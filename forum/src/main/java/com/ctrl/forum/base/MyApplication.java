@@ -2,7 +2,6 @@ package com.ctrl.forum.base;
 
 import android.app.Activity;
 
-import com.baidu.mapapi.SDKInitializer;
 import com.beanu.arad.AradApplication;
 import com.beanu.arad.AradApplicationConfig;
 import com.beanu.arad.http.HttpConfig;
@@ -61,7 +60,7 @@ public class MyApplication extends AradApplication {
         //SDKInitializer.initialize(getApplicationContext());
         super.onCreate();
         //SpeechUtility.createUtility(getApplicationContext(), SpeechConstant.APPID + Constant.XUNFEI_APPID); //科大讯飞
-        SDKInitializer.initialize(getApplicationContext());
+     //   SDKInitializer.initialize(getApplicationContext());
         //LocationUtil.getInstance().init(getApplicationContext());
         config.httpConfig = new HttpConfig("succeed");
 

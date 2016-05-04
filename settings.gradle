@@ -1,1 +1,1 @@
-include ':app', ':arad', ':pulltorefresh',':viewpagerindicator', ':swipelayoutlib', ':appstaff', ':yinfeng', ':sharesdk', ':onekeyshare', ':forum'
+include ':arad', ':pulltorefresh',':viewpagerindicator', ':swipelayoutlib', ':sharesdk', ':onekeyshare', ':forum'

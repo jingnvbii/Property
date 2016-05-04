@@ -4,12 +4,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
-import com.baidu.mapapi.search.core.SearchResult;
-import com.baidu.mapapi.search.geocode.GeoCodeOption;
-import com.baidu.mapapi.search.geocode.GeoCodeResult;
-import com.baidu.mapapi.search.geocode.GeoCoder;
-import com.baidu.mapapi.search.geocode.OnGetGeoCoderResultListener;
-import com.baidu.mapapi.search.geocode.ReverseGeoCodeResult;
 import com.ctrl.forum.R;
 import com.ctrl.forum.base.AppToolBarActivity;
 
@@ -19,7 +13,7 @@ import com.ctrl.forum.base.AppToolBarActivity;
  * Created by jason on 2016/4/12.
  */
 public class LocationActivity extends AppToolBarActivity{
-    private GeoCoder mSearch;
+  //  private GeoCoder mSearch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,10 +23,10 @@ public class LocationActivity extends AppToolBarActivity{
        // getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
         initView();
-        initSearch();
+     //   initSearch();
     }
 
-    private void initSearch() {
+   /* private void initSearch() {
          mSearch = GeoCoder.newInstance();
         OnGetGeoCoderResultListener listener = new OnGetGeoCoderResultListener() {
             public void onGetGeoCodeResult(GeoCodeResult result) {
@@ -55,7 +49,7 @@ public class LocationActivity extends AppToolBarActivity{
         mSearch.geocode(new GeoCodeOption());
         //释放地理编码检索实例
         mSearch.destroy();
-    }
+    }*/
 
     /**
      * 初始化组件
