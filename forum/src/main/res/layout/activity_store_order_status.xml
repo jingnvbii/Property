@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:background="@color/main_bg"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/toolbar_height"
+        android:background="#dc3d3c">
+
+        <ImageView
+            android:id="@+id/iv_order_status_back"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:src="@mipmap/jiantou_left_white"
+            android:paddingLeft="10dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="订单状态"
+            android:gravity="center"
+            android:textSize="18sp"
+            android:textColor="@color/text_white"
+            android:layout_centerInParent="true"/>
+
+        <ImageView
+            android:id="@+id/iv_order_status_tel"
+            android:layout_width="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_height="match_parent"
+            android:src="@mipmap/order_phone_icon"
+            android:paddingRight="10dp"
+            android:paddingLeft="5dp"
+            />
+
+        <ImageView
+            android:id="@+id/iv_order_status_share"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:src="@mipmap/share_white"
+            android:layout_toLeftOf="@+id/iv_order_status_tel"
+            android:paddingRight="10dp"
+            android:paddingLeft="10dp"
+            />
+    </RelativeLayout>
+    
+    <RadioGroup
+        android:layout_width="match_parent"
+        android:background="@color/white"
+        android:orientation="horizontal"
+        android:layout_height="45dp">
+
+        <RadioButton
+            android:id="@+id/rb1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="订单状态"
+            android:button="@null"
+            android:gravity="center"
+            android:textColor="@drawable/text_rb_red_selector"
+            />
+        <RadioButton
+            android:id="@+id/rb2"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="订单详情"
+            android:gravity="center"
+            android:button="@null"
+            android:textColor="@drawable/text_rb_red_selector"
+            />
+    </RadioGroup>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_height="2px">
+
+        <View
+            android:id="@+id/view01"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:background="#cb1e1e"
+            android:layout_weight="1"></View>
+        <View
+            android:id="@+id/view02"
+            android:layout_width="0dp"
+            android:visibility="invisible"
+            android:layout_height="match_parent"
+            android:background="#cb1e1e"
+            android:layout_weight="1"></View>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/line_gray"></View>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewPager_order_status"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        ></android.support.v4.view.ViewPager>
+
+</LinearLayout>

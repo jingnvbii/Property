@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include layout="@layout/toolbar_common_red"
+        android:layout_height="@dimen/toolbar_height"
+        android:layout_width="match_parent"
+        ></include>
+
+    <RelativeLayout
+        android:id="@+id/rl_add_address"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:background="@color/white">
+        <TextView
+            android:id="@+id/tv_add_address"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="新增地址"
+            android:layout_centerInParent="true"
+            android:textColor="@color/text_red"/>
+        <ImageView
+            android:layout_toRightOf="@+id/tv_add_address"
+            android:layout_marginLeft="5dp"
+            android:layout_centerVertical="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/add_address_red"/>
+    </RelativeLayout>
+
+    <com.handmark.pulltorefresh.library.PullToRefreshListView
+        android:id="@+id/lv_manage_address"
+        android:layout_width="match_parent"
+        android:layout_marginTop="10dp"
+        android:background="@color/white"
+        android:layout_height="wrap_content">
+
+    </com.handmark.pulltorefresh.library.PullToRefreshListView>
+
+
+
+
+
+
+</LinearLayout>

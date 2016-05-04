@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffff"
+    android:orientation="vertical"
+    >
+
+
+    <LinearLayout
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tv_weixin"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="微信"
+            android:drawableTop="@mipmap/weixin"
+            android:drawablePadding="5dp"
+            android:gravity="center"
+            android:layout_weight="1"/>
+        <TextView
+            android:id="@+id/tv_pengyouquan"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="朋友圈"
+            android:drawableTop="@mipmap/pengyouquan"
+            android:drawablePadding="5dp"
+            android:gravity="center"
+            android:layout_weight="1"/>
+        <TextView
+            android:id="@+id/tv_sinaweibo"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="新浪微博"
+            android:drawableTop="@mipmap/sinaweibo"
+            android:drawablePadding="5dp"
+            android:gravity="center"
+            android:layout_weight="1"/>
+        <TextView
+            android:id="@+id/tv_qq"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="QQ"
+            android:drawableTop="@mipmap/qq"
+            android:drawablePadding="5dp"
+            android:gravity="center"
+            android:layout_weight="1"/>
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_marginTop="10dp"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tv_tecentweibo"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="腾讯微博"
+            android:drawableTop="@mipmap/tecentweibo"
+            android:drawablePadding="5dp"
+            android:gravity="center"
+            android:layout_weight="1"/>
+        <TextView
+            android:id="@+id/tv_renren"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="人人网"
+            android:drawableTop="@mipmap/renren"
+            android:drawablePadding="5dp"
+            android:gravity="center"
+            android:layout_weight="1"/>
+        <TextView
+            android:id="@+id/tv_email"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="邮件"
+            android:drawableTop="@mipmap/email"
+            android:drawablePadding="5dp"
+            android:gravity="center"
+            android:layout_weight="1"/>
+        <TextView
+            android:id="@+id/tv_duanxin"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="短信"
+            android:drawableTop="@mipmap/duanxin"
+            android:drawablePadding="5dp"
+            android:gravity="center"
+            android:layout_weight="1"/>
+    </LinearLayout>
+
+
+    <TextView
+        android:id="@+id/share_cancel"
+        android:layout_width="match_parent"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/edit_white_shap"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:text="取消"
+        android:padding="15dp"
+        android:gravity="center"
+        android:textColor="@color/text_blue"
+
+        />
+
+</LinearLayout>

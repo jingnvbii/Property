@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.ctrl.android.property.staff" >
+
+    <!--访问网络连接，可能产生GPRS流量-->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <!--允许程序写入外部存储，如SD卡上写文件-->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <!--分享权限-->
+    <uses-permission android:name="android.permission.GET_TASKS" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.MANAGE_ACCOUNTS"/>
+    <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
+
+    <!-- 二维码 -->
+    <uses-permission android:name="android.permission.VIBRATE" />  <!-- 震动权限 -->
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
+
+    <application android:name="com.ctrl.android.property.staff.base.MyApplication"
+        android:allowBackup="true"
+        android:label="@string/app_name"
+        android:icon="@mipmap/ic_launcher"
+        android:theme="@style/AradAppTheme">
+        <activity
+            android:name=".StartActivity"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity android:name="com.ctrl.android.property.staff.MainActivity"/>
+        <activity android:name="com.ctrl.android.property.staff.LoginActivity"/>
+        <activity android:name="com.ctrl.android.property.staff.ui.my.MyActivity"/>
+        <activity android:name="com.ctrl.android.property.staff.ui.forum.ForumActivity"/>
+        <activity android:name="com.ctrl.android.property.staff.ui.forum.ForumDetailActivity"/>
+        <activity android:name="com.ctrl.android.property.staff.ui.forum.ForumeListActivity"/>
+        <activity android:name="com.ctrl.android.property.staff.ui.forum.ForumStartNoteActivity"/>
+        <activity android:name="com.ctrl.android.property.staff.ui.widget.ImageZoomActivity"/>
+        <activity android:name="com.ctrl.android.property.staff.ui.device.DeviceActivity"/>
+        <activity android:name="com.ctrl.android.property.staff.ui.device.DeviceActivity2"/>
+        <activity android:name="com.ctrl.android.property.staff.ui.device.DeviceSearchActivity"/>
+        <activity android:name="com.ctrl.android.property.staff.ui.device.DeviceHistoryActivity"/>
+        <activity android:name="com.ctrl.android.property.staff.ui.device.DeviceAddRecordActivity"/>
+        <activity android:name="com.ctrl.android.property.staff.ui.task.TaskAddActivity"/>
+        <activity android:name="com.ctrl.android.property.staff.ui.device.DeviceRecordDetailActivity"/>
+        <activity android:name="com.ctrl.android.property.staff.ui.task.TaskDetailActivity"/>
+        <activity android:name="com.ctrl.android.property.staff.ui.contact.ContactActivity"/>
+        <activity android:name="com.ctrl.android.property.staff.ui.contact.ContactActivity2"/>
+        <activity android:name="com.ctrl.android.property.staff.ui.task.TaskDetailActivity2"/>
+        <activity android:name="com.ctrl.android.property.staff.ui.my.ChangePasswordActivity"/>
+        <activity android:name="com.ctrl.android.property.staff.ui.my.MySettingActivity"/>
+        <activity android:name="com.ctrl.android.property.staff.ui.task.TaskListActivity"/>
+
+
+
+<!--************************************************************************************-->
+
+
+        <activity android:name=".ui.CustomActivity.TestanroidpicActivity" />
+        <activity android:name=".ui.notice.NoticeListActivity" />
+        <activity android:name=".ui.notice.NoticeDetailActivity" />
+        <activity android:name=".ui.patrol.PatrolActivity" />
+        <activity android:name=".ui.patrol.PatrolLineActivity" />
+        <activity android:name=".ui.repair.ChargeBackCauseActivity" />
+        <activity android:name=".ui.repair.RepairsActivity" />
+        <activity android:name=".ui.repair.RepairsAftertreatmentActivity" />
+        <activity android:name=".ui.repair.RepairsPretreatmentActivity" />
+        <activity android:name=".ui.visit.VisitHandleActivity" />
+        <activity android:name=".ui.visit.VisitProruptionActivity" />
+        <activity android:name=".ui.visit.VisitProruptionDetailActivity" />
+        <activity android:name=".ui.visit.VisitProruptionDetailFeedBackActivity" />
+        <activity android:name=".ui.visit.VisitProruptionReleaseActivity" />
+        <activity android:name=".ui.visit.VisitOrderHandleDetailActivity" />
+        <activity android:name=".ui.visit.VisitOrderActivity" />
+        <activity android:name=".ui.express.ExpressListActivity"/>
+        <activity android:name=".ui.express.ExpressDetailActivity"/>
+        <activity android:name=".ui.express.ExpressHandleActivity"/>
+        <activity android:name=".ui.qrcode.QrCodeActivity"/>
+
+    </application>
+
+</manifest>

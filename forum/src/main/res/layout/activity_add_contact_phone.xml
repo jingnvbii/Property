@@ -1,0 +1,103 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/main_bg">
+
+    <include
+        android:id="@+id/in"
+        layout="@layout/toolbar_common_main"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/toolbar_height"
+        ></include>
+    <View
+        android:layout_below="@id/in"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/line_gray" />
+
+    <TextView
+        android:id="@+id/tv_01"
+        android:layout_below="@id/in"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/text_height"
+        android:text="添加联系电话"
+        android:gravity="center_vertical"
+        android:paddingLeft="@dimen/margin_left_and_right"
+        />
+    <View
+        android:layout_below="@id/tv_01"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/line_gray" />
+
+    <TextView
+        android:id="@+id/tv_name"
+        android:layout_below="@id/tv_01"
+        android:background="@color/white"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/text_height"
+        android:gravity="center_vertical"
+        android:text="名称 :"
+        android:paddingLeft="@dimen/margin_left_and_right"
+        />
+    <EditText
+        android:id="@+id/et_name"
+        android:layout_toRightOf="@id/tv_name"
+        android:layout_below="@id/tv_01"
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/text_height"
+        android:gravity="center_vertical"
+        android:paddingLeft="5dp"
+        />
+
+    <TextView
+        android:layout_marginTop="1px"
+        android:id="@+id/tv_address"
+        android:layout_below="@id/tv_name"
+        android:background="@color/white"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/text_height"
+        android:gravity="center_vertical"
+        android:text="地址 :"
+        android:paddingLeft="@dimen/margin_left_and_right"
+        />
+    <EditText
+        android:id="@+id/et_address"
+        android:layout_marginTop="1px"
+        android:layout_toRightOf="@id/tv_address"
+        android:layout_below="@id/tv_name"
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/text_height"
+        android:gravity="center_vertical"
+        android:paddingLeft="5dp"
+        />
+    <TextView
+        android:layout_marginTop="1px"
+        android:id="@+id/tv_tel"
+        android:layout_below="@id/tv_address"
+        android:background="@color/white"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/text_height"
+        android:gravity="center_vertical"
+        android:text="电话 :"
+        android:paddingLeft="@dimen/margin_left_and_right"
+        />
+    <EditText
+        android:id="@+id/et_tel"
+        android:layout_marginTop="1px"
+        android:layout_toRightOf="@id/tv_tel"
+        android:layout_below="@id/tv_address"
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/text_height"
+        android:gravity="center_vertical"
+        android:paddingLeft="5dp"
+        />
+    <View
+        android:layout_below="@id/tv_tel"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/line_gray" />
+</RelativeLayout>

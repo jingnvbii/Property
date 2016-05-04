@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:padding="10dp"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/pinterest_img"
+        android:minHeight="200dp"
+        android:scaleType="fitXY"
+        />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        >
+        <TextView
+            android:id="@+id/tv_titile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:textColor="@color/text_black"
+            android:text="离幸福的房间多少级反倒是发斯蒂芬"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2016-fdfdf"
+            android:drawableLeft="@mipmap/clock_small"
+            android:layout_toRightOf="@+id/iv_zan"
+            android:layout_below="@+id/tv_titile"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="10dp"
+            android:drawablePadding="5dp"
+            android:textColor="@color/text_gray"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="29"
+            android:drawablePadding="5dp"
+            android:drawableLeft="@mipmap/shuzhuangti"
+            android:textColor="@color/text_gray"
+            android:layout_marginTop="10dp"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/tv_titile"
+            />
+
+
+    </RelativeLayout>
+
+
+
+</LinearLayout>

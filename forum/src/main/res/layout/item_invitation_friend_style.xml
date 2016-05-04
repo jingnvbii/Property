@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:background="@color/white"
+    android:layout_height="match_parent">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/iv_title_photo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/baby_large"
+            android:layout_marginTop="@dimen/margin_left_and_right"
+            android:layout_marginLeft="@dimen/margin_left_and_right"/>
+        <TextView
+            android:id="@+id/tv_titile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="发帖人"
+            android:textColor="@color/text_black"
+            android:layout_toRightOf="@+id/iv_title_photo"
+            android:layout_marginTop="@dimen/margin_left_and_right"
+            android:layout_marginLeft="5dp"/>
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/vip_icon3"
+            android:layout_toRightOf="@+id/tv_titile"
+            android:layout_marginTop="@dimen/margin_left_and_right"
+            android:layout_marginLeft="5dp"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="3月16日  历下去掉飞第三方"
+            android:layout_toRightOf="@+id/iv_title_photo"
+            android:layout_below="@+id/tv_titile"
+            android:layout_marginTop="@dimen/margin_left_and_right"/>
+    </RelativeLayout>
+
+       <TextView
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:text="dsfsdfsdfsdfsdfsdfsfsdfsdfsd"
+           android:layout_marginLeft="@dimen/margin_left_and_right"
+           android:layout_marginRight="@dimen/margin_left_and_right"
+           android:layout_marginTop="@dimen/margin_left_and_right"
+           android:textColor="@color/text_black"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_marginTop="10dp"
+        android:background="@color/line_gray" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:background="@color/main_bg"
+        android:layout_height="35dp">
+        <View
+            android:layout_width="1px"
+            android:layout_height="match_parent"
+            android:background="@color/line_gray" />
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            android:layout_height="match_parent">
+        <TextView
+            android:layout_toRightOf="@+id/iv_zan"
+            android:layout_marginLeft="5dp"
+            android:layout_width="wrap_content"
+            android:drawableLeft="@mipmap/zan_friend"
+            android:drawablePadding="5dp"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:layout_height="wrap_content"
+            android:text="喜欢"
+            />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="1px"
+            android:layout_height="match_parent"
+            android:background="@color/line_gray" />
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent">
+            <TextView
+                android:layout_toRightOf="@+id/iv_zan"
+                android:layout_marginLeft="5dp"
+                android:layout_width="wrap_content"
+                android:drawableLeft="@mipmap/pinglun_friend"
+                android:drawablePadding="5dp"
+                android:layout_centerInParent="true"
+                android:gravity="center"
+                android:layout_height="wrap_content"
+                android:text="评论"
+                />
+        </RelativeLayout>
+        <View
+            android:layout_width="1px"
+            android:layout_height="match_parent"
+            android:background="@color/line_gray" />
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent">
+            <TextView
+                android:layout_toRightOf="@+id/iv_zan"
+                android:layout_marginLeft="5dp"
+                android:layout_width="wrap_content"
+                android:drawableLeft="@mipmap/share_friend"
+                android:drawablePadding="5dp"
+                android:layout_centerInParent="true"
+                android:gravity="center"
+                android:layout_height="wrap_content"
+                android:text="分享"
+                />
+        </RelativeLayout>
+        <View
+            android:layout_width="1px"
+            android:layout_height="match_parent"
+            android:background="@color/line_gray" />
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_marginRight="10dp"
+            android:layout_height="match_parent">
+            <TextView
+                android:layout_toRightOf="@+id/iv_zan"
+                android:layout_marginLeft="5dp"
+                android:layout_width="wrap_content"
+                android:drawableLeft="@mipmap/more_friend"
+                android:drawablePadding="5dp"
+                android:layout_centerInParent="true"
+                android:gravity="center"
+                android:layout_height="wrap_content"
+                android:text="更多"
+                />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="1px"
+            android:layout_height="match_parent"
+            android:background="@color/line_gray" />
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/line_gray" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="评论:"
+        android:drawablePadding="5dp"
+        android:layout_marginTop="10dp"
+        android:drawableLeft="@mipmap/pinglun_friend"/>
+
+    <ListView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+    </ListView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:text="查看其他  3  条评论...."/>
+    </LinearLayout>
+
+
+</LinearLayout>

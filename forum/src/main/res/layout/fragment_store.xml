@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:background="@color/white"
+    android:layout_height="match_parent">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:background="@color/red_bg"
+        android:layout_height="@dimen/toolbar_height"
+        >
+
+        <TextView
+            android:id="@+id/tv_toolbar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/text_white"
+            android:drawableLeft="@mipmap/locate_img"
+            android:drawablePadding="5dp"
+            android:drawableRight="@mipmap/white_arrow_down"
+            android:textSize="@dimen/text_size_medium"
+            android:layout_centerInParent="true"
+            android:text="中润世纪广场"/>
+
+    </RelativeLayout>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+     <LinearLayout
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:orientation="vertical">
+
+
+
+         <!--内容-->
+    <FrameLayout
+        android:id="@+id/framelayout"
+        android:layout_width="wrap_content"
+        android:layout_height="100dp">
+    </FrameLayout>
+
+
+    <HorizontalScrollView
+        android:id="@+id/scrollView"
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <LinearLayout
+            android:id="@+id/linearLayout1"
+            android:layout_width="match_parent"
+            android:layout_marginLeft="@dimen/margin_left_and_right"
+            android:layout_height="wrap_content" >
+
+            <com.ctrl.forum.customview.GridViewForScrollView
+                android:id="@+id/gridView1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+            </com.ctrl.forum.customview.GridViewForScrollView>
+        </LinearLayout>
+    </HorizontalScrollView>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/line_gray" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_height="40dp">
+
+      <ImageView
+          android:layout_width="wrap_content"
+          android:layout_height="match_parent"
+          android:paddingTop="5dp"
+          android:paddingBottom="5dp"
+          android:paddingLeft="10dp"
+          android:paddingRight="10dp"
+          android:src="@mipmap/jinrigonggao_red"/>
+
+        <View
+            android:layout_width="1px"
+            android:layout_height="match_parent"
+            android:background="@color/line_gray" />
+
+        <TextView
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="2dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:text="【每日特惠】"
+            android:textColor="@color/text_red"
+            android:gravity="center"
+            />
+
+
+   <!-- <com.ctrl.forum.customview.AutoTextView
+        android:layout_width="match_parent"
+        android:layout_height="20dp">
+    </com.ctrl.forum.customview.AutoTextView>-->
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/line_gray" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+          <ImageView
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:src="@mipmap/tuijian_1"
+              android:scaleType="fitXY"
+              />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:orientation="horizontal"
+            android:layout_weight="1">
+           <ImageView
+               android:layout_width="0dp"
+               android:layout_height="match_parent"
+               android:scaleType="fitXY"
+               android:src="@mipmap/tuijian_2"
+               android:layout_weight="1"/>
+           <ImageView
+               android:layout_width="0dp"
+               android:layout_height="match_parent"
+               android:scaleType="fitXY"
+               android:src="@mipmap/tuijian_3"
+               android:layout_weight="1"/>
+           <ImageView
+               android:layout_width="0dp"
+               android:layout_height="match_parent"
+               android:scaleType="fitXY"
+               android:src="@mipmap/tuijian_4"
+               android:layout_weight="1"/>
+        </LinearLayout>
+      </LinearLayout>
+
+     <RelativeLayout
+         android:layout_width="match_parent"
+         android:layout_height="@dimen/text_height">
+         <ImageView
+             android:id="@+id/iv02"
+             android:layout_width="wrap_content"
+             android:layout_marginLeft="10dp"
+             android:layout_height="wrap_content"
+             android:layout_centerVertical="true"
+             android:src="@mipmap/damuzhi"
+             />
+         <TextView
+             android:layout_toRightOf="@+id/iv02"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:layout_centerVertical="true"
+             android:layout_marginLeft="5dp"
+             android:textColor="@color/text_black"
+             android:text="推荐商家"/>
+
+         <TextView
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:text="查看更多>>"
+             android:layout_alignParentRight="true"
+             android:layout_centerVertical="true"
+             android:layout_marginRight="10dp"
+             />
+
+
+     </RelativeLayout>
+    <com.ctrl.forum.customview.PullToRefreshListViewForScrollView
+        android:id="@+id/listview"
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:background="@color/white"
+        android:layout_height="match_parent">
+    </com.ctrl.forum.customview.PullToRefreshListViewForScrollView>
+
+     </LinearLayout>
+    </ScrollView>
+</LinearLayout>

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:background="@color/main_bg"
+    android:layout_height="match_parent">
+
+    <include layout="@layout/toolbar_common_red"
+        android:layout_height="@dimen/toolbar_height"
+        android:layout_width="match_parent"
+        ></include>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/toolbar_height"
+        android:background="#dc3d3c">
+
+        <EditText
+            android:layout_width="0dp"
+            android:layout_marginLeft="@dimen/margin_left_and_right"
+            android:layout_weight="1"
+            android:layout_gravity="center_vertical"
+            android:layout_height="wrap_content"
+            android:hint="搜索您附近的位置"
+            android:drawableLeft="@mipmap/search_red"
+            android:drawablePadding="10dp"
+            android:textColorHint="@color/text_gray"
+            android:background="@drawable/white_border"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="搜索"
+            android:layout_gravity="center_vertical"
+            android:textColor="@color/text_white"
+            android:layout_marginRight="20dp"
+            android:textSize="@dimen/text_size_medium"
+            android:layout_marginLeft="10dp"
+            />
+    </LinearLayout>
+
+
+    <TextView
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/text_height"
+        android:drawableLeft="@mipmap/locate_red"
+        android:paddingLeft="10dp"
+        android:gravity="center_vertical"
+        android:drawablePadding="5dp"
+        android:text="定位当前位置"
+        android:background="@color/white"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/text_height"
+        android:paddingLeft="10dp"
+        android:gravity="center_vertical"
+        android:text="我的收货地址"
+        />
+
+    <ListView
+        android:layout_width="match_parent"
+        android:background="@color/white"
+        android:layout_height="wrap_content">
+    </ListView>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/text_height"
+        android:paddingLeft="10dp"
+        android:gravity="center_vertical"
+        android:text="历史记录"
+        />
+
+    <ListView
+        android:layout_width="match_parent"
+        android:background="@color/white"
+        android:layout_height="wrap_content">
+    </ListView>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/text_height"
+        android:paddingLeft="10dp"
+        android:gravity="center"
+        android:background="@color/white"
+        android:text="清空历史记录"
+        />
+
+
+
+
+</LinearLayout>

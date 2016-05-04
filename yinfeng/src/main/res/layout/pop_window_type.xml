@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:su="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/main_bg"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/pop_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <Button
+            android:id="@+id/btn_cancel"
+            android:layout_width="50dp"
+            android:layout_height="30dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="5dp"
+            android:background="@color/text_job_red"
+            android:textColor="@color/white"
+            android:textSize="@dimen/LargeTextSize"
+            android:text="取消" />
+
+        <Button
+            android:id="@+id/btn_confirm"
+            android:layout_width="50dp"
+            android:layout_height="30dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="5dp"
+            android:background="@color/text_job_red"
+            android:textColor="@color/white"
+            android:textSize="@dimen/LargeTextSize"
+            android:text="确定" />
+
+        <com.ctrl.android.yinfeng.customview.ScrollerNumberPicker
+            android:id="@+id/pv_report"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/btn_confirm"
+            android:layout_marginLeft="1dp"
+            android:layout_marginRight="1dp"
+            android:layout_marginTop="10dp"
+            su:itemNumber="3"
+            android:layout_centerHorizontal="true"
+            su:lineColor="#ffff6000"
+            su:maskHight="32dp"
+            su:noEmpty="true"
+            su:normalTextColor="#777"
+            su:normalTextSize="14sp"
+            su:selecredTextColor="#ff000000"
+            su:selecredTextSize="22sp"
+            su:unitHight="50dp" />
+
+    </RelativeLayout>
+
+</LinearLayout>

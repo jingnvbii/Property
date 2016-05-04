@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    android:id="@+id/item"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:background="@color/white"
+    android:descendantFocusability="blocksDescendants"
+    android:layout_height="wrap_content">
+            <!--<CheckBox
+                android:id="@+id/cb_adress"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:layout_width="wrap_content"
+                android:clickable="false"
+                android:focusable="false"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:button="@drawable/checkbox_addressbook"
+                />-->
+
+
+            <ImageView
+                android:id="@+id/hotline2_head_img"
+                android:layout_width="40dp"
+                android:layout_height="60dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:scaleType="fitXY"
+                android:src="@mipmap/hotline_default_head_img"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:layout_below="@id/hotline2_head_img"/>
+
+            <TextView
+                android:id="@+id/hotline2_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/hotline2_head_img"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="30dp"
+                android:singleLine="true"
+                android:textSize="@dimen/LargeTextSize"
+                android:textColor="@color/text_black"
+                android:text="曾小贤"/>
+
+            <TextView
+                android:id="@+id/hotline2_position"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/hotline2_name"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="30dp"
+                android:singleLine="true"
+                android:textSize="@dimen/BasicTextSize"
+                android:textColor="#9f9f9f"
+                />
+
+            <TextView
+                android:id="@+id/hotline2_duty"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/hotline2_position"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="30dp"
+                android:singleLine="true"
+                android:textSize="@dimen/BasicTextSize"
+                android:textColor="#9f9f9f"
+                />
+
+
+        <ImageView
+            android:id="@+id/hotline2_tel"
+            android:layout_marginRight="20dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="30dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/iconfont_dianhua"/>
+
+
+
+
+</RelativeLayout>
+

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/iv_title_photo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/margin_left_and_right"
+        android:layout_marginTop="@dimen/margin_left_and_right"
+        android:src="@mipmap/baby_large"/>
+
+    <TextView
+        android:id="@+id/tv_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/iv_title_photo"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        android:textColor="@color/text_black"
+        android:text="飘雪我"/>
+
+    <ImageView
+        android:id="@+id/iv_levlel"
+        android:layout_width="wrap_content"
+        android:layout_toRightOf="@+id/tv_name"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="5dp"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/vip_icon3"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="楼主"
+        android:layout_toRightOf="@+id/iv_levlel"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="@dimen/margin_left_and_right"
+        android:textColor="@color/white"
+        android:background="@drawable/blue_border_bg"/>
+
+    <TextView
+        android:id="@+id/tv_floor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="2楼"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="@dimen/margin_left_and_right"
+        android:layout_marginTop="@dimen/margin_left_and_right"/>
+    <TextView
+        android:id="@+id/tv_time"
+        android:layout_below="@+id/tv_floor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="@dimen/margin_left_and_right"
+        android:layout_marginTop="@dimen/margin_left_and_right"
+        android:text="2015-5-24"/>
+
+    <TextView
+        android:id="@+id/tv_content"
+        android:layout_below="@+id/iv_title_photo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/iv_title_photo"
+        android:layout_toLeftOf="@+id/tv_time"
+        android:layout_marginRight="@dimen/margin_left_and_right"
+        android:text="fdfsdfsdfdsfsdfsdfsfdfdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfdfsdf"/>
+
+
+
+    <ListView
+        android:id="@+id/lv_comment_item"
+        android:layout_below="@+id/tv_content"
+        android:layout_width="wrap_content"
+        android:visibility="gone"
+        android:background="@color/main_bg"
+        android:layout_marginRight="@dimen/margin_left_and_right"
+        android:layout_toRightOf="@+id/iv_title_photo"
+        android:layout_height="wrap_content">
+    </ListView>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="回复"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/lv_comment_item"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="@dimen/margin_left_and_right"
+        android:padding="5dp"
+        android:layout_marginBottom="@dimen/margin_left_and_right"
+        android:background="@drawable/text_black_border_shap"/>
+</RelativeLayout>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/main_bg">
+
+    <include
+        android:id="@+id/in"
+        layout="@layout/toolbar_common_main"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/toolbar_height"
+        ></include>
+    <View
+        android:layout_below="@id/in"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/line_gray" />
+
+    <com.handmark.pulltorefresh.library.PullToRefreshListView
+        android:id="@+id/lv_frind"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:divider="@null"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_weight="1"
+        android:scrollbars="none">
+    </com.handmark.pulltorefresh.library.PullToRefreshListView>
+
+</LinearLayout>

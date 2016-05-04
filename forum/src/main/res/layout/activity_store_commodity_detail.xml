@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:background="@color/main_bg"
+    android:layout_height="match_parent">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/toolbar_height"
+        android:background="#dc3d3c"
+        >
+
+        <ImageView
+            android:id="@+id/iv_back"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:src="@mipmap/jiantou_left_white"
+            android:layout_marginLeft="10dp"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="小贝商品"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:gravity="center"
+            android:layout_centerInParent="true"
+            />
+
+        <ImageView
+            android:id="@+id/iv_share"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:src="@mipmap/share_white"
+            android:layout_alignParentRight="true"
+            android:padding="10dp"
+            />
+
+        <ImageView
+            android:id="@+id/iv_zan"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:src="@mipmap/zan_white"
+            android:padding="10dp"
+            android:layout_toLeftOf="@+id/iv_share"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:id="@+id/container"
+        android:layout_height="100dp">
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewPager_commdity"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        ></android.support.v4.view.ViewPager>
+
+
+
+     <TextView
+         android:id="@+id/tv_image_number"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:text="1/4"
+         android:textSize="16sp"
+         android:textColor="@color/text_white"
+         android:paddingTop="5dp"
+         android:paddingBottom="5dp"
+         android:paddingLeft="10dp"
+         android:paddingRight="10dp"
+         android:background="#b0000000"
+         android:layout_alignParentRight="true"
+         android:layout_alignParentBottom="true"
+         />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:background="@color/white"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tv_commdity_name"
+            android:layout_marginTop="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="奥利奥原味夹心饼干100g"
+            android:textColor="@color/text_black"
+            android:layout_marginLeft="10dp"/>
+
+
+        <TextView
+            android:id="@+id/tv_commdity_price"
+            android:layout_below="@+id/tv_commdity_name"
+            android:layout_width="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="10dp"
+            android:layout_height="wrap_content"
+            android:text="$16.4"
+            android:layout_marginBottom="20dp"
+            android:textColor="@color/text_red"
+            />
+        <TextView
+            android:id="@+id/tv_beizhu"
+            android:layout_toRightOf="@+id/tv_commdity_price"
+            android:layout_below="@+id/tv_commdity_name"
+            android:layout_width="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="40dp"
+            android:layout_height="wrap_content"
+            android:text="自己配送"
+            android:textColor="@color/text_gray"
+            />
+        <TextView
+
+            android:layout_toRightOf="@+id/tv_beizhu"
+            android:layout_below="@+id/tv_commdity_name"
+            android:layout_width="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_height="wrap_content"
+            android:text="销量：50份"
+            android:textColor="@color/text_gray"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="加入购物车"
+            android:padding="10dp"
+             android:textColor="@color/text_white"
+            android:background="@drawable/orange_border"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="10dp"
+            />
+
+
+   </RelativeLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="日用百货"
+        android:textColor="@color/text_black"
+        android:layout_margin="10dp"
+        />
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@color/white"
+        android:layout_weight="1">
+
+    </ListView>
+
+    <RelativeLayout
+        android:id="@+id/m_list_bt"
+        android:layout_width="match_parent"
+        android:background="@color/white"
+        android:layout_alignParentBottom="true"
+        android:layout_height="50dp">
+
+        <RelativeLayout
+            android:id="@+id/m_list_car_lay"
+            android:layout_width="60dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/m_list_car"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_centerInParent="true"
+                android:src="@mipmap/cart_car_gray"/>
+        </RelativeLayout>
+        <TextView
+            android:id="@+id/m_list_num"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/goods_tv_bg_selector"
+            android:layout_alignRight="@+id/m_list_car_lay"
+            android:layout_alignTop="@+id/m_list_car_lay"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:text="0"
+            android:textColor="@color/white"/>
+
+        <TextView android:id="@+id/m_list_all_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/m_list_car_lay"
+            android:layout_marginLeft="20dp"
+            android:layout_centerVertical="true"
+            android:textColor="@color/text_red"
+            android:text="共￥24元"/>
+        <View android:id="@+id/m_listview"
+            android:layout_width="1dp"
+            android:layout_height="26px"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/m_list_all_price"
+            android:background="@color/color_f2f2f2"/>
+        <Button android:id="@+id/m_list_submit"
+            android:layout_width="80dp"
+            android:layout_height="match_parent"
+            android:background="@color/text_gray"
+            android:text="马上结算"
+            android:layout_alignParentRight="true"
+            android:textColor="@color/white"/>
+    </RelativeLayout>
+
+
+
+
+</LinearLayout>

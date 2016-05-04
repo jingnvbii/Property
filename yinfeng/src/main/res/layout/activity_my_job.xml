@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.ctrl.android.property.jason.ui.complaint.MyComplaintActivity">
+
+
+    <include layout="@layout/toolbar_common_red"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/header_height"/>
+
+    <LinearLayout
+        android:layout_marginTop="5dp"
+        android:layout_width="match_parent"
+        android:background="@color/white"
+        android:layout_height="46dp"
+        android:orientation="horizontal"
+        android:id="@+id/linearLayout">
+
+        <!--待处理-->
+        <TextView
+            android:drawablePadding="3dp"
+            android:id="@+id/tv_pending"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="待处理"
+            android:paddingLeft="5dp"
+            android:gravity="center"
+            android:textColor="@drawable/text_color_selector"
+            android:textSize="@dimen/BasicTextSize"
+            />
+        <View
+            android:layout_width="1px"
+            android:layout_height="30dp"
+            android:layout_marginTop="10dp"
+            android:background="@color/line_gray" />
+
+        <!--处理中-->
+        <TextView
+            android:id="@+id/tv_processing"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="处理中"
+            android:textColor="@drawable/text_color_selector"
+            android:gravity="center"
+            android:textSize="@dimen/BasicTextSize"
+            />
+        <View
+            android:layout_width="1px"
+            android:layout_height="30dp"
+            android:layout_marginTop="10dp"
+            android:background="@color/line_gray" />
+        <!--待评价-->
+        <TextView
+            android:id="@+id/tv_pingjia"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="待评价"
+            android:textColor="@drawable/text_color_selector"
+            android:gravity="center"
+            android:textSize="@dimen/BasicTextSize"
+            />
+        <View
+            android:layout_width="1px"
+            android:layout_height="30dp"
+            android:layout_marginTop="10dp"
+            android:background="@color/line_gray" />
+
+        <!--已结束-->
+        <TextView
+            android:id="@+id/tv_end"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="已结束"
+            android:textColor="@drawable/text_color_selector"
+            android:gravity="center"
+            android:textSize="@dimen/BasicTextSize"
+            />
+            />-->
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/cursor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:scaleType="matrix"
+        android:src="@mipmap/line" />
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="1px"
+        android:background="@color/line_gray" />
+
+    <!--内容-->
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewpager_job"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:flipInterval="400"
+        android:persistentDrawingCache="animation"
+        />
+
+
+</LinearLayout>

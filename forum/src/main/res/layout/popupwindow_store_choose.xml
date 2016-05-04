@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@mipmap/choose_bg">
+
+    <TextView
+        android:id="@+id/tv_dianpu_pup"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center_vertical"
+        android:text="店铺"
+        android:paddingLeft="10dp"
+        android:paddingRight="30dp"
+        android:textColor="@color/text_white"
+        android:drawablePadding="15dp"
+        android:drawableLeft="@mipmap/dianpu"/>
+    <TextView
+        android:id="@+id/tv_shangpin_pup"
+       android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center_vertical"
+        android:text="商品"
+        android:paddingLeft="10dp"
+        android:paddingRight="30dp"
+        android:textColor="@color/text_white"
+        android:drawablePadding="15dp"
+        android:drawableLeft="@mipmap/shangpin"/>
+
+
+
+</LinearLayout>

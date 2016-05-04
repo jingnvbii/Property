@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:background="@color/main_bg"
+    android:layout_height="match_parent">
+
+    <include
+        layout="@layout/toolbar_common_main"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/toolbar_height"
+        ></include>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/line_gray" />
+
+    <RelativeLayout
+        android:layout_marginTop="10dp"
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/text_height">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="名片"
+            android:gravity="center"
+            android:textColor="@color/text_black"
+            android:layout_marginLeft="@dimen/margin_left_and_right"
+            />
+
+        <CheckBox
+            android:id="@+id/cb_calling"
+            android:background="@drawable/calling_card_selector"
+            android:button="@null"
+            android:layout_width="wrap_content"
+            android:checked="false"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="@dimen/margin_left_and_right"
+            android:layout_centerVertical="true"
+            />
+    </RelativeLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/line_gray" />
+</LinearLayout>

@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/toolbar_height"
+        android:background="#dc3d3c">
+        <ImageView
+            android:id="@+id/iv_back"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:src="@mipmap/jiantou_left_white"
+            android:paddingLeft="@dimen/margin_left_and_right"
+            />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_marginLeft="20dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:background="@drawable/white_border"
+            android:layout_weight="1">
+
+            <!--  <Spinner
+                  android:id="@+id/spinner"
+                  android:layout_width="50dp"
+                  android:layout_height="wrap_content">
+              </Spinner>
+     -->
+
+            <TextView
+                android:id="@+id/tv_choose"
+                android:paddingLeft="5dp"
+                android:paddingRight="10dp"
+                android:gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:drawableRight="@mipmap/xiala_black"
+                android:drawablePadding="5dp"
+                android:text="店铺"
+                />
+            <EditText
+                android:id="@+id/et_search"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_gravity="center_vertical"
+                android:layout_height="wrap_content"
+                android:hint="请输入要搜索的内容"
+                android:textColorHint="@color/text_gray"
+                android:background="@null"
+                />
+        </LinearLayout>
+        <TextView
+            android:id="@+id/tv_search"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="搜索"
+            android:layout_gravity="center_vertical"
+            android:textColor="@color/text_white"
+            android:layout_marginRight="20dp"
+            android:textSize="@dimen/text_size_medium"
+            android:layout_marginLeft="10dp"
+            />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:background="#f5f5f5"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/tv_xiaoliang"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="销量优先"
+            android:padding="10dp"
+            android:gravity="center"
+            android:layout_centerInParent="true"
+            />
+
+        <View
+            android:layout_width="1px"
+            android:layout_height="match_parent"
+            android:background="@color/line_gray" />
+
+        <TextView
+            android:id="@+id/tv_pinjia"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="评价优先"
+            android:padding="10dp"
+            android:gravity="center"
+            android:layout_centerInParent="true"
+            />
+
+
+
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2px"
+        android:background="@color/line_gray" />
+
+    <com.handmark.pulltorefresh.library.PullToRefreshListView
+        android:id="@+id/listview_shop"
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </com.handmark.pulltorefresh.library.PullToRefreshListView>
+
+</LinearLayout>
