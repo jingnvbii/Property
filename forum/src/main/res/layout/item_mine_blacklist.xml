@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/folder_cover_size"
+    android:background="@color/white">
+
+
+    <com.ctrl.forum.customview.MineHeadView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/iv_icon"
+        android:src="@mipmap/iconfont_head"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="@dimen/margin_left_and_right"
+        android:layout_marginLeft="@dimen/margin_left_and_right"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/dear_name"
+        android:textColor="@color/text_black1"
+        android:textSize="@dimen/text_size_basic"
+        android:id="@+id/tv_deal"
+        android:layout_centerVertical="true"
+        android:layout_toRightOf="@+id/iv_icon"
+        android:layout_toEndOf="@+id/iv_icon"
+        android:layout_marginLeft="@dimen/margin_left_and_right"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/comment_name"
+        android:textSize="@dimen/text_size_basic"
+        android:id="@+id/tv_name"
+        android:layout_toRightOf="@+id/tv_deal"
+        android:textColor="@color/text_black1"
+        android:layout_toEndOf="@+id/tv_deal"
+        android:layout_marginLeft="3dp"
+        android:layout_centerVertical="true" />
+
+    <Button
+        android:layout_width="100dp"
+        android:layout_height="30dp"
+        android:text="@string/clear_black"
+        android:id="@+id/bt_clear"
+        android:layout_centerVertical="true"
+        android:textColor="@color/text_white"
+        android:background="@drawable/btn_red_selector"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="@dimen/margin_left_and_right" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/iv_grade"
+        android:src="@mipmap/vip_icon2"
+        android:layout_toRightOf="@+id/tv_name"
+        android:layout_centerVertical="true"
+        android:layout_toEndOf="@+id/tv_name"
+        android:layout_marginLeft="5dp"/>
+</RelativeLayout>

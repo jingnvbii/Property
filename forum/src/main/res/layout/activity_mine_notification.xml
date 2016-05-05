@@ -1,0 +1,73 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+   android:layout_width="match_parent" android:layout_height="match_parent"
+   android:orientation="vertical"
+   android:background="@color/main_bg">
+    <include
+        layout="@layout/toolbar_common_red"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/toolbar_height" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/white"
+        android:id="@+id/text"
+     >
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/all"
+            android:clickable="true"
+            android:onClick="onClick"
+            android:id="@+id/tv_all"
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:textSize="@dimen/text_size_more"
+            />
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/receive_comment"
+            android:clickable="true"
+            android:onClick="onClick"
+            android:id="@+id/tv_comment"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:textSize="@dimen/text_size_more" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:id="@+id/lines"
+        >
+
+        <TextView
+            android:id="@+id/tv_line_all"
+            android:layout_width="0dp"
+            android:layout_height="3dp"
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            android:gravity="center"
+            />
+        <TextView
+            android:id="@+id/tv_line_comment"
+            android:layout_width="0dp"
+            android:layout_height="3dp"
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            android:gravity="center" />
+    </LinearLayout>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/fl_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+       >
+    </android.support.v4.view.ViewPager>
+</LinearLayout>

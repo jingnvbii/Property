@@ -1,0 +1,140 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+     android:layout_width="match_parent" android:layout_height="match_parent"
+     android:background="@color/main_bg"  android:orientation="vertical">
+
+    <include layout="@layout/toolbar_common_red"
+        android:layout_width="match_parent" android:layout_height="@dimen/toolbar_height"
+        android:id="@+id/include" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/main_bg">
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/title"
+        android:textSize="12sp"
+        android:textColor="@color/text_black1"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/xieyi"
+        android:textSize="12sp"
+        android:id="@+id/xieyi"
+        android:textColor="@color/xieyi"
+        android:layout_alignTop="@+id/tv_title"
+        android:layout_toRightOf="@+id/tv_title"
+        android:layout_toEndOf="@+id/tv_title" />
+    </RelativeLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/important"
+        android:textSize="12sp"
+        android:textColor="@color/red_bg"
+        android:layout_marginTop="11dp"
+        android:layout_marginLeft="10dp" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/white"
+        android:layout_marginTop="11dp"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/tv_phone"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="10dp"
+            android:textColor="@color/text_black1"
+            android:textSize="16sp"
+            android:layout_alignParentStart="true"
+            android:id="@+id/textView3" />
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="phone"
+            android:ems="10"
+            android:hint="@string/hint_phone"
+            android:textColorHint="@color/text_hint"
+            android:id="@+id/editText"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="3dp"
+            android:textSize="16sp"
+            android:background="@null"
+            android:layout_toRightOf="@+id/textView3"
+            android:layout_toEndOf="@+id/textView3" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/white"
+        android:layout_marginTop="11dp"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/getyanzheng"
+            android:id="@+id/getyanzheng"
+            android:layout_centerVertical="true"
+            android:textSize="16sp"
+            android:textColor="@color/text_yanzheng"
+            android:layout_centerHorizontal="true" />
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/white"
+        android:layout_marginTop="11dp"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/yanzheng"
+            android:layout_marginLeft="10dp"
+            android:textSize="16sp"
+            android:id="@+id/textView4"
+            android:textColor="@color/text_black1"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:ems="10"
+            android:id="@+id/et_yanzheng"
+            android:background="@null"
+            android:layout_marginLeft="3dp"
+            android:layout_alignTop="@+id/textView4"
+            android:layout_toRightOf="@+id/textView4"
+            android:layout_toEndOf="@+id/textView4" />
+    </RelativeLayout>
+    <TextView
+        android:id="@+id/tv_next"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/next"
+        android:textColor="@color/text_white"
+        android:background="@drawable/btn_red_selector"
+        android:gravity="center"
+        android:padding="10dp"
+        android:textSize="@dimen/text_size_medium"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="30dp"/>
+
+
+</LinearLayout>

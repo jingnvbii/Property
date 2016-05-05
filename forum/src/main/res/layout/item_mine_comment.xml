@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/comment_content"
+            android:textSize="@dimen/text_size_medium"
+            android:textColor="@color/text_black1"
+            android:id="@+id/tv_comment"
+            android:lines="2"
+            android:ellipsize="end"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="@dimen/margin_left_and_right"
+            android:layout_marginLeft="@dimen/margin_left_and_right"
+            android:layout_marginRight="@dimen/margin_left_and_right"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/comment_year"
+            android:id="@+id/tv_year"
+            android:textSize="@dimen/text_size_medium"
+            android:textColor="@color/text_newpwd"
+            android:layout_below="@+id/tv_comment"
+            android:layout_alignLeft="@+id/tv_comment"
+            android:layout_alignStart="@+id/tv_comment"
+            android:layout_marginTop="5dp"
+            />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/comment_time"
+        android:id="@+id/tv_time"
+        android:textSize="@dimen/text_size_medium"
+        android:textColor="@color/text_newpwd"
+        android:layout_alignBottom="@+id/tv_year"
+        android:layout_toRightOf="@+id/tv_year"
+        android:layout_marginLeft="7dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/aite"
+        android:id="@+id/tv_aite"
+        android:textSize="@dimen/text_size_medium"
+        android:textColor="@color/text_newpwd"
+        android:layout_alignBottom="@+id/tv_time"
+        android:layout_toRightOf="@+id/tv_time"
+        android:layout_marginLeft="7dp"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/comment_name"
+        android:id="@+id/tv_name"
+        android:textSize="@dimen/text_size_medium"
+        android:textColor="@color/text_newpwd"
+        android:layout_alignBottom="@+id/tv_aite"
+        android:layout_toRightOf="@+id/tv_aite"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/comment_append"
+        android:id="@+id/tv_append"
+        android:textSize="@dimen/text_size_medium"
+        android:textColor="@color/text_newpwd"
+        android:layout_alignBottom="@+id/tv_name"
+        android:layout_toRightOf="@+id/tv_name"
+        android:layout_marginLeft="4dp"
+        />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/tv_year"
+        android:background="@color/line_gray"
+        android:layout_marginTop="5dp"
+         />
+
+</RelativeLayout>

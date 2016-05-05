@@ -1,0 +1,57 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+ >
+    <include
+        layout="@layout/toolbar_common_red"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/toolbar_height"
+        />
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/white"
+        android:id="@+id/text">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/tie_collect"
+            android:clickable="true"
+            android:onClick="onClick"
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:textColor="@color/rim"
+            android:textSize="@dimen/text_size_basic"
+            />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/shop_collect"
+            android:clickable="true"
+            android:onClick="onClick"
+            android:id="@+id/tv_comment"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:textColor="@color/rim"
+            android:textSize="@dimen/text_size_basic" />
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/goods_collect"
+            android:clickable="true"
+            android:onClick="onClick"
+            android:id="@+id/tv_all"
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:textColor="@color/rim"
+            android:textSize="@dimen/text_size_basic"
+            />
+    </LinearLayout>
+
+</LinearLayout>

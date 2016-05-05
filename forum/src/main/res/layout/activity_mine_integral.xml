@@ -1,0 +1,166 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/main_bg"
+   >
+    <include
+        layout="@layout/toolbar_common_red"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/toolbar_height"
+        android:id="@+id/include5" />
+
+    <LinearLayout
+        android:id="@+id/last"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/list_item_micro"
+        android:layout_below="@+id/include5"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:background="@color/white">
+
+        <RelativeLayout
+            android:id="@+id/rl_last"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/imageView17"
+                android:layout_marginLeft="@dimen/margin_left_and_right"
+                android:src="@mipmap/money_black"
+                android:layout_centerVertical="true"
+                 />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/last"
+                android:id="@+id/textView41"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="3dp"
+                android:textColor="@color/rim"
+                android:textSize="@dimen/text_size_basic"
+                android:layout_toRightOf="@+id/imageView17"
+                android:layout_toEndOf="@+id/imageView17" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="299"
+                android:id="@+id/textView42"
+                android:textColor="@color/rim"
+                android:textSize="@dimen/text_size_basic"
+                android:layout_alignBottom="@+id/textView41"
+                android:layout_toRightOf="@+id/textView41"
+                android:layout_toEndOf="@+id/textView41" />
+        </RelativeLayout>
+
+        <TextView
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+           android:background="@color/main_bg" />
+
+        <RelativeLayout
+            android:id="@+id/rl_dui"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/imageView1"
+                android:layout_marginLeft="@dimen/margin_left_and_right"
+                android:src="@mipmap/dui_huan"
+                android:layout_centerVertical="true"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/exchange"
+                android:id="@+id/textView4"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="3dp"
+                android:textColor="@color/rim"
+                android:textSize="@dimen/text_size_basic"
+                android:layout_toRightOf="@+id/imageView1"
+                android:layout_toEndOf="@+id/imageView1" />
+
+        </RelativeLayout>
+
+        <TextView
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/main_bg" />
+
+        <RelativeLayout
+            android:id="@+id/rl_fen"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/imageView2"
+                android:layout_marginLeft="@dimen/margin_left_and_right"
+                android:src="@mipmap/jifen"
+                android:layout_centerVertical="true"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/ji_log"
+                android:id="@+id/textView"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="3dp"
+                android:textColor="@color/rim"
+                android:textSize="@dimen/text_size_basic"
+                android:layout_toRightOf="@+id/imageView2"
+                android:layout_toEndOf="@+id/imageView2" />
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <GridView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/rl_shop"
+        android:layout_below="@+id/last"
+        android:horizontalSpacing="1dp"
+        android:verticalSpacing="1dp"
+        android:numColumns="2"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="@dimen/margin_left_and_right"
+        android:background="@color/main_bg"/>
+
+    <ListView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/lv_dui"
+        android:divider="@color/fen_line"
+        android:layout_below="@+id/last"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="@dimen/margin_left_and_right"
+        android:background="@color/main_bg"/>
+
+    <ListView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/lv_fen"
+        android:divider="@color/fen_line"
+        android:layout_below="@+id/last"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="@dimen/margin_left_and_right"
+        android:background="@color/main_bg"/>
+
+</RelativeLayout>

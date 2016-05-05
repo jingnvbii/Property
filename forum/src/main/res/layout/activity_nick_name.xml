@@ -1,0 +1,49 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+     android:layout_width="match_parent" android:layout_height="match_parent"
+    android:background="@color/main_bg"
+    android:orientation="vertical">
+
+    <include
+        layout="@layout/toolbar_common_red"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/toolbar_height"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="35dp"
+        android:text="昵称(9/30)"
+        android:textSize="20sp"
+        android:layout_marginLeft="10dp"
+        android:gravity="center_vertical"
+        android:id="@+id/tv_ni"
+        android:textColor="@color/text_gray1"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:textColor="@color/line_gray"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white">
+    <EditText
+        android:id="@+id/et_nickname"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:background="@color/white"
+        android:text="春风佛面"
+        android:layout_marginLeft="10dp"
+        android:gravity="center_vertical"
+        android:textColorHint="@color/text_black"
+        android:textSize="20sp"
+        android:ems="30"
+        android:maxLength="30"
+        android:textColor="@color/black"/>
+    </LinearLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/line_gray"/>
+</LinearLayout>
