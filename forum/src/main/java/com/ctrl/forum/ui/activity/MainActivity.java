@@ -32,6 +32,7 @@ public class MainActivity extends AppToolBarActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initView();
+        //改动1
     }
 
     private void initView() {
