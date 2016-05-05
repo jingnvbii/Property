@@ -23,6 +23,232 @@
     <string name="xlistview_footer_hint_normal">上拉加载更多…</string>
     <string name="xlistview_footer_hint_ready">松开后加载…</string>
 
+    <!--编辑-->
+    <string name="my_center">个人中心</string>
+    <string name="bianji">编辑我的资料</string>
+    <string name="nickname">编辑昵称</string>
+    <string name="signname">编辑签名</string>
+    <string name="mysign">我的签名</string>
+    <string name="name_ok">确定</string>
+
+    <!--详细资料-->
+    <string name="detail">详细资料</string>
+    <string name="shop">店铺</string>
+    <string name="men_cloth">男装</string>
+    <string name="juan">劵</string>
+    <string name="hui">惠</string>
+    <string name="start_time">营业时间:</string>
+    <string name="ta_post">TA的发帖</string>
+    <string name="like_title">喜欢的文章</string>
+    <string name="ta_comment">TA的评论</string>
+    <string name="ta_fa_title">TA的发文</string>
+    <string name="send_message">发送消息</string>
+    <string name="input_blacklist">拉入黑名单</string>
+
+    <!--我的订单-->
+    <string name="ctrl">开创集团</string>
+    <string name="offer">本订单由开创集团提供</string>
+    <string name="total">总价</string>
+    <string name="ping_jia">评价</string>
+    <string name="buy_again">再次购买</string>
+    <string name="payment">付款</string>
+    <string name="time">2016-01-01 13:41:03</string>
+
+    <!--红包-->
+    <string name="input_ni_phone">请输入您的手机号</string>
+    <string name="activity">活动规则</string>
+    <string name="activity_content">1.红包新老用户同享&#x000A;2.活动规则介绍活动规则介绍活动规则介绍活动规则介绍&#x000A;3.活动规则介绍活动规则介绍活动规则介绍活动规则介绍&#x000A;4.活动规则介绍活动规则介绍活动规则介绍活动规则介绍活动规则介绍&#x000A;</string>
+    <string name="see_friend">看朋友手气如何</string>
+    <string name="you_hui">优惠劵</string>
+    <string name="xian_juan">现金劵</string>
+    <string name="man">全品类满100使用</string>
+    <string name="juan_time">2016-03-31</string>
+    <string name="xian_zhi">限开创集团使用</string>
+
+    <!--现金劵-->
+    <string name="wei_juan">未使用(10)</string>
+    <string name="use_juan">已使用(5)</string>
+    <string name="past_juan">已过期(8)</string>
+    <string name="juan_name">西门子柏海生专卖店</string>
+    <string name="time_limit">使用期限:</string>
+    <string name="limit_day">2016.12.20-2016.12.23</string>
+    <string name="goods_limit">限定商品</string>
+    <string name="use_man">满1200元使用</string>
+
+    <!--积分商城-->
+    <string name="integral_shop">积分商城</string>
+    <string name="last">剩余:</string>
+    <string name="exchange">兑换记录</string>
+    <string name="ji_log">积分记录</string>
+    <string name="goods_name">商品名称:</string>
+    <string name="goods_name_detail">小熊维尼T恤衫</string>
+
+    <!--积分记录-->
+    <string name="fen_content">您登录平台超过5小时,奖励1个积分</string>
+
+    <!--会员中心-->
+    <string name="my_name">昵称:Angelababy</string>
+    <string name="my_grade">等级</string>
+    <string name="sign">签到</string>
+    <string name="integral">积分:173</string>
+    <string name="my_comment">我的评论</string>
+    <string name="comment_content">"请问这个学区房的学校是历下第一实验小学吗?能不能公积金贷款?产权是70年吗"</string>
+    <string name="comment_year">2016-12-12</string>
+    <string name="comment_time">12:05:13</string>
+    <string name="comment">评论</string>
+    <string name="aite">\@</string>
+    <string name="comment_name">宝宝</string>
+    <string name="comment_append">的帖子</string>
+    <string name="my_collect">我的收藏</string>
+    <string name="my_post">我的发帖</string>
+    <string name="my_juan">我的劵</string>
+    <string name="my_order">我的订单</string>
+    <string name="my_address">收货地址</string>
+    <string name="my_pingjia">我的评价</string>
+    <string name="my_xiaoqu">我的小区</string>
+    <string name="my_shop">我的店铺</string>
+    <string name="my_drafts">草稿箱</string>
+    <string name="my_blacklist">黑名单</string>
+    <string name="dear_name">昵称:</string>
+    <string name="clear_black">取消屏蔽</string>
+
+    <!--我的店铺-->
+    <string name="apply_shop">店铺申请</string>
+    <string name="apply_start">马上申请我的店铺</string>
+    <string name="shop_name">店铺名称</string>
+    <string name="input_shop_name">请输入店铺名称(必填)</string>
+    <string name="shop_address">地址</string>
+    <string name="input_shop_address">请输入联系地址</string>
+    <string name="apply_name">申请人姓名</string>
+    <string name="input_apply_name">请输入申请人姓名</string>
+    <string name="shop_phone">联系方式</string>
+    <string name="input_shop_phone">请输入联系方式</string>
+    <string name="commit">提交</string>
+    <string name="commit_apply">已提交审核,请耐心等待!</string>
+
+    <!--店铺评论-->
+    <string name="store_comment">店铺评论</string>
+
+    <!--等级-->
+    <string name="vip_grade">会员等级</string>
+    <string name="vip_name">随风飘散</string>
+    <string name="now_grade">您当前等级为</string>
+    <string name="learning_Stage">今日已获取经验值</string>
+    <string name="max_stage">(每日上限75点)</string>
+    <string name="now_stage">当前经验值</string>
+    <string name="up_grade">距离升级还有</string>
+    <string name="stage">点经验</string>
+    <string name="fast_stage">如何快速升级?</string>
+    <string name="use_grade">等级有什么用?</string>
+
+    <!--收到的评论-->
+    <string name="comment_vip_name">飘雪虚</string>
+    <string name="comment_reply">回复</string>
+    <string name="reply_content">:好的,先这样也可以</string>
+    <string name="reply_my_comment">回复我的评论:</string>
+    <string name="reply_gao_xiao">多搞笑?</string>
+
+    <!--我的评价-->
+    <string name="assess">我的评价</string>
+    <string name="wei_assess">待评价订单</string>
+    <string name="yi_assess">已评价订单</string>
+    <string name="assess_name">重庆鸡公煲(银座店)</string>
+    <string name="assess_total">总价:</string>
+    <string name="assess_go">去评价</string>
+    <string name="assess_time">2016-12-8  15:36:21</string>
+    <string name="assess_speed">送餐速度超级快</string>
+
+    <!--我的收藏-->
+    <string name="tie_collect">帖子收藏</string>
+    <string name="shop_collect">店铺收藏</string>
+    <string name="goods_collect">商品收藏</string>
+
+    <!--修改密码-->
+    <string name="updatepwd">修改密码</string>
+    <string name="title">注册手机账号的行为表明您同意我们的</string>
+    <string name="xieyi">&lt;&lt;使用协议&gt;&gt;</string>
+    <string name="important">*其它人不会看到你的手机号</string>
+    <string name="tv_phone">手机号:</string>
+    <string name="hint_phone">请输入你的手机号</string>
+    <string name="getyanzheng"><b>点击获取验证码</b></string>
+    <string name="yanzheng">验证码:</string>
+    <string name="next">下一步</string>
+    <string name="input_pwd">输入密码:</string>
+    <string name="ok_pwd">确认密码:</string>
+    <string name="new_pwd">新密码</string>
+    <string name="input_newpwd">输入新密码</string>
+
+    <!--修改头像-->
+    <string name="take_picture">拍照</string>
+    <string name="choose_phone">相册中选取</string>
+
+    <!--设置-->
+    <string name="set_title">设置</string>
+    <string name="notification_type">通知类型</string>
+    <string name="system_notification">系统通知</string>
+    <string name="reply_comments">评论回复</string>
+    <string name="message_notification_type">消息通知方式</string>
+    <string name="voice">声音</string>
+    <string name="vibration">振动</string>
+    <string name="night_no_message">夜间免打扰</string>
+    <string name="no_data">(22:00-8:00不接收通知)</string>
+    <string name="notification_show">通知显示消息详情</string>
+    <string name="desktop_icon_hints">桌面图标提示</string>
+    <string name="clear">清理缓存</string>
+
+    <!--意见反馈-->
+    <string name="feedback">意见反馈</string>
+    <string name="send">发送</string>
+    <string name="max_input">最多输入两百字</string>
+    <string name="input_phone">请输入您的手机号</string>
+
+    <!--消息通知-->
+    <string name="message_notification">消息通知</string>
+    <string name="all">全部</string>
+    <string name="receive_comment">收到的评论</string>
+    <string name="content_data">2015-10-3</string>
+    <string name="message_contetn">您已成功升级为三星会员,感谢您对本平台的支持!</string>
+
+    <!--周边服务-->
+    <string name="rim">周边服务</string>
+    <string name="search">搜索栏目内容</string>
+    <string name="hot_div">热门分类</string>
+    <string name="phone">电话号码</string>
+    <string name="serve">便民服务</string>
+    <string name="shopping">购物</string>
+    <string name="doctor">医疗</string>
+    <string name="cate">美食小吃</string>
+    <string name="play">运动健身</string>
+    <string name="fun">休闲娱乐</string>
+    <string name="mom">母婴</string>
+    <string name="beautiful">丽人</string>
+    <string name="more">其它</string>
+    <string name="item_one">项目一</string>
+
+    <!--项目一-->
+    <string name="rim_shop_name">老兵果蔬店</string>
+    <string name="rim_shop_address">中润世纪广场18号楼</string>
+    <string name="rim_phone">电话:</string>
+    <string name="rim_phone_num">0531-81663561</string>
+    <string name="take_bo">已拨打</string>
+    <string name="take_ci">次</string>
+    <string name="bo_hao">1358903262</string>
+    <string name="call_up">呼叫</string>
+
+    <!--店铺详情-->
+    <string name="address">地址:</string>
+    <string name="detail_address">济南市中润世纪广场18号楼401室</string>
+    <string name="detail_message">详细信息:</string>
+    <string name="no_one">暂无</string>
+    <string name="hot_pl">热门评论</string>
+    <string name="pl_num">(10)</string>
+    <string name="colon">:</string>
+    <string name="collect">收藏</string>
+    <string name="collect_serve">收藏服务列表</string>
+
+    <!--地图-->
+    <string name="map_dh">导航</string>
+    <string name="map">地图</string>
 
 
 

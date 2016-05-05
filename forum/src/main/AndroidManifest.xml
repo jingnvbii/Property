@@ -114,7 +114,38 @@
         <activity android:name=".ui.activity.store.StorePaymentSucessActivity" />
         <activity android:name=".ui.activity.store.StoreOrderStatusActivity" />
 
+        <!--我的-->
+        <activity android:name=".ui.activity.mine.MineAssessActivity" />
+        <activity android:name=".ui.activity.mine.MineBlacklistActivity" />
+        <activity android:name=".ui.activity.mine.MineCreateShopOneActivity" />
+        <activity android:name=".ui.activity.mine.MineCreateShopTwoActivity" />
+        <activity android:name=".ui.activity.mine.MineCreateShopThreeActivity" />
+        <activity android:name=".ui.activity.mine.MineCommentActivity" />
+        <activity android:name=".ui.activity.mine.MineCollectActivity" />
+        <activity android:name=".ui.activity.mine.MineNickNameActivity" />
+        <activity android:name=".ui.activity.mine.MineDetailActivity" />
+        <activity android:name=".ui.activity.mine.MineEditActivity" />
+        <activity android:name=".ui.activity.mine.MineFeedBackActivity" />
+        <activity android:name=".ui.activity.mine.MineGradeActivity" />
+        <activity android:name=".ui.activity.mine.MineIntegralActivity" />
+        <activity android:name=".ui.activity.mine.MineJuanActivity" />
+        <activity android:name=".ui.activity.mine.MineMessageActivity" />
+        <activity android:name=".ui.activity.mine.MineNewpwdActivity" />
+        <activity android:name=".ui.activity.mine.MineOrderActivity" />
+        <activity android:name=".ui.activity.mine.MineSignActivity" />
+        <activity android:name=".ui.activity.mine.MineUpdatepwdActivity" />
+        <activity android:name=".ui.activity.mine.MineSettingActivity" />
+        <activity android:name=".ui.activity.mine.MineShopManageActivity" />
+        <activity android:name=".ui.activity.mine.MineYouJuanActivity" />
+        <activity android:name=".ui.activity.mine.MineXianJuanActivity" />
+        <activity android:name=".ui.activity.mine.RedPacketActivity" />
 
+        <!--周边-->
+        <activity android:name=".ui.activity.rim.ItemRimActivity" />
+        <activity android:name=".ui.activity.rim.RimStoreCommentActivity" />
+        <activity android:name=".ui.activity.rim.RimMapDetailActivity" />
+        <activity android:name=".ui.activity.rim.RimCollectServeActivity" />
+        <activity android:name=".ui.activity.rim.RimShopDetailActivity" />
 
     </application>
 
