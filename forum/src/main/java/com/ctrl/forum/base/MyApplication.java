@@ -2,9 +2,11 @@ package com.ctrl.forum.base;
 
 import android.app.Activity;
 
+import com.baidu.mapapi.SDKInitializer;
 import com.beanu.arad.AradApplication;
 import com.beanu.arad.AradApplicationConfig;
 import com.beanu.arad.http.HttpConfig;
+import com.ctrl.forum.service.LocationService;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -21,6 +23,8 @@ public class MyApplication extends AradApplication {
     private List<Activity> mList = new LinkedList<Activity>();
     //为了实现每次使用该类时不创建新的对象而创建的静态对象
     private static MyApplication instance;
+    public LocationService locationService;
+
     //构造方法
     //private MyApplication(){}
     //实例化一次
@@ -56,11 +60,14 @@ public class MyApplication extends AradApplication {
 
     @Override
     public void onCreate() {
+        /***
+         * 初始化定位sdk，建议在Application中创建
+         */
+        locationService = new LocationService(getApplicationContext());
         //百度地图初始化
-        //SDKInitializer.initialize(getApplicationContext());
+        SDKInitializer.initialize(getApplicationContext());
         super.onCreate();
         //SpeechUtility.createUtility(getApplicationContext(), SpeechConstant.APPID + Constant.XUNFEI_APPID); //科大讯飞
-     //   SDKInitializer.initialize(getApplicationContext());
         //LocationUtil.getInstance().init(getApplicationContext());
         config.httpConfig = new HttpConfig("succeed");
 
