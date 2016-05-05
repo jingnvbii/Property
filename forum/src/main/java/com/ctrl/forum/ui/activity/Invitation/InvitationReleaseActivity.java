@@ -27,6 +27,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.beanu.arad.Arad;
+import com.beanu.arad.utils.AndroidUtil;
 import com.beanu.arad.utils.AnimUtil;
 import com.beanu.arad.utils.MessageUtils;
 import com.ctrl.forum.R;
@@ -77,6 +78,9 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
     private String tel;
 
 
+    private String tv_location_name;//位置标识
+
+
     @InjectView(R.id.iv01)
     ImageView iv01;
     @InjectView(R.id.iv02)
@@ -95,6 +99,11 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
     ImageView iv08;
     @InjectView(R.id.iv09)
     ImageView iv09;
+
+    @InjectView(R.id.ll_image_second)//图片布局2
+     LinearLayout ll_image_second;
+    @InjectView(R.id.ll_image_third)//图片布局3
+     LinearLayout ll_image_third;
 
 
     /* 请求码*/
@@ -135,7 +144,8 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
         tv_location.setOnClickListener(this);
         tv_name.setOnClickListener(this);
         tv_release_back.setOnClickListener(this);
-
+        //初始化控件宽高
+        setImageViewWidth(iv01);
         listImg.add(iv01);
         listImg.add(iv02);
         listImg.add(iv03);
@@ -276,7 +286,102 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
     public void onRequestSuccess(int requestCode) {
         super.onRequestSuccess(requestCode);
         if(requestCode==888){
+            showProgress(false);
             MessageUtils.showShortToast(this,"图片上传成功");
+            Image image=Idao.getImage();
+            mImageList.add(image);
+            setBitmapImg();
+            iv01.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    if (mImageList.size() >= 1) {
+                        imageFlag = 1;
+                        showDelDialog(1);
+                    }
+                    return true;
+                }
+            });
+            iv02.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    if (mImageList.size() >= 2) {
+                        imageFlag = 2;
+                        showDelDialog(2);
+                    }
+                    return true;
+                }
+            });
+            iv03.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    if (mImageList.size() >= 3) {
+                        imageFlag = 3;
+                        showDelDialog(3);
+                    }
+                    return true;
+                }
+            });
+            iv04.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    if (mImageList.size() >= 4) {
+                        imageFlag = 4;
+                        showDelDialog(4);
+                    }
+                    return true;
+                }
+            });
+            iv05.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    if (mImageList.size() >= 5) {
+                        imageFlag = 5;
+                        showDelDialog(5);
+                    }
+                    return true;
+                }
+            });
+            iv06.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    if (mImageList.size() >= 6) {
+                        imageFlag = 6;
+                        showDelDialog(6);
+                    }
+                    return true;
+                }
+            });
+            iv07.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    if (mImageList.size() >= 7) {
+                        imageFlag = 7;
+                        showDelDialog(7);
+                    }
+                    return true;
+                }
+            });
+            iv08.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    if (mImageList.size() >= 8) {
+                        imageFlag = 8;
+                        showDelDialog(8);
+                    }
+                    return true;
+                }
+            });
+            iv09.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    if (mImageList.size() >= 9) {
+                        imageFlag = 9;
+                        showDelDialog(9);
+                    }
+                    return true;
+                }
+            });
+
         }
 
         if(requestCode==12){
@@ -347,7 +452,7 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
                 break;
             case R.id.tv_location:
                 intent=new Intent(this,LocationActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent, 101);
                 AnimUtil.intentSlidIn(this);
                 break;
             case R.id.tv_name:
@@ -505,6 +610,14 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
                         tel=getIntent().getStringExtra("tel");
                     }
                     break;
+                case 101:
+                    if(resultCode==RESULT_CANCELED){
+                        tv_location_name="";
+                    }
+                    if(resultCode==RESULT_OK){
+                        tv_location_name=getIntent().getStringExtra("location");
+                    }
+                    break;
             }
         }catch (Exception e){
             e.printStackTrace();
@@ -517,7 +630,7 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
     private void setImageViewWidth(ImageView imageView){
 
         ViewGroup.LayoutParams params = imageView.getLayoutParams();
-        int w=imageView.getWidth();
+        int w= (AndroidUtil.getDeviceWidth(this)-20)/4;
         android.util.Log.d("demo", "width : " + w);
         params.height=w;
         android.util.Log.d("demo", "height : " + params.height);
@@ -526,12 +639,19 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
     }
 
 
+
+
     private void setBitmapImg(){
 
-/*        setImageViewWidth(iv01_ereport_add);
-        setImageViewWidth(iv02_ereport_add);
-        setImageViewWidth(iv03_ereport_add);
-        setImageViewWidth(iv04_ereport_add);*/
+        setImageViewWidth(iv01);
+        setImageViewWidth(iv02);
+        setImageViewWidth(iv03);
+        setImageViewWidth(iv04);
+        setImageViewWidth(iv05);
+        setImageViewWidth(iv06);
+        setImageViewWidth(iv07);
+        setImageViewWidth(iv08);
+        setImageViewWidth(iv09);
 
         if (mImageList != null){
 
@@ -560,7 +680,9 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
                 iv05.setVisibility(View.INVISIBLE);
 
 
-                for(int i = 0 ; i < mImageList.size() ; i ++){
+                for(int i = 0 ; i < mImageList.size() ; i++){
+                   // Log.i("tag","mImageList----"+mImageList.size());
+                  //  Log.i("tag","mImageList  url----"+mImageList.get(i).getThumbImgUrl());
                     Arad.imageLoader.load(mImageList.get(i).getThumbImgUrl()).into(listImg.get(i));
                 }
 
@@ -604,6 +726,9 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
             }
 
             if (mImageList.size() == 4){
+                ll_image_second.setVisibility(View.VISIBLE);
+
+
                 iv01.setVisibility(View.VISIBLE);
                 iv02.setVisibility(View.VISIBLE);
                 iv03.setVisibility(View.VISIBLE);
@@ -620,6 +745,7 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
                 }
             }
             if (mImageList.size() ==5){
+              //  ll_image_second.setVisibility(View.VISIBLE);
                 iv01.setVisibility(View.VISIBLE);
                 iv02.setVisibility(View.VISIBLE);
                 iv03.setVisibility(View.VISIBLE);
@@ -668,6 +794,7 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
                 }
             }
             if (mImageList.size() == 8){
+                ll_image_third.setVisibility(View.VISIBLE);
                 iv01.setVisibility(View.VISIBLE);
                 iv02.setVisibility(View.VISIBLE);
                 iv03.setVisibility(View.VISIBLE);
@@ -684,6 +811,7 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
                 }
             }
             if (mImageList.size() == 9){
+              //  ll_image_third.setVisibility(View.VISIBLE);
                 iv01.setVisibility(View.VISIBLE);
                 iv02.setVisibility(View.VISIBLE);
                 iv03.setVisibility(View.VISIBLE);
@@ -762,6 +890,7 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
                 }
                 if(mImageList.size() == 4){
                     mImageList.remove(0);
+                      ll_image_second.setVisibility(View.GONE);
 
 
                     iv01.setVisibility(View.VISIBLE);
@@ -776,10 +905,10 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
                     iv09.setVisibility(View.INVISIBLE);
                     setBitmapImg();
                 }
-                if(mImageList.size() == 5){
+                if (mImageList.size() == 5){
                     mImageList.remove(0);
 
-
+                  //  ll_image_second.setVisibility(View.GONE);
                     iv01.setVisibility(View.VISIBLE);
                     iv02.setVisibility(View.VISIBLE);
                     iv03.setVisibility(View.VISIBLE);
@@ -826,6 +955,7 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
                 }
                 if(mImageList.size() == 8){
                     mImageList.remove(0);
+                    ll_image_third.setVisibility(View.GONE);
 
 
                     iv01.setVisibility(View.VISIBLE);
@@ -842,7 +972,7 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
                 }
                 if(mImageList.size() ==9){
                     mImageList.remove(0);
-
+                  //  ll_image_third.setVisibility(View.GONE);
 
                     iv01.setVisibility(View.VISIBLE);
                     iv02.setVisibility(View.VISIBLE);
@@ -903,6 +1033,7 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
 
                 if(mImageList.size() == 4){
                     mImageList.remove(1);
+                    ll_image_second.setVisibility(View.GONE);
 
 
                     iv01.setVisibility(View.VISIBLE);
@@ -922,7 +1053,6 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
 
                 if(mImageList.size() == 5){
                     mImageList.remove(1);
-
 
                     iv01.setVisibility(View.VISIBLE);
                     iv02.setVisibility(View.VISIBLE);
@@ -970,6 +1100,7 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
                 }
                 if(mImageList.size() == 8){
                     mImageList.remove(1);
+                    ll_image_third.setVisibility(View.GONE);
 
 
                     iv01.setVisibility(View.VISIBLE);
@@ -986,7 +1117,6 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
                 }
                 if(mImageList.size() ==9){
                     mImageList.remove(1);
-
 
                     iv01.setVisibility(View.VISIBLE);
                     iv02.setVisibility(View.VISIBLE);
@@ -1035,6 +1165,7 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
 
                 if(mImageList.size() == 4){
                     mImageList.remove(2);
+                    ll_image_second.setVisibility(View.GONE);
 
 
                     iv01.setVisibility(View.VISIBLE);
@@ -1054,7 +1185,6 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
 
                 if(mImageList.size() == 5){
                     mImageList.remove(2);
-
 
                     iv01.setVisibility(View.VISIBLE);
                     iv02.setVisibility(View.VISIBLE);
@@ -1102,6 +1232,7 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
                 }
                 if(mImageList.size() == 8){
                     mImageList.remove(2);
+                    ll_image_third.setVisibility(View.GONE);
 
 
                     iv01.setVisibility(View.VISIBLE);
@@ -1118,7 +1249,6 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
                 }
                 if(mImageList.size() ==9){
                     mImageList.remove(2);
-
 
                     iv01.setVisibility(View.VISIBLE);
                     iv02.setVisibility(View.VISIBLE);
@@ -1149,6 +1279,7 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
 
                 if(mImageList.size() == 4){
                     mImageList.remove(3);
+                    ll_image_second.setVisibility(View.GONE);
 
 
                     iv01.setVisibility(View.VISIBLE);
@@ -1168,7 +1299,6 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
 
                 if(mImageList.size() == 5){
                     mImageList.remove(3);
-
 
                     iv01.setVisibility(View.VISIBLE);
                     iv02.setVisibility(View.VISIBLE);
@@ -1216,6 +1346,8 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
                 }
                 if(mImageList.size() == 8){
                     mImageList.remove(3);
+                    ll_image_third.setVisibility(View.GONE);
+
 
 
                     iv01.setVisibility(View.VISIBLE);
@@ -1232,7 +1364,6 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
                 }
                 if(mImageList.size() ==9){
                     mImageList.remove(3);
-
 
                     iv01.setVisibility(View.VISIBLE);
                     iv02.setVisibility(View.VISIBLE);
@@ -1268,7 +1399,7 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
                 if(mImageList.size() == 5){
                     mImageList.remove(4);
 
-
+                  // ll_image_second.setVisibility(View.GONE);
                     iv01.setVisibility(View.VISIBLE);
                     iv02.setVisibility(View.VISIBLE);
                     iv03.setVisibility(View.VISIBLE);
@@ -1315,7 +1446,7 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
                 }
                 if(mImageList.size() == 8){
                     mImageList.remove(4);
-
+                    ll_image_third.setVisibility(View.GONE);
 
                     iv01.setVisibility(View.VISIBLE);
                     iv02.setVisibility(View.VISIBLE);
@@ -1401,7 +1532,7 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
                 }
                 if(mImageList.size() == 8){
                     mImageList.remove(5);
-
+                    ll_image_third.setVisibility(View.GONE);
 
                     iv01.setVisibility(View.VISIBLE);
                     iv02.setVisibility(View.VISIBLE);
@@ -1474,6 +1605,7 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
                 }
                 if(mImageList.size() == 8){
                     mImageList.remove(6);
+                    ll_image_third.setVisibility(View.GONE);
 
 
                     iv01.setVisibility(View.VISIBLE);
@@ -1490,7 +1622,6 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
                 }
                 if(mImageList.size() ==9){
                     mImageList.remove(6);
-
 
                     iv01.setVisibility(View.VISIBLE);
                     iv02.setVisibility(View.VISIBLE);
@@ -1534,6 +1665,7 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
                 }
                 if(mImageList.size() == 8){
                     mImageList.remove(7);
+                    ll_image_third.setVisibility(View.GONE);
 
 
                     iv01.setVisibility(View.VISIBLE);
@@ -1550,7 +1682,6 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
                 }
                 if(mImageList.size() ==9){
                     mImageList.remove(7);
-
 
                     iv01.setVisibility(View.VISIBLE);
                     iv02.setVisibility(View.VISIBLE);
@@ -1598,7 +1729,7 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
                 if(mImageList.size() ==9){
                     mImageList.remove(8);
 
-
+                  //  ll_image_third.setVisibility(View.GONE);
                     iv01.setVisibility(View.VISIBLE);
                     iv02.setVisibility(View.VISIBLE);
                     iv03.setVisibility(View.VISIBLE);
