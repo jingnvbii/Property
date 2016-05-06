@@ -11,6 +11,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.util.Base64;
 import android.view.Gravity;
 import android.view.View;
@@ -19,6 +20,7 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
@@ -105,6 +107,14 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
     @InjectView(R.id.ll_image_third)//图片布局3
      LinearLayout ll_image_third;
 
+    @InjectView(R.id.tv_release)//发布
+    TextView tv_release;
+
+   @InjectView(R.id.et_tittle)//标题
+    EditText et_tittle;
+    @InjectView(R.id.et_content)//内容
+    EditText et_content;
+
 
     /* 请求码*/
     private static final int IMAGE_REQUEST_CODE = 0;
@@ -113,6 +123,9 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
     List<Image>mImageList=new ArrayList<>();
     private List<ImageView> listImg=new ArrayList<>();
     private ImageDao Idao;
+    private String thirdKindId;//三级分类id
+    private String secondKindId;//二级分类id
+
 
 
     @Override
@@ -144,6 +157,8 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
         tv_location.setOnClickListener(this);
         tv_name.setOnClickListener(this);
         tv_release_back.setOnClickListener(this);
+        tv_release.setOnClickListener(this);
+
         //初始化控件宽高
         setImageViewWidth(iv01);
         listImg.add(iv01);
@@ -217,6 +232,8 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
 
     public void Init() {
         channelId=getIntent().getStringExtra("channelId");
+        checkType=getIntent().getStringExtra("checkType");
+
         Idao=new ImageDao(this);
 
     }
@@ -285,6 +302,11 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
     @Override
     public void onRequestSuccess(int requestCode) {
         super.onRequestSuccess(requestCode);
+        if(requestCode==7){
+            MessageUtils.showShortToast(this,"帖子发布成功");
+            finish();
+        }
+
         if(requestCode==888){
             showProgress(false);
             MessageUtils.showShortToast(this,"图片上传成功");
@@ -400,6 +422,8 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                    idao.requesItemCategory3(listItemCategroy.get(position).getId(),"2");
+                   secondKindId=listItemCategroy.get(position).getId();
+
                 }
 
                 @Override
@@ -411,6 +435,7 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
         }
         if(requestCode==13){
             MessageUtils.showShortToast(this,"获取三级分类成功");
+            spinner_third_kind.setVisibility(View.VISIBLE);
             listItemCategroy=idao.getListCategroyItem();
             for(int i=0;i<listItemCategroy.size();i++){
                 thirdCategroyStr.add(listItemCategroy.get(i).getName());
@@ -426,9 +451,8 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                     categroyId=listItemCategroy.get(position).getId();
+                    thirdKindId=categroyId;
                     checkType=listItemCategroy.get(position).getCheckType();
-                    
-                    
                 }
 
                 @Override
@@ -441,10 +465,95 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
         }
     }
 
+    private boolean checkInput(){
+        if(TextUtils.isEmpty(name)){
+            MessageUtils.showShortToast(InvitationReleaseActivity.this,"联系人名称为空");
+            return false;
+        }
+        if(TextUtils.isEmpty(adress)){
+            MessageUtils.showShortToast(InvitationReleaseActivity.this,"联系人地址为空");
+            return false;
+        }
+        if(TextUtils.isEmpty(tel)){
+            MessageUtils.showShortToast(InvitationReleaseActivity.this,"联系人电话为空");
+            return false;
+        }
+        return true;
+    }
+
     @Override
     public void onClick(View v) {
        Intent intent=null;
         switch (v.getId()){
+            case R.id.tv_release:
+                if(Arad.preferences.getBoolean("isCallingChecked")){
+                    if(checkInput()){
+                       if(spinner_third_kind.getVisibility()==View.VISIBLE){
+                           idao.requesReleasePost(
+                                   Arad.preferences.getString("memberId"),
+                                   thirdKindId,
+                                   "0",
+                                   "1",
+                                   checkType,
+                                   et_tittle.getText().toString().trim(),
+                                   et_content.getText().toString().trim(),
+                                   "0",
+                                   name,
+                                   adress,
+                                   tel,
+                                   "",
+                                   "",
+                                   "",
+                                   ""
+                           );
+                       }else {
+
+                           idao.requesReleasePost(
+                                   Arad.preferences.getString("memberId"),
+                                   secondKindId,
+                                   "0",
+                                   "1",
+                                   checkType,
+                                   et_tittle.getText().toString().trim(),
+                                   et_content.getText().toString().trim(),
+                                   "0",
+                                   name,
+                                   adress,
+                                   tel,
+                                   "",
+                                   "",
+                                   "",
+                                   ""
+                           );
+
+                       }
+
+
+
+                    }
+
+                }else{
+
+                    idao.requesReleasePost(
+                            Arad.preferences.getString("memberId"),
+                            thirdKindId,
+                            "0",
+                            "1",
+                            checkType,
+                            et_tittle.getText().toString().trim(),
+                            et_content.getText().toString().trim(),
+                            "0",
+                            name,
+                            adress,
+                            tel,
+                            "",
+                            "",
+                            "",
+                            "");
+                }
+
+
+                break;
             case R.id.tv_tel:
                 intent=new Intent(this,AddContactPhoneActivity.class);
                 startActivityForResult(intent, 100);
@@ -605,9 +714,11 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
 
                 case 100:
                     if(resultCode==RESULT_OK){
-                        name=getIntent().getStringExtra("name");
-                        adress=getIntent().getStringExtra("adress");
-                        tel=getIntent().getStringExtra("tel");
+
+                        name=data.getStringExtra("name");
+                        adress=data.getStringExtra("adress");
+                        tel=data.getStringExtra("tel");
+
                     }
                     break;
                 case 101:

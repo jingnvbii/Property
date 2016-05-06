@@ -2,6 +2,7 @@ package com.ctrl.forum.ui.activity.Invitation;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
@@ -67,7 +68,7 @@ public class AddContactPhoneActivity extends AppToolBarActivity {
                 intent.putExtra("name",et_name.getText().toString().trim());
                 intent.putExtra("adress",et_address.getText().toString().trim());
                 intent.putExtra("tel",et_tel.getText().toString().trim());
-                setResult(RESULT_OK,intent);
+                setResult(RESULT_OK, intent);
                 finish();
             }
         });

@@ -67,20 +67,20 @@ public class InvitationDao extends IDao {
     }
     /**
      * 根据分类获取帖子列表
-     * @param categoryType //分类类型（0：广场帖子、1：小区帖子）
      * @param reporterId //发帖人id（会员id）
      * @param categoryId //帖子分类id
+     * @param categoryType //分类类型（0：广场帖子、1：小区帖子）
      * @param pageNum   //当前页码
      * @param pageSize  //每页条数
      * */
-    public void requestPostListByCategory(String categoryType,String reporterId,String categoryId,int pageNum,int pageSize){
+    public void requestPostListByCategory(String reporterId,String categoryId,String categoryType,int pageNum,int pageSize){
         String url="post/queryPostListByCategory";
         Map<String,String> map = new HashMap<String,String>();
-        map.put("categoryType",categoryType);
         map.put("reporterId",reporterId);
         map.put("categoryId",categoryId);
-        map.put("pageNum",pageNum+"");
-        map.put("pageSize",pageSize+"");
+        map.put("categoryType",categoryType);
+        map.put("pageNum",String.valueOf(pageNum));
+        map.put("pageSize",String.valueOf(pageSize));
 
         postRequest(Constant.RAW_URL+url, mapToRP(map), 1);
     }
@@ -212,7 +212,6 @@ public class InvitationDao extends IDao {
      * @param locationLongitude //发帖位置_经度
      * @param locationLatitude //发帖位置_纬度
      * @param locationName //位置名称
-     * @param remarkStr //帖子图片说明串: (多张图片之间用逗号分隔)
      * @param postImgStr //帖子图片串:(跟帖子图片一一对应,之间用逗号分隔)
      * */
     public void requesReleasePost(String reporterId,
@@ -229,11 +228,10 @@ public class InvitationDao extends IDao {
                                  String locationLongitude,
                                  String locationLatitude,
                                  String locationName,
-                                 String remarkStr,
                                  String postImgStr
     ){
+        String url="post/reportPost";
         Map<String,String> map = new HashMap<String,String>();
-        map.put(Constant.METHOD,"post/editorPost");//方法名称
         map.put("reporterId",reporterId);
         map.put("categoryId",categoryId);
         map.put("categoryType",categoryType);
@@ -248,10 +246,9 @@ public class InvitationDao extends IDao {
         map.put("locationLongitude",locationLongitude);
         map.put("locationLatitude",locationLatitude);
         map.put("locationName",locationName);
-        map.put("remarkStr",remarkStr);
         map.put("postImgStr",postImgStr);
 
-        postRequest(Constant.RAW_URL, mapToRP(map),7);
+        postRequest(Constant.RAW_URL+url, mapToRP(map),7);
     }
 
 
@@ -351,9 +348,12 @@ public class InvitationDao extends IDao {
 
         if(requestCode == 1){
             Log.d("demo","dao中结果集(根据分类获取帖子列表): " + result);
-            listPost = JsonUtil.node2pojoList(result.findValue("postList"), Post.class);
+            List<Post> data = JsonUtil.node2pojo(result.findValue("postList"),new TypeReference<List<Post>>(){});
+            listPost.addAll(data);
+
+           /* listPost = JsonUtil.node2pojoList(result.findValue("postList"), Post.class);
             listPostImage = JsonUtil.node2pojoList(result.findValue("postImgList"), PostImage.class);
-            listPostReply = JsonUtil.node2pojoList(result.findValue("postReplyList"), PostReply.class);
+            listPostReply = JsonUtil.node2pojoList(result.findValue("postReplyList"), PostReply.class);*/
         }
         if(requestCode == 2){
             Log.d("demo","dao中结果集(获取帖子分类列表): " + result);

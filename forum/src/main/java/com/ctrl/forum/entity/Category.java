@@ -10,6 +10,7 @@ public class Category {
     private String id;//分类id
     private String name;//分类名称
     private String category_icon;//分类图标
+    private String checkType;//审核类型（0：无需审核、1：需审核)
     private String styleType;//样式类型（1：列表样式、2：方块样式、3：瀑布流样式、4：朋友圈样式）
     private String canPublish;//是否允许发帖（0：禁止、1：允许）
     private String canComment;//是否允许评论（0：禁止、1：允许）
@@ -19,6 +20,13 @@ public class Category {
 
     public List<Category2> getCategorylist() {
         return categorylist;
+    }
+    public String getCheckType() {
+        return checkType;
+    }
+
+    public void setCheckType(String checkType) {
+        this.checkType = checkType;
     }
 
     public void setCategorylist(List<Category2> categorylist) {

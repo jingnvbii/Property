@@ -28,6 +28,11 @@ public class CallingCardActivity extends AppToolBarActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.calling_card_activity);
         ButterKnife.inject(this);
+        if(Arad.preferences.getBoolean("isCallingChecked")){
+            cb_calling.setChecked(true);
+        }else {
+            cb_calling.setChecked(false);
+        }
         cb_calling.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {

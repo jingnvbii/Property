@@ -2,8 +2,11 @@ package com.ctrl.forum.ui.activity.Invitation;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
@@ -15,38 +18,69 @@ import android.widget.TextView;
 
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
+import com.baidu.location.Poi;
+import com.baidu.mapapi.model.LatLng;
+import com.baidu.mapapi.search.core.PoiInfo;
+import com.baidu.mapapi.search.core.SearchResult;
+import com.baidu.mapapi.search.poi.OnGetPoiSearchResultListener;
+import com.baidu.mapapi.search.poi.PoiCitySearchOption;
+import com.baidu.mapapi.search.poi.PoiDetailResult;
+import com.baidu.mapapi.search.poi.PoiNearbySearchOption;
+import com.baidu.mapapi.search.poi.PoiResult;
 import com.baidu.mapapi.search.poi.PoiSearch;
+import com.beanu.arad.utils.MessageUtils;
 import com.ctrl.forum.R;
 import com.ctrl.forum.base.AppToolBarActivity;
 import com.ctrl.forum.base.MyApplication;
 import com.ctrl.forum.service.LocationService;
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
 /**
- *
  * 所在位置 activity
  * Created by jason on 2016/4/12.
  */
-public class LocationActivity extends AppToolBarActivity implements View.OnClickListener{
+public class LocationActivity extends AppToolBarActivity implements View.OnClickListener {
     @InjectView(R.id.lv_locate)//下拉列表
-    PullToRefreshListView lv_locate;
+            PullToRefreshListView lv_locate;
     @InjectView(R.id.rl_loacte)//不显示位置
-    RelativeLayout rl_loacte;
+            RelativeLayout rl_loacte;
     @InjectView(R.id.et_search)//搜索
-    EditText et_search;
+            EditText et_search;
 
 
-   // public LocationClient mLocationClient = null;
-  //  public BDLocationListener myListener = new MyLocationListener();
+    // public LocationClient mLocationClient = null;
+    //  public BDLocationListener myListener = new MyLocationListener();
 
     private LocationService locationService;
     private String city;//城市名
     private PoiSearch mPoiSearch;
+    private List<String> mPoiInfoListStr=new ArrayList<>();
+    private ArrayAdapter<String> adapter;
+    private int totalPage;
+    private ArrayAdapter<String> adapter2;
+
+    private static int PAGE_NUM=1;
+    private PoiCitySearchOption option;
+    private CharSequence et_s;
+    private LatLng latLng;
+    private boolean isRefresh=false;
+
+    private Handler handler=new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            if(msg.what==1){
+                lv_locate.onRefreshComplete();
+            }
+        }
+    };
 
 
     @Override
@@ -55,16 +89,15 @@ public class LocationActivity extends AppToolBarActivity implements View.OnClick
         setContentView(R.layout.location_activity);
         ButterKnife.inject(this);
 
-       // mLocationClient = new LocationClient(getApplicationContext());     //声明LocationClient类
-       // mLocationClient.registerLocationListener(myListener);    //注册监听函数
+        // mLocationClient = new LocationClient(getApplicationContext());     //声明LocationClient类
+        // mLocationClient.registerLocationListener(myListener);    //注册监听函数
         // 隐藏输入法
-         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
         initView();
-       // initSearch();
-      //  mLocationClient.start();
+        // initSearch();
+        //  mLocationClient.start();
     }
-
 
 
     /**
@@ -73,29 +106,85 @@ public class LocationActivity extends AppToolBarActivity implements View.OnClick
     private void initView() {
         rl_loacte.setOnClickListener(this);
         et_search.addTextChangedListener(watcher);
-
+        //第一步，创建POI检索实例
         mPoiSearch = PoiSearch.newInstance();
+
+        // 第二步，创建POI检索监听者；
+        OnGetPoiSearchResultListener poiListener = new OnGetPoiSearchResultListener() {
+            public void onGetPoiResult(PoiResult result) {
+                lv_locate.onRefreshComplete();
+                isRefresh=true;
+                if (result == null || result.error == SearchResult.ERRORNO.RESULT_NOT_FOUND) {// 没有找到检索结
+                    MessageUtils.showShortToast(LocationActivity.this, "抱歉，未找到结果");
+                    mPoiInfoListStr.clear();
+                    adapter2.notifyDataSetChanged();
+                    return;
+                }
+
+                if (result.error == SearchResult.ERRORNO.NO_ERROR) {// 检索结果正常返回
+                    List<PoiInfo>poiInfoList=result.getAllPoi();
+                    for(int i=0;i<poiInfoList.size();i++){
+                        mPoiInfoListStr.add(poiInfoList.get(i).name);
+                    }
+                    adapter2 = new ArrayAdapter<String>(LocationActivity.this, android.R.layout.simple_list_item_1, mPoiInfoListStr);
+                    adapter2.notifyDataSetChanged();
+                    lv_locate.setAdapter(adapter2);
+                }
+
+            }
+
+            public void onGetPoiDetailResult(PoiDetailResult result) {
+                //获取Place详情页检索结果
+            }
+        };
+        // 第三步，设置POI检索监听者；
+        mPoiSearch.setOnGetPoiSearchResultListener(poiListener);
 
     }
 
-    private TextWatcher watcher = new TextWatcher() {
 
+    private TextWatcher watcher = new TextWatcher() {
+        //文字变化时
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
             // TODO Auto-generated method stub
+            mPoiInfoListStr.clear();
+            if (s.toString() == null) {
+                adapter2.notifyDataSetChanged();
+                return;
+            }
+            //第四步，发起检索请求；
+            mPoiSearch.searchNearby((new PoiNearbySearchOption())
+                    .pageNum(PAGE_NUM)
+                    .location(latLng)
+                    .radius(500)
+                    .keyword(s.toString())
+                    .pageCapacity(10))
+            ;
+
+            Log.i("tag", "city---" + city);
+            Log.i("tag", "s---" + s.toString());
 
         }
+        //文字变化前
 
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count,
                                       int after) {
             // TODO Auto-generated method stub
 
+
         }
 
+        //文字变化后
         @Override
         public void afterTextChanged(Editable s) {
             // TODO Auto-generated method stub
+            if (s.length() == 0) {
+                mPoiInfoListStr.clear();
+                adapter2.notifyDataSetChanged();
+            }
+            et_s=s.toString();
 
         }
     };
@@ -116,7 +205,7 @@ public class LocationActivity extends AppToolBarActivity implements View.OnClick
         // TODO Auto-generated method stub
         super.onStart();
         // -----------location config ------------
-        locationService = ((MyApplication)getApplication()).locationService;
+        locationService = ((MyApplication) getApplication()).locationService;
         //获取locationservice实例，建议应用中只初始化1个location实例，然后使用，可以参考其他示例的activity，都是通过此种方式获取locationservice实例的
         locationService.registerListener(mListener);
         //注册监听
@@ -144,108 +233,62 @@ public class LocationActivity extends AppToolBarActivity implements View.OnClick
         showProgress(true);
 
 
-
     }
+
 
 
     /*****
      * 定位结果回调，重写onReceiveLocation方法，可以直接拷贝如下代码到自己工程中修改
-     *
      */
     private BDLocationListener mListener = new BDLocationListener() {
 
         @Override
         public void onReceiveLocation(BDLocation location) {
             showProgress(false);
+            isRefresh=false;
             // TODO Auto-generated method stub
             if (null != location && location.getLocType() != BDLocation.TypeServerError) {
-
-              /*  StringBuffer sb = new StringBuffer(256);
-                sb.append("time : ");
-                *//**
-                 * 时间也可以使用systemClock.elapsedRealtime()方法 获取的是自从开机以来，每次回调的时间；
-                 * location.getTime() 是指服务端出本次结果的时间，如果位置不发生变化，则时间不变
-                 *//*
-                sb.append(location.getTime());
-                sb.append("\nerror code : ");
-                sb.append(location.getLocType());
-                sb.append("\nlatitude : ");
-                sb.append(location.getLatitude());
-                sb.append("\nlontitude : ");
-                sb.append(location.getLongitude());
-                sb.append("\nradius : ");
-                sb.append(location.getRadius());
-                sb.append("\nCountryCode : ");
-                sb.append(location.getCountryCode());
-                sb.append("\nCountry : ");
-                sb.append(location.getCountry());
-                sb.append("\ncitycode : ");
-                sb.append(location.getCityCode());
-                sb.append("\ncity : ");
-                sb.append(location.getCity());
-                sb.append("\nDistrict : ");
-                sb.append(location.getDistrict());
-                sb.append("\nStreet : ");
-                sb.append(location.getStreet());
-                sb.append("\naddr : ");
-                sb.append(location.getAddrStr());
-                sb.append("\nDescribe: ");
-                sb.append(location.getLocationDescribe());
-                sb.append("\nDirection(not all devices have value): ");
-                sb.append(location.getDirection());
-                sb.append("\nPoi: ");
-                if (location.getPoiList() != null && !location.getPoiList().isEmpty()) {
-                    for (int i = 0; i < location.getPoiList().size(); i++) {
-                        Poi poi = (Poi) location.getPoiList().get(i);
-                        sb.append(poi.getName() + ";");
-                    }
+                mPoiInfoListStr.clear();
+                List<Poi> poiList = location.getPoiList();
+                for (int i = 0; i < poiList.size(); i++) {
+                    mPoiInfoListStr.add(poiList.get(i).getName());
                 }
-                if (location.getLocType() == BDLocation.TypeGpsLocation) {// GPS定位结果
-                    sb.append("\nspeed : ");
-                    sb.append(location.getSpeed());// 单位：km/h
-                    sb.append("\nsatellite : ");
-                    sb.append(location.getSatelliteNumber());
-                    sb.append("\nheight : ");
-                    sb.append(location.getAltitude());// 单位：米
-                    sb.append("\ndescribe : ");
-                    sb.append("gps定位成功");
-                } else if (location.getLocType() == BDLocation.TypeNetWorkLocation) {// 网络定位结果
-                    // 运营商信息
-                    sb.append("\noperationers : ");
-                    sb.append(location.getOperators());
-                    sb.append("\ndescribe : ");
-                    sb.append("网络定位成功");
-                } else if (location.getLocType() == BDLocation.TypeOffLineLocation) {// 离线定位结果
-                    sb.append("\ndescribe : ");
-                    sb.append("离线定位成功，离线定位结果也是有效的");
-                } else if (location.getLocType() == BDLocation.TypeServerError) {
-                    sb.append("\ndescribe : ");
-                    sb.append("服务端网络定位失败，可以反馈IMEI号和大体定位时间到loc-bugs@baidu.com，会有人追查原因");
-                } else if (location.getLocType() == BDLocation.TypeNetWorkException) {
-                    sb.append("\ndescribe : ");
-                    sb.append("网络不同导致定位失败，请检查网络是否通畅");
-                } else if (location.getLocType() == BDLocation.TypeCriteriaException) {
-                    sb.append("\ndescribe : ");
-                    sb.append("无法获取有效定位依据导致定位失败，一般是由于手机的原因，处于飞行模式下一般会造成这种结果，可以试着重启手机");
-                }
-                Log.i("BaiduLocationApiDem", sb.toString());*/
-               final ArrayList<String>listStr=new ArrayList<>();
-                for(int i=0;i<location.getPoiList().size();i++){
-                    listStr.add(location.getPoiList().get(i).getName());
-                }
-                city=location.getCity();
-                ArrayAdapter adapter = new ArrayAdapter<String>(LocationActivity.this, android.R.layout.simple_list_item_1,listStr);
+                latLng=new LatLng(location.getLatitude(),location.getLongitude());
+                city = location.getCity();
+                adapter = new ArrayAdapter<String>(LocationActivity.this, android.R.layout.simple_list_item_1, mPoiInfoListStr);
                 ListView lv = lv_locate.getRefreshableView();
                 lv.setAdapter(adapter);
                 lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        Intent intent=new Intent();
-                        intent.putExtra("location",listStr.get(position));
+                        Intent intent = new Intent();
+                        intent.putExtra("location", mPoiInfoListStr.get(position));
                         setResult(RESULT_OK, intent);
                         finish();
                     }
                 });
+                    lv_locate.setMode(PullToRefreshBase.Mode.PULL_FROM_END);
+                    lv_locate.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
+                        @Override
+                        public void onRefresh(PullToRefreshBase<ListView> refreshView) {
+                            if (isRefresh) {
+                                PAGE_NUM += 1;
+                                //第四步，发起检索请求；
+                                mPoiSearch.searchNearby((new PoiNearbySearchOption())
+                                        .pageNum(PAGE_NUM)
+                                        .location(latLng)
+                                        .radius(500)
+                                        .keyword(et_s.toString())
+                                        .pageCapacity(10));
+                                isRefresh=false;
+                            }else {
+                                Message message = handler.obtainMessage();
+                                message.what=1;
+                                handler.sendMessage(message);
+                            }
+                        }
+
+                    });
             }
         }
 
@@ -255,6 +298,8 @@ public class LocationActivity extends AppToolBarActivity implements View.OnClick
     @Override
     protected void onDestroy() {
         super.onDestroy();
+       // 第五步，释放POI检索实例；
+        mPoiSearch.destroy();
     }
 
     @Override
@@ -279,7 +324,7 @@ public class LocationActivity extends AppToolBarActivity implements View.OnClick
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.rl_loacte:
                 setResult(RESULT_CANCELED);
                 finish();
