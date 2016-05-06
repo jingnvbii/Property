@@ -125,6 +125,10 @@
     <string name="input_shop_phone">请输入联系方式</string>
     <string name="commit">提交</string>
     <string name="commit_apply">已提交审核,请耐心等待!</string>
+    <string name="shop_all">全部</string>
+    <string name="shop_put">待收货</string>
+    <string name="shop_send">待发货</string>
+    <string name="shop_yi_comment">已评价</string>
 
     <!--店铺评论-->
     <string name="store_comment">店铺评论</string>
@@ -147,6 +151,9 @@
     <string name="reply_content">:好的,先这样也可以</string>
     <string name="reply_my_comment">回复我的评论:</string>
     <string name="reply_gao_xiao">多搞笑?</string>
+    <string name="lou_zhu">楼主</string>
+    <string name="small_cat">小猫咪</string>
+    <string name="reply_comment">ok.没问题</string>
 
     <!--我的评价-->
     <string name="assess">我的评价</string>
