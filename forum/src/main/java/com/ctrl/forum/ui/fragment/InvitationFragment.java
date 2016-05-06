@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,12 +14,13 @@ import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.view.animation.TranslateAnimation;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.GridView;
-import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.beanu.arad.Arad;
@@ -27,12 +29,13 @@ import com.beanu.arad.utils.MessageUtils;
 import com.ctrl.forum.R;
 import com.ctrl.forum.base.Constant;
 import com.ctrl.forum.customview.GridViewForScrollView;
-import com.ctrl.forum.customview.PullToRefreshListViewForScrollView;
 import com.ctrl.forum.dao.InvitationDao;
 import com.ctrl.forum.entity.Banner;
 import com.ctrl.forum.entity.Invitation_listview;
 import com.ctrl.forum.entity.Kind;
 import com.ctrl.forum.entity.Notice;
+import com.ctrl.forum.entity.Post;
+import com.ctrl.forum.entity.PostImage;
 import com.ctrl.forum.entity.PostKind;
 import com.ctrl.forum.entity.Recommend;
 import com.ctrl.forum.ui.activity.Invitation.InvitationPullDownActivity;
@@ -41,11 +44,11 @@ import com.ctrl.forum.ui.adapter.InvitationListViewAdapter;
 import com.ctrl.forum.ui.viewpage.CycleViewPager;
 import com.ctrl.forum.ui.viewpage.ViewFactory;
 import com.ctrl.forum.utils.DemoUtil;
+import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.ButterKnife;
 import butterknife.InjectView;
 
 /**
@@ -53,7 +56,7 @@ import butterknife.InjectView;
  * Created by jason on 2016/4/7.
  */
 public class InvitationFragment extends ToolBarFragment {
-    @InjectView(R.id.scrollView)
+   /* @InjectView(R.id.scrollView)
     HorizontalScrollView scrollView;
     @InjectView(R.id.gridView1)
     GridViewForScrollView gridView1;
@@ -68,9 +71,11 @@ public class InvitationFragment extends ToolBarFragment {
     @InjectView(R.id.iv_recommend_4)//推荐列表图片4
             ImageView iv_recommend_4;
     @InjectView(R.id.tv_change)//文字轮播
-            TextView tv_change;
-    @InjectView(R.id.listview)//下拉列表
-            PullToRefreshListViewForScrollView listview;
+            TextView tv_change;*/
+   /* @InjectView(R.id.lv_invitation_fragment)//下拉列表
+     PullToRefreshListView lv_invitation_fragment;*/
+    @InjectView(R.id.ll_linear_layout)//父布局
+            LinearLayout ll_linear_layout;
 
     DisplayMetrics dm;
     private int NUM = 4; // 每行显示个数
@@ -86,6 +91,21 @@ public class InvitationFragment extends ToolBarFragment {
     private List<Notice> listNotice;
     private List<Recommend> listRecommend;
     private List<PostKind> listPostKind;
+
+    private List<Post> listPost;
+    private List<PostImage> listPostImage;
+    private TextView tv_change;
+    private FrameLayout framelayout;
+    private ImageView iv_recommend_1;
+    private ImageView iv_recommend_2;
+    private ImageView iv_recommend_3;
+    private ImageView iv_recommend_4;
+    private GridViewForScrollView gridView1;
+
+    private PullToRefreshListView lv_invitation_fragment;
+
+
+
 
 
     /*
@@ -145,27 +165,41 @@ public class InvitationFragment extends ToolBarFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_invitation, container, false);
-        ButterKnife.inject(this, view);
-        scrollView.setHorizontalScrollBarEnabled(false);// 隐藏滚动条
-        initData();
+        lv_invitation_fragment=(PullToRefreshListView)view.findViewById(R.id.lv_invitation_fragment);
+       // ButterKnife.inject(this, view);
+       // scrollView.setHorizontalScrollBarEnabled(false);// 隐藏滚动条
+        initView();
         getScreenDen();
         //调用轮播图
         setLoopView();
         //公告轮播控件初始化
-        initView();
-
-        invitationListViewAdapter = new InvitationListViewAdapter(getActivity());
-        invitationListViewAdapter.setList(list);
-        listview.setAdapter(invitationListViewAdapter);
+        initNoticeView();
+        initData();
         return view;
     }
 
-    private void initView() {
+    private void initNoticeView() {
         tv_change.setText("");
         set.addAnimation(animation);
         set.addAnimation(ta);
         set.setDuration(1000);
         set.setRepeatMode(Animation.REVERSE);
+    }
+
+    private void initView() {
+        invitationListViewAdapter = new InvitationListViewAdapter(getActivity());
+        AbsListView.LayoutParams layoutParams = new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, AbsListView.LayoutParams.WRAP_CONTENT);
+        View headview = getActivity().getLayoutInflater().inflate(R.layout.fragment_invitation_home_header, ll_linear_layout, false);
+        headview.setLayoutParams(layoutParams);
+        ListView lv01 = lv_invitation_fragment.getRefreshableView();
+        tv_change=(TextView)headview.findViewById(R.id.tv_change);
+        framelayout=(FrameLayout)headview.findViewById(R.id.framelayout);
+        iv_recommend_1=(ImageView)headview.findViewById(R.id.iv_recommend_1);
+        iv_recommend_2=(ImageView)headview.findViewById(R.id.iv_recommend_2);
+        iv_recommend_3=(ImageView)headview.findViewById(R.id.iv_recommend_3);
+        iv_recommend_4=(ImageView)headview.findViewById(R.id.iv_recommend_4);
+        gridView1=(GridViewForScrollView)headview.findViewById(R.id.gridView1);
+        lv01.addHeaderView(headview);
     }
 
     private void setLoopView() {
@@ -180,22 +214,7 @@ public class InvitationFragment extends ToolBarFragment {
     private void initData() {
         idao = new InvitationDao(this);
         idao.requestInitPostHomePage();
-        idao.requestPostListByCategory("0",Arad.preferences.getString("memberId"), "", Constant.PAGE_NUM, Constant.PAGE_SIZE);
-        list = new ArrayList<>();
-
-        for (int i = 0; i < 20; i++) {
-            Invitation_listview invitation = new Invitation_listview();
-            invitation.setName("汪峰" + i + "便利店");
-            list.add(invitation);
-        }
-
-
-       /* kindList=new ArrayList<>();
-        for(int i=0;i<6;i++){
-            Kind kind=new Kind();
-            kind.setKindName("频道:" + i);
-            kindList.add(kind);
-        }*/
+        idao.requestPostListByCategory(Arad.preferences.getString("memberId"), "", "0", 1, Constant.PAGE_SIZE);
     }
 
 
@@ -215,6 +234,12 @@ public class InvitationFragment extends ToolBarFragment {
 
         if (requestCode == 1) {
             MessageUtils.showShortToast(getActivity(), "获取帖子列表成功");
+            listPost=idao.getListPost();
+
+            Log.i("tag", "listpost size---" + listPost.size());
+            invitationListViewAdapter.setList(listPost);
+            lv_invitation_fragment.setAdapter(invitationListViewAdapter);
+
         }
 
 
@@ -293,7 +318,8 @@ public class InvitationFragment extends ToolBarFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        MessageUtils.showShortToast(getActivity(),"fddfdf");
+      //  lv_invitation_fragment.setAdapter(invitationListViewAdapter);
     }
 
 }

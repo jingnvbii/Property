@@ -1,5 +1,7 @@
 package com.ctrl.forum.entity;
 
+import java.util.List;
+
 /**
  * 帖子实体类
  * Created by Administrator on 2016/4/8.
@@ -21,6 +23,27 @@ public class Post {
     private String locationName;//位置名称
     private String picturesStyle;//列表中是否总以多图方式显示（0：否、1：是） 注：只针对列表样式
     private String topShow;//是否置顶（0：否、1：是）
+
+    private List<PostImage> postImgList;
+
+    public List<PostReply> getPostReplyList() {
+        return postReplyList;
+    }
+
+    public void setPostReplyList(List<PostReply> postReplyList) {
+        this.postReplyList = postReplyList;
+    }
+
+    public List<PostImage> getPostImgList() {
+        return postImgList;
+    }
+
+    public void setPostImgList(List<PostImage> postImgList) {
+        this.postImgList = postImgList;
+    }
+
+    private List<PostReply> postReplyList;
+
 
 
 

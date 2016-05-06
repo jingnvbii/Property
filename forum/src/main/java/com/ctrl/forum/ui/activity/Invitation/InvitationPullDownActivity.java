@@ -86,6 +86,7 @@ public class InvitationPullDownActivity extends AppToolBarActivity implements Vi
     private PullToRefreshListView listview;
     private InvitationDao idao;
     private String channelId;
+    private String checkType;
     private List<Category> listCategory;
 
     @Override
@@ -320,6 +321,7 @@ public class InvitationPullDownActivity extends AppToolBarActivity implements Vi
             public void onClick(View v) {
                 Intent intent=new Intent(InvitationPullDownActivity.this,InvitationReleaseActivity.class);
                 intent.putExtra("channelId",channelId);
+                intent.putExtra("checkType",listCategory.get(0).getCheckType());
                 startActivity(intent);
                 AnimUtil.intentSlidIn(InvitationPullDownActivity.this);
             }

@@ -35,7 +35,6 @@
             android:background="@drawable/calling_card_selector"
             android:button="@null"
             android:layout_width="wrap_content"
-            android:checked="false"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_marginRight="@dimen/margin_left_and_right"
