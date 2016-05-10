@@ -7,7 +7,6 @@ import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.GridView;
 import android.widget.HorizontalScrollView;
@@ -21,7 +20,6 @@ import com.beanu.arad.utils.AnimUtil;
 import com.ctrl.forum.R;
 import com.ctrl.forum.base.AppToolBarActivity;
 import com.ctrl.forum.entity.ThirdKind;
-import com.ctrl.forum.ui.adapter.InvitationPullDownGridViewAdapter;
 import com.ctrl.forum.ui.viewpage.CycleViewPager;
 import com.ctrl.forum.ui.viewpage.ViewFactory;
 import com.ctrl.forum.utils.DemoUtil;
@@ -74,9 +72,9 @@ public class InvitationSecondPullDownActivity extends AppToolBarActivity impleme
         setContentView(R.layout.activity_invitation_pull_down_second);
         ButterKnife.inject(this);
         width = getResources().getDisplayMetrics().widthPixels;
-        initData();
+      /*  initData();
         getScreenDen();
-        setValue();
+        setValue();*/
 
         // 三句话 调用轮播广告
         vhdf = getLayoutInflater().inflate(R.layout.viewpage, null);
@@ -156,7 +154,7 @@ public class InvitationSecondPullDownActivity extends AppToolBarActivity impleme
         }
     }
 
-    private void setValue() {
+ /*   private void setValue() {
         InvitationPullDownGridViewAdapter adapter = new InvitationPullDownGridViewAdapter(this);
         adapter.setList(kindList);
         int count = adapter.getCount();
@@ -177,12 +175,12 @@ public class InvitationSecondPullDownActivity extends AppToolBarActivity impleme
         gridView1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-             /*   Intent intent=new Intent(getActivity(), InvitationPullDownActivity.class);
-                getActivity().startActivity(intent);*/
+             *//*   Intent intent=new Intent(getActivity(), InvitationPullDownActivity.class);
+                getActivity().startActivity(intent);*//*
             }
         });
 
-    }
+    }*/
 
     private void getScreenDen() {
         dm = new DisplayMetrics();

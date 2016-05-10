@@ -12,6 +12,7 @@ import com.ctrl.forum.entity.CategoryItem;
 import com.ctrl.forum.entity.MemberInfo;
 import com.ctrl.forum.entity.Notice;
 import com.ctrl.forum.entity.Post;
+import com.ctrl.forum.entity.Post2;
 import com.ctrl.forum.entity.PostDrafts;
 import com.ctrl.forum.entity.PostImage;
 import com.ctrl.forum.entity.PostKind;
@@ -43,6 +44,7 @@ public class InvitationDao extends IDao {
     private List<Recommend> listRecommend = new ArrayList<>();//帖子首页推荐列表
     private List<Notice> listNotice = new ArrayList<>();//帖子首页公告列表
     private List<Post> listPost = new ArrayList<>();//帖子列表
+    private List<Post> listPost2 = new ArrayList<>();//帖子列表
     private List<PostImage> listPostImage = new ArrayList<>();//帖子图片列表
     private List<PostReply> listPostReply = new ArrayList<>();//帖子回复列表
     private List<Category> listCategory = new ArrayList<>();//帖子分类列表
@@ -51,6 +53,7 @@ public class InvitationDao extends IDao {
     private List<PostReply2> listPostReply2 = new ArrayList<>();//评论列表
     private List<PostDrafts> listPostDrafts = new ArrayList<>();//草稿箱帖子列表
     private List<CategoryItem> listCategroyItem = new ArrayList<>();//帖子分类级联列表
+    private Post2 post2;
 
 
     public InvitationDao(INetResult activity){
@@ -104,11 +107,10 @@ public class InvitationDao extends IDao {
      * @param id //当前目录id
      * */
     public void requesPostDetail(String id){
+        String url="/post/getPort";
         Map<String,String> map = new HashMap<String,String>();
-        map.put(Constant.METHOD,"/post/getPort");//方法名称
         map.put("id",id);
-
-        postRequest(Constant.RAW_URL, mapToRP(map),3);
+        postRequest(Constant.RAW_URL + url, mapToRP(map), 3);
     }
     /**
      * 获取当前频道下所有帖子列表分类
@@ -258,11 +260,11 @@ public class InvitationDao extends IDao {
      * @param id //帖子id（唯一id标示）
      * */
     public void requesDeltePost(String id){
+        String url="post/deletePort";
         Map<String,String> map = new HashMap<String,String>();
-        map.put(Constant.METHOD,"postReply/obtainPostReplyList");//方法名称
         map.put("id",id);
 
-        postRequest(Constant.RAW_URL, mapToRP(map),8);
+        postRequest(Constant.RAW_URL+url, mapToRP(map),8);
     }
     /**
      * 获取草稿箱帖子列表接口
@@ -348,7 +350,8 @@ public class InvitationDao extends IDao {
 
         if(requestCode == 1){
             Log.d("demo","dao中结果集(根据分类获取帖子列表): " + result);
-            List<Post> data = JsonUtil.node2pojo(result.findValue("postList"),new TypeReference<List<Post>>(){});
+            List<Post> data = JsonUtil.node2pojo(result.findValue("postList"), new TypeReference<List<Post>>() {
+            });
             listPost.addAll(data);
 
            /* listPost = JsonUtil.node2pojoList(result.findValue("postList"), Post.class);
@@ -361,12 +364,13 @@ public class InvitationDao extends IDao {
         }
         if(requestCode == 3){
             Log.d("demo","dao中结果集(获取帖子详情): " + result);
-            post=JsonUtil.node2pojo(result.findValue("post"),Post.class);
+           // post=JsonUtil.node2pojo(result.findValue("post"),Post.class);
             userInfo=JsonUtil.node2pojo(result.findValue("user"), MemberInfo.class);
-            listPostImage = JsonUtil.node2pojoList(result.findValue("postImgList"), PostImage.class);
+          //  listPostImage = JsonUtil.node2pojoList(result.findValue("postImgList"), PostImage.class);
             listPost = JsonUtil.node2pojoList(result.findValue("rtuRelatedPost"), Post.class);
             listMemberInfo = JsonUtil.node2pojoList(result.findValue("Relateduser"), MemberInfo.class);
             listRelatePostImage = JsonUtil.node2pojoList(result.findValue("RelatedpostImgList"), PostImage.class);
+           post2 = JsonUtil.node2pojo(result.findValue("post"),new TypeReference<Post2>(){});
 
         }
 
@@ -439,6 +443,14 @@ public class InvitationDao extends IDao {
     }
     public List<CategoryItem> getListCategroyItem() {
         return listCategroyItem;
+    }
+
+
+    public Post2 getPost2(){
+        return post2;
+    }
+    public MemberInfo getUser(){
+        return userInfo;
     }
 
 }

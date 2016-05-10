@@ -117,21 +117,4 @@
         android:layout_height="match_parent">
     </com.handmark.pulltorefresh.library.PullToRefreshListView>
 
-
-   <!-- <LinearLayout
-        android:id="@+id/ll_linear_layout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-        <com.ctrl.forum.customview.XListView
-            android:id="@+id/invitation_list"
-            android:scrollbars="none"
-            android:fastScrollEnabled="true"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
-    </LinearLayout>-->
-
-
-
-
 </LinearLayout>

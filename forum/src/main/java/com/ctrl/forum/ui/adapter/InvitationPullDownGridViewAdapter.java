@@ -8,7 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.ctrl.forum.R;
-import com.ctrl.forum.entity.ThirdKind;
+import com.ctrl.forum.entity.Category2;
 
 import java.util.List;
 
@@ -21,13 +21,13 @@ import butterknife.InjectView;
  */
 public class InvitationPullDownGridViewAdapter extends BaseAdapter{
     private Context mContext;
-    private List<ThirdKind>kindList;
+    private List<Category2>kindList;
 
     public InvitationPullDownGridViewAdapter(Context context) {
                this.mContext=context;
     }
 
-    public void setList(List<ThirdKind> list) {
+    public void setList(List<Category2> list) {
         this.kindList = list;
         notifyDataSetChanged();
     }
@@ -58,8 +58,8 @@ public class InvitationPullDownGridViewAdapter extends BaseAdapter{
         }else {
             holder=(ViewHolder)convertView.getTag();
         }
-        ThirdKind kind=kindList.get(position);
-        holder.item_tv.setText(kind.getKindName());
+        Category2 kind=kindList.get(position);
+        holder.item_tv.setText(kind.getName());
         return convertView;
     }
 

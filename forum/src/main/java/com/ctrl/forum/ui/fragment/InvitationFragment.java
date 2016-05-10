@@ -25,6 +25,7 @@ import android.widget.TextView;
 
 import com.beanu.arad.Arad;
 import com.beanu.arad.base.ToolBarFragment;
+import com.beanu.arad.utils.AnimUtil;
 import com.beanu.arad.utils.MessageUtils;
 import com.ctrl.forum.R;
 import com.ctrl.forum.base.Constant;
@@ -33,22 +34,26 @@ import com.ctrl.forum.dao.InvitationDao;
 import com.ctrl.forum.entity.Banner;
 import com.ctrl.forum.entity.Invitation_listview;
 import com.ctrl.forum.entity.Kind;
+import com.ctrl.forum.entity.Merchant;
 import com.ctrl.forum.entity.Notice;
 import com.ctrl.forum.entity.Post;
 import com.ctrl.forum.entity.PostImage;
 import com.ctrl.forum.entity.PostKind;
 import com.ctrl.forum.entity.Recommend;
+import com.ctrl.forum.ui.activity.Invitation.InvitationPinterestDetailActivity;
 import com.ctrl.forum.ui.activity.Invitation.InvitationPullDownActivity;
 import com.ctrl.forum.ui.adapter.InvitationGridViewAdapter;
 import com.ctrl.forum.ui.adapter.InvitationListViewAdapter;
 import com.ctrl.forum.ui.viewpage.CycleViewPager;
 import com.ctrl.forum.ui.viewpage.ViewFactory;
 import com.ctrl.forum.utils.DemoUtil;
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.ButterKnife;
 import butterknife.InjectView;
 
 /**
@@ -56,13 +61,13 @@ import butterknife.InjectView;
  * Created by jason on 2016/4/7.
  */
 public class InvitationFragment extends ToolBarFragment {
-   /* @InjectView(R.id.scrollView)
-    HorizontalScrollView scrollView;
-    @InjectView(R.id.gridView1)
+  /*  @InjectView(R.id.gridView1)
     GridViewForScrollView gridView1;
     @InjectView(R.id.framelayout)
-    FrameLayout framelayout;
-    @InjectView(R.id.iv_recommend_1)//推荐列表图片1
+    FrameLayout framelayout;*/
+   /* @InjectView(R.id.tv_change)//文字轮播
+            TextView tv_change;*/
+   /* @InjectView(R.id.iv_recommend_1)//推荐列表图片1
             ImageView iv_recommend_1;
     @InjectView(R.id.iv_recommend_2)//推荐列表图片2
             ImageView iv_recommend_2;
@@ -94,15 +99,20 @@ public class InvitationFragment extends ToolBarFragment {
 
     private List<Post> listPost;
     private List<PostImage> listPostImage;
-    private TextView tv_change;
-    private FrameLayout framelayout;
     private ImageView iv_recommend_1;
     private ImageView iv_recommend_2;
     private ImageView iv_recommend_3;
     private ImageView iv_recommend_4;
-    private GridViewForScrollView gridView1;
 
     private PullToRefreshListView lv_invitation_fragment;
+
+    private TextView tv_change;
+    private ListView lv01;
+    private List<Merchant> listMerchant;
+    private FrameLayout framelayout;
+    private GridViewForScrollView gridView1;
+    private int PAGE_NUM=1;
+
 
 
 
@@ -157,6 +167,8 @@ public class InvitationFragment extends ToolBarFragment {
         super.setUserVisibleHint(isVisibleToUser);
     }
 
+
+
     @Override
     public void onPause() {
         super.onPause();
@@ -166,7 +178,7 @@ public class InvitationFragment extends ToolBarFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_invitation, container, false);
         lv_invitation_fragment=(PullToRefreshListView)view.findViewById(R.id.lv_invitation_fragment);
-       // ButterKnife.inject(this, view);
+        ButterKnife.inject(this, view);
        // scrollView.setHorizontalScrollBarEnabled(false);// 隐藏滚动条
         initView();
         getScreenDen();
@@ -175,6 +187,8 @@ public class InvitationFragment extends ToolBarFragment {
         //公告轮播控件初始化
         initNoticeView();
         initData();
+
+
         return view;
     }
 
@@ -187,11 +201,11 @@ public class InvitationFragment extends ToolBarFragment {
     }
 
     private void initView() {
-        invitationListViewAdapter = new InvitationListViewAdapter(getActivity());
+
         AbsListView.LayoutParams layoutParams = new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, AbsListView.LayoutParams.WRAP_CONTENT);
         View headview = getActivity().getLayoutInflater().inflate(R.layout.fragment_invitation_home_header, ll_linear_layout, false);
         headview.setLayoutParams(layoutParams);
-        ListView lv01 = lv_invitation_fragment.getRefreshableView();
+         lv01 = lv_invitation_fragment.getRefreshableView();
         tv_change=(TextView)headview.findViewById(R.id.tv_change);
         framelayout=(FrameLayout)headview.findViewById(R.id.framelayout);
         iv_recommend_1=(ImageView)headview.findViewById(R.id.iv_recommend_1);
@@ -200,6 +214,7 @@ public class InvitationFragment extends ToolBarFragment {
         iv_recommend_4=(ImageView)headview.findViewById(R.id.iv_recommend_4);
         gridView1=(GridViewForScrollView)headview.findViewById(R.id.gridView1);
         lv01.addHeaderView(headview);
+        invitationListViewAdapter = new InvitationListViewAdapter(getActivity());
     }
 
     private void setLoopView() {
@@ -214,13 +229,64 @@ public class InvitationFragment extends ToolBarFragment {
     private void initData() {
         idao = new InvitationDao(this);
         idao.requestInitPostHomePage();
-        idao.requestPostListByCategory(Arad.preferences.getString("memberId"), "", "0", 1, Constant.PAGE_SIZE);
+        idao.requestPostListByCategory(Arad.preferences.getString("memberId"), "", "0", PAGE_NUM, Constant.PAGE_SIZE);
+        lv_invitation_fragment.setMode(PullToRefreshBase.Mode.BOTH);
+        lv_invitation_fragment.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
+            @Override
+            public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
+                listPost.clear();
+                PAGE_NUM = 1;
+                idao.requestPostListByCategory(Arad.preferences.getString("memberId"), "", "0", PAGE_NUM, Constant.PAGE_SIZE);
+
+            }
+
+            @Override
+            public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
+                PAGE_NUM += 1;
+                idao.requestPostListByCategory(Arad.preferences.getString("memberId"), "", "0", PAGE_NUM, Constant.PAGE_SIZE);
+            }
+        });
+
+        lv01.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+               
+              //  Log.i("tag", "positionlist---" + String.valueOf(position - lv01.getHeaderViewsCount()));
+             //  String type = listPost.get(position +lv01.getHeaderViewsCount()).getSourceType();
+              /*  String type = listPost.get(position-lv01.getHeaderViewsCount()).getSourceType();
+                switch (type) {
+                    case "0"://平台
+
+
+                        break;
+                    case "1"://app
+                        Intent intent = new Intent(getActivity(), InvitationPinterestDetailActivity.class);
+                        intent.putExtra("id",position -lv01.getHeaderViewsCount());
+                        startActivity(intent);
+                        AnimUtil.intentSlidIn(getActivity());
+                        break;
+                }*/
+
+                Intent intent = new Intent(getActivity(), InvitationPinterestDetailActivity.class);
+                intent.putExtra("id",position -lv01.getHeaderViewsCount());
+                startActivity(intent);
+                AnimUtil.intentSlidIn(getActivity());
+
+            }
+        });
+
     }
 
+    @Override
+    public void onRequestFaild(String errorNo, String errorMessage) {
+        super.onRequestFaild(errorNo, errorMessage);
+        lv_invitation_fragment.onRefreshComplete();
+    }
 
     @Override
     public void onRequestSuccess(int requestCode) {
         super.onRequestSuccess(requestCode);
+        lv_invitation_fragment.onRefreshComplete();
         if (requestCode == 0) {
             listBanner = idao.getListBanner();
             listPostKind = idao.getListPostKind();
@@ -235,11 +301,8 @@ public class InvitationFragment extends ToolBarFragment {
         if (requestCode == 1) {
             MessageUtils.showShortToast(getActivity(), "获取帖子列表成功");
             listPost=idao.getListPost();
-
-            Log.i("tag", "listpost size---" + listPost.size());
+            Log.i("tag", "listPost---" + listPost.size());
             invitationListViewAdapter.setList(listPost);
-            lv_invitation_fragment.setAdapter(invitationListViewAdapter);
-
         }
 
 
@@ -318,8 +381,8 @@ public class InvitationFragment extends ToolBarFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        MessageUtils.showShortToast(getActivity(),"fddfdf");
-      //  lv_invitation_fragment.setAdapter(invitationListViewAdapter);
+        MessageUtils.showShortToast(getActivity(), "fddfdf");
+        lv_invitation_fragment.setAdapter(invitationListViewAdapter);
     }
 
 }
