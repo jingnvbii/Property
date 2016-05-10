@@ -14,7 +14,7 @@
     <color name="main_bg">#f6f6f6</color>
     <color name="red_bg">#cb1e1e</color>
     <color name="gray_store">#efefef</color>
-
+    <color name="progress_ok">#1784fd</color>
 
 
     <color name="line_gray">#dfdfdf</color>

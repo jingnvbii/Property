@@ -60,8 +60,6 @@ public class MineMessageListAdapter extends BaseAdapter{
         TextView tv_data;
         @InjectView(R.id.tv_content)
         TextView tv_content;
-        ViewHolder(View view) {
-            ButterKnife.inject(this, view);
-        }
+        ViewHolder(View view) {ButterKnife.inject(this, view);}
     }
 }

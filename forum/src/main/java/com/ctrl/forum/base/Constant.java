@@ -91,8 +91,8 @@ public class Constant {
     /*报修*/
     public static final String IMG_TYPE_FIX = "FIX";
 
-
-
+   /**店铺评论的list的类型*/
+   public static final int RIM_TYPE_ITEM = 4;
 
 
 

@@ -112,7 +112,6 @@
                 android:layout_height="match_parent"
                 ></Spinner>
             <Spinner
-                android:visibility="gone"
                 android:layout_marginTop="5dp"
                 android:id="@+id/spinner_third_kind"
                 android:layout_width="100dp"
@@ -141,7 +140,6 @@
            android:textColor="@color/text_black"/>
 
         <EditText
-            android:id="@+id/et_tittle"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
@@ -173,7 +171,6 @@
             android:textColor="@color/text_black"/>
 
         <EditText
-            android:id="@+id/et_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:lines="7"
@@ -188,9 +185,6 @@
         <!-- 网格显示图片 行列间距5dp 每列宽度90dp -->
         <LinearLayout
             android:layout_marginTop="10dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginBottom="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -198,16 +192,12 @@
                 android:id="@+id/iv01"
                 android:layout_width="0dp"
                 android:layout_weight="1"
-                android:layout_margin="5dp"
-                android:scaleType="fitXY"
                 android:layout_height="wrap_content"
                 android:src="@mipmap/add_pic"/>
             <ImageView
                 android:id="@+id/iv02"
                 android:layout_width="0dp"
                 android:layout_weight="1"
-                android:scaleType="fitXY"
-                android:layout_margin="5dp"
                 android:visibility="invisible"
                 android:layout_height="wrap_content"
                 android:src="@mipmap/add_pic"/>
@@ -215,16 +205,12 @@
                 android:id="@+id/iv03"
                 android:layout_width="0dp"
                 android:layout_weight="1"
-                android:scaleType="fitXY"
-                android:layout_margin="5dp"
                 android:visibility="invisible"
                 android:layout_height="wrap_content"
                 android:src="@mipmap/add_pic"/>
             <ImageView
                 android:id="@+id/iv04"
                 android:layout_width="0dp"
-                android:layout_margin="5dp"
-                android:scaleType="fitXY"
                 android:layout_weight="1"
                 android:visibility="invisible"
                 android:layout_height="wrap_content"
@@ -232,10 +218,7 @@
 
         </LinearLayout>
         <LinearLayout
-            android:id="@+id/ll_image_second"
-            android:layout_marginBottom="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
             android:layout_width="match_parent"
             android:visibility="gone"
             android:layout_height="wrap_content">
@@ -244,8 +227,6 @@
                 android:id="@+id/iv05"
                 android:layout_width="0dp"
                 android:layout_weight="1"
-                android:layout_margin="5dp"
-                android:scaleType="fitXY"
                 android:visibility="invisible"
                 android:layout_height="wrap_content"
                 android:src="@mipmap/add_pic"/>
@@ -253,8 +234,6 @@
                 android:id="@+id/iv06"
                 android:layout_width="0dp"
                 android:layout_weight="1"
-                android:layout_margin="5dp"
-                android:scaleType="fitXY"
                 android:visibility="invisible"
                 android:layout_height="wrap_content"
                 android:src="@mipmap/add_pic"/>
@@ -268,8 +247,6 @@
             <ImageView
                 android:id="@+id/iv08"
                 android:layout_width="0dp"
-                android:layout_margin="5dp"
-                android:scaleType="fitXY"
                 android:layout_weight="1"
                 android:visibility="invisible"
                 android:layout_height="wrap_content"
@@ -277,10 +254,8 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/ll_image_third"
+            android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
             android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -289,32 +264,24 @@
                 android:id="@+id/iv09"
                 android:layout_width="0dp"
                 android:layout_weight="1"
-                android:layout_margin="5dp"
-                android:scaleType="fitXY"
                 android:visibility="invisible"
                 android:layout_height="wrap_content"
                 android:src="@mipmap/add_pic"/>
             <ImageView
                 android:layout_width="0dp"
                 android:layout_weight="1"
-                android:layout_margin="5dp"
-                android:scaleType="fitXY"
                 android:visibility="invisible"
                 android:layout_height="wrap_content"
                 android:src="@mipmap/add_pic"/>
             <ImageView
                 android:layout_width="0dp"
                 android:layout_weight="1"
-                android:layout_margin="5dp"
-                android:scaleType="fitXY"
                 android:visibility="invisible"
                 android:layout_height="wrap_content"
                 android:src="@mipmap/add_pic"/>
             <ImageView
                 android:layout_width="0dp"
                 android:layout_weight="1"
-                android:layout_margin="5dp"
-                android:scaleType="fitXY"
                 android:visibility="invisible"
                 android:layout_height="wrap_content"
                 android:src="@mipmap/add_pic"/>
@@ -367,7 +334,7 @@
     </LinearLayout>
 
     <TextView
-        android:id="@+id/tv_release"
+        android:id="@+id/tv_login"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/release"
