@@ -115,7 +115,7 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
             finish();
         }
         if(requestCode == 3){
-            MessageUtils.showShortToast(this, "获取帖子详情成功");
+            MessageUtils.showShortToast(this, "获取帖子详情成功ghfgh");
             post=idao.getPost2();
             Arad.imageLoader.load(idao.getUser().getImgUrl()).placeholder(R.mipmap.round_img).into(title_image);
             tv_name.setText(idao.getUser().getNickName());
