@@ -5,8 +5,12 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
 
+import com.beanu.arad.Arad;
+import com.beanu.arad.utils.MessageUtils;
 import com.ctrl.forum.R;
 import com.ctrl.forum.base.AppToolBarActivity;
+import com.ctrl.forum.base.Constant;
+import com.ctrl.forum.dao.EditDao;
 import com.ctrl.forum.entity.Blacklist;
 import com.ctrl.forum.ui.adapter.MineBlacklistAdapter;
 
@@ -14,7 +18,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MineBlacklistActivity extends AppToolBarActivity implements View.OnClickListener{
-    private List<Blacklist> blacklists;
+    private List<Blacklist> blacklists = new ArrayList<>();
+    private EditDao edao;
     private MineBlacklistAdapter blacklistAdapter;
     private ListView lv_blacklist;
     @Override
@@ -24,17 +29,23 @@ public class MineBlacklistActivity extends AppToolBarActivity implements View.On
         lv_blacklist = (ListView) findViewById(R.id.lv_blacklist);
 
         initData();
-        blacklistAdapter = new MineBlacklistAdapter(blacklists,this);
+        blacklistAdapter = new MineBlacklistAdapter(this);
         lv_blacklist.setAdapter(blacklistAdapter);
         blacklistAdapter.setOnButton(this);
     }
 
     private void initData() {
-        blacklists = new ArrayList<>();
-        for (int i = 0;i<5;i++){
-            Blacklist blacklist = new Blacklist();
-            blacklist.setName(getResources().getString(R.string.comment_name));
-            blacklists.add(blacklist);
+        edao = new EditDao(this);
+        edao.getBlackList(Arad.preferences.getString("memberId"), Constant.PAGE_NUM,Constant.PAGE_SIZE);
+    }
+
+    @Override
+    public void onRequestSuccess(int requestCode) {
+        super.onRequestSuccess(requestCode);
+        if (requestCode==2){
+            MessageUtils.showShortToast(this,"获取成功");
+            blacklists = edao.getBlacklists();
+            blacklistAdapter.setBlacklists(blacklists);
         }
     }
 

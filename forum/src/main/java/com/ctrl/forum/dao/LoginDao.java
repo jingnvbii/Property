@@ -60,9 +60,9 @@ public class LoginDao extends IDao {
      * @param password 登录密码
      * @param obtainType 修改类型（0：登录后修改、1：忘记密码时修改）
      * */
-    public void requestChangePassword(String memberId,String userName,String oldPassword,
+   /* public void requestChangePassword(String memberId,String userName,String oldPassword,
                                       String password,String obtainType){
-        String url="pm.ppt.members.modifyPassword";
+        String url="member/login";
         Map<String,String> map = new HashMap<String,String>();
         map.put("memberId",memberId);
         map.put("userName",userName);
@@ -70,8 +70,20 @@ public class LoginDao extends IDao {
         map.put("password",password);
         map.put("obtainType",obtainType);
         postRequest(Constant.RAW_URL+url, mapToRP(map), 1);
-    }
+    }*/
 
+    /**
+     * 登录 修改密码
+     * @param userName 用户名/手机号
+     * @param password 登录密码
+     * */
+    public void requestChangePassword(String userName, String password){
+        String url="member/login";
+        Map<String,String> map = new HashMap<>();
+        map.put("userName",userName);
+        map.put("password",password);
+        postRequest(Constant.RAW_URL+url, mapToRP(map), 1);
+    }
 
     @Override
     public void onRequestSuccess(JsonNode result, int requestCode) throws IOException {
@@ -80,15 +92,11 @@ public class LoginDao extends IDao {
             memberInfo = JsonUtil.node2pojo(result.findValue("memberInfo"), MemberInfo.class);
             listReceiveAddress = JsonUtil.node2pojoList(result.findValue("receiveAddressList"), ReceiveAddress.class);
         }
-
         if(requestCode == 1){
             Log.d("demo","dao中结果集(修改密码): " + result);
             //memberInfo = JsonUtil.node2pojo(result.findValue("memberInfo"), MemberInfo.class);
             //listReceiveAddress = JsonUtil.node2pojoList(result.findValue("receiveAddressList"), ReceiveAddress.class);
         }
-
-
-
     }
 
 

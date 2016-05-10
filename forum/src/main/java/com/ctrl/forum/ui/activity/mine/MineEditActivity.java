@@ -12,27 +12,90 @@ import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.beanu.arad.Arad;
+import com.beanu.arad.utils.MessageUtils;
 import com.beanu.arad.widget.SlidingUpPanelLayout;
 import com.ctrl.forum.R;
 import com.ctrl.forum.base.AppToolBarActivity;
+import com.ctrl.forum.customview.MineHeadView;
+import com.ctrl.forum.dao.EditDao;
+import com.ctrl.forum.entity.MemberInfo;
+
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 
 /**
- * 编辑
+ * 编辑界面
  */
 public class MineEditActivity extends AppToolBarActivity implements View.OnClickListener{
-    private RelativeLayout update_head,rl_ni,rl_jianjie,rl_phone,rl_xiaoqu,rl_pwd;
+
+    @InjectView(R.id.update_head)
+    RelativeLayout update_head;  //修改头像
+    @InjectView(R.id.rl_ni)
+    RelativeLayout rl_ni;  //修改昵称
+    @InjectView(R.id.rl_jianjie)
+    RelativeLayout rl_jianjie;  //修改简介
+    @InjectView(R.id.rl_phone)
+    RelativeLayout rl_phone;  //修改电话号码
+    @InjectView(R.id.rl_xiaoqu)
+    RelativeLayout rl_xiaoqu;  //修改小区
+    @InjectView(R.id.rl_pwd)
+    RelativeLayout rl_pwd;  //修改密码
+    @InjectView(R.id.tv_ni)
+    TextView tv_ni;    //昵称
+    @InjectView(R.id.tv_jianjie)
+    TextView tv_jianjie;    //简介
+    @InjectView(R.id.tv_phone)
+    TextView tv_phone;    //电话
+    @InjectView(R.id.tv_xiaoqu)
+    TextView tv_xiaoqu;    //小区
+    @InjectView(R.id.iv_head)
+    MineHeadView iv_head; //头像
+
+    private EditDao edao;
+    private MemberInfo memberInfo;//会员基本信息
     private TextView take_picture,choose_phone,cancel;
     private View view;
     private PopupWindow popupWindow;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit);
+        ButterKnife.inject(this);
         init();
         initPop();
-
+        putData();
     }
 
+    //为控件赋值
+    private void putData() {
+        String id = Arad.preferences.getString("memberId");
+        edao.getVipInfo(id);
+        tv_ni.setText(Arad.preferences.getString("nickName"));
+        tv_jianjie.setText(Arad.preferences.getString("remark"));
+        tv_phone.setText(Arad.preferences.getString("mobile"));
+        tv_xiaoqu.setText(Arad.preferences.getString(""));
+    }
+
+    @Override
+    public void onRequestSuccess(int requestCode) {
+        super.onRequestSuccess(requestCode);
+        if (requestCode==1){
+            MessageUtils.showShortToast(this, "获取个人信息成功");
+            memberInfo=edao.getMemberInfo();
+            Arad.preferences.putString("nickName", memberInfo.getNickName());//昵称
+            Arad.preferences.putString("mobile", memberInfo.getMobile()); //手机号
+            Arad.preferences.putString("point", memberInfo.getPoint()); //积分
+            Arad.preferences.putString("remark", memberInfo.getRemark());//简介
+            Arad.preferences.putString("memberLevel", memberInfo.getMemberLevel());//等级
+            Arad.preferences.putString("imgUrl", memberInfo.getImgUrl()); //头像
+            Arad.preferences.putString("companyId", memberInfo.getCompanyId());//是否有店铺0-没有 1-有
+            Arad.preferences.flush();
+        }
+    }
+
+    //弹窗
     private void initPop() {
         view = LayoutInflater.from(this).inflate(R.layout.update_head,null);
         popupWindow = new PopupWindow(view, SlidingUpPanelLayout.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
@@ -49,14 +112,9 @@ public class MineEditActivity extends AppToolBarActivity implements View.OnClick
         choose_phone.setOnClickListener(this);
         cancel.setOnClickListener(this);
     }
-
+    //控件的初始化
     private void init() {
-        update_head = (RelativeLayout) findViewById(R.id.update_head);
-        rl_ni = (RelativeLayout) findViewById(R.id.rl_ni);
-        rl_jianjie = (RelativeLayout) findViewById(R.id.rl_jianjie);
-        rl_phone = (RelativeLayout) findViewById(R.id.rl_phone);
-        rl_xiaoqu = (RelativeLayout) findViewById(R.id.rl_xiaoqu);
-        rl_pwd = (RelativeLayout) findViewById(R.id.rl_pwd);
+        edao = new EditDao(this);
 
         update_head.setOnClickListener(this);
         rl_ni.setOnClickListener(this);
@@ -118,5 +176,9 @@ public class MineEditActivity extends AppToolBarActivity implements View.OnClick
         }
     }
 
-
+    @Override
+    protected void onResume() {
+        super.onResume();
+        putData();
+    }
 }

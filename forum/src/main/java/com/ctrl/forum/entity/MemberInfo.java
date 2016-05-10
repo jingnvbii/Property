@@ -15,6 +15,7 @@ public class MemberInfo {
     private String imgUrl;//头像url地址
     private String isAdmin;//是否管理员（0：否  1：是）
     private String address;//会员地址
+    private String companyId;//是否有店铺(0:没有 1:有)
 
 
     private String userName;//用户名（登录名）
@@ -133,5 +134,9 @@ public class MemberInfo {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public String getCompanyId() {
+        return companyId;
     }
 }

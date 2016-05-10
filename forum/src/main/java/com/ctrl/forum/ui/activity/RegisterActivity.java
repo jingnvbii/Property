@@ -42,7 +42,6 @@ public class RegisterActivity extends AppToolBarActivity implements View.OnClick
     private String code;
     private RegisterActivity activity;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,18 +65,15 @@ public class RegisterActivity extends AppToolBarActivity implements View.OnClick
     public void onRequestSuccess(int requestCode) {
         super.onRequestSuccess(requestCode);
         if (requestCode == 0) {
-            MessageUtils.showShortToast(this, "注册成功");
+           MessageUtils.showShortToast(this, "注册成功");
             finish();
         }
 
         if (requestCode == 1) {
             code = rdao.getCode();
             MessageUtils.showShortToast(this, "获取短信验证码成功" + code);
-
         }
-
     }
-
 
     @Override
     public boolean setupToolBarLeftButton(ImageView leftButton) {

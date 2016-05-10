@@ -8,7 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.ctrl.forum.R;
-import com.ctrl.forum.entity.Comment;
+import com.ctrl.forum.entity.ReplyForMe;
 
 import java.util.List;
 
@@ -20,12 +20,12 @@ import butterknife.InjectView;
  * Created by Administrator on 2016/4/22.
  */
 public class MineCommentListAdapter extends BaseAdapter {
-    private List<Comment> comments;
+    private List<ReplyForMe> comments;
     private Context context;
 
-    public MineCommentListAdapter(List<Comment> comments, Context context) {this.comments = comments;this.context = context;}
+    public MineCommentListAdapter(List<ReplyForMe> comments, Context context) {this.comments = comments;this.context = context;}
 
-    public void setComments(List<Comment> comments) {
+    public void setComments(List<ReplyForMe> comments) {
         this.comments = comments;
        // notifyDataSetChanged();
     }
@@ -47,10 +47,7 @@ public class MineCommentListAdapter extends BaseAdapter {
         }else {
             holder=(ViewHolder)convertView.getTag();
         }
-        holder.tv_comment.setText(comments.get(position).getComment());
-        holder.tv_year.setText(comments.get(position).getYear());
-        holder.tv_time.setText(comments.get(position).getTime());
-        holder.tv_name.setText(comments.get(position).getName());
+
         return convertView;
     }
 

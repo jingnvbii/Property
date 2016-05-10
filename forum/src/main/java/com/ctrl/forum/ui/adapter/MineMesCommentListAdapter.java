@@ -9,7 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ctrl.forum.R;
-import com.ctrl.forum.entity.MesComment;
+import com.ctrl.forum.entity.ReplyForMe;
 
 import java.util.List;
 
@@ -21,16 +21,16 @@ import butterknife.InjectView;
  */
 public class MineMesCommentListAdapter extends BaseAdapter {
 
-    private List<MesComment> messages;
+    private List<ReplyForMe> replyForMes;
     private Context context;
 
-    public MineMesCommentListAdapter(Context context, List<MesComment> messages) {this.context = context;this.messages = messages;}
+    public MineMesCommentListAdapter(Context context, List<ReplyForMe> messages) {this.context = context;this.replyForMes = messages;}
 
     @Override
-    public int getCount() {return messages.size()!= 0?messages.size():0;}
+    public int getCount() {return replyForMes.size()!= 0?replyForMes.size():0;}
 
     @Override
-    public Object getItem(int position) {return messages.get(position);}
+    public Object getItem(int position) {return replyForMes.get(position);}
 
     @Override
     public long getItemId(int position) {return position;}

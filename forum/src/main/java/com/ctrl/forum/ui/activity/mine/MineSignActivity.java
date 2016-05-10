@@ -3,14 +3,18 @@ package com.ctrl.forum.ui.activity.mine;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.beanu.arad.Arad;
+import com.beanu.arad.utils.MessageUtils;
 import com.ctrl.forum.R;
 import com.ctrl.forum.base.AppToolBarActivity;
+import com.ctrl.forum.dao.EditDao;
 
 /**
  * 我的签名
@@ -18,14 +22,22 @@ import com.ctrl.forum.base.AppToolBarActivity;
 public class MineSignActivity extends AppToolBarActivity {
     private TextView tv_sign;
     private EditText et_sign;
+    private EditDao edao;
+    private String id;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mine_sign);
+        init();
+    }
 
+    private void init() {
         tv_sign = (TextView) findViewById(R.id.tv_sign);
         et_sign = (EditText) findViewById(R.id.et_sign);
         et_sign.addTextChangedListener(mTextWatcher);
+        edao = new EditDao(this);
+        id = Arad.preferences.getString("memberId");
     }
 
     TextWatcher mTextWatcher = new TextWatcher() {
@@ -63,9 +75,20 @@ public class MineSignActivity extends AppToolBarActivity {
         mRightText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onBackPressed();
+                if (TextUtils.isEmpty(et_sign.getText().toString().trim())){
+                    MessageUtils.showShortToast(getApplicationContext(),"签名内容不能为空!");
+                }else{edao.requestChangeBasicInfo("",et_sign.getText().toString().trim(),"",id);}
             }
         });
         return true;
+    }
+
+    @Override
+    public void onRequestSuccess(int requestCode) {
+        super.onRequestSuccess(requestCode);
+        if (requestCode==0){
+            MessageUtils.showShortToast(this,"修改签名成功");
+            this.finish();
+        }
     }
 }

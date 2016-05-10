@@ -9,7 +9,7 @@ import android.widget.ListView;
 
 import com.ctrl.forum.R;
 import com.ctrl.forum.base.AppToolBarActivity;
-import com.ctrl.forum.entity.Comment;
+import com.ctrl.forum.entity.ReplyForMe;
 import com.ctrl.forum.ui.adapter.MineCommentListAdapter;
 
 import java.util.ArrayList;
@@ -17,10 +17,9 @@ import java.util.List;
 
 /**
  * 我的评论
- * 退出时,点两次才会退出
  */
 public class MineCommentActivity extends AppToolBarActivity {
-    private List<Comment> comments;
+    private List<ReplyForMe> comments;
     private MineCommentListAdapter mineCommentListAdapter;
     private ListView lv_comment;
 
@@ -43,11 +42,8 @@ public class MineCommentActivity extends AppToolBarActivity {
     private void initData() {
         comments = new ArrayList<>();
         for (int i=0;i<6;i++){
-            Comment comment = new Comment();
-            comment.setName(getResources().getString(R.string.comment_name));
-            comment.setComment(getResources().getString(R.string.comment_content));
-            comment.setTime(getResources().getString(R.string.comment_time));
-            comment.setYear(getResources().getString(R.string.comment_year));
+            ReplyForMe comment = new ReplyForMe();
+
             comments.add(comment);
         }
     }

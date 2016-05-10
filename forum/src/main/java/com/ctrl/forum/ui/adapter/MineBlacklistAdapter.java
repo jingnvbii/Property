@@ -24,9 +24,20 @@ public class MineBlacklistAdapter extends BaseAdapter {
     private View.OnClickListener onButton;
 
     public void setOnButton(View.OnClickListener onButton) {this.onButton = onButton;}
-    public MineBlacklistAdapter(List<Blacklist> blacklists, Context context) {this.blacklists = blacklists;this.context = context;}
+    public MineBlacklistAdapter( Context context) {this.context = context;}
+
+    public void setBlacklists(List<Blacklist> blacklists) {
+        this.blacklists = blacklists;
+        notifyDataSetChanged();
+    }
+
+    public void AddBlacklists(List<Blacklist> blacklists) {
+        this.blacklists.addAll(blacklists);
+        notifyDataSetChanged();
+    }
+
     @Override
-    public int getCount() {return blacklists.size()==0?0:blacklists.size();}
+    public int getCount() {return 8;}//blacklists.size();
 
     @Override
     public Object getItem(int position) {return blacklists.get(position);}

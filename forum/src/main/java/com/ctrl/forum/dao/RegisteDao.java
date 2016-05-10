@@ -17,7 +17,6 @@ import java.util.Map;
  */
 public class RegisteDao extends IDao {
 
-
     private String code;
 
     public RegisteDao(INetResult activity){
@@ -59,10 +58,7 @@ public class RegisteDao extends IDao {
             Log.d("demo","dao中结果集(注册): " + result);
         }
 
-
     }
 
     public String getCode(){return code;}
-
-
 }

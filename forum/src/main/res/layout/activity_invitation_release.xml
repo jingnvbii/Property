@@ -140,6 +140,7 @@
            android:textColor="@color/text_black"/>
 
         <EditText
+            android:id="@+id/et_tittle"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
@@ -184,6 +185,7 @@
         </LinearLayout>
         <!-- 网格显示图片 行列间距5dp 每列宽度90dp -->
         <LinearLayout
+            android:id="@+id/ll_image_second"
             android:layout_marginTop="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -218,6 +220,7 @@
 
         </LinearLayout>
         <LinearLayout
+            android:id="@+id/ll_image_third"
             android:layout_marginTop="10dp"
             android:layout_width="match_parent"
             android:visibility="gone"
@@ -334,7 +337,7 @@
     </LinearLayout>
 
     <TextView
-        android:id="@+id/tv_login"
+        android:id="@+id/tv_release"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/release"

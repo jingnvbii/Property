@@ -15,6 +15,7 @@ import com.ctrl.forum.R;
 import com.ctrl.forum.base.AppToolBarActivity;
 import com.ctrl.forum.dao.LoginDao;
 import com.ctrl.forum.entity.MemberInfo;
+import com.ctrl.forum.ui.activity.mine.MineUpdatepwdActivity;
 
 import butterknife.ButterKnife;
 
@@ -23,7 +24,6 @@ import butterknife.ButterKnife;
  * Created by Eric on 2015/11/23.
  * */
 public class LoginActivity extends AppToolBarActivity implements View.OnClickListener{
-
 
     private TextView tv_register;//注册按钮
     private EditText et_username;//用户名
@@ -64,7 +64,6 @@ public class LoginActivity extends AppToolBarActivity implements View.OnClickLis
        iv_qqzone.setOnClickListener(this);
        iv_weixin.setOnClickListener(this);
 
-
         ldao=new LoginDao(this);
 
     }
@@ -77,9 +76,9 @@ public class LoginActivity extends AppToolBarActivity implements View.OnClickLis
             Arad.preferences.putString("memberId", memberInfo.getId());
             Arad.preferences.flush();
             MessageUtils.showShortToast(this,"登录成功");
-              Intent intent02=new Intent(this,MainActivity.class);
-                startActivity(intent02);
-                AnimUtil.intentSlidIn(this);
+            Intent intent02=new Intent(this,MainActivity.class);
+            startActivity(intent02);
+            AnimUtil.intentSlidIn(this);
         }
     }
 
@@ -114,6 +113,7 @@ public class LoginActivity extends AppToolBarActivity implements View.OnClickLis
                 }
                 break;
             case R.id.tv_forget :
+                startActivity(new Intent(this, MineUpdatepwdActivity.class));
                 break;
             case R.id.iv_weibo :
                 break;

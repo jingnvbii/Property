@@ -105,7 +105,6 @@ public class MineMessageActivity extends AppToolBarActivity implements View.OnCl
         };
     }
 
-
     @Override
     public boolean setupToolBarLeftButton(ImageView leftButton) {
         leftButton.setImageResource(R.mipmap.white_arrow_left_none);
@@ -118,11 +117,8 @@ public class MineMessageActivity extends AppToolBarActivity implements View.OnCl
         return true;
     }
 
-
     @Override
     public String setupToolBarTitle() {return getResources().getString(R.string.message_notification);}
-
-
 
     @Override
     public void onClick(View v) {
