@@ -23,11 +23,34 @@ public class Post {
     private String locationName;//位置名称
     private String picturesStyle;//列表中是否总以多图方式显示（0：否、1：是） 注：只针对列表样式
     private String topShow;//是否置顶（0：否、1：是）
+    private String contactPhone;//联系电话
+    private String contactAddress;//联系地址
+    private List<PostImage> postImgList;//图片列表
+    private List<PostReply> postReplyList;//回复列表
 
-    private List<PostImage> postImgList;
+
+
+
 
     public List<PostReply> getPostReplyList() {
         return postReplyList;
+    }
+
+
+    public String getContactPhone() {
+        return contactPhone;
+    }
+
+    public void setContactPhone(String contactPhone) {
+        this.contactPhone = contactPhone;
+    }
+
+    public String getContactAddress() {
+        return contactAddress;
+    }
+
+    public void setContactAddress(String contactAddress) {
+        this.contactAddress = contactAddress;
     }
 
     public void setPostReplyList(List<PostReply> postReplyList) {
@@ -41,12 +64,6 @@ public class Post {
     public void setPostImgList(List<PostImage> postImgList) {
         this.postImgList = postImgList;
     }
-
-    private List<PostReply> postReplyList;
-
-
-
-
 
 
     public String getReporterId() {

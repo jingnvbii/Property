@@ -8,7 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.ctrl.forum.R;
-import com.ctrl.forum.entity.Category2;
+import com.ctrl.forum.entity.Merchant;
 
 import java.util.List;
 
@@ -16,31 +16,31 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 
 /**
- * 帖子三Kind级分类  adapter
+ * 商城首页列表 adapter
  * Created by jason on 2016/4/8.
  */
-public class InvitationPullDownGridViewAdapter extends BaseAdapter{
-    private Context mContext;
-    private List<Category2>kindList;
+public class testAdapter extends BaseAdapter{
+    private Context mcontext;
+    private List<Merchant> list;
 
-    public InvitationPullDownGridViewAdapter(Context context) {
-               this.mContext=context;
+    public testAdapter(Context context) {
+               this.mcontext=context;
     }
 
-    public void setList(List<Category2> list) {
-        this.kindList = list;
+    public void setList(List<Merchant> list) {
+        this.list = list;
         notifyDataSetChanged();
     }
 
 
     @Override
     public int getCount() {
-        return kindList==null?0:kindList.size();
+        return list==null?0:list.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return kindList.get(position);
+        return list.get(position);
     }
 
     @Override
@@ -52,20 +52,22 @@ public class InvitationPullDownGridViewAdapter extends BaseAdapter{
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder=null;
         if(convertView==null){
-            convertView= LayoutInflater.from(mContext).inflate(R.layout.gridview_invitation_pull_down_item,parent,false);
+            convertView= LayoutInflater.from(mcontext).inflate(R.layout.item_listview_store_fragment,parent,false);
             holder=new ViewHolder(convertView);
             convertView.setTag(holder);
         }else {
             holder=(ViewHolder)convertView.getTag();
         }
-        Category2 kind=kindList.get(position);
-        holder.item_tv.setText(kind.getName());
+       Merchant merchant=list.get(position);
+        holder.tv_name.setText(merchant.getName());
         return convertView;
     }
 
     static class ViewHolder{
-        @InjectView(R.id.item_tv)//文字
-                TextView  item_tv;
+       /* @InjectView(R.id.iv_grid_item)//图片
+                ImageView iv_grid_item;*/
+        @InjectView(R.id.tv_name)//文字
+                TextView  tv_name;
         ViewHolder(View view) {
             ButterKnife.inject(this, view);
         }

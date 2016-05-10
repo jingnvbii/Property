@@ -2,69 +2,63 @@ package com.ctrl.forum.ui.activity.Invitation;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
+import android.util.Log;
+import android.util.SparseArray;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
-import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import com.beanu.arad.Arad;
 import com.beanu.arad.utils.AnimUtil;
 import com.beanu.arad.utils.MessageUtils;
 import com.ctrl.forum.R;
 import com.ctrl.forum.base.AppToolBarActivity;
+import com.ctrl.forum.base.Constant;
 import com.ctrl.forum.customview.XListView;
 import com.ctrl.forum.dao.InvitationDao;
 import com.ctrl.forum.entity.Category;
 import com.ctrl.forum.entity.Invitation_listview;
+import com.ctrl.forum.entity.Post;
 import com.ctrl.forum.entity.ThirdKind;
 import com.ctrl.forum.ui.adapter.InvitationListViewAdapter;
-import com.ctrl.forum.ui.adapter.InvitationPullDownGridViewAdapter;
 import com.ctrl.forum.ui.adapter.PinterestAdapter;
+import com.ctrl.forum.ui.adapter.ViewPagerAdapter;
+import com.ctrl.forum.ui.fragment.InvitationPullDownHaveThirdKindFragment;
+import com.ctrl.forum.ui.fragment.InvitationPullDownHaveThirdKindPinterestStyleFragment;
+import com.ctrl.forum.ui.fragment.InvitationPullDownNoThirdKindFragment;
+import com.ctrl.forum.ui.fragment.InvitationPullDownNoThirdKindPinterestStyleFragment;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
+import butterknife.InjectView;
 
 /**
  * 帖子列表 三级分类下拉页面 activity
  * Created by jason on 2016/4/8
- * */
-public class InvitationPullDownActivity extends AppToolBarActivity implements View.OnClickListener,XListView.IXListViewListener{
-
-  /*  @InjectView(R.id.scrollView)
-    HorizontalScrollView scrollView;
-    @InjectView(R.id.gridView1)
-    GridViewForScrollView gridView1;
-
-    @InjectView(R.id.tv_search)//搜索
-    TextView tv_search;
-
-
-    @InjectView(R.id.horizontalScrollView)
-    HorizontalScrollView mHorizontalScrollView;//上面的水平滚动控件
+ */
+public class InvitationPullDownActivity extends AppToolBarActivity implements View.OnClickListener, XListView.IXListViewListener {
+    @InjectView(R.id.viewpager_invitation_pull_down)
+    ViewPager viewpager_invitation_pull_down;
     @InjectView(R.id.lay)
-    LinearLayout layout;*/
-/*
-    @InjectView(R.id.listview)//下拉列表
-            PullToRefreshListViewForScrollView listview;*/
-
-   /* @InjectView(R.id.invitation_list)//瀑布流下拉列表
-            XListView invitation_list;
-*/
+    LinearLayout layout;
 
 
+
+    private int PAGE_NUM = 1;
     private float mCurrentCheckedRadioLeft;//当前被选中的RadioButton距离左侧的距离
     private RadioGroup myRadioGroup;
     private int width;
@@ -73,14 +67,12 @@ public class InvitationPullDownActivity extends AppToolBarActivity implements Vi
     private int hSpacing = 20;// 水平间距
 
 
-
-    private List<ThirdKind>kindList;
+    private List<ThirdKind> kindList;
     private List<Invitation_listview> list;
     private InvitationListViewAdapter invitationAdapter;
     private PinterestAdapter adapter;
     private View headview;
     private TextView tv_search;
-    private LinearLayout layout;
     private HorizontalScrollView mHorizontalScrollView;
     private GridView gridView1;
     private PullToRefreshListView listview;
@@ -88,121 +80,81 @@ public class InvitationPullDownActivity extends AppToolBarActivity implements Vi
     private String channelId;
     private String checkType;
     private List<Category> listCategory;
+    private List<Post> listPost;
+
+    private SparseArray<Fragment> fragments = new SparseArray<>();
+    private String styleType;
+    private boolean isHaveThirdKind;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_invitation_style_3);
+        setContentView(R.layout.activity_invitation_pull_down_now);
         ButterKnife.inject(this);
         width = getResources().getDisplayMetrics().widthPixels;
-      //  headview = LayoutInflater.from(this).inflate(R.layout.fragment_invitation_header, null);
-        listview = (PullToRefreshListView) findViewById(R.id.invitation_list);
-        AbsListView.LayoutParams layoutParams = new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, AbsListView.LayoutParams.WRAP_CONTENT);
-        View headview = getLayoutInflater().inflate(R.layout.fragment_invitation_header, listview, false);
-        headview.setLayoutParams(layoutParams);
-        ListView lv = listview.getRefreshableView();
-        tv_search=(TextView)headview.findViewById(R.id.tv_search);
-        layout=(LinearLayout)headview.findViewById(R.id.lay);
-        gridView1=(GridView)headview.findViewById(R.id.gridView1);
-        mHorizontalScrollView=(HorizontalScrollView)headview.findViewById(R.id.horizontalScrollView);
-
-        channelId=getIntent().getStringExtra("channelId");
-
-
+        channelId = getIntent().getStringExtra("channelId");
         initView();
-        initData();
-        getScreenDen();
-        setValue();
-
-
-        lv.addHeaderView(headview);
-        //不显示滚动条
-        lv.setFastScrollEnabled(false);
-        adapter = new PinterestAdapter(this);
-        adapter.setList(list);
-        listview.setAdapter(adapter);
-
-        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent_lv=new Intent(InvitationPullDownActivity.this,InvitationPinerestGalleyActivity.class);
-                startActivity(intent_lv);
-                AnimUtil.intentSlidIn(InvitationPullDownActivity.this);
-            }
-        });
-
-
-    /*    invitation_list.addHeaderView(headview);
-        invitation_list.setPullLoadEnable(true);
-        invitation_list.setXListViewListener(this);
-        adapter = new PinterestAdapter(this);
-        adapter.setList(list);
-        invitation_list.setAdapter(adapter);
-        invitation_list.setOnItemClickListener(new PLA_AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(PLA_AdapterView<?> parent, View view, int position, long id) {
-                Intent i = new Intent();
-                i.setClass(getActivity(), PostDetailActivity.class);
-                i.putExtra("forumPostId", dao.getForumPostList().get(position - 2).getId());
-                i.putExtra("proprietorId",proprietorId);
-                startActivity(i);
-                resum = 1;
-            }
-        });*/
-      /*  invitationAdapter=new InvitationListViewAdapter(this);
-        invitationAdapter.setList(list);
-        listview.setAdapter(invitationAdapter);
-        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(InvitationPullDownActivity.this, InvitationDetailActivity.class);
-                startActivity(intent);
-                AnimUtil.intentSlidIn(InvitationPullDownActivity.this);
-            }
-        });
-*/
-
-
-
     }
 
     private void initView() {
-        idao=new InvitationDao(this);
+        idao = new InvitationDao(this);
         idao.requesAllPostCategory(channelId);
-        tv_search.setOnClickListener(this);
+        idao.requestPostListByCategory(Arad.preferences.getString("memberId"), channelId, "0", PAGE_NUM, Constant.PAGE_SIZE);
+
+      /*  InvitationPullDownNoThirdKindFragment invitationPullDownNoThirdKindFragment = InvitationPullDownNoThirdKindFragment.newInstance();
+        InvitationPullDownNoThirdKindPinterestStyleFragment invitationPullDownNoThirdKindPinterestStyleFragment = InvitationPullDownNoThirdKindPinterestStyleFragment.newInstance();
+        InvitationPullDownHaveThirdKindFragment invitationPullDownHaveThirdKindFragment = InvitationPullDownHaveThirdKindFragment.newInstance();
+        InvitationPullDownHaveThirdKindPinterestStyleFragment invitationPullDownHaveThirdKindPinterestStyleFragment = InvitationPullDownHaveThirdKindPinterestStyleFragment.newInstance();
+        fragments.put(0, invitationPullDownNoThirdKindFragment);
+        fragments.put(1, invitationPullDownNoThirdKindPinterestStyleFragment);
+        fragments.put(2, invitationPullDownHaveThirdKindFragment);
+        fragments.put(3, invitationPullDownHaveThirdKindPinterestStyleFragment);*/
+
     }
 
     @Override
     public void onRequestSuccess(int requestCode) {
         super.onRequestSuccess(requestCode);
-        if(requestCode==4){
-            MessageUtils.showShortToast(this,"获取当前频道下所有帖子分类成功");
+        if (requestCode == 4) {
+            MessageUtils.showShortToast(this, "获取当前频道下所有帖子分类成功");
             listCategory = idao.getListCategory();
+         //   Log.i("tag", "listCategory---" + listCategory.size());
+            styleType = listCategory.get(0).getStyleType();
+           // Log.i("tag", "styleType---" + styleType);
+           // Log.i("tag", "haveThirdKind---" + listCategory.get(0).getCategorylist().size());
             setRadioGruop();
+        }
+        if (requestCode == 1) {
+            MessageUtils.showShortToast(this, "获取帖子列表成功");
+            listPost = idao.getListPost();
+            Log.i("tag", "listPost---" + listPost.size());
         }
 
     }
 
     private void setRadioGruop() {
         myRadioGroup = new RadioGroup(this);
-        myRadioGroup.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT));
+        myRadioGroup.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         myRadioGroup.setOrientation(LinearLayout.HORIZONTAL);
         layout.addView(myRadioGroup);
-        for (int i = 0; i <listCategory.size(); i++) {
+        for (int i = 0; i < listCategory.size(); i++) {
+            if (listCategory.get(i).getCategorylist().size() > 0) {
+                isHaveThirdKind = true;
+            }
             RadioButton radio = new RadioButton(this);
             radio.setBackgroundResource(R.drawable.top_category_selector);
             LinearLayout.LayoutParams l;
-            if(listCategory.size()==1){
+            if (listCategory.size() == 1) {
                 l = new LinearLayout.LayoutParams(width, ViewGroup.LayoutParams.MATCH_PARENT, Gravity.CENTER);
-            }else if(listCategory.size()==2){
-                l = new LinearLayout.LayoutParams(width/2, ViewGroup.LayoutParams.MATCH_PARENT, Gravity.CENTER);
-            }else if(listCategory.size()==3){
-                l = new LinearLayout.LayoutParams(width/3, ViewGroup.LayoutParams.MATCH_PARENT, Gravity.CENTER);
-            }else if(listCategory.size()==4){
-                l = new LinearLayout.LayoutParams(width/4, ViewGroup.LayoutParams.MATCH_PARENT, Gravity.CENTER);
-            }else {
-            l = new LinearLayout.LayoutParams((width-30)/5, ViewGroup.LayoutParams.MATCH_PARENT, Gravity.CENTER);
-             }
+            } else if (listCategory.size() == 2) {
+                l = new LinearLayout.LayoutParams(width / 2, ViewGroup.LayoutParams.MATCH_PARENT, Gravity.CENTER);
+            } else if (listCategory.size() == 3) {
+                l = new LinearLayout.LayoutParams(width / 3, ViewGroup.LayoutParams.MATCH_PARENT, Gravity.CENTER);
+            } else if (listCategory.size() == 4) {
+                l = new LinearLayout.LayoutParams(width / 4, ViewGroup.LayoutParams.MATCH_PARENT, Gravity.CENTER);
+            } else {
+                l = new LinearLayout.LayoutParams((width - 30) / 5, ViewGroup.LayoutParams.MATCH_PARENT, Gravity.CENTER);
+            }
             radio.setLayoutParams(l);
             radio.setGravity(Gravity.CENTER);
             //  radio.setPadding(20, 20, 20, 20);
@@ -222,10 +174,27 @@ public class InvitationPullDownActivity extends AppToolBarActivity implements Vi
             view.setLayoutParams(v);
             //  view.setBackgroundColor(Color.parseColor("#cccccc"));
             myRadioGroup.addView(radio);
-            //  myRadioGroup.addView(view);
-          /*  ConvenientServiceFragment fragment = ConvenientServiceFragment.newInstance(dao.getCompanyCategoryList().get(i).getAroundCompanyList());
-            fragments.put(i, fragment);*/
+            myRadioGroup.addView(view);
+            if (styleType.equals("4")) {
+                if (isHaveThirdKind) {
+                    InvitationPullDownHaveThirdKindPinterestStyleFragment invitationPullDownHaveThirdKindPinterestStyleFragment = InvitationPullDownHaveThirdKindPinterestStyleFragment.newInstance(listCategory.get(i).getCategorylist());
+                    fragments.put(i,invitationPullDownHaveThirdKindPinterestStyleFragment);
+                } else {
+                    InvitationPullDownNoThirdKindPinterestStyleFragment invitationPullDownNoThirdKindPinterestStyleFragment = InvitationPullDownNoThirdKindPinterestStyleFragment.newInstance();
+                    fragments.put(i, invitationPullDownNoThirdKindPinterestStyleFragment);
+                }
+            } else {
+                if (!isHaveThirdKind) {
+                    InvitationPullDownNoThirdKindFragment invitationPullDownNoThirdKindFragment = InvitationPullDownNoThirdKindFragment.newInstance();
+                    fragments.put(i, invitationPullDownNoThirdKindFragment);
+                } else {
+                    InvitationPullDownHaveThirdKindFragment invitationPullDownHaveThirdKindFragment = InvitationPullDownHaveThirdKindFragment.newInstance(listCategory.get(i).getCategorylist(),channelId);
+                    fragments.put(i, invitationPullDownHaveThirdKindFragment);
+                }
+            }
         }
+        viewpager_invitation_pull_down.setAdapter(new ViewPagerAdapter(getSupportFragmentManager(), fragments));
+        viewpager_invitation_pull_down.setCurrentItem(0);
         myRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
 
             @Override
@@ -234,64 +203,63 @@ public class InvitationPullDownActivity extends AppToolBarActivity implements Vi
                 int radioButtonId = group.getCheckedRadioButtonId();
                 //根据ID获取RadioButton的实例
                 RadioButton rb = (RadioButton) findViewById(radioButtonId);
-                //  mViewpager.setCurrentItem(radioButtonId);//让下方ViewPager跟随上面的HorizontalScrollView切换
+                viewpager_invitation_pull_down.setCurrentItem(radioButtonId);//让下方ViewPager跟随上面的HorizontalScrollView切换
                 mCurrentCheckedRadioLeft = rb.getLeft();
                 mHorizontalScrollView.smoothScrollTo((int) mCurrentCheckedRadioLeft - (width * 2) / 5, 0);
             }
         });
 
+        viewpager_invitation_pull_down.setOnPageChangeListener(new FragmentOnPageChangeListener());
+        viewpager_invitation_pull_down.setOffscreenPageLimit(6);
+
+
+    }
+
+    /**
+     * ViewPager的PageChangeListener(页面改变的监听器)
+     */
+    private class FragmentOnPageChangeListener implements ViewPager.OnPageChangeListener {
+
+        @Override
+        public void onPageScrollStateChanged(int arg0) {
+            // TODO Auto-generated method stub
+
+        }
+
+        @Override
+        public void onPageScrolled(int arg0, float arg1, int arg2) {
+            // TODO Auto-generated method stub
+        }
+
+        /**
+         * 滑动ViewPager的时候,让上方的HorizontalScrollView自动切换
+         */
+        @Override
+        public void onPageSelected(int position) {
+            // TODO Auto-generated method stub
+            RadioButton radioButton = (RadioButton) findViewById(position);
+            radioButton.performClick();
+
+        }
     }
 
     private void initData() {
-        list=new ArrayList<>();
+        list = new ArrayList<>();
 
-        for(int i=0;i<20;i++){
-            Invitation_listview invitation=new Invitation_listview();
-            invitation.setName("汪峰"+i+"便利店");
+        for (int i = 0; i < 20; i++) {
+            Invitation_listview invitation = new Invitation_listview();
+            invitation.setName("汪峰" + i + "便利店");
             list.add(invitation);
         }
 
 
-        kindList=new ArrayList<>();
-        for(int i=0;i<8;i++){
-            ThirdKind kind=new ThirdKind();
-            kind.setKindName("频道:"+i);
+        kindList = new ArrayList<>();
+        for (int i = 0; i < 8; i++) {
+            ThirdKind kind = new ThirdKind();
+            kind.setKindName("频道:" + i);
             kindList.add(kind);
         }
     }
-
-    private void setValue() {
-        InvitationPullDownGridViewAdapter adapter = new InvitationPullDownGridViewAdapter(this);
-        adapter.setList(kindList);
-        int count = adapter.getCount();
-        int columns = (count % 2 == 0) ? count / 2 : count / 2 + 1;
-        gridView1.setAdapter(adapter);
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(columns * dm.widthPixels / NUM,
-                LinearLayout.LayoutParams.WRAP_CONTENT);
-        gridView1.setLayoutParams(params);
-        gridView1.setColumnWidth(dm.widthPixels / NUM);
-        // gridView.setHorizontalSpacing(hSpacing);
-        gridView1.setStretchMode(GridView.NO_STRETCH);
-        if (count <= 3) {
-            gridView1.setNumColumns(count);
-        } else {
-            gridView1.setNumColumns(columns);
-        }
-
-        gridView1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-            }
-        });
-
-    }
-
-    private void getScreenDen() {
-        dm = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(dm);
-    }
-
 
     @Override
     public String setupToolBarTitle() {
@@ -319,9 +287,9 @@ public class InvitationPullDownActivity extends AppToolBarActivity implements Vi
         rightButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(InvitationPullDownActivity.this,InvitationReleaseActivity.class);
-                intent.putExtra("channelId",channelId);
-                intent.putExtra("checkType",listCategory.get(0).getCheckType());
+                Intent intent = new Intent(InvitationPullDownActivity.this, InvitationReleaseActivity.class);
+                intent.putExtra("channelId", channelId);
+                intent.putExtra("checkType", listCategory.get(0).getCheckType());
                 startActivity(intent);
                 AnimUtil.intentSlidIn(InvitationPullDownActivity.this);
             }
@@ -332,13 +300,6 @@ public class InvitationPullDownActivity extends AppToolBarActivity implements Vi
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
-            case R.id.tv_search:
-                Intent intent=new Intent(this,InvitationSearchActivity.class);
-                startActivity(intent);
-                AnimUtil.intentSlidIn(this);
-                break;
-        }
     }
 
     @Override

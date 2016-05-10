@@ -1,5 +1,7 @@
 package com.ctrl.forum.entity;
 
+import java.util.List;
+
 /**
  * 帖子详情实体类
  * Created by Administrator on 2016/4/8.
@@ -31,6 +33,26 @@ public class Post2 {
     private String contactAddress;//联系人地址
     private String contactPhone;//联系人电话
     private String vcardDisplay;//是否显示名片
+
+    public List<PostReply> getPostReplyList() {
+        return postReplyList;
+    }
+
+    public void setPostReplyList(List<PostReply> postReplyList) {
+        this.postReplyList = postReplyList;
+    }
+
+    public List<PostImage> getPostImgList() {
+        return postImgList;
+    }
+
+    public void setPostImgList(List<PostImage> postImgList) {
+        this.postImgList = postImgList;
+    }
+
+    private List<PostImage> postImgList;//图片列表
+    private List<PostReply> postReplyList;//回复列表
+
 
     public String getContent() {
         return content;
