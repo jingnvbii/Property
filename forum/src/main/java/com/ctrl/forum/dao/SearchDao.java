@@ -22,12 +22,15 @@ import java.util.Map;
  */
 public class SearchDao extends IDao {
 
+
     private List<SearchHistory> listSearchHistory=new ArrayList<>();//搜索历史记录列表
     private List<HotSearch> listHotSearch=new ArrayList<>();//热门搜索
 
     public SearchDao(INetResult activity){
         super(activity);
     }
+
+    //fdfdfsdf
 
     /**
      * 获取我的搜索历史记录
