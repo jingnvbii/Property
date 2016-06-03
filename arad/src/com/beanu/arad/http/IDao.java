@@ -10,6 +10,7 @@ import com.loopj.android.http.RequestParams;
 import com.loopj.android.http.TextHttpResponseHandler;
 
 import org.apache.http.Header;
+import org.json.JSONException;
 
 import java.io.IOException;
 import java.util.Map;
@@ -30,7 +31,7 @@ public abstract class IDao {
      * @param requestCode
      * @throws java.io.IOException
      */
-    public abstract void onRequestSuccess(JsonNode result, int requestCode) throws IOException;
+    public abstract void onRequestSuccess(JsonNode result, int requestCode) throws IOException, JSONException;
 
 
     /**
@@ -73,6 +74,8 @@ public abstract class IDao {
                     e.printStackTrace();
                 } catch (IOException e) {
                     e.printStackTrace();
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
             }
 
@@ -114,6 +117,8 @@ public abstract class IDao {
                 } catch (JsonProcessingException e) {
                     e.printStackTrace();
                 } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }

@@ -1,6 +1,8 @@
 package com.ctrl.forum.ui.activity.store;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -13,13 +15,17 @@ import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import com.beanu.arad.Arad;
+import com.beanu.arad.utils.AnimUtil;
+import com.beanu.arad.utils.MessageUtils;
 import com.ctrl.forum.R;
 import com.ctrl.forum.base.AppToolBarActivity;
+import com.ctrl.forum.base.Constant;
+import com.ctrl.forum.dao.MallDao;
 import com.ctrl.forum.entity.Merchant;
 import com.ctrl.forum.ui.adapter.StoreSearchGridViewAdapter;
 import com.handmark.pulltorefresh.library.PullToRefreshGridView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -32,8 +38,6 @@ import butterknife.InjectView;
 public class StoreSearchCommodityActivity extends AppToolBarActivity implements View.OnClickListener{
     @InjectView(R.id.iv_back)//返回按钮
     ImageView iv_back;
-   /* @InjectView(R.id.spinner)//下拉列表
-            Spinner spinner;*/
     @InjectView(R.id.et_search)//搜索输入框
     EditText et_search;
     @InjectView(R.id.tv_search)//搜索按钮
@@ -44,13 +48,16 @@ public class StoreSearchCommodityActivity extends AppToolBarActivity implements 
 
     @InjectView(R.id.tv_xiaoliang)//销量优先
     TextView tv_xiaoliang;
-    @InjectView(R.id.tv_pinjia)//评价优先
-    TextView tv_pinjia;
+    @InjectView(R.id.tv_pinjia_commodity)//评价优先
+    TextView tv_pinjia_commodity;
     @InjectView(R.id.gridview)//网格列表
     PullToRefreshGridView gridView;
     private List<Merchant> list;
     private StoreSearchGridViewAdapter adapter;
     private PopupWindow popupWindow;
+    private int choose=1;
+    private MallDao mdao;
+    private int PAGE_NUM=1;
 
 
     @Override
@@ -62,8 +69,26 @@ public class StoreSearchCommodityActivity extends AppToolBarActivity implements 
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         initView();
         initData();
+    }
+
+    private void initView() {
+        tv_choose.setOnClickListener(this);
+        iv_back.setOnClickListener(this);
+        tv_search.setOnClickListener(this);
+        tv_pinjia_commodity.setOnClickListener(this);
+        tv_xiaoliang.setOnClickListener(this);
+    }
+
+    private void initData() {
+        tv_choose.setText("商品");
+        mdao=new MallDao(this);
+        mdao.requestSearchCompanysOrProductByKeyword("0",""," ",
+                "1", getIntent().getStringExtra("keyword"), Arad.preferences.getString("memberId"), String.valueOf(PAGE_NUM), String.valueOf(Constant.PAGE_SIZE)
+        );
+/*        mdao.requestSearchCompanysOrProductByKeyword("0", Arad.preferences.getString("latitude"), Arad.preferences.getString("longitude"),
+                "1", getIntent().getStringExtra("keyword"), Arad.preferences.getString("memberId"), String.valueOf(PAGE_NUM), String.valueOf(Constant.PAGE_SIZE)
+        );*/
         adapter=new StoreSearchGridViewAdapter(this);
-        adapter.setList(list);
         gridView.getRefreshableView().setNumColumns(2);
         gridView.setAdapter(adapter);
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -74,29 +99,59 @@ public class StoreSearchCommodityActivity extends AppToolBarActivity implements 
                 AnimUtil.intentSlidIn(StoreSearchCommodityActivity.this);*/
             }
         });
-    }
-
-    private void initData() {
-        list=new ArrayList<>();
+       /* list=new ArrayList<>();
 
         for(int i=0;i<20;i++){
             Merchant manchant = new Merchant();
             manchant.setName("章子怡"+i+"便利店");
             list.add(manchant);
+        }*/
+    }
+
+    @Override
+    public void onRequestSuccess(int requestCode) {
+        super.onRequestSuccess(requestCode);
+        if(requestCode==6){
+            MessageUtils.showShortToast(this,"根据关键字获取商品成功");
+            adapter.setList(mdao.getListProduct());
         }
     }
-
-    private void initView() {
-       tv_choose.setOnClickListener(this);
-    }
-
-
 
     @Override
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.tv_choose:
                 showPopupWidow();
+                break;
+            case R.id.iv_back:
+                onBackPressed();
+                break;
+            case R.id.tv_search:
+                if(TextUtils.isEmpty(et_search.getText().toString())){
+                    MessageUtils.showShortToast(this,"搜索内容不能为空");
+                    return;
+                }
+                if(choose==1){
+                    mdao.requestSearchCompanysOrProductByKeyword("0", Arad.preferences.getString("latitude"), Arad.preferences.getString("longitude"),
+                            "1", getIntent().getStringExtra("keyword"), Arad.preferences.getString("memberId"), String.valueOf(PAGE_NUM), String.valueOf(Constant.PAGE_SIZE)
+                    );
+                }
+                if(choose==2){
+                    Intent intent=new Intent(StoreSearchCommodityActivity.this,StoreSearchShopActivity.class);
+                    intent.putExtra("keyword",et_search.getText().toString().trim());
+                    startActivity(intent);
+                    AnimUtil.intentSlidIn(StoreSearchCommodityActivity.this);
+                }
+                break;
+            case R.id.tv_pinjia_commodity:
+                mdao.requestSearchCompanysOrProductByKeyword("1", Arad.preferences.getString("latitude"), Arad.preferences.getString("longitude"),
+                        "1", getIntent().getStringExtra("keyword"), Arad.preferences.getString("memberId"), String.valueOf(PAGE_NUM), String.valueOf(Constant.PAGE_SIZE)
+                );
+                break;
+            case R.id.tv_xiaoliang:
+                mdao.requestSearchCompanysOrProductByKeyword("0", Arad.preferences.getString("latitude"), Arad.preferences.getString("longitude"),
+                        "1", getIntent().getStringExtra("keyword"), Arad.preferences.getString("memberId"), String.valueOf(PAGE_NUM), String.valueOf(Constant.PAGE_SIZE)
+                );
                 break;
         }
 
@@ -112,6 +167,7 @@ public class StoreSearchCommodityActivity extends AppToolBarActivity implements 
             @Override
             public void onClick(View v) {
                 tv_choose.setText("店铺");
+                choose = 2;
                 popupWindow.dismiss();
             }
         });
@@ -119,6 +175,7 @@ public class StoreSearchCommodityActivity extends AppToolBarActivity implements 
             @Override
             public void onClick(View v) {
                 tv_choose.setText("商品");
+                choose = 1;
                 popupWindow.dismiss();
 
             }
@@ -135,7 +192,7 @@ public class StoreSearchCommodityActivity extends AppToolBarActivity implements 
         // 设置SelectPicPopupWindow弹出窗体可点击
         popupWindow.setFocusable(true);
         // 设置SelectPicPopupWindow弹出窗体动画效果
-        popupWindow.setAnimationStyle(R.style.AnimBottom);
+      //  popupWindow.setAnimationStyle(R.style.AnimBottom);
         // 实例化一个ColorDrawable颜色为半透明
       //  ColorDrawable dw = new ColorDrawable(0xb0000000);
         // 设置SelectPicPopupWindow弹出窗体的背景

@@ -13,9 +13,7 @@ import android.widget.SectionIndexer;
 import android.widget.TextView;
 
 import com.ctrl.forum.R;
-import com.ctrl.forum.cart.datasave.DemoData;
-import com.ctrl.forum.cart.datasave.GoodsDataBaseInterface;
-import com.ctrl.forum.cart.datasave.OperateGoodsDataBase;
+import com.ctrl.forum.cart.datasave.OperateGoodsDataBaseStatic;
 import com.ctrl.forum.customview.PinnedHeaderListView;
 import com.ctrl.forum.entity.FoodModel;
 import com.ctrl.forum.entity.FoodTypeModel;
@@ -33,6 +31,7 @@ public class FoodAdapter extends BaseAdapter implements SectionIndexer, PinnedHe
 	
 	private OnPinneChangeListener changeListener;
 	public  boolean isChangeable;
+	private int num=0;
 	
 	private Context context;
 	private List<FoodModel> foodList;//��Ʒ����
@@ -42,7 +41,7 @@ public class FoodAdapter extends BaseAdapter implements SectionIndexer, PinnedHe
 	private int mLocationPosition = -1;
 	private LayoutInflater inflater;
 	private OnItemClickListener mOnItemClickListener;
-	private int mPosition=-1;
+	private OperateGoodsDataBaseStatic mGoodsDataBaseInterface=null;
 
 	public void setChangeable(boolean isChangeable) {
 		this.isChangeable = isChangeable;
@@ -55,29 +54,8 @@ public class FoodAdapter extends BaseAdapter implements SectionIndexer, PinnedHe
 		this.foodTpyePositionList = foodTpyePositionList;
 		
 		inflater = LayoutInflater.from(context);
-		mGoodsDataBaseInterface = OperateGoodsDataBase.getInstance();
 	}
 
-
-	/** 数据操作接口 */
-	GoodsDataBaseInterface mGoodsDataBaseInterface = null;
-
-	//定义接口
-	public interface OnItemClickListener{
-		void onItemClick(ViewHolder holder);
-		void onItemLongClick(ViewHolder holder);
-		void onItemJiaClick(ViewHolder holder);
-		void onItemJianClick(ViewHolder holder);
-	}
-
-	public void setOnItemClickListener(OnItemClickListener listener){
-		this.mOnItemClickListener = listener ;
-	}
-
-    public void setposition(int position){
-		this.mPosition=position;
-		notifyDataSetChanged();
-	}
 
 	@Override
 	public int getCount() { 
@@ -94,75 +72,57 @@ public class FoodAdapter extends BaseAdapter implements SectionIndexer, PinnedHe
 		return position;
 	}
 
+	//定义接口
+	public interface OnItemClickListener{
+		void onItemJiaClick(ViewHolder v);
+		void onItemJianClick(ViewHolder v);
+	}
+
+	public void setOnItemClickListener(OnItemClickListener listener){
+		this.mOnItemClickListener = listener ;
+	}
+
 	@Override
-	public View getView(int position, View convertView, ViewGroup parent) {
-		int section = getSectionForPosition(position);
-		/*if (convertView == null) {
-			convertView = inflater.inflate(R.layout.listview_item, null);
-		}
-		LinearLayout mHeaderParent = (LinearLayout) convertView.findViewById(R.id.friends_item_header_parent);
-		TextView mHeaderText = (TextView) convertView.findViewById(R.id.friends_item_header_text);*/
+	public View getView(final int position, View convertView, ViewGroup parent) {
+		final int section = getSectionForPosition(position);
 		ViewHolder holder=null;
 		if(convertView==null){
-			convertView= LayoutInflater.from(context).inflate(R.layout.listview_item,parent,false);
+			convertView=inflater.inflate(R.layout.listview_item,parent,false);
 			holder=new ViewHolder(convertView);
-			holder.item_menu_content_jia.setTag(position);
-
 			convertView.setTag(holder);
 		}else {
 			holder=(ViewHolder)convertView.getTag();
 		}
-
-
 		if (getPositionForSection(section) == position) {
-			holder.mHeaderParent.setVisibility(View.VISIBLE);
+			holder.friends_item_header_parent.setVisibility(View.VISIBLE);
 			holder.mHeaderText.setText(foodTypeList.get(section).getFoodTypeName());
 		} else {
-			holder.mHeaderParent.setVisibility(View.GONE);
+			holder.friends_item_header_parent.setVisibility(View.GONE);
 		}
-		//TextView textView = (TextView) convertView.findViewById(R.id.tv_shop_name);
-		final String foodName=foodList.get(position).getName();
-		   /** 获取存储的商品数量 */
-		   if (mGoodsDataBaseInterface.getSecondGoodsNumber(context, StoreShopListVerticalStyleActivity.SELECTPOSITION, DemoData.ListMenu_GOODSID[(int)holder.item_menu_content_jia.getTag()]) == 0) {
-			   holder.item_menu_content_number.setText("");
-			   holder.item_menu_content_number.setVisibility(View.GONE);
-			   holder.item_menu_content_jian.setVisibility(View.GONE);
-		   } else {
-			   holder.item_menu_content_number.setText("" + mGoodsDataBaseInterface.getSecondGoodsNumber(context, StoreShopListVerticalStyleActivity.SELECTPOSITION, DemoData.ListMenu_GOODSID[(int)holder.item_menu_content_jia.getTag()]));
-			   holder.item_menu_content_number.setVisibility(View.VISIBLE);
-			   holder.item_menu_content_jian.setVisibility(View.VISIBLE);
-		   }
+		FoodModel foodModel=foodList.get(position);
+		/** 获取存储的商品数量 */
+		if (mGoodsDataBaseInterface.getSecondGoodsNumber(context, StoreShopListVerticalStyleActivity.SELECTPOSITION, foodModel.getId()) == 0) {
+			holder.item_menu_content_number.setText("");
+			holder.item_menu_content_jian.setVisibility(View.GONE);
+			holder.item_menu_content_number.setVisibility(View.GONE);
+		} else {
+			holder.item_menu_content_number.setText("" + mGoodsDataBaseInterface.getSecondGoodsNumber(context, StoreShopListVerticalStyleActivity.SELECTPOSITION , foodModel.getId()));
+			holder.item_menu_content_number.setVisibility(View.VISIBLE);
+			holder.item_menu_content_jian.setVisibility(View.VISIBLE);
+		}
 
-
-		/*textView.setText(foodName);
-		textView.setOnClickListener(new View.OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				Toast.makeText(context, foodName, Toast.LENGTH_SHORT).show();
-
-			}
-		});*/
-
+		holder.tv_shop_name.setText(foodModel.getName());
+		holder.tv_numbers.setText(foodModel.getSalesVolume());
+		holder.tv_vertical_price.setText(foodModel.getSellingPrice()+"/份");
+		holder.setPosition(position);
 		setOnListtener(holder);
 		return convertView;
 	}
-   //触发监听
-	private void setOnListtener( final ViewHolder holder) {
+
+	//触发
+	protected void setOnListtener(final ViewHolder holder){
 		if(mOnItemClickListener != null){
-		/*	holder.view.setOnClickListener(new View.OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					mOnItemClickListener.onItemClick(holder);
-				}
-			});
-			holder.view.setOnLongClickListener(new View.OnLongClickListener() {
-				@Override
-				public boolean onLongClick(View v) {
-					mOnItemClickListener.onItemLongClick(holder);
-					return true;
-				}
-			});*/
+
 			holder.item_menu_content_jia.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
@@ -176,25 +136,35 @@ public class FoodAdapter extends BaseAdapter implements SectionIndexer, PinnedHe
 				}
 			});
 		}
-
 	}
 
-
-public	static class ViewHolder{
-
+public static class ViewHolder{
+		@InjectView(R.id.friends_item_header_text)
+		TextView mHeaderText;   //类型名
+		@InjectView(R.id.tv_shop_name)
+		TextView tv_shop_name;   //商品名
+		@InjectView(R.id.tv_numbers)
+		TextView tv_numbers;    //销量
+		@InjectView(R.id.tv_vertical_price)
+		TextView tv_vertical_price;    //价格
+		@InjectView(R.id.item_vertical_numbers)
+		public TextView item_menu_content_number;    //数量
+		@InjectView(R.id.iv_style_img)
+		ImageView iv_style_img;    //商品图片
+		@InjectView(R.id.item_vertical_jian)
+		public ImageView item_menu_content_jian;    //减号
+		@InjectView(R.id.item_vertical_jia)
+		public ImageView item_menu_content_jia;    //加号
 		@InjectView(R.id.friends_item_header_parent)
-		        LinearLayout mHeaderParent;
-		@InjectView(R.id.friends_item_header_text)//标题
-				TextView mHeaderText;
-		@InjectView(R.id.item_menu_content_number)//标题
-			public 	TextView item_menu_content_number;
-		@InjectView(R.id.item_menu_content_jia)//加号
-		public	ImageView item_menu_content_jia;
-		@InjectView(R.id.item_menu_content_jian)//减号
-		public	ImageView item_menu_content_jian;
+		LinearLayout friends_item_header_parent;
+	private int position;
 
-
-
+	public void setPosition(int position){
+			this.position=position;
+		}
+	public int getPosition(){
+		return position;
+	}
 		ViewHolder(View view) {
 			ButterKnife.inject(this, view);
 		}

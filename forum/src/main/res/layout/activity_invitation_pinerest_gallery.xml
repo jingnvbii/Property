@@ -10,6 +10,7 @@
         android:layout_height="@dimen/toolbar_height"
         >
         <ImageView
+            android:id="@+id/iv_gallery_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
@@ -43,6 +44,7 @@
         </com.ctrl.forum.photo.zoom.ViewPagerFixed>
 
         <TextView
+            android:id="@+id/tv_image_remark"
             android:layout_gravity="bottom"
             android:layout_marginLeft="10dp"
             android:layout_marginBottom="20dp"
@@ -53,7 +55,7 @@
             android:text="萌的不要用不要的15132"/>
 
         <TextView
-            android:id="@+id/tv_tel"
+            android:id="@+id/tv_image_tel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="电话连接"
@@ -83,6 +85,7 @@
         android:layout_height="40dp">
 
         <RelativeLayout
+            android:id="@+id/rl_pinerest_gallery_zan"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1">
@@ -93,6 +96,7 @@
                 android:layout_height="wrap_content"
                 android:src="@mipmap/zan_large"/>
             <TextView
+                android:id="@+id/tv_pinerest_gallery_zan_num"
                 android:layout_centerInParent="true"
                 android:layout_toRightOf="@id/iv_zan"
                 android:layout_width="wrap_content"
@@ -103,24 +107,27 @@
         </RelativeLayout>
 
         <ImageView
-            android:id="@+id/iv_share"
+            android:id="@+id/iv_pinerest_gallery_share"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:padding="10dp"
             android:layout_weight="1"
             android:layout_gravity="center"
             android:src="@mipmap/share_large"/>
         <ImageView
+            android:id="@+id/iv_pinerest_gallery_pinglun"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:padding="10dp"
             android:layout_gravity="center"
             android:src="@mipmap/pinglun_large"/>
-        <ImageView
+      <!--  <ImageView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_gravity="center"
-            android:src="@mipmap/more_large"/>
+            android:src="@mipmap/more_large"/>-->
 
     </LinearLayout>
 

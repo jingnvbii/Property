@@ -24,6 +24,7 @@
             android:textColor="@color/text_black"/>
 
         <EditText
+            android:id="@+id/et_add_adress_name"
             android:layout_toRightOf="@+id/tv_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -40,6 +41,7 @@
         android:layout_height="1px"
         android:background="@color/line_gray"></View>
     <RelativeLayout
+        android:id="@+id/rl_add_address"
         android:background="@color/white"
         android:layout_width="match_parent"
         android:padding="10dp"
@@ -60,7 +62,8 @@
             android:layout_toRightOf="@+id/tv_address_name"
             android:src="@mipmap/locate_black"/>
 
-        <EditText
+        <TextView
+            android:id="@+id/tv_add_address_base"
             android:layout_toRightOf="@+id/iv_locate_img"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -96,6 +99,7 @@
             android:textColor="@color/text_black"/>
 
         <EditText
+            android:id="@+id/et_add_adress_detail"
             android:layout_toRightOf="@+id/tv_door_number"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -125,6 +129,7 @@
             android:textColor="@color/text_black"/>
 
         <EditText
+            android:id="@+id/et_add_adress_tel"
             android:layout_toRightOf="@+id/tv_phone_number"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -143,6 +148,7 @@
 
 
     <TextView
+        android:id="@+id/tv_add_address_save"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"

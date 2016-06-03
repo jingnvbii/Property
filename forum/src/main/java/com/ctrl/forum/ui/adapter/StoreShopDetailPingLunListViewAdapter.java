@@ -5,10 +5,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.ctrl.forum.R;
-import com.ctrl.forum.entity.Merchant;
+import com.ctrl.forum.entity.ShopReply;
+import com.ctrl.forum.utils.TimeUtils;
 
 import java.util.List;
 
@@ -21,13 +23,13 @@ import butterknife.InjectView;
  */
 public class StoreShopDetailPingLunListViewAdapter extends BaseAdapter{
     private Context mcontext;
-    private List<Merchant>kindList;
+    private List<ShopReply>kindList;
 
     public StoreShopDetailPingLunListViewAdapter(Context context) {
                this.mcontext=context;
     }
 
-    public void setList(List<Merchant> list) {
+    public void setList(List<ShopReply> list) {
         this.kindList = list;
         notifyDataSetChanged();
     }
@@ -58,14 +60,32 @@ public class StoreShopDetailPingLunListViewAdapter extends BaseAdapter{
         }else {
             holder=(ViewHolder)convertView.getTag();
         }
-       Merchant merchant=kindList.get(position);
-        holder.tv_titile.setText(merchant.getName());
+        ShopReply mShopReply=kindList.get(position);
+        holder.tv_ping_name.setText(mShopReply.getReportName());
+        holder.id_pingjia_content.setText(mShopReply.getContent());
+        holder.ratingBar_pinglun.setNumStars(Integer.parseInt(mShopReply.getLevel()));
+        holder.tv_pinlun_time.setText(TimeUtils.dateTime(mShopReply.getCreateTime()));
+        holder.tv_huifu_content.setText(mShopReply.getKfReplay());
+        if(mShopReply.getLevel()!=null){
+            holder.ratingBar_pinglun.setRating(Float.parseFloat(mShopReply.getLevel())/2);
+        }
+
         return convertView;
     }
 
     static class ViewHolder{
-        @InjectView(R.id.tv_ping_name)//标题
-                TextView tv_titile;
+        @InjectView(R.id.tv_ping_name)//评价人姓名
+                TextView tv_ping_name;
+        @InjectView(R.id.id_pingjia_content)//评价内容
+                TextView id_pingjia_content;
+        @InjectView(R.id.tv_pinlun_time)//评价时间
+                TextView tv_pinlun_time;
+        @InjectView(R.id.tv_huifu_content)//回复内容
+                TextView tv_huifu_content;
+        @InjectView(R.id.tv_huifu_time)//回复时间
+                TextView tv_huifu_time;
+        @InjectView(R.id.ratingBar_pinglun)//评价等级
+                RatingBar ratingBar_pinglun;
         ViewHolder(View view) {
             ButterKnife.inject(this, view);
         }

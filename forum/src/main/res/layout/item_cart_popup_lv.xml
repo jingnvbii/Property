@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:padding="10dp"
+    android:id="@+id/rl_all"
+    android:descendantFocusability="afterDescendants"
+    android:layout_height="match_parent">
+
+
+    <TextView
+        android:id="@+id/tv_popup_lv_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="康师傅冰红茶"
+        android:padding="5dp"
+        android:textColor="@color/text_black"/>
+
+    <TextView
+        android:id="@+id/tv_popup_lv_price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="80"
+        android:padding="5dp"
+        android:textColor="@color/text_red"
+        android:layout_centerHorizontal="true"
+        />
+
+    <ImageView
+        android:id="@+id/iv_popup_lv_add"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:src="@mipmap/add_cart_red"
+        android:layout_alignParentRight="true"/>
+
+    <TextView
+        android:id="@+id/tv_popup_lv_number"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="12"
+        android:padding="5dp"
+        android:textColor="@color/text_red"
+        android:layout_toLeftOf="@id/iv_popup_lv_add"
+        android:layout_marginRight="5dp"
+        />
+
+    <ImageView
+        android:id="@+id/iv_popup_lv_subtract"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:src="@mipmap/subtract_cart_red"
+        android:layout_marginRight="5dp"
+        android:layout_toLeftOf="@id/tv_popup_lv_number"/>
+
+
+</RelativeLayout>

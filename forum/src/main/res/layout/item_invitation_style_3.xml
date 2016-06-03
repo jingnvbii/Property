@@ -6,6 +6,7 @@
     android:layout_height="match_parent">
 
     <ImageView
+        android:id="@+id/iv_block_style_photo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:src="@mipmap/pinterest_img"
@@ -18,7 +19,7 @@
         android:layout_gravity="bottom"
         >
         <TextView
-            android:id="@+id/tv_titile"
+            android:id="@+id/tv_block_style_titile"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
@@ -26,18 +27,20 @@
             android:text="离幸福的房间多少级反倒是发斯蒂芬"/>
 
         <TextView
+            android:id="@+id/tv_block_style_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="2016-fdfdf"
             android:drawableLeft="@mipmap/clock_small"
             android:layout_toRightOf="@+id/iv_zan"
-            android:layout_below="@+id/tv_titile"
+            android:layout_below="@+id/tv_block_style_titile"
             android:layout_marginLeft="5dp"
             android:layout_marginTop="10dp"
             android:drawablePadding="5dp"
             android:textColor="@color/text_gray"/>
 
         <TextView
+            android:id="@+id/tv_block_style_zan"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="29"
@@ -46,7 +49,7 @@
             android:textColor="@color/text_gray"
             android:layout_marginTop="10dp"
             android:layout_alignParentRight="true"
-            android:layout_below="@+id/tv_titile"
+            android:layout_below="@+id/tv_block_style_titile"
             />
 
 

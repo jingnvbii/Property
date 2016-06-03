@@ -1,6 +1,7 @@
 package com.ctrl.forum.ui.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +14,6 @@ import com.ctrl.forum.customview.PinnedHeaderListView;
 import com.ctrl.forum.entity.FoodTypeModel;
 
 import java.util.List;
-
 
 public class TitleAdapter extends BaseAdapter {
 	private static final String TAG = "TitleAdapter";
@@ -31,18 +31,6 @@ public class TitleAdapter extends BaseAdapter {
 	}
 	public void setPos(int pos) {
 		this.pos = pos;
-	}
-
-
-	private OnItemClickListener mOnItemClickListener;
-	//定义接口
-	public interface OnItemClickListener{
-		void onItemClick(View v, int position);
-		void onItemLongClick(View v, int position);
-	}
-
-	public void setOnItemClickListener(OnItemClickListener listener){
-		this.mOnItemClickListener = listener ;
 	}
 
 	@Override
@@ -67,8 +55,8 @@ public class TitleAdapter extends BaseAdapter {
 			vh = new ViewHolder();
 			convertView = LayoutInflater.from(context).inflate(R.layout.item, null);
 			vh.title = (TextView) convertView.findViewById(R.id.title);
-			vh.tv_line_red = (TextView) convertView.findViewById(R.id.tv_line_red);
-			vh.ll_title_item = (LinearLayout) convertView.findViewById(R.id.ll_title_item);
+			vh.tv_line_red=(TextView)convertView.findViewById(R.id.tv_line_red);
+			vh.ll_title_item=(LinearLayout)convertView.findViewById(R.id.ll_title_item);
 			convertView.setTag(vh);
 		} else {
 			vh = (ViewHolder) convertView.getTag();
@@ -76,14 +64,13 @@ public class TitleAdapter extends BaseAdapter {
 		FoodTypeModel model = getItem(position); 
 
 		if (pos==position) {
-			vh.tv_line_red.setVisibility(View.VISIBLE);
 			vh.title.setTextColor(context.getResources().getColor(R.color.text_red));
-			vh.ll_title_item.setBackgroundResource(R.color.white);
+			vh.tv_line_red.setVisibility(View.VISIBLE);
+			vh.ll_title_item.setBackgroundColor(Color.WHITE);
 		} else {
-			vh.tv_line_red.setVisibility(View.GONE);
 			vh.title.setTextColor(context.getResources().getColor(R.color.text_black));
-			vh.ll_title_item.setBackgroundResource(R.color.gray_store);
-
+			vh.tv_line_red.setVisibility(View.GONE);
+			vh.ll_title_item.setBackgroundColor(Color.parseColor("#efefef"));
 		}
 		final String foodTypeName=model.getFoodTypeName();
 		final int itemPos=model.getItemPosition();
@@ -97,30 +84,7 @@ public class TitleAdapter extends BaseAdapter {
 //				lv_Content.setSelection(itemPos);
 //			}
 //		});
-
-		setOnListtener(vh);
 		return convertView;
-	}
-
-	//触发
-	protected void setOnListtener(final ViewHolder holder){
-		if(mOnItemClickListener != null){
-			holder.ll_title_item.setOnClickListener(new View.OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					int layoutPosition = pos;
-					mOnItemClickListener.onItemClick(holder.ll_title_item,layoutPosition);
-				}
-			});
-			holder.ll_title_item.setOnLongClickListener(new View.OnLongClickListener() {
-				@Override
-				public boolean onLongClick(View v) {
-					int layoutPosition = pos;
-					mOnItemClickListener.onItemLongClick(holder.ll_title_item,layoutPosition);
-					return true;
-				}
-			});
-		}
 	}
 
 	class ViewHolder {

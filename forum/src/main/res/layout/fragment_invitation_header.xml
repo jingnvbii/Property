@@ -4,7 +4,7 @@
     android:background="@color/main_bg"
     android:layout_height="match_parent">
 
-  <!--  <LinearLayout
+    <!--<LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:background="@color/white"
@@ -42,9 +42,24 @@
 
     </LinearLayout>-->
 
-    <HorizontalScrollView
+    <FrameLayout
+        android:id="@+id/framelayout"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="100dp">
+    </FrameLayout>
+
+    <GridView
+        android:id="@+id/gridView_pull_down"
+        android:layout_width="match_parent"
+        android:numColumns="5"
+        android:layout_height="wrap_content" >
+    </GridView>
+
+  <!--  <HorizontalScrollView
         android:id="@+id/scrollView"
-        android:layout_marginTop="10dp"
+        android:padding="10dp"
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
 
@@ -54,13 +69,13 @@
             android:layout_marginLeft="@dimen/margin_left_and_right"
             android:layout_height="wrap_content" >
 
-            <com.ctrl.forum.customview.GridViewForScrollView
-                android:id="@+id/gridView1"
+            <GridView
+                android:id="@+id/gridView_pull_down"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" >
-            </com.ctrl.forum.customview.GridViewForScrollView>
+            </GridView>
         </LinearLayout>
-    </HorizontalScrollView>
+    </HorizontalScrollView>-->
 
     <View
         android:layout_width="match_parent"
@@ -69,6 +84,7 @@
         android:background="@color/line_gray" />
     <LinearLayout
         android:id="@+id/ll"
+        android:visibility="gone"
         android:layout_width="wrap_content"
         android:layout_centerInParent="true"
         android:layout_marginTop="10dp"
@@ -89,8 +105,6 @@
             android:drawablePadding="5dp"
             android:drawableLeft="@mipmap/search_gray"
             />
-
-
     </LinearLayout>
 
 </LinearLayout>

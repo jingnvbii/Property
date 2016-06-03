@@ -5,10 +5,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.beanu.arad.Arad;
 import com.ctrl.forum.R;
-import com.ctrl.forum.entity.Merchant;
+import com.ctrl.forum.entity.CompanyUnion;
 
 import java.util.List;
 
@@ -21,13 +23,13 @@ import butterknife.InjectView;
  */
 public class StoreLianMengGridViewAdapter extends BaseAdapter{
     private Context mcontext;
-    private List<Merchant>kindList;
+    private List<CompanyUnion>kindList;
 
     public StoreLianMengGridViewAdapter(Context context) {
                this.mcontext=context;
     }
 
-    public void setList(List<Merchant> list) {
+    public void setList(List<CompanyUnion> list) {
         this.kindList = list;
         notifyDataSetChanged();
     }
@@ -58,14 +60,17 @@ public class StoreLianMengGridViewAdapter extends BaseAdapter{
         }else {
             holder=(ViewHolder)convertView.getTag();
         }
-       Merchant merchant=kindList.get(position);
-        holder.tv_titile.setText(merchant.getName());
+        CompanyUnion mCompanyUnion=kindList.get(position);
+        holder.tv_lianmeng_name.setText(mCompanyUnion.gettCompanysLis().get(0).getName());
+        Arad.imageLoader.load(mCompanyUnion.gettCompanysLis().get(0).getImg()).placeholder(R.mipmap.default_error).into(holder.iv_title_photo);
         return convertView;
     }
 
     static class ViewHolder{
-        @InjectView(R.id.tv_lianmeng_name)//标题
-                TextView tv_titile;
+        @InjectView(R.id.tv_lianmeng_name)//商家名称
+                TextView tv_lianmeng_name;
+        @InjectView(R.id.iv_title_photo)//商家logo
+                ImageView iv_title_photo;
         ViewHolder(View view) {
             ButterKnife.inject(this, view);
         }

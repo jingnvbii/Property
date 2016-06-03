@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:descendantFocusability="blocksDescendants"
+    android:padding="10dp"
     android:layout_height="match_parent">
 
     <ImageView
         android:id="@+id/iv_title_photo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="70dp"
+        android:layout_height="80dp"
         android:src="@mipmap/item_store_list"
         android:scaleType="fitXY"
-        android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_alignBottom="@+id/tv_youhuiquan"
         android:layout_alignTop="@+id/tv_name" />
@@ -20,7 +19,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="小贝日用百货便利店"
-        android:layout_marginTop="20dp"
         android:id="@+id/tv_name" />
 
     <RatingBar
@@ -28,6 +26,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/ratingBar"
+        android:isIndicator="true"
         android:layout_below="@+id/tv_name"
         android:rating="4"
         android:layout_marginTop="5dp"
@@ -35,6 +34,7 @@
         />
 
     <TextView
+        android:id="@+id/tv_yingyezhong"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@+id/ratingBar"
@@ -63,6 +63,7 @@
         />
 
     <TextView
+        android:id="@+id/tv_xianjinquan_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="美意美发 5折券"
@@ -91,6 +92,7 @@
 
 
     <TextView
+        android:id="@+id/tv_youhuiquan_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="满20 减10元"
@@ -109,8 +111,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:layout_marginTop="20dp"
-        android:layout_marginRight="10dp"
         android:text="2.60km"/>
 
 </RelativeLayout>

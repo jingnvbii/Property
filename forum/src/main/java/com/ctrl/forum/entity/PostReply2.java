@@ -1,5 +1,7 @@
 package com.ctrl.forum.entity;
 
+import java.util.List;
+
 /**
  * 帖子回复实体
  * Created by Administrator on 2016/4/8.
@@ -19,6 +21,53 @@ public class PostReply2 {
     private String receiverFloor;//被回复者所在楼层
     private String memberName;//回复者昵称
     private String receiverName;//被回复者昵称
+    private String replyType;//回复类型 "0"回复帖子 "1"回复帖子
+
+    public String getReplyType() {
+        return replyType;
+    }
+
+    public void setReplyType(String replyType) {
+        this.replyType = replyType;
+    }
+
+    public String getReceiverId() {
+        return receiverId;
+    }
+
+    public void setReceiverId(String receiverId) {
+        this.receiverId = receiverId;
+    }
+
+    private String receiverId;//被回复者id
+    private String preContentType;//原原内容类型（0：文字或者表情、1：图片、2：语音）
+    private String preContent;//原回复内容
+
+    public List<PostImage> getPostReplyImgList() {
+        return postReplyImgList;
+    }
+
+    public void setPostReplyImgList(List<PostImage> postReplyImgList) {
+        this.postReplyImgList = postReplyImgList;
+    }
+
+    public String getPreContentType() {
+        return preContentType;
+    }
+
+    public void setPreContentType(String preContentType) {
+        this.preContentType = preContentType;
+    }
+
+    public String getPreContent() {
+        return preContent;
+    }
+
+    public void setPreContent(String preContent) {
+        this.preContent = preContent;
+    }
+
+    private List<PostImage> postReplyImgList;//评论图片集合
 
 
 

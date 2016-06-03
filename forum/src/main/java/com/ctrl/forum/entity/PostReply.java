@@ -14,6 +14,42 @@ public class PostReply {
     private String receiverFloor;//被回复者所在楼层
     private String memberName;//回复者昵称
     private String receiverName;//被回复者昵称
+    private String preContentType;//原原内容类型（0：文字或者表情、1：图片、2：语音）
+    private String preContent;//原回复内容
+    private String postId;//帖子id
+    private String replyType;//评论类型（0：对帖子的评论、1：对评论的回复）
+
+    public String getPreContentType() {
+        return preContentType;
+    }
+
+    public void setPreContentType(String preContentType) {
+        this.preContentType = preContentType;
+    }
+
+    public String getPreContent() {
+        return preContent;
+    }
+
+    public void setPreContent(String preContent) {
+        this.preContent = preContent;
+    }
+
+    public String getPostId() {
+        return postId;
+    }
+
+    public void setPostId(String postId) {
+        this.postId = postId;
+    }
+
+    public String getReplyType() {
+        return replyType;
+    }
+
+    public void setReplyType(String replyType) {
+        this.replyType = replyType;
+    }
 
     public String getId() {
         return id;

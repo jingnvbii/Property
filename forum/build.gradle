@@ -35,7 +35,7 @@ dependencies {
     compile project(':pulltorefresh')
     compile project(':sharesdk')
     // 以下三个库是必须依赖的
-    compile 'com.android.support:recyclerview-v7:22.2.1'
+  //  compile 'com.android.support:recyclerview-v7:22.2.1'
     compile 'cn.bingoogolapple:bga-refreshlayout:1.0.7@aar'
     compile 'com.nineoldandroids:library:2.4.0'
     //动画依赖包

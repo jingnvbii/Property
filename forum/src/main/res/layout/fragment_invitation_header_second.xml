@@ -4,7 +4,7 @@
     android:background="@color/main_bg"
     android:layout_height="match_parent">
 
-    <LinearLayout
+   <!-- <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:background="@color/white"
@@ -26,12 +26,12 @@
                 android:gravity="center">
             </LinearLayout>
         </HorizontalScrollView>
-        <!-- <View
+        &lt;!&ndash; <View
              android:layout_width="1px"
              android:layout_height="match_parent"
              android:layout_marginTop="5dp"
              android:layout_marginBottom="5dp"
-             android:background="@color/line_gray" />-->
+             android:background="@color/line_gray" />&ndash;&gt;
 
         <ImageView
             android:layout_width="30dp"
@@ -90,7 +90,7 @@
             />
 
 
-    </LinearLayout>
+    </LinearLayout>-->
     <FrameLayout
         android:id="@+id/framelayout"
         android:layout_width="match_parent"

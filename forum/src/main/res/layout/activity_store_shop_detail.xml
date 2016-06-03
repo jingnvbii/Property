@@ -29,8 +29,8 @@
 
         <ImageView
             android:id="@+id/iv_style_img"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_width="70dp"
+            android:layout_height="80dp"
             android:scaleType="fitXY"
             android:layout_margin="10dp"
             android:src="@mipmap/style1_img"/>
@@ -67,6 +67,7 @@
     </RelativeLayout>
 
     <TextView
+        android:id="@+id/tv_shop_detail_address"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="济南市中润世纪广场"
@@ -79,6 +80,7 @@
         android:layout_marginTop="10dp"
         />
     <TextView
+        android:id="@+id/tv_shop_tel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="024555"
@@ -101,6 +103,7 @@
         android:padding="10dp"
         />
     <TextView
+        android:id="@+id/tv_shop_notifcation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="sdfsdajkfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfdfhsdafsd f "
@@ -124,6 +127,7 @@
         android:padding="10dp"
         />
     <TextView
+        android:id="@+id/tv_shop_introduce"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="sdfsdajkfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfdfhsdafsd f "
@@ -151,12 +155,28 @@
         android:background="@color/white"
         android:paddingBottom="10dp"
         android:layout_height="wrap_content">
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="35dp"
-        android:src="@mipmap/zizhi_img"
-        />
+        <HorizontalScrollView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="none"
+            android:background="@color/white"
+            >
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:layout_margin="10dp" >
+
+                <GridView
+                    android:id="@+id/gridview_zizhi"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:gravity="center"
+                    android:numColumns="auto_fit"
+                    android:stretchMode="spacingWidthUniform" >
+                </GridView>
+            </LinearLayout>
+        </HorizontalScrollView>
     </RelativeLayout>
 
     <TextView
@@ -208,6 +228,7 @@
         android:padding="10dp"
         />
     <TextView
+        android:id="@+id/tv_xianjinquan_remark"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="sdfsdajkfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfdfhsdafsd f "
@@ -228,12 +249,14 @@
 
 
     <TextView
+        android:id="@+id/tv_reply_detail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="评论详情"
         android:drawableLeft="@mipmap/pinglun_black"
         android:background="@color/white"
         android:drawablePadding="20dp"
+        android:drawableRight="@mipmap/jiantou_right_gray"
         android:textSize="16sp"
         android:textColor="@color/text_black"
         android:padding="10dp"

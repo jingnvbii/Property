@@ -68,8 +68,16 @@ public class ViewFactory {
 		//设置圆点指示图标组居中显示，默认靠右
 		cycleViewPager.setIndicatorCenter();
 	}
-
 	
+	
+	
+	
+	
+	
+	
+	
+	
+
 	/**
 	 * 获取ImageView视图的同时加载显示url
 	 * 

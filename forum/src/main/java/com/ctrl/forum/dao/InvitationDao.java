@@ -54,9 +54,6 @@ public class InvitationDao extends IDao {
     private List<PostDrafts> listPostDrafts = new ArrayList<>();//草稿箱帖子列表
     private List<CategoryItem> listCategroyItem = new ArrayList<>();//帖子分类级联列表
     private Post2 post2;
-    private List<Post> minePost = new ArrayList<>(); //我发布的帖子列表
-    private List<PostImage> minePostImage = new ArrayList<>(); //我发布的帖子列表
-    private List<PostReply> minePostReply = new ArrayList<>(); //我发布的帖子回复列表
 
 
     public InvitationDao(INetResult activity){
@@ -339,21 +336,6 @@ public class InvitationDao extends IDao {
         postRequest(Constant.RAW_URL+url, mapToRP(map),13);
     }
 
-    /**
-     * 获取我发布的帖子列表
-     * @param reporterId //发帖人id（会员id）
-     * @param pageNum //当前页码
-     * @param pageSize //每页条数
-     * */
-    public void queryMyPostList(String reporterId,String pageNum,String pageSize){
-        String url="post/queryMyPostList";
-        Map<String,String> map = new HashMap<String,String>();
-        map.put("reporterId",reporterId);
-        map.put("pageNum",pageNum);
-        map.put("pageSize",pageSize);
-
-        postRequest(Constant.RAW_URL+url, mapToRP(map),14);
-    }
 
 
     @Override
@@ -384,8 +366,7 @@ public class InvitationDao extends IDao {
             Log.d("demo","dao中结果集(获取帖子详情): " + result);
            // post=JsonUtil.node2pojo(result.findValue("post"),Post.class);
             userInfo=JsonUtil.node2pojo(result.findValue("user"), MemberInfo.class);
-
-            //listPostImage = JsonUtil.node2pojoList(result.findValue("postImgList"), PostImage.class);
+          //  listPostImage = JsonUtil.node2pojoList(result.findValue("postImgList"), PostImage.class);
             listPost = JsonUtil.node2pojoList(result.findValue("rtuRelatedPost"), Post.class);
             listMemberInfo = JsonUtil.node2pojoList(result.findValue("Relateduser"), MemberInfo.class);
             listRelatePostImage = JsonUtil.node2pojoList(result.findValue("RelatedpostImgList"), PostImage.class);
@@ -418,12 +399,7 @@ public class InvitationDao extends IDao {
             listCategroyItem = JsonUtil.node2pojoList(result.findValue("itemCategoryList"), CategoryItem.class);
         }
 
-        if (requestCode==14){
-            Log.d("demo","dao中结果集(获取我发布的帖子列表接口): " + result);
-            minePost = JsonUtil.node2pojoList(result.findValue("postList"), Post.class);
-            minePostImage = JsonUtil.node2pojoList(result.findValue("postImgList"),PostImage.class);
-            minePostReply = JsonUtil.node2pojoList(result.findValue("postReplyList"),PostReply.class);
-        }
+
 
     }
 
@@ -468,15 +444,7 @@ public class InvitationDao extends IDao {
     public List<CategoryItem> getListCategroyItem() {
         return listCategroyItem;
     }
-    public List<Post> getMinePost() {
-        return minePost;
-    }
-    public List<PostImage> getMinePostImage() {
-        return minePostImage;
-    }
-    public List<PostReply> getMinePostReply() {
-        return minePostReply;
-    }
+
 
     public Post2 getPost2(){
         return post2;

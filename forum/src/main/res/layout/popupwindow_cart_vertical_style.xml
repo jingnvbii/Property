@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="match_parent"
+    android:background="#10000000"
+    >
+
+    <FrameLayout
+        android:layout_below="@+id/text"
+        android:id="@+id/framelayout"
+        android:layout_width="match_parent"
+        android:layout_above="@+id/lv_cart_popup"
+        android:layout_height="70dp"
+        >
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:background="#00000000">
+
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@color/white"
+            android:layout_gravity="bottom">
+
+            <TextView
+                android:id="@+id/tv_cart_popup_delete"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:drawableLeft="@mipmap/delete_cart"
+                android:drawablePadding="5dp"
+                android:paddingBottom="10dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="20dp"
+                android:paddingTop="10dp"
+                android:text="清空购物车"
+                android:textColor="@color/text_gray"
+                android:textSize="14sp" />
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/m_list_car_popup"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_centerInParent="true"
+                android:layout_marginLeft="30dp"
+                android:src="@mipmap/cart_car_orange" />
+
+              <RelativeLayout
+                  android:id="@+id/m_list_car_lay"
+                  android:layout_width="60dp"
+                  android:layout_height="wrap_content"
+                  android:layout_marginBottom="10dp"
+                  android:layout_marginLeft="10dp"></RelativeLayout>
+
+            <TextView
+                android:id="@+id/m_list_num_popup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignRight="@+id/m_list_car_lay"
+                android:layout_alignTop="@+id/m_list_car_lay"
+                android:background="@drawable/goods_tv_bg_selector"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:text="0"
+                android:textColor="@color/white"
+                android:visibility="visible" />
+        </RelativeLayout>
+
+    </FrameLayout>
+
+
+
+    <ListView
+        android:id="@+id/lv_cart_popup"
+        android:layout_width="match_parent"
+        android:layout_above="@+id/m_list_bt"
+        android:layout_height="200dp"
+        android:background="@color/white"></ListView>
+        <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/line_gray"></View>
+
+    <RelativeLayout
+        android:id="@+id/m_list_bt"
+        android:layout_width="match_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_height="50dp"
+        android:background="@color/white">
+
+
+        <TextView
+            android:id="@+id/m_list_all_price_popup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="20dp"
+            android:text=""
+            android:textColor="@color/text_red"
+            android:textSize="18sp" />
+
+        <View
+            android:id="@+id/m_listview"
+            android:layout_width="1dp"
+            android:layout_height="26px"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_toRightOf="@+id/m_list_all_price"
+            android:background="@color/color_f2f2f2" />
+
+        <Button
+            android:id="@+id/m_list_submit_popup"
+            android:layout_width="80dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:background="@color/text_red"
+            android:text="选好了"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+    </RelativeLayout>
+
+</RelativeLayout>

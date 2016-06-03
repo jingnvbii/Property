@@ -13,6 +13,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Base64;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,7 +40,6 @@ import com.ctrl.forum.dao.ImageDao;
 import com.ctrl.forum.dao.InvitationDao;
 import com.ctrl.forum.entity.CategoryItem;
 import com.ctrl.forum.entity.Image;
-import com.ctrl.forum.photo.util.PublicWay;
 import com.ctrl.forum.utils.Utils;
 
 import java.io.ByteArrayOutputStream;
@@ -64,7 +64,6 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
     private TextView tv_location;//位置
     private TextView tv_name;//名片
 
-    private TextView tv_release_back;
     private Spinner spinner_second_kind;
     private Spinner spinner_third_kind;
     private InvitationDao idao;
@@ -115,6 +114,11 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
     @InjectView(R.id.et_content)//内容
     EditText et_content;
 
+    @InjectView(R.id.tv_release_back)//取消
+    TextView tv_release_back;
+    @InjectView(R.id.tv_release_save)//存草稿
+    TextView tv_release_save;
+
 
     /* 请求码*/
     private static final int IMAGE_REQUEST_CODE = 0;
@@ -125,7 +129,13 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
     private ImageDao Idao;
     private String thirdKindId;//三级分类id
     private String secondKindId;//二级分类id
+    private String locationLongitude;
+    private String locationLatitude;
+    private String checkType3;
+    private String checkType2;
+    private List<CategoryItem> listItemCategroy3;
 
+    private boolean isSave;//是否存草稿
 
 
     @Override
@@ -147,7 +157,6 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
         tv_tel=(TextView)findViewById(R.id.tv_tel);
         tv_location=(TextView)findViewById(R.id.tv_location);
         tv_name=(TextView)findViewById(R.id.tv_name);
-        tv_release_back=(TextView)findViewById(R.id.tv_release_back);
 
         spinner_second_kind=(Spinner)findViewById(R.id.spinner_second_kind);
         spinner_third_kind=(Spinner)findViewById(R.id.spinner_third_kind);
@@ -158,6 +167,7 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
         tv_name.setOnClickListener(this);
         tv_release_back.setOnClickListener(this);
         tv_release.setOnClickListener(this);
+        tv_release_save.setOnClickListener(this);
 
         //初始化控件宽高
         setImageViewWidth(iv01);
@@ -232,7 +242,8 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
 
     public void Init() {
         channelId=getIntent().getStringExtra("channelId");
-        checkType=getIntent().getStringExtra("checkType");
+
+
 
         Idao=new ImageDao(this);
 
@@ -273,6 +284,7 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
                 Intent intentFromCapture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 intentFromCapture.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(Environment.getExternalStorageDirectory(), "cxh.jpg")));
                 startActivityForResult(intentFromCapture, CAMERA_REQUEST_CODE);
+                AnimUtil.intentSlidIn(InvitationReleaseActivity.this);
                 pop.dismiss();
                 ll_popup.clearAnimation();
             }
@@ -298,12 +310,24 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
 
     }
 
+    @Override
+    public void onRequestFaild(String errorNo, String errorMessage) {
+        super.onRequestFaild(errorNo, errorMessage);
+        if(errorNo.equals("006")){
+            spinner_third_kind.setVisibility(View.GONE);
+        }
+    }
 
     @Override
     public void onRequestSuccess(int requestCode) {
         super.onRequestSuccess(requestCode);
         if(requestCode==7){
-            MessageUtils.showShortToast(this,"帖子发布成功");
+            if(isSave){
+                MessageUtils.showShortToast(this,"存草稿成功");
+            }else {
+                MessageUtils.showShortToast(this, "帖子发布成功");
+            }
+            isSave=false;
             finish();
         }
 
@@ -407,8 +431,12 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
         }
 
         if(requestCode==12){
-            MessageUtils.showShortToast(this,"获取二级分类成功");
+            MessageUtils.showShortToast(this, "获取二级分类成功");
+            if(listItemCategroy!=null){
+                listItemCategroy.clear();
+            }
             listItemCategroy=idao.getListCategroyItem();
+            Log.i("tag", "size---" + listItemCategroy.size());
             for(int i=0;i<listItemCategroy.size();i++){
                 secondCategroyStr.add(listItemCategroy.get(i).getName());
             }
@@ -421,8 +449,11 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
             spinner_second_kind.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                   idao.requesItemCategory3(listItemCategroy.get(position).getId(),"2");
-                   secondKindId=listItemCategroy.get(position).getId();
+
+                    idao.requesItemCategory3(listItemCategroy.get(position).getId(), "2");
+                    secondKindId = listItemCategroy.get(position).getId();
+                    Log.i("tag", "secondKindId---" + secondKindId);
+                    checkType2 = listItemCategroy.get(position).getCheckType();
 
                 }
 
@@ -434,11 +465,14 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
 
         }
         if(requestCode==13){
+            if(listItemCategroy3!=null){
+                listItemCategroy3.clear();
+            }
             MessageUtils.showShortToast(this,"获取三级分类成功");
             spinner_third_kind.setVisibility(View.VISIBLE);
-            listItemCategroy=idao.getListCategroyItem();
-            for(int i=0;i<listItemCategroy.size();i++){
-                thirdCategroyStr.add(listItemCategroy.get(i).getName());
+            listItemCategroy3=idao.getListCategroyItem();
+            for(int i=0;i<listItemCategroy3.size();i++){
+                thirdCategroyStr.add(listItemCategroy3.get(i).getName());
             }
 
             arrayAdapter = new ArrayAdapter<String>(InvitationReleaseActivity.this, R.layout.simple_spinner_item, thirdCategroyStr);
@@ -450,9 +484,10 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
             spinner_third_kind.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    categroyId=listItemCategroy.get(position).getId();
-                    thirdKindId=categroyId;
-                    checkType=listItemCategroy.get(position).getCheckType();
+                    categroyId = listItemCategroy3.get(position).getId();
+                    thirdKindId = categroyId;
+                    checkType3 = listItemCategroy3.get(position).getCheckType();
+
                 }
 
                 @Override
@@ -471,41 +506,192 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
             return false;
         }
         if(TextUtils.isEmpty(adress)){
-            MessageUtils.showShortToast(InvitationReleaseActivity.this,"联系人地址为空");
+            MessageUtils.showShortToast(InvitationReleaseActivity.this, "联系人地址为空");
             return false;
         }
         if(TextUtils.isEmpty(tel)){
-            MessageUtils.showShortToast(InvitationReleaseActivity.this,"联系人电话为空");
+            MessageUtils.showShortToast(InvitationReleaseActivity.this, "联系人电话为空");
             return false;
         }
         return true;
     }
+/*
+* 原图url串
+* */
+    public String getImagesUrl(List<Image>mImageList){
+        String imagesUrl=null;
+        switch (mImageList.size()){
+            case 0:
+                imagesUrl=null;
+                break;
+            case 1:
+                imagesUrl=mImageList.get(0).getImgUrl();
+                break;
+            case 2:
+                imagesUrl=mImageList.get(0).getImgUrl()+","+mImageList.get(1).getImgUrl();
+                break;
+            case 3:
+                imagesUrl=mImageList.get(0).getImgUrl()+","+mImageList.get(1).getImgUrl()+","+mImageList.get(2).getImgUrl();
+                break;
+            case 4:
+                imagesUrl=mImageList.get(0).getImgUrl()+","+mImageList.get(1).getImgUrl()+","+mImageList.get(2).getImgUrl()+","+mImageList.get(3).getImgUrl();
+                break;
+            case 5:
+                imagesUrl=mImageList.get(0).getImgUrl()+","+mImageList.get(1).getImgUrl()+","+mImageList.get(2).getImgUrl()
+                        +","+mImageList.get(3).getImgUrl()+","+mImageList.get(4).getImgUrl();
+                break;
+            case 6:
+                imagesUrl=mImageList.get(0).getImgUrl()+","+mImageList.get(1).getImgUrl()+","+mImageList.get(2).getImgUrl()
+                        +","+mImageList.get(3).getImgUrl()+","+mImageList.get(4).getImgUrl()+","+mImageList.get(5).getImgUrl();
+                break;
+            case 7:
+                imagesUrl=mImageList.get(0).getImgUrl()+","+mImageList.get(1).getImgUrl()+","+mImageList.get(2).getImgUrl()
+                        +","+mImageList.get(3).getImgUrl()+","+mImageList.get(4).getImgUrl()+","+mImageList.get(5).getImgUrl()+","+
+                mImageList.get(6).getImgUrl();
+                break;
+            case 8:
+                imagesUrl=mImageList.get(0).getImgUrl()+","+mImageList.get(1).getImgUrl()+","+mImageList.get(2).getImgUrl()
+                        +","+mImageList.get(3).getImgUrl()+","+mImageList.get(4).getImgUrl()+","+mImageList.get(5).getImgUrl()+","+
+                        mImageList.get(6).getImgUrl()+","+mImageList.get(7).getImgUrl();
+                break;
+            case 9:
+                imagesUrl=mImageList.get(0).getImgUrl()+","+mImageList.get(1).getImgUrl()+","+mImageList.get(2).getImgUrl()
+                        +","+mImageList.get(3).getImgUrl()+","+mImageList.get(4).getImgUrl()+","+mImageList.get(5).getImgUrl()+","+
+                        mImageList.get(6).getImgUrl()+","+mImageList.get(7).getImgUrl()+","+mImageList.get(8).getImgUrl();
+                break;
+        }
+        return imagesUrl;
+    }
+/*
+* 缩略图url串
+* */
+    public String getThumbImagesUrl(List<Image>mImageList){
+        String thumbImagesUrl=null;
+        switch (mImageList.size()){
+            case 0:
+                thumbImagesUrl=null;
+                break;
+            case 1:
+                thumbImagesUrl=mImageList.get(0).getThumbImgUrl();
+                break;
+            case 2:
+                thumbImagesUrl=mImageList.get(0).getThumbImgUrl()+","+mImageList.get(1).getThumbImgUrl();
+                break;
+            case 3:
+                thumbImagesUrl=mImageList.get(0).getThumbImgUrl()+","+mImageList.get(1).getThumbImgUrl()+","+mImageList.get(2).getThumbImgUrl();
+                break;
+            case 4:
+                thumbImagesUrl=mImageList.get(0).getThumbImgUrl()+","+mImageList.get(1).getThumbImgUrl()+","+mImageList.get(2).getThumbImgUrl()+","+mImageList.get(3).getThumbImgUrl();
+                break;
+            case 5:
+                thumbImagesUrl=mImageList.get(0).getThumbImgUrl()+","+mImageList.get(1).getThumbImgUrl()+","+mImageList.get(2).getThumbImgUrl()
+                        +","+mImageList.get(3).getThumbImgUrl()+","+mImageList.get(4).getThumbImgUrl();
+                break;
+            case 6:
+                thumbImagesUrl=mImageList.get(0).getThumbImgUrl()+","+mImageList.get(1).getThumbImgUrl()+","+mImageList.get(2).getThumbImgUrl()
+                        +","+mImageList.get(3).getThumbImgUrl()+","+mImageList.get(4).getThumbImgUrl()+","+mImageList.get(5).getThumbImgUrl();
+                break;
+            case 7:
+                thumbImagesUrl=mImageList.get(0).getThumbImgUrl()+","+mImageList.get(1).getThumbImgUrl()+","+mImageList.get(2).getThumbImgUrl()
+                        +","+mImageList.get(3).getThumbImgUrl()+","+mImageList.get(4).getThumbImgUrl()+","+mImageList.get(5).getThumbImgUrl()+","+
+                mImageList.get(6).getThumbImgUrl();
+                break;
+            case 8:
+                thumbImagesUrl=mImageList.get(0).getThumbImgUrl()+","+mImageList.get(1).getThumbImgUrl()+","+mImageList.get(2).getThumbImgUrl()
+                        +","+mImageList.get(3).getThumbImgUrl()+","+mImageList.get(4).getThumbImgUrl()+","+mImageList.get(5).getThumbImgUrl()+","+
+                        mImageList.get(6).getThumbImgUrl()+","+mImageList.get(7).getThumbImgUrl();
+                break;
+            case 9:
+                thumbImagesUrl=mImageList.get(0).getThumbImgUrl()+","+mImageList.get(1).getThumbImgUrl()+","+mImageList.get(2).getThumbImgUrl()
+                        +","+mImageList.get(3).getThumbImgUrl()+","+mImageList.get(4).getThumbImgUrl()+","+mImageList.get(5).getThumbImgUrl()+","+
+                        mImageList.get(6).getThumbImgUrl()+","+mImageList.get(7).getThumbImgUrl()+","+mImageList.get(8).getThumbImgUrl();
+                break;
+        }
+        return thumbImagesUrl;
+    }
+
 
     @Override
     public void onClick(View v) {
        Intent intent=null;
         switch (v.getId()){
+            case R.id.tv_release_save:
+                isSave=true;
+                if(et_content.getText().toString().trim().length()<20){
+                    MessageUtils.showShortToast(this,"帖子内容少于20个字符");
+                    return;
+                }
+                String imagesUrl1=getImagesUrl(mImageList);
+                String thumbImagesUrl1= getThumbImagesUrl(mImageList);
+                        if(spinner_third_kind.getVisibility()==View.VISIBLE){
+                            idao.requesReleasePost(
+                                    Arad.preferences.getString("memberId"),
+                                    thirdKindId,
+                                    "0",
+                                    "0",
+                                    checkType3,
+                                    et_tittle.getText().toString().trim(),
+                                    et_content.getText().toString().trim(),
+                                    "0",
+                                    name,
+                                    adress,
+                                    tel,
+                                    locationLongitude,
+                                    locationLatitude,
+                                    tv_location_name,
+                                    imagesUrl1,
+                                    thumbImagesUrl1
+                            );
+                        }else {
+
+                            idao.requesReleasePost(
+                                    Arad.preferences.getString("memberId"),
+                                    secondKindId,
+                                    "0",
+                                    "0",
+                                    checkType2,
+                                    et_tittle.getText().toString().trim(),
+                                    et_content.getText().toString().trim(),
+                                    "0",
+                                    name,
+                                    adress,
+                                    tel,
+                                    locationLongitude,
+                                    locationLatitude,
+                                    tv_location_name,
+                                    imagesUrl1,
+                                    thumbImagesUrl1
+                            );
+                        }
+                break;
             case R.id.tv_release:
+              String imagesUrl=getImagesUrl(mImageList);
+               String thumbImagesUrl= getThumbImagesUrl(mImageList);
+                if(et_content.getText().toString().trim().length()<20){
+                    MessageUtils.showShortToast(this,"帖子内容少于20个字符");
+                    return;
+                }
                 if(Arad.preferences.getBoolean("isCallingChecked")){
                     if(checkInput()){
                        if(spinner_third_kind.getVisibility()==View.VISIBLE){
-                           idao.requesReleasePost(
-                                   Arad.preferences.getString("memberId"),
-                                   thirdKindId,
-                                   "0",
-                                   "1",
-                                   checkType,
-                                   et_tittle.getText().toString().trim(),
-                                   et_content.getText().toString().trim(),
-                                   "0",
-                                   name,
-                                   adress,
-                                   tel,
-                                   "",
-                                   "",
-                                   "",
-                                   ""
-                           );
+                               idao.requesReleasePost(
+                                       Arad.preferences.getString("memberId"),
+                                       thirdKindId,
+                                       "0",
+                                       "1",
+                                       checkType3,
+                                       et_tittle.getText().toString().trim(),
+                                       et_content.getText().toString().trim(),
+                                       "0",
+                                       name,
+                                       adress,
+                                       tel,
+                                       locationLongitude,
+                                       locationLatitude,
+                                       tv_location_name,
+                                       imagesUrl,
+                                       thumbImagesUrl
+                               );
                        }else {
 
                            idao.requesReleasePost(
@@ -513,17 +699,18 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
                                    secondKindId,
                                    "0",
                                    "1",
-                                   checkType,
+                                   checkType2,
                                    et_tittle.getText().toString().trim(),
                                    et_content.getText().toString().trim(),
                                    "0",
                                    name,
                                    adress,
                                    tel,
-                                   "",
-                                   "",
-                                   "",
-                                   ""
+                                   locationLongitude,
+                                   locationLatitude,
+                                   tv_location_name,
+                                   imagesUrl,
+                                   thumbImagesUrl
                            );
 
                        }
@@ -539,17 +726,18 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
                             thirdKindId,
                             "0",
                             "1",
-                            checkType,
+                            checkType2,
                             et_tittle.getText().toString().trim(),
                             et_content.getText().toString().trim(),
                             "0",
                             name,
                             adress,
                             tel,
-                            "",
-                            "",
-                            "",
-                            "");
+                            locationLongitude,
+                            locationLatitude,
+                            tv_location_name,
+                            imagesUrl,
+                            thumbImagesUrl);
                 }
 
 
@@ -570,12 +758,7 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
                 AnimUtil.intentSlidIn(this);
                 break;
             case R.id.tv_release_back:
-                for(int i=0;i<PublicWay.activityList.size();i++){
-                    if (null != PublicWay.activityList.get(i)) {
-                        PublicWay.activityList.get(i).finish();
-                    }
-                }
-              //  System.exit(0);
+                onBackPressed();
                 break;
             case R.id.iv01:
                 if(mImageList.size() >= 1){
@@ -678,7 +861,7 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
             if (photo != null){
                 // Log.d("demo","上传方法2");
                 /**调用后台方法  将图片上传**/
-                String imgData = photo;
+              //  String imgData = photo;
                 showProgress(true);
                 Idao.requestUploadImage(photo);
             }
@@ -724,9 +907,13 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
                 case 101:
                     if(resultCode==RESULT_CANCELED){
                         tv_location_name="";
+                        locationLongitude="";//经度
+                        locationLatitude="";//纬度
                     }
                     if(resultCode==RESULT_OK){
-                        tv_location_name=getIntent().getStringExtra("location");
+                        tv_location_name=data.getStringExtra("location");
+                        locationLongitude=data.getStringExtra("locationLongitude");
+                        locationLatitude=data.getStringExtra("locationLatitude");
                     }
                     break;
             }
@@ -792,8 +979,8 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
 
 
                 for(int i = 0 ; i < mImageList.size() ; i++){
-                   // Log.i("tag","mImageList----"+mImageList.size());
-                  //  Log.i("tag","mImageList  url----"+mImageList.get(i).getThumbImgUrl());
+                    // Log.i("tag","mImageList----"+mImageList.size());
+                    //  Log.i("tag","mImageList  url----"+mImageList.get(i).getThumbImgUrl());
                     Arad.imageLoader.load(mImageList.get(i).getThumbImgUrl()).into(listImg.get(i));
                 }
 
@@ -856,7 +1043,7 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
                 }
             }
             if (mImageList.size() ==5){
-              //  ll_image_second.setVisibility(View.VISIBLE);
+                //  ll_image_second.setVisibility(View.VISIBLE);
                 iv01.setVisibility(View.VISIBLE);
                 iv02.setVisibility(View.VISIBLE);
                 iv03.setVisibility(View.VISIBLE);
@@ -922,7 +1109,7 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
                 }
             }
             if (mImageList.size() == 9){
-              //  ll_image_third.setVisibility(View.VISIBLE);
+                //  ll_image_third.setVisibility(View.VISIBLE);
                 iv01.setVisibility(View.VISIBLE);
                 iv02.setVisibility(View.VISIBLE);
                 iv03.setVisibility(View.VISIBLE);
@@ -1001,7 +1188,7 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
                 }
                 if(mImageList.size() == 4){
                     mImageList.remove(0);
-                      ll_image_second.setVisibility(View.GONE);
+                    ll_image_second.setVisibility(View.GONE);
 
 
                     iv01.setVisibility(View.VISIBLE);
@@ -1019,7 +1206,7 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
                 if (mImageList.size() == 5){
                     mImageList.remove(0);
 
-                  //  ll_image_second.setVisibility(View.GONE);
+                    //  ll_image_second.setVisibility(View.GONE);
                     iv01.setVisibility(View.VISIBLE);
                     iv02.setVisibility(View.VISIBLE);
                     iv03.setVisibility(View.VISIBLE);
@@ -1083,7 +1270,7 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
                 }
                 if(mImageList.size() ==9){
                     mImageList.remove(0);
-                  //  ll_image_third.setVisibility(View.GONE);
+                    //  ll_image_third.setVisibility(View.GONE);
 
                     iv01.setVisibility(View.VISIBLE);
                     iv02.setVisibility(View.VISIBLE);
@@ -1510,7 +1697,7 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
                 if(mImageList.size() == 5){
                     mImageList.remove(4);
 
-                  // ll_image_second.setVisibility(View.GONE);
+                    // ll_image_second.setVisibility(View.GONE);
                     iv01.setVisibility(View.VISIBLE);
                     iv02.setVisibility(View.VISIBLE);
                     iv03.setVisibility(View.VISIBLE);
@@ -1603,11 +1790,11 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
                 }
 
                 if(mImageList.size() == 4){
-                   //
+                    //
                 }
 
                 if(mImageList.size() == 5){
-                  //
+                    //
                 }
                 if(mImageList.size() == 6){
                     mImageList.remove(5);
@@ -1689,14 +1876,14 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
                 }
 
                 if(mImageList.size() == 4){
-                  //
+                    //
                 }
 
                 if(mImageList.size() == 5){
-                   //
+                    //
                 }
                 if(mImageList.size() == 6){
-                 //
+                    //
                 }
                 if(mImageList.size() == 7){
                     mImageList.remove(6);
@@ -1762,17 +1949,17 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
                 }
 
                 if(mImageList.size() == 4){
-                   //
+                    //
                 }
 
                 if(mImageList.size() == 5){
-                   //
+                    //
                 }
                 if(mImageList.size() == 6){
-                   //
+                    //
                 }
                 if(mImageList.size() == 7){
-                   //
+                    //
                 }
                 if(mImageList.size() == 8){
                     mImageList.remove(7);
@@ -1822,25 +2009,25 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
                 }
 
                 if(mImageList.size() == 4){
-                  //
+                    //
                 }
 
                 if(mImageList.size() == 5){
-                   //
+                    //
                 }
                 if(mImageList.size() == 6){
-                   //
+                    //
                 }
                 if(mImageList.size() == 7){
-                   //
+                    //
                 }
                 if(mImageList.size() == 8){
-                   //
+                    //
                 }
                 if(mImageList.size() ==9){
                     mImageList.remove(8);
 
-                  //  ll_image_third.setVisibility(View.GONE);
+                    //  ll_image_third.setVisibility(View.GONE);
                     iv01.setVisibility(View.VISIBLE);
                     iv02.setVisibility(View.VISIBLE);
                     iv03.setVisibility(View.VISIBLE);

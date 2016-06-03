@@ -2,6 +2,7 @@ package com.ctrl.forum.ui.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,12 +10,17 @@ import android.widget.AbsListView;
 import android.widget.FrameLayout;
 import android.widget.ListView;
 
+import com.beanu.arad.Arad;
 import com.beanu.arad.base.ToolBarFragment;
+import com.beanu.arad.utils.MessageUtils;
 import com.ctrl.forum.R;
-import com.ctrl.forum.ui.viewpage.CycleViewPager;
-import com.ctrl.forum.ui.viewpage.ViewFactory;
-import com.ctrl.forum.utils.DemoUtil;
+import com.ctrl.forum.base.Constant;
+import com.ctrl.forum.dao.InvitationDao;
+import com.ctrl.forum.entity.Post;
+import com.ctrl.forum.ui.adapter.InvitationListViewAdapter;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
+
+import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -27,13 +33,18 @@ public class InvitationPullDownNoThirdKindFragment extends ToolBarFragment {
     @InjectView(R.id.listview_invitation_pull_down_no_third_kind)
     PullToRefreshListView listview_invitation_pull_down_no_third_kind;
 
-    private View vhdf;
-    private CycleViewPager cycleViewPager;
     private FrameLayout framelayout;
+    private InvitationDao idao;
+    private String channelId;
+   // private List<Post> mPostList;
+    private int PAGE_NUM=1;
+    private List<Post> listPost;
+    private InvitationListViewAdapter invitationListViewAdapter;
 
 
-    public static InvitationPullDownNoThirdKindFragment newInstance() {
+    public static InvitationPullDownNoThirdKindFragment newInstance(String channelId) {
         InvitationPullDownNoThirdKindFragment fragment = new InvitationPullDownNoThirdKindFragment();
+        fragment.channelId=channelId;
         return fragment;
     }
 
@@ -41,6 +52,7 @@ public class InvitationPullDownNoThirdKindFragment extends ToolBarFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_invitation_pull_down_no_third_kind, container, false);
         ButterKnife.inject(this, view);
+        invitationListViewAdapter=new InvitationListViewAdapter(getActivity());
         AbsListView.LayoutParams layoutParams = new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, AbsListView.LayoutParams.WRAP_CONTENT);
         View headview =getActivity().getLayoutInflater().inflate(R.layout.fragment_invitation_header_second, listview_invitation_pull_down_no_third_kind, false);
         headview.setLayoutParams(layoutParams);
@@ -48,21 +60,32 @@ public class InvitationPullDownNoThirdKindFragment extends ToolBarFragment {
         ListView lv = listview_invitation_pull_down_no_third_kind.getRefreshableView();
         lv.addHeaderView(headview);
         //调用轮播图
-        setLoopView();
+     //   setLoopView();
+        initData();
         return view;
     }
 
-    private void setLoopView() {
-        // 三句话 调用轮播广告
-        vhdf = getActivity().getLayoutInflater().inflate(R.layout.viewpage, null);
-        cycleViewPager = (CycleViewPager) getActivity().getFragmentManager().findFragmentById(R.id.fragment_cycle_viewpager_content);
-        ViewFactory.initialize(getActivity(), vhdf, cycleViewPager, DemoUtil.cycData());
-        framelayout.addView(vhdf);
+    private void initData() {
+        idao = new InvitationDao(this);
+        idao.requestPostListByCategory(Arad.preferences.getString("memberId"), channelId, "0","", PAGE_NUM, Constant.PAGE_SIZE);
+    }
 
+
+    @Override
+    public void onRequestSuccess(int requestCode) {
+        super.onRequestSuccess(requestCode);
+        if (requestCode == 1) {
+            MessageUtils.showShortToast(getActivity(), "获取帖子列表成功");
+            listPost = idao.getListPost();
+            invitationListViewAdapter.setList(listPost);
+
+            Log.i("tag", "listPost---" + listPost.size());
+        }
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        listview_invitation_pull_down_no_third_kind.setAdapter(invitationListViewAdapter);
     }
 }

@@ -59,12 +59,12 @@
     
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="100dp">
+        android:layout_height="wrap_content">
         
         <ImageView
             android:id="@+id/iv_style_img"
-            android:layout_width="100dp"
-            android:layout_height="match_parent"
+            android:layout_width="70dp"
+            android:layout_height="80dp"
             android:scaleType="fitXY"
             android:layout_margin="10dp"
             android:src="@mipmap/style1_img"/>
@@ -99,47 +99,49 @@
             android:layout_toRightOf="@+id/iv_style_img"
             />
     </RelativeLayout>
-
     <LinearLayout
-        android:layout_above="@+id/view"
-        android:layout_below="@+id/include"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:orientation="horizontal">
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/m_list_menu"
+        android:orientation="horizontal" >
+
+
+        <ListView
+            android:id="@+id/lv_business_shop_food_orderfoods_foodTypes"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="5"
-            android:scrollbars="none">
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:cacheColorHint="#00000000"
+            android:divider="@color/line_gray"
+            android:dividerHeight="1px"
+            android:fadingEdge="none"
+            android:fadingEdgeLength="0dp"
+            android:listSelector="#00000000"
+            android:scrollbars="none" />
 
-        </android.support.v7.widget.RecyclerView>
+        <com.ctrl.forum.customview.PinnedHeaderListView
+            android:id="@+id/lv_business_shop_food_orderfoods_foods"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:cacheColorHint="#00000000"
+            android:divider="@null"
+            android:footerDividersEnabled="false"
+            android:headerDividersEnabled="false" />
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/m_list_content"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="2"
-            android:scrollbars="none">
-
-        </android.support.v7.widget.RecyclerView>
     </LinearLayout>
 
-
     <View
-        android:id="@+id/view"
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_above="@+id/m_list_bt"
-        android:background="@color/color_fa5858"/>
+        android:layout_height="1px"
+        android:background="@color/line_gray"></View>
 
     <RelativeLayout
         android:id="@+id/m_list_bt"
         android:layout_width="match_parent"
         android:background="@color/white"
         android:layout_alignParentBottom="true"
-        android:layout_height="wrap_content">
+        android:layout_height="50dp">
 
         <RelativeLayout
             android:id="@+id/m_list_car_lay"
@@ -148,31 +150,34 @@
             android:layout_marginBottom="10dp"
             android:layout_height="wrap_content">
             <ImageView
-                android:id="@+id/m_list_car"
+                android:id="@+id/m_list_car_vertical_style"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_centerInParent="true"
-                android:src="@mipmap/cart_car_orange"/>
+                android:src="@mipmap/cart_car_gray"/>
         </RelativeLayout>
         <TextView
-            android:id="@+id/m_list_num"
+            android:id="@+id/m_list_num_store_vertical"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/goods_tv_bg_selector"
             android:layout_alignRight="@+id/m_list_car_lay"
             android:layout_alignTop="@+id/m_list_car_lay"
             android:paddingLeft="5dp"
+            android:visibility="gone"
             android:paddingRight="5dp"
             android:text="0"
             android:textColor="@color/white"/>
 
-        <TextView android:id="@+id/m_list_all_price"
+        <TextView android:id="@+id/m_list_all_price_store_vertical"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="65dp"
+            android:layout_toRightOf="@+id/m_list_car_lay"
+            android:layout_marginLeft="20dp"
+            android:textSize="18sp"
             android:layout_centerVertical="true"
-            android:textColor="@color/color_2d2d2d"
-            android:text="￥74"/>
+            android:textColor="@color/text_red"
+            android:text=""/>
         <View android:id="@+id/m_listview"
             android:layout_width="1dp"
             android:layout_height="26px"
@@ -181,22 +186,15 @@
             android:layout_centerVertical="true"
             android:layout_toRightOf="@+id/m_list_all_price"
             android:background="@color/color_f2f2f2"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/m_listview"
-            android:layout_marginTop="5dp"
-            android:layout_centerVertical="true"
-            android:textColor="@color/color_898787"
-            android:text="另需服务费￥3"/>
-        <Button android:id="@+id/m_list_submit"
+        <Button android:id="@+id/m_list_submit_vertical_style"
             android:layout_width="80dp"
-            android:layout_height="50dp"
-            android:background="@color/color_fa5858"
-            android:text="点餐"
+            android:layout_height="match_parent"
+            android:background="@color/text_gray"
+            android:text="马上结算"
             android:layout_alignParentRight="true"
             android:textColor="@color/white"/>
     </RelativeLayout>
+
 
 
 </LinearLayout>

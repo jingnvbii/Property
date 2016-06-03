@@ -2,11 +2,19 @@ package com.ctrl.forum.entity;
 
 /**
  * 搜索历史记录
+<<<<<<< HEAD
  * Created by Administrator on 2016/5/24.
  */
 public class SearchHistory {
     private String id;  //主键id
     private String keyword; //关键字
+=======
+ * Created by Administrator on 2016/4/8.
+ */
+public class SearchHistory {
+    private String id;//主键id
+    private String keyword;//关键字
+>>>>>>> origin/master
 
     public String getId() {
         return id;

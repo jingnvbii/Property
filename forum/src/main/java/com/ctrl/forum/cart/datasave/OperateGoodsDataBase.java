@@ -21,14 +21,14 @@ public class OperateGoodsDataBase implements GoodsDataBaseInterface{
      *添加和删除商品数量,并得到商品数量
      */
     @Override
-    public int saveGoodsNumber(Context context, int menupos, int goodsid, String goodsnum , String goodsprice) {
-        return OperateGoodsDataBaseStatic.saveGoodsNumber(context , menupos , goodsid , goodsnum ,goodsprice);
+    public int saveGoodsNumber(Context context, int menupos, String goodsid, String goodsnum , float goodsprice,String name,String stock) {
+        return OperateGoodsDataBaseStatic.saveGoodsNumber(context , menupos , goodsid , goodsnum ,goodsprice,name,stock);
     }
     /**
      *根据下标得到 第二级对应购物的数量
      */
     @Override
-    public int getSecondGoodsNumber(Context context, int menupos, int goodsid) {
+    public int getSecondGoodsNumber(Context context, int menupos, String goodsid) {
         return OperateGoodsDataBaseStatic.getSecondGoodsNumber(context, menupos, goodsid);
     }
     /**
@@ -43,7 +43,7 @@ public class OperateGoodsDataBase implements GoodsDataBaseInterface{
      *据第一级的下标 得到第二级的所有购物的价格
      */
     @Override
-    public int getSecondGoodsPriceAll(Context context, int menupos) {
+    public float getSecondGoodsPriceAll(Context context, int menupos) {
         return OperateGoodsDataBaseStatic.getSecondGoodsPriceAll(context, menupos);
     }
     /**

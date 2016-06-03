@@ -52,7 +52,7 @@ public class testAdapter extends BaseAdapter{
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder=null;
         if(convertView==null){
-            convertView= LayoutInflater.from(mcontext).inflate(R.layout.item_listview_store_fragment,parent,false);
+            convertView= LayoutInflater.from(mcontext).inflate(R.layout.item_invitation_listview_no_image,parent,false);
             holder=new ViewHolder(convertView);
             convertView.setTag(holder);
         }else {
@@ -66,7 +66,7 @@ public class testAdapter extends BaseAdapter{
     static class ViewHolder{
        /* @InjectView(R.id.iv_grid_item)//图片
                 ImageView iv_grid_item;*/
-        @InjectView(R.id.tv_name)//文字
+        @InjectView(R.id.tv_titile0)//文字
                 TextView  tv_name;
         ViewHolder(View view) {
             ButterKnife.inject(this, view);

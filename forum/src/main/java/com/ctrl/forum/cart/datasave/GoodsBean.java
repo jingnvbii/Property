@@ -3,19 +3,40 @@ package com.ctrl.forum.cart.datasave;
 import com.lidroid.xutils.db.annotation.Column;
 import com.lidroid.xutils.db.annotation.Table;
 
+import java.io.Serializable;
+
 /**
  * Created by fml on 2015/12/17 0017.
  */
-@Table(name = "goods")
-public class GoodsBean extends GoodsBase{
+@Table(name = "goodes")
+public class GoodsBean extends GoodsBase implements Serializable{
     @Column(column = "menupos")
     private int menupos;
     @Column(column = "goodsid")
-    private int goodsid;
+    private String goodsid;
     @Column(column = "goodsnum")
     private String goodsnum;
     @Column(column = "goodsprice")
-    private String goodsprice;
+    private float goodsprice;
+    @Column(column="goodsname")
+    private String goodsname;
+    @Column(column="stock")
+    private String stock;
+    public String getStock() {
+        return stock;
+    }
+
+    public void setStock(String stock) {
+        this.stock = stock;
+    }
+
+    public String getGoodsname() {
+        return goodsname;
+    }
+
+    public void setGoodsname(String goodsname) {
+        this.goodsname = goodsname;
+    }
 
     public int getMenupos() {
         return menupos;
@@ -25,11 +46,11 @@ public class GoodsBean extends GoodsBase{
         this.menupos = menupos;
     }
 
-    public int getGoodsid() {
+    public String getGoodsid() {
         return goodsid;
     }
 
-    public void setGoodsid(int goodsid) {
+    public void setGoodsid(String goodsid) {
         this.goodsid = goodsid;
     }
 
@@ -41,11 +62,11 @@ public class GoodsBean extends GoodsBase{
         this.goodsnum = goodsnum;
     }
 
-    public String getGoodsprice() {
+    public float getGoodsprice() {
         return goodsprice;
     }
 
-    public void setGoodsprice(String goodsprice) {
+    public void setGoodsprice(float goodsprice) {
         this.goodsprice = goodsprice;
     }
 
@@ -56,6 +77,8 @@ public class GoodsBean extends GoodsBase{
                 ", goodsid='" + goodsid + '\'' +
                 ", goodsnum='" + goodsnum + '\'' +
                 ", goodsprice='" + goodsprice + '\'' +
+                ", names='" + goodsname + '\'' +
+                ", stock='" + stock + '\'' +
                 '}';
     }
 }

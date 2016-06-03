@@ -1,7 +1,6 @@
 package com.ctrl.forum.ui.adapter;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,8 +10,10 @@ import android.widget.TextView;
 
 import com.beanu.arad.Arad;
 import com.ctrl.forum.R;
+import com.ctrl.forum.customview.RoundImageView;
 import com.ctrl.forum.entity.Post;
 import com.ctrl.forum.entity.PostImage;
+import com.ctrl.forum.utils.TimeUtils;
 
 import java.util.List;
 
@@ -32,12 +33,6 @@ public class InvitationListViewAdapter extends BaseAdapter{
     private List<PostImage> imageList;
 
 
-
-    //得到新的修正后的position
-
-   // int newPosition = position - headerViewsCount;
-  /*  Log.i("tag","headerViewsCount---"+headerViewsCount);
-    Log.i("tag","newPosition---"+newPosition);*/
 
     public InvitationListViewAdapter(Context context) {
                this.mcontext=context;
@@ -71,8 +66,7 @@ public class InvitationListViewAdapter extends BaseAdapter{
 
     @Override
     public int getItemViewType(int position) {
-       int type=-1;
-        Log.i("tag"," positionadapter----"+position);
+       int type=0;
        if(mPostList.get(position).getPostImgList()!=null) {
            int size = mPostList.get(position).getPostImgList().size();
            switch (size) {
@@ -120,6 +114,8 @@ public class InvitationListViewAdapter extends BaseAdapter{
                     holder3=new ViewHolder3(convertView);
                     convertView.setTag(holder3);
                     break;
+                case -1:
+                    break;
             }
         }else {
             switch (type){
@@ -132,33 +128,49 @@ public class InvitationListViewAdapter extends BaseAdapter{
                 case 3:
                     holder3=(ViewHolder3)convertView.getTag();
                     break;
+                case -1:
+                    break;
             }
             }
-         Post post=mPostList.get(position);
+        Post post=mPostList.get(position);
         switch (type){
             case 0:
-              //  Post mPost1 = mPostList.get(position);
-                holder1.tv_titile0.setText(post.getTitle());
+                if(post==null){break;}
+               // Post mPost1 = mPostList.get(position);
+               holder1.tv_titile0.setText(post.getTitle());
                 holder1.tv_name0.setText(post.getMemberName());
-                holder1.tv_time0.setText(post.getPublishTime());
-                holder1.tv_numbers0.setText(post.getCommentNum()+"");
+                if(post.getPublishTime()!=null)
+                holder1.tv_time0.setText(TimeUtils.dateTime(post.getPublishTime()));
+                holder1.tv_numbers0.setText(post.getCommentNum() + "");
                 Arad.imageLoader.load(post.getImgUrl()).into(holder1.imageView0);
                 break;
             case 1:
-              //  Post mPost2 = mPostList.get(position);
+               // Post mPost2 = mPostList.get(position);
                 holder2.tv_titile1.setText(post.getTitle());
                 holder2.tv_name1.setText(post.getMemberName());
-                holder2.tv_time1.setText(post.getPublishTime());
-                holder2.tv_numbers1.setText(post.getCommentNum()+"");
+              //  holder2.tv_time1.setText(TimeUtils.date(Long.parseLong(post.getPublishTime())));
+                holder2.tv_time1.setText(TimeUtils.dateTime(post.getPublishTime()));
+                holder2.tv_numbers1.setText(post.getCommentNum() + "");
                 Arad.imageLoader.load(post.getImgUrl()).into(holder2.imageView1);
+                if(post.getPostImgList()!=null) {
+                    Arad.imageLoader.load(post.getPostImgList().get(0).getImg()).placeholder(R.mipmap.default_error).into(holder2.iv_title_photo1);
+                }
                 break;
             case 3:
-              //  Post mPos3 = mPostList.get(position);
+              // Post mPos3 = mPostList.get(position);
                 holder3.tv_titile3.setText(post.getTitle());
                 holder3.tv_name3.setText(post.getMemberName());
-                holder3.tv_time3.setText(post.getPublishTime());
-                holder3.tv_numbers03.setText(post.getCommentNum()+"");
+                holder3.tv_time3.setText(TimeUtils.dateTime(post.getPublishTime()));
+                holder3.tv_numbers03.setText(post.getCommentNum() + "");
                 Arad.imageLoader.load(post.getImgUrl()).into(holder3.imageView3);
+                if(post.getPostImgList()!=null) {
+                    Arad.imageLoader.load(post.getPostImgList().get(0).getImg()).placeholder(R.mipmap.default_error).into(holder3.iv_image3_01);
+                    Arad.imageLoader.load(post.getPostImgList().get(1).getImg()).placeholder(R.mipmap.default_error).into(holder3.iv_image3_02);
+                    Arad.imageLoader.load(post.getPostImgList().get(2).getImg()).placeholder(R.mipmap.default_error).into(holder3.iv_image3_03);
+                }
+
+                break;
+            case -1:
                 break;
         }
         return convertView;
@@ -174,7 +186,7 @@ public class InvitationListViewAdapter extends BaseAdapter{
         @InjectView(R.id.tv_numbers0)//评论数
         TextView  tv_numbers0;
         @InjectView(R.id.imageView0)
-        ImageView imageView0;
+        RoundImageView imageView0;
         ViewHolder1(View view) {
             ButterKnife.inject(this, view);
         }
@@ -189,7 +201,9 @@ public class InvitationListViewAdapter extends BaseAdapter{
         @InjectView(R.id.tv_numbers1)//评论数
         TextView  tv_numbers1;
         @InjectView(R.id.imageView1)
-        ImageView imageView1;
+        RoundImageView imageView1;
+        @InjectView(R.id.iv_title_photo1)
+        ImageView iv_title_photo1;
         ViewHolder2(View view) {
             ButterKnife.inject(this, view);
         }
@@ -204,7 +218,13 @@ public class InvitationListViewAdapter extends BaseAdapter{
         @InjectView(R.id.tv_numbers03)//评论数
         TextView  tv_numbers03;
         @InjectView(R.id.imageView3)
-        ImageView imageView3;
+        RoundImageView imageView3;
+        @InjectView(R.id.iv_image3_01)
+        ImageView iv_image3_01;
+        @InjectView(R.id.iv_image3_02)
+        ImageView iv_image3_02;
+        @InjectView(R.id.iv_image3_03)
+        ImageView iv_image3_03;
         ViewHolder3(View view) {
             ButterKnife.inject(this, view);
         }
