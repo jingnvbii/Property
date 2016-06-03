@@ -14,6 +14,8 @@ import com.ctrl.forum.base.Constant;
 import com.ctrl.forum.dao.ReplyCommentDao;
 import com.ctrl.forum.entity.ReplyForMe;
 import com.ctrl.forum.ui.adapter.MineMesCommentListAdapter;
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
 import java.util.List;
 
@@ -24,8 +26,9 @@ public class MineCommentFragment extends ToolBarFragment {
 
     private List<ReplyForMe> replyForMes;
     private MineMesCommentListAdapter mineMesCommentListAdapter;
-    private ListView lv_content;
+    private PullToRefreshListView lv_content;
     private ReplyCommentDao rcdao;
+    private int PAGE_NUM=1;
 
     public static MineCommentFragment newInstance() {
         MineCommentFragment fragment = new MineCommentFragment();
@@ -45,27 +48,55 @@ public class MineCommentFragment extends ToolBarFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_mine_notificationi, container, false);
+        View view = inflater.inflate(R.layout.fragment_mine_list, container, false);
         initData();
 
-        lv_content = (ListView) view.findViewById(R.id.lv_content);
-        mineMesCommentListAdapter = new MineMesCommentListAdapter(getActivity(),replyForMes);
-        lv_content.setAdapter(mineMesCommentListAdapter);
+        lv_content = (PullToRefreshListView) view.findViewById(R.id.lv_content);
+
+        lv_content.setMode(PullToRefreshBase.Mode.BOTH);
+        lv_content.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
+            @Override
+            public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
+                if (replyForMes != null) {
+                    replyForMes.clear();
+                    PAGE_NUM = 1;
+                }
+                    rcdao.obtainReply(Arad.preferences.getString("memberId"), PAGE_NUM, Constant.PAGE_SIZE);
+            }
+
+            @Override
+            public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
+                PAGE_NUM += 1;
+                rcdao.obtainReply(Arad.preferences.getString("memberId"), Constant.PAGE_NUM, Constant.PAGE_SIZE);
+            }
+        });
+
+        mineMesCommentListAdapter = new MineMesCommentListAdapter(getActivity());
         return view;
     }
 
     private void initData() {
       rcdao = new ReplyCommentDao(this);
-        MessageUtils.showShortToast(getActivity(),Arad.preferences.getString("memberId"));
-        rcdao.obtainReply(Arad.preferences.getString("memberId"), Constant.PAGE_NUM,Constant.PAGE_SIZE);
-        replyForMes = rcdao.getReplyForMes();
+        rcdao.obtainReply(Arad.preferences.getString("memberId"),PAGE_NUM,Constant.PAGE_SIZE);
     }
 
     @Override
     public void onRequestSuccess(int requestCode) {
         super.onRequestSuccess(requestCode);
+        lv_content.onRefreshComplete();
         if(requestCode == 0){
             MessageUtils.showShortToast(getActivity(),"查看评论成功");
+            replyForMes = rcdao.getReplyForMes();
+            if (replyForMes.size()>0){
+                lv_content.setAdapter(mineMesCommentListAdapter);
+                mineMesCommentListAdapter.setReplyForMes(replyForMes);
+            }
         }
+    }
+
+    @Override
+    public void onRequestFaild(String errorNo, String errorMessage) {
+        super.onRequestFaild(errorNo, errorMessage);
+        lv_content.onRefreshComplete();
     }
 }

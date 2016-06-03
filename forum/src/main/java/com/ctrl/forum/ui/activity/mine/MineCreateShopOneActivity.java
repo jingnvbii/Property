@@ -9,6 +9,9 @@ import android.widget.TextView;
 import com.ctrl.forum.R;
 import com.ctrl.forum.base.AppToolBarActivity;
 
+/**
+ * 我的店铺_没有店铺
+ */
 public class MineCreateShopOneActivity extends AppToolBarActivity implements View.OnClickListener{
     private TextView tv_apply_start;
     @Override
@@ -47,6 +50,7 @@ public class MineCreateShopOneActivity extends AppToolBarActivity implements Vie
             case R.id.tv_apply_start:
                 Intent intent = new Intent(getApplicationContext(),MineCreateShopTwoActivity.class);
                 startActivity(intent);
+                this.finish();
                 break;
         }
     }

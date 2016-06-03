@@ -1,0 +1,53 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+   >
+    <include
+        android:id="@+id/include_header"
+        layout="@layout/toolbar_common_red"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/toolbar_height"
+        />
+
+    <ListView
+        android:layout_below="@id/include_header"
+        android:orientation="vertical"
+        android:layout_width="90dp"
+        android:layout_height="wrap_content"
+        android:background="@color/gray_store"
+        android:id="@+id/lv_left"
+        android:divider="@color/line_gray"
+        android:dividerHeight="1dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+    </ListView>
+
+    <TextView
+        android:layout_below="@id/lv_left"
+        android:layout_width="90dp"
+        android:layout_height="1dp"
+        android:background="@color/line_gray"
+        />
+
+    <com.ctrl.forum.customview.MinePinnedHeaderListView
+        android:layout_below="@id/include_header"
+        android:background="@color/white"
+        android:id="@+id/lv_right"
+        android:dividerHeight="1dp"
+        android:divider="@color/line_gray"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_toRightOf="@+id/tv_line"
+        android:layout_toEndOf="@+id/lv_left">
+
+    </com.ctrl.forum.customview.MinePinnedHeaderListView>
+
+    <TextView
+        android:layout_below="@id/include_header"
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:id="@+id/tv_line"
+        android:layout_toRightOf="@+id/lv_left"
+         />
+</RelativeLayout>

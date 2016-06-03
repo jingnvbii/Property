@@ -11,7 +11,8 @@ public class Constant {
    // public static final String RAW_URL = "http://121.42.159.145:8088/pm/api?";//外网地址
     //public static final String RAW_URL = "http://192.168.1.36:8088/pm/api?";//李鑫测试地址
     //public static final String RAW_URL = "http://192.168.1.210:8088/pm/api?";//桑越测试地址
-    public static final String RAW_URL = "http://124.128.85.156:8001/ctrl-api/";//测试地址
+    //public static final String RAW_URL = "http://124.128.85.156:8001/ctrl-api/";//测试地址
+    public static final String RAW_URL = "http://115.28.243.3:8008/ctrl-api/"; //方文地址
 
     /**请求dao时传递参数 - Eric - **/
     public static String APPKEY = "appKey";//用用程序的key
@@ -94,7 +95,8 @@ public class Constant {
    /**店铺评论的list的类型*/
    public static final int RIM_TYPE_ITEM = 4;
 
-
+    /**我的订单list的类型*/
+    public static final int Order_TYPE_ITEM = 2;
 
 
 

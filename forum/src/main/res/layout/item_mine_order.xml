@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/order_number"
+            android:textSize="@dimen/text_size_basic"
+            android:layout_marginLeft="@dimen/margin_left_and_right"
+            android:id="@+id/textView4"
+            android:textColor="@color/rim_gray"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="48983896244248"
+            android:textSize="@dimen/text_size_basic"
+            android:id="@+id/tv_number"
+            android:textColor="@color/rim_gray"
+            android:layout_alignBottom="@+id/textView4"
+            android:layout_toRightOf="@+id/textView4"
+            android:layout_toEndOf="@+id/textView4" />
+    </RelativeLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/line_gray"
+    />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/order_time"
+            android:textSize="@dimen/text_size_basic"
+            android:layout_marginLeft="@dimen/margin_left_and_right"
+            android:id="@+id/textView"
+            android:textColor="@color/rim_gray"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2016-06-15 15:26:32"
+            android:textSize="@dimen/text_size_basic"
+            android:id="@+id/tv_order_time"
+            android:textColor="@color/rim_gray"
+            android:layout_alignBottom="@+id/textView"
+            android:layout_toRightOf="@+id/textView"
+            android:layout_toEndOf="@+id/textView" />
+    </RelativeLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/line_gray"
+        />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/order_name"
+            android:textSize="@dimen/text_size_basic"
+            android:layout_marginLeft="@dimen/margin_left_and_right"
+            android:id="@+id/textView3"
+            android:textColor="@color/text_black"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="李先生"
+            android:textSize="@dimen/text_size_basic"
+            android:id="@+id/tv_order_name"
+            android:textColor="@color/text_black"
+            android:layout_alignBottom="@+id/textView3"
+            android:layout_toRightOf="@+id/textView3"
+            android:layout_toEndOf="@+id/textView3" />
+    </RelativeLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/line_gray"
+        />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/order_phone"
+            android:textSize="@dimen/text_size_basic"
+            android:layout_marginLeft="@dimen/margin_left_and_right"
+            android:id="@+id/textView32"
+            android:textColor="@color/text_black"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="13518652964"
+            android:textSize="@dimen/text_size_basic"
+            android:id="@+id/tv_order_phone"
+            android:textColor="@color/text_black"
+            android:layout_alignBottom="@+id/textView32"
+            android:layout_toRightOf="@+id/textView32"
+            android:layout_toEndOf="@+id/textView32" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/imageView21"
+            android:layout_marginLeft="3dp"
+            android:src="@mipmap/iconfont_dianhua_black"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/tv_order_phone"
+            android:layout_toEndOf="@+id/tv_order_phone" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="已付款"
+            android:textColor="@color/red_bg"
+            android:id="@+id/tv_state"
+            android:layout_marginRight="@dimen/margin_left_and_right"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
+    </RelativeLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/line_gray"
+        />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/order_address"
+            android:textSize="@dimen/text_size_basic"
+            android:layout_marginLeft="@dimen/margin_left_and_right"
+            android:id="@+id/textView1"
+            android:textColor="@color/text_black"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="山东经十路中润世纪广场"
+            android:textSize="@dimen/text_size_basic"
+            android:id="@+id/tv_order_address"
+            android:textColor="@color/text_black"
+            android:layout_alignBottom="@+id/textView1"
+            android:layout_toRightOf="@+id/textView1"
+            android:layout_toEndOf="@+id/textView1" />
+    </RelativeLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/line_gray"
+        />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:id="@+id/rl_bt"
+        android:background="@color/main_bg">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:text="发货"
+            android:background="@color/red_bg"
+            android:textSize="@dimen/text_size_basic"
+            android:id="@+id/bt_send"
+            android:textColor="@color/text_white"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="@dimen/margin_left_and_right"/>
+
+    </RelativeLayout>
+
+
+</LinearLayout>

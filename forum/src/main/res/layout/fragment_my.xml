@@ -70,15 +70,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/iv_bianji"
-            android:layout_marginRight="@dimen/margin_left_and_right"
+            android:paddingBottom="20dp"
+            android:paddingTop="20dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="@dimen/margin_left_and_right"
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
             android:src="@mipmap/iconfont_more" />
 
         <com.ctrl.forum.customview.MineHeadView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:id="@+id/iv_head"
             android:src="@mipmap/iconfont_head"
             android:layout_alignParentTop="true"
@@ -94,9 +97,9 @@
             android:text="@string/my_name"
             android:textSize="@dimen/text_size_basic"
             android:textColor="@color/text_white"
-            android:id="@+id/textView2"
+            android:id="@+id/tv_nickName"
             android:layout_alignTop="@+id/iv_bianji"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="20dp"
             android:layout_alignRight="@+id/iv_head"
             android:layout_alignEnd="@+id/iv_head" />
 
@@ -108,7 +111,7 @@
             android:textSize="@dimen/text_size_small"
             android:id="@+id/bt_sign"
             android:background="@drawable/btn_red_selector"
-            android:layout_below="@+id/textView2"
+            android:layout_below="@+id/tv_nickName"
             android:layout_marginRight="35dp"
             android:layout_marginTop="10dp"
             android:layout_alignRight="@+id/iv_head"
@@ -136,8 +139,8 @@
             android:textSize="@dimen/text_size_basic"
             android:layout_above="@+id/bt_sign"
             android:layout_marginLeft="7dp"
-            android:layout_toRightOf="@+id/textView2"
-            android:layout_toEndOf="@+id/textView2" />
+            android:layout_toRightOf="@+id/tv_nickName"
+            android:layout_toEndOf="@+id/tv_nickName" />
 
         <ImageView
             android:layout_width="wrap_content"

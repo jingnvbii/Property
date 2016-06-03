@@ -20,6 +20,7 @@
     <dimen name="text_size_more">20sp</dimen>
     <dimen name="text_size_large">22sp</dimen>
 
+    <dimen name="image_heade">50dp</dimen>
 
     <!-- img select -->
     <dimen name="image_size">120dp</dimen>

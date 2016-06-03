@@ -1,6 +1,7 @@
 package com.ctrl.forum.entity;
 
 /**
+ * 周边-我的收藏服务列表
  * Created by Administrator on 2016/4/27.
  */
 public class RimShop {

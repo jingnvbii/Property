@@ -14,10 +14,13 @@
             android:layout_height="wrap_content"
             android:id="@+id/iv_back"
             android:src="@mipmap/iconfont_jiantou7"
+            android:paddingLeft="@dimen/margin_left_and_right"
+            android:paddingRight="@dimen/margin_left_and_right"
+            android:paddingTop="@dimen/margin_left_and_right"
+            android:paddingBottom="@dimen/margin_left_and_right"
             android:layout_centerVertical="true"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_marginLeft="@dimen/margin_left_and_right"/>
+            android:layout_alignParentStart="true" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -35,9 +38,9 @@
         android:layout_height="1dp"
         android:textColor="@color/collect_line"/>
 
-    <ListView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <com.handmark.pulltorefresh.library.PullToRefreshListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:id="@+id/lv_collect" />
 
 

@@ -13,7 +13,7 @@
         android:id="@+id/tv_apply_finish"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/apply_start"
+        android:text="@string/commit_apply"
         android:textColor="@color/text_white"
         android:background="@drawable/btn_red_selector"
         android:gravity="center"

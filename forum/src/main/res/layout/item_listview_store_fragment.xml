@@ -46,7 +46,7 @@
         android:background="@mipmap/tv_blue_bg"
         android:paddingRight="5dp"
         android:paddingLeft="5dp"
-
+        android:id="@+id/business"
         />
 
     <TextView
@@ -70,6 +70,7 @@
         android:layout_toRightOf="@+id/tv_xianjinquan"
         android:layout_marginTop="10dp"
         android:layout_marginLeft="10dp"
+        android:id="@+id/tv_xianjinquan_content"
         />
 
 
@@ -99,6 +100,7 @@
         android:layout_marginLeft="10dp"
         android:layout_toEndOf="@+id/iv_title_photo"
         android:layout_marginBottom="10dp"
+        android:id="@+id/tv_youhuiquan_content"
         />
 
 

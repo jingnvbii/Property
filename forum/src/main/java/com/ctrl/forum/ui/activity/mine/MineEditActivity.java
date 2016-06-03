@@ -75,7 +75,9 @@ public class MineEditActivity extends AppToolBarActivity implements View.OnClick
         tv_ni.setText(Arad.preferences.getString("nickName"));
         tv_jianjie.setText(Arad.preferences.getString("remark"));
         tv_phone.setText(Arad.preferences.getString("mobile"));
-        tv_xiaoqu.setText(Arad.preferences.getString(""));
+        tv_xiaoqu.setText(Arad.preferences.getString("communityName"));
+
+        Arad.imageLoader.load(Arad.preferences.getString("imgUrl")).into(iv_head);
     }
 
     @Override
@@ -83,14 +85,20 @@ public class MineEditActivity extends AppToolBarActivity implements View.OnClick
         super.onRequestSuccess(requestCode);
         if (requestCode==1){
             MessageUtils.showShortToast(this, "获取个人信息成功");
-            memberInfo=edao.getMemberInfo();
+           /* memberInfo=edao.getMemberInfo();
             Arad.preferences.putString("nickName", memberInfo.getNickName());//昵称
             Arad.preferences.putString("mobile", memberInfo.getMobile()); //手机号
             Arad.preferences.putString("point", memberInfo.getPoint()); //积分
             Arad.preferences.putString("remark", memberInfo.getRemark());//简介
             Arad.preferences.putString("memberLevel", memberInfo.getMemberLevel());//等级
             Arad.preferences.putString("imgUrl", memberInfo.getImgUrl()); //头像
-            Arad.preferences.putString("companyId", memberInfo.getCompanyId());//是否有店铺0-没有 1-有
+            Arad.preferences.putString("companyId", memberInfo.getCompanyId());//店铺id
+            Arad.preferences.putString("state", memberInfo.getState());//是否有店铺0-没有, 如果是checkState:0：待审核、1：已通过
+            Arad.preferences.putString("isShielded", memberInfo.getIsShielded());//是否被屏蔽（0：否、1：是）
+            Arad.preferences.putString("couponsNum", memberInfo.getCouponsNum()); //现金券数量
+            Arad.preferences.putString("redenvelopeNum", memberInfo.getRedenvelopeNum());//优惠券数量
+            Arad.preferences.putString("signTimes", memberInfo.getSignTimes());//连续签到次数*/
+
             Arad.preferences.flush();
         }
     }
@@ -161,6 +169,7 @@ public class MineEditActivity extends AppToolBarActivity implements View.OnClick
             case R.id.rl_phone://
                 break;
             case R.id.rl_xiaoqu://小区
+                startActivity(new Intent(this,MineFindFlotActivity.class));
                 break;
             case R.id.rl_pwd://修改密码
                 intent = new Intent(getApplicationContext(),MineUpdatepwdActivity.class);
@@ -169,6 +178,7 @@ public class MineEditActivity extends AppToolBarActivity implements View.OnClick
             case R.id.take_picture: //拍照片
                 break;
             case R.id.choose_phone: //选择照片
+                //startActivity(new Intent(this, AlbumActivity.class));
                 break;
             case R.id.cancel: //取消
                 popupWindow.dismiss();

@@ -6,6 +6,7 @@ import com.beanu.arad.http.INetResult;
 import com.beanu.arad.utils.JsonUtil;
 import com.ctrl.forum.base.Constant;
 import com.ctrl.forum.entity.Blacklist;
+import com.ctrl.forum.entity.DraftsPostList;
 import com.ctrl.forum.entity.MemberInfo;
 import com.fasterxml.jackson.databind.JsonNode;
 import java.io.IOException;
@@ -24,6 +25,7 @@ public class EditDao extends IDao {
      * */
     private MemberInfo memberInfo=new MemberInfo();
     private List<Blacklist> blacklists = new ArrayList<>();
+    private List<DraftsPostList> draftsPostLists = new ArrayList<>();//草稿箱
 
     public EditDao(INetResult activity) {super(activity);}
 
@@ -61,8 +63,8 @@ public class EditDao extends IDao {
      * @param pageNum 当前页号
      * @param pageSize 每页几条
      */
-    public void getBlackList(String memberId,int pageNum,int pageSize){
-        String url="member/getMemeberDetails";
+    public void getBlackList(String memberId,String pageNum,String pageSize){
+        String url="memberBlackList/getMemberBlackList";
         Map<String,String> map = new HashMap<>();
         map.put("memberId",memberId);
         map.put("pageNum",pageNum+"");
@@ -76,11 +78,22 @@ public class EditDao extends IDao {
      * @param personId 被拉黑用户id
      */
     public void cancelBlack(String memberId,String personId){
-        String url="member/getMemeberDetails";
+        String url="memberBlackList/memberBlackListDelete";
         Map<String,String> map = new HashMap<>();
         map.put("memberId",memberId);
         map.put("personId",personId);
         postRequest(Constant.RAW_URL + url, mapToRP(map), 3);
+    }
+
+    /**
+     * 获取草稿箱帖子列表接口
+     * @param reporterId 用户id/发帖人id
+     */
+    public void getDraftsList(String reporterId){
+        String url="post/getDraftsList";
+        Map<String,String> map = new HashMap<>();
+        map.put("reporterId",reporterId);
+        postRequest(Constant.RAW_URL + url, mapToRP(map), 4);
     }
 
     @Override
@@ -99,13 +112,19 @@ public class EditDao extends IDao {
         if(requestCode==3){
             Log.d("demo","dao中结果集(会员取消屏蔽): " + result);
         }
+        if(requestCode==4){
+            Log.d("demo","dao中结果集(获取草稿箱帖子列表接口): " + result);
+            draftsPostLists = JsonUtil.node2pojoList(result.findValue("postList"), DraftsPostList.class);
+        }
     }
 
     public MemberInfo getMemberInfo() {
         return memberInfo;
     }
-
     public List<Blacklist> getBlacklists() {
         return blacklists;
+    }
+    public List<DraftsPostList> getDraftsPostLists() {
+        return draftsPostLists;
     }
 }

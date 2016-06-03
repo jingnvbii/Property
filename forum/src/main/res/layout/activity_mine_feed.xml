@@ -52,6 +52,7 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_marginLeft="5dp"
+            android:maxLength="11"
             android:textColorHint="@color/text_newpwd"
             android:background="@null"/>
     </RelativeLayout>

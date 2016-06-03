@@ -1,53 +1,189 @@
 package com.ctrl.forum.ui.activity.rim;
 
+import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
-import com.ctrl.forum.R;
-import com.ctrl.forum.entity.RimShop;
-import com.ctrl.forum.ui.adapter.RimShopListAdapter;
+import android.widget.PopupWindow;
+import android.widget.TextView;
 
-import java.util.ArrayList;
+import com.beanu.arad.Arad;
+import com.beanu.arad.base.ToolBarActivity;
+import com.beanu.arad.widget.SlidingUpPanelLayout;
+import com.ctrl.forum.R;
+import com.ctrl.forum.base.Constant;
+import com.ctrl.forum.dao.RimDao;
+import com.ctrl.forum.entity.RimServiceCompany;
+import com.ctrl.forum.ui.adapter.RimShopListAdapter;
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.PullToRefreshListView;
+
 import java.util.List;
 
-public class RimCollectServeActivity extends ActionBarActivity implements View.OnClickListener{
-    private ListView lv_collect;
-    private ImageView iv_back;
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+
+/**
+ * 周边服务--我的收藏
+ */
+public class RimCollectServeActivity extends ToolBarActivity implements View.OnClickListener{
+    @InjectView(R.id.lv_collect)
+    PullToRefreshListView lv_collect;
+    @InjectView(R.id.iv_back)
+    ImageView iv_back;
+
     private RimShopListAdapter rimShopListAdapter;
-    private List<RimShop> serves;
+    private List<RimServiceCompany> rimServiceCompanies;
+    private RimDao rimDao;
+    private int PAGE_NUM=1;
+    private View view;
+    private PopupWindow popupWindow;
+    private TextView bo_hao,call_up,cancel;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rim_collect_serve);
-
-        lv_collect = (ListView) findViewById(R.id.lv_collect);
-        iv_back = (ImageView) findViewById(R.id.iv_back);
+        ButterKnife.inject(this);
         iv_back.setOnClickListener(this);
 
-        initData();
-
-        rimShopListAdapter = new RimShopListAdapter(this,serves);
+        rimShopListAdapter = new RimShopListAdapter(this);
         lv_collect.setAdapter(rimShopListAdapter);
-    }
-   //��ʼ�����
-    private void initData() {
-        serves = new ArrayList<>();
-        for (int i =0;i<7;i++){
-                RimShop rimShop = new RimShop();
-                rimShop.setName(getResources().getString(R.string.rim_shop_name));
-                serves.add(rimShop);
+        rimShopListAdapter.setOnPhone(this);
+
+        initData();
+        initPop();
+
+        lv_collect.setMode(PullToRefreshBase.Mode.BOTH);
+        lv_collect.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
+            @Override
+            public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
+                if (rimServiceCompanies != null) {
+                    rimServiceCompanies.clear();
+                    PAGE_NUM = 1;
+                    rimShopListAdapter = new RimShopListAdapter(getApplication());
+                    lv_collect.setAdapter(rimShopListAdapter);
+                }
+                rimDao.getAroundServiceCollectionList(Arad.preferences.getString("memberId"), PAGE_NUM + "", Constant.PAGE_SIZE + "");
             }
+
+            @Override
+            public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
+                if (rimServiceCompanies != null) {
+                    PAGE_NUM += 1;
+                    rimDao.getAroundServiceCollectionList(Arad.preferences.getString("memberId"), PAGE_NUM + "", Constant.PAGE_SIZE + "");
+                } else {
+                    lv_collect.onRefreshComplete();
+                }
+            }
+        });
+
+        lv_collect.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (rimServiceCompanies != null) {
+                    Intent intent = new Intent(getApplicationContext(), RimMapDetailActivity.class);
+                    intent.putExtra("rimServiceCompaniesId", rimServiceCompanies.get(position - 1).getAroundServiceId());
+                    intent.putExtra("name", rimServiceCompanies.get(position - 1).getName());
+                    intent.putExtra("address", rimServiceCompanies.get(position - 1).getAddress());
+                    intent.putExtra("telephone", rimServiceCompanies.get(position - 1).getTelephone());
+                    intent.putExtra("callTimes", rimServiceCompanies.get(position - 1).getCallTimes());
+                    startActivity(intent);
+                }
+            }
+        });
+
     }
 
+    //初始化弹窗
+    private void initPop() {
+        view = LayoutInflater.from(this).inflate(R.layout.call_phone,null);
+        popupWindow = new PopupWindow(view, SlidingUpPanelLayout.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
+        popupWindow.setFocusable(true);
+        ColorDrawable colorDrawable = new ColorDrawable(getResources().getColor(R.color.pop_bg));
+        colorDrawable.setAlpha(40);
+        popupWindow.setBackgroundDrawable(colorDrawable);
+        popupWindow.setOutsideTouchable(true);
+
+        bo_hao = (TextView) view.findViewById(R.id.bo_hao);
+        call_up = (TextView) view.findViewById(R.id.call_up);
+        cancel = (TextView) view.findViewById(R.id.cancel);
+
+        bo_hao.setOnClickListener(this);
+        call_up.setOnClickListener(this);
+        cancel.setOnClickListener(this);
+    }
+
+    private void initData() {
+        rimDao = new RimDao(this);
+        rimDao.getAroundServiceCollectionList(Arad.preferences.getString("memberId"),PAGE_NUM+"", Constant.PAGE_SIZE+"");
+        Log.e("rimServiceCompanies=================", "initData=================");
+    }
 
     @Override
     public void onClick(View v) {
+        Object id =v.getTag();
+        int position = 0;
         switch (v.getId()){
             case R.id.iv_back:
                 this.finish();
                 break;
+            case R.id.iv_phone:
+                position = (int)id;
+                bo_hao.setText(rimServiceCompanies.get(position).getTelephone());
+                if (!bo_hao.getText().equals("")){
+                    popupWindow.showAtLocation(this.view, Gravity.BOTTOM, 0, 0);  //在底部
+                    popupWindow.update();
+                }
+                break;
+            case R.id.call_up: //打电话
+                if (!bo_hao.getText().equals("")){
+                    startActivity(new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + bo_hao.getText())));
+                    rimDao.addCallHistory(rimServiceCompanies.get(position).getAroundServiceId(), bo_hao.getText().toString(), Arad.preferences.getString("memberId"));
+                    popupWindow.dismiss();}
+                break;
+            case R.id.cancel: //取消
+                popupWindow.dismiss();
+                break;
         }
+    }
+
+    @Override
+    public void onRequestSuccess(int requestCode) {
+        super.onRequestSuccess(requestCode);
+        lv_collect.onRefreshComplete();
+        if (requestCode==8){
+            rimServiceCompanies = rimDao.getRimServiceCompanies();
+            if (rimServiceCompanies!=null){
+                rimShopListAdapter.setRimServiceCompanies(rimServiceCompanies);
+            }
+        }
+    }
+
+    @Override
+    public void onRequestFaild(String errorNo, String errorMessage) {
+        super.onRequestFaild(errorNo, errorMessage);
+        lv_collect.onRefreshComplete();
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        initPop();
+        if (rimServiceCompanies != null) {
+            rimServiceCompanies.clear();
+            PAGE_NUM = 1;
+            rimShopListAdapter = new RimShopListAdapter(getApplication());
+            lv_collect.setAdapter(rimShopListAdapter);
+        }
+        rimDao.getAroundServiceCollectionList(Arad.preferences.getString("memberId"), PAGE_NUM + "", Constant.PAGE_SIZE + "");
     }
 }

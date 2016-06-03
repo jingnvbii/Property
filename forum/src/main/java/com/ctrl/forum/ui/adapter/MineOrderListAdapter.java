@@ -5,11 +5,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.beanu.arad.Arad;
 import com.ctrl.forum.R;
-import com.ctrl.forum.entity.Order;
+import com.ctrl.forum.base.Constant;
+import com.ctrl.forum.entity.MemeberOrder;
+import com.ctrl.forum.utils.DateUtil;
 
 import java.util.List;
 
@@ -18,19 +22,61 @@ import java.util.List;
  * Created by Administrator on 2016/4/25.
  */
 public class MineOrderListAdapter extends BaseAdapter{
-    private List<Order> orders;
+    private List<MemeberOrder> orders;
     private Context context;
-    private int type;
+    private List<Integer> types;
+    private View.OnClickListener onDelete;
+    private View.OnClickListener onPay;
+    private View.OnClickListener onBuy;
+    private View.OnClickListener onPingJia;
 
-    public MineOrderListAdapter(Context context, List<Order> orders) {
+    public MineOrderListAdapter(Context context) {
         this.context = context;
-        this.orders = orders;
     }
 
-    public void setType(int type) {this.type = type;}
+    public void setOrders(List<MemeberOrder> orders) {
+        this.orders = orders;
+        notifyDataSetChanged();
+    }
+
+    public void setOnBuy(View.OnClickListener onBuy) {
+        this.onBuy = onBuy;
+    }
+
+    public void setOnDelete(View.OnClickListener onDelete) {
+        this.onDelete = onDelete;
+    }
+
+    public void setOnPay(View.OnClickListener onPay) {
+        this.onPay = onPay;
+    }
+
+    public void setOnPingJia(View.OnClickListener onPingJia) {
+        this.onPingJia = onPingJia;
+    }
+
+    // 它的返回值是listview的item的种类的个数的和。
+    @Override
+    public int getViewTypeCount() {
+        // TODO Auto-generated method stub
+        return Constant.Order_TYPE_ITEM;
+    }
+
+    // 获取到具体的list的每一个成员的类型号
+    @Override
+    public int getItemViewType(int position) {
+        // TODO Auto-generated method stub
+        return types.get(position);
+    }
+
+    public void setTypes(List<Integer> types) {
+        this.types = types;
+        notifyDataSetChanged();
+    }
+
     @Override
     public int getCount() {
-        return orders.size()==0?0:orders.size();
+        return orders==null?0:orders.size();
     }
 
     @Override
@@ -47,7 +93,7 @@ public class MineOrderListAdapter extends BaseAdapter{
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder = null;
         if(convertView==null){
-            switch (type){
+            switch (types.get(position)){
                 case 0://已付款
                     convertView= LayoutInflater.from(context).inflate(R.layout.item_mine_payment,parent,false);
                     holder=new ViewHolder();
@@ -56,9 +102,17 @@ public class MineOrderListAdapter extends BaseAdapter{
                     holder.tv_content = (TextView) convertView.findViewById(R.id.tv_content);
                     holder.time = (TextView) convertView.findViewById(R.id.textView24);
                     holder.iv_head = (ImageView) convertView.findViewById(R.id.iv_head);
+                    holder.iv_delete = (ImageView) convertView.findViewById(R.id.iv_delete);
+                    holder.buy_again = (Button) convertView.findViewById(R.id.buy_again);
+                    holder.button2 = (Button) convertView.findViewById(R.id.button2);
+                    holder.iv_delete.setOnClickListener(onDelete);
+                    holder.buy_again.setOnClickListener(onBuy);
+                    holder.button2.setOnClickListener(onPingJia);
+                    holder.buy_again.setTag(position);
+                    holder.button2.setTag(position);
                     convertView.setTag(holder);
                     break;
-                case 1://未付款
+                case 3://未付款
                     convertView= LayoutInflater.from(context).inflate(R.layout.item_mine_nopayment,parent,false);
                     holder=new ViewHolder();
                     holder.ctrl = (TextView) convertView.findViewById(R.id.ctrl);
@@ -66,21 +120,39 @@ public class MineOrderListAdapter extends BaseAdapter{
                     holder.tv_content = (TextView) convertView.findViewById(R.id.tv_content);
                     holder.time = (TextView) convertView.findViewById(R.id.textView24);
                     holder.iv_head = (ImageView) convertView.findViewById(R.id.iv_head);
+                    holder.iv_delete = (ImageView) convertView.findViewById(R.id.iv_delete);
+                    holder.payment = (Button) convertView.findViewById(R.id.payment);
+                    holder.payment.setOnClickListener(onPay);
+                    holder.iv_delete.setOnClickListener(onDelete);
+                    holder.payment.setTag(position);
+                    holder.iv_delete.setTag(position);
                     convertView.setTag(holder);
                     break;
             }
         }else {
             holder=(ViewHolder)convertView.getTag();
         }
-          holder.tv_total.setText(orders.get(position).getTotal());
+
+        if (orders!=null && orders.get(position)!=null){
+            holder.ctrl.setText(orders.get(position).getCompanyname());
+            holder.tv_total.setText(orders.get(position).getTotalCost());
+            String time = DateUtil.getStringByFormat(orders.get(position).getCreateTime(),"yyyy-MM-dd  hh:mm:ss");
+            holder.time.setText(time);
+            holder.tv_content.setText("本订单由"+orders.get(position).getCompanyname()+"提供");
+            Arad.imageLoader.load(orders.get(position).getImg()).into(holder.iv_head);
+        }
         return convertView;
     }
 
     class ViewHolder{
-      TextView ctrl;
+        TextView ctrl;
         TextView tv_total; //总价
-          TextView time;//时间
-         TextView tv_content;//由谁提供
+        TextView time;//时间
+        TextView tv_content;//由谁提供
         ImageView iv_head;
+        Button payment; //付款
+        ImageView iv_delete;
+        Button buy_again;
+        Button button2;
     }
 }

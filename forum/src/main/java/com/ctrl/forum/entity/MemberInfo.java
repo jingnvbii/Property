@@ -15,14 +15,64 @@ public class MemberInfo {
     private String imgUrl;//头像url地址
     private String isAdmin;//是否管理员（0：否  1：是）
     private String address;//会员地址
-    private String companyId;//是否有店铺(0:没有 1:有)
-
+    private String companyState;//是否有店铺 0-没有, 如果是checkState:0：待审核、1：已通过
+    private String companyId;//店铺id
+    private String isShielded;//是否被屏蔽（0：否、1：是）
+    private String couponsNum;//现金券数量
+    private String redenvelopeNum;//优惠券数量
+    private String signTimes;//连续签到次数
+    private String communityId; //小区的id
+    private String communityName; //小区名称
 
     private String userName;//用户名（登录名）
     private String password;//用户密码
     private String trueName;//真实姓名
     private String registIp;//注册ip
     private String registTime;//注册时间
+    private String messageCount;  //通知消息数量
+    private String signState; //是否签到; 0:没签到   1:已签到
+
+    private String memberName;//用户名称
+
+    public String getMemberName() {
+        return memberName;
+    }
+
+    public void setMemberName(String memberName) {
+        this.memberName = memberName;
+    }
+
+    public String getMessageCount() {
+        return messageCount;
+    }
+
+    public void setMessageCount(String messageCount) {
+        this.messageCount = messageCount;
+    }
+
+    public String getSignState() {
+        return signState;
+    }
+
+    public void setSignState(String signState) {
+        this.signState = signState;
+    }
+
+    public String getCommunityId() {
+        return communityId;
+    }
+
+    public void setCommunityId(String communityId) {
+        this.communityId = communityId;
+    }
+
+    public String getCommunityName() {
+        return communityName;
+    }
+
+    public void setCommunityName(String communityName) {
+        this.communityName = communityName;
+    }
 
     public String getUserName() {
         return userName;
@@ -138,5 +188,49 @@ public class MemberInfo {
 
     public String getCompanyId() {
         return companyId;
+    }
+
+    public void setCompanyId(String companyId) {
+        this.companyId = companyId;
+    }
+
+    public String getCouponsNum() {
+        return couponsNum;
+    }
+
+    public void setCouponsNum(String couponsNum) {
+        this.couponsNum = couponsNum;
+    }
+
+    public String getIsShielded() {
+        return isShielded;
+    }
+
+    public void setIsShielded(String isShielded) {
+        this.isShielded = isShielded;
+    }
+
+    public String getRedenvelopeNum() {
+        return redenvelopeNum;
+    }
+
+    public void setRedenvelopeNum(String redenvelopeNum) {
+        this.redenvelopeNum = redenvelopeNum;
+    }
+
+    public String getSignTimes() {
+        return signTimes;
+    }
+
+    public void setSignTimes(String signTimes) {
+        this.signTimes = signTimes;
+    }
+
+    public String getCompanyState() {
+        return companyState;
+    }
+
+    public void setCompanyState(String companyState) {
+        this.companyState = companyState;
     }
 }

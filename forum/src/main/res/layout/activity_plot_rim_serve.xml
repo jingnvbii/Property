@@ -1,0 +1,101 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:background="@color/main_bg"
+    android:layout_height="match_parent">
+
+    <include
+        layout="@layout/toolbar_common_red"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/toolbar_height"
+        android:id="@+id/include2" />
+
+    <LinearLayout
+        android:layout_toLeftOf="@+id/iv_more"
+        android:background="@color/white"
+        android:id="@+id/ll_category"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_below="@+id/include2">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:text="项目1"
+            android:textSize="16sp"
+            android:textColor="#404040"
+            android:gravity="center"
+            />
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:text="项目2"
+            android:textSize="16sp"
+            android:textColor="#404040"
+            android:gravity="center"
+            />
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:text="项目3"
+            android:textSize="16sp"
+            android:textColor="#404040"
+            android:gravity="center"
+            />
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:text="项目4"
+            android:textSize="16sp"
+            android:textColor="#404040"
+            android:gravity="center"
+            />
+
+    </LinearLayout>
+
+    <ImageView
+        android:background="@color/white"
+        android:layout_width="wrap_content"
+        android:layout_height="45dp"
+        android:id="@+id/iv_more"
+        android:paddingLeft="10dp"
+        android:paddingTop="10dp"
+        android:paddingRight="10dp"
+        android:paddingBottom="10dp"
+        android:layout_centerInParent="true"
+        android:src="@mipmap/iconfont_jiantou_botoom"
+        android:layout_alignParentRight="true"
+       android:layout_below="@+id/include2" />
+
+
+    <com.handmark.pulltorefresh.library.PullToRefreshListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/lv_content"
+        android:dividerHeight="1dp"
+        android:divider="#ddd6d6"
+        android:background="@color/white"
+        android:layout_below="@+id/ll_category"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="5dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#ddd6d6"
+        android:layout_below="@+id/ll_category" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#ddd6d6"
+        android:layout_alignTop="@+id/lv_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+
+</RelativeLayout>

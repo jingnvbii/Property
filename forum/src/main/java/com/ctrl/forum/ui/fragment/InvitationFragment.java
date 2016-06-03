@@ -302,7 +302,7 @@ public class InvitationFragment extends ToolBarFragment {
             MessageUtils.showShortToast(getActivity(), "获取帖子列表成功");
             listPost=idao.getListPost();
             Log.i("tag", "listPost---" + listPost.size());
-            invitationListViewAdapter.setList(listPost);
+         //invitationListViewAdapter.setList(listPost);
         }
 
 

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/xx_plot"
+        android:textSize="@dimen/text_size_basic"
+        android:layout_marginLeft="@dimen/margin_left_and_right"
+        android:layout_marginTop="@dimen/margin_left_and_right"
+        android:id="@+id/tv_name"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/send_num"
+        android:textSize="14sp"
+        android:layout_marginTop="@dimen/margin_left_and_right"
+        android:layout_marginBottom="@dimen/margin_left_and_right"
+        android:id="@+id/textView44"
+        android:layout_below="@+id/tv_name"
+        android:layout_alignLeft="@+id/tv_name"
+        android:layout_alignStart="@+id/tv_name" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv_f_num"
+        android:text="2847"
+        android:textSize="14sp"
+        android:layout_alignBottom="@+id/textView44"
+        android:layout_toRightOf="@+id/textView44"
+        android:layout_toEndOf="@+id/textView44" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/store_num"
+        android:id="@+id/textView45"
+        android:textSize="14sp"
+        android:layout_alignBottom="@+id/tv_f_num"
+        android:layout_toRightOf="@+id/tv_f_num"
+        android:layout_toEndOf="@+id/tv_f_num"
+        android:layout_marginLeft="@dimen/margin_left_and_right"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="214878"
+        android:textSize="14sp"
+        android:id="@+id/tv_good_num"
+        android:layout_alignBottom="@+id/textView45"
+        android:layout_toRightOf="@+id/textView45"
+        android:layout_toEndOf="@+id/textView45" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="加入"
+        android:textSize="14sp"
+        android:layout_marginRight="@dimen/margin_left_and_right"
+        android:background="@drawable/bt_red_rim"
+        android:id="@+id/tv_join"
+        android:textColor="@color/red_bg"
+        android:layout_alignBottom="@+id/tv_good_num"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+</RelativeLayout>
