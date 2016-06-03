@@ -19,7 +19,7 @@
         android:orientation="vertical">
         <TextView
         android:layout_width="wrap_content"
-        android:layout_height="45dp"
+        android:layout_height="40dp"
         android:text="@string/notification_type"
         android:textSize="@dimen/text_size_basic"
         android:gravity="center_vertical"
@@ -28,7 +28,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="55dp"
+        android:layout_height="45dp"
         android:background="@color/white">
 
         <TextView
@@ -43,7 +43,7 @@
             android:layout_marginLeft="10dp"
             android:textColor="@color/text_black1"/>
 
-        <ImageView
+        <CheckBox
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/iv_system_notification"
@@ -51,7 +51,8 @@
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="10dp"
-            android:src="@mipmap/on"/>
+            android:button="@null"
+           android:background="@drawable/setting_select"/>
     </RelativeLayout>
 
     <TextView
@@ -61,8 +62,8 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="55dp"
-        android:background="@color/main_bg">
+        android:layout_height="45dp"
+        android:background="@color/white">
 
         <TextView
             android:layout_width="wrap_content"
@@ -76,7 +77,7 @@
             android:layout_marginLeft="10dp"
             android:textColor="@color/text_black1"/>
 
-        <ImageView
+        <CheckBox
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/iv_reply_comments"
@@ -84,7 +85,8 @@
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="10dp"
-            android:src="@mipmap/off"/>
+            android:button="@null"
+            android:background="@drawable/setting_select"/>
     </RelativeLayout>
 
     <TextView
@@ -94,7 +96,7 @@
 
     <TextView
         android:layout_width="wrap_content"
-        android:layout_height="45dp"
+        android:layout_height="40dp"
         android:text="@string/message_notification_type"
         android:textSize="@dimen/text_size_basic"
         android:gravity="center_vertical"
@@ -103,8 +105,8 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="55dp"
-        android:background="@color/main_bg">
+        android:layout_height="45dp"
+        android:background="@color/white">
 
         <TextView
             android:layout_width="wrap_content"
@@ -117,7 +119,7 @@
             android:layout_marginLeft="10dp"
             android:textColor="@color/text_black1"/>
 
-        <ImageView
+        <CheckBox
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/iv_voice"
@@ -125,7 +127,8 @@
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="10dp"
-            android:src="@mipmap/on"/>
+            android:button="@null"
+            android:background="@drawable/setting_select"/>
     </RelativeLayout>
     <TextView
         android:layout_width="match_parent"
@@ -134,8 +137,8 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="55dp"
-        android:background="@color/main_bg">
+        android:layout_height="45dp"
+        android:background="@color/white">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -147,7 +150,7 @@
             android:layout_marginLeft="10dp"
             android:textColor="@color/text_black1"/>
 
-        <ImageView
+        <CheckBox
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/iv_vibration"
@@ -155,7 +158,8 @@
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="10dp"
-            android:src="@mipmap/on"/>
+            android:button="@null"
+            android:background="@drawable/setting_select"/>
     </RelativeLayout>
     <TextView
         android:layout_width="match_parent"
@@ -164,8 +168,8 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="55dp"
-        android:background="@color/main_bg">
+        android:layout_height="45dp"
+        android:background="@color/white">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -178,7 +182,7 @@
             android:textColor="@color/text_black1"
             android:id="@+id/textView7" />
 
-        <ImageView
+        <CheckBox
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/iv_night_no_message"
@@ -186,7 +190,8 @@
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="10dp"
-            android:src="@mipmap/on"/>
+            android:button="@null"
+            android:background="@drawable/setting_select"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -205,8 +210,8 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="55dp"
-        android:background="@color/main_bg">
+        android:layout_height="45dp"
+        android:background="@color/white">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -218,7 +223,7 @@
             android:layout_marginLeft="10dp"
             android:textColor="@color/text_black1"/>
 
-        <ImageView
+        <CheckBox
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/iv_notification_show"
@@ -226,7 +231,8 @@
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="10dp"
-            android:src="@mipmap/on"/>
+            android:button="@null"
+            android:background="@drawable/setting_select"/>
     </RelativeLayout>
     <TextView
         android:layout_width="match_parent"
@@ -235,8 +241,8 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="55dp"
-        android:background="@color/main_bg">
+        android:layout_height="45dp"
+        android:background="@color/white">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -248,7 +254,7 @@
             android:layout_marginLeft="10dp"
             android:textColor="@color/text_black1"/>
 
-        <ImageView
+        <CheckBox
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/iv_desktop_icon_hints"
@@ -256,7 +262,8 @@
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="10dp"
-            android:src="@mipmap/on"/>
+            android:button="@null"
+            android:background="@drawable/setting_select"/>
     </RelativeLayout>
         <TextView
             android:layout_width="match_parent"
@@ -265,10 +272,11 @@
 
 
     <RelativeLayout
+        android:id="@+id/rl_cancle"
         android:layout_width="match_parent"
-        android:layout_height="55dp"
-        android:layout_marginTop="15dp"
-        android:background="@color/main_bg">
+        android:layout_height="45dp"
+        android:layout_marginTop="10dp"
+        android:background="@color/white">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -297,9 +305,9 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="55dp"
+        android:layout_height="45dp"
         android:id="@+id/feedback"
-        android:background="@color/main_bg">
+        android:background="@color/white">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

@@ -32,7 +32,8 @@ public class MineNickNameActivity extends AppToolBarActivity {
     private void init() {
         et_nickname = (EditText) findViewById(R.id.et_nickname);
         tv_ni = (TextView) findViewById(R.id.tv_ni);
-        tv_ni.setText("4/30");
+        et_nickname.setText(Arad.preferences.getString("nickName"));
+        tv_ni.setText( et_nickname.length()+"/11");
         et_nickname.addTextChangedListener(mTextWatcher);
         edao = new EditDao(this);
         id =  Arad.preferences.getString("memberId");
@@ -50,7 +51,10 @@ public class MineNickNameActivity extends AppToolBarActivity {
         }
         @Override
         public void afterTextChanged(Editable s) {
-            tv_ni.setText(s.length()+"/30");
+            tv_ni.setText(s.length() + "/11");
+            if (s.length()==11){
+                MessageUtils.showShortToast(getApplicationContext(),"已输入11位,不能继续输入!");
+            }
         }
     };
 

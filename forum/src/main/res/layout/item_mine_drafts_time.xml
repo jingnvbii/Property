@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/margin_left_and_right"
+        android:paddingBottom="@dimen/margin_left_and_right"
+        android:textColor="#999"
+        android:background="#f6f6f6"
+        android:textSize="16sp"
+        android:paddingLeft="@dimen/margin_left_and_right"
+        android:text="2016/5/12"
+        android:id="@+id/tv_time" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="(2封)"
+        android:textColor="#999"
+        android:background="#f6f6f6"
+        android:textSize="16sp"
+        android:paddingTop="@dimen/margin_left_and_right"
+        android:paddingBottom="@dimen/margin_left_and_right"
+        android:id="@+id/tv_num"
+        android:layout_alignBottom="@+id/tv_time"
+        android:layout_toRightOf="@+id/tv_time"
+        android:layout_toEndOf="@+id/tv_time" />
+</RelativeLayout>

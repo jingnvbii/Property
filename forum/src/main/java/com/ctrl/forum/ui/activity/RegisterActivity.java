@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.beanu.arad.utils.MessageUtils;
 import com.ctrl.forum.R;
 import com.ctrl.forum.base.AppToolBarActivity;
+import com.ctrl.forum.dao.KeyDao;
 import com.ctrl.forum.dao.RegisteDao;
 import com.ctrl.forum.utils.RegexpUtil;
 
@@ -37,10 +38,13 @@ public class RegisterActivity extends AppToolBarActivity implements View.OnClick
             CheckBox checkbox;
     @InjectView(R.id.tv_auth_code)//获取验证码控件
             TextView tv_auth_code;
+    @InjectView(R.id.tv_user_agreement)//《用户使用协议》
+            TextView tv_user_agreement;
     private TimeCount time;
     private RegisteDao rdao;
     private String code;
     private RegisterActivity activity;
+    private KeyDao kdao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,9 +58,10 @@ public class RegisterActivity extends AppToolBarActivity implements View.OnClick
         time = new TimeCount(60000, 1000);
         tv_auth_code.setOnClickListener(this);
         tv_login.setOnClickListener(this);
+        tv_user_agreement.setOnClickListener(this);
         rdao = new RegisteDao(this);
         activity = new RegisterActivity();
-
+        kdao = new KeyDao(this);
 
     }
 
@@ -113,7 +118,11 @@ public class RegisterActivity extends AppToolBarActivity implements View.OnClick
                 if (checkAllInput()) {
                     rdao.requestRegiste(et_username.getText().toString().trim(), et_pass_word.getText().toString().trim(), "");
                 }
-
+            case R.id.tv_user_agreement:
+                kdao.ueryDictionary("APP_PROTOCOL"); //用户使用协议
+                kdao.ueryDictionary("HOW_STEP_UP"); //如何快速升级
+                kdao.ueryDictionary("LEVEL_EFFECT"); //等级有什么用
+                break;
         }
 
     }

@@ -1,10 +1,12 @@
 package com.ctrl.forum.entity;
 
+import com.ctrl.forum.base.ListItemTypeInterf;
+
 /**
  * 草稿箱帖子实体类
  * Created by Administrator on 2016/4/8.
  */
-public class Drafts {
+public class Drafts implements ListItemTypeInterf{
     private String id;//帖子ID
     private String title;//帖子标题
     private String status;//帖子状态 2标示审核未通过
@@ -40,5 +42,10 @@ public class Drafts {
 
     public void setPublishState(String publishState) {
         this.publishState = publishState;
+    }
+
+    @Override
+    public int getType() {
+        return 1;
     }
 }

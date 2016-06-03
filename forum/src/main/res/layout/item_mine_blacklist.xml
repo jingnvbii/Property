@@ -6,8 +6,8 @@
 
 
     <com.ctrl.forum.customview.MineHeadView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:id="@+id/iv_icon"
         android:src="@mipmap/iconfont_head"
         android:layout_alignParentTop="true"

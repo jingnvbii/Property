@@ -2,42 +2,53 @@ package com.ctrl.forum.ui.activity.mine;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.beanu.arad.Arad;
+import com.beanu.arad.utils.MessageUtils;
 import com.ctrl.forum.R;
 import com.ctrl.forum.base.AppToolBarActivity;
+import com.ctrl.forum.dao.StoreManageDao;
 
+/**
+ * 我的店铺_马上申请我的店铺
+ */
 public class MineCreateShopTwoActivity extends AppToolBarActivity implements View.OnClickListener{
     private EditText et_shop_name,et_address,et_apply_name,et_shop_phone;
     private TextView tv_num,tv_commit;
+    private StoreManageDao storeManageDao;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mine_shop_two);
 
         init();
-        et_shop_name.addTextChangedListener(mTextWatcher);
-
     }
-    TextWatcher mTextWatcher = new TextWatcher() {
-        @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
 
+    public Boolean checkInputAll(){
+        if (TextUtils.isEmpty(et_shop_name.getText().toString())){
+            MessageUtils.showShortToast(this,"店铺名称不能为空!");
+            return false;
         }
-        @Override
-        public void beforeTextChanged(CharSequence s, int start, int count,
-                                      int after) {
+        if (TextUtils.isEmpty(et_address.getText().toString())){
+            MessageUtils.showShortToast(this,"联系地址不能为空!");
+            return false;
         }
-        @Override
-        public void afterTextChanged(Editable s) {
-            tv_num.setText(s.length()+"/20");
+        if (TextUtils.isEmpty(et_apply_name.getText().toString())){
+            MessageUtils.showShortToast(this,"申请人姓名不能为空!");
+            return false;
         }
-    };
+        if (TextUtils.isEmpty(et_shop_phone.getText().toString())){
+            MessageUtils.showShortToast(this,"联系方式不能为空!");
+            return false;
+        }
+        return true;
+    }
 
     private void init() {
         et_shop_name = (EditText) findViewById(R.id.et_shop_name);
@@ -52,6 +63,8 @@ public class MineCreateShopTwoActivity extends AppToolBarActivity implements Vie
         et_apply_name.setOnClickListener(this);
         et_shop_phone.setOnClickListener(this);
         tv_commit.setOnClickListener(this);
+
+        storeManageDao = new StoreManageDao(this);
     }
 
     @Override
@@ -74,9 +87,22 @@ public class MineCreateShopTwoActivity extends AppToolBarActivity implements Vie
         int id = v.getId();
         switch (id){
             case R.id.tv_commit:
-                Intent intent = new Intent(this,MineCreateShopThreeActivity.class);
-                startActivity(intent);
+                if (checkInputAll()) {
+                    storeManageDao.requestChangeBasicInfo(Arad.preferences.getString("memberId"), et_address.getText().toString(),
+                            et_apply_name.getText().toString(), et_shop_phone.getText().toString(),
+                            et_shop_name.getText().toString());
+                }
             break;
+        }
+    }
+
+    @Override
+    public void onRequestSuccess(int requestCode) {
+        super.onRequestSuccess(requestCode);
+        if (requestCode==0){
+            Intent intent = new Intent(this,MineCreateShopThreeActivity.class);
+            startActivity(intent);
+            this.finish();
         }
     }
 }

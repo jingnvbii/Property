@@ -1,14 +1,27 @@
 package com.ctrl.forum.ui.activity.mine;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
+import com.beanu.arad.Arad;
+import com.beanu.arad.utils.MessageUtils;
 import com.ctrl.forum.R;
 import com.ctrl.forum.base.AppToolBarActivity;
+import com.ctrl.forum.base.Constant;
+import com.ctrl.forum.dao.RemarkDao;
+import com.ctrl.forum.entity.IntegralProduct;
+import com.ctrl.forum.entity.RedeemHistory;
+import com.ctrl.forum.ui.adapter.MineIntegralGridAdapter;
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.PullToRefreshGridView;
+
+import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -17,35 +30,71 @@ import butterknife.InjectView;
  */
 public class MineIntegralActivity extends AppToolBarActivity implements View.OnClickListener{
     @InjectView(R.id.rl_last)
-    RelativeLayout rl_last; //ʣ��
+    RelativeLayout rl_last;
     @InjectView(R.id.rl_dui)
-    RelativeLayout rl_dui; //�һ���¼
+    RelativeLayout rl_dui;
     @InjectView(R.id.rl_fen)
-    RelativeLayout rl_fen; //��ּ�¼
-    @InjectView(R.id.rl_shop)
-    GridView rl_shop; //ʣ���б�
-    @InjectView(R.id.lv_dui)
-    ListView lv_dui; //�һ���¼�б�
-    @InjectView(R.id.lv_fen)
-    ListView lv_fen; //��ּ�¼�б�
+    RelativeLayout rl_fen;
+    @InjectView(R.id.tv_total)
+    TextView tv_total;
 
+    private PullToRefreshGridView pullToRefreshGridView;
+    private MineIntegralGridAdapter mineIntegralGridAdapter;
+    private List<IntegralProduct> integralProducts;
+    private List<RedeemHistory> redeemHistories;
+    private RemarkDao rdao;
+    private int PAGE_NUM = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mine_integral);
         ButterKnife.inject(this);
+
         initView();
+        mineIntegralGridAdapter = new MineIntegralGridAdapter(this);
+        pullToRefreshGridView.setAdapter(mineIntegralGridAdapter);
+
+        pullToRefreshGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                rdao.convertRemarkGoods(Arad.preferences.getString("memberId"), integralProducts.get(position).getId());
+            }
+        });
+
+        pullToRefreshGridView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<GridView>() {
+            @Override
+            public void onPullDownToRefresh(PullToRefreshBase<GridView> refreshView) {
+                if (integralProducts!=null){
+                    integralProducts.clear();
+                }
+                PAGE_NUM = 1;
+                rdao.getRemarkGoods(PAGE_NUM + "", Constant.PAGE_SIZE + "");
+            }
+
+            @Override
+            public void onPullUpToRefresh(PullToRefreshBase<GridView> refreshView) {
+                if (integralProducts!=null){
+                    PAGE_NUM += 1;
+                    rdao.getRemarkGoods(PAGE_NUM + "", Constant.PAGE_SIZE + "");
+                }
+                    pullToRefreshGridView.onRefreshComplete();
+            }
+        });
     }
 
     private void initView() {
+        pullToRefreshGridView = (PullToRefreshGridView) findViewById(R.id.pgv_shop);
+        pullToRefreshGridView.setMode(PullToRefreshBase.Mode.BOTH);
+
         rl_last.setOnClickListener(this);
         rl_dui.setOnClickListener(this);
         rl_fen.setOnClickListener(this);
 
-        rl_shop.setVisibility(View.VISIBLE);
-        lv_dui.setVisibility(View.INVISIBLE);
-        lv_fen.setVisibility(View.INVISIBLE);
+        tv_total.setText(Arad.preferences.getString("point"));
+
+        rdao = new RemarkDao(this);
+        rdao.getRemarkGoods(PAGE_NUM + "", Constant.PAGE_SIZE + "");
     }
 
     @Override
@@ -65,20 +114,42 @@ public class MineIntegralActivity extends AppToolBarActivity implements View.OnC
 
     @Override
     public void onClick(View v) {
-      if (v==rl_last){
-          rl_shop.setVisibility(View.VISIBLE);
-          lv_dui.setVisibility(View.INVISIBLE);
-          lv_fen.setVisibility(View.INVISIBLE);
-      }
-        if (v==rl_dui){
-            lv_dui.setVisibility(View.VISIBLE);
-            rl_shop.setVisibility(View.INVISIBLE);
-            lv_fen.setVisibility(View.INVISIBLE);
+        if (v==rl_dui){ //兑换记录
+            startActivity(new Intent(this,MineRemarkHistoryActivity.class));
         }
-        if (v==rl_fen){
-            lv_fen.setVisibility(View.VISIBLE);
-            lv_dui.setVisibility(View.INVISIBLE);
-            rl_shop.setVisibility(View.INVISIBLE);
+        if (v==rl_fen){ //积分记录
+            startActivity(new Intent(this,MinePointHistoryActivity.class));
         }
+    }
+
+    @Override
+    public void onRequestSuccess(int requestCode) {
+        super.onRequestSuccess(requestCode);
+        pullToRefreshGridView.onRefreshComplete();
+        if (requestCode==0){
+            MessageUtils.showShortToast(this,"获取积分商品成功");
+            integralProducts = rdao.getIntegralProducts();
+            if (integralProducts!=null){
+                mineIntegralGridAdapter.setData(integralProducts);
+            }
+          //  pullToRefreshGridView.onRefreshComplete();
+        }
+        if (requestCode==1){
+            MessageUtils.showShortToast(this, "兑换积分商品成功");
+            rdao.getRemarkGoods(PAGE_NUM + "", Constant.PAGE_SIZE + "");
+        }
+    }
+
+    @Override
+    public void onRequestFaild(String errorNo, String errorMessage) {
+        super.onRequestFaild(errorNo, errorMessage);
+        MessageUtils.showShortToast(this, "获取失败");
+        pullToRefreshGridView.onRefreshComplete();
+    }
+
+    @Override
+    public void onNoConnect() {
+        super.onNoConnect();
+        pullToRefreshGridView.onRefreshComplete();
     }
 }

@@ -38,7 +38,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/last"
-                android:id="@+id/textView41"
+                android:id="@+id/tv_total"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="3dp"
                 android:textColor="@color/rim"
@@ -53,9 +53,9 @@
                 android:id="@+id/textView42"
                 android:textColor="@color/rim"
                 android:textSize="@dimen/text_size_basic"
-                android:layout_alignBottom="@+id/textView41"
-                android:layout_toRightOf="@+id/textView41"
-                android:layout_toEndOf="@+id/textView41" />
+                android:layout_alignBottom="@+id/tv_total"
+                android:layout_toRightOf="@+id/tv_total"
+                android:layout_toEndOf="@+id/tv_total" />
         </RelativeLayout>
 
         <TextView
@@ -128,10 +128,10 @@
 
     </LinearLayout>
 
-    <GridView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/rl_shop"
+    <com.handmark.pulltorefresh.library.PullToRefreshGridView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/pgv_shop"
         android:layout_below="@+id/last"
         android:horizontalSpacing="1dp"
         android:verticalSpacing="1dp"
@@ -139,28 +139,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_marginTop="@dimen/margin_left_and_right"
-        android:background="@color/main_bg"/>
+        android:background="@color/fen_line"/>
 
-    <ListView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/lv_dui"
-        android:divider="@color/fen_line"
-        android:layout_below="@+id/last"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="@dimen/margin_left_and_right"
-        android:background="@color/main_bg"/>
-
-    <ListView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/lv_fen"
-        android:divider="@color/fen_line"
-        android:layout_below="@+id/last"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="@dimen/margin_left_and_right"
-        android:background="@color/main_bg"/>
 
 </RelativeLayout>

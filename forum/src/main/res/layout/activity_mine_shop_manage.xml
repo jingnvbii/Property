@@ -14,9 +14,12 @@
         android:layout_height="40dp"
         android:layout_below="@+id/include7"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
+        android:layout_alignParentStart="true"
+        android:id="@+id/ll_text">
 
         <TextView
+            android:clickable="true"
+            android:onClick="onClick"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -27,16 +30,20 @@
             android:textColor="@color/text_black1"
             android:id="@+id/tv_all" />
         <TextView
+            android:clickable="true"
+            android:onClick="onClick"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/shop_send"
+            android:text="@string/shop_paying"
             android:gravity="center"
             android:layout_gravity="center"
             android:textSize="@dimen/text_size_basic"
             android:textColor="@color/text_black1"
             android:id="@+id/tv_send" />
         <TextView
+            android:clickable="true"
+            android:onClick="onClick"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -47,6 +54,8 @@
             android:textColor="@color/text_black1"
             android:id="@+id/tv_put" />
         <TextView
+            android:clickable="true"
+            android:onClick="onClick"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -57,5 +66,71 @@
             android:textColor="@color/text_black1"
             android:id="@+id/tv_comment" />
     </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/shop_manager"
+        android:textColor="@color/text_white"
+        android:layout_marginTop="16dp"
+        android:id="@+id/tv_shop_manager"
+        android:layout_marginRight="10dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/xian_juan"
+        android:textColor="@color/text_white"
+        android:id="@+id/tv_xian"
+        android:layout_marginRight="10dp"
+        android:layout_alignBottom="@+id/tv_shop_manager"
+        android:layout_toLeftOf="@+id/tv_shop_manager"
+        android:layout_toStartOf="@+id/tv_shop_manager" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:layout_below="@+id/ll_text"
+        android:id="@+id/lines"
+        >
+
+        <TextView
+            android:id="@+id/tv_line_all"
+            android:layout_width="0dp"
+            android:layout_height="3dp"
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            android:gravity="center"
+            />
+        <TextView
+            android:id="@+id/tv_line_comment"
+            android:layout_width="0dp"
+            android:layout_height="3dp"
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            android:gravity="center" />
+        <TextView
+        android:layout_width="0dp"
+        android:layout_height="3dp"
+        android:layout_weight="1"
+        android:layout_gravity="center"
+        android:gravity="center" />
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="3dp"
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            android:gravity="center" />
+    </LinearLayout>
+    <android.support.v4.view.ViewPager
+        android:id="@+id/fl_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/lines"
+        >
+    </android.support.v4.view.ViewPager>
 
 </RelativeLayout>

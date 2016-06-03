@@ -11,13 +11,13 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="90dp"
         android:background="@color/white"
      >
         <com.ctrl.forum.customview.MineHeadView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/imageView2"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:id="@+id/iv_header"
             android:src="@mipmap/iconfont_head"
             android:layout_centerVertical="true"
             android:layout_alignParentLeft="true"
@@ -30,30 +30,29 @@
             android:text="@string/vip_name"
             android:layout_marginTop="@dimen/margin_left_and_right"
             android:layout_marginLeft="@dimen/margin_left_and_right"
-            android:id="@+id/textView11"
+            android:id="@+id/tv_name"
             android:textColor="@color/text_black1"
             android:textSize="@dimen/text_size_basic"
             android:layout_alignParentTop="true"
-            android:layout_toRightOf="@+id/imageView2"
-            android:layout_toEndOf="@+id/imageView2" />
+            android:layout_toRightOf="@+id/iv_header" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/now_grade"
-            android:layout_marginTop="@dimen/margin_left_and_right"
+            android:layout_marginTop="5dp"
             android:layout_marginLeft="@dimen/margin_left_and_right"
             android:id="@+id/textView12"
             android:textColor="@color/text_newpwd"
-            android:textSize="@dimen/text_size_basic"
-            android:layout_alignTop="@+id/imageView2"
-            android:layout_toRightOf="@+id/imageView2"
-            android:layout_toEndOf="@+id/imageView2" />
+            android:textSize="@dimen/text_size_small"
+            android:layout_below="@+id/tv_name"
+            android:layout_toRightOf="@+id/iv_header"
+            android:layout_toEndOf="@+id/iv_header" />
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/imageView4"
+            android:id="@+id/iv_grade"
             android:src="@mipmap/vip_icon2"
             android:layout_alignBottom="@+id/textView12"
             android:layout_toRightOf="@+id/textView12"
@@ -69,16 +68,16 @@
             android:layout_below="@+id/textView12"
             android:layout_alignLeft="@+id/textView12"
             android:layout_alignStart="@+id/textView12"
-            android:layout_marginTop="@dimen/margin_left_and_right"
+            android:layout_marginTop="5dp"
             android:textColor="@color/text_newpwd"
-            android:textSize="@dimen/text_size_basic"/>
+            android:textSize="@dimen/text_size_small"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="2"
             android:id="@+id/tv_stage"
-            android:textSize="@dimen/text_size_basic"
+            android:textSize="@dimen/text_size_small"
             android:layout_alignBottom="@+id/textView13"
             android:layout_toRightOf="@+id/textView13"
             android:layout_toEndOf="@+id/textView13"
@@ -89,8 +88,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/max_stage"
-            android:id="@+id/textView15"
-            android:textSize="@dimen/text_size_basic"
+            android:id="@+id/tv_MaxExp"
+            android:textSize="@dimen/text_size_small"
             android:layout_alignBottom="@+id/tv_stage"
             android:layout_toRightOf="@+id/tv_stage"
             android:layout_toEndOf="@+id/tv_stage"
@@ -112,38 +111,39 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/now_stage"
-                android:textSize="@dimen/text_size_medium"
+                android:textSize="@dimen/text_size_basic"
                 android:textColor="@color/text_gray_black" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="650"
                 android:layout_marginLeft="5dp"
-                android:textSize="@dimen/text_size_medium"
+                android:textSize="@dimen/text_size_basic"
                 android:id="@+id/now_stage"
                 android:textColor="@color/text_gray_black"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="/"
-                android:textSize="@dimen/text_size_medium"
+                android:textSize="@dimen/text_size_basic"
                 android:textColor="@color/text_gray_black"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="1000"
                 android:id="@+id/tv_end"
-                android:textSize="@dimen/text_size_medium"
+                android:textSize="@dimen/text_size_basic"
                 android:textColor="@color/text_gray_black"/>
         </LinearLayout>
 
+        <!--style="@style/roomProgressBar"-->
       <ProgressBar
           style="@style/roomProgressBar"
           android:layout_width="match_parent"
-          android:layout_height="wrap_content"
+          android:layout_height="18dp"
           android:id="@+id/pb_grade"
           android:max="1000"
-          android:progress="650"
+          android:progress="300"
           android:layout_below="@+id/ll_now_suffer"
           android:layout_marginTop="@dimen/margin_left_and_right"
           android:layout_marginLeft="@dimen/margin_left_and_right"
@@ -161,21 +161,21 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/up_grade"
-                android:textSize="@dimen/text_size_medium"
+                android:textSize="@dimen/text_size_basic"
                 android:textColor="@color/text_gray_black"
                 android:id="@+id/textView14" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="350"
-                android:textSize="@dimen/text_size_medium"
+                android:textSize="@dimen/text_size_basic"
                 android:id="@+id/tv_num"
                 android:textColor="@color/text_yellow1"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/stage"
-                android:textSize="@dimen/text_size_medium"
+                android:textSize="@dimen/text_size_basic"
                 android:id="@+id/textView16"
                 android:textColor="@color/text_gray_black" />
         </LinearLayout>
@@ -185,7 +185,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/list_item_micro"
+        android:layout_height="40dp"
         android:layout_marginTop="2dp"
         android:background="@color/white"
         android:id="@+id/fast_stage">
@@ -212,7 +212,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/list_item_micro"
+        android:layout_height="40dp"
         android:layout_marginTop="2dp"
         android:id="@+id/use_grade"
         android:background="@color/white">

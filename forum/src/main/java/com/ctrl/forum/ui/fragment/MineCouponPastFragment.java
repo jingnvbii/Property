@@ -1,27 +1,33 @@
 package com.ctrl.forum.ui.fragment;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
+import com.beanu.arad.Arad;
+import com.beanu.arad.base.ToolBarFragment;
+import com.beanu.arad.utils.MessageUtils;
 import com.ctrl.forum.R;
-import com.ctrl.forum.entity.Coupon;
+import com.ctrl.forum.base.Constant;
+import com.ctrl.forum.dao.CouponsDao;
+import com.ctrl.forum.entity.Redenvelope;
 import com.ctrl.forum.ui.adapter.MineCouponListAdapter;
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
- * �Ż݄�-�ѹ���
+ * 优惠劵-已过期
  */
-public class MineCouponPastFragment extends Fragment {
-    private List<Coupon> coupons;
-    private ListView lv_content;
+public class MineCouponPastFragment extends ToolBarFragment {
+    private List<Redenvelope> redenvelopes ;
+    private PullToRefreshListView lv_content;
     private MineCouponListAdapter couponListAdapter;
-   // private View view;
+    private CouponsDao cdao;
+    private int PAGE_NUM = 1;
 
     public static MineCouponPastFragment newInstance() {
         MineCouponPastFragment fragment = new MineCouponPastFragment();
@@ -43,27 +49,59 @@ public class MineCouponPastFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_mine_notificationi, container, false);
-        lv_content = (ListView) v.findViewById(R.id.lv_content);
+        View v = inflater.inflate(R.layout.fragment_mine_list, container, false);
+        lv_content = (PullToRefreshListView) v.findViewById(R.id.lv_content);
         initData();
-        //view = LayoutInflater.from(getActivity()).inflate(R.layout.item_hui_past,null);
-        //couponListAdapter = new CouponListAdapter(getActivity(),coupons,view);
-        couponListAdapter = new MineCouponListAdapter(getActivity(),coupons);
-        lv_content.setAdapter(couponListAdapter);
+
+        lv_content.setMode(PullToRefreshBase.Mode.BOTH);
+        lv_content.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
+            @Override
+            public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
+                if (redenvelopes!=null) {
+                    redenvelopes.clear();
+                    PAGE_NUM = 1;}
+                cdao.getMemberRedenvelope("1", "2", Arad.preferences.getString("memberId"), PAGE_NUM + "", Constant.PAGE_SIZE + "");
+            }
+
+            @Override
+            public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
+                if (redenvelopes!=null) {
+                    PAGE_NUM += 1;
+                    cdao.getMemberRedenvelope("1", "2", Arad.preferences.getString("memberId"), Constant.PAGE_NUM + "", Constant.PAGE_SIZE + "");
+                } else {
+                    lv_content.onRefreshComplete();
+                }
+            }
+        });
         return v;
     }
 
-    //��ʼ�����
     private void initData() {
-        coupons = new ArrayList<>();
-        for (int i=0;i<3;i++){
-            Coupon coupon = new Coupon();
-           coupon.setName(i+"");
-            coupons.add(coupon);
-        }
+        cdao = new CouponsDao(this);
+        cdao.getMemberRedenvelope("1", "2", Arad.preferences.getString("memberId"), Constant.PAGE_NUM + "", Constant.PAGE_SIZE + "");
 
+        int resources = R.layout.item_mine_huipast;
+        couponListAdapter = new MineCouponListAdapter(getActivity(),resources);
+        lv_content.setAdapter(couponListAdapter);
     }
 
+    @Override
+    public void onRequestSuccess(int requestCode) {
+        super.onRequestSuccess(requestCode);
+        lv_content.onRefreshComplete();
+        if (requestCode==1){
+            MessageUtils.showShortToast(getActivity(), "获取优惠劵成功");
+            redenvelopes = cdao.getRedenvelopes();
+            if (redenvelopes!=null) {
+                couponListAdapter.setMessages(redenvelopes);
+            }
+        }
+    }
 
-
+    @Override
+    public void onRequestFaild(String errorNo, String errorMessage) {
+        super.onRequestFaild(errorNo, errorMessage);
+        MessageUtils.showShortToast(getActivity(), "获取失败");
+        lv_content.onRefreshComplete();
+    }
 }

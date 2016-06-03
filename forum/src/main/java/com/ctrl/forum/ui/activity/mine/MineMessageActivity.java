@@ -21,7 +21,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 
 /**
- * 消息
+ * 消息通知
  */
 public class MineMessageActivity extends AppToolBarActivity implements View.OnClickListener{
     @InjectView(R.id.text)//文本
@@ -46,11 +46,8 @@ public class MineMessageActivity extends AppToolBarActivity implements View.OnCl
         fl_content.setAdapter(fragmentPagerAdapter);
 
         fl_content.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-
             @Override
             public void onPageSelected(int arg0) {
-
-
                 for (int i = 0; i < text.getChildCount(); i++) {
                     ((TextView) text.getChildAt(i))
                             .setTextColor(getResources().getColor(R.color.text_black1));
@@ -60,22 +57,16 @@ public class MineMessageActivity extends AppToolBarActivity implements View.OnCl
                 ((TextView) text.getChildAt(arg0))
                         .setTextColor(getResources().getColor(R.color.red_bg));
                  lines.getChildAt(arg0).setBackgroundColor(getResources().getColor(R.color.red_bg));
-
             }
 
             @Override
             public void onPageScrolled(int arg0, float arg1, int arg2) {
-
-
             }
 
             @Override
             public void onPageScrollStateChanged(int arg0) {
-
-
             }
         });
-
     }
 
     private void initData() {
@@ -122,7 +113,6 @@ public class MineMessageActivity extends AppToolBarActivity implements View.OnCl
 
     @Override
     public void onClick(View v) {
-
         for (int i = 0; i < text.getChildCount(); i++) {
             ((TextView) text.getChildAt(i)).setTextColor(getResources().getColor(R.color.text_black1));
             lines.getChildAt(i).setBackgroundColor(getResources().getColor(R.color.line_gray));
@@ -130,7 +120,6 @@ public class MineMessageActivity extends AppToolBarActivity implements View.OnCl
 
         ((TextView) v).setTextColor(getResources().getColor(R.color.red_bg));
         (lines.getChildAt(text.indexOfChild(v))).setBackgroundColor(getResources().getColor(R.color.red_bg));
-
 
         fl_content.setCurrentItem(text.indexOfChild(v));
     }

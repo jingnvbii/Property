@@ -67,8 +67,8 @@ public class JsonUtil {
         return objectMapper.readTree(jsonAsString);
     }
 
-    public static JsonNode json2node(InputStream istream) throws JsonProcessingException, IOException {
-        return objectMapper.readTree(istream);
+    public static JsonNode json2node(JsonNode istream) throws JsonProcessingException, IOException {
+        return objectMapper.readTree(String.valueOf(istream));
     }
 
     public static JsonNode json2node(Reader reader) throws JsonProcessingException, IOException {

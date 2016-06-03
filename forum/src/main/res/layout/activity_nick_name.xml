@@ -12,7 +12,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="35dp"
-        android:text="昵称(9/30)"
+        android:text="昵称(4/11)"
         android:textSize="20sp"
         android:layout_marginLeft="10dp"
         android:gravity="center_vertical"
@@ -39,7 +39,7 @@
         android:textColorHint="@color/text_black"
         android:textSize="20sp"
         android:ems="30"
-        android:maxLength="30"
+        android:maxLength="11"
         android:textColor="@color/black"/>
     </LinearLayout>
     <TextView

@@ -14,6 +14,7 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="180dp"
+        android:scaleType="fitXY"
         android:id="@+id/iv_shop_pic"
          />
 
@@ -26,7 +27,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/list_item_micro"
+        android:layout_height="45dp"
         android:background="@color/white">
 
         <TextView
@@ -56,7 +57,6 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/ctrl"
             android:id="@+id/tv_name"
             android:textSize="@dimen/text_size_basic"
             android:textColor="@color/rim_gray"
@@ -75,7 +75,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/list_item_micro"
+        android:layout_height="45dp"
         android:id="@+id/rl_address"
         android:background="@color/white">
 
@@ -94,7 +94,6 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/detail_address"
             android:id="@+id/tv_detail_address"
             android:textSize="@dimen/text_size_basic"
             android:textColor="@color/rim_gray"
@@ -114,9 +113,12 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/imageView14"
+            android:id="@+id/iv_map"
             android:src="@mipmap/iconfont_weizhi_red"
-            android:layout_marginRight="@dimen/margin_left_and_right"
+            android:paddingLeft="@dimen/margin_left_and_right"
+            android:paddingRight="@dimen/margin_left_and_right"
+            android:paddingBottom="@dimen/margin_left_and_right"
+            android:paddingTop="@dimen/margin_left_and_right"
             android:layout_centerVertical="true"
             android:layout_toLeftOf="@+id/imageView13"
             android:layout_toStartOf="@+id/imageView13" />
@@ -130,7 +132,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/list_item_micro"
+        android:layout_height="45dp"
         android:background="@color/white">
 
         <TextView
@@ -165,7 +167,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/list_item_micro"
+        android:layout_height="45dp"
         android:background="@color/white">
 
         <TextView
@@ -183,7 +185,6 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/rim_phone_num"
             android:id="@+id/tv_phone"
             android:textSize="@dimen/text_size_basic"
             android:textColor="@color/rim_gray"
@@ -195,7 +196,10 @@
             android:layout_height="wrap_content"
             android:id="@+id/iv_phone"
             android:src="@mipmap/phone_red"
-            android:layout_marginRight="@dimen/margin_left_and_right"
+            android:paddingRight="20dp"
+            android:paddingLeft="@dimen/margin_left_and_right"
+            android:paddingBottom="@dimen/margin_left_and_right"
+            android:paddingTop="@dimen/margin_left_and_right"
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true" />
@@ -209,7 +213,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/list_item_micro"
+        android:layout_height="45dp"
         android:background="@color/white"
         android:id="@+id/hot_pl">
 
@@ -248,7 +252,6 @@
         android:id="@+id/tv_collect"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/collect"
         android:textColor="@color/text_white"
         android:background="@color/detail_button"
         android:gravity="center"

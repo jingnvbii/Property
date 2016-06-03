@@ -9,8 +9,13 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.beanu.arad.Arad;
+import com.beanu.arad.utils.MessageUtils;
 import com.ctrl.forum.R;
 import com.ctrl.forum.base.AppToolBarActivity;
+import com.ctrl.forum.base.Constant;
+import com.ctrl.forum.dao.CouponsDao;
+import com.ctrl.forum.entity.Count;
 import com.ctrl.forum.ui.fragment.MineCouponFragment;
 import com.ctrl.forum.ui.fragment.MineCouponPastFragment;
 import com.ctrl.forum.ui.fragment.MineCouponUseFragment;
@@ -22,21 +27,29 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 
 /**
- * �Ż݄�
+ * 优惠劵
  */
 public class MineYouJuanActivity extends AppToolBarActivity {
-    @InjectView(R.id.text)//�ı�
+    @InjectView(R.id.text)
             LinearLayout text;
-    @InjectView(R.id.fl_content)//����
+    @InjectView(R.id.fl_content)
             ViewPager fl_content;
-    @InjectView(R.id.lines)//�»���
+    @InjectView(R.id.lines)
             LinearLayout lines;
+    @InjectView(R.id.tv_wei)
+    TextView tv_wei;
+    @InjectView(R.id.tv_yi)
+    TextView tv_yi;
+    @InjectView(R.id.tv_past)
+    TextView tv_past;
 
     private FragmentPagerAdapter fragmentPagerAdapter;
-    private MineCouponFragment couponFragment;//δʹ���Ż݄�
-    private MineCouponUseFragment couponUseFragment; //��ʹ���Ż݄�
-    private MineCouponPastFragment couponPastFragment;//�ѹ����Ż݄�
+    private MineCouponFragment couponFragment;
+    private MineCouponUseFragment couponUseFragment;
+    private MineCouponPastFragment couponPastFragment;
     private List<Fragment> fragments;
+    private CouponsDao cdao;
+    private String wei,yi,past;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,17 +61,13 @@ public class MineYouJuanActivity extends AppToolBarActivity {
         fl_content.setAdapter(fragmentPagerAdapter);
 
         fl_content.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-
             @Override
             public void onPageSelected(int arg0) {
-
-
                 for (int i = 0; i < text.getChildCount(); i++) {
                     ((TextView) text.getChildAt(i))
                             .setTextColor(getResources().getColor(R.color.text_black1));
                     lines.getChildAt(i).setBackgroundColor(getResources().getColor(R.color.line_gray));
                 }
-
                 ((TextView) text.getChildAt(arg0))
                         .setTextColor(getResources().getColor(R.color.red_bg));
                 lines.getChildAt(arg0).setBackgroundColor(getResources().getColor(R.color.red_bg));
@@ -66,14 +75,10 @@ public class MineYouJuanActivity extends AppToolBarActivity {
 
             @Override
             public void onPageScrolled(int arg0, float arg1, int arg2) {
-
-
             }
 
             @Override
             public void onPageScrollStateChanged(int arg0) {
-
-
             }
         });
     }
@@ -89,6 +94,9 @@ public class MineYouJuanActivity extends AppToolBarActivity {
         ((TextView) text.getChildAt(0))
                 .setTextColor(getResources().getColor(R.color.red_bg));
         lines.getChildAt(0).setBackgroundColor(getResources().getColor(R.color.red_bg));
+
+        cdao = new CouponsDao(this);
+        cdao.getMemberRedenvelope("0","", Arad.preferences.getString("memberId"), Constant.PAGE_NUM+"", Constant.PAGE_SIZE+"");
     }
 
     private void initCtrl() {
@@ -121,7 +129,6 @@ public class MineYouJuanActivity extends AppToolBarActivity {
     public String setupToolBarTitle() {return getResources().getString(R.string.you_hui);}
 
     public void onClick(View v) {
-
         for (int i = 0; i < text.getChildCount(); i++) {
             ((TextView) text.getChildAt(i)).setTextColor(getResources().getColor(R.color.text_black1));
             lines.getChildAt(i).setBackgroundColor(getResources().getColor(R.color.line_gray));
@@ -132,5 +139,21 @@ public class MineYouJuanActivity extends AppToolBarActivity {
 
 
         fl_content.setCurrentItem(text.indexOfChild(v));
+    }
+
+    @Override
+    public void onRequestSuccess(int requestCode) {
+        super.onRequestSuccess(requestCode);
+        if (requestCode==1){
+            Count count = cdao.getCount();
+            wei = count.getNotUsed();
+            yi = count.getUsed();
+            past = count.getExpired();
+            MessageUtils.showShortToast(this, past);
+
+            tv_wei.setText("未使用("+wei+")");
+            tv_yi.setText("已使用("+yi+")");
+            tv_past.setText("已过期("+past+")");
+        }
     }
 }

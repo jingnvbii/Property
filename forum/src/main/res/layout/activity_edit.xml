@@ -15,10 +15,10 @@
         android:id="@+id/update_head"
         android:background="@color/white"
         android:layout_width="match_parent"
-        android:layout_height="75dp">
+        android:layout_height="65dp">
         <com.ctrl.forum.customview.MineHeadView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:id="@+id/iv_head"
             android:src="@mipmap/iconfont_head"
             android:layout_centerVertical="true"
@@ -48,12 +48,12 @@
 
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="30dp"
+        android:layout_height="20dp"
         android:textColor="@color/main_bg" />
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="55dp"
+        android:layout_height="50dp"
         android:id="@+id/rl_ni"
         android:background="@color/white">
         <TextView
@@ -95,7 +95,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="55dp"
+        android:layout_height="50dp"
         android:id="@+id/rl_jianjie"
         android:background="@color/white">
         <TextView
@@ -136,7 +136,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="55dp"
+        android:layout_height="50dp"
         android:id="@+id/rl_phone"
         android:background="@color/white">
         <TextView
@@ -177,7 +177,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="55dp"
+        android:layout_height="50dp"
         android:background="@color/white"
         android:id="@+id/rl_xiaoqu">
         <TextView
@@ -218,7 +218,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="55dp"
+        android:layout_height="50dp"
         android:id="@+id/rl_pwd"
         android:background="@color/white">
         <TextView

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+
+
+    <TextView
+        android:textColor="@color/defaultTextColor"
+        android:layout_width="wrap_content"
+        android:textSize="@dimen/text_size_basic"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView46" />
+
+    <com.ctrl.forum.customview.StorkPicView
+        android:layout_width="97dp"
+        android:layout_height="68dp"
+        android:id="@+id/iv_right_pic"
+        android:src="@mipmap/fuzhuang"
+        android:scaleType="fitXY"
+        android:layout_marginRight="@dimen/margin_left_and_right"
+        android:layout_marginTop="@dimen/margin_left_and_right"
+        android:layout_marginLeft="@dimen/margin_left_and_right"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/store_name"
+        android:textSize="@dimen/text_size_basic"
+        android:textColor="#333"
+        android:id="@+id/tv_store_name"
+        android:layout_alignTop="@+id/iv_right_pic"
+        android:layout_toRightOf="@+id/iv_right_pic"
+        android:layout_toEndOf="@+id/iv_right_pic" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="月销量:"
+        android:textColor="@color/defaultTextColor"
+        android:textSize="14sp"
+        android:layout_marginTop="6dp"
+        android:id="@+id/textView27"
+        android:layout_below="@+id/tv_store_name"
+        android:layout_toRightOf="@+id/iv_right_pic"
+        android:layout_toEndOf="@+id/iv_right_pic" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="100"
+        android:textColor="@color/defaultTextColor"
+        android:textSize="14sp"
+        android:id="@+id/tv_sale_num"
+        android:layout_alignBottom="@+id/textView27"
+        android:layout_toRightOf="@+id/textView27"
+        android:layout_toEndOf="@+id/textView27" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="165元/份"
+        android:layout_marginTop="6dp"
+        android:textColor="@color/red_bg"
+        android:textSize="14sp"
+        android:id="@+id/tv_dan_price"
+        android:layout_below="@+id/textView27"
+        android:layout_toRightOf="@+id/iv_right_pic"
+        android:layout_toEndOf="@+id/iv_right_pic"
+        android:layout_marginBottom="@dimen/margin_left_and_right"/>
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/iv_checkBox"
+        android:layout_marginTop="30dp"
+        android:layout_marginRight="@dimen/margin_left_and_right"
+        android:button="@null"
+        android:background="@drawable/setting_select"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+</RelativeLayout>

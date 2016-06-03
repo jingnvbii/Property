@@ -113,7 +113,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="2dp"
-        android:textColor="@color/line_gray"
+        android:background="@color/line_gray"
         android:id="@+id/textView25"
         android:layout_below="@+id/tv_content"
         android:layout_alignLeft="@+id/tv_content"
@@ -129,10 +129,11 @@
         android:textColor="@color/text_white"
         android:textSize="@dimen/text_size_basic"
         android:id="@+id/buy_again"
+        android:layout_marginTop="10dp"
         android:layout_below="@+id/textView25"
         android:layout_alignRight="@+id/textView25"
         android:layout_alignEnd="@+id/textView25"
-        android:layout_marginBottom="5dp"
+        android:layout_marginBottom="10dp"
         android:layout_marginRight="@dimen/text_size_basic"/>
 
     <Button
@@ -144,6 +145,7 @@
         android:textColor="@color/text_white"
         android:textSize="@dimen/text_size_basic"
         android:layout_below="@+id/textView25"
+        android:layout_marginTop="10dp"
         android:layout_marginRight="@dimen/margin_left_and_right"
         android:layout_toLeftOf="@+id/buy_again"
         android:layout_toStartOf="@+id/buy_again"

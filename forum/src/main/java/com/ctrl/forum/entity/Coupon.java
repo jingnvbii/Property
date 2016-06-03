@@ -1,33 +1,46 @@
 package com.ctrl.forum.entity;
 
 /**
- * �Ż݄�
+ * 现金劵
  * Created by Administrator on 2016/5/3.
  */
 public class Coupon {
-    private String name;//�Ż݄����̵���
-    private String price;//�۸�
-    private String limit;//ʹ������
-    private String time;//ʱ��
-    private String man;//����ٿ�ʹ��
+    private String id;//现金劵id
+    private String companyId;//商铺id
+    private String name;//现金劵名称
+    private String remark;//现金劵标注
+    private String validityStartTime;//使用起始时间
+    private String validityEndTime;//使用终止时间
+    private String amount;//现金劵金额
+    private String useType;//使用方式（0：使用核销、1：分享核销）
+    private String useState;//使用状态（0：未使用、1：已使用、2：已过期）
+
 
     public Coupon() {
     }
 
-    public String getMan() {
-        return man;
+    public String getAmount() {
+        return amount;
     }
 
-    public void setMan(String man) {
-        this.man = man;
+    public void setAmount(String amount) {
+        this.amount = amount;
     }
 
-    public String getLimit() {
-        return limit;
+    public String getCompanyId() {
+        return companyId;
     }
 
-    public void setLimit(String limit) {
-        this.limit = limit;
+    public void setCompanyId(String companyId) {
+        this.companyId = companyId;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -38,19 +51,44 @@ public class Coupon {
         this.name = name;
     }
 
-    public String getPrice() {
-        return price;
+    public String getRemark() {
+        return remark;
     }
 
-    public void setPrice(String price) {
-        this.price = price;
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 
-    public String getTime() {
-        return time;
+    public String getUseState() {
+        return useState;
     }
 
-    public void setTime(String time) {
-        this.time = time;
+    public void setUseState(String useState) {
+        this.useState = useState;
     }
+
+    public String getUseType() {
+        return useType;
+    }
+
+    public void setUseType(String useType) {
+        this.useType = useType;
+    }
+
+    public String getValidityEndTime() {
+        return validityEndTime;
+    }
+
+    public void setValidityEndTime(String validityEndTime) {
+        this.validityEndTime = validityEndTime;
+    }
+
+    public String getValidityStartTime() {
+        return validityStartTime;
+    }
+
+    public void setValidityStartTime(String validityStartTime) {
+        this.validityStartTime = validityStartTime;
+    }
+
 }

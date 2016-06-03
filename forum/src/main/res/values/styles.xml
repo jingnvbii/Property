@@ -62,9 +62,11 @@
         <item name="android:maxHeight">16dp</item>
     </style>
 
-    <!--自定义评分样式-->
+    <!--自定义等级进度条-->
     <style name="roomProgressBar" parent="@android:style/Widget.ProgressBar.Horizontal">
         <item name="android:progressDrawable">@drawable/room_progress_bar</item>
+        <item name="android:minHeight">18dp</item>
+        <item name="android:maxHeight">18dp</item>
     </style>
 
 
