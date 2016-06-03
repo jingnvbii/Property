@@ -7,6 +7,7 @@ import com.lidroid.xutils.DbUtils;
 import com.lidroid.xutils.db.sqlite.Selector;
 import com.lidroid.xutils.exception.DbException;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,7 +18,9 @@ public class OperateGoodsDataBaseStatic{
     /**
      *添加和删除商品数量
      */
-    public static int saveGoodsNumber(Context context, int menupos, int goodsid, String goodsnum , String goodsprice) {
+    public static int saveGoodsNumber(Context context, int menupos, String
+
+            goodsid, String goodsnum , float goodsprice,String name,String stock) {
         DbUtils utils = DbUtils.create(context);
         GoodsBean goodsBean = null;
         goodsBean =new GoodsBean();
@@ -25,6 +28,8 @@ public class OperateGoodsDataBaseStatic{
         goodsBean.setGoodsid(goodsid);
         goodsBean.setGoodsnum(goodsnum);
         goodsBean.setGoodsprice(goodsprice);
+        goodsBean.setGoodsname(name);
+        goodsBean.setStock(stock);
         try {
             GoodsBean bean = utils.findFirst(Selector.from(GoodsBean.class).where("menupos" , "=" , menupos).and("goodsid", "=", goodsid));
             //如果有这条数据，数量直接加1；否则就插入表里面
@@ -46,7 +51,7 @@ public class OperateGoodsDataBaseStatic{
         return 0;
     }
     /**修改数量，直接传入数量**/
-    public static int updateNum(Context context , int menupos , int goodsid , String goodsnum){
+    public static int updateNum(Context context , int menupos , String goodsid , String goodsnum){
         DbUtils	utils = DbUtils.create(context);
         try {
             GoodsBean bean = utils.findFirst(Selector.from(GoodsBean.class).where("menupos", "=", menupos).and("goodsid", "=", goodsid));
@@ -63,7 +68,7 @@ public class OperateGoodsDataBaseStatic{
     /**
      *根据下标得到 第二级对应购物的数量
      */
-    public static int getSecondGoodsNumber(Context context , int menupos , int goodsid) {
+    public static int getSecondGoodsNumber(Context context , int menupos , String goodsid) {
         DbUtils	utils = DbUtils.create(context);
         if(utils == null){
             Log.e("TAG" , "还没有该数据库");
@@ -131,9 +136,10 @@ public class OperateGoodsDataBaseStatic{
     /**
      *据第一级的下标 得到第二级的所有购物的价格
      */
-    public static int getSecondGoodsPriceAll(Context context, int menupos) {
+    public static float getSecondGoodsPriceAll(Context context, int menupos) {
         DbUtils	utils = DbUtils.create(context);
-        int mSecondGoodsPrice = 0;
+        float mSecondGoodsPrice = 0;
+        float   f1=0;
         ArrayList<GoodsBean> mGoodsBeanList = null;
         mGoodsBeanList = getSecondGoodsTypeList(context);
         if(mGoodsBeanList == null){
@@ -142,13 +148,19 @@ public class OperateGoodsDataBaseStatic{
         }
         for(int i = 0 ; i < mGoodsBeanList.size(); i++){
             if(mGoodsBeanList.get(i).getMenupos() == menupos){
-                mSecondGoodsPrice += Integer.parseInt(mGoodsBeanList.get(i).getGoodsnum()) * Integer.parseInt(mGoodsBeanList.get(i).getGoodsprice());
+                float goodsPrice=mGoodsBeanList.get(i).getGoodsprice();
+             //  float price=Float.parseFloat(goodsPrice);
+             //   mSecondGoodsPrice += Integer.parseInt(mGoodsBeanList.get(i).getGoodsnum()) * goodsPrice;
+                mSecondGoodsPrice += Integer.parseInt(mGoodsBeanList.get(i).getGoodsnum()) * goodsPrice;
+                //保留两位小数
+                BigDecimal b  =   new BigDecimal(mSecondGoodsPrice);
+               f1   =  b.setScale(2, BigDecimal.ROUND_HALF_UP).floatValue();
             }
         }
         Log.e("TAG" , "根据第一级的下标 得到第二级的所有购物的价格成功：" + mSecondGoodsPrice);
         utils.close();
         Log.e("TAG" , "根据第一级的下标 得到第二级的所有购物的价格失败");
-        return mSecondGoodsPrice;
+        return f1;
     }
     /**
      *删除所有的购物数据

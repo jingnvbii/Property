@@ -11,6 +11,7 @@ import com.ctrl.forum.entity.Category;
 import com.ctrl.forum.entity.CategoryItem;
 import com.ctrl.forum.entity.MemberInfo;
 import com.ctrl.forum.entity.Notice;
+import com.ctrl.forum.entity.NoticeImage;
 import com.ctrl.forum.entity.Post;
 import com.ctrl.forum.entity.Post2;
 import com.ctrl.forum.entity.PostDrafts;
@@ -21,6 +22,10 @@ import com.ctrl.forum.entity.PostReply2;
 import com.ctrl.forum.entity.Recommend;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -54,6 +59,10 @@ public class InvitationDao extends IDao {
     private List<PostDrafts> listPostDrafts = new ArrayList<>();//草稿箱帖子列表
     private List<CategoryItem> listCategroyItem = new ArrayList<>();//帖子分类级联列表
     private Post2 post2;
+    private List <Post>listRelateMap=new ArrayList<>();//关联帖子列表
+    private List <NoticeImage>listNoticeImage=new ArrayList<>();//帖子公告图片
+    private NoticeImage noticeImage;
+    //  private ArrayList<PostImage> list=new ArrayList<>();
 
 
     public InvitationDao(INetResult activity){
@@ -73,15 +82,17 @@ public class InvitationDao extends IDao {
      * @param reporterId //发帖人id（会员id）
      * @param categoryId //帖子分类id
      * @param categoryType //分类类型（0：广场帖子、1：小区帖子）
+     * @param keyword //搜索关键字
      * @param pageNum   //当前页码
      * @param pageSize  //每页条数
      * */
-    public void requestPostListByCategory(String reporterId,String categoryId,String categoryType,int pageNum,int pageSize){
+    public void requestPostListByCategory(String reporterId,String categoryId,String categoryType,String keyword,int pageNum,int pageSize){
         String url="post/queryPostListByCategory";
         Map<String,String> map = new HashMap<String,String>();
         map.put("reporterId",reporterId);
         map.put("categoryId",categoryId);
         map.put("categoryType",categoryType);
+        map.put("keyword",keyword);
         map.put("pageNum",String.valueOf(pageNum));
         map.put("pageSize",String.valueOf(pageSize));
 
@@ -94,22 +105,24 @@ public class InvitationDao extends IDao {
      * @param categoryType //分类类型（0：广场帖子分类、1：小区帖子分类、2：小区周边服务分类、3：周边服务分类）
      * */
     public void requesPostCategory(String id,String grade,String categoryType){
+        String url="post/getPostCategory";
         Map<String,String> map = new HashMap<String,String>();
-        map.put(Constant.METHOD,"post/queryPostListByCategory");//方法名称
         map.put("id",id);
         map.put("grade",grade);
         map.put("categoryType",categoryType);
 
-        postRequest(Constant.RAW_URL, mapToRP(map), 2);
+        postRequest(Constant.RAW_URL+url, mapToRP(map), 2);
     }
     /**
      * 获取帖子详情
-     * @param id //当前目录id
-     * */
-    public void requesPostDetail(String id){
+    * @param id //当前目录id
+    * @param zambiaID //用户id
+    * */
+    public void requesPostDetail(String id,String zambiaID){
         String url="/post/getPort";
         Map<String,String> map = new HashMap<String,String>();
         map.put("id",id);
+        map.put("zambiaID",zambiaID);
         postRequest(Constant.RAW_URL + url, mapToRP(map), 3);
     }
     /**
@@ -131,14 +144,14 @@ public class InvitationDao extends IDao {
      * @param pageSize //每页条数
      * */
     public void requesPostReplyList(String postId,String timeSortType,String pageNum,String pageSize){
+        String url="postReply/obtainPostReplyList";
         Map<String,String> map = new HashMap<String,String>();
-        map.put(Constant.METHOD,"postReply/obtainPostReplyList");//方法名称
         map.put("postId",postId);
         map.put("timeSortType",timeSortType);
         map.put("pageNum",pageNum);
         map.put("pageSize",pageSize);
 
-        postRequest(Constant.RAW_URL, mapToRP(map),5);
+        postRequest(Constant.RAW_URL+url, mapToRP(map),5);
     }
     /**
      * 编辑帖子
@@ -215,6 +228,7 @@ public class InvitationDao extends IDao {
      * @param locationLatitude //发帖位置_纬度
      * @param locationName //位置名称
      * @param postImgStr //帖子图片串:(跟帖子图片一一对应,之间用逗号分隔)
+     * @param thumbImgPostPicStr //帖子缩略图片串:(url之间用逗号分隔)
      * */
     public void requesReleasePost(String reporterId,
                                  String categoryId,
@@ -230,7 +244,8 @@ public class InvitationDao extends IDao {
                                  String locationLongitude,
                                  String locationLatitude,
                                  String locationName,
-                                 String postImgStr
+                                 String postImgStr,
+                                 String thumbImgPostPicStr
     ){
         String url="post/reportPost";
         Map<String,String> map = new HashMap<String,String>();
@@ -249,6 +264,7 @@ public class InvitationDao extends IDao {
         map.put("locationLatitude",locationLatitude);
         map.put("locationName",locationName);
         map.put("postImgStr",postImgStr);
+        map.put("thumbImgPostPicStr",thumbImgPostPicStr);
 
         postRequest(Constant.RAW_URL+url, mapToRP(map),7);
     }
@@ -283,12 +299,12 @@ public class InvitationDao extends IDao {
      * @param personId //被拉黑用户ID
      * */
     public void requeMemberBlackListAdd(String memberId,String personId){
+        String url="memberBlackList/memberBlackListAdd";
         Map<String,String> map = new HashMap<String,String>();
-        map.put(Constant.METHOD,"MemberBlackList/MemberBlackListAdd");//方法名称
         map.put("memberId",memberId);
         map.put("personId",personId);
 
-        postRequest(Constant.RAW_URL, mapToRP(map),10);
+        postRequest(Constant.RAW_URL+url, mapToRP(map),10);
     }
     /**
      *对帖子进行举报接口
@@ -298,14 +314,14 @@ public class InvitationDao extends IDao {
      * @param createBy //举报人ID
      * */
     public void requePostReport(String postId,String remark,String reporterId,String createBy){
+        String url="postReport/postReportAdd";
         Map<String,String> map = new HashMap<String,String>();
-        map.put(Constant.METHOD,"postReport/postReportAdd");//方法名称
         map.put("postId",postId);
         map.put("remark",remark);
         map.put("reporterId",reporterId);
         map.put("createBy",createBy);
 
-        postRequest(Constant.RAW_URL, mapToRP(map),11);
+        postRequest(Constant.RAW_URL+url, mapToRP(map),11);
     }
 
 
@@ -335,17 +351,129 @@ public class InvitationDao extends IDao {
 
         postRequest(Constant.RAW_URL+url, mapToRP(map),13);
     }
+    /**
+     *设置点赞/取消点赞
+     * @param zambiaType //add是点赞reduce是取消赞
+     * @param id //帖子id
+     * @param zambiaID//当前操作用户id
+     * */
+    public void requesZambia(String zambiaType,String id,String zambiaID){
+        String url="post/Zambia";
+        Map<String,String> map = new HashMap<String,String>();
+        map.put("zambiaType",zambiaType);
+        map.put("id",id);
+        map.put("zambiaID",zambiaID
+        );
+
+        postRequest(Constant.RAW_URL+url, mapToRP(map),14);
+    }
+    /**
+     *对帖子进行回复
+     注：1、内容类型为“0：文字或者表情”时，帖子内容不能为空。为“1：图片”时，
+     回复原图Url串和回复缩略图Url串均不能为空。为“2：语音”时，语音文件Url不能为空。
+     2、直接对帖子回复时，帖子id、回复者id和回复内容类型为必须项。
+     对评论进行回复时候，评论id、被回复者id、被回复者所在楼层均不可为空。
+     *
+     * @param postId //帖子id
+     * @param reporterId //帖子发布者id
+     * @param pid //评论id
+     * @param memberId //回复者id
+     * @param contentType //内容类型（0：文字或者表情、1：图片、2：语音）
+     * @param replyContent //回复内容（文本和表情）
+     * @param soundUrl //语音文件Url
+     * @param receiverId //被回复者id
+     * @param receiverFloor //被回复者所在楼层
+     * @param replyImgStr //回复原图Url（多个Url逗号分隔存放）
+     * @param replyThumbImgStr //回复缩略图Url（多个Url逗号分隔存放）
+     * */
+    public void requestReplyPost(String postId,
+                                String reporterId,
+                                String pid,
+                                String memberId,
+                                String contentType,
+                                String replyContent,
+                                String soundUrl,
+                                String receiverId,
+                                String receiverFloor,
+                                String replyImgStr,
+                                String replyThumbImgStr){
+        String url="postReply/replyPost";
+        Map<String,String> map = new HashMap<String,String>();
+        map.put("postId",postId);
+        map.put("reporterId",reporterId);
+        map.put("pid",pid);
+        map.put("memberId",memberId);
+        map.put("contentType",contentType);
+        map.put("replyContent",replyContent);
+        map.put("soundUrl",soundUrl);
+        map.put("receiverId",receiverId);
+        map.put("receiverFloor",receiverFloor);
+        map.put("replyImgStr",replyImgStr);
+        map.put("replyThumbImgStr",replyThumbImgStr);
+
+        postRequest(Constant.RAW_URL+url, mapToRP(map),15);
+    }
+
+    /**
+     *收藏帖子
+     * @param memberId //会员id
+     * @param targerId //帖子id
+     * @param osType //收藏来源（0：未知、1：Android、2：IOS、3：WEB）
+     * */
+    public void requestCollectPost(String memberId,String targerId,String osType){
+        String url="memberCollection/collectPost";
+        Map<String,String> map = new HashMap<String,String>();
+        map.put("memberId",memberId);
+        map.put("targerId",targerId);
+        map.put("osType",osType);
+
+        postRequest(Constant.RAW_URL+url, mapToRP(map),16);
+    }
+    /**
+     *取消收藏帖子
+     * @param memberId //会员id
+     * @param targerId //帖子id
+     * */
+    public void requestDeleteCollectPost(String memberId,String targerId){
+        String url="memberCollection/deleteCollectionPost";
+        Map<String,String> map = new HashMap<String,String>();
+        map.put("memberId",memberId);
+        map.put("targerId",targerId);
+
+        postRequest(Constant.RAW_URL+url, mapToRP(map),17);
+    }
+
+
+    /**
+     *获取我的评论
+     * @param memberId //会员id
+     * @param pageNum //当前页码
+     * @param pageSize //每页条数
+     * */
+    public void requestObtainMyReplyList(String memberId,String pageNum,String pageSize){
+        String url="postReply/obtainMyReplyList";
+        Map<String,String> map = new HashMap<String,String>();
+        map.put("memberId",memberId);
+        map.put("pageNum",pageNum);
+        map.put("pageSize",pageSize);
+
+        postRequest(Constant.RAW_URL+url, mapToRP(map),18);
+    }
+
+
+
 
 
 
     @Override
-    public void onRequestSuccess(JsonNode result, int requestCode) throws IOException {
+    public void onRequestSuccess(JsonNode result, int requestCode) throws IOException{
         if(requestCode == 0){
             Log.d("demo", "dao中结果集(帖子初始化返回): " + result);
             listBanner = JsonUtil.node2pojoList(result.findValue("rotatingBannerList"), Banner.class);
             listPostKind = JsonUtil.node2pojoList(result.findValue("postCategoryList"), PostKind.class);
             listRecommend = JsonUtil.node2pojoList(result.findValue("recommendItemList"), Recommend.class);
             listNotice = JsonUtil.node2pojoList(result.findValue("noticeList"), Notice.class);
+            listNoticeImage=JsonUtil.node2pojoList(result.findValue("noticeImgList"), NoticeImage.class);
         }
 
         if(requestCode == 1){
@@ -360,31 +488,53 @@ public class InvitationDao extends IDao {
         }
         if(requestCode == 2){
             Log.d("demo","dao中结果集(获取帖子分类列表): " + result);
-            listCategory = JsonUtil.node2pojoList(result.findValue("category"), Category.class);
+            List<Category> data = JsonUtil.node2pojo(result.findValue("category"), new TypeReference<List<Category>>() {
+            });
+            listCategory.addAll(data);
         }
         if(requestCode == 3){
-            Log.d("demo","dao中结果集(获取帖子详情): " + result);
-           // post=JsonUtil.node2pojo(result.findValue("post"),Post.class);
+            String json = JsonUtil.node2json(result);
+            JSONObject object= null;
+            try {
+                object = new JSONObject(json);
+                JSONObject personObject = object.getJSONObject("data");
+
+            // 返回json的数组
+            JSONArray jsonArray = personObject.getJSONArray("postImgList");
+
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject jsonObject2 = jsonArray.getJSONObject(i);
+                PostImage person = new PostImage();
+                person.setId(jsonObject2.getString("id"));
+                person.setImg(jsonObject2.getString("img"));
+                person.setThumbImg(jsonObject2.getString("thumbImg"));
+                person.setTargetId(jsonObject2.getString("targetId"));
+
+                listPostImage.add(person);
+            }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
             userInfo=JsonUtil.node2pojo(result.findValue("user"), MemberInfo.class);
-          //  listPostImage = JsonUtil.node2pojoList(result.findValue("postImgList"), PostImage.class);
-            listPost = JsonUtil.node2pojoList(result.findValue("rtuRelatedPost"), Post.class);
-            listMemberInfo = JsonUtil.node2pojoList(result.findValue("Relateduser"), MemberInfo.class);
-            listRelatePostImage = JsonUtil.node2pojoList(result.findValue("RelatedpostImgList"), PostImage.class);
-           post2 = JsonUtil.node2pojo(result.findValue("post"),new TypeReference<Post2>(){});
+            List<Post> data = JsonUtil.node2pojo(result.findValue("relatedMap"), new TypeReference<List<Post>>() {
+            });
+            listRelateMap.addAll(data);
+            post2=JsonUtil.node2pojo(result.findValue("post"), Post2.class);
 
         }
 
         if(requestCode == 4){
             Log.d("demo","dao中结果集(获取当前频道下所有帖子列表分类): " + result);
-           // listCategory = JsonUtil.node2pojoList(result.findValue("category"), Category.class);//可能有问题
-
             List<Category> data = JsonUtil.node2pojo(result.findValue("category"),new TypeReference<List<Category>>(){});
             listCategory.addAll(data);
         }
         if(requestCode == 5){
             Log.d("demo","dao中结果集(获取帖子评论列表): " + result);
-            listPostReply2 = JsonUtil.node2pojoList(result.findValue("postReplyList"), PostReply2.class);
-            listPostImage = JsonUtil.node2pojoList(result.findValue("postReplyImgList"), PostImage.class);
+            List<PostReply2> data = JsonUtil.node2pojo(result.findValue("postReplyList"), new TypeReference<List<PostReply2>>() {
+            });
+            listPostReply2.addAll(data);
+           // listPostImage = JsonUtil.node2pojoList(result.findValue("postReplyImgList"), PostImage.class);
         }
         if(requestCode == 9){
             Log.d("demo","dao中结果集(获取草稿箱帖子列表接口): " + result);
@@ -397,6 +547,10 @@ public class InvitationDao extends IDao {
         if(requestCode == 13){
             Log.d("demo","dao中结果集(获取帖子分类级联列表接口): " + result);
             listCategroyItem = JsonUtil.node2pojoList(result.findValue("itemCategoryList"), CategoryItem.class);
+        }
+        if (requestCode == 18){
+            Log.d("demo","dao中结果集(获取我的评论列表接口): " + result);
+
         }
 
 
@@ -453,4 +607,15 @@ public class InvitationDao extends IDao {
         return userInfo;
     }
 
+    public List<Post> getListRelateMap() {
+        return listRelateMap;
+    }
+
+    public NoticeImage getNoticeImage() {
+        return noticeImage;
+    }
+
+    public List<NoticeImage> getListNoticeImage() {
+        return listNoticeImage;
+    }
 }

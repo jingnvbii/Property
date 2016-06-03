@@ -79,6 +79,7 @@ public class MainActivity extends AppToolBarActivity implements View.OnClickList
 
     }
 
+
     /**
      * 根据传入的index参数来设置选中的tab页。
      *

@@ -9,7 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ctrl.forum.R;
-import com.ctrl.forum.entity.Kind;
+import com.ctrl.forum.entity.MallKind;
 
 import java.util.List;
 
@@ -17,18 +17,18 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 
 /**
- * 帖子一级分类  adapter
+ * 商城一级分类  adapter
  * Created by jason on 2016/4/8.
  */
 public class StoreGridViewAdapter extends BaseAdapter{
     private Context mcontext;
-    private List<Kind>kindList;
+    private List<MallKind>kindList;
 
     public StoreGridViewAdapter(Context context) {
                this.mcontext=context;
     }
 
-    public void setList(List<Kind> list) {
+    public void setList(List<MallKind> list) {
         this.kindList = list;
         notifyDataSetChanged();
     }
@@ -53,14 +53,14 @@ public class StoreGridViewAdapter extends BaseAdapter{
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder=null;
         if(convertView==null){
-            convertView= LayoutInflater.from(mcontext).inflate(R.layout.gridview_invitation_item,parent,false);
+            convertView= LayoutInflater.from(mcontext).inflate(R.layout.gridview_store_item,parent,false);
             holder=new ViewHolder(convertView);
             convertView.setTag(holder);
         }else {
             holder=(ViewHolder)convertView.getTag();
         }
-        Kind kind=kindList.get(position);
-        holder.tv_grid_item.setText(kind.getKindName());
+        MallKind kind=kindList.get(position);
+        holder.tv_grid_item.setText(kind.getName());
         return convertView;
     }
 

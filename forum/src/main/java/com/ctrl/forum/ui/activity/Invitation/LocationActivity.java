@@ -55,9 +55,6 @@ public class LocationActivity extends AppToolBarActivity implements View.OnClick
             EditText et_search;
 
 
-    // public LocationClient mLocationClient = null;
-    //  public BDLocationListener myListener = new MyLocationListener();
-
     private LocationService locationService;
     private String city;//城市名
     private PoiSearch mPoiSearch;
@@ -88,15 +85,10 @@ public class LocationActivity extends AppToolBarActivity implements View.OnClick
         super.onCreate(savedInstanceState);
         setContentView(R.layout.location_activity);
         ButterKnife.inject(this);
-
-        // mLocationClient = new LocationClient(getApplicationContext());     //声明LocationClient类
-        // mLocationClient.registerLocationListener(myListener);    //注册监听函数
         // 隐藏输入法
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
         initView();
-        // initSearch();
-        //  mLocationClient.start();
     }
 
 
@@ -215,20 +207,6 @@ public class LocationActivity extends AppToolBarActivity implements View.OnClick
         } else if (type == 1) {
             locationService.setLocationOption(locationService.getOption());
         }
-       /* startLocation.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                if (startLocation.getText().toString().equals(getString(R.string.startlocation))) {
-                    locationService.start();// 定位SDK
-                    // start之后会默认发起一次定位请求，开发者无须判断isstart并主动调用request
-                    startLocation.setText(getString(R.string.stoplocation));
-                } else {
-                    locationService.stop();
-                    startLocation.setText(getString(R.string.startlocation));
-                }
-            }
-        });*/
         locationService.start();
         showProgress(true);
 
@@ -243,7 +221,7 @@ public class LocationActivity extends AppToolBarActivity implements View.OnClick
     private BDLocationListener mListener = new BDLocationListener() {
 
         @Override
-        public void onReceiveLocation(BDLocation location) {
+        public void onReceiveLocation(final BDLocation location) {
             showProgress(false);
             isRefresh=false;
             // TODO Auto-generated method stub
@@ -262,6 +240,8 @@ public class LocationActivity extends AppToolBarActivity implements View.OnClick
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         Intent intent = new Intent();
+                        intent.putExtra("locationLongitude", location.getLongitude());
+                        intent.putExtra("locationLatitude", location.getLatitude());
                         intent.putExtra("location", mPoiInfoListStr.get(position));
                         setResult(RESULT_OK, intent);
                         finish();

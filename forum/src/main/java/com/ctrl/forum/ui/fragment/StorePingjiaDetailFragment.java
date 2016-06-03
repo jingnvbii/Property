@@ -1,6 +1,7 @@
 package com.ctrl.forum.ui.fragment;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,8 +11,13 @@ import android.widget.ListView;
 
 import com.beanu.arad.base.ToolBarFragment;
 import com.ctrl.forum.R;
-import com.ctrl.forum.entity.Merchant;
+import com.ctrl.forum.base.Constant;
+import com.ctrl.forum.dao.MallDao;
+import com.ctrl.forum.entity.ShopReply;
+import com.ctrl.forum.ui.activity.store.StorePingjiaDetailActivity;
 import com.ctrl.forum.ui.adapter.StoreShopDetailPingLunListViewAdapter;
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
 import java.util.List;
 
@@ -24,21 +30,116 @@ import butterknife.InjectView;
  */
 public class StorePingjiaDetailFragment extends ToolBarFragment {
     @InjectView(R.id.lv_pingjia_detail)
-    ListView lv_pingjia_detail;
+    PullToRefreshListView lv_pingjia_detail;
 
-    private List<Merchant> aroundCompanies ;
+    private MallDao mdao;
+    private int PAGE_NUM = 1;
+    private int bol = 1;
+
     private StoreShopDetailPingLunListViewAdapter mAdapter;
+    private int type;
+    private String id;
+    private List<ShopReply> allEvaluationlist;
+    private List<ShopReply> listPraise;
+    private List<ShopReply> listMedium;
+    private List<ShopReply> listBad;
+    private String allNum;
+    private String goodNum;
+    private String mediumNum;
+    private String badNum;
 
-    public static StorePingjiaDetailFragment newInstance(List<Merchant>aroundCompanies) {
+    public static StorePingjiaDetailFragment newInstance(int type) {
         StorePingjiaDetailFragment fragment = new StorePingjiaDetailFragment();
-        fragment.aroundCompanies = aroundCompanies;
+        fragment.type = type;
         return fragment;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mdao = new MallDao(this);
+        id = getActivity().getIntent().getStringExtra("id");
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser && bol == 1)
+            mdao.requestCompanysEvaluate(id, String.valueOf(PAGE_NUM), String.valueOf(Constant.PAGE_SIZE));
+    }
+
+    @Override
+    public void onRequestSuccess(int requestCode) {
+        super.onRequestSuccess(requestCode);
+        if (requestCode == 3) {
+            bol = 0;
+            allEvaluationlist = mdao.getListAllEvaluation();
+            listPraise = mdao.getListPraise();
+            listMedium = mdao.getListMedium();
+            listBad = mdao.getListBad();
+            switch (type) {
+                case 0:
+                    mAdapter.setList(allEvaluationlist);
+                    break;
+                case 1:
+                    mAdapter.setList(listPraise);
+                    break;
+                case 2:
+                    mAdapter.setList(listMedium);
+                    break;
+                case 3:
+                    mAdapter.setList(listBad);
+                    break;
+
+            }
+            setNum();
+        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_store_pingjia_detail, container, false);
         ButterKnife.inject(this, view);
+        lv_pingjia_detail.setMode(PullToRefreshBase.Mode.BOTH);
+        lv_pingjia_detail.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
+            @Override
+            public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
+                PAGE_NUM = 1;
+                switch (type) {
+                    case 0:
+                        allEvaluationlist.clear();
+                        break;
+                    case 1:
+                        listPraise.clear();
+                        break;
+                    case 2:
+                        listMedium.clear();
+                        break;
+                    case 3:
+                        listBad.clear();
+                        break;
+                }
+
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        mdao.requestCompanysEvaluate(id, String.valueOf(PAGE_NUM), String.valueOf(Constant.PAGE_SIZE));
+                    }
+                }, 500);
+
+            }
+
+            @Override
+            public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
+                PAGE_NUM += 1;
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        mdao.requestCompanysEvaluate(id, String.valueOf(PAGE_NUM), String.valueOf(Constant.PAGE_SIZE));
+                    }
+                }, 500);
+            }
+        });
         return view;
     }
 
@@ -46,7 +147,6 @@ public class StorePingjiaDetailFragment extends ToolBarFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mAdapter = new StoreShopDetailPingLunListViewAdapter(getActivity());
-        mAdapter.setList(aroundCompanies);
         lv_pingjia_detail.setAdapter(mAdapter);
         lv_pingjia_detail.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -58,5 +158,17 @@ public class StorePingjiaDetailFragment extends ToolBarFragment {
                 }*/
             }
         });
+
+    }
+
+    private void setNum() {
+        StorePingjiaDetailActivity activity=(StorePingjiaDetailActivity)getActivity();
+        allNum=allEvaluationlist.size()==0?"0":allEvaluationlist.get(0).getCount();
+        goodNum=listPraise.size()==0?"0":listPraise.get(0).getCount();
+        mediumNum=listMedium.size()==0?"0":listMedium.get(0).getCount();
+        badNum=listBad.size()==0?"0":listBad.get(0).getCount();
+        
+        
+        activity.setNum(allNum,goodNum,mediumNum,badNum);
     }
 }

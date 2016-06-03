@@ -8,7 +8,8 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.ctrl.forum.R;
-import com.ctrl.forum.entity.Merchant;
+import com.ctrl.forum.entity.CashCoupons;
+import com.ctrl.forum.utils.TimeUtils;
 
 import java.util.List;
 
@@ -21,13 +22,13 @@ import butterknife.InjectView;
  */
 public class StoreXianjinQuanListViewAdapter extends BaseAdapter{
     private Context mcontext;
-    private List<Merchant>kindList;
+    private List<CashCoupons>kindList;
 
     public StoreXianjinQuanListViewAdapter(Context context) {
                this.mcontext=context;
     }
 
-    public void setList(List<Merchant> list) {
+    public void setList(List<CashCoupons> list) {
         this.kindList = list;
         notifyDataSetChanged();
     }
@@ -58,14 +59,17 @@ public class StoreXianjinQuanListViewAdapter extends BaseAdapter{
         }else {
             holder=(ViewHolder)convertView.getTag();
         }
-       Merchant merchant=kindList.get(position);
-        holder.tv_titile.setText(merchant.getName());
+        CashCoupons mCashCoupons=kindList.get(position);
+        holder.tv_name.setText(mCashCoupons.getName());
+        holder.tv_use_time.setText("使用期限 ："+ TimeUtils.date(Long.parseLong(mCashCoupons.getValidityStartTime()))+"-"+TimeUtils.date(Long.parseLong(mCashCoupons.getValidityEndTime())));
         return convertView;
     }
 
     static class ViewHolder{
         @InjectView(R.id.tv_name)//标题
-                TextView tv_titile;
+                TextView tv_name;
+        @InjectView(R.id.tv_use_time)//标题
+                TextView tv_use_time;
         ViewHolder(View view) {
             ButterKnife.inject(this, view);
         }

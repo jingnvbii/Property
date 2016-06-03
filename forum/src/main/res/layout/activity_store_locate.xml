@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:background="@color/main_bg"
     android:layout_height="match_parent">
 
     <include layout="@layout/toolbar_common_red"
@@ -15,6 +14,7 @@
         android:background="#dc3d3c">
 
         <EditText
+            android:id="@+id/et_locate_search"
             android:layout_width="0dp"
             android:layout_marginLeft="@dimen/margin_left_and_right"
             android:layout_weight="1"
@@ -23,10 +23,13 @@
             android:hint="搜索您附近的位置"
             android:drawableLeft="@mipmap/search_red"
             android:drawablePadding="10dp"
+            android:textSize="12sp"
+            android:padding="5dp"
             android:textColorHint="@color/text_gray"
             android:background="@drawable/white_border"
             />
         <TextView
+            android:id="@+id/tv_seach"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="搜索"
@@ -38,8 +41,24 @@
             />
     </LinearLayout>
 
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
+     <ListView
+         android:id="@+id/lv_search_address"
+         android:layout_width="match_parent"
+         android:layout_height="match_parent">
+     </ListView>
+
+    <LinearLayout
+        android:id="@+id/ll_store_locate"
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:background="@color/main_bg"
+        android:layout_height="match_parent">
     <TextView
+        android:id="@+id/tv_locate_now"
         android:layout_marginTop="10dp"
         android:layout_width="match_parent"
         android:layout_height="@dimen/text_height"
@@ -57,26 +76,49 @@
         android:gravity="center_vertical"
         android:text="我的收货地址"
         />
+    <TextView
+        android:id="@+id/tv_locate_address"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/text_height"
+        android:paddingLeft="10dp"
+        android:background="@color/white"
+        android:gravity="center"
+        android:text="暂无收货地址!"
+        />
 
     <ListView
+        android:id="@+id/lv_locate_address"
         android:layout_width="match_parent"
+        android:visibility="gone"
         android:background="@color/white"
         android:layout_height="wrap_content">
     </ListView>
     <TextView
+        android:id="@+id/tv_locate_history"
         android:layout_width="match_parent"
         android:layout_height="@dimen/text_height"
         android:paddingLeft="10dp"
         android:gravity="center_vertical"
         android:text="历史记录"
         />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/text_height"
+        android:paddingLeft="10dp"
+        android:background="@color/white"
+        android:gravity="center"
+        android:text="暂无历史记录!"
+        />
 
     <ListView
+        android:id="@+id/lv_locate_history"
         android:layout_width="match_parent"
         android:background="@color/white"
+        android:visibility="gone"
         android:layout_height="wrap_content">
     </ListView>
     <TextView
+        android:id="@+id/tv_delete_store_history"
         android:layout_width="match_parent"
         android:layout_height="@dimen/text_height"
         android:paddingLeft="10dp"
@@ -84,8 +126,6 @@
         android:background="@color/white"
         android:text="清空历史记录"
         />
-
-
-
-
+    </LinearLayout>
+    </FrameLayout>
 </LinearLayout>

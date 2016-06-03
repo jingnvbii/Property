@@ -1,6 +1,7 @@
 package com.ctrl.forum.ui.fragment;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
@@ -40,13 +41,16 @@ import com.ctrl.forum.entity.Post;
 import com.ctrl.forum.entity.PostImage;
 import com.ctrl.forum.entity.PostKind;
 import com.ctrl.forum.entity.Recommend;
+import com.ctrl.forum.loopview.HomeAutoSwitchPicHolder;
+import com.ctrl.forum.ui.activity.Invitation.InvitationDetailActivity;
+import com.ctrl.forum.ui.activity.Invitation.InvitationDetailFromPlatformActivity;
 import com.ctrl.forum.ui.activity.Invitation.InvitationPinterestDetailActivity;
 import com.ctrl.forum.ui.activity.Invitation.InvitationPullDownActivity;
+import com.ctrl.forum.ui.activity.store.StoreCommodityDetailActivity;
+import com.ctrl.forum.ui.activity.store.StoreShopListVerticalStyleActivity;
 import com.ctrl.forum.ui.adapter.InvitationGridViewAdapter;
 import com.ctrl.forum.ui.adapter.InvitationListViewAdapter;
-import com.ctrl.forum.ui.viewpage.CycleViewPager;
-import com.ctrl.forum.ui.viewpage.ViewFactory;
-import com.ctrl.forum.utils.DemoUtil;
+import com.ctrl.forum.ui.adapter.testAdapter;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
@@ -60,7 +64,7 @@ import butterknife.InjectView;
  * 帖子 fragment
  * Created by jason on 2016/4/7.
  */
-public class InvitationFragment extends ToolBarFragment {
+public class InvitationFragment extends ToolBarFragment implements View.OnClickListener{
   /*  @InjectView(R.id.gridView1)
     GridViewForScrollView gridView1;
     @InjectView(R.id.framelayout)
@@ -86,8 +90,6 @@ public class InvitationFragment extends ToolBarFragment {
     private int NUM = 4; // 每行显示个数
     private int hSpacing = 20;// 水平间距
     private List<Kind> kindList;
-    private View vhdf;
-    private CycleViewPager cycleViewPager;
     private InvitationListViewAdapter invitationListViewAdapter;
     private List<Invitation_listview> list;
     private InvitationDao idao;
@@ -104,7 +106,7 @@ public class InvitationFragment extends ToolBarFragment {
     private ImageView iv_recommend_3;
     private ImageView iv_recommend_4;
 
-    private PullToRefreshListView lv_invitation_fragment;
+   private PullToRefreshListView lv_invitation_fragment_home;
 
     private TextView tv_change;
     private ListView lv01;
@@ -148,6 +150,10 @@ public class InvitationFragment extends ToolBarFragment {
 
         ;
     };
+    private testAdapter adapter;
+    private HomeAutoSwitchPicHolder mAutoSwitchPicHolder;
+    private ArrayList<String> mData;
+    private ImageView iv_invitation_notice_image;
 
 
     public static InvitationFragment newInstance() {
@@ -159,6 +165,7 @@ public class InvitationFragment extends ToolBarFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        invitationListViewAdapter = new InvitationListViewAdapter(getActivity());
 
     }
 
@@ -175,20 +182,16 @@ public class InvitationFragment extends ToolBarFragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater,@Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_invitation, container, false);
-        lv_invitation_fragment=(PullToRefreshListView)view.findViewById(R.id.lv_invitation_fragment);
         ButterKnife.inject(this, view);
+        lv_invitation_fragment_home=(PullToRefreshListView)view.findViewById(R.id.lv_invitation_fragment_home);
        // scrollView.setHorizontalScrollBarEnabled(false);// 隐藏滚动条
         initView();
         getScreenDen();
-        //调用轮播图
-        setLoopView();
         //公告轮播控件初始化
         initNoticeView();
         initData();
-
-
         return view;
     }
 
@@ -201,12 +204,12 @@ public class InvitationFragment extends ToolBarFragment {
     }
 
     private void initView() {
-
         AbsListView.LayoutParams layoutParams = new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, AbsListView.LayoutParams.WRAP_CONTENT);
-        View headview = getActivity().getLayoutInflater().inflate(R.layout.fragment_invitation_home_header, ll_linear_layout, false);
+        View headview = getActivity().getLayoutInflater().inflate(R.layout.fragment_invitation_home_header, lv_invitation_fragment_home, false);
         headview.setLayoutParams(layoutParams);
-         lv01 = lv_invitation_fragment.getRefreshableView();
+         lv01 = lv_invitation_fragment_home.getRefreshableView();
         tv_change=(TextView)headview.findViewById(R.id.tv_change);
+        iv_invitation_notice_image=(ImageView)headview.findViewById(R.id.iv_invitation_notice_image);
         framelayout=(FrameLayout)headview.findViewById(R.id.framelayout);
         iv_recommend_1=(ImageView)headview.findViewById(R.id.iv_recommend_1);
         iv_recommend_2=(ImageView)headview.findViewById(R.id.iv_recommend_2);
@@ -214,79 +217,104 @@ public class InvitationFragment extends ToolBarFragment {
         iv_recommend_4=(ImageView)headview.findViewById(R.id.iv_recommend_4);
         gridView1=(GridViewForScrollView)headview.findViewById(R.id.gridView1);
         lv01.addHeaderView(headview);
-        invitationListViewAdapter = new InvitationListViewAdapter(getActivity());
     }
 
-    private void setLoopView() {
-        // 三句话 调用轮播广告
-        vhdf = getActivity().getLayoutInflater().inflate(R.layout.viewpage, null);
-        cycleViewPager = (CycleViewPager) getActivity().getFragmentManager().findFragmentById(R.id.fragment_cycle_viewpager_content);
-        ViewFactory.initialize(getActivity(), vhdf, cycleViewPager, DemoUtil.cycData());
-        framelayout.addView(vhdf);
 
+    /*
+ * 轮播图
+ * */
+    private void setLoopView() {
+        // 1.创建轮播的holder
+        mAutoSwitchPicHolder = new HomeAutoSwitchPicHolder(getActivity());
+        // 2.得到轮播图的视图view
+        View autoPlayPicView = mAutoSwitchPicHolder.getRootView();
+        // 把轮播图的视图添加到主界面中
+        framelayout.addView(autoPlayPicView);
+        //4. 为轮播图设置数据
+        mAutoSwitchPicHolder.setData(getData());
+        mAutoSwitchPicHolder.setData(listBanner);
+    }
+
+    public List<String> getData() {
+        mData = new ArrayList<String>();
+        for(int i=0;i<listBanner.size();i++){
+            mData.add(listBanner.get(i).getImgUrl());
+        }
+        return mData;
     }
 
     private void initData() {
         idao = new InvitationDao(this);
+        showProgress(true);
         idao.requestInitPostHomePage();
-        idao.requestPostListByCategory(Arad.preferences.getString("memberId"), "", "0", PAGE_NUM, Constant.PAGE_SIZE);
-        lv_invitation_fragment.setMode(PullToRefreshBase.Mode.BOTH);
-        lv_invitation_fragment.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
+        idao.requestPostListByCategory(Arad.preferences.getString("memberId"), "", "0", "", PAGE_NUM, Constant.PAGE_SIZE);
+        lv_invitation_fragment_home.setMode(PullToRefreshBase.Mode.BOTH);
+        lv_invitation_fragment_home.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
                 listPost.clear();
                 PAGE_NUM = 1;
-                idao.requestPostListByCategory(Arad.preferences.getString("memberId"), "", "0", PAGE_NUM, Constant.PAGE_SIZE);
-
+                showProgress(true);
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        idao.requestPostListByCategory(Arad.preferences.getString("memberId"), "", "0", "", PAGE_NUM, Constant.PAGE_SIZE);
+                    }
+                }, 500);
             }
 
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
                 PAGE_NUM += 1;
-                idao.requestPostListByCategory(Arad.preferences.getString("memberId"), "", "0", PAGE_NUM, Constant.PAGE_SIZE);
+                showProgress(true);
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        idao.requestPostListByCategory(Arad.preferences.getString("memberId"), "", "0", "", PAGE_NUM, Constant.PAGE_SIZE);
+                    }
+                }, 500);
             }
         });
-
         lv01.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-               
-              //  Log.i("tag", "positionlist---" + String.valueOf(position - lv01.getHeaderViewsCount()));
-             //  String type = listPost.get(position +lv01.getHeaderViewsCount()).getSourceType();
-              /*  String type = listPost.get(position-lv01.getHeaderViewsCount()).getSourceType();
+                  Intent intent=null;
+                //  Log.i("tag", "positionlist---" + String.valueOf(position - lv01.getHeaderViewsCount()));
+                //  String type = listPost.get(position +lv01.getHeaderViewsCount()).getSourceType();
+                String type = listPost.get(position - lv01.getHeaderViewsCount()).getSourceType();
                 switch (type) {
                     case "0"://平台
-
+                         intent = new Intent(getActivity(), InvitationDetailFromPlatformActivity.class);
+                        intent.putExtra("id", listPost.get(position - lv01.getHeaderViewsCount()).getId());
+                        startActivity(intent);
+                        AnimUtil.intentSlidIn(getActivity());
 
                         break;
                     case "1"://app
-                        Intent intent = new Intent(getActivity(), InvitationPinterestDetailActivity.class);
-                        intent.putExtra("id",position -lv01.getHeaderViewsCount());
+                        intent = new Intent(getActivity(), InvitationPinterestDetailActivity.class);
+                        intent.putExtra("id", listPost.get(position - lv01.getHeaderViewsCount()).getId());
                         startActivity(intent);
                         AnimUtil.intentSlidIn(getActivity());
                         break;
-                }*/
+                }
 
-                Intent intent = new Intent(getActivity(), InvitationPinterestDetailActivity.class);
-                intent.putExtra("id",position -lv01.getHeaderViewsCount());
-                startActivity(intent);
-                AnimUtil.intentSlidIn(getActivity());
 
             }
         });
-
     }
 
     @Override
     public void onRequestFaild(String errorNo, String errorMessage) {
         super.onRequestFaild(errorNo, errorMessage);
-        lv_invitation_fragment.onRefreshComplete();
+        showProgress(false);
+        lv_invitation_fragment_home.onRefreshComplete();
     }
 
     @Override
     public void onRequestSuccess(int requestCode) {
         super.onRequestSuccess(requestCode);
-        lv_invitation_fragment.onRefreshComplete();
+        showProgress(false);
+        lv_invitation_fragment_home.onRefreshComplete();
         if (requestCode == 0) {
             listBanner = idao.getListBanner();
             listPostKind = idao.getListPostKind();
@@ -296,20 +324,24 @@ public class InvitationFragment extends ToolBarFragment {
             setValue();
             initRecommend();//推荐列表初始化
             initNotice();//公告栏数据初始化
+            //调用轮播图
+            setLoopView();
         }
 
         if (requestCode == 1) {
             MessageUtils.showShortToast(getActivity(), "获取帖子列表成功");
             listPost=idao.getListPost();
             Log.i("tag", "listPost---" + listPost.size());
-            invitationListViewAdapter.setList(listPost);
+            if(listPost!=null) {
+               invitationListViewAdapter.setList(listPost);
+            }
         }
 
 
     }
 
     private void initNotice() {
-
+         Arad.imageLoader.load(idao.getListNoticeImage().get(0).getImgUrl()).placeholder(R.mipmap.jinrigonggao).into(iv_invitation_notice_image);
         for (int i = 0; i < listNotice.size(); i++) {
             listNoticeString.add(listNotice.get(i).getContent());
         }
@@ -330,15 +362,19 @@ public class InvitationFragment extends ToolBarFragment {
     private void initRecommend() {
         if (listRecommend.size() > 0) {
             Arad.imageLoader.load(listRecommend.get(0).getImgUrl()).placeholder(R.mipmap.fuzhuang).into(iv_recommend_1);
+            iv_recommend_1.setOnClickListener(this);
         }
         if (listRecommend.size() > 1) {
             Arad.imageLoader.load(listRecommend.get(1).getImgUrl()).placeholder(R.mipmap.fuzhuang).into(iv_recommend_2);
+            iv_recommend_2.setOnClickListener(this);
         }
         if (listRecommend.size() > 2) {
             Arad.imageLoader.load(listRecommend.get(2).getImgUrl()).placeholder(R.mipmap.fuzhuang).into(iv_recommend_3);
+            iv_recommend_3.setOnClickListener(this);
         }
         if (listRecommend.size() > 3) {
             Arad.imageLoader.load(listRecommend.get(3).getImgUrl()).placeholder(R.mipmap.fuzhuang).into(iv_recommend_4);
+            iv_recommend_4.setOnClickListener(this);
         }
     }
 
@@ -373,6 +409,8 @@ public class InvitationFragment extends ToolBarFragment {
     }
 
 
+
+
     private void getScreenDen() {
         dm = new DisplayMetrics();
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(dm);
@@ -382,7 +420,141 @@ public class InvitationFragment extends ToolBarFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         MessageUtils.showShortToast(getActivity(), "fddfdf");
-        lv_invitation_fragment.setAdapter(invitationListViewAdapter);
+       // adapter=new testAdapter(getActivity());
+      //  adapter.setList(listMerchant);
+        lv_invitation_fragment_home.setAdapter(adapter);
+        if(lv_invitation_fragment_home!=null) {
+            lv_invitation_fragment_home.setAdapter(invitationListViewAdapter);
+        }
     }
 
+    @Override
+    public void onClick(View v) {
+        String type=null;
+        Intent intent=null;
+        switch (v.getId()){
+            case R.id.iv_recommend_1:
+                type=listRecommend.get(0).getType();
+                switch (type){
+                    case "0"://跳商家
+                        intent=new Intent(getActivity(), StoreShopListVerticalStyleActivity.class);
+                        intent.putExtra("targerId",listRecommend.get(0).getTargetId());
+                        getActivity().startActivity(intent);
+                        AnimUtil.intentSlidIn(getActivity());
+                        break;
+                    case "1"://跳商品详情
+                        intent=new Intent(getActivity(), StoreCommodityDetailActivity.class);
+                        intent.putExtra("targerId",listRecommend.get(0).getTargetId());
+                        getActivity().startActivity(intent);
+                        AnimUtil.intentSlidIn(getActivity());
+                        break;
+                    case "2"://跳帖子详情
+                        intent=new Intent(getActivity(), InvitationDetailActivity.class);
+                        intent.putExtra("targerId",listRecommend.get(0).getTargetId());
+                        getActivity().startActivity(intent);
+                        AnimUtil.intentSlidIn(getActivity());
+                        break;
+                    case "3"://外部链接
+                        Uri uri = Uri.parse(listRecommend.get(0).getTargetUrl());
+                        intent = new Intent(Intent.ACTION_VIEW, uri);
+                        getActivity().startActivity(intent);
+                        AnimUtil.intentSlidIn(getActivity());
+                        break;
+
+                }
+                break;
+            case R.id.iv_recommend_2:
+                type=listRecommend.get(1).getType();
+                switch (type){
+                    case "0"://跳商家
+                        intent=new Intent(getActivity(), StoreShopListVerticalStyleActivity.class);
+                        intent.putExtra("targerId",listRecommend.get(1).getTargetId());
+                        getActivity().startActivity(intent);
+                        AnimUtil.intentSlidIn(getActivity());
+                        break;
+                    case "1"://跳商品详情
+                        intent=new Intent(getActivity(), StoreCommodityDetailActivity.class);
+                        intent.putExtra("targerId",listRecommend.get(1).getTargetId());
+                        getActivity().startActivity(intent);
+                        AnimUtil.intentSlidIn(getActivity());
+                        break;
+                    case "2"://跳帖子详情
+                        intent=new Intent(getActivity(), InvitationDetailActivity.class);
+                        intent.putExtra("targerId",listRecommend.get(1).getTargetId());
+                        getActivity().startActivity(intent);
+                        AnimUtil.intentSlidIn(getActivity());
+                        break;
+                    case "3"://外部链接
+                        Uri uri = Uri.parse(listRecommend.get(1).getTargetUrl());
+                        intent = new Intent(Intent.ACTION_VIEW, uri);
+                        getActivity().startActivity(intent);
+                        AnimUtil.intentSlidIn(getActivity());
+                        break;
+
+                }
+
+                break;
+            case R.id.iv_recommend_3:
+                type=listRecommend.get(2).getType();
+                switch (type){
+                    case "0"://跳商家
+                        intent=new Intent(getActivity(), StoreShopListVerticalStyleActivity.class);
+                        intent.putExtra("targerId",listRecommend.get(2).getTargetId());
+                        getActivity().startActivity(intent);
+                        AnimUtil.intentSlidIn(getActivity());
+                        break;
+                    case "1"://跳商品详情
+                        intent=new Intent(getActivity(), StoreCommodityDetailActivity.class);
+                        intent.putExtra("targerId",listRecommend.get(2).getTargetId());
+                        getActivity().startActivity(intent);
+                        AnimUtil.intentSlidIn(getActivity());
+                        break;
+                    case "2"://跳帖子详情
+                        intent=new Intent(getActivity(), InvitationDetailActivity.class);
+                        intent.putExtra("targerId",listRecommend.get(2).getTargetId());
+                        getActivity().startActivity(intent);
+                        AnimUtil.intentSlidIn(getActivity());
+                        break;
+                    case "3"://外部链接
+                        Uri uri = Uri.parse(listRecommend.get(2).getTargetUrl());
+                        intent = new Intent(Intent.ACTION_VIEW, uri);
+                        getActivity().startActivity(intent);
+                        AnimUtil.intentSlidIn(getActivity());
+                        break;
+
+                }
+
+                break;
+            case R.id.iv_recommend_4:
+                type=listRecommend.get(3).getType();
+                switch (type){
+                    case "0"://跳商家
+                        intent=new Intent(getActivity(), StoreShopListVerticalStyleActivity.class);
+                        intent.putExtra("targerId",listRecommend.get(3).getTargetId());
+                        getActivity().startActivity(intent);
+                        AnimUtil.intentSlidIn(getActivity());
+                        break;
+                    case "1"://跳商品详情
+                        intent=new Intent(getActivity(), StoreCommodityDetailActivity.class);
+                        intent.putExtra("targerId",listRecommend.get(3).getTargetId());
+                        getActivity().startActivity(intent);
+                        AnimUtil.intentSlidIn(getActivity());
+                        break;
+                    case "2"://跳帖子详情
+                        intent=new Intent(getActivity(), InvitationDetailActivity.class);
+                        intent.putExtra("targerId",listRecommend.get(3).getTargetId());
+                        getActivity().startActivity(intent);
+                        AnimUtil.intentSlidIn(getActivity());
+                        break;
+                    case "3"://外部链接
+                        Uri uri = Uri.parse(listRecommend.get(3).getTargetUrl());
+                        intent = new Intent(Intent.ACTION_VIEW, uri);
+                        getActivity().startActivity(intent);
+                        AnimUtil.intentSlidIn(getActivity());
+                        break;
+                }
+                break;
+        }
+
+    }
 }

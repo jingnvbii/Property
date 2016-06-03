@@ -14,11 +14,7 @@ import android.widget.TextView;
 
 import com.ctrl.forum.R;
 import com.ctrl.forum.base.AppToolBarActivity;
-import com.ctrl.forum.entity.Merchant;
 import com.ctrl.forum.ui.fragment.StorePingjiaDetailFragment;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -44,9 +40,7 @@ public class StorePingjiaDetailActivity extends AppToolBarActivity implements Vi
     @InjectView(R.id.rb_bad)//全部评价
     RadioButton   rb_bad;
 
-
    SparseArray<Fragment>fragments=new SparseArray<>();
-    private List<Merchant> list;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,36 +49,34 @@ public class StorePingjiaDetailActivity extends AppToolBarActivity implements Vi
         // 隐藏输入法
        // getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         ButterKnife.inject(this);
-        initData();
         initView();
     }
 
-    private void initData() {
-        list=new ArrayList<>();
-        for(int i=0;i<10;i++){
-            Merchant merchant=new Merchant();
-            merchant.setName("小贝便利"+i);
-            list.add(merchant);
-        }
 
+    public void setNum(String allNum,String goodNum,String mediumNum,String badNum){
+        rb_all.setText("全部"+"("+allNum+")");
+        rb_good.setText("好评"+"("+goodNum+")");
+        rb_medium.setText("中评"+"("+mediumNum+")");
+        rb_bad.setText("差评"+"("+badNum+")");
     }
+
 
     private void initView() {
         rb_all.setOnClickListener(this);
         rb_good.setOnClickListener(this);
         rb_medium.setOnClickListener(this);
         rb_bad.setOnClickListener(this);
-
         iv_back.setOnClickListener(this);
         for(int i=0;i<4;i++){
-            StorePingjiaDetailFragment  mStorePingjiaDetailFragment=StorePingjiaDetailFragment.newInstance(list);
+            StorePingjiaDetailFragment mStorePingjiaDetailFragment=StorePingjiaDetailFragment.newInstance(i);
             fragments.put(i, mStorePingjiaDetailFragment);
-        }
+            }
         rb_all.setTextColor(getResources().getColor(R.color.text_red));
 
         viewpager_pingjia_detail.setAdapter(new com.ctrl.forum.ui.adapter.ViewPagerAdapter(getSupportFragmentManager(), fragments));
       //  viewpager_pingjia_detail.setOnPageChangeListener(new FragmentOnPageChangeListener());
         viewpager_pingjia_detail.setCurrentItem(0);
+        viewpager_pingjia_detail.setOffscreenPageLimit(4);
         viewpager_pingjia_detail.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {

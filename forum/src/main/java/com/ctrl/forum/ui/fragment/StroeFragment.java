@@ -1,32 +1,64 @@
 package com.ctrl.forum.ui.fragment;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
+import android.view.animation.TranslateAnimation;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.GridView;
-import android.widget.HorizontalScrollView;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 
+import com.baidu.location.BDLocation;
+import com.baidu.location.BDLocationListener;
+import com.baidu.mapapi.model.LatLng;
+import com.baidu.mapapi.search.core.SearchResult;
+import com.baidu.mapapi.search.geocode.GeoCodeResult;
+import com.baidu.mapapi.search.geocode.GeoCoder;
+import com.baidu.mapapi.search.geocode.OnGetGeoCoderResultListener;
+import com.baidu.mapapi.search.geocode.ReverseGeoCodeOption;
+import com.baidu.mapapi.search.geocode.ReverseGeoCodeResult;
+import com.beanu.arad.Arad;
 import com.beanu.arad.base.ToolBarFragment;
 import com.beanu.arad.utils.AnimUtil;
+import com.beanu.arad.utils.MessageUtils;
 import com.ctrl.forum.R;
-import com.ctrl.forum.customview.PullToRefreshListViewForScrollView;
-import com.ctrl.forum.entity.Kind;
+import com.ctrl.forum.base.Constant;
+import com.ctrl.forum.base.MyApplication;
+import com.ctrl.forum.customview.GridViewForScrollView;
+import com.ctrl.forum.dao.MallDao;
+import com.ctrl.forum.entity.Banner;
+import com.ctrl.forum.entity.Mall;
+import com.ctrl.forum.entity.MallKind;
+import com.ctrl.forum.entity.MallRecommend;
 import com.ctrl.forum.entity.Merchant;
+import com.ctrl.forum.entity.Notice;
+import com.ctrl.forum.loopview.HomeAutoSwitchPicHolder;
+import com.ctrl.forum.service.LocationService;
+import com.ctrl.forum.ui.activity.Invitation.InvitationDetailActivity;
+import com.ctrl.forum.ui.activity.store.StoreCommodityDetailActivity;
 import com.ctrl.forum.ui.activity.store.StoreLocateActivity;
 import com.ctrl.forum.ui.activity.store.StoreScreenActivity;
+import com.ctrl.forum.ui.activity.store.StoreShopListVerticalStyleActivity;
 import com.ctrl.forum.ui.adapter.StoreFragmentAdapter;
 import com.ctrl.forum.ui.adapter.StoreGridViewAdapter;
-import com.ctrl.forum.ui.viewpage.CycleViewPager;
-import com.ctrl.forum.ui.viewpage.ViewFactory;
-import com.ctrl.forum.utils.DemoUtil;
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,27 +71,51 @@ import butterknife.InjectView;
  * Created by jason on 2016/4/7.
  */
 public class StroeFragment extends ToolBarFragment implements View.OnClickListener {
-    @InjectView(R.id.scrollView)
-    HorizontalScrollView scrollView;
-    @InjectView(R.id.gridView1)
-    GridView gridView1;
-    @InjectView(R.id.framelayout)
-    FrameLayout framelayout;
     @InjectView(R.id.tv_toolbar)//定位标
             TextView tv_toolbar;
-
-    @InjectView(R.id.listview)//下拉列表
-    PullToRefreshListViewForScrollView listview;
+    @InjectView(R.id.ll_linear_layout)
+    LinearLayout ll_linear_layout;
 
 
     DisplayMetrics dm;
     private int NUM = 4; // 每行显示个数
     private int hSpacing = 20;// 水平间距
-    private List<Kind> kindList;
-    private View vhdf;
-    private CycleViewPager cycleViewPager;
     private StoreFragmentAdapter listviewAdapter;
-    private List<Merchant> list;
+    private PullToRefreshListView lv_store_home;
+    private ListView lv01;
+    private TextView tv_change;
+    private FrameLayout framelayout;
+    private GridViewForScrollView gridView1;
+    private ImageView iv01_store_recomend;
+    private ImageView iv02_store_recomend;
+    private ImageView iv03_store_recomend;
+    private ImageView iv04_store_recomend;
+    private MallDao mdao;
+    private int PAGE_NUM = 1;
+    private List<Banner> listBanner;
+    private List<MallKind> listMallKind;
+    private List<Notice> listMallNotice;
+    private List<MallRecommend> listMallRecommend;
+    private List<Mall> listMall;
+    private LocationService locationService;
+    private List<Merchant> merchantList;//测试数据
+    private GeoCoder mSearch;
+    private HomeAutoSwitchPicHolder mAutoSwitchPicHolder;
+    private ArrayList<String> mData;
+    private String latitude_now;
+    private String longitude_now;
+    private String address_now;
+    private String latitude_address;
+    private String longitude_address;
+    private String address_address;
+    private double latitude1;
+    private double longitude1;
+    private String latitude_map;
+    private String longitude_map;
+    private String address_map;
+    private String latitude_search;
+    private String longitude_search;
+    private String address_search;
 
 
     public static StroeFragment newInstance() {
@@ -67,65 +123,281 @@ public class StroeFragment extends ToolBarFragment implements View.OnClickListen
         return fragment;
     }
 
+    /*
+   * 实现文字上下轮播
+   * */
+    private boolean isloop = true;
+    private List<String> listNoticeString = new ArrayList<>();
+    private int item = 0;
+    private AnimationSet set = new AnimationSet(true);
+    private AlphaAnimation animation = new AlphaAnimation(0.1f, 1.0f);
+    private TranslateAnimation ta = new TranslateAnimation(
+            Animation.RELATIVE_TO_SELF, 0, Animation.RELATIVE_TO_SELF,
+            0, Animation.RELATIVE_TO_SELF, 2.0f,
+            Animation.RELATIVE_TO_SELF, 0);
+    private Handler handler = new Handler() {
+        public void handleMessage(android.os.Message msg) {
+            switch (msg.what) {
+                case 1:
+
+                    if (isloop) {
+                        tv_change.setText(listNoticeString.get(item % listNoticeString.size()));
+                        tv_change.setAnimation(set);
+                        tv_change.startAnimation(set);
+                        item += 1;
+                    }
+                    break;
+            }
+        }
+
+    };
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mdao = new MallDao(this);
+        showProgress(true);
+        mdao.requestInitMall();
+        mSearch = GeoCoder.newInstance();
+        OnGetGeoCoderResultListener listener = new OnGetGeoCoderResultListener() {
+            public void onGetGeoCodeResult(GeoCodeResult result) {
+                if (result == null || result.error != SearchResult.ERRORNO.NO_ERROR) {
+                    //没有检索到结果
+                    //没有找到检索结果
+                    MessageUtils.showShortToast(getActivity(), "没有结果");
+                }
+                //获取地理编码结果
+                //获取反向地理编码结果
+                Log.i("tag", "地理位置--" + result.getAddress());
+            }
+
+            @Override
+            public void onGetReverseGeoCodeResult(ReverseGeoCodeResult result) {
+                if (result == null || result.error != SearchResult.ERRORNO.NO_ERROR) {
+                    //没有找到检索结果
+                    MessageUtils.showShortToast(getActivity(), "没有结果");
+                }
+                //获取反向地理编码结果
+                Log.i("tag", "地理位置--" + result.getAddress());
+                //         tv_toolbar.setText(result.getAddress());
+                latitude1 = result.getLocation().latitude;
+                longitude1 = result.getLocation().longitude;
+
+            }
+        };
+        mSearch.setOnGetGeoCodeResultListener(listener);
+    }
+
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mSearch.destroy();
 
     }
 
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser && longitude != null && latitude != null) {
+            mdao.requestInitMallRecommendCompany(latitude, longitude,
+                    String.valueOf(Constant.PAGE_SIZE), String.valueOf(PAGE_NUM));
+        }
+
+
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_store, container, false);
+        lv_store_home = (PullToRefreshListView) view.findViewById(R.id.lv_store_home);
         ButterKnife.inject(this, view);
-        scrollView.setHorizontalScrollBarEnabled(false);// 隐藏滚动条
-        initData();
+        // scrollView.setHorizontalScrollBarEnabled(false);// 隐藏滚动条
         getScreenDen();
-        setValue();
-        // 三句话 调用轮播广告
-        vhdf = getActivity().getLayoutInflater().inflate(R.layout.viewpage2, null);
-        cycleViewPager = (CycleViewPager) getActivity().getFragmentManager().findFragmentById(R.id.fragment_cycle_viewpager_content_2);
-        ViewFactory.initialize(getActivity(), vhdf, cycleViewPager, DemoUtil.cycData());
-        framelayout.addView(vhdf);
         initView();
+        //调用轮播图
+        setLoopView();
+        //公告轮播控件初始化
+        initNoticeView();
+        initData();
 
-        listviewAdapter=new StoreFragmentAdapter(getActivity());
-        listviewAdapter.setList(list);
-        listview.setAdapter(listviewAdapter);
         return view;
     }
 
-    private void initView() {
-        tv_toolbar.setOnClickListener(this);
-
-    }
-
     private void initData() {
-       list=new ArrayList<>();
+        tv_toolbar.requestFocus();//跑马灯获取焦点
+        lv_store_home.setMode(PullToRefreshBase.Mode.BOTH);
+        lv_store_home.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
+            @Override
+            public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
+                if(listMall!=null)
+                listMall.clear();
+                PAGE_NUM = 1;
+                showProgress(true);
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        mdao.requestInitMallRecommendCompany(latitude, longitude,
+                                String.valueOf(Constant.PAGE_SIZE), String.valueOf(PAGE_NUM));
+                    }
+                }, 500);
 
-        for(int i=0;i<20;i++){
-            Merchant manchant = new Merchant();
-            manchant.setName("章子怡"+i+"便利店");
-            list.add(manchant);
+
+            }
+
+            @Override
+            public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
+                PAGE_NUM += 1;
+                showProgress(true);
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        mdao.requestInitMallRecommendCompany(latitude, longitude,
+                                String.valueOf(Constant.PAGE_SIZE), String.valueOf(PAGE_NUM));
+                    }
+                }, 500);
+            }
+        });
+
+        lv01.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+
+            }
+        });
+
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        // TODO Auto-generated method stub
+        locationService.unregisterListener(mListener); //注销掉监听
+        locationService.stop(); //停止定位服务
+    }
+
+    @Override
+    public void onStart() {
+        // TODO Auto-generated method stub
+        super.onStart();
+        // -----------location config ------------
+        locationService = ((MyApplication) getActivity().getApplication()).locationService;
+        //获取locationservice实例，建议应用中只初始化1个location实例，然后使用，可以参考其他示例的activity，都是通过此种方式获取locationservice实例的
+        locationService.registerListener(mListener);
+        //注册监听
+        locationService.setLocationOption(locationService.getDefaultLocationClientOption());//默认  仅定位一次
+        locationService.start();
+        // showProgress(true);
+
+    }
+
+
+    private boolean isRefresh;
+    private String latitude;
+    private String longitude;
+    private BDLocationListener mListener = new BDLocationListener() {
+
+
+        @Override
+        public void onReceiveLocation(final BDLocation location) {
+            showProgress(false);
+            isRefresh = false;
+            // TODO Auto-generated method stub
+            if (null != location && location.getLocType() != BDLocation.TypeServerError) {
+                latitude = String.valueOf(location.getLatitude());
+                longitude = String.valueOf(location.getLongitude());
+                if (latitude != null && longitude != null) {
+                    Arad.preferences.putString("latitude", latitude);
+                    Arad.preferences.putString("longtude", longitude);
+                }
+                Arad.preferences.flush();
+                LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+                mSearch.reverseGeoCode(new ReverseGeoCodeOption().location(latLng));
+            }
+        }
+
+    };
+
+
+    @Override
+    public void onRequestFaild(String errorNo, String errorMessage) {
+        super.onRequestFaild(errorNo, errorMessage);
+        showProgress(false);
+        lv_store_home.onRefreshComplete();
+    }
+
+    @Override
+    public void onRequestSuccess(int requestCode) {
+        super.onRequestSuccess(requestCode);
+        lv_store_home.onRefreshComplete();
+        showProgress(false);
+        if (requestCode == 0) {
+            listBanner = mdao.getListMallBanner();
+            listMallKind = mdao.getListMallKind();
+            listMallNotice = mdao.getListMallNotice();
+            listMallRecommend = mdao.getListMallRecommend();
+            MessageUtils.showShortToast(getActivity(), "商城初始化成功");
+            setValue();
+            initRecommend();//推荐列表初始化
+            initNotice();//公告栏数据初始化
+        }
+
+        if (requestCode == 1) {
+            MessageUtils.showShortToast(getActivity(), "获取推荐商家列表成功");
+            listMall = mdao.getListMall();
+            // Log.i("tag", "listPost---" + listPost.size());
+            listviewAdapter.setList(listMall);
         }
 
 
-        kindList = new ArrayList<>();
-        for (int i = 0; i < 8; i++) {
-            Kind kind = new Kind();
-            kind.setKindName("频道:" + i);
-            kindList.add(kind);
+    }
+
+    private void initNotice() {
+
+        for (int i = 0; i < listMallNotice.size(); i++) {
+            listNoticeString.add(listMallNotice.get(i).getContent());
+        }
+        //实现自动切换界面
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (isloop) {
+                    //系统时钟的睡眠方法---->电量的消耗很少。
+                    SystemClock.sleep(4000);
+                    handler.sendEmptyMessage(1);
+                }
+            }
+        }).start();
+
+    }
+
+    private void initRecommend() {
+        if (listMallRecommend.size() > 0) {
+            Arad.imageLoader.load(listMallRecommend.get(0).getImgUrl()).placeholder(R.mipmap.fuzhuang).into(iv01_store_recomend);
+            iv01_store_recomend.setOnClickListener(this);
+        }
+        if (listMallRecommend.size() > 1) {
+            Arad.imageLoader.load(listMallRecommend.get(1).getImgUrl()).placeholder(R.mipmap.fuzhuang).into(iv02_store_recomend);
+            iv02_store_recomend.setOnClickListener(this);
+        }
+        if (listMallRecommend.size() > 2) {
+            Arad.imageLoader.load(listMallRecommend.get(2).getImgUrl()).placeholder(R.mipmap.fuzhuang).into(iv03_store_recomend);
+            iv03_store_recomend.setOnClickListener(this);
+        }
+        if (listMallRecommend.size() > 3) {
+            Arad.imageLoader.load(listMallRecommend.get(3).getImgUrl()).placeholder(R.mipmap.fuzhuang).into(iv04_store_recomend);
+            iv04_store_recomend.setOnClickListener(this);
         }
     }
+
 
     private void setValue() {
         StoreGridViewAdapter adapter = new StoreGridViewAdapter(getActivity());
-        adapter.setList(kindList);
+        gridView1.setClickable(true);
+        adapter.setList(listMallKind);
         int count = adapter.getCount();
         int columns = (count % 2 == 0) ? count / 2 : count / 2 + 1;
         gridView1.setAdapter(adapter);
@@ -133,10 +405,10 @@ public class StroeFragment extends ToolBarFragment implements View.OnClickListen
                 LinearLayout.LayoutParams.WRAP_CONTENT);
         gridView1.setLayoutParams(params);
         gridView1.setColumnWidth(dm.widthPixels / NUM);
-        // gridView.setHorizontalSpacing(hSpacing);
+        gridView1.setHorizontalSpacing(hSpacing);
         gridView1.setStretchMode(GridView.NO_STRETCH);
         if (count <= 3) {
-            gridView1.setNumColumns(count);
+            gridView1.setNumColumns(columns);
         } else {
             gridView1.setNumColumns(columns);
         }
@@ -145,11 +417,64 @@ public class StroeFragment extends ToolBarFragment implements View.OnClickListen
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getActivity(), StoreScreenActivity.class);
+                intent.putExtra("channelId", listMallKind.get(position).getId());
+                intent.putExtra("latitude", latitude);
+                intent.putExtra("longitude", longitude);
                 getActivity().startActivity(intent);
+                AnimUtil.intentSlidIn(getActivity());
             }
         });
 
     }
+
+    private void initNoticeView() {
+        tv_change.setText("");
+        set.addAnimation(animation);
+        set.addAnimation(ta);
+        set.setDuration(1000);
+        set.setRepeatMode(Animation.REVERSE);
+    }
+
+    private void initView() {
+        tv_toolbar.setOnClickListener(this);
+        AbsListView.LayoutParams layoutParams = new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, AbsListView.LayoutParams.WRAP_CONTENT);
+        View headview = getActivity().getLayoutInflater().inflate(R.layout.fragment_store_home_header, ll_linear_layout, false);
+        headview.setLayoutParams(layoutParams);
+        lv01 = lv_store_home.getRefreshableView();
+        tv_change = (TextView) headview.findViewById(R.id.tv_change);
+        framelayout = (FrameLayout) headview.findViewById(R.id.framelayout_store_home);
+        iv01_store_recomend = (ImageView) headview.findViewById(R.id.iv01_store_recomend);
+        iv02_store_recomend = (ImageView) headview.findViewById(R.id.iv02_store_recomend);
+        iv03_store_recomend = (ImageView) headview.findViewById(R.id.iv03_store_recomend);
+        iv04_store_recomend = (ImageView) headview.findViewById(R.id.iv04_store_recomend);
+        gridView1 = (GridViewForScrollView) headview.findViewById(R.id.gridView1_store_home);
+        lv01.addHeaderView(headview);
+        lv01.setFocusable(false);
+        listviewAdapter = new StoreFragmentAdapter(getActivity());
+    }
+
+    /*
+  * 轮播图
+  * */
+    private void setLoopView() {
+        // 1.创建轮播的holder
+        mAutoSwitchPicHolder = new HomeAutoSwitchPicHolder(getActivity());
+        // 2.得到轮播图的视图view
+        View autoPlayPicView = mAutoSwitchPicHolder.getRootView();
+        // 把轮播图的视图添加到主界面中
+        framelayout.addView(autoPlayPicView);
+        //4. 为轮播图设置数据
+        mAutoSwitchPicHolder.setData(getData());
+    }
+
+    public List<String> getData() {
+        mData = new ArrayList<String>();
+        mData.add("http://pic.qqmail.com/imagecache/20101016/1287208885.png");
+        mData.add("http://v1.qzone.cc/pic/201308/01/16/44/51fa1fd3d9f0d545.jpg!600x600.jpg");
+        mData.add("http://img.blog.cctv.com/attachments/2009/02/810583_200902231053501.jpg");
+        return mData;
+    }
+
 
     private void getScreenDen() {
         dm = new DisplayMetrics();
@@ -159,20 +484,177 @@ public class StroeFragment extends ToolBarFragment implements View.OnClickListen
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        lv_store_home.setAdapter(listviewAdapter);
 
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 555 && resultCode == 556) {
+            latitude_now = data.getStringExtra("latitude");
+            longitude_now = data.getStringExtra("longitude");
+            address_now = data.getStringExtra("address");
+            tv_toolbar.setText(address_now);
+        }
+        if (requestCode == 555 && resultCode == 557) {
+            latitude_address = data.getStringExtra("latitude");
+            longitude_address = data.getStringExtra("longitude");
+            address_address = data.getStringExtra("address");
+            tv_toolbar.setText(address_address);
+        }
+        if (requestCode == 555 && resultCode == 666) {
+            latitude_map = data.getStringExtra("latitude");
+            longitude_map = data.getStringExtra("longitude");
+            address_map = data.getStringExtra("address");
+            tv_toolbar.setText(address_map);
+        }
+        if (requestCode == 555 && resultCode == 888) {
+            latitude_search = data.getStringExtra("latitude");
+            longitude_search = data.getStringExtra("longitude");
+            address_search = data.getStringExtra("address");
+            tv_toolbar.setText(address_search);
+        }
+
+    }
 
     @Override
     public void onClick(View v) {
+        String type = null;
+        Intent intent = null;
         switch (v.getId()) {
             case R.id.tv_toolbar:
                 Intent intent_toolbar = new Intent(getActivity(), StoreLocateActivity.class);
-                startActivity(intent_toolbar);
+                intent_toolbar.putExtra("address", tv_toolbar.getText().toString().trim());
+                intent_toolbar.putExtra("latitude1", latitude1);
+                intent_toolbar.putExtra("longitude1", longitude1);
+                startActivityForResult(intent_toolbar, 555);
                 AnimUtil.intentSlidIn(getActivity());
                 break;
+
+            case R.id.iv01_store_recomend:
+                type = listMallRecommend.get(0).getType();
+                switch (type) {
+                    case "0"://跳商家
+                        intent = new Intent(getActivity(), StoreShopListVerticalStyleActivity.class);
+                        intent.putExtra("targerId", listMallRecommend.get(0).getTargetId());
+                        getActivity().startActivity(intent);
+                        AnimUtil.intentSlidIn(getActivity());
+                        break;
+                    case "1"://跳商品详情
+                        intent = new Intent(getActivity(), StoreCommodityDetailActivity.class);
+                        intent.putExtra("targerId", listMallRecommend.get(0).getTargetId());
+                        getActivity().startActivity(intent);
+                        AnimUtil.intentSlidIn(getActivity());
+                        break;
+                    case "2"://跳帖子详情
+                        intent = new Intent(getActivity(), InvitationDetailActivity.class);
+                        intent.putExtra("targerId", listMallRecommend.get(0).getTargetId());
+                        getActivity().startActivity(intent);
+                        AnimUtil.intentSlidIn(getActivity());
+                        break;
+                    case "3"://外部链接
+                        Uri uri = Uri.parse(listMallRecommend.get(0).getLinkUrl());
+                        intent = new Intent(Intent.ACTION_VIEW, uri);
+                        getActivity().startActivity(intent);
+                        AnimUtil.intentSlidIn(getActivity());
+                        break;
+
+                }
+                break;
+            case R.id.iv02_store_recomend:
+                type = listMallRecommend.get(1).getType();
+                switch (type) {
+                    case "0"://跳商家
+                        intent = new Intent(getActivity(), StoreShopListVerticalStyleActivity.class);
+                        intent.putExtra("targerId", listMallRecommend.get(1).getTargetId());
+                        getActivity().startActivity(intent);
+                        AnimUtil.intentSlidIn(getActivity());
+                        break;
+                    case "1"://跳商品详情
+                        intent = new Intent(getActivity(), StoreCommodityDetailActivity.class);
+                        intent.putExtra("targerId", listMallRecommend.get(1).getTargetId());
+                        getActivity().startActivity(intent);
+                        AnimUtil.intentSlidIn(getActivity());
+                        break;
+                    case "2"://跳帖子详情
+                        intent = new Intent(getActivity(), InvitationDetailActivity.class);
+                        intent.putExtra("targerId", listMallRecommend.get(1).getTargetId());
+                        getActivity().startActivity(intent);
+                        AnimUtil.intentSlidIn(getActivity());
+                        break;
+                    case "3"://外部链接
+                        Uri uri = Uri.parse(listMallRecommend.get(1).getLinkUrl());
+                        intent = new Intent(Intent.ACTION_VIEW, uri);
+                        getActivity().startActivity(intent);
+                        AnimUtil.intentSlidIn(getActivity());
+                        break;
+
+                }
+
+                break;
+            case R.id.iv03_store_recomend:
+                type = listMallRecommend.get(2).getType();
+                switch (type) {
+                    case "0"://跳商家
+                        intent = new Intent(getActivity(), StoreShopListVerticalStyleActivity.class);
+                        intent.putExtra("targerId", listMallRecommend.get(2).getTargetId());
+                        getActivity().startActivity(intent);
+                        AnimUtil.intentSlidIn(getActivity());
+                        break;
+                    case "1"://跳商品详情
+                        intent = new Intent(getActivity(), StoreCommodityDetailActivity.class);
+                        intent.putExtra("targerId", listMallRecommend.get(2).getTargetId());
+                        getActivity().startActivity(intent);
+                        AnimUtil.intentSlidIn(getActivity());
+                        break;
+                    case "2"://跳帖子详情
+                        intent = new Intent(getActivity(), InvitationDetailActivity.class);
+                        intent.putExtra("targerId", listMallRecommend.get(2).getTargetId());
+                        getActivity().startActivity(intent);
+                        AnimUtil.intentSlidIn(getActivity());
+                        break;
+                    case "3"://外部链接
+                        Uri uri = Uri.parse(listMallRecommend.get(2).getLinkUrl());
+                        intent = new Intent(Intent.ACTION_VIEW, uri);
+                        getActivity().startActivity(intent);
+                        AnimUtil.intentSlidIn(getActivity());
+                        break;
+
+                }
+
+                break;
+            case R.id.iv04_store_recomend:
+                type = listMallRecommend.get(3).getType();
+                switch (type) {
+                    case "0"://跳商家
+                        intent = new Intent(getActivity(), StoreShopListVerticalStyleActivity.class);
+                        intent.putExtra("targerId", listMallRecommend.get(3).getTargetId());
+                        getActivity().startActivity(intent);
+                        AnimUtil.intentSlidIn(getActivity());
+                        break;
+                    case "1"://跳商品详情
+                        intent = new Intent(getActivity(), StoreCommodityDetailActivity.class);
+                        intent.putExtra("targerId", listMallRecommend.get(3).getTargetId());
+                        getActivity().startActivity(intent);
+                        AnimUtil.intentSlidIn(getActivity());
+                        break;
+                    case "2"://跳帖子详情
+                        intent = new Intent(getActivity(), InvitationDetailActivity.class);
+                        intent.putExtra("targerId", listMallRecommend.get(3).getTargetId());
+                        getActivity().startActivity(intent);
+                        AnimUtil.intentSlidIn(getActivity());
+                        break;
+                    case "3"://外部链接
+                        Uri uri = Uri.parse(listMallRecommend.get(3).getLinkUrl());
+                        intent = new Intent(Intent.ACTION_VIEW, uri);
+                        getActivity().startActivity(intent);
+                        AnimUtil.intentSlidIn(getActivity());
+                        break;
+                }
+                break;
         }
-
-
     }
+
+
 }

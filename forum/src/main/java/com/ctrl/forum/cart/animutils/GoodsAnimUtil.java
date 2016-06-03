@@ -78,13 +78,13 @@ public abstract class GoodsAnimUtil {
         scaleAnimation.setInterpolator(new AccelerateInterpolator());
         scaleAnimation.setRepeatCount(0);// 动画重复执行的次数
         scaleAnimation.setFillAfter(true);
-        scaleAnimation.setDuration(300);
+        scaleAnimation.setDuration(400);
         final AnimationSet set = new AnimationSet(false);
         set.setFillAfter(false);
         set.addAnimation(translateAnimationY);
         set.addAnimation(translateAnimationX);
         //set.setStartOffset(300);
-        set.setDuration(800);// 动画的执行时间
+        set.setDuration(300);// 动画的执行时间
         view.startAnimation(set);
         // 动画监听事件
         set.setAnimationListener(new Animation.AnimationListener() {

@@ -12,7 +12,7 @@ import android.widget.TextView;
 import com.ctrl.forum.R;
 import com.ctrl.forum.base.AppToolBarActivity;
 import com.ctrl.forum.entity.Invitation_listview;
-import com.ctrl.forum.ui.adapter.InvitationFriendStyleListViewAdapter;
+import com.ctrl.forum.ui.adapter.InvitationListViewFriendStyleAdapter;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
 import java.util.ArrayList;
@@ -29,7 +29,7 @@ public class InvitationFriendStyleActivity extends AppToolBarActivity{
     @InjectView(R.id.lv_frind)//下拉列表
     PullToRefreshListView lv_friend;
     private ArrayList<Invitation_listview> kindList;
-    private InvitationFriendStyleListViewAdapter friendAdapter;
+    private InvitationListViewFriendStyleAdapter friendAdapter;
     private ListView lv;
 
 
@@ -43,8 +43,8 @@ public class InvitationFriendStyleActivity extends AppToolBarActivity{
 
         initView();
         initData();
-        friendAdapter=new InvitationFriendStyleListViewAdapter(this);
-        friendAdapter.setList(kindList);
+        friendAdapter=new InvitationListViewFriendStyleAdapter(this);
+       // friendAdapter.setList(kindList);
         lv=lv_friend.getRefreshableView();
         lv.setDivider(new ColorDrawable(Color.alpha(0)));
         lv.setDividerHeight(30);

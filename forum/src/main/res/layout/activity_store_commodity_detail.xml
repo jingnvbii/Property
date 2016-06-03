@@ -16,7 +16,8 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:src="@mipmap/jiantou_left_white"
-            android:layout_marginLeft="10dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="20dp"
             />
 
         <TextView
@@ -115,7 +116,7 @@
             android:textColor="@color/text_gray"
             />
         <TextView
-
+           android:id="@+id/tv_product_number"
             android:layout_toRightOf="@+id/tv_beizhu"
             android:layout_below="@+id/tv_commdity_name"
             android:layout_width="wrap_content"
@@ -126,7 +127,24 @@
             android:textColor="@color/text_gray"
             />
 
+        <FrameLayout
+            android:layout_width="100dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_height="wrap_content">
         <TextView
+            android:id="@+id/tv_add_cart"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="加入购物车"
+            android:visibility="visible"
+            android:padding="10dp"
+             android:textColor="@color/text_white"
+            android:background="@drawable/orange_border"
+            />
+      <!--  <TextView
+            android:id="@+id/tv_add_cart"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="加入购物车"
@@ -136,9 +154,45 @@
             android:layout_alignParentRight="true"
             android:layout_marginTop="10dp"
             android:layout_marginRight="10dp"
-            />
+            />-->
 
+            <RelativeLayout
+                android:id="@+id/rl_commodity_detail_add_cart"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:visibility="gone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
 
+                <ImageView
+                    android:id="@+id/iv_commodity_detail_add"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:src="@mipmap/add_cart_red"
+                    android:layout_alignParentRight="true"/>
+
+                <TextView
+                    android:id="@+id/tv_commodity_detail_num"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="12"
+                    android:padding="5dp"
+                    android:textColor="@color/text_red"
+                    android:layout_toLeftOf="@id/iv_commodity_detail_add"
+                    android:layout_marginRight="5dp"
+                    />
+
+                <ImageView
+                    android:id="@+id/iv_commodity_detail_sub"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:src="@mipmap/subtract_cart_red"
+                    android:layout_marginRight="5dp"
+                    android:layout_toLeftOf="@id/tv_commodity_detail_num"/>
+            </RelativeLayout>
+        </FrameLayout>
    </RelativeLayout>
 
     <TextView
@@ -149,13 +203,14 @@
         android:layout_margin="10dp"
         />
 
-    <ListView
+    <WebView
+        android:id="@+id/webview_commdity"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:background="@color/white"
         android:layout_weight="1">
 
-    </ListView>
+    </WebView>
 
     <RelativeLayout
         android:id="@+id/m_list_bt"

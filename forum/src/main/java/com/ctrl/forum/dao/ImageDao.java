@@ -38,7 +38,18 @@ public class ImageDao extends IDao {
         String url="sysImg/uploadImg";
         Map<String,String> map = new HashMap<String,String>();
         map.put("imgData",imgData);
-        postRequest(Constant.RAW_URL+url, mapToRP(map),888);
+        postRequest(Constant.RAW_URL + url, mapToRP(map), 888);
+    }
+    /**
+     * 删除图片接口
+     * @param id 图片id
+     *
+     * */
+    public void requestDeleteImage(String id){
+        String url="sysImg/deleteImg";
+        Map<String,String> map = new HashMap<String,String>();
+        map.put("id",id);
+        postRequest(Constant.RAW_URL+url, mapToRP(map),889);
     }
 
 
@@ -46,7 +57,7 @@ public class ImageDao extends IDao {
     public void onRequestSuccess(JsonNode result, int requestCode) throws IOException {
         if(requestCode == 888){
             Log.d("demo","dao中结果集(登录返回): " + result);
-            image = JsonUtil.node2pojo(result.findValue("memberInfo"), Image.class);
+            image = JsonUtil.node2pojo(result.findValue("data"), Image.class);
         }
 
 

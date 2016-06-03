@@ -7,6 +7,10 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,4 +46,52 @@ public class BitmapCompress {
 		}
 		return bitmap;
 	}
+
+	/**
+	 * 根据图片的url路径获得Bitmap对象
+	 * @param url
+	 * @return
+	 */
+	public static  Bitmap returnBitmap(String url) {
+		URL fileUrl = null;
+		Bitmap bitmap = null;
+
+		try {
+			fileUrl = new URL(url);
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		}
+
+		try {
+			HttpURLConnection conn = (HttpURLConnection) fileUrl
+					.openConnection();
+			conn.setDoInput(true);
+			conn.connect();
+			InputStream is = conn.getInputStream();
+			BitmapFactory.Options options = new BitmapFactory.Options();
+			options.inJustDecodeBounds = true;
+			BitmapFactory.decodeStream(is, null, options);
+			is.close();
+			int i = 0;
+			while (true) {
+				if ((options.outWidth >> i <= 1000)
+						&& (options.outHeight >> i <= 1000)) {
+					is = new BufferedInputStream(
+							is);
+					options.inSampleSize = (int) Math.pow(2.0D, i);
+					options.inJustDecodeBounds = false;
+					bitmap = BitmapFactory.decodeStream(is, null, options);
+					break;
+				}
+				i += 1;
+			}
+			is.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return bitmap;
+
+	}
+
+
 }

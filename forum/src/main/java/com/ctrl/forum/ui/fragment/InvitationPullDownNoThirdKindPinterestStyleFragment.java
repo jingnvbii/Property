@@ -10,9 +10,6 @@ import android.widget.FrameLayout;
 import com.beanu.arad.base.ToolBarFragment;
 import com.ctrl.forum.R;
 import com.ctrl.forum.customview.XListView;
-import com.ctrl.forum.ui.viewpage.CycleViewPager;
-import com.ctrl.forum.ui.viewpage.ViewFactory;
-import com.ctrl.forum.utils.DemoUtil;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -25,8 +22,6 @@ public class InvitationPullDownNoThirdKindPinterestStyleFragment extends ToolBar
     @InjectView(R.id.invitation_list_no_third_kind)
     XListView invitation_list_no_third_kind;
     private FrameLayout framelayout;
-    private View vhdf;
-    private CycleViewPager cycleViewPager;
 
 
     public static InvitationPullDownNoThirdKindPinterestStyleFragment newInstance() {
@@ -44,17 +39,9 @@ public class InvitationPullDownNoThirdKindPinterestStyleFragment extends ToolBar
         framelayout=(FrameLayout)headview.findViewById(R.id.framelayout);
         invitation_list_no_third_kind.addHeaderView(headview);
         //调用轮播图
-        setLoopView();
         return view;
     }
 
-    private void setLoopView() {
-        // 三句话 调用轮播广告
-        vhdf = getActivity().getLayoutInflater().inflate(R.layout.viewpage, null);
-        cycleViewPager = (CycleViewPager) getActivity().getFragmentManager().findFragmentById(R.id.fragment_cycle_viewpager_content);
-        ViewFactory.initialize(getActivity(), vhdf, cycleViewPager, DemoUtil.cycData());
-        framelayout.addView(vhdf);
-    }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {

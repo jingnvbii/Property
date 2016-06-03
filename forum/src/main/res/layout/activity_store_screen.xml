@@ -70,9 +70,10 @@
         android:background="@color/line_gray" />
 
     <com.handmark.pulltorefresh.library.PullToRefreshListView
-        android:id="@+id/listview"
+        android:id="@+id/lv_store_screen"
+        android:background="@color/white"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
     </com.handmark.pulltorefresh.library.PullToRefreshListView>
 
 

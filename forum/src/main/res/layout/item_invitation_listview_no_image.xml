@@ -3,6 +3,8 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="10dp">
+
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -17,11 +19,12 @@
 
 
 
-    <ImageView
+    <com.ctrl.forum.customview.RoundImageView
         android:layout_below="@+id/tv_titile0"
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:src="@mipmap/baby"
+        android:scaleType="fitXY"
         android:id="@+id/imageView0"
         android:layout_marginTop="10dp"
         android:layout_alignLeft="@+id/tv_titile0"
@@ -41,7 +44,7 @@
         android:id="@+id/tv_name0" />
 
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="80dp"
         android:layout_height="wrap_content"
         android:text="一分钟前"
         android:layout_marginTop="10dp"
@@ -56,7 +59,7 @@
 
     <TextView
         android:id="@+id/tv_numbers0"
-        android:layout_width="wrap_content"
+        android:layout_width="50dp"
         android:layout_height="wrap_content"
         android:text="20"
         android:layout_marginTop="10dp"

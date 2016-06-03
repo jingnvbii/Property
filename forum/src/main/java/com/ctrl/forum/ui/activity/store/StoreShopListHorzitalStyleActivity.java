@@ -145,9 +145,6 @@ public class StoreShopListHorzitalStyleActivity extends AppToolBarActivity imple
                 mHorizontalScrollView.smoothScrollTo((int) mCurrentCheckedRadioLeft - (width * 2) / 5, 0);
             }
         });
-
-
-
         mViewpager.setAdapter(new com.ctrl.forum.ui.adapter.ViewPagerAdapter(getSupportFragmentManager(), fragments));
         mViewpager.setOnPageChangeListener(new FragmentOnPageChangeListener());
         mViewpager.setCurrentItem(0);

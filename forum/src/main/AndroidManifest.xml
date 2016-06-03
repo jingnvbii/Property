@@ -13,6 +13,7 @@
 
 
     <!--百度地图权限配置-->
+
     <uses-permission android:name="com.android.launcher.permission.READ_SETTINGS" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
@@ -37,7 +38,17 @@
     <!--允许应用读取低级别的系统日志文件 -->
     <uses-permission android:name="android.permission.READ_LOGS"/>
 
+     <!--录音权限-->
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
+    <supports-screens
+        android:anyDensity="true"
+        android:largeScreens="true"
+        android:normalScreens="false"
+        android:resizeable="true"
+        android:smallScreens="true" />
 
     <application
         android:name=".base.MyApplication"
@@ -83,11 +94,17 @@
         <activity android:name=".ui.activity.Invitation.AddContactPhoneActivity" />
         <activity android:name=".ui.activity.Invitation.LocationActivity" />
         <activity android:name=".ui.activity.Invitation.CallingCardActivity" />
-        <activity android:name=".ui.activity.Invitation.InvitationPinterestDetailActivity" />
+        <activity android:name=".ui.activity.Invitation.InvitationPinterestDetailActivity"
+            android:windowSoftInputMode="stateVisible|adjustResize"
+            />
+        <activity android:name=".ui.activity.Invitation.InvitationDetailFromPlatformActivity"
+            android:windowSoftInputMode="stateVisible|adjustResize"
+            />
+
         <activity android:name=".ui.activity.Invitation.InvitationDetailActivity" />
-        <activity android:name=".ui.activity.Invitation.InvitationSecondPullDownActivity" />
         <activity android:name=".ui.activity.Invitation.InvitationSearchActivity" />
         <activity android:name=".ui.activity.Invitation.InvitationPinerestGalleyActivity" />
+        <activity android:name=".ui.activity.Invitation.InvitationCommentDetaioActivity" />
         <activity
             android:name=".ui.activity.Invitation.InvitationCommentActivity"
             android:windowSoftInputMode="stateUnchanged|adjustPan" />
@@ -113,6 +130,9 @@
         <activity android:name=".ui.activity.store.StorePaymentOrderActivity" />
         <activity android:name=".ui.activity.store.StorePaymentSucessActivity" />
         <activity android:name=".ui.activity.store.StoreOrderStatusActivity" />
+        <activity android:name=".ui.activity.store.StoreLocateMapActivity" />
+        <activity android:name=".ui.activity.store.StoreEditAddressActivity" />
+        <activity android:name=".ui.activity.store.StoreLocateListMapActivity" />
 
         <!--我的-->
         <activity android:name=".ui.activity.mine.MineAssessActivity" />

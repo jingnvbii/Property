@@ -87,7 +87,7 @@
             android:background="@color/line_gray" />
 
         <TextView
-            android:id="@+id/tv_pinjia"
+            android:id="@+id/tv_pinjia_commodity"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
@@ -110,7 +110,7 @@
         android:background="@color/white"
         android:paddingTop="10dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
     </com.handmark.pulltorefresh.library.PullToRefreshGridView>
 
 

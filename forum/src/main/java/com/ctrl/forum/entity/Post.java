@@ -17,6 +17,7 @@ public class Post {
     private String sourceType;//发布来源类型（0：平台、1：App）
     private int commentNum;//评论数
     private int praiseNum;//赞数
+    private int shareNum;//分享数
     private String publishTime;//帖子发布时间
     private String locationLongitude;//发帖位置经度
     private String locationLatitude;//发帖位置纬度
@@ -28,9 +29,13 @@ public class Post {
     private List<PostImage> postImgList;//图片列表
     private List<PostReply> postReplyList;//回复列表
 
+    public int getShareNum() {
+        return shareNum;
+    }
 
-
-
+    public void setShareNum(int shareNum) {
+        this.shareNum = shareNum;
+    }
 
     public List<PostReply> getPostReplyList() {
         return postReplyList;

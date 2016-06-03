@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:padding="10dp"
+    android:descendantFocusability="afterDescendants"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    <com.ctrl.forum.customview.RoundImageView
+        android:id="@+id/iv_reply_photo"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@mipmap/baby_large"
+        android:layout_alignBottom="@+id/tv_reply_address"
+        android:layout_alignParentTop="true" />
+    <TextView
+        android:id="@+id/tv_reply_name"
+        android:layout_width="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/iv_reply_photo"
+        android:layout_marginLeft="10dp"
+        android:textSize="16sp"
+        android:text="发帖人"
+        android:textColor="@color/text_black"/>
+    <ImageView
+        android:id="@+id/iv_reply_level"
+        android:layout_toRightOf="@id/tv_reply_name"
+        android:layout_marginTop="10dp"
+        android:layout_width="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/vip_icon3"/>
+    <TextView
+        android:id="@+id/tv_reply_time"
+        android:layout_toRightOf="@id/iv_reply_level"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/text_gray"
+        android:text="2013-5-6 12:12:12"/>
+    <ImageView
+        android:id="@+id/iv_reply_pinglun"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="20dp"
+        android:paddingBottom="20dp"
+        android:src="@mipmap/pinglun_large"
+        android:layout_alignParentRight="true"
+        />
+    <TextView
+        android:layout_toRightOf="@id/iv_reply_photo"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="5dp"
+        android:layout_below="@id/tv_reply_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/text_gray"
+        android:text="济南第三方就开始对福建省地方角色的"
+        android:id="@+id/tv_reply_address" />
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/tv_reply_content"
+        android:layout_marginTop="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/text_gray"
+        android:text="gdfgsdgsdgsgsdfgsdfsdfsdfsdfsd"/>
+
+    <LinearLayout
+        android:id="@+id/ll_reply_invitation_image"
+        android:layout_width="match_parent"
+        android:layout_marginTop="10dp"
+        android:visibility="gone"
+        android:layout_height="80dp">
+
+        <ImageView
+            android:id="@+id/iv_reply_invitation_image1"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:scaleType="fitXY"
+            android:src="@mipmap/fanbingbing"
+            android:layout_height="wrap_content" />
+        <ImageView
+            android:id="@+id/iv_reply_invitation_image2"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:scaleType="fitXY"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_height="wrap_content" />
+        <ImageView
+            android:id="@+id/iv_reply_invitation_image3"
+            android:layout_width="0dp"
+            android:scaleType="fitXY"
+            android:layout_weight="1"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/rl_reply_voice"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="50dp"
+        android:visibility="gone"
+        android:layout_centerVertical="true"
+        android:background="@drawable/blue_border_bg_voice" >
+
+        <View
+            android:id="@+id/id_recorder_anim"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_gravity="center_vertical|left"
+            android:background="@drawable/voice_default"/>
+
+        <TextView
+            android:id="@+id/tv_reply_voice_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="26'"
+            android:layout_gravity="center_vertical|left"
+            android:textColor="@color/text_white"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="10dp"
+            />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_pinglun"
+        android:layout_width="match_parent"
+        android:background="#eeeeee"
+        android:layout_marginTop="10dp"
+        android:padding="10dp"
+        android:visibility="visible"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tv_pinglun_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="引用飘絮的回复"/>
+
+        <TextView
+            android:id="@+id/tv_pinglun_content"
+            android:layout_below="@id/tv_pinglun_title"
+            android:layout_marginTop="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="dfsdkfjksdf"/>
+
+        <TextView
+            android:id="@+id/tv_pinglun_floor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:text="5楼"/>
+
+      <!--  <RelativeLayout
+            android:id="@+id/rl_reply_pinglun_voice"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:visibility="gone"
+            android:layout_below="@id/tv_pinglun_title"
+            android:layout_centerVertical="true"
+            android:background="@drawable/blue_border_bg_voice" >
+
+            <View
+                android:id="@+id/id_recorder_pinglun_anim"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center_vertical|left"
+                android:background="@drawable/voice_default"/>
+
+            <TextView
+                android:id="@+id/tv_reply_pinglun_voice_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="26'"
+                android:layout_gravity="center_vertical|left"
+                android:textColor="@color/text_white"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="10dp"
+                />
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_below="@id/tv_pinglun_title"
+            android:layout_marginTop="10dp"
+            android:visibility="gone"
+            android:id="@+id/ll_reply_pinglun_image"
+            android:layout_width="match_parent"
+            android:layout_height="100dp">
+
+            <ImageView
+                android:id="@+id/iv_reply_pinglun_image1"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:src="@mipmap/fanbingbing"
+                android:layout_height="wrap_content" />
+            <ImageView
+                android:id="@+id/iv_reply_pinglun_image2"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content" />
+            <ImageView
+                android:id="@+id/iv_reply_pinglun_image3"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+-->
+
+    </RelativeLayout>
+
+   <!-- <ListView
+        android:layout_marginTop="10dp"
+        android:id="@+id/lv_reply_pinglun"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    </ListView>
+-->
+
+</LinearLayout>

@@ -33,6 +33,32 @@ public class Post2 {
     private String contactAddress;//联系人地址
     private String contactPhone;//联系人电话
     private String vcardDisplay;//是否显示名片
+    private String zambiastate;//是否被当前用户点赞
+    private String collectstate;//是否被当前用户收藏
+
+    private List<PostImage> postImgList;//图片列表
+    private List<PostReply> postReplyList;//回复列表
+
+
+
+
+
+
+    public String getCollectstate() {
+        return collectstate;
+    }
+
+    public void setCollectstate(String collectstate) {
+        this.collectstate = collectstate;
+    }
+
+    public String getZambiastate() {
+        return zambiastate;
+    }
+
+    public void setZambiastate(String zambiastate) {
+        this.zambiastate = zambiastate;
+    }
 
     public List<PostReply> getPostReplyList() {
         return postReplyList;
@@ -49,9 +75,6 @@ public class Post2 {
     public void setPostImgList(List<PostImage> postImgList) {
         this.postImgList = postImgList;
     }
-
-    private List<PostImage> postImgList;//图片列表
-    private List<PostReply> postReplyList;//回复列表
 
 
     public String getContent() {
