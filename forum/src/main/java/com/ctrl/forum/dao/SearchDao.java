@@ -106,6 +106,7 @@ public class SearchDao extends IDao {
         postRequest(Constant.RAW_URL + url, mapToRP(map), 0);
     }
 
+
     /**
      * 清空我的搜索历史记录
      * @param memberId //会员id

@@ -24,7 +24,6 @@ import com.ctrl.forum.R;
 import com.ctrl.forum.base.AppToolBarActivity;
 import com.ctrl.forum.dao.MallDao;
 import com.ctrl.forum.dao.SearchDao;
-import com.ctrl.forum.entity.HotSearch;
 import com.ctrl.forum.entity.SearchHistory;
 import com.ctrl.forum.ui.adapter.InvitationSearchGridViewAdapter;
 import com.ctrl.forum.ui.adapter.StoreSearchHistoryAdapter;
@@ -64,7 +63,7 @@ public class StoreSearchActivity extends AppToolBarActivity implements View.OnCl
     private SearchDao sdao;
     private StoreSearchHistoryAdapter mStoreSearchHistoryAdapter;
     private MallDao mdao;
-    private List<HotSearch> listHotSearch;
+    private List<SearchHistory> listHotSearch;
     private InvitationSearchGridViewAdapter mInvitationSearchGridViewAdapter;
     private List<SearchHistory> listSearchHistory;
 
@@ -130,10 +129,10 @@ public class StoreSearchActivity extends AppToolBarActivity implements View.OnCl
     @Override
     public void onRequestSuccess(int requestCode) {
         super.onRequestSuccess(requestCode);
-        if (requestCode == 999) {
+        if (requestCode == 0) {
           //  MessageUtils.showShortToast(this, "获取搜索历史记录成功");
-            listSearchHistory=sdao.getListSearchHistory();
-            listHotSearch=sdao.getListHotSearch();
+            listSearchHistory=sdao.getSearchHistory();
+            listHotSearch=sdao.getHotSearch();
             mStoreSearchHistoryAdapter.setList(listSearchHistory);
             mInvitationSearchGridViewAdapter.setList(listHotSearch);
         }
