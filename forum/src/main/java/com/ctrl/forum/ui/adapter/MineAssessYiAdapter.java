@@ -9,7 +9,7 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.ctrl.forum.R;
-import com.ctrl.forum.entity.AssessYi;
+import com.ctrl.forum.entity.Assess;
 
 import java.util.List;
 
@@ -21,23 +21,18 @@ import butterknife.InjectView;
  * Created by Administrator on 2016/5/3.
  */
 public class MineAssessYiAdapter extends BaseAdapter {
-    private List<AssessYi> messages;
+    private List<Assess> messages;
     private Context context;
 
     public MineAssessYiAdapter(Context context) {this.context = context;}
 
-    public void setMessages(List<AssessYi> messages) {
+    public void setMessages(List<Assess> messages) {
         this.messages = messages;
         notifyDataSetChanged();
     }
 
-    public void addMessages(List<AssessYi> messages) {
-        this.messages.addAll(messages);
-        notifyDataSetChanged();
-    }
-
     @Override
-    public int getCount() {return messages.size()!= 0?messages.size():0;}
+    public int getCount() {return messages!=null?messages.size():0;}
 
     @Override
     public Object getItem(int position) {return messages.get(position);}
@@ -56,6 +51,13 @@ public class MineAssessYiAdapter extends BaseAdapter {
             holder=(ViewHolder)convertView.getTag();
         }
 
+        if (messages!=null){
+            holder.tv_name.setText(messages.get(position).getCompanyname());
+            holder.tv_time.setText(messages.get(position).getCreateTime());
+
+            //时间需改格式,评分条未传值,评价内容随评分条改变
+        }
+
         return convertView;
     }
 
@@ -65,7 +67,9 @@ public class MineAssessYiAdapter extends BaseAdapter {
         @InjectView(R.id.tv_time)
         TextView tv_time;   //时间
         @InjectView(R.id.rb)
-        RatingBar rb;    //评分条
+        RatingBar rb;    //评分条(未做)
+        @InjectView(R.id.tv_data)
+                TextView tv_data;  //评价
         ViewHolder(View view) {
             ButterKnife.inject(this, view);
         }

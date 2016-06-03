@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:background="@mipmap/gray_rectangle"
+    >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:background="@color/white"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:id="@+id/relativeLayout5">
+
+        <LinearLayout
+            android:id="@+id/ll_phone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal"
+            android:layout_centerHorizontal="true" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/text_black"
+                android:textSize="16sp"
+                android:text="当前手机"/>
+            <TextView
+                android:id="@+id/tv_phone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/red_bg"
+                android:textSize="16sp"
+                android:layout_marginLeft="5dp"
+                android:text="(1358903262)"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_people"
+            android:layout_below="@+id/ll_phone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:orientation="horizontal"
+            android:layout_centerHorizontal="true" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/text_black"
+                android:textSize="16sp"
+                android:text="为会员："/>
+            <TextView
+                android:id="@+id/member_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/red_bg"
+                android:textSize="16sp"
+                android:text="贾小多"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/text_black"
+                android:textSize="16sp"
+                android:layout_marginLeft="5dp"
+                android:text="使用  是否继续赠与?"/>
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_below="@+id/ll_people"
+            android:id="@+id/tv_line"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/line_gray"/>
+
+        <LinearLayout
+            android:layout_below="@+id/tv_line"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:orientation="horizontal">
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content">
+            <Button
+                android:id="@+id/give"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:textColor="@color/text_black"
+                android:background="@mipmap/white_rectangle"
+                android:textSize="16sp"
+                android:layout_centerHorizontal="true"
+                android:text="赠与"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content">
+                <Button
+                    android:id="@+id/bt_cancle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:textColor="@color/text_black"
+                    android:background="@mipmap/white_rectangle"
+                    android:textSize="16sp"
+                    android:layout_centerHorizontal="true"
+                    android:text="取消"/>
+            </RelativeLayout>
+
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</RelativeLayout>

@@ -54,4 +54,40 @@
             />
     </LinearLayout>
 
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:id="@+id/lines"
+        >
+
+        <TextView
+            android:id="@+id/tv_line_all"
+            android:layout_width="0dp"
+            android:layout_height="3dp"
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            android:gravity="center"
+            />
+        <TextView
+            android:id="@+id/tv_line_comment"
+            android:layout_width="0dp"
+            android:layout_height="3dp"
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            android:gravity="center" />
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="3dp"
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            android:gravity="center" />
+    </LinearLayout>
+    <android.support.v4.view.ViewPager
+        android:id="@+id/fl_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+    </android.support.v4.view.ViewPager>
+
 </LinearLayout>

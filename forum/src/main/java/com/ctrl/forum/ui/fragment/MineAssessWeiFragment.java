@@ -1,26 +1,31 @@
 package com.ctrl.forum.ui.fragment;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
+import com.beanu.arad.Arad;
+import com.beanu.arad.base.ToolBarFragment;
+import com.beanu.arad.utils.MessageUtils;
 import com.ctrl.forum.R;
-import com.ctrl.forum.entity.AssessWei;
+import com.ctrl.forum.dao.ReplyCommentDao;
+import com.ctrl.forum.entity.Assess;
 import com.ctrl.forum.ui.adapter.MineAssessWeiAdapter;
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
- * �����۶���
+ * 待评价订单
  */
-public class MineAssessWeiFragment extends Fragment {
-    private ListView lv_content;
+public class MineAssessWeiFragment extends ToolBarFragment {
+    private PullToRefreshListView lv_content;
     private MineAssessWeiAdapter assessWeiAdapter;
-    private List<AssessWei> assessWeis;
+    private List<Assess> assessWeis;
+    private ReplyCommentDao rcdao;
 
     public static MineAssessWeiFragment newInstance() {
         MineAssessWeiFragment fragment = new MineAssessWeiFragment();
@@ -38,23 +43,64 @@ public class MineAssessWeiFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view =inflater.inflate(R.layout.fragment_mine_notificationi, container, false);
-        lv_content = (ListView) view.findViewById(R.id.lv_content);
+        View view =inflater.inflate(R.layout.fragment_mine_list, container, false);
+        lv_content = (PullToRefreshListView) view.findViewById(R.id.lv_content);
         initData();
         assessWeiAdapter = new MineAssessWeiAdapter(getActivity());
-        assessWeiAdapter.setMessages(assessWeis);
         lv_content.setAdapter(assessWeiAdapter);
+
+        lv_content.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
+            @Override
+            public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
+                if (assessWeis != null) {
+                    assessWeis.clear();
+                    rcdao.queryOrderEvaluation(Arad.preferences.getString("memberId"), "0");
+                } else {
+                    lv_content.onRefreshComplete();
+                }
+            }
+
+            @Override
+            public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
+                if (assessWeis != null) {
+                    assessWeis.clear();
+                    rcdao.queryOrderEvaluation(Arad.preferences.getString("memberId"), "0");
+                } else {
+                    lv_content.onRefreshComplete();
+                }
+            }
+        });
         return view;
     }
 
     private void initData() {
-        assessWeis = new ArrayList<>();
+       /* assessWeis = new ArrayList<>();
         for(int i=0;i<7;i++){
-            AssessWei assessWei = new AssessWei();
-            assessWei.setShop_name(i+"");
+            Assess assessWei = new Assess();
             assessWeis.add(assessWei);
+        }
+*/
+        rcdao = new ReplyCommentDao(this);
+        rcdao.queryOrderEvaluation(Arad.preferences.getString("memberId"), "0");
+    }
+
+    @Override
+    public void onRequestSuccess(int requestCode) {
+        super.onRequestSuccess(requestCode);
+        lv_content.onRefreshComplete();
+        if (requestCode==1){
+            MessageUtils.showShortToast(getActivity(), "获取待评价订单成功");
+            assessWeis = rcdao.getAssesses();
+            if (assessWeis!=null){
+                assessWeiAdapter.setMessages(assessWeis);
+            }
         }
     }
 
-
+    @Override
+    public void onRequestFaild(String errorNo, String errorMessage) {
+        super.onRequestFaild(errorNo, errorMessage);
+        lv_content.onRefreshComplete();
+        MessageUtils.showShortToast(getActivity(), "获取待评价订单失败!");
+    }
 }

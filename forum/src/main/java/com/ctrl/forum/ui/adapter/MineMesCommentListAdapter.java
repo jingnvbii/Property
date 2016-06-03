@@ -17,6 +17,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 
 /**
+ *
  * Created by Administrator on 2016/5/3.
  */
 public class MineMesCommentListAdapter extends BaseAdapter {
@@ -24,7 +25,12 @@ public class MineMesCommentListAdapter extends BaseAdapter {
     private List<ReplyForMe> replyForMes;
     private Context context;
 
-    public MineMesCommentListAdapter(Context context, List<ReplyForMe> messages) {this.context = context;this.replyForMes = messages;}
+    public MineMesCommentListAdapter(Context context) {this.context = context;}
+
+    public void setReplyForMes(List<ReplyForMe> replyForMes) {
+        this.replyForMes = replyForMes;
+        notifyDataSetChanged();
+    }
 
     @Override
     public int getCount() {return replyForMes.size()!= 0?replyForMes.size():0;}

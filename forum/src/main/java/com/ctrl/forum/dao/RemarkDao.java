@@ -6,6 +6,7 @@ import com.beanu.arad.http.IDao;
 import com.beanu.arad.http.INetResult;
 import com.beanu.arad.utils.JsonUtil;
 import com.ctrl.forum.base.Constant;
+import com.ctrl.forum.entity.ExchaneProduct;
 import com.ctrl.forum.entity.IntegralProduct;
 import com.ctrl.forum.entity.RedeemHistory;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -22,7 +23,7 @@ import java.util.Map;
  */
 public class RemarkDao extends IDao {
     private List<IntegralProduct> integralProducts = new ArrayList<>(); //获取商品积分
-    private List<IntegralProduct> tRedeemHistory= new ArrayList<>();   //兑换商品积分历史记录
+    private List<ExchaneProduct> tRedeemHistory= new ArrayList<>();   //兑换商品积分历史记录
     private List<RedeemHistory> redeemHistories= new ArrayList<>(); //积分历史记录
 
     public RemarkDao(INetResult activity) {
@@ -93,15 +94,14 @@ public class RemarkDao extends IDao {
       }
         if (requestCode==1){
             Log.d("demo","dao中结果集(兑换积分商品): " + result);
-            integralProducts = JsonUtil.node2pojoList(result.findValue("integralProductList"),IntegralProduct.class);
         }
         if (requestCode==2){
             Log.d("demo","dao中结果集(兑换积分商品历史记录): " + result);
-            tRedeemHistory = JsonUtil.node2pojoList(result.findValue("tRedeemHistoryList"),IntegralProduct.class);
+            tRedeemHistory = JsonUtil.node2pojoList(result.findValue("tRedeemHistoryList"),ExchaneProduct.class);
         }
         if (requestCode==3){
             Log.d("demo","dao中结果集(积分历史记录): " + result);
-            redeemHistories = JsonUtil.node2pojoList(result.findValue("tRedeemHistoryList"),RedeemHistory.class);
+            redeemHistories = JsonUtil.node2pojoList(result.findValue("pointList"),RedeemHistory.class);
         }
     }
 
@@ -109,7 +109,7 @@ public class RemarkDao extends IDao {
         return integralProducts;
     }
 
-    public List<IntegralProduct> gettRedeemHistory() {
+    public List<ExchaneProduct> gettRedeemHistory() {
         return tRedeemHistory;
     }
 

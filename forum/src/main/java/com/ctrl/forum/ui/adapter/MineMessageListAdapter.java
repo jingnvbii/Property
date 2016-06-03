@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.ctrl.forum.R;
 import com.ctrl.forum.entity.Message;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -24,7 +25,12 @@ public class MineMessageListAdapter extends BaseAdapter{
     private List<Message> messages;
     private Context context;
 
-    public MineMessageListAdapter(Context context, List<Message> messages) {this.context = context;this.messages = messages;}
+    public MineMessageListAdapter(Context context) {this.context = context;this.messages = new ArrayList<>();}
+
+    public void setMessages(List<Message> messages) {
+        this.messages.addAll(messages);
+        notifyDataSetChanged();
+    }
 
     @Override
     public int getCount() {return messages.size()!= 0?messages.size():0;}

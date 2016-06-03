@@ -115,6 +115,9 @@ public class MainActivity extends AppToolBarActivity implements View.OnClickList
                 if (plotFragment == null) {
                     // 如果NewsFragment为空，则创建一个并添加到界面上
                     plotFragment = PlotFragment.newInstance();
+                    Bundle bundle = new Bundle();
+                    bundle.putString("str", "小区");
+                    plotFragment.setArguments(bundle);
                     transaction.add(R.id.content, plotFragment);
                 } else {
                     // 如果NewsFragment不为空，则直接将它显示出来

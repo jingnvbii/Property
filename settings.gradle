@@ -1,1 +1,1 @@
-include ':arad', ':pulltorefresh',':viewpagerindicator', ':swipelayoutlib', ':sharesdk', ':onekeyshare', ':forum', ':tabhost'
+include ':arad', ':pulltorefresh',':viewpagerindicator', ':swipelayoutlib', ':sharesdk', ':onekeyshare', ':forum', ':tabhost', ':myapplication'

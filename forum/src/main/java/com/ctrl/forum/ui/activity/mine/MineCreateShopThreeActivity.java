@@ -15,6 +15,7 @@ public class MineCreateShopThreeActivity extends AppToolBarActivity implements V
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mine_shop_three);
+        tv_apply_finish.setOnClickListener(this);
 
         tv_apply_finish = (TextView) findViewById(R.id.tv_apply_finish);
 
@@ -40,6 +41,7 @@ public class MineCreateShopThreeActivity extends AppToolBarActivity implements V
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.tv_apply_finish:
+                this.finish();
                 break;
         }
     }

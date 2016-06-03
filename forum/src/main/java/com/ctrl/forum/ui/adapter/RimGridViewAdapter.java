@@ -8,6 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 
 import com.ctrl.forum.R;
+import com.ctrl.forum.entity.RimServeCategorySecond;
 
 import java.util.List;
 
@@ -15,15 +16,25 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 
 /**
+ * 周边服务--gridView
  * Created by Administrator on 2016/4/26.
  */
 public class RimGridViewAdapter extends BaseAdapter{
-    private List<String> data;
+    private List<RimServeCategorySecond> data;
     private Context context;
-    public RimGridViewAdapter(List<String> data,Context context){
+    private View.OnClickListener onButton;
+    private String title;
+
+    public RimGridViewAdapter(Context context){
         this.context = context;
+    }
+
+    public void setData(List<RimServeCategorySecond> data) {
         this.data = data;
-        notifyDataSetChanged();
+    }
+
+    public void setOnButton(View.OnClickListener onButton) {
+        this.onButton = onButton;
     }
 
     @Override
@@ -42,16 +53,19 @@ public class RimGridViewAdapter extends BaseAdapter{
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
         if(convertView==null){
             convertView= LayoutInflater.from(context).inflate(R.layout.item_rim,parent,false);
             holder=new ViewHolder(convertView);
+            holder.bt_rim.setOnClickListener(onButton);
             convertView.setTag(holder);
         }else {
             holder=(ViewHolder)convertView.getTag();
         }
-        holder.bt_rim.setText(data.get(position));
+        holder.bt_rim.setText(data.get(position).getName());
+        holder.bt_rim.setTag(data.get(position).getId());
+        title = holder.bt_rim.getText().toString();
         return convertView;
     }
 
@@ -62,4 +76,5 @@ public class RimGridViewAdapter extends BaseAdapter{
             ButterKnife.inject(this, view);
         }
     }
+
 }

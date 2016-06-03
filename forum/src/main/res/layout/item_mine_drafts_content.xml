@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#dfdfdf" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/margin_left_and_right"
+        android:background="@color/white">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="标题:"
+            android:singleLine="true"
+            android:ellipsize="end"
+            android:id="@+id/tv_title"
+            android:layout_marginTop="@dimen/margin_left_and_right"
+            android:layout_marginLeft="@dimen/margin_left_and_right"
+            android:textSize="@dimen/text_size_basic"
+            android:textColor="#404040"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/drafts_title"
+            android:textSize="@dimen/text_size_basic"
+            android:textColor="#404040"
+            android:id="@+id/tv_title_content"
+            android:layout_alignBottom="@+id/tv_title"
+            android:layout_toRightOf="@+id/tv_title"
+            android:layout_toEndOf="@+id/tv_title" />
+
+        <Button
+            android:layout_width="80dp"
+            android:layout_height="38dp"
+            android:text="编辑"
+            android:textSize="@dimen/text_size_basic"
+            android:textColor="#404040"
+            android:id="@+id/bt_edit"
+            android:layout_marginTop="10dp"
+            android:layout_below="@+id/tv_title"
+            android:layout_alignLeft="@+id/tv_title"
+            android:layout_alignStart="@+id/tv_title" />
+
+        <Button
+            android:layout_width="80dp"
+            android:layout_height="38dp"
+            android:text="删除"
+            android:id="@+id/bt_delete"
+            android:textSize="@dimen/text_size_basic"
+            android:textColor="#404040"
+            android:layout_marginLeft="10dp"
+            android:layout_alignBottom="@+id/bt_edit"
+            android:layout_toRightOf="@+id/bt_edit"
+            android:layout_toEndOf="@+id/bt_edit" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/iconfont_back"
+            android:id="@+id/iv_back"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
+    </RelativeLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#dfdfdf" />
+</LinearLayout>
