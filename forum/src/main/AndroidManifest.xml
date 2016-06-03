@@ -57,7 +57,10 @@
             android:process=":remote" >
         </service>
 
-
+        <!--录音权限-->
+        <uses-permission android:name="android.permission.RECORD_AUDIO" />
+        <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+        <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
         <activity
             android:name=".ui.activity.StartActivity"
@@ -79,15 +82,22 @@
         <activity android:name=".photo.activity.ShowAllPhoto" />
 
 
+
         <!--帖子区-->
         <activity android:name=".ui.activity.Invitation.AddContactPhoneActivity" />
         <activity android:name=".ui.activity.Invitation.LocationActivity" />
         <activity android:name=".ui.activity.Invitation.CallingCardActivity" />
-        <activity android:name=".ui.activity.Invitation.InvitationPinterestDetailActivity" />
+        <activity android:name=".ui.activity.Invitation.InvitationPinterestDetailActivity"
+            android:windowSoftInputMode="stateVisible|adjustResize"
+            />
+        <activity android:name=".ui.activity.Invitation.InvitationDetailFromPlatformActivity"
+            android:windowSoftInputMode="stateVisible|adjustResize"
+            />
+
         <activity android:name=".ui.activity.Invitation.InvitationDetailActivity" />
-        <activity android:name=".ui.activity.Invitation.InvitationSecondPullDownActivity" />
         <activity android:name=".ui.activity.Invitation.InvitationSearchActivity" />
         <activity android:name=".ui.activity.Invitation.InvitationPinerestGalleyActivity" />
+        <activity android:name=".ui.activity.Invitation.InvitationCommentDetaioActivity" />
         <activity
             android:name=".ui.activity.Invitation.InvitationCommentActivity"
             android:windowSoftInputMode="stateUnchanged|adjustPan" />
@@ -113,8 +123,11 @@
         <activity android:name=".ui.activity.store.StorePaymentOrderActivity" />
         <activity android:name=".ui.activity.store.StorePaymentSucessActivity" />
         <activity android:name=".ui.activity.store.StoreOrderStatusActivity" />
+        <activity android:name=".ui.activity.store.StoreLocateMapActivity" />
+        <activity android:name=".ui.activity.store.StoreEditAddressActivity" />
+        <activity android:name=".ui.activity.store.StoreLocateListMapActivity" />
 
-        <!--我的-->
+        <!-- 我的 -->
         <activity android:name=".ui.activity.mine.MineAssessActivity" />
         <activity android:name=".ui.activity.mine.MineBlacklistActivity" />
         <activity android:name=".ui.activity.mine.MineCreateShopOneActivity" />
@@ -135,17 +148,53 @@
         <activity android:name=".ui.activity.mine.MineSignActivity" />
         <activity android:name=".ui.activity.mine.MineUpdatepwdActivity" />
         <activity android:name=".ui.activity.mine.MineSettingActivity" />
-        <activity android:name=".ui.activity.mine.MineShopManageActivity" />
+        <activity android:name=".ui.activity.mine.MineOrderManageActivity" />
         <activity android:name=".ui.activity.mine.MineYouJuanActivity" />
         <activity android:name=".ui.activity.mine.MineXianJuanActivity" />
         <activity android:name=".ui.activity.mine.RedPacketActivity" />
+        <activity android:name=".ui.activity.mine.MinePointHistoryActivity" />
+        <activity android:name=".ui.activity.mine.MineRemarkHistoryActivity" />
+        <activity android:name=".ui.activity.mine.MineFindFlotActivity" />
+        <activity android:name=".ui.activity.mine.MineShopManagerActivity" />
 
-        <!--周边-->
+        <!-- 周边 -->
         <activity android:name=".ui.activity.rim.ItemRimActivity" />
         <activity android:name=".ui.activity.rim.RimStoreCommentActivity" />
         <activity android:name=".ui.activity.rim.RimMapDetailActivity" />
         <activity android:name=".ui.activity.rim.RimCollectServeActivity" />
         <activity android:name=".ui.activity.rim.RimShopDetailActivity" />
+        <activity
+            android:name=".ui.activity.rim.RimSearchActivity"
+            android:label="@string/title_activity_rim_search" >
+        </activity>
+        <activity
+            android:name=".ui.activity.rim.RimSearchReaultActivity"
+            android:label="@string/title_activity_rim_search_reault" >
+        </activity>
+        <activity
+            android:name=".ui.activity.mine.MineQueryPostActivity"
+            android:label="@string/title_activity_mine_query_post" >
+        </activity>
+        <activity
+            android:name=".ui.activity.mine.MineDraftActivity"
+            android:label="@string/title_activity_mine_draft" >
+        </activity>
+        <activity
+            android:name=".ui.activity.plot.PlotSearchResultActivity"
+            android:label="@string/title_activity_plot_search_result" >
+        </activity>
+        <activity
+            android:name=".ui.activity.plot.PlotRimServeActivity"
+            android:label="@string/title_activity_plot_rim_serve" >
+        </activity>
+        <activity
+            android:name=".ui.activity.mine.MinePlotActivity"
+            android:label="@string/title_activity_mine_plot" >
+        </activity>
+        <activity
+            android:name=".ui.activity.mine.MineMerchantCouponActivity"
+            android:label="@string/title_activity_mine_merchant_coupon" >
+        </activity>
 
     </application>
 

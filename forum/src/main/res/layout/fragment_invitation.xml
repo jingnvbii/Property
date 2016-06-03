@@ -11,7 +11,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
         <com.handmark.pulltorefresh.library.PullToRefreshListView
-            android:id="@+id/lv_invitation_fragment_home"
+            android:id="@+id/lv_invitation_fragment"
             android:scrollbars="none"
             android:fastScrollEnabled="true"
             android:layout_width="match_parent"

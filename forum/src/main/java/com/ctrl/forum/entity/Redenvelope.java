@@ -40,15 +40,6 @@ public class Redenvelope {
     public void setExpired(String expired) {
         this.expired = expired;
     }
-=======
- * 优惠券实体类
- * Created by Administrator on 2016/4/8.
- */
-public class Redenvelope {
-    private String id; //优惠券主键id
-    private String amount;//优惠券金额
-    private String useRule;//使用规则说明
->>>>>>> origin/master
 
     public String getId() {
         return id;
@@ -58,7 +49,6 @@ public class Redenvelope {
         this.id = id;
     }
 
-<<<<<<< HEAD
     public String getLeastMoney() {
         return leastMoney;
     }
@@ -67,12 +57,12 @@ public class Redenvelope {
         this.leastMoney = leastMoney;
     }
 
-    public String getNotUsed() {
-        return notUsed;
+    public String getUseRule() {
+        return useRule;
     }
 
-    public void setNotUsed(String notUsed) {
-        this.notUsed = notUsed;
+    public void setUseRule(String useRule) {
+        this.useRule = useRule;
     }
 
     public String getNumber() {
@@ -83,31 +73,6 @@ public class Redenvelope {
         this.number = number;
     }
 
-    public String getUsed() {
-        return used;
-    }
-
-    public void setUsed(String used) {
-        this.used = used;
-=======
-    public String getAmount() {
-        return amount;
-    }
-
-    public void setAmount(String amount) {
-        this.amount = amount;
->>>>>>> origin/master
-    }
-
-    public String getUseRule() {
-        return useRule;
-    }
-
-    public void setUseRule(String useRule) {
-        this.useRule = useRule;
-    }
-<<<<<<< HEAD
-
     public String getUseState() {
         return useState;
     }
@@ -115,6 +80,20 @@ public class Redenvelope {
     public void setUseState(String useState) {
         this.useState = useState;
     }
-=======
->>>>>>> origin/master
+
+    public String getUsed() {
+        return used;
+    }
+
+    public void setUsed(String used) {
+        this.used = used;
+    }
+
+    public String getNotUsed() {
+        return notUsed;
+    }
+
+    public void setNotUsed(String notUsed) {
+        this.notUsed = notUsed;
+    }
 }

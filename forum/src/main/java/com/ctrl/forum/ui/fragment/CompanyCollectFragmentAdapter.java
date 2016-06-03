@@ -1,4 +1,4 @@
-package com.ctrl.forum.ui.adapter;
+package com.ctrl.forum.ui.fragment;
 
 import android.content.Context;
 import android.view.LayoutInflater;

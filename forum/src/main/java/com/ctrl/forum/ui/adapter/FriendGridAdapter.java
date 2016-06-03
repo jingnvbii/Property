@@ -48,10 +48,6 @@ public class FriendGridAdapter extends BaseAdapter {
 	public long getItemId(int arg0) {
 		return arg0;
 	}
-<<<<<<< HEAD
-=======
-	
->>>>>>> origin/master
 
 	@Override
 	public View getView(final int position, View view, ViewGroup arg2) {

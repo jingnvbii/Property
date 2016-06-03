@@ -25,16 +25,10 @@ import com.ctrl.forum.customview.GridViewForScrollView;
 import com.ctrl.forum.customview.ListViewForScrollView;
 import com.ctrl.forum.entity.Post;
 import com.ctrl.forum.entity.PostImage;
-<<<<<<< HEAD
-import com.ctrl.forum.ui.activity.Invitation.InvitationPullDownActivity;
-import com.ctrl.forum.ui.activity.mine.MineCommentActivity;
-import com.ctrl.forum.utils.SysUtils;
-=======
 import com.ctrl.forum.ui.activity.Invitation.InvitationCommentDetaioActivity;
 import com.ctrl.forum.ui.activity.Invitation.InvitationPullDownActivity;
 import com.ctrl.forum.utils.SysUtils;
 import com.ctrl.forum.utils.TimeUtils;
->>>>>>> origin/master
 
 import java.util.ArrayList;
 import java.util.List;
@@ -103,19 +97,6 @@ public class InvitationListViewFriendStyleAdapter extends BaseAdapter {
         final Post post = mPostList.get(position);
         holder.tv_friend_style_content.setText(post.getTitle());
         holder.tv_friend_style_name.setText(post.getMemberName());
-<<<<<<< HEAD
-//        holder.tv_friend_style_time.setText(TimeUtils.date(Long.parseLong(post.getPublishTime()))+"   "+post.getLocationName());
-        holder.tv_friend_style_zan_num.setText(post.getPraiseNum()+"");
-        holder.tv_friend_style_pinglun_num.setText(post.getCommentNum()+"");
-        holder.tv_friend_style_share_num.setText(post.getShareNum() + "");
-
-        //设置等级头像
-        if(post.getMemberLevel()!=null){
-            int level = Integer.parseInt(post.getMemberLevel());
-            holder.iv_friend_style_levlel.setImageResource(R.mipmap.vip_icon+level);
-        }
-
-=======
         holder.tv_friend_style_time.setText(TimeUtils.date(Long.parseLong(post.getPublishTime()))+"   "+post.getLocationName());
         holder.tv_friend_style_zan_num.setText(post.getPraiseNum()+"");
         holder.tv_friend_style_pinglun_num.setText(post.getCommentNum()+"");
@@ -145,7 +126,6 @@ public class InvitationListViewFriendStyleAdapter extends BaseAdapter {
                     break;
             }
         }
->>>>>>> origin/master
         Arad.imageLoader.load(post.getImgUrl()).placeholder(R.mipmap.default_error).into(holder.iv_friend_style_title_photo);
         if(post.getPostReplyList()!=null) {
             if (post.getPostReplyList().size() <= 3) {
@@ -209,11 +189,7 @@ public class InvitationListViewFriendStyleAdapter extends BaseAdapter {
         holder.rl_friend_style_pinglun.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-<<<<<<< HEAD
-                Intent intent=new Intent(mcontext, MineCommentActivity.class);
-=======
                 Intent intent=new Intent(mcontext, InvitationCommentDetaioActivity.class);
->>>>>>> origin/master
                 intent.putExtra("id",post.getId());
                 intent.putExtra("reportid",post.getReporterId());
                 mcontext.startActivity(intent);
@@ -223,11 +199,7 @@ public class InvitationListViewFriendStyleAdapter extends BaseAdapter {
         holder.tv_friend_style_shengyu_pinglun.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-<<<<<<< HEAD
-                Intent intent=new Intent(mcontext, MineCommentActivity.class);
-=======
                 Intent intent=new Intent(mcontext, InvitationCommentDetaioActivity.class);
->>>>>>> origin/master
                 intent.putExtra("id",post.getId());
                 intent.putExtra("reportid",post.getReporterId());
                 mcontext.startActivity(intent);
@@ -305,12 +277,7 @@ public class InvitationListViewFriendStyleAdapter extends BaseAdapter {
             @Override
             public void onClick(View v) {
                 InvitationPullDownActivity activity=(InvitationPullDownActivity)mcontext;
-<<<<<<< HEAD
-                //请求接口
-               // activity.requeMemberBlackListAdd(post.getReporterId(), popupWindow);
-=======
                 activity.requeMemberBlackListAdd(post.getReporterId(), popupWindow);
->>>>>>> origin/master
 
             }
         });
@@ -318,11 +285,7 @@ public class InvitationListViewFriendStyleAdapter extends BaseAdapter {
             @Override
             public void onClick(View v) {
                 InvitationPullDownActivity activity=(InvitationPullDownActivity)mcontext;
-<<<<<<< HEAD
-               // activity.requestJuBao(post.getId(),post.getReporterId(),popupWindow);
-=======
                 activity.requestJuBao(post.getId(),post.getReporterId(),popupWindow);
->>>>>>> origin/master
             }
         });
 

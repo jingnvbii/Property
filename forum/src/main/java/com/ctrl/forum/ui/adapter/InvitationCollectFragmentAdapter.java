@@ -52,7 +52,7 @@ public class InvitationCollectFragmentAdapter extends BaseAdapter{
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder=null;
         if(convertView==null){
-            convertView= LayoutInflater.from(mcontext).inflate(R.layout.item_listview_store_fragment,parent,false);
+            convertView= LayoutInflater.from(mcontext).inflate(R.layout.item_listview_store_fragment_jason,parent,false);
             holder=new ViewHolder(convertView);
             convertView.setTag(holder);
         }else {

@@ -142,7 +142,8 @@ public class InvitationListViewAdapter extends BaseAdapter{
                 if(post.getPublishTime()!=null)
                 holder1.tv_time0.setText(TimeUtils.dateTime(post.getPublishTime()));
                 holder1.tv_numbers0.setText(post.getCommentNum() + "");
-                Arad.imageLoader.load(post.getImgUrl()).into(holder1.imageView0);
+                Arad.imageLoader.load(post.getImgUrl()).placeholder(R.mipmap.baby_large).resize(50,50)
+                        .centerCrop().into(holder1.imageView1);
                 break;
             case 1:
                // Post mPost2 = mPostList.get(position);
@@ -151,7 +152,8 @@ public class InvitationListViewAdapter extends BaseAdapter{
               //  holder2.tv_time1.setText(TimeUtils.date(Long.parseLong(post.getPublishTime())));
                 holder2.tv_time1.setText(TimeUtils.dateTime(post.getPublishTime()));
                 holder2.tv_numbers1.setText(post.getCommentNum() + "");
-                Arad.imageLoader.load(post.getImgUrl()).into(holder2.imageView1);
+                Arad.imageLoader.load(post.getImgUrl()).placeholder(R.mipmap.baby_large).resize(50,50)
+                        .centerCrop().into(holder2.imageView2);
                 if(post.getPostImgList()!=null) {
                     Arad.imageLoader.load(post.getPostImgList().get(0).getImg()).placeholder(R.mipmap.default_error).into(holder2.iv_title_photo1);
                 }
@@ -162,7 +164,8 @@ public class InvitationListViewAdapter extends BaseAdapter{
                 holder3.tv_name3.setText(post.getMemberName());
                 holder3.tv_time3.setText(TimeUtils.dateTime(post.getPublishTime()));
                 holder3.tv_numbers03.setText(post.getCommentNum() + "");
-                Arad.imageLoader.load(post.getImgUrl()).into(holder3.imageView3);
+                Arad.imageLoader.load(post.getImgUrl()).placeholder(R.mipmap.baby_large).resize(50,50)
+                        .centerCrop().into(holder3.imageView3);
                 if(post.getPostImgList()!=null) {
                     Arad.imageLoader.load(post.getPostImgList().get(0).getImg()).placeholder(R.mipmap.default_error).into(holder3.iv_image3_01);
                     Arad.imageLoader.load(post.getPostImgList().get(1).getImg()).placeholder(R.mipmap.default_error).into(holder3.iv_image3_02);
@@ -186,7 +189,7 @@ public class InvitationListViewAdapter extends BaseAdapter{
         @InjectView(R.id.tv_numbers0)//评论数
         TextView  tv_numbers0;
         @InjectView(R.id.imageView0)
-        RoundImageView imageView0;
+        RoundImageView imageView1;
         ViewHolder1(View view) {
             ButterKnife.inject(this, view);
         }
@@ -201,7 +204,7 @@ public class InvitationListViewAdapter extends BaseAdapter{
         @InjectView(R.id.tv_numbers1)//评论数
         TextView  tv_numbers1;
         @InjectView(R.id.imageView1)
-        RoundImageView imageView1;
+        RoundImageView imageView2;
         @InjectView(R.id.iv_title_photo1)
         ImageView iv_title_photo1;
         ViewHolder2(View view) {

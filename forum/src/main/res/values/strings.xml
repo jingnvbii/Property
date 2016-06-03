@@ -74,6 +74,12 @@
     <string name="limit_day">2016.12.20-2016.12.23</string>
     <string name="goods_limit">限定商品</string>
     <string name="use_man">满1200元使用</string>
+    <string name="coupon_share">本现金劵分享后才能核销!</string>
+    <string name="share_now">是否现在分享?</string>
+    <string name="share">立即分享</string>
+    <string name="yes">是</string>
+    <string name="no">否</string>
+    <string name="coupon_cost">是否确认使用该优惠劵?</string>
 
     <!--积分商城-->
     <string name="integral_shop">积分商城</string>
@@ -82,6 +88,9 @@
     <string name="ji_log">积分记录</string>
     <string name="goods_name">商品名称:</string>
     <string name="goods_name_detail">小熊维尼T恤衫</string>
+    <string name="point_history">积分记录</string>
+    <string name="remark_history">兑换积分</string>
+    <string name="clear_all">清空</string>
 
     <!--积分记录-->
     <string name="fen_content">您登录平台超过5小时,奖励1个积分</string>
@@ -112,6 +121,12 @@
     <string name="dear_name">昵称:</string>
     <string name="clear_black">取消屏蔽</string>
 
+    <!--我的小区-->
+    <string name="find_plot">发现小区</string>
+    <string name="xx_plot">某某小区</string>
+    <string name="send_num">发布数:</string>
+    <string name="store_num">商家数:</string>
+
     <!--我的店铺-->
     <string name="apply_shop">店铺申请</string>
     <string name="apply_start">马上申请我的店铺</string>
@@ -127,8 +142,24 @@
     <string name="commit_apply">已提交审核,请耐心等待!</string>
     <string name="shop_all">全部</string>
     <string name="shop_put">待收货</string>
-    <string name="shop_send">待发货</string>
+    <string name="shop_paying">已付款</string>
     <string name="shop_yi_comment">已评价</string>
+    <string name="shop_manager">商品管理</string>
+
+    <!--订单管理-->
+    <string name="order_number">订单编号:</string>
+    <string name="order_time">下单时间:</string>
+    <string name="order_name">收货人:</string>
+    <string name="order_phone">联系电话:</string>
+    <string name="order_address">送货地址:</string>
+
+    <!--店铺管理-->
+    <string name="day_goods">日用百货</string>
+    <string name="milk">奶类</string>
+    <string name="sheng_xian">生鲜</string>
+    <string name="sale_pai">销售排行</string>
+    <string name="store_tui">商家推荐</string>
+    <string name="store_name">小贝日用百货便利店</string>
 
     <!--店铺评论-->
     <string name="store_comment">店铺评论</string>
@@ -169,6 +200,12 @@
     <string name="tie_collect">帖子收藏</string>
     <string name="shop_collect">店铺收藏</string>
     <string name="goods_collect">商品收藏</string>
+
+    <!--帖子收藏-->
+    <string name="post_content">历下区最新学区房,首付10万起,快来抢购啦!</string>
+    <string name="post_user_ID">发帖人:</string>
+    <string name="post_user_name">开创集团</string>
+    <string name="post_time">发布时间:</string>
 
     <!--修改密码-->
     <string name="updatepwd">修改密码</string>
@@ -215,6 +252,9 @@
     <string name="receive_comment">收到的评论</string>
     <string name="content_data">2015-10-3</string>
     <string name="message_contetn">您已成功升级为三星会员,感谢您对本平台的支持!</string>
+
+    <!--草稿箱-->
+    <string name="drafts_title">高新区学区房火热销售中,首付10万</string>
 
     <!--周边服务-->
     <string name="rim">周边服务</string>
@@ -270,4 +310,28 @@
     <string name="camera_cancel">取消</string>
     <string name="no_photo">相册没有图片</string>
     <string name="title_activity_add_contact_phone">AddContactPhoneActivity</string>
+    <string name="title_activity_mine_point_history">MinePointHistoryActivity</string>
+    <string name="title_activity_mine_remark_history">MineRemarkHistoryActivity</string>
+    <string name="title_activity_mineplot">MineplotActivity</string>
+    <string name="title_activity_map">MapActivity</string>
+    <string name="title_activity_mine_shop_manager">MineShopManagerActivity</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_rim_search">RimSearchActivity</string>
+    <string name="title_activity_rim_search_reault">RimSearchReaultActivity</string>
+    <string name="title_activity_mine_query_post">MineQueryPostActivity</string>
+    <string name="title_activity_mine_draft">MineDraftActivity</string>
+    <string name="title_activity_plot_search_result">PlotSearchResultActivity</string>
+    <string name="title_activity_plot_rim_serve">PlotRimServeActivity</string>
+    <string name="title_activity_mine_plot">MinePlotActivity</string>
+    <string name="title_activity_mine_merchant_coupon">MineMerchantCouponActivity</string>
+
+
+    <!--录音按钮-->
+    <string name="normal">按住 说话</string>
+    <string name="recording">松开 结束</string>
+    <string name="want_to_cancle">松开手指，取消发送</string>
+    <string name="shouzhishanghua">手指上滑，取消发送</string>
+    <string name="tooshort">录音时间过短</string>
 </resources>

@@ -8,13 +8,6 @@ package com.ctrl.forum.entity;
 public class SearchHistory {
     private String id;  //主键id
     private String keyword; //关键字
-=======
- * Created by Administrator on 2016/4/8.
- */
-public class SearchHistory {
-    private String id;//主键id
-    private String keyword;//关键字
->>>>>>> origin/master
 
     public String getId() {
         return id;

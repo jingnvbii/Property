@@ -20,7 +20,6 @@ import android.widget.TextView;
 import com.beanu.arad.Arad;
 import com.beanu.arad.base.ToolBarFragment;
 import com.beanu.arad.utils.AnimUtil;
-import com.beanu.arad.utils.MessageUtils;
 import com.ctrl.forum.R;
 import com.ctrl.forum.base.Constant;
 import com.ctrl.forum.dao.InvitationDao;
@@ -255,8 +254,6 @@ public class InvitationPullDownHaveThirdKindFragment extends ToolBarFragment {
         gridView1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                MessageUtils.showShortToast(getActivity(), "dfdf");
                 bol = 1;
                 idao.requestPostListByCategory(Arad.preferences.getString("memberId"), listCategroy3.get(position).getId(), "0", "", PAGE_NUM, Constant.PAGE_SIZE);
             }
