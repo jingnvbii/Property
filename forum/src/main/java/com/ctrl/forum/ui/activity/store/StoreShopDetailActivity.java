@@ -40,7 +40,7 @@ import butterknife.InjectView;
 * */
 
 public class StoreShopDetailActivity extends AppToolBarActivity implements View.OnClickListener {
-    @InjectView(R.id.lv_xianjinquan)//现金券12
+    @InjectView(R.id.lv_xianjinquan)//现金券
             ListViewForScrollView lv_xianjinquan;
     @InjectView(R.id.gridview_lianmeng)//联盟商家
             GridView gridview_lianmeng;
