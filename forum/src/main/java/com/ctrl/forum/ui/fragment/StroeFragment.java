@@ -475,7 +475,7 @@ public class StroeFragment extends ToolBarFragment implements View.OnClickListen
   * 轮播图
   * */
     private void setLoopView() {
-        // 1.创建轮播的holder
+        // 1.创建轮播的holder  fdfdf
         mAutoSwitchPicHolder = new HomeAutoSwitchPicHolder(getActivity());
         // 2.得到轮播图的视图view
         View autoPlayPicView = mAutoSwitchPicHolder.getRootView();
