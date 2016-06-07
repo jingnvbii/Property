@@ -52,7 +52,7 @@ public class MineMessageListAdapter extends BaseAdapter{
             holder=(ViewHolder)convertView.getTag();
         }
 
-        holder.tv_content.setText(messages.get(position).getContent());
+        //holder.tv_content.setText(messages.get(position).getContent());
 
         return convertView;
     }
