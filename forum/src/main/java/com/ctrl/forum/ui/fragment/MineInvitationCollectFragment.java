@@ -1,17 +1,21 @@
 package com.ctrl.forum.ui.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.beanu.arad.Arad;
 import com.beanu.arad.base.ToolBarFragment;
+import com.beanu.arad.utils.MessageUtils;
 import com.ctrl.forum.R;
 import com.ctrl.forum.base.Constant;
 import com.ctrl.forum.dao.CollectDao;
 import com.ctrl.forum.entity.CollectionPost;
+import com.ctrl.forum.ui.activity.Invitation.InvitationDetailFromPlatformActivity;
 import com.ctrl.forum.ui.adapter.MinePostCollectListAdapter;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
@@ -32,7 +36,6 @@ public class MineInvitationCollectFragment extends ToolBarFragment{
     public static MineInvitationCollectFragment newInstance() {
         MineInvitationCollectFragment fragment = new MineInvitationCollectFragment();
         Bundle args = new Bundle();
-
         fragment.setArguments(args);
         return fragment;
     }
@@ -44,7 +47,7 @@ public class MineInvitationCollectFragment extends ToolBarFragment{
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(final LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_mine_list, container, false);
@@ -74,6 +77,18 @@ public class MineInvitationCollectFragment extends ToolBarFragment{
                     collectDao.getCollectPostList(Arad.preferences.getString("memberId"), PAGE_NUM + "", Constant.PAGE_SIZE + "");
                 } else {
                     lv_content.onRefreshComplete();
+                }
+            }
+        });
+
+        lv_content.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                MessageUtils.showShortToast(getActivity(),position+"");
+                if (collectionPosts.get(position-1)!=null) {
+                    Intent intent = new Intent(getActivity(), InvitationDetailFromPlatformActivity.class);
+                    intent.putExtra("id", collectionPosts.get(position-1).getPostId());
+                    startActivity(intent);
                 }
             }
         });

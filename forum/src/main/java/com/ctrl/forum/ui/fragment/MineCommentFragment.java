@@ -8,7 +8,6 @@ import android.widget.ListView;
 
 import com.beanu.arad.Arad;
 import com.beanu.arad.base.ToolBarFragment;
-import com.beanu.arad.utils.MessageUtils;
 import com.ctrl.forum.R;
 import com.ctrl.forum.base.Constant;
 import com.ctrl.forum.dao.ReplyCommentDao;
@@ -85,7 +84,6 @@ public class MineCommentFragment extends ToolBarFragment {
         super.onRequestSuccess(requestCode);
         lv_content.onRefreshComplete();
         if(requestCode == 0){
-            MessageUtils.showShortToast(getActivity(),"查看评论成功");
             replyForMes = rcdao.getReplyForMes();
             if (replyForMes.size()>0){
                 lv_content.setAdapter(mineMesCommentListAdapter);

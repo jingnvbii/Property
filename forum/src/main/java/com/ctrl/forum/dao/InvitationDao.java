@@ -63,6 +63,7 @@ public class InvitationDao extends IDao {
     private List <NoticeImage>listNoticeImage=new ArrayList<>();//帖子公告图片
     private NoticeImage noticeImage;
     //  private ArrayList<PostImage> list=new ArrayList<>();
+    private List<Post> minePost = new ArrayList<>();
 
 
     public InvitationDao(INetResult activity){
@@ -445,15 +446,15 @@ public class InvitationDao extends IDao {
 
 
     /**
-     *获取我的评论
-     * @param memberId //会员id
+     * 获取我发布的帖子
+     * @param reporterId //会员id/发帖人id
      * @param pageNum //当前页码
      * @param pageSize //每页条数
      * */
-    public void requestObtainMyReplyList(String memberId,String pageNum,String pageSize){
-        String url="postReply/obtainMyReplyList";
+    public void queryMyPostList(String reporterId,String pageNum,String pageSize){
+        String url="post/queryMyPostList";
         Map<String,String> map = new HashMap<String,String>();
-        map.put("memberId",memberId);
+        map.put("reporterId",reporterId);
         map.put("pageNum",pageNum);
         map.put("pageSize",pageSize);
 
@@ -549,8 +550,8 @@ public class InvitationDao extends IDao {
             listCategroyItem = JsonUtil.node2pojoList(result.findValue("itemCategoryList"), CategoryItem.class);
         }
         if (requestCode == 18){
-            Log.d("demo","dao中结果集(获取我的评论列表接口): " + result);
-
+            Log.d("demo","dao中结果集(获取我发布的帖子接口): " + result);
+            minePost = JsonUtil.node2pojoList(result.findValue("postList"),Post.class);
         }
 
 
@@ -617,5 +618,9 @@ public class InvitationDao extends IDao {
 
     public List<NoticeImage> getListNoticeImage() {
         return listNoticeImage;
+    }
+
+    public List<Post> getMinePost() {
+        return minePost;
     }
 }

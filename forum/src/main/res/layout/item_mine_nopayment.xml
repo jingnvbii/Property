@@ -136,6 +136,19 @@
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
         android:layout_marginRight="@dimen/text_size_basic"/>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="35dp"
+        android:text="取消订单"
+        android:background="@color/red_bg"
+        android:textColor="@color/text_white"
+        android:textSize="@dimen/text_size_basic"
+        android:id="@+id/cancle"
+        android:layout_below="@+id/textView25"
+        android:layout_toLeftOf="@+id/payment"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginRight="@dimen/text_size_basic"/>
 
 
 </RelativeLayout>

@@ -12,8 +12,8 @@ import android.widget.TextView;
 import com.beanu.arad.Arad;
 import com.ctrl.forum.R;
 import com.ctrl.forum.customview.StorkPicView;
-import com.ctrl.forum.entity.CProduct;
-import com.ctrl.forum.entity.CProductCategory;
+import com.ctrl.forum.entity.Product2;
+import com.ctrl.forum.entity.ProductCategroy;
 
 import java.util.List;
 import java.util.Map;
@@ -21,25 +21,26 @@ import java.util.Map;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
+/**
+ * 商品管理
+ */
 public class MineShopManagerAdapter extends SectionedBaseAdapter {
 	
 	private Context mContext;
-	//private String[] leftStr;
-    private List<CProductCategory> leftStr;
-	//private Map<Integer,List<CProduct>> rightStr;
-    private Map<String,List<CProduct>> rightStr;
+    private List<ProductCategroy> leftStr;
+    private Map<String,List<Product2>> rightStr;
     private CompoundButton.OnCheckedChangeListener onCheckBox;
 	
 	public MineShopManagerAdapter(Context context){
 		this.mContext = context;
 	}
 
-    public void setLeftStr(List<CProductCategory> leftStr) {
+    public void setLeftStr(List<ProductCategroy> leftStr) {
         this.leftStr = leftStr;
         notifyDataSetChanged();
     }
 
-    public void setRightStr( Map<String,List<CProduct>> rightStr) {
+    public void setRightStr( Map<String,List<Product2>> rightStr) {
         this.rightStr = rightStr;
         notifyDataSetChanged();
     }
@@ -88,13 +89,14 @@ public class MineShopManagerAdapter extends SectionedBaseAdapter {
 
         if (leftStr!=null&&rightStr!=null){
             holder.iv_right_pic.setColour(mContext.getResources().getColor(R.color.c_gray));
-            holder.iv_right_pic.setBorderWidth(1);
-            List<CProduct> cProducts =rightStr.get(leftStr.get(position).getId());
-            Arad.imageLoader.load(cProducts.get(position).getListImgUrl()).placeholder(R.mipmap.fuzhuang).into(holder.iv_right_pic);
-            holder.tv_store_name.setText(cProducts.get(position).getName());
-            holder.tv_dan_price.setText(cProducts.get(position).getSellingPrice());
-            holder.tv_sale_num.setText(cProducts.get(position).getSalesVolume());
-
+            holder.iv_right_pic.setBorderWidth(3);
+            List<Product2> cProducts =rightStr.get(leftStr.get(section).getId());
+            if (cProducts!=null) {
+                Arad.imageLoader.load(cProducts.get(position).getListImgUrl()).into(holder.iv_right_pic);
+                holder.tv_store_name.setText(cProducts.get(position).getName());
+                holder.tv_dan_price.setText(cProducts.get(position).getSellingPrice()+"元/份");
+                holder.tv_sale_num.setText(cProducts.get(position).getSalesVolume());
+            }
             String storeId = cProducts.get(position).getId();//商品的id
             holder.iv_checkBox.setTag(storeId);
         }
@@ -111,8 +113,8 @@ public class MineShopManagerAdapter extends SectionedBaseAdapter {
             layout = (LinearLayout) convertView;
         }
         layout.setClickable(false);
-        CProductCategory cProductCategory = leftStr.get(section);
-        ((TextView) layout.findViewById(R.id.tv_header)).setText(cProductCategory.getName());
+        ProductCategroy productCategory = leftStr.get(section);
+        ((TextView) layout.findViewById(R.id.tv_header)).setText(productCategory.getName());
         return layout;
     }
 

@@ -29,6 +29,7 @@ public class MineOrderListAdapter extends BaseAdapter{
     private View.OnClickListener onPay;
     private View.OnClickListener onBuy;
     private View.OnClickListener onPingJia;
+    private View.OnClickListener onCancle;
 
     public MineOrderListAdapter(Context context) {
         this.context = context;
@@ -37,6 +38,10 @@ public class MineOrderListAdapter extends BaseAdapter{
     public void setOrders(List<MemeberOrder> orders) {
         this.orders = orders;
         notifyDataSetChanged();
+    }
+
+    public void setOnCancle(View.OnClickListener onCancle) {
+        this.onCancle = onCancle;
     }
 
     public void setOnBuy(View.OnClickListener onBuy) {
@@ -92,6 +97,7 @@ public class MineOrderListAdapter extends BaseAdapter{
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder = null;
+        String id = orders.get(position).getId();
         if(convertView==null){
             switch (types.get(position)){
                 case 0://已付款
@@ -108,8 +114,9 @@ public class MineOrderListAdapter extends BaseAdapter{
                     holder.iv_delete.setOnClickListener(onDelete);
                     holder.buy_again.setOnClickListener(onBuy);
                     holder.button2.setOnClickListener(onPingJia);
-                    holder.buy_again.setTag(position);
-                    holder.button2.setTag(position);
+                    holder.iv_delete.setTag(id);
+                    holder.buy_again.setTag(id);
+                    holder.button2.setTag(id);
                     convertView.setTag(holder);
                     break;
                 case 3://未付款
@@ -122,10 +129,13 @@ public class MineOrderListAdapter extends BaseAdapter{
                     holder.iv_head = (ImageView) convertView.findViewById(R.id.iv_head);
                     holder.iv_delete = (ImageView) convertView.findViewById(R.id.iv_delete);
                     holder.payment = (Button) convertView.findViewById(R.id.payment);
+                    holder.cancle = (Button) convertView.findViewById(R.id.cancle);
+                    holder.cancle.setOnClickListener(onCancle);
                     holder.payment.setOnClickListener(onPay);
                     holder.iv_delete.setOnClickListener(onDelete);
-                    holder.payment.setTag(position);
-                    holder.iv_delete.setTag(position);
+                    holder.cancle.setTag(id);
+                    holder.payment.setTag(id);
+                    holder.iv_delete.setTag(id);
                     convertView.setTag(holder);
                     break;
             }
@@ -154,5 +164,6 @@ public class MineOrderListAdapter extends BaseAdapter{
         ImageView iv_delete;
         Button buy_again;
         Button button2;
+        Button cancle;
     }
 }

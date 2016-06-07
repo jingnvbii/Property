@@ -1,13 +1,13 @@
 package com.ctrl.forum.ui.activity.mine;
 
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -16,9 +16,10 @@ import com.beanu.arad.base.ToolBarActivity;
 import com.beanu.arad.utils.MessageUtils;
 import com.ctrl.forum.R;
 import com.ctrl.forum.customview.MinePinnedHeaderListView;
+import com.ctrl.forum.dao.MallDao;
 import com.ctrl.forum.dao.MineStoreDao;
-import com.ctrl.forum.entity.CProduct;
-import com.ctrl.forum.entity.CProductCategory;
+import com.ctrl.forum.entity.Product2;
+import com.ctrl.forum.entity.ProductCategroy;
 import com.ctrl.forum.ui.adapter.MineShopManagerAdapter;
 
 import java.util.ArrayList;
@@ -34,13 +35,11 @@ public class MineShopManagerActivity extends ToolBarActivity implements Compound
     private MineShopManagerAdapter sectionedAdapter;
     private boolean isScroll = true;
     private ListView left_listView;
-    private Map<String,List<CProduct>> rightStr ;
-   //private Map<Integer,List<CProduct>> rightStr ;
-    private List<CProduct> rightStrs;
-    private TextView tv_left_content;
+    private Map<String,List<Product2>> rightStr ;
     private TextView tv_line;
     private MineStoreDao sdao;
-    private List<CProductCategory> leftStr; //商品分类
+    private MallDao mallDao;
+    private List<ProductCategroy> leftStr; //商品分类
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,12 +63,20 @@ public class MineShopManagerActivity extends ToolBarActivity implements Compound
                 for (int i = 0; i < left_listView.getChildCount(); i++) {
                     if (i == position) {
                         left_listView.getChildAt(i).setBackgroundColor(getResources().getColor(R.color.white));
-                        //TextView textView = (TextView) view.findViewById(R.id.tv_left_content);
-                        tv_left_content.setTextColor(getResources().getColor(R.color.red_bg));
-                        //textView.setTextColor(getResources().getColor(R.color.red_bg));
+                        LinearLayout ll = (LinearLayout) left_listView.getChildAt(i);
+
+                        TextView tv = (TextView) ll.getChildAt(1);
+                        tv.setTextColor(getResources().getColor(R.color.red_bg));
+                        TextView tv1 = (TextView) ll.getChildAt(0);
+                        tv1.setBackgroundColor(getResources().getColor(R.color.red_bg));
                     } else {
                         left_listView.getChildAt(i).setBackgroundColor(getResources().getColor(R.color.gray_store));
-                        tv_left_content.setTextColor(getResources().getColor(R.color.defaultTextColor));
+
+                        LinearLayout ll = (LinearLayout) left_listView.getChildAt(i);
+                        TextView tv = (TextView) ll.getChildAt(1);
+                        tv.setTextColor(getResources().getColor(R.color.defaultTextColor));
+                        TextView tv1 = (TextView) ll.getChildAt(0);
+                        tv1.setBackgroundColor(getResources().getColor(R.color.gray_store));
                     }
                 }
 
@@ -88,6 +95,7 @@ public class MineShopManagerActivity extends ToolBarActivity implements Compound
             public void onScrollStateChanged(AbsListView arg0, int arg1) {
 
             }
+
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem,
                                  int visibleItemCount, int totalItemCount) {
@@ -95,10 +103,19 @@ public class MineShopManagerActivity extends ToolBarActivity implements Compound
                     for (int i = 0; i < left_listView.getChildCount(); i++) {
                         if (i == sectionedAdapter.getSectionForPosition(firstVisibleItem)) {
                             left_listView.getChildAt(i).setBackgroundColor(getResources().getColor(R.color.white));
-                            tv_left_content.setTextColor(getResources().getColor(R.color.red_bg));
+                            LinearLayout ll = (LinearLayout) left_listView.getChildAt(i);
+
+                            TextView tv = (TextView) ll.getChildAt(1);
+                            tv.setTextColor(getResources().getColor(R.color.red_bg));
+                            TextView tv1 = (TextView) ll.getChildAt(0);
+                            tv1.setBackgroundColor(getResources().getColor(R.color.red_bg));
                         } else {
                             left_listView.getChildAt(i).setBackgroundColor(getResources().getColor(R.color.gray_store));
-                            tv_left_content.setTextColor(getResources().getColor(R.color.defaultTextColor));
+                            LinearLayout ll = (LinearLayout) left_listView.getChildAt(i);
+                            TextView tv = (TextView) ll.getChildAt(1);
+                            tv.setTextColor(getResources().getColor(R.color.defaultTextColor));
+                            TextView tv1 = (TextView) ll.getChildAt(0);
+                            tv1.setBackgroundColor(getResources().getColor(R.color.gray_store));
                         }
                     }
                 } else {
@@ -111,24 +128,13 @@ public class MineShopManagerActivity extends ToolBarActivity implements Compound
     private void initView() {
          right_listview = (MinePinnedHeaderListView) findViewById(R.id.lv_right);
          tv_line = (TextView) findViewById(R.id.tv_line);
-
         left_listView = (ListView) findViewById(R.id.lv_left);
-
-        View leftView = LayoutInflater.from(this).inflate(R.layout.item_mine_list_left,null);
-        tv_left_content = (TextView) leftView.findViewById(R.id.tv_left_content);
     }
 
     private void initData() {
-        /*rightStr = new HashMap<>();
-        for (int i = 0;i<5;i++){
-            List<CProduct> list = new ArrayList<>();
-            CProduct cProduct = new CProduct();
-            cProduct.setId("i");
-         rightStr.put(i+"",list);
-        }*/
-
         sdao = new MineStoreDao(this);
-        sdao.getProductCategory(Arad.preferences.getString("companyId"));
+        mallDao = new MallDao(this);
+        mallDao.requestProductCategroy(Arad.preferences.getString("companyId"));
     }
 
     @Override
@@ -146,49 +152,20 @@ public class MineShopManagerActivity extends ToolBarActivity implements Compound
     @Override
     public String setupToolBarTitle() {return "商品管理";}
 
-    private void getData()
-    {
-        leftStr = new ArrayList<>();
-        CProductCategory cProductCategory = new CProductCategory();
-        cProductCategory.setName("日用百货");
-        leftStr.add(cProductCategory);
-        CProductCategory cProductCategory1 = new CProductCategory();
-        cProductCategory.setName("奶类");
-        leftStr.add(cProductCategory1);
-        CProductCategory cProductCategory2= new CProductCategory();
-        cProductCategory.setName("生鲜类");
-        leftStr.add(cProductCategory2);
-        CProductCategory cProductCategory3 = new CProductCategory();
-        cProductCategory.setName("销量排行");
-        leftStr.add(cProductCategory3);
-
-        List<String> str1 = new ArrayList<>();
-        for (int i= 0 ;i<leftStr.size();i++){
-            CProductCategory cProductCategory6 = leftStr.get(i);
-            str1.add(cProductCategory6.getName());
-            //rightStr赋值
-            rightStr.put(leftStr.get(i).getId(),leftStr.get(i).getcProducts());
-        }
-        left_listView.setAdapter(new ArrayAdapter<>(this,
-                R.layout.item_mine_list_left, R.id.tv_left_content, str1));
-    }
-
     @Override
     public void onRequestSuccess(int requestCode) {
         super.onRequestSuccess(requestCode);
-        if (requestCode==2){
-            leftStr = sdao.getProductCategories();
+        if (requestCode==9){
+            leftStr = mallDao.getListProductCategroy();
             rightStr = new HashMap<>();
             if (leftStr!=null){
                 tv_line.setBackgroundColor(getResources().getColor(R.color.line_gray));
 
                 List<String> str = new ArrayList<>();
                 for (int i= 0 ;i<leftStr.size();i++){
-                    CProductCategory cProductCategory = leftStr.get(i);
-                    str.add(cProductCategory.getName());
-                    //rightStr赋值
-                    rightStr.put(leftStr.get(i).getId(),leftStr.get(i).getcProducts());
-                    //Log.e(leftStr.get(i).getcProducts().toString(),"=================");
+                    ProductCategroy productCategory = leftStr.get(i);
+                    str.add(productCategory.getName());
+                    rightStr.put(leftStr.get(i).getId(),leftStr.get(i).getProductList());
                 }
                 left_listView.setAdapter(new ArrayAdapter<>(this,
                         R.layout.item_mine_list_left, R.id.tv_left_content, str));
@@ -213,4 +190,5 @@ public class MineShopManagerActivity extends ToolBarActivity implements Compound
             MessageUtils.showShortToast(this, "商品下架");
         }
     }
+
 }

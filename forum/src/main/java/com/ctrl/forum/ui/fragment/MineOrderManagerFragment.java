@@ -4,10 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.beanu.arad.Arad;
 import com.beanu.arad.base.ToolBarFragment;
@@ -15,24 +12,30 @@ import com.beanu.arad.utils.MessageUtils;
 import com.ctrl.forum.R;
 import com.ctrl.forum.base.Constant;
 import com.ctrl.forum.dao.MineStoreDao;
+import com.ctrl.forum.dao.OrderDao;
 import com.ctrl.forum.entity.CompanyOrder;
+import com.ctrl.forum.entity.OrderItem;
+import com.ctrl.forum.entity.OrderState;
 import com.ctrl.forum.ui.adapter.MineOrderManagerAdapter;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * 订单管理
  */
-public class MineOrderManagerFragment extends ToolBarFragment {
+public class MineOrderManagerFragment extends ToolBarFragment implements View.OnClickListener{
     private PullToRefreshListView lv_content;
     private MineOrderManagerAdapter orderManagerAdapter;
     private List<CompanyOrder> companyOrders;
+    private List<OrderItem> orderItems;
+    private List<OrderState> orderStates;
     private MineStoreDao odao;
     public static int type = 0;
     private int PAGE_NUM =1;
-
+    private OrderDao orderDao;
 
     public static MineOrderManagerFragment newInstance() {
         MineOrderManagerFragment fragment = new MineOrderManagerFragment();
@@ -52,20 +55,24 @@ public class MineOrderManagerFragment extends ToolBarFragment {
         lv_content = (PullToRefreshListView) view.findViewById(R.id.lv_content);
         Bundle args = getArguments();
         type = args.getInt("position");
-        //initView();
-       initData();
+
         orderManagerAdapter = new MineOrderManagerAdapter(getActivity());
         lv_content.setAdapter(orderManagerAdapter);
+        orderManagerAdapter.setOnButton(this);
+
+        //initView();
+        initData();
 
         lv_content.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
                 if (companyOrders != null) {
                     companyOrders.clear();
-                    odao.companyOrderList(Arad.preferences.getString("companyId"), type + "", Constant.PAGE_SIZE + "", PAGE_NUM + "");
-                } else {
-                    lv_content.onRefreshComplete();
+                    PAGE_NUM = 1;
+                    orderManagerAdapter = new MineOrderManagerAdapter(getActivity());
+                    lv_content.setAdapter(orderManagerAdapter);
                 }
+                odao.companyOrderList(Arad.preferences.getString("companyId"), type + "", Constant.PAGE_SIZE + "", PAGE_NUM + "");
             }
 
             @Override
@@ -83,37 +90,24 @@ public class MineOrderManagerFragment extends ToolBarFragment {
     }
 
     private void initView() {
-        View v = LayoutInflater.from(getActivity()).inflate(R.layout.item_mine_order,null);
-        TextView tv_state = (TextView) v.findViewById(R.id.tv_stage);
-        Button bt_send = (Button) v.findViewById(R.id.bt_send);
-        RelativeLayout rl_bt = (RelativeLayout) v.findViewById(R.id.rl_bt);
-        switch (type){
-            case 0:
-                tv_state.setText("已付款");
-                bt_send.setText("发货");
-                rl_bt.setVisibility(View.VISIBLE);
-                break;
-            case 1:
-                tv_state.setText("已付款");
-                bt_send.setText("发货");
-                rl_bt.setVisibility(View.VISIBLE);
-                break;
-            case 2:
-                tv_state.setText("已发货");
-                bt_send.setVisibility(View.GONE);
-                rl_bt.setVisibility(View.GONE);
-                break;
-            case 3:
-                tv_state.setText("已收货");
-                bt_send.setVisibility(View.GONE);
-                rl_bt.setVisibility(View.GONE);
-                break;
+        companyOrders = new ArrayList<>();
+        for (int i=0;i<8;i++){
+            CompanyOrder companyOrder = new CompanyOrder();
+            companyOrder.setAddress(i+"");
+            companyOrder.setId(i + "");
+            companyOrders.add(companyOrder);
         }
+        orderManagerAdapter.setMessages(companyOrders);
+        orderManagerAdapter.setType(type);
+
+        orderDao = new OrderDao(this);
     }
 
     private void initData() {
         odao = new MineStoreDao(this);
         odao.companyOrderList(Arad.preferences.getString("companyId"),type+"", Constant.PAGE_SIZE+"",PAGE_NUM+"");
+
+        orderDao = new OrderDao(this);
     }
 
     @Override
@@ -127,12 +121,33 @@ public class MineOrderManagerFragment extends ToolBarFragment {
                orderManagerAdapter.setMessages(companyOrders);
             }
         }
+        if (requestCode==6){
+            orderItems = orderDao.getListOrderItem();
+            orderStates = orderDao.getListOrderState();
+            if (orderItems!=null&&orderStates!=null){
+                orderManagerAdapter.setOrderItems(orderItems);
+                orderManagerAdapter.setOrderStates(orderStates);
+            }
+        }
     }
 
     @Override
     public void onRequestFaild(String errorNo, String errorMessage) {
         super.onRequestFaild(errorNo, errorMessage);
         lv_content.onRefreshComplete();
-        MessageUtils.showShortToast(getActivity(), "商家获取订单列表失败!");
     }
+
+    @Override
+    public void onClick(View v) {
+        Object id = v.getTag();
+        switch (v.getId()){
+            case R.id.bt_send:
+                String position = (String)id;
+                orderManagerAdapter.setGone(0);
+                orderDao.requesOrderDetail(position);
+                break;
+        }
+    }
+
+
 }

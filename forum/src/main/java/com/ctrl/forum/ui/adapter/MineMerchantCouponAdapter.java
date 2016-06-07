@@ -21,10 +21,11 @@ import butterknife.InjectView;
  * 现金包
  * Created by Administrator on 2016/4/22.
  */
-public class MineMerchantCouponAdapter extends BaseAdapter {
+public class MineMerchantCouponAdapter extends BaseAdapter{
     private Context context;
     private List<CouponsPackag> list;
     private View.OnClickListener onButton;
+    public static EditText et_text;
 
     public void setOnButton(View.OnClickListener onButton) {this.onButton = onButton;}
     public MineMerchantCouponAdapter(Context context) {this.context = context;}
@@ -49,24 +50,21 @@ public class MineMerchantCouponAdapter extends BaseAdapter {
             convertView= LayoutInflater.from(context).inflate(R.layout.item_mine_coupon_give,parent,false);
             holder=new ViewHolder(convertView);
             holder.bt_ok.setOnClickListener(onButton);
+            et_text = (EditText) convertView.findViewById(R.id.et_phone);
             convertView.setTag(holder);
         }else {
             holder=(ViewHolder)convertView.getTag();
         }
 
-        holder.bt_ok.setTag(position);
-
         if (list!=null && list.get(position)!=null){
             holder.tv_name.setText(list.get(position).getName());
         }
 
-         holder.bt_ok.setTag(position);
+        holder.bt_ok.setTag(position);
         return convertView;
     }
 
     class ViewHolder{
-        @InjectView(R.id.et_phone)
-        EditText et_phone;
         @InjectView(R.id.tv_name)
         TextView tv_name;
         @InjectView(R.id.bt_ok)

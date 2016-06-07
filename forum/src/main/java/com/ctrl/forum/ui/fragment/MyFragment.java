@@ -20,6 +20,7 @@ import com.beanu.arad.base.ToolBarFragment;
 import com.beanu.arad.utils.MessageUtils;
 import com.ctrl.forum.R;
 import com.ctrl.forum.base.SetMemberLevel;
+import com.ctrl.forum.customview.NumView;
 import com.ctrl.forum.dao.EditDao;
 import com.ctrl.forum.dao.MemberDao;
 import com.ctrl.forum.entity.Member;
@@ -83,7 +84,7 @@ public class MyFragment extends ToolBarFragment implements View.OnClickListener{
     @InjectView(R.id.iv_set)
     ImageView iv_set; //设置
     @InjectView(R.id.iv_message)
-    ImageView iv_message; //消息
+    NumView iv_message; //消息
     @InjectView(R.id.iv_grade)
     ImageView iv_grade; //等级
     @InjectView(R.id.bt_integral)
@@ -94,9 +95,10 @@ public class MyFragment extends ToolBarFragment implements View.OnClickListener{
     ImageView iv_head; //头像
     @InjectView(R.id.bt_sign)
     Button bt_sign;
+    @InjectView(R.id.num_juan)
+    NumView num_juan;
 
     private List<Member> datas;
-    private Boolean isShop = true;//判断我是否已经有店铺,有了则显示,没有则创建
     private MemberDao mdao;
     private EditDao editDao;
     private MemberInfo memberInfo;//会员基本信息
@@ -294,6 +296,21 @@ public class MyFragment extends ToolBarFragment implements View.OnClickListener{
                     bt_sign.setText("已签到");
                 }
             }
+        if (memberInfo.getMessageCount()!=null){
+            iv_message.setShowNumMode(2);
+            int num = Integer.parseInt(memberInfo.getMessageCount());
+            iv_message.setNum(num);
+        }
+
+        int redenvelopeNum=0;
+        int couponsNum=0;
+        if (memberInfo.getRedenvelopeNum()!=null){
+            redenvelopeNum = Integer.parseInt(memberInfo.getRedenvelopeNum()); }
+        if (memberInfo.getCouponsNum()!=null){
+            couponsNum = Integer.parseInt(memberInfo.getCouponsNum());
+        }
+        num_juan.setShowNumMode(1);
+        num_juan.setNum(redenvelopeNum+couponsNum);
     }
 
     @Override

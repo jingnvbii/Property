@@ -25,23 +25,23 @@
             android:id="@+id/textView" />
 
         <!--消息-->
-        <ImageView
+        <com.ctrl.forum.customview.NumView
+            android:padding="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/iv_message"
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
-            android:layout_marginRight="@dimen/margin_left_and_right"
             android:src="@mipmap/iconfont_pinglun01"/>
         <!--设置-->
         <ImageView
+            android:padding="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/iv_set"
             android:layout_centerVertical="true"
             android:layout_toLeftOf="@+id/iv_message"
-            android:src="@mipmap/iconfont_shezhi"
-            android:layout_marginRight="@dimen/margin_left_and_right" />
+            android:src="@mipmap/iconfont_shezhi" />
 
     </RelativeLayout>
 
@@ -319,6 +319,14 @@
                android:layout_toEndOf="@+id/iv_juan"
                android:layout_marginLeft="@dimen/margin_left_and_right"
                android:layout_centerVertical="true"/>
+
+           <com.ctrl.forum.customview.NumView
+               android:id="@+id/num_juan"
+               android:layout_toRightOf="@id/tv_juan"
+               android:layout_width="50dp"
+               android:layout_height="50dp"
+               android:padding="20dp" />
+
            <ImageView
                android:layout_width="wrap_content"
                android:layout_height="wrap_content"

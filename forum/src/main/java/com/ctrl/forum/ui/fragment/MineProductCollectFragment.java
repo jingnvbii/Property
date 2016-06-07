@@ -1,5 +1,6 @@
 package com.ctrl.forum.ui.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,6 +16,7 @@ import com.ctrl.forum.R;
 import com.ctrl.forum.base.Constant;
 import com.ctrl.forum.dao.CollectDao;
 import com.ctrl.forum.entity.ProductCollect;
+import com.ctrl.forum.ui.activity.store.StoreCommodityDetailActivity;
 import com.ctrl.forum.ui.adapter.ProductCollectFragmentAdapter;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
@@ -86,9 +88,9 @@ public class MineProductCollectFragment extends ToolBarFragment{
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (productCollects!=null){
                     String productId = productCollects.get(position-1).getId();//点击的商品id
-                    /*Intent intent = new Intent();
-                    intent.putExtra("productId",productId);*/
-                    //跳转到购买商品或者商品详情页面
+                    Intent intent = new Intent(getActivity(), StoreCommodityDetailActivity.class);
+                    intent.putExtra("id",productId);
+                    startActivity(intent);
                 }
             }
         });
