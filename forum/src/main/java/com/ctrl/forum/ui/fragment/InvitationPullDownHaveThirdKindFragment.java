@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,6 +32,7 @@ import com.ctrl.forum.entity.ThirdKind;
 import com.ctrl.forum.loopview.HomeAutoSwitchPicHolder;
 import com.ctrl.forum.ui.activity.Invitation.InvitationDetailFromPlatformActivity;
 import com.ctrl.forum.ui.activity.Invitation.InvitationPinterestDetailActivity;
+import com.ctrl.forum.ui.activity.Invitation.InvitationPullDownActivity;
 import com.ctrl.forum.ui.activity.Invitation.InvitationSearchActivity;
 import com.ctrl.forum.ui.adapter.InvitationListViewAdapter;
 import com.ctrl.forum.ui.adapter.InvitationListViewBlockStyleAdapter;
@@ -116,11 +118,15 @@ public class InvitationPullDownHaveThirdKindFragment extends ToolBarFragment {
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
+        if(!InvitationPullDownActivity.isFromSelcet){
+            thirdKindId=null;
+            Log.i("tag","dsfsdfsdf11");
+        }
         if (isVisibleToUser&&bol==1 ) {
             showProgress(true);
             if(listCategroy3!=null)listCategroy3.clear();
             if(thirdKindId==null) {
-                idao.requesPostCategory(channelId, "2", "0");
+               idao.requesPostCategory(channelId, "2", "0");
                 idao.requestPostListByCategory(Arad.preferences.getString("memberId"), channelId, "0", "", PAGE_NUM, Constant.PAGE_SIZE);
             }else {
                 idao.requesPostCategory(channelId, "2", "0");
@@ -308,6 +314,7 @@ public class InvitationPullDownHaveThirdKindFragment extends ToolBarFragment {
                     break;
             }
             thirdKindId=null;
+            InvitationPullDownActivity.isFromSelcet=false;
 
         }
         if (requestCode == 2) {
@@ -332,7 +339,6 @@ public class InvitationPullDownHaveThirdKindFragment extends ToolBarFragment {
                 }
             });
             thirdKindId=null;
-            channelId=null;
             //  setValue();
         }
     }

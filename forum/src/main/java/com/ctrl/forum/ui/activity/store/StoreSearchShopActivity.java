@@ -2,6 +2,7 @@ package com.ctrl.forum.ui.activity.store;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,9 +11,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.PopupWindow;
+import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.beanu.arad.Arad;
@@ -22,11 +26,12 @@ import com.ctrl.forum.R;
 import com.ctrl.forum.base.AppToolBarActivity;
 import com.ctrl.forum.base.Constant;
 import com.ctrl.forum.dao.MallDao;
+import com.ctrl.forum.entity.Mall;
 import com.ctrl.forum.entity.Merchant;
 import com.ctrl.forum.ui.adapter.StoreFragmentAdapter;
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -40,9 +45,9 @@ public class StoreSearchShopActivity extends AppToolBarActivity implements View.
     @InjectView(R.id.listview_shop)//下拉列表
     PullToRefreshListView listview_shop;
     @InjectView(R.id.tv_xiaoliang)//销量优先
-    TextView tv_xiaoliang;
-    @InjectView(R.id.tv_pinjia)//评价优先
-    TextView tv_pingjia;
+            RadioButton tv_xiaoliang;
+    @InjectView(R.id.tv_pinjia2)//评价优先
+            RadioButton rb_pingjia;
     @InjectView(R.id.tv_choose)//切换
     TextView tv_choose;
     @InjectView(R.id.et_search)//搜索输入内容
@@ -58,6 +63,7 @@ public class StoreSearchShopActivity extends AppToolBarActivity implements View.
     private int PAGE_NUM=1;
     private PopupWindow popupWindow;
     private int choose=2;
+    private List<Mall> listMall;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,27 +77,48 @@ public class StoreSearchShopActivity extends AppToolBarActivity implements View.
     }
 
     private void initView() {
-        tv_pingjia.setOnClickListener(this);
-        tv_xiaoliang.setOnClickListener(this);
         tv_choose.setOnClickListener(this);
         tv_search.setOnClickListener(this);
         iv_back.setOnClickListener(this);
 
+        tv_xiaoliang.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    mdao.requestSearchCompanysOrProductByKeyword("0", Arad.preferences.getString("latitude"), Arad.preferences.getString("longitude"),
+                            "0", getIntent().getStringExtra("keyword"), Arad.preferences.getString("memberId"), String.valueOf(PAGE_NUM), String.valueOf(Constant.PAGE_SIZE)
+                    );
+                }
+            }
+        });
+        rb_pingjia.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    mdao.requestSearchCompanysOrProductByKeyword("1", Arad.preferences.getString("latitude"),Arad.preferences.getString("longitude"),
+                            "0",getIntent().getStringExtra("keyword"),Arad.preferences.getString("memberId"),String.valueOf(PAGE_NUM),String.valueOf(Constant.PAGE_SIZE)
+                    );
+                }
+            }
+        });
+
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        et_search.setText("");
     }
 
     private void initData() {
         tv_choose.setText("店铺");
+        et_search.setText(getIntent().getStringExtra("keyword"));
+        //光标移到行尾
+        et_search.setSelection(et_search.getText().length());
         mdao=new MallDao(this);
         mdao.requestSearchCompanysOrProductByKeyword("0", Arad.preferences.getString("latitude"),Arad.preferences.getString("longitude"),
                 "0",getIntent().getStringExtra("keyword"),Arad.preferences.getString("memberId"),String.valueOf(PAGE_NUM),String.valueOf(Constant.PAGE_SIZE)
                 );
-        list=new ArrayList<>();
-
-        for(int i=0;i<20;i++){
-            Merchant manchant = new Merchant();
-            manchant.setName("章子怡"+i+"便利店");
-            list.add(manchant);
-        }
 
         listviewAdapter=new StoreFragmentAdapter(this);
         listview_shop.setAdapter(listviewAdapter);
@@ -104,16 +131,71 @@ public class StoreSearchShopActivity extends AppToolBarActivity implements View.
             }
         });
 
+        listview_shop.setMode(PullToRefreshBase.Mode.BOTH);
+        listview_shop.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
+            @Override
+            public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
+                PAGE_NUM = 1;
+                listMall.clear();
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        mdao.requestSearchCompanysOrProductByKeyword("0", Arad.preferences.getString("latitude"), Arad.preferences.getString("longitude"),
+                                "0", getIntent().getStringExtra("keyword"), Arad.preferences.getString("memberId"), String.valueOf(PAGE_NUM), String.valueOf(Constant.PAGE_SIZE)
+                        );
+                    }
+                }, 500);
+
+
+            }
+
+            @Override
+            public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
+                PAGE_NUM += 1;
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        mdao.requestSearchCompanysOrProductByKeyword("0", Arad.preferences.getString("latitude"), Arad.preferences.getString("longitude"),
+                                "0", getIntent().getStringExtra("keyword"), Arad.preferences.getString("memberId"), String.valueOf(PAGE_NUM), String.valueOf(Constant.PAGE_SIZE)
+                        );
+                    }
+                }, 500);
+            }
+        });
+
+        listview_shop.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(StoreSearchShopActivity.this, StoreShopListVerticalStyleActivity.class);
+                intent.putExtra("id", listMall.get(position - 1).getId());
+                intent.putExtra("url", listMall.get(position - 1).getImg());
+                intent.putExtra("name", listMall.get(position - 1).getName());
+                intent.putExtra("startTime", listMall.get(position - 1).getWorkStartTime());
+                intent.putExtra("endTime", listMall.get(position - 1).getWorkEndTime());
+                intent.putExtra("levlel", listMall.get(position - 1).getEvaluatLevel());
+                startActivity(intent);
+                AnimUtil.intentSlidIn(StoreSearchShopActivity.this);
+            }
+        });
+
         
     }
 
     @Override
     public void onRequestSuccess(int requestCode) {
         super.onRequestSuccess(requestCode);
+        listview_shop.onRefreshComplete();
         if(requestCode==6){
-            MessageUtils.showShortToast(this,"根据关键字获取商铺成功");
+         //   MessageUtils.showShortToast(this,"根据关键字获取商铺成功");
+            listMall=mdao.getListMall();
             listviewAdapter.setList(mdao.getListMall());
         }
+    }
+
+    @Override
+    public void onRequestFaild(String errorNo, String errorMessage) {
+        super.onRequestFaild(errorNo, errorMessage);
+        listview_shop.onRefreshComplete();
     }
 
     @Override
@@ -122,16 +204,7 @@ public class StoreSearchShopActivity extends AppToolBarActivity implements View.
             case R.id.iv_back:
                 onBackPressed();
                 break;
-            case R.id.tv_xiaoliang:
-                mdao.requestSearchCompanysOrProductByKeyword("0", Arad.preferences.getString("latitude"),Arad.preferences.getString("longitude"),
-                        "0",getIntent().getStringExtra("keyword"),Arad.preferences.getString("memberId"),String.valueOf(PAGE_NUM),String.valueOf(Constant.PAGE_SIZE)
-                );
-                break;
-            case R.id.tv_pingjia:
-                mdao.requestSearchCompanysOrProductByKeyword("1", Arad.preferences.getString("latitude"),Arad.preferences.getString("longitude"),
-                        "0",getIntent().getStringExtra("keyword"),Arad.preferences.getString("memberId"),String.valueOf(PAGE_NUM),String.valueOf(Constant.PAGE_SIZE)
-                );
-                break;
+
             case R.id.tv_choose:
                 showPopupWidow();
                 break;
@@ -173,6 +246,7 @@ public class StoreSearchShopActivity extends AppToolBarActivity implements View.
             @Override
             public void onClick(View v) {
                 tv_choose.setText("商品");
+                et_search.setText("");
                 choose=1;
                 popupWindow.dismiss();
 

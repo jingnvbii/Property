@@ -94,6 +94,8 @@ public class InvitationPullDownActivity extends AppToolBarActivity implements Vi
     private int mGroupPostion;
     private int mChildrenPosition;
 
+    public static boolean isFromSelcet=false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -213,11 +215,10 @@ public class InvitationPullDownActivity extends AppToolBarActivity implements Vi
             public void onReload() {
                 fragments = null;
                 List<Fragment> list = new ArrayList<Fragment>();
-                for(int i=0;i<listCategory.size();i++){
+                for(int i=0;i<listCategory2.size();i++){
                     styleType=listCategory2.get(i).getStyleType();
                     if (styleType.equals("3")) {
                        list.add(InvitationPullDownHaveThirdKindPinterestStyleFragment.newInstance(listCategory2.get(i).getId(), thirdKindId));
-
                     } else {
                        list.add(InvitationPullDownHaveThirdKindFragment.newInstance(listCategory2.get(i).getId(), listCategory2.get(i).getStyleType(),thirdKindId));
                     }
@@ -287,7 +288,7 @@ public class InvitationPullDownActivity extends AppToolBarActivity implements Vi
     public void request(int groupPosition,int position,String thirdId){
         mGroupPostion=groupPosition;
         mChildrenPosition=position;
-        thirdKindId=thirdId;
+        thirdKindId = thirdId;
         viewpager_invitation_pull_down.setCurrentItem(groupPosition);
         viewPagerAdapter.reLoad();
         popupWindow.dismiss();
@@ -325,7 +326,6 @@ public class InvitationPullDownActivity extends AppToolBarActivity implements Vi
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode==1111&&resultCode==RESULT_OK){
-            Log.i("tag","wo shi 1111");
         }
     }
 

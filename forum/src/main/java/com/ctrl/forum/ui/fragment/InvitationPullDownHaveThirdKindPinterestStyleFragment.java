@@ -28,6 +28,7 @@ import com.ctrl.forum.entity.Category;
 import com.ctrl.forum.entity.Post;
 import com.ctrl.forum.loopview.HomeAutoSwitchPicHolder;
 import com.ctrl.forum.ui.activity.Invitation.InvitationPinerestGalleyActivity;
+import com.ctrl.forum.ui.activity.Invitation.InvitationPullDownActivity;
 import com.ctrl.forum.ui.activity.Invitation.InvitationSearchActivity;
 import com.ctrl.forum.ui.adapter.InvitationListViewPinterestStyleAdapter;
 import com.ctrl.forum.ui.adapter.InvitationPullDownGridViewAdapter;
@@ -96,8 +97,12 @@ public class InvitationPullDownHaveThirdKindPinterestStyleFragment extends ToolB
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
-       if (isVisibleToUser&&bol==1 ) {
-            if(listCategroy3!=null)listCategroy3.clear();
+        if(!InvitationPullDownActivity.isFromSelcet){
+            thirdKindId=null;
+            Log.i("tag", "dsfsdfsdf1122");
+        }
+        if (isVisibleToUser&&bol==1 ) {
+           if(listCategroy3!=null)listCategroy3.clear();
             if(thirdKindId==null) {
                  idao.requesPostCategory(id, "2", "0");
                 idao.requestPostListByCategory(Arad.preferences.getString("memberId"), id, "0", "", PAGE_NUM, Constant.PAGE_SIZE);
@@ -121,13 +126,9 @@ public class InvitationPullDownHaveThirdKindPinterestStyleFragment extends ToolB
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_invitation_pull_down_have_third_kind_pinterest_style, container, false);
         ButterKnife.inject(this, view);
-        // AbsListView.LayoutParams layoutParams = new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, AbsListView.LayoutParams.WRAP_CONTENT);
         headview = getActivity().getLayoutInflater().inflate(R.layout.fragment_invitation_header, null);
-        // headview.setLayoutParams(layoutParams);
-        // ListView lv = invitation_list.getRefreshableView();
         xlv_pinerest_style.addHeaderView(headview);
         xlv_pinerest_style.setFocusable(false);
-        Log.i("tag", "woshi  222");
         xlv_pinerest_style.setOnItemClickListener(new PLA_AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(PLA_AdapterView<?> parent, View view, int position, long id) {
@@ -187,6 +188,7 @@ public class InvitationPullDownHaveThirdKindPinterestStyleFragment extends ToolB
             }
             mInvitationListViewPinterestStyleAdapter.setList(listPost);
             thirdKindId=null;
+            InvitationPullDownActivity.isFromSelcet=false;
         }
         if (requestCode == 2) {
             bol = 0;
@@ -212,8 +214,6 @@ public class InvitationPullDownHaveThirdKindPinterestStyleFragment extends ToolB
             });
 
             thirdKindId=null;
-            id=null;
-
             // setValue();
         }
     }

@@ -3,6 +3,7 @@ package com.ctrl.forum.ui.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -46,6 +47,7 @@ public class LoginActivity extends AppToolBarActivity implements View.OnClickLis
     public LocationClient mLocationClient = null;
     public BDLocationListener myListener = new MyLocationListener();
     private String latitude,lontitude;
+    private String address;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -142,6 +144,8 @@ public class LoginActivity extends AppToolBarActivity implements View.OnClickLis
             //Log.i("BaiduLocationApiDem", sb.toString());
             latitude = location.getLatitude() + "";
             lontitude = location.getLongitude() + "";
+            address=location.getAddrStr();
+            Log.i("tag", "address===-=====" + address);
         }
     }
 
@@ -188,11 +192,11 @@ public class LoginActivity extends AppToolBarActivity implements View.OnClickLis
 
             Arad.preferences.putString("latitude", latitude);
             Arad.preferences.putString("lontitude", lontitude);
-
+            Arad.preferences.putString("address", address);
             Arad.preferences.flush();
             MessageUtils.showShortToast(this, "登录成功");
-           // Intent intent02=new Intent(this,MainActivity.class);
-           // startActivity(intent02);
+            Intent intent02=new Intent(this,MainActivity.class);
+            startActivity(intent02);
             AnimUtil.intentSlidIn(this);
         }
     }
@@ -225,8 +229,6 @@ public class LoginActivity extends AppToolBarActivity implements View.OnClickLis
             case R.id.tv_login :
                 if(checkInput()){
                     ldao.requestLogin(et_username.getText().toString().trim(), et_pass_word.getText().toString().trim(), "1");
-                    Intent intent02=new Intent(this,MainActivity.class);
-                    startActivity(intent02);
                 }
                 break;
             case R.id.tv_forget :

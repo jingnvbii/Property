@@ -48,6 +48,8 @@
             android:layout_gravity="center_vertical"
             android:layout_height="wrap_content"
             android:hint="请输入要搜索的内容"
+            android:textSize="14sp"
+            android:padding="5dp"
             android:textColorHint="@color/text_gray"
             android:background="@null"
             />
@@ -66,18 +68,22 @@
     </LinearLayout>
 
 
-    <LinearLayout
+    <RadioGroup
         android:layout_width="match_parent"
         android:background="#f5f5f5"
+        android:orientation="horizontal"
         android:layout_height="wrap_content">
-        <TextView
+        <RadioButton
             android:id="@+id/tv_xiaoliang"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
             android:text="销量优先"
             android:padding="10dp"
+            android:button="@null"
             android:gravity="center"
+            android:checked="true"
+            android:textColor="@drawable/text_red_selector"
             android:layout_centerInParent="true"
             />
 
@@ -86,12 +92,14 @@
             android:layout_height="match_parent"
             android:background="@color/line_gray" />
 
-        <TextView
+        <RadioButton
             android:id="@+id/tv_pinjia_commodity"
             android:layout_width="0dp"
             android:layout_weight="1"
+            android:button="@null"
             android:layout_height="wrap_content"
             android:text="评价优先"
+            android:textColor="@drawable/text_red_selector"
             android:padding="10dp"
             android:gravity="center"
             android:layout_centerInParent="true"
@@ -99,7 +107,7 @@
 
 
 
-    </LinearLayout>
+    </RadioGroup>
     <View
         android:layout_width="match_parent"
         android:layout_height="2px"
@@ -110,11 +118,71 @@
         android:background="@color/white"
         android:paddingTop="10dp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="0dp"
+        android:layout_weight="1">
     </com.handmark.pulltorefresh.library.PullToRefreshGridView>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/line_gray"></View>
 
+    <RelativeLayout
+        android:id="@+id/m_list_bt"
+        android:layout_width="match_parent"
+        android:background="@color/white"
+        android:layout_alignParentBottom="true"
+        android:layout_height="50dp">
 
+        <RelativeLayout
+            android:id="@+id/m_list_car_lay"
+            android:layout_width="60dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/m_list_car_vertical_style"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_centerInParent="true"
+                android:src="@mipmap/cart_car_gray"/>
+        </RelativeLayout>
+        <TextView
+            android:id="@+id/m_list_num_store_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/goods_tv_bg_selector"
+            android:layout_alignRight="@+id/m_list_car_lay"
+            android:layout_alignTop="@+id/m_list_car_lay"
+            android:paddingLeft="5dp"
+            android:visibility="gone"
+            android:paddingRight="5dp"
+            android:text="0"
+            android:textColor="@color/white"/>
 
-
+        <TextView android:id="@+id/m_list_all_price_store_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/m_list_car_lay"
+            android:layout_marginLeft="20dp"
+            android:textSize="18sp"
+            android:layout_centerVertical="true"
+            android:textColor="@color/text_red"
+            android:text=""/>
+        <View android:id="@+id/m_listview"
+            android:layout_width="1dp"
+            android:layout_height="26px"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/m_list_all_price"
+            android:background="@color/color_f2f2f2"/>
+        <Button android:id="@+id/m_list_submit_vertical_style"
+            android:layout_width="80dp"
+            android:layout_height="match_parent"
+            android:background="@color/text_gray"
+            android:text="马上结算"
+            android:layout_alignParentRight="true"
+            android:textColor="@color/white"/>
+    </RelativeLayout>
 </LinearLayout>

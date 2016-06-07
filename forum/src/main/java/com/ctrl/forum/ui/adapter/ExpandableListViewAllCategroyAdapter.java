@@ -126,6 +126,7 @@ public class ExpandableListViewAllCategroyAdapter extends BaseExpandableListAdap
         grid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                InvitationPullDownActivity.isFromSelcet=true;
                 InvitationPullDownActivity activity=(InvitationPullDownActivity)mContext;
                 activity.request(groupPosition,position,list.get(groupPosition).getCategorylist().get(position).getId());
             }

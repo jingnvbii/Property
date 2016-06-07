@@ -9,37 +9,49 @@
         android:layout_width="match_parent"
         ></include>
     
-   <LinearLayout
+   <RelativeLayout
+       android:id="@+id/rl_store_information"
        android:layout_width="match_parent"
        android:background="#feeeee"
        android:layout_height="wrap_content">
        <ImageView
+           android:id="@+id/iv_store_information_image"
            android:padding="10dp"
            android:layout_width="wrap_content"
+           android:layout_centerVertical="true"
            android:layout_height="wrap_content"
            android:layout_gravity="center"
            android:src="@mipmap/lapa_red"/>
        <TextView
-           android:layout_width="0dp"
-           android:layout_weight="1"
+           android:id="@+id/tv_store_information"
+           android:layout_width="200dp"
            android:paddingTop="10dp"
            android:paddingBottom="10dp"
+           android:layout_toRightOf="@+id/iv_store_information_image"
+           android:focusable="true"
+           android:ellipsize="marquee"
+           android:marqueeRepeatLimit="marquee_forever"
+           android:focusableInTouchMode="true"
+           android:scrollHorizontally="true"
+           android:singleLine="true"
            android:gravity="center_vertical"
            android:textColor="@color/text_red"
            android:layout_height="wrap_content"
-           android:text="dfsdfsdfsdfsdfsd"
            />
        <ImageView
+           android:id="@+id/iv_store_information_close"
            android:layout_width="wrap_content"
            android:layout_height="wrap_content"
            android:src="@mipmap/close_gray"
            android:layout_gravity="center"
+           android:layout_centerVertical="true"
+           android:layout_alignParentRight="true"
            android:paddingTop="10dp"
            android:paddingBottom="10dp"
            android:paddingRight="20dp"
            android:paddingLeft="10dp"
            />
-   </LinearLayout>
+   </RelativeLayout>
 
     <EditText
         android:layout_width="match_parent"
@@ -58,6 +70,7 @@
         />
     
     <RelativeLayout
+        android:padding="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         
@@ -66,15 +79,14 @@
             android:layout_width="70dp"
             android:layout_height="80dp"
             android:scaleType="fitXY"
-            android:layout_margin="10dp"
             android:src="@mipmap/style1_img"/>
 
         <TextView
             android:id="@+id/tv_shop_name"
             android:layout_toRightOf="@+id/iv_style_img"
             android:layout_width="wrap_content"
-            android:layout_marginTop="20dp"
             android:textSize="16sp"
+            android:layout_marginLeft="10dp"
             android:textColor="@color/text_black"
             android:layout_height="wrap_content"
             android:text="小贝日用百货便利店"/>
@@ -82,8 +94,9 @@
             android:id="@+id/tv_time"
             android:layout_below="@+id/tv_shop_name"
             android:layout_toRightOf="@+id/iv_style_img"
+            android:layout_marginLeft="10dp"
             android:layout_width="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="5dp"
             android:layout_height="wrap_content"
             android:text="营业时间  21：00-9:00"/>
 
@@ -93,6 +106,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/ratingBar"
             android:layout_below="@+id/tv_time"
+            android:layout_marginLeft="10dp"
             android:isIndicator="true"
             android:rating="4"
             android:layout_marginTop="5dp"

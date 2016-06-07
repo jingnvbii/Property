@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.ctrl.forum.R;
@@ -82,8 +83,8 @@ public class CartPopupWindowListViewAdapter extends BaseAdapter {
             holder.tv_popup_lv_number.setText("");
             holder.iv_popup_lv_subtract.setVisibility(View.GONE);
             holder.tv_popup_lv_number.setVisibility(View.GONE);
+            holder.rl_all.setVisibility(View.GONE);
         } else {
-
             holder.tv_popup_lv_number.setText("" + mGoodsDataBaseInterface.getSecondGoodsNumber(mcontext, StoreShopListVerticalStyleActivity.SELECTPOSITION, list.get(position).getGoodsid()));
             holder.tv_popup_lv_number.setVisibility(View.VISIBLE);
             holder.iv_popup_lv_subtract.setVisibility(View.VISIBLE);
@@ -134,9 +135,8 @@ public class CartPopupWindowListViewAdapter extends BaseAdapter {
         public ImageView iv_popup_lv_subtract;
         @InjectView(R.id.tv_popup_lv_number)//数量
         public TextView tv_popup_lv_number;
-     /*   @InjectView(R.id.rl_all)//根布局
-      RelativeLayout rl_all;
-*/
+        @InjectView(R.id.rl_all)//根布局
+                RelativeLayout rl_all;
         private int position;
 
         public void setPosition(int position) {

@@ -254,7 +254,7 @@ public class InvitationFragment extends ToolBarFragment implements View.OnClickL
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
                 listPost.clear();
                 PAGE_NUM = 1;
-                showProgress(true);
+              //  showProgress(true);
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -266,7 +266,7 @@ public class InvitationFragment extends ToolBarFragment implements View.OnClickL
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
                 PAGE_NUM += 1;
-                showProgress(true);
+              //  showProgress(true);
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {

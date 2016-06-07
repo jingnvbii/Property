@@ -12,6 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.SectionIndexer;
 import android.widget.TextView;
 
+import com.beanu.arad.Arad;
 import com.ctrl.forum.R;
 import com.ctrl.forum.cart.datasave.OperateGoodsDataBaseStatic;
 import com.ctrl.forum.customview.PinnedHeaderListView;
@@ -114,6 +115,7 @@ public class FoodAdapter extends BaseAdapter implements SectionIndexer, PinnedHe
 		holder.tv_shop_name.setText(foodModel.getName());
 		holder.tv_numbers.setText(foodModel.getSalesVolume());
 		holder.tv_vertical_price.setText(foodModel.getSellingPrice()+"/份");
+		Arad.imageLoader.load(foodModel.getListImgUrl()).placeholder(R.mipmap.default_error).into(holder.iv_style_img);
 		holder.setPosition(position);
 		setOnListtener(holder);
 		return convertView;

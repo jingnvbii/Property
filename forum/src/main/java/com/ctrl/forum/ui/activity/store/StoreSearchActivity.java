@@ -119,7 +119,7 @@ public class StoreSearchActivity extends AppToolBarActivity implements View.OnCl
         lv_store_search_history.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                et_search.setText(sdao.getListSearchHistory().get(position).getKeyword());
+                et_search.setText(listSearchHistory.get(position).getKeyword());
                 //光标移到行尾
                 et_search.setSelection(et_search.getText().length());
             }
@@ -142,6 +142,23 @@ public class StoreSearchActivity extends AppToolBarActivity implements View.OnCl
             mStoreSearchHistoryAdapter.setList(listSearchHistory);
         }
     }
+
+    @Override
+    public void onRequestFaild(String errorNo, String errorMessage) {
+        super.onRequestFaild(errorNo, errorMessage);
+        if(errorNo.equals("006")){
+            if(listSearchHistory!=null) {
+                listSearchHistory.clear();
+                mStoreSearchHistoryAdapter.setList(listSearchHistory);
+
+            }
+            if(listHotSearch!=null) {
+                listHotSearch.clear();
+                mInvitationSearchGridViewAdapter.setList(listHotSearch);
+            }
+            }
+
+        }
 
     @Override
     public void onClick(View v) {
