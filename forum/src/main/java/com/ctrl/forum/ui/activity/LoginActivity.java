@@ -3,6 +3,7 @@ package com.ctrl.forum.ui.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -43,6 +44,7 @@ public class LoginActivity extends AppToolBarActivity implements View.OnClickLis
     public LocationClient mLocationClient = null;
     public BDLocationListener myListener = new MyLocationListener();
     private String latitude,lontitude;
+    private String address;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +66,7 @@ public class LoginActivity extends AppToolBarActivity implements View.OnClickLis
         option.setLocationMode(LocationClientOption.LocationMode.Hight_Accuracy
         );//可选，默认高精度，设置定位模式，高精度，低功耗，仅设备
         option.setCoorType("bd09ll");//可选，默认gcj02，设置返回的定位结果坐标系
-        int span=1000;
+        int span=100000;
         option.setScanSpan(span);//可选，默认0，即仅定位一次，设置发起定位请求的间隔需要大于等于1000ms才是有效的
         option.setIsNeedAddress(true);//可选，设置是否需要地址信息，默认不需要
        // option.setOpenGps(true);//可选，默认false,设置是否使用gps
@@ -81,6 +83,8 @@ public class LoginActivity extends AppToolBarActivity implements View.OnClickLis
         public void onReceiveLocation(BDLocation location) {
             latitude = location.getLatitude() + "";
             lontitude = location.getLongitude() + "";
+            address=location.getAddrStr();
+            Log.i("tag", "address===-=====" + address);
         }
     }
 
@@ -127,11 +131,11 @@ public class LoginActivity extends AppToolBarActivity implements View.OnClickLis
 
             Arad.preferences.putString("latitude", latitude);
             Arad.preferences.putString("lontitude", lontitude);
-
+            Arad.preferences.putString("address", address);
             Arad.preferences.flush();
             MessageUtils.showShortToast(this, "登录成功");
-           // Intent intent02=new Intent(this,MainActivity.class);
-           // startActivity(intent02);
+            Intent intent02=new Intent(this,MainActivity.class);
+            startActivity(intent02);
             AnimUtil.intentSlidIn(this);
         }
     }
@@ -164,8 +168,6 @@ public class LoginActivity extends AppToolBarActivity implements View.OnClickLis
             case R.id.tv_login :
                 if(checkInput()){
                     ldao.requestLogin(et_username.getText().toString().trim(), et_pass_word.getText().toString().trim(), "1");
-                    Intent intent02=new Intent(this,MainActivity.class);
-                    startActivity(intent02);
                 }
                 break;
             case R.id.tv_forget :

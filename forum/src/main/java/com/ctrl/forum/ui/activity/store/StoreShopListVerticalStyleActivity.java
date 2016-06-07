@@ -38,6 +38,7 @@ import com.ctrl.forum.cart.datasave.OperateGoodsDataBase;
 import com.ctrl.forum.cart.datasave.OperateGoodsDataBaseStatic;
 import com.ctrl.forum.customview.PinnedHeaderListView;
 import com.ctrl.forum.dao.MallDao;
+import com.ctrl.forum.entity.Company;
 import com.ctrl.forum.entity.FoodModel;
 import com.ctrl.forum.entity.FoodTypeModel;
 import com.ctrl.forum.entity.ProductCategroy;
@@ -76,6 +77,12 @@ public class StoreShopListVerticalStyleActivity extends AppToolBarActivity imple
     TextView tv_time;
     @InjectView(R.id.ratingBar)//评价等级
     RatingBar ratingBar;
+    @InjectView(R.id.tv_store_information)//店铺公告
+    TextView tv_store_information;
+    @InjectView(R.id.iv_store_information_close)//关闭公告
+    ImageView iv_store_information_close;
+    @InjectView(R.id.rl_store_information)//公告布局
+    RelativeLayout rl_store_information;
 
 
     /**
@@ -134,6 +141,7 @@ public class StoreShopListVerticalStyleActivity extends AppToolBarActivity imple
     private ArrayList<String> listNameStr;
     private TextView m_list_num_popup;
     private TextView m_list_all_price_popup;
+    private Company company;
 
 
     @Override
@@ -156,6 +164,7 @@ public class StoreShopListVerticalStyleActivity extends AppToolBarActivity imple
         lv_Content = (PinnedHeaderListView) findViewById(R.id.lv_business_shop_food_orderfoods_foods);
         m_list_car_vertical_style.setOnClickListener(this);
         m_list_submit_vertical_style.setOnClickListener(this);
+        iv_store_information_close.setOnClickListener(this);
 
         Arad.imageLoader.load(getIntent().getStringExtra("url")).placeholder(R.mipmap.default_error).into(iv_style_img);
         tv_shop_name.setText(getIntent().getStringExtra("name"));
@@ -188,6 +197,7 @@ public class StoreShopListVerticalStyleActivity extends AppToolBarActivity imple
         mdao = new MallDao(this);
         showProgress(true);
         mdao.requestProductCategroy(getIntent().getStringExtra("id"));
+        mdao.requestCompanysDetails(Arad.preferences.getString("memberId"), getIntent().getStringExtra("id"));
        // mdao.requestProductCategroy("1");
 
         foodList = new ArrayList<FoodModel>();
@@ -220,8 +230,18 @@ public class StoreShopListVerticalStyleActivity extends AppToolBarActivity imple
     public void onRequestSuccess(int requestCode) {
         super.onRequestSuccess(requestCode);
         showProgress(false);
+        if (requestCode == 002) {
+          //  MessageUtils.showShortToast(this, "获取店铺详情成功");
+            showProgress(false);
+            company = mdao.getCompany();
+            tv_store_information.setText(company.getInformation());
+            tv_store_information.requestFocus();
+        }
+
+
+
         if (requestCode == 9) {
-            MessageUtils.showShortToast(this, "获取铺商品分类以及分类下的商品列表成功");
+          //  MessageUtils.showShortToast(this, "获取铺商品分类以及分类下的商品列表成功");
             listProductCategroy = mdao.getListProductCategroy();
             int itemPosition = 0;// 每个item在list中的位置
             for (int i = 0; i < listProductCategroy.size(); i++) {
@@ -234,6 +254,7 @@ public class StoreShopListVerticalStyleActivity extends AppToolBarActivity imple
                     foodModel.setSalesVolume(listProductCategroy.get(i).getProductList().get(j).getSalesVolume());
                     foodModel.setSellingPrice(listProductCategroy.get(i).getProductList().get(j).getSellingPrice());
                     foodModel.setStock(listProductCategroy.get(i).getProductList().get(j).getStock());
+                    foodModel.setListImgUrl(listProductCategroy.get(i).getProductList().get(j).getListImgUrl());
                     itemPosition++;
                     foodList.add(foodModel);
                 }
@@ -360,6 +381,9 @@ public class StoreShopListVerticalStyleActivity extends AppToolBarActivity imple
     @Override
     public void onClick(View v) {
         switch (v.getId()){
+            case R.id.iv_store_information_close:
+                rl_store_information.setVisibility(View.GONE);
+                break;
             case R.id.m_list_car_vertical_style:
                 if(listGoodsBean!=null){
                     listGoodsBean.clear();
@@ -494,17 +518,19 @@ public class StoreShopListVerticalStyleActivity extends AppToolBarActivity imple
             @Override
             public void onItemJianClick(CartPopupWindowListViewAdapter.ViewHolder v) {
                 String nums = v.tv_popup_lv_number.getText().toString().trim();
-             //   v.tv_popup_lv_number.setText(mGoodsDataBaseInterface.saveGoodsNumber(mContext, SELECTPOSITION,listGoodsBean.get(v.getPosition()).getGoodsid(), String.valueOf(Integer.parseInt(nums) - 1), listGoodsBean.get(v.getPosition()).getGoodsprice()) + "");
+                //   v.tv_popup_lv_number.setText(mGoodsDataBaseInterface.saveGoodsNumber(mContext, SELECTPOSITION,listGoodsBean.get(v.getPosition()).getGoodsid(), String.valueOf(Integer.parseInt(nums) - 1), listGoodsBean.get(v.getPosition()).getGoodsprice()) + "");
                 v.tv_popup_lv_number.setText(mGoodsDataBaseInterface.saveGoodsNumber(mContext, SELECTPOSITION,
                         listGoodsBean.get(v.getPosition()).getGoodsid(), String.valueOf(Integer.parseInt(nums) - 1),
                         listGoodsBean.get(v.getPosition()).getGoodsprice() ,
                         listGoodsBean.get(v.getPosition()).getGoodsname(),listGoodsBean.get(v.getPosition()).getStock())+"");
                 foodAdapter.notifyDataSetChanged();
                 nums = v.tv_popup_lv_number.getText().toString().trim();
+
                 // 减完之后  数据为0
                 if (nums.equals("0")) {
-                    listGoodsBean.remove(v.getPosition());
+                  //  listGoodsBean.remove(v.getPosition());
                   //  mCartPopupWindowListViewAdapter.setName(listNameStr);
+                    listGoodsBean= OperateGoodsDataBaseStatic.getSecondGoodsTypeList(mContext);
                     mCartPopupWindowListViewAdapter.setList(listGoodsBean);
                 }
                 setPupupAll();
@@ -570,7 +596,7 @@ public class StoreShopListVerticalStyleActivity extends AppToolBarActivity imple
     }
 
 
-    /**
+      /**
      * 动画结束后，更新所有数量和所有价格
      */
     class onEndAnim implements GoodsAnimUtil.OnEndAnimListener {

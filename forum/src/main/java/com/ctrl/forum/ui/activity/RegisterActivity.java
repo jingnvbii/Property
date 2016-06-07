@@ -127,6 +127,7 @@ public class RegisterActivity extends AppToolBarActivity implements View.OnClick
 
     }
 
+
     /*
     * 输入检测
     * */

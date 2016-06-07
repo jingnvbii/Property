@@ -32,9 +32,9 @@
 
             <ImageView
                 android:id="@+id/iv_style_img"
-                android:layout_width="50dp"
+                android:layout_width="60dp"
                 android:scaleType="fitXY"
-                android:layout_height="wrap_content"
+                android:layout_height="80dp"
                 android:src="@mipmap/style1_img"
                 android:layout_alignBottom="@+id/tv_vertical_price" />
 

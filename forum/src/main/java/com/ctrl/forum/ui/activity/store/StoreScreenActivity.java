@@ -20,7 +20,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.beanu.arad.utils.AnimUtil;
-import com.beanu.arad.utils.MessageUtils;
 import com.ctrl.forum.R;
 import com.ctrl.forum.base.AppToolBarActivity;
 import com.ctrl.forum.base.Constant;
@@ -86,7 +85,11 @@ public class StoreScreenActivity extends AppToolBarActivity implements View.OnCl
         channelId = getIntent().getStringExtra("channelId");
         latitude = getIntent().getStringExtra("latitude");
         longitude = getIntent().getStringExtra("longitude");
-        mdao.requestCompanyByKind("0", latitude, longitude, channelId, String.valueOf(PAGE_NEM), String.valueOf(Constant.PAGE_SIZE));
+        if(getIntent().getFlags()==303){
+            mdao.requestCompanyByKind("0", getIntent().getStringExtra("latitude"), getIntent().getStringExtra("longitude"), "", String.valueOf(PAGE_NEM), String.valueOf(Constant.PAGE_SIZE));
+        }else {
+            mdao.requestCompanyByKind("0", latitude, longitude, channelId, String.valueOf(PAGE_NEM), String.valueOf(Constant.PAGE_SIZE));
+        }
         sortList = new ArrayList<>();
         sortList.add("默认排序");
         sortList.add("评价最高");
@@ -161,7 +164,7 @@ public class StoreScreenActivity extends AppToolBarActivity implements View.OnCl
         super.onRequestSuccess(requestCode);
         lv_store_screen.onRefreshComplete();
         if (requestCode == 5) {
-            MessageUtils.showShortToast(this, "获取店铺列表成功");
+          //  MessageUtils.showShortToast(this, "获取店铺列表成功");
             listMall = mdao.getListMall();
             listviewAdapter.setList(listMall);
             if(popupWindow!=null){
@@ -169,7 +172,7 @@ public class StoreScreenActivity extends AppToolBarActivity implements View.OnCl
             }
         }
         if (requestCode == 777) {
-            MessageUtils.showShortToast(this, "获取全部分类列表成功");
+          //  MessageUtils.showShortToast(this, "获取全部分类列表成功");
             listKind = kdao.getListKind();
             listKindStr = new ArrayList<String>();
             for (int i = 0; i < listKind.size(); i++) {

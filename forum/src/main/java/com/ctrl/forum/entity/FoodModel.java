@@ -13,6 +13,15 @@ public class FoodModel {
 	private String salesVolume;//销量
 	private String collectState;//收藏（0-未收藏，1-收藏）
 	private String categoryName;//分类
+	private String listImgUrl;//分类
+
+	public String getListImgUrl() {
+		return listImgUrl;
+	}
+
+	public void setListImgUrl(String listImgUrl) {
+		this.listImgUrl = listImgUrl;
+	}
 
 	public String getId() {
 		return id;

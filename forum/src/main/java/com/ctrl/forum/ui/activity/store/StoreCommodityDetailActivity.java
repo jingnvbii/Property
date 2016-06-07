@@ -435,7 +435,7 @@ public class StoreCommodityDetailActivity extends AppToolBarActivity implements 
                     mCartPopupWindowListViewAdapter.setList(listGoodsBean);
                 }
                 setPupupAll();
-                setAll();
+              //  setAll();
 
             }
         });
@@ -451,7 +451,7 @@ public class StoreCommodityDetailActivity extends AppToolBarActivity implements 
                     public void onClick(DialogInterface dialog, int which) {
                         mGoodsDataBaseInterface.deleteAll(mContext);
                         //   foodAdapter.notifyDataSetChanged();
-                        //  setAll();
+                        setAll();
                         popupWindow.dismiss();
                     }
                 }).show();

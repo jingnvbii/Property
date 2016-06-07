@@ -74,6 +74,8 @@ public class StoreFragmentAdapter extends BaseAdapter{
             holder.tv_yingyezhong.setText("营业中");
             holder.tv_yingyezhong.setBackgroundResource(R.mipmap.tv_blue_bg);
         }
+        holder.ratingBar.setRating(Float.parseFloat(mall.getEvaluatLevel())/2);
+
         Arad.imageLoader.load(mall.getImg()).placeholder(R.mipmap.default_error).into(holder.iv_title_photo);
         return convertView;
     }
