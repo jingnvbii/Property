@@ -96,6 +96,19 @@ public class EditDao extends IDao {
         postRequest(Constant.RAW_URL + url, mapToRP(map), 4);
     }
 
+    /**
+     * 修改头像
+     * @param id 会员id
+     * @param imgData 头像数据
+     */
+    public void modifyImgUrl(String id,String imgData){
+        String url="member/modifyImgUrl";
+        Map<String,String> map = new HashMap<>();
+        map.put("id",id);
+        map.put("imgData",imgData);
+        postRequest(Constant.RAW_URL + url, mapToRP(map), 5);
+    }
+
     @Override
     public void onRequestSuccess(JsonNode result, int requestCode) throws IOException {
        if (requestCode==0){

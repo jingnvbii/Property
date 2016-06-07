@@ -5,6 +5,11 @@
     android:background="@color/gray_store">
 
     <TextView
+        android:layout_width="2dp"
+        android:layout_height="match_parent"
+        android:id="@+id/red_line" />
+
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:textSize="@dimen/text_size_basic"

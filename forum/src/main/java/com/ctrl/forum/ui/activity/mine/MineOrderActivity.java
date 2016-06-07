@@ -10,6 +10,7 @@ import com.beanu.arad.utils.MessageUtils;
 import com.ctrl.forum.R;
 import com.ctrl.forum.base.AppToolBarActivity;
 import com.ctrl.forum.dao.MineStoreDao;
+import com.ctrl.forum.dao.OrderDao;
 import com.ctrl.forum.entity.MemeberOrder;
 import com.ctrl.forum.ui.adapter.MineOrderListAdapter;
 
@@ -25,6 +26,7 @@ public class MineOrderActivity extends AppToolBarActivity implements View.OnClic
     private List<Integer> types; //类型
     private MineOrderListAdapter orderListviewAdapter;
     private MineStoreDao orderDao;
+    private OrderDao odao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,11 +41,14 @@ public class MineOrderActivity extends AppToolBarActivity implements View.OnClic
         orderListviewAdapter.setOnDelete(this);
         orderListviewAdapter.setOnPay(this);
         orderListviewAdapter.setOnPingJia(this);
+        orderListviewAdapter.setOnCancle(this);
     }
 
     private void initData() {
         orderDao = new MineStoreDao(this);
         orderDao.getMemeberOrder(Arad.preferences.getString("memberId"));
+
+        odao = new OrderDao(this);
     }
 
     @Override
@@ -90,20 +95,26 @@ public class MineOrderActivity extends AppToolBarActivity implements View.OnClic
     @Override
     public void onClick(View v) {
         Object position = v.getTag();
-        int id;
+        String id="";
         switch (v.getId()){
             case R.id.payment:  //付款
-                id = (int)position;
+                id = (String)position;
                 break;
             case R.id.iv_delete:
-                id = (int)position;
-                orderDao.deleteOrder(orders.get(id).getId());
+                id = (String)position;
+                odao.requestDeleteOrder(id);
                 break;
             case R.id.buy_again: //再次购买
-                id = (int)position;
+                id = (String)position;
+
                 break;
             case R.id.button2: //评价
-                id = (int)position;
+                id = (String)position;
+
+                break;
+            case R.id.cancle: //取消订单
+                id = (String)position;
+                odao.requestCancelOrder(id);
                 break;
         }
     }

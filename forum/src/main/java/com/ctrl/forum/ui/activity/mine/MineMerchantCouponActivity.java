@@ -2,7 +2,6 @@ package com.ctrl.forum.ui.activity.mine;
 
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,12 +35,13 @@ public class MineMerchantCouponActivity extends AppToolBarActivity implements Vi
     private View view;
     private PopupWindow popupWindow;
     private TextView tv_phone,member_name;
-    private EditText et_phone;
     private Button give,bt_cancle;
     private MineStoreDao mdao;
     private MemberInfo memberInfo;
     private List<CouponsPackag> couponsPackags;
+    private String phone;
     private  MineMerchantCouponAdapter mineMerchantCouponAdapter;
+    private int position;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +52,7 @@ public class MineMerchantCouponActivity extends AppToolBarActivity implements Vi
         mineMerchantCouponAdapter = new MineMerchantCouponAdapter(this);
         lv_content.setAdapter(mineMerchantCouponAdapter);
         mineMerchantCouponAdapter.setOnButton(this);
+
         mdao = new MineStoreDao(this);
         mdao.queryCouponsPackageByCompanyId(Arad.preferences.getString("companyId"));
 
@@ -83,22 +84,21 @@ public class MineMerchantCouponActivity extends AppToolBarActivity implements Vi
         Object id = v.getTag();
         switch (v.getId()){
             case R.id.bt_ok:
-                //
-                View view = LayoutInflater.from(this).inflate(R.layout.item_mine_coupon_give,null);
-                et_phone = (EditText) view.findViewById(R.id.et_phone);
-                MessageUtils.showShortToast(this,et_phone.getText().toString());
-                if (!TextUtils.isEmpty(et_phone.getText().toString())){
-                    mdao.getMemberName(et_phone.getText().toString());
+                position = (int)id;
+                EditText et_phone = MineMerchantCouponAdapter.et_text;
+                if (et_phone.getText().toString().equals("")){
+                    MessageUtils.showShortToast(this,"手机号不能为空!");
                 }else{
-                    MessageUtils.showShortToast(this,"赠与手机号不能为空");
+                    phone = et_phone.getText().toString();
                 }
+                mdao.getMemberName(phone);
                 break;
             case R.id.bt_cancle:
-
+                popupWindow.dismiss();
                 break;
             case R.id.give:
-
-
+                mdao.sendGiftVoucher(Arad.preferences.getString("companyId"),couponsPackags.get(position).getPackageId(),phone);
+                popupWindow.dismiss();
                 break;
             default:
                 break;
@@ -112,7 +112,7 @@ public class MineMerchantCouponActivity extends AppToolBarActivity implements Vi
             memberInfo = mdao.getMemberInfo();
             if (memberInfo!=null){
                 popupWindow.showAtLocation(this.view, Gravity.BOTTOM, 0, 0);  //在底部
-                tv_phone.setText(et_phone.getText().toString());
+                tv_phone.setText(phone);
                 member_name.setText(memberInfo.getMemberName());
                 popupWindow.update();
             }
@@ -122,6 +122,9 @@ public class MineMerchantCouponActivity extends AppToolBarActivity implements Vi
             if (couponsPackags!=null){
                 mineMerchantCouponAdapter.setList(couponsPackags);
             }
+        }
+        if (requestCode==7){
+            MessageUtils.showShortToast(this,"赠与成功");
         }
     }
 

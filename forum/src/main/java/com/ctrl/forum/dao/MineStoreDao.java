@@ -123,6 +123,21 @@ public class MineStoreDao extends IDao {
         postRequest(Constant.RAW_URL+url,mapToRP(map),6);
     }
 
+    /**
+     * 商家派送现金券
+     * @param companyId 店铺id
+     * @param packageId 现金包id
+     * @param mobile 会员手机号码
+     */
+    public void sendGiftVoucher(String companyId,String packageId,String mobile){
+        String url = "companys/sendGiftVoucher";
+        Map<String,String> map = new HashMap<>();
+        map.put("companyId",companyId);
+        map.put("packageId",packageId);
+        map.put("mobile",mobile);
+        postRequest(Constant.RAW_URL+url,mapToRP(map),7);
+    }
+
     @Override
     public void onRequestSuccess(JsonNode result, int requestCode) throws IOException {
       if (requestCode==0){
@@ -134,9 +149,11 @@ public class MineStoreDao extends IDao {
             companyOrders = JsonUtil.node2pojoList(result.findValue("orderList"), CompanyOrder.class);
         }
         if (requestCode==2){
+
             Log.d("demo", "dao中结果集(获取店铺商品分类以及分类下的商品): " + result);
             productCategories = JsonUtil.node2pojoList(result.findValue("productCategoryList"), CProductCategory.class);
             products = JsonUtil.node2pojoList(result.findValue("productList"),CProduct.class);
+            Log.e("products============", productCategories.get(0).getcProducts().toString());
 
         }
         if (requestCode==3){
@@ -147,7 +164,7 @@ public class MineStoreDao extends IDao {
             memberInfo = JsonUtil.node2pojo(result.findValue("memberInfo"), MemberInfo.class);
         }
         if (requestCode==6){
-            Log.d("demo", "dao中结果集(手机获取用户名): " + result);
+            Log.d("demo", "dao中结果集(根据商家id查询现金包): " + result);
             couponsPackags = JsonUtil.node2pojoList(result.findValue("couponsPackageList"), CouponsPackag.class);
         }
     }

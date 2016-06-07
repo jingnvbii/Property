@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.beanu.arad.Arad;
 import com.ctrl.forum.R;
 import com.ctrl.forum.entity.RimServeCategory;
+import com.ctrl.forum.entity.RimServeCategorySecond;
 
 import java.util.List;
 
@@ -25,6 +26,8 @@ import butterknife.InjectView;
  */
 public class RimListViewAdapter extends BaseAdapter{
     private List<RimServeCategory> data;
+   // private List<RimServeCategorySecond> grid;
+    private List<RimServeCategorySecond> grid;
     private Context context;
     private RimGridViewAdapter rimGridViewAdapter;
     private View.OnClickListener onSearch;
@@ -139,7 +142,14 @@ public class RimListViewAdapter extends BaseAdapter{
                 Arad.imageLoader.load(data.get(position-2).getCategory_icon()).into(holder3.iv_pic);
                 holder3.tv_title.setText(data.get(position - 2).getName());
                 holder3.gv_hot.setAdapter(rimGridViewAdapter);
-                rimGridViewAdapter.setData(data.get(position - 2).getAroundservicecategorylist());}
+                    grid = data.get(position - 2).getAroundservicecategorylist();
+                   if (grid!=null){
+                       if (grid.size()%3==0){
+                          //直接给gridView赋值
+                       }
+                       rimGridViewAdapter.setData(grid);
+                   }
+                }
                 break;
         }
 

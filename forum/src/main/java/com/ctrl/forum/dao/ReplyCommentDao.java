@@ -7,6 +7,7 @@ import com.beanu.arad.http.INetResult;
 import com.beanu.arad.utils.JsonUtil;
 import com.ctrl.forum.base.Constant;
 import com.ctrl.forum.entity.Assess;
+import com.ctrl.forum.entity.Message;
 import com.ctrl.forum.entity.ObtainMyReply;
 import com.ctrl.forum.entity.ReplyForMe;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -25,6 +26,7 @@ public class ReplyCommentDao extends IDao{
     private List<ReplyForMe> replyForMes = new ArrayList<>();//收到的评论列表
     private List<Assess> assesses = new ArrayList<>();  //我的评价
     private List<ObtainMyReply> obtainMyReplies = new ArrayList<>(); //我收到的评论
+    private List<Message> messages = new ArrayList<>(); //消息通知
 
     public ReplyCommentDao(INetResult activity) {
         super(activity);
@@ -44,6 +46,22 @@ public class ReplyCommentDao extends IDao{
         map.put("pageSize",pageSize+"");
         postRequest(Constant.RAW_URL + url, mapToRP(map), 0);
     }
+
+    /**
+     * 获取消息列表接口
+     * @param receiverId  消息接收者id
+     * @param pageNum  当前页码
+     * @param pageSize  每页条数
+     */
+    public void queryMessageList(String receiverId,int pageNum,int pageSize){
+        String url="message/queryMessageList";
+        Map<String,String> map = new HashMap<>();
+        map.put("receiverId",receiverId);
+        map.put("pageNum",pageNum+"");
+        map.put("pageSize",pageSize+"");
+        postRequest(Constant.RAW_URL + url, mapToRP(map), 4);
+    }
+
 
     /**
      * 获取待评价或者已评价订单列表接口
@@ -102,17 +120,21 @@ public class ReplyCommentDao extends IDao{
             Log.d("demo", "dao中结果集(个人中心====我的评论): " + result);
             obtainMyReplies = JsonUtil.node2pojoList(result.findValue("postReplyList"),ObtainMyReply.class);
         }
+        if (requestCode==4){
+            messages = JsonUtil.node2pojoList(result.findValue("messageList"),Message.class);
+        }
     }
 
     public List<ReplyForMe> getReplyForMes() {
         return replyForMes;
     }
-
     public List<Assess> getAssesses() {
         return assesses;
     }
-
     public List<ObtainMyReply> getObtainMyReplies() {
         return obtainMyReplies;
+    }
+    public List<Message> getMessages() {
+        return messages;
     }
 }

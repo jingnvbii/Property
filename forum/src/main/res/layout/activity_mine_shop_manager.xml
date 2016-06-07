@@ -19,6 +19,7 @@
         android:id="@+id/lv_left"
         android:divider="@color/line_gray"
         android:dividerHeight="1dp"
+        android:scrollbars="none"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true">
     </ListView>

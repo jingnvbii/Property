@@ -17,6 +17,9 @@ import com.ctrl.forum.ui.fragment.MineOrderManagerFragment;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
+/**
+ * 订单管理
+ */
 public class MineOrderManageActivity extends AppToolBarActivity implements View.OnClickListener{
     @InjectView(R.id.ll_text)
     LinearLayout ll_text;

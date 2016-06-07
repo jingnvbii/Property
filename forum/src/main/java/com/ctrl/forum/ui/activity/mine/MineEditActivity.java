@@ -1,8 +1,16 @@
 package com.ctrl.forum.ui.activity.mine;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.text.format.DateFormat;
+import android.util.Base64;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +28,12 @@ import com.ctrl.forum.base.AppToolBarActivity;
 import com.ctrl.forum.customview.MineHeadView;
 import com.ctrl.forum.dao.EditDao;
 import com.ctrl.forum.entity.MemberInfo;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.util.Calendar;
+import java.util.Locale;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -57,6 +71,27 @@ public class MineEditActivity extends AppToolBarActivity implements View.OnClick
     private TextView take_picture,choose_phone,cancel;
     private View view;
     private PopupWindow popupWindow;
+
+    //查看相册Intent  key
+    public static final int LOOK_ALBUM_INTENT = 10009;
+    //访问相机Intent  key
+    public static final int LOOK_CAMERA_INTENT=10010;
+    //裁剪照片Intent  key
+    public static final int CROP_PHOTO_INTENT = 10011;
+
+    private String encodeToString;//base64图片
+    private ImageView sv_loans_certificate;//上传头像
+    private ImageView image1;//加号
+    private Bitmap bitmap;
+
+    private File file = new File(Environment.getExternalStorageDirectory(), getPhotoFileName());
+
+    // 使用系统当前日期加以调整作为照片的名称
+    /*@SuppressLint("SimpleDateFormat")*/
+    private String getPhotoFileName() {
+        String name = DateFormat.format("yyyyMMdd_hhmmss", Calendar.getInstance(Locale.CHINA)) + ".jpg";
+        return name;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -176,9 +211,25 @@ public class MineEditActivity extends AppToolBarActivity implements View.OnClick
                 startActivity(intent);
                 break;
             case R.id.take_picture: //拍照片
+                intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(file));
+                startActivityForResult(intent, LOOK_CAMERA_INTENT);
+                //关闭弹窗
+                popupWindow.dismiss();
                 break;
             case R.id.choose_phone: //选择照片
-                //startActivity(new Intent(this, AlbumActivity.class));
+                if (Build.VERSION.SDK_INT < 19) {
+                    intent = new Intent(Intent.ACTION_GET_CONTENT, null);
+                    intent.addCategory(Intent.CATEGORY_OPENABLE);
+                    intent.setType("image/*");
+                } else {
+                    intent = new Intent(Intent.ACTION_OPEN_DOCUMENT, null);
+                    intent.setType("image/*");
+                }
+                intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
+                startActivityForResult(intent, LOOK_ALBUM_INTENT);
+                //关闭弹窗
+                popupWindow.dismiss();
                 break;
             case R.id.cancel: //取消
                 popupWindow.dismiss();
@@ -190,5 +241,76 @@ public class MineEditActivity extends AppToolBarActivity implements View.OnClick
     protected void onResume() {
         super.onResume();
         putData();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
+                case LOOK_ALBUM_INTENT://相册
+                    if (data != null) {
+                        startPhotoZoom(data.getData());
+                    }
+                    break;
+                case LOOK_CAMERA_INTENT://相机
+                    startPhotoZoom(Uri.fromFile(file));
+                    break;
+                case CROP_PHOTO_INTENT: // 图片缩放完成后
+                    if (null != data) {
+                        Log.e("", "-------------------" + data);
+                        setPicToView(data);
+                    }
+                    break;
+            }
+
+        }
+    }
+
+    /**
+     * 调用系统裁剪
+     */
+    private void startPhotoZoom(Uri uri) {
+        // TODO Auto-generated method stub
+        Intent intent = new Intent("com.android.camera.action.CROP");
+        intent.setDataAndType(uri, "image/*");
+        intent.putExtra("crop", true);
+        // 剪切比例
+        intent.putExtra("aspectX", 1);
+        intent.putExtra("aspectY", 1);
+        int size = 340;
+        // 输出大小
+        intent.putExtra("outputX", size);
+        intent.putExtra("outputY", size);
+        intent.putExtra("return-data", true);
+        startActivityForResult(intent, CROP_PHOTO_INTENT);
+    }
+
+    /**
+     * 设置图片并将图片转成base64
+     */
+    private void setPicToView(Intent arg2) {
+        Bundle bundle = arg2.getExtras();
+        bitmap = bundle.getParcelable("data");// 获取相机返回的数据，并转换为Bitmap图片格式
+        /*sv_loans_certificate.setImageBitmap(bitmap);
+        Log.e("", "----------------------" + bitmap);*/
+        //sv_loans_certificate.setImageURI(Uri.parse(MediaStore.Images.Media.insertImage(getContentResolver(), bitmap, null, null)));
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);// 把数据写入文件
+        byte[] bytes = baos.toByteArray();
+        //转成base64
+        encodeToString = Base64.encodeToString(bytes, Base64.DEFAULT);
+        Log.e("", "-----------------------" + encodeToString);
+
+        iv_head.setImageBitmap(bitmap);
+        //设置头像
+        //-----------------------------------------------------------
+        //调用接口上传服务器。。。encodeToString是String形式
+
+        try {
+            baos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
