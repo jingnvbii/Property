@@ -64,7 +64,7 @@ public class NumView extends ImageView {
 		paint = new Paint();
 		paint.setAntiAlias(true);
 		textPaint = new TextPaint();
-		textPaint.setTextSize(30);
+		textPaint.setTextSize(20);
 		textPaint.setColor(Color.WHITE);
 		textPaint.setAntiAlias(true);
 	}
@@ -82,7 +82,7 @@ public class NumView extends ImageView {
 			if (num > 0) {
 				if (num <= 99) {
 					paint.setColor(0xffff0000);
-					textPaint.setTextSize(40);
+					textPaint.setTextSize(getResources().getDimension(R.dimen.text_size_micro));
 					canvas.drawCircle(
 							getWidth() - textPaint.measureText(num + "") * 0.5f
 									- getPaddingRight(),
@@ -97,7 +97,7 @@ public class NumView extends ImageView {
 
 				} else {
 					paint.setColor(0xffff0000);
-					textPaint.setTextSize(40);
+					textPaint.setTextSize(getResources().getDimension(R.dimen.text_size_micro));
 					canvas.drawCircle(
 							getWidth() - textPaint.measureText(99 + "") * 0.5f
 									- getPaddingRight(),
@@ -116,7 +116,7 @@ public class NumView extends ImageView {
 		case 2: //黄底
 			if (num > 0) {
 				if (num <= 99) {
-					textPaint.setTextSize(25);
+					textPaint.setTextSize(getResources().getDimension(R.dimen.text_size_num));
 					paint.setColor(getResources().getColor(R.color.text_yellow1));
 					canvas.drawCircle(
 							getWidth() - textPaint.measureText(num + "") * 0.5f
@@ -131,8 +131,8 @@ public class NumView extends ImageView {
 									+ getPaddingTop(), textPaint);
 
 				} else {
-					paint.setColor(0xffff0000);
-					textPaint.setTextSize(25);
+					paint.setColor(getResources().getColor(R.color.text_yellow1));
+					textPaint.setTextSize(getResources().getDimension(R.dimen.text_size_num));
 					canvas.drawCircle(
 							getWidth() - textPaint.measureText(99 + "") * 0.5f
 									- getPaddingRight(),

@@ -14,7 +14,6 @@ import com.ctrl.forum.dao.OrderDao;
 import com.ctrl.forum.entity.MemeberOrder;
 import com.ctrl.forum.ui.adapter.MineOrderListAdapter;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -23,7 +22,6 @@ import java.util.List;
 public class MineOrderActivity extends AppToolBarActivity implements View.OnClickListener{
     private ListView lv_order;
     private List<MemeberOrder> orders;
-    private List<Integer> types; //类型
     private MineOrderListAdapter orderListviewAdapter;
     private MineStoreDao orderDao;
     private OrderDao odao;
@@ -70,25 +68,22 @@ public class MineOrderActivity extends AppToolBarActivity implements View.OnClic
     public void onRequestSuccess(int requestCode) {
         super.onRequestSuccess(requestCode);
         if (requestCode==0){
-            MessageUtils.showShortToast(this,"获取个人订单成功!");
             orders = orderDao.getMemeberOrders();
-            putData();
-        }
-    }
-
-    public void putData(){
-        if (orders!=null){
-            types = new ArrayList<>();
-            orderListviewAdapter.setOrders(orders);
-            for (int i=0;i<orders.size();i++){
-                String state = orders.get(i).getState();
-                if (state.equals("3")){
-                    types.add(i,3);
-                }else{
-                    types.add(i,0);
-                }
+            if (orders!=null){
+                orderListviewAdapter.setOrders(orders);
             }
-            orderListviewAdapter.setTypes(types);
+        }
+        if (requestCode==3){
+            orders.clear();
+            orderListviewAdapter = new MineOrderListAdapter(getApplicationContext());
+            lv_order.setAdapter(orderListviewAdapter);
+            orderDao.getMemeberOrder(Arad.preferences.getString("memberId"));
+        }
+        if (requestCode==1){
+            orders.clear();
+            orderListviewAdapter = new MineOrderListAdapter(getApplicationContext());
+            lv_order.setAdapter(orderListviewAdapter);
+            orderDao.getMemeberOrder(Arad.preferences.getString("memberId"));
         }
     }
 
@@ -99,23 +94,30 @@ public class MineOrderActivity extends AppToolBarActivity implements View.OnClic
         switch (v.getId()){
             case R.id.payment:  //付款
                 id = (String)position;
+                MessageUtils.showShortToast(this,"付款");
                 break;
             case R.id.iv_delete:
                 id = (String)position;
                 odao.requestDeleteOrder(id);
                 break;
-            case R.id.buy_again: //再次购买
+            case R.id.bt_right: //再次购买
                 id = (String)position;
-
+                MessageUtils.showShortToast(this,"再次购买");
                 break;
-            case R.id.button2: //评价
+            case R.id.bt_left: //评价
                 id = (String)position;
-
+                MessageUtils.showShortToast(this,"评价");
                 break;
             case R.id.cancle: //取消订单
                 id = (String)position;
                 odao.requestCancelOrder(id);
                 break;
         }
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        orderDao.getMemeberOrder(Arad.preferences.getString("memberId"));
     }
 }

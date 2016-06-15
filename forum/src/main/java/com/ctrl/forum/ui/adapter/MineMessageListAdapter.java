@@ -1,6 +1,7 @@
 package com.ctrl.forum.ui.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,8 +9,10 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.beanu.arad.Arad;
 import com.ctrl.forum.R;
 import com.ctrl.forum.entity.Message;
+import com.ctrl.forum.utils.DateUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,10 +28,15 @@ public class MineMessageListAdapter extends BaseAdapter{
     private List<Message> messages;
     private Context context;
 
-    public MineMessageListAdapter(Context context) {this.context = context;this.messages = new ArrayList<>();}
+    public MineMessageListAdapter(Context context) {
+        this.context = context;
+        this.messages = new ArrayList<>();
+        Log.e("MineMessageListAdapter","123456789");
+    }
 
     public void setMessages(List<Message> messages) {
         this.messages.addAll(messages);
+        Log.e("setMessages", "123456789");
         notifyDataSetChanged();
     }
 
@@ -52,7 +60,17 @@ public class MineMessageListAdapter extends BaseAdapter{
             holder=(ViewHolder)convertView.getTag();
         }
 
-        //holder.tv_content.setText(messages.get(position).getContent());
+       if (messages!=null && messages.get(position)!=null){
+           Arad.imageLoader.load(messages.get(position).getImgUrl()).placeholder(context.getResources().getDrawable(R.mipmap.iconfont_head)).into(holder.iv_icon);
+           holder.tv_content.setText(messages.get(position).getContent());
+           holder.tv_data.setText(DateUtil.getCurrentDate("yyyy-MM-dd"));
+           String state = messages.get(position).getReporterId();
+           if (state.equals("admin")){
+               holder.tv_name.setText("系统通知");
+           }else{
+               holder.tv_name.setText(messages.get(position).getMemberName());
+           }
+       }
 
         return convertView;
     }

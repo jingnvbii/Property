@@ -9,7 +9,9 @@ import android.widget.TextView;
 
 import com.ctrl.forum.R;
 import com.ctrl.forum.entity.Coupon;
+import com.ctrl.forum.utils.DateUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -24,15 +26,11 @@ public class MineCouponXianListAdapter extends BaseAdapter{
     public MineCouponXianListAdapter(Context context, int resources) {
         this.context = context;
         this.resources = resources;
+        messages = new ArrayList<>();
     }
 
     public void setMessages(List<Coupon> messages) {
-        this.messages = messages;
-        notifyDataSetChanged();
-    }
-
-    public void addMessages(List<Coupon> messages){
-        messages.addAll(messages);
+        this.messages .addAll(messages);
         notifyDataSetChanged();
     }
 
@@ -63,9 +61,12 @@ public class MineCouponXianListAdapter extends BaseAdapter{
             holder=(ViewHolder)convertView.getTag();
         }
 
-        if (messages!=null){
+        if (messages!=null && messages.get(position)!=null){
              holder.tv_name.setText(messages.get(position).getName());
-            holder.tv_money.setText(messages.get(position).getAmount());
+             holder.tv_money.setText(messages.get(position).getAmount());
+             holder.time_limit.setText(DateUtil.getStringByFormat(messages.get(position).getValidityStartTime(), "yyyy.MM.dd") + "-" +
+                     DateUtil.getStringByFormat(messages.get(position).getValidityEndTime(), "yyyy.MM.dd"));
+             holder.tv_limit_goods.setText(messages.get(position).getRemark());
         }
 
         return convertView;

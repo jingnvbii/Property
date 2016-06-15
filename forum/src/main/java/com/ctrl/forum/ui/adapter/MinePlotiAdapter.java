@@ -35,7 +35,7 @@ public class MinePlotiAdapter extends BaseAdapter {
     }
 
     public void setMessages(List<Communitys> communities) {
-        this.communities.addAll(communities);
+        this.communities = communities;
         notifyDataSetChanged();
     }
 

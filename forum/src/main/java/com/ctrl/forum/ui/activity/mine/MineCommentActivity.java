@@ -44,8 +44,6 @@ public class MineCommentActivity extends AppToolBarActivity {
                 if (comments != null) {
                     comments.clear();
                     PAGE_NUM = 1;
-                    mineCommentListAdapter = new MineCommentListAdapter(getApplicationContext());
-                    lv_comment.setAdapter(mineCommentListAdapter);
                 }
                 replyCommentDao.obtainMyReply(Arad.preferences.getString("memberId"), PAGE_NUM, Constant.PAGE_SIZE);
             }

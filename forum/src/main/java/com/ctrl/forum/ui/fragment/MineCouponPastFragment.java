@@ -8,7 +8,6 @@ import android.widget.ListView;
 
 import com.beanu.arad.Arad;
 import com.beanu.arad.base.ToolBarFragment;
-import com.beanu.arad.utils.MessageUtils;
 import com.ctrl.forum.R;
 import com.ctrl.forum.base.Constant;
 import com.ctrl.forum.dao.CouponsDao;
@@ -28,6 +27,7 @@ public class MineCouponPastFragment extends ToolBarFragment {
     private MineCouponListAdapter couponListAdapter;
     private CouponsDao cdao;
     private int PAGE_NUM = 1;
+    private int resources;
 
     public static MineCouponPastFragment newInstance() {
         MineCouponPastFragment fragment = new MineCouponPastFragment();
@@ -59,7 +59,10 @@ public class MineCouponPastFragment extends ToolBarFragment {
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
                 if (redenvelopes!=null) {
                     redenvelopes.clear();
-                    PAGE_NUM = 1;}
+                    PAGE_NUM = 1;
+                    couponListAdapter = new MineCouponListAdapter(getActivity(),resources);
+                    lv_content.setAdapter(couponListAdapter);
+                }
                 cdao.getMemberRedenvelope("1", "2", Arad.preferences.getString("memberId"), PAGE_NUM + "", Constant.PAGE_SIZE + "");
             }
 
@@ -67,7 +70,7 @@ public class MineCouponPastFragment extends ToolBarFragment {
             public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
                 if (redenvelopes!=null) {
                     PAGE_NUM += 1;
-                    cdao.getMemberRedenvelope("1", "2", Arad.preferences.getString("memberId"), Constant.PAGE_NUM + "", Constant.PAGE_SIZE + "");
+                    cdao.getMemberRedenvelope("1", "2", Arad.preferences.getString("memberId"),PAGE_NUM + "", Constant.PAGE_SIZE + "");
                 } else {
                     lv_content.onRefreshComplete();
                 }
@@ -78,9 +81,9 @@ public class MineCouponPastFragment extends ToolBarFragment {
 
     private void initData() {
         cdao = new CouponsDao(this);
-        cdao.getMemberRedenvelope("1", "2", Arad.preferences.getString("memberId"), Constant.PAGE_NUM + "", Constant.PAGE_SIZE + "");
+        cdao.getMemberRedenvelope("1", "2", Arad.preferences.getString("memberId"),PAGE_NUM + "", Constant.PAGE_SIZE + "");
 
-        int resources = R.layout.item_mine_huipast;
+        resources = R.layout.item_mine_huipast;
         couponListAdapter = new MineCouponListAdapter(getActivity(),resources);
         lv_content.setAdapter(couponListAdapter);
     }
@@ -90,7 +93,6 @@ public class MineCouponPastFragment extends ToolBarFragment {
         super.onRequestSuccess(requestCode);
         lv_content.onRefreshComplete();
         if (requestCode==1){
-            MessageUtils.showShortToast(getActivity(), "获取优惠劵成功");
             redenvelopes = cdao.getRedenvelopes();
             if (redenvelopes!=null) {
                 couponListAdapter.setMessages(redenvelopes);
@@ -101,7 +103,6 @@ public class MineCouponPastFragment extends ToolBarFragment {
     @Override
     public void onRequestFaild(String errorNo, String errorMessage) {
         super.onRequestFaild(errorNo, errorMessage);
-        MessageUtils.showShortToast(getActivity(), "获取失败");
         lv_content.onRefreshComplete();
     }
 }

@@ -144,8 +144,6 @@ public class LoginActivity extends AppToolBarActivity implements View.OnClickLis
             //Log.i("BaiduLocationApiDem", sb.toString());
             latitude = location.getLatitude() + "";
             lontitude = location.getLongitude() + "";
-            address=location.getAddrStr();
-            Log.i("tag", "address===-=====" + address);
         }
     }
 
@@ -183,15 +181,22 @@ public class LoginActivity extends AppToolBarActivity implements View.OnClickLis
             Arad.preferences.putString("point", memberInfo.getPoint());
             Arad.preferences.putString("remark", memberInfo.getRemark());
             Arad.preferences.putString("memberLevel", memberInfo.getMemberLevel());
+
+            if (memberInfo.getImgUrl()==null){
+                Arad.preferences.putString("imgUrl","");
+            }else{
+                Arad.preferences.putString("imgUrl", memberInfo.getImgUrl());
+            }
+
             Arad.preferences.putString("imgUrl", memberInfo.getImgUrl());
             Arad.preferences.putString("address", memberInfo.getAddress());
             Arad.preferences.putString("companyId", memberInfo.getCompanyId());
             Arad.preferences.putString("communityName", memberInfo.getCommunityName());
             Arad.preferences.putString("communityId",memberInfo.getCommunityId());
 
-
             Arad.preferences.putString("latitude", latitude);
             Arad.preferences.putString("lontitude", lontitude);
+
             Arad.preferences.putString("address", address);
             Arad.preferences.flush();
             MessageUtils.showShortToast(this, "登录成功");
@@ -229,6 +234,9 @@ public class LoginActivity extends AppToolBarActivity implements View.OnClickLis
             case R.id.tv_login :
                 if(checkInput()){
                     ldao.requestLogin(et_username.getText().toString().trim(), et_pass_word.getText().toString().trim(), "1");
+                    //没网的时候可以登陆
+                    startActivity(new Intent(this,MainActivity.class));
+
                 }
                 break;
             case R.id.tv_forget :

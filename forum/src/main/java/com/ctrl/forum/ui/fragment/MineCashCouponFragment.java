@@ -39,6 +39,7 @@ public class MineCashCouponFragment extends ToolBarFragment implements View.OnCl
     private TextView tv_no,tv_yes,tv_share;
     private String couponId; //现金劵的id
     private int PAGE_NUM=1;
+    private int resources;
 
     public static MineCashCouponFragment newInstance() {
         MineCashCouponFragment fragment = new MineCashCouponFragment();
@@ -65,9 +66,9 @@ public class MineCashCouponFragment extends ToolBarFragment implements View.OnCl
         lv_content.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (coupons.size() > 0) {
-                    couponId = coupons.get(position).getId();//点击的现金劵的id
-                    String useType = coupons.get(position).getUseType();//使用方式（0：使用核销、1：分享核销）
+                if (coupons!=null && coupons.get(position-1)!=null) {
+                    couponId = coupons.get(position-1).getId();//点击的现金劵的id
+                    String useType = coupons.get(position-1).getUseType();//使用方式（0：使用核销、1：分享核销）
                     if (useType.equals("0")) {
                         popView = LayoutInflater.from(getActivity()).inflate(R.layout.coupon_share, null);
                         tv_no = (TextView) popView.findViewById(R.id.tv_no);
@@ -85,14 +86,16 @@ public class MineCashCouponFragment extends ToolBarFragment implements View.OnCl
             }
         });
 
+        lv_content.setMode(PullToRefreshBase.Mode.BOTH);
         lv_content.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
                 if (coupons!=null) {
                     coupons.clear();
                     PAGE_NUM = 1;
-                } else {
-                    lv_content.onRefreshComplete();
+                    couponXianListAdapter = new MineCouponXianListAdapter(getActivity(), resources);
+                    lv_content.setAdapter(couponXianListAdapter);
+
                 }
                 cdao.getMemberCoupons("1", "0", Arad.preferences.getString("memberId"), PAGE_NUM + "", Constant.PAGE_SIZE + "");
             }
@@ -112,12 +115,13 @@ public class MineCashCouponFragment extends ToolBarFragment implements View.OnCl
     }
 
     private void initData() {
-        cdao = new CouponsDao(this);
-        cdao.getMemberCoupons("1", "0", Arad.preferences.getString("memberId"), PAGE_NUM + "", Constant.PAGE_SIZE + "");
 
-        int resources = R.layout.item_mine_xian;
+         resources = R.layout.item_mine_xian;
         couponXianListAdapter = new MineCouponXianListAdapter(getActivity(), resources);
         lv_content.setAdapter(couponXianListAdapter);
+
+        cdao = new CouponsDao(this);
+        cdao.getMemberCoupons("1", "0", Arad.preferences.getString("memberId"), PAGE_NUM + "", Constant.PAGE_SIZE + "");
 
     }
 
@@ -126,7 +130,6 @@ public class MineCashCouponFragment extends ToolBarFragment implements View.OnCl
         super.onRequestSuccess(requestCode);
         lv_content.onRefreshComplete();
         if (requestCode==0){
-            MessageUtils.showShortToast(getActivity(),"获取现金劵成功");
             coupons = cdao.getCoupons();
             if (coupons!=null) {
                 couponXianListAdapter.setMessages(coupons);
@@ -170,7 +173,6 @@ public class MineCashCouponFragment extends ToolBarFragment implements View.OnCl
     @Override
     public void onRequestFaild(String errorNo, String errorMessage) {
         super.onRequestFaild(errorNo, errorMessage);
-        MessageUtils.showShortToast(getActivity(), "获取失败");
         lv_content.onRefreshComplete();
     }
 }

@@ -10,13 +10,13 @@ import com.ctrl.forum.R;
 import com.ctrl.forum.base.AppToolBarActivity;
 
 public class MineDetailActivity extends AppToolBarActivity implements View.OnClickListener{
-    private RelativeLayout rl_post;//��ķ���
-    private RelativeLayout rl_title;//ϲ��������
-    private RelativeLayout rl_comment;//�������
-    private RelativeLayout rl_fa_title;//��ķ���
-    private TextView tv_message; //������Ϣ
-    private TextView tv_blacklist; //�������
-    private ImageView iv_phone;//����绰
+    private RelativeLayout rl_post;
+    private RelativeLayout rl_title;
+    private RelativeLayout rl_comment;
+    private RelativeLayout rl_fa_title;
+    private TextView tv_message;
+    private TextView tv_blacklist;
+    private ImageView iv_phone;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

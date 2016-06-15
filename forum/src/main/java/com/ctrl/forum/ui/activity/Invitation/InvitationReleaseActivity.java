@@ -38,8 +38,14 @@ import com.ctrl.forum.base.AppToolBarActivity;
 import com.ctrl.forum.customview.GridViewForScrollView;
 import com.ctrl.forum.dao.ImageDao;
 import com.ctrl.forum.dao.InvitationDao;
+import com.ctrl.forum.dao.KeyDao;
 import com.ctrl.forum.entity.CategoryItem;
 import com.ctrl.forum.entity.Image;
+import com.ctrl.forum.entity.ItemValues;
+import com.ctrl.forum.entity.List2;
+import com.ctrl.forum.entity.Post2;
+import com.ctrl.forum.entity.PostImage;
+import com.ctrl.forum.ui.activity.WebViewActivity;
 import com.ctrl.forum.utils.Utils;
 
 import java.io.ByteArrayOutputStream;
@@ -55,6 +61,9 @@ import butterknife.InjectView;
  * Created by Administrator on 2016/4/11.
  */
 public class InvitationReleaseActivity extends AppToolBarActivity implements View.OnClickListener{
+    private KeyDao kdao;
+    private ItemValues itemValues;
+
     private GridViewForScrollView noScrollgridview;
     private View parentView;
     private PopupWindow pop = null;
@@ -114,6 +123,9 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
     @InjectView(R.id.et_content)//内容
     EditText et_content;
 
+    @InjectView(R.id.tougao)
+    TextView tougao;
+
     @InjectView(R.id.tv_release_back)//取消
     TextView tv_release_back;
     @InjectView(R.id.tv_release_save)//存草稿
@@ -134,8 +146,12 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
     private String checkType3;
     private String checkType2;
     private List<CategoryItem> listItemCategroy3;
+    private String vcardDisplay;
+    private List<List2> list;
+    private String categoryTree; //分类
 
     private boolean isSave;//是否存草稿
+    private String[] eid;
 
 
     @Override
@@ -147,12 +163,21 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
         ButterKnife.inject(this);
        Init();
        initView();
+       checkActivity();
+    }
 
+    private void checkActivity() {
+        String id = getIntent().getStringExtra("id");
+        if (id!=null && !id.equals("")){
+            idao = new InvitationDao(this);
+            idao.requesPostDetail(id, Arad.preferences.getString("memberId"));
+        }
     }
 
     private void initView() {
         idao=new InvitationDao(this);
         idao.requesItemCategory2(channelId,"1");
+        kdao = new KeyDao(this);
 
         tv_tel=(TextView)findViewById(R.id.tv_tel);
         tv_location=(TextView)findViewById(R.id.tv_location);
@@ -168,6 +193,8 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
         tv_release_back.setOnClickListener(this);
         tv_release.setOnClickListener(this);
         tv_release_save.setOnClickListener(this);
+        tougao.setOnClickListener(this);
+
 
         //初始化控件宽高
         setImageViewWidth(iv01);
@@ -321,6 +348,13 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
     @Override
     public void onRequestSuccess(int requestCode) {
         super.onRequestSuccess(requestCode);
+        if (requestCode == 66) {
+            itemValues = kdao.getItemValues();
+            Intent intent = new Intent(this,WebViewActivity.class);
+            intent.putExtra("data",itemValues.getItemValue());
+            intent.putExtra("title","投稿协议");
+            startActivity(intent);
+        }
         if(requestCode==7){
             if(isSave){
                 MessageUtils.showShortToast(this,"存草稿成功");
@@ -331,142 +365,94 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
             finish();
         }
 
+        if (requestCode == 3){
+            Post2 post2 = idao.getPost2(); //帖子内容
+            name = post2.getContactName();
+            adress = post2.getContactAddress();
+            tel = post2.getContactPhone();
+            locationLongitude = post2.getLocationLongitude();
+            locationLatitude = post2.getLocationLatitude();
+            tv_location_name = post2.getLocationName();
+            et_content.setText(post2.getContent());
+            et_tittle.setText(post2.getTitle());
+            categoryTree = post2.getCategoryTree();
+            eid = categoryTree.split(",", categoryTree.length());
+
+            //二级菜单列表
+            listItemCategroy = idao.getList2s();
+            for(int i=0;i<listItemCategroy.size();i++){
+                secondCategroyStr.add(listItemCategroy.get(i).getName());
+            }
+            setSecondSpinner2();
+
+            //三级菜单列表
+            listItemCategroy3 = idao.getList3();
+            if (listItemCategroy3!=null) {
+                spinner_third_kind.setVisibility(View.VISIBLE);
+                for (int i = 0; i < listItemCategroy3.size(); i++) {
+                    thirdCategroyStr.add(listItemCategroy3.get(i).getName());
+                }
+                setSecondSpinner3();
+            }
+
+
+            //名片
+            vcardDisplay = post2.getVcardDisplay();
+            if (vcardDisplay.equals("0")){
+                Arad.preferences.putBoolean("isCallingChecked",false);
+            }else{
+                Arad.preferences.putBoolean("isCallingChecked",true);
+            }
+            Arad.preferences.flush();
+
+            List<PostImage> listPostImage = idao.getListPostImage();//图片
+            for (int i=0;i<listPostImage.size();i++){
+                PostImage post = listPostImage.get(i);
+                Image image=new Image();
+                image.setImgUrl(post.getImg());
+                image.setThumbImgUrl(post.getThumbImg());
+                mImageList.add(image);
+            }
+            if (mImageList.size()>3){
+                ll_image_second.setVisibility(View.VISIBLE);
+            }
+            if (mImageList.size()>7){
+                ll_image_third.setVisibility(View.VISIBLE);
+            }
+            setBitmapImg();
+            bitmapClick();
+        }
+
         if(requestCode==888){
             showProgress(false);
-            MessageUtils.showShortToast(this,"图片上传成功");
+            MessageUtils.showShortToast(this, "图片上传成功");
             Image image=Idao.getImage();
             mImageList.add(image);
             setBitmapImg();
-            iv01.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    if (mImageList.size() >= 1) {
-                        imageFlag = 1;
-                        showDelDialog(1);
-                    }
-                    return true;
-                }
-            });
-            iv02.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    if (mImageList.size() >= 2) {
-                        imageFlag = 2;
-                        showDelDialog(2);
-                    }
-                    return true;
-                }
-            });
-            iv03.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    if (mImageList.size() >= 3) {
-                        imageFlag = 3;
-                        showDelDialog(3);
-                    }
-                    return true;
-                }
-            });
-            iv04.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    if (mImageList.size() >= 4) {
-                        imageFlag = 4;
-                        showDelDialog(4);
-                    }
-                    return true;
-                }
-            });
-            iv05.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    if (mImageList.size() >= 5) {
-                        imageFlag = 5;
-                        showDelDialog(5);
-                    }
-                    return true;
-                }
-            });
-            iv06.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    if (mImageList.size() >= 6) {
-                        imageFlag = 6;
-                        showDelDialog(6);
-                    }
-                    return true;
-                }
-            });
-            iv07.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    if (mImageList.size() >= 7) {
-                        imageFlag = 7;
-                        showDelDialog(7);
-                    }
-                    return true;
-                }
-            });
-            iv08.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    if (mImageList.size() >= 8) {
-                        imageFlag = 8;
-                        showDelDialog(8);
-                    }
-                    return true;
-                }
-            });
-            iv09.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    if (mImageList.size() >= 9) {
-                        imageFlag = 9;
-                        showDelDialog(9);
-                    }
-                    return true;
-                }
-            });
-
         }
 
         if(requestCode==12){
             MessageUtils.showShortToast(this, "获取二级分类成功");
-            if(listItemCategroy!=null){
+            if(listItemCategroy!= null){
                 listItemCategroy.clear();
             }
+            if(secondCategroyStr!= null){
+                secondCategroyStr.clear();
+            }
             listItemCategroy=idao.getListCategroyItem();
-            Log.i("tag", "size---" + listItemCategroy.size());
             for(int i=0;i<listItemCategroy.size();i++){
                 secondCategroyStr.add(listItemCategroy.get(i).getName());
             }
 
-            arrayAdapter = new ArrayAdapter<String>(InvitationReleaseActivity.this, R.layout.simple_spinner_item, secondCategroyStr);
-            //设置下拉列表的风格
-            //arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            arrayAdapter.setDropDownViewResource(R.layout.spinner_layout);
-            spinner_second_kind.setAdapter(arrayAdapter);
-            spinner_second_kind.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-                    idao.requesItemCategory3(listItemCategroy.get(position).getId(), "2");
-                    secondKindId = listItemCategroy.get(position).getId();
-                    Log.i("tag", "secondKindId---" + secondKindId);
-                    checkType2 = listItemCategroy.get(position).getCheckType();
-
-                }
-
-                @Override
-                public void onNothingSelected(AdapterView<?> parent) {
-
-                }
-            });
+            setSecondSpinner2();
 
         }
         if(requestCode==13){
             if(listItemCategroy3!=null){
                 listItemCategroy3.clear();
+            }
+            if (thirdCategroyStr!=null){
+                thirdCategroyStr.clear();
             }
             MessageUtils.showShortToast(this,"获取三级分类成功");
             spinner_third_kind.setVisibility(View.VISIBLE);
@@ -475,29 +461,162 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
                 thirdCategroyStr.add(listItemCategroy3.get(i).getName());
             }
 
-            arrayAdapter = new ArrayAdapter<String>(InvitationReleaseActivity.this, R.layout.simple_spinner_item, thirdCategroyStr);
-            //设置下拉列表的风格
-           // arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            arrayAdapter.setDropDownViewResource(R.layout.spinner_layout);
-            spinner_third_kind.setAdapter(arrayAdapter);
-
-            spinner_third_kind.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    categroyId = listItemCategroy3.get(position).getId();
-                    thirdKindId = categroyId;
-                    checkType3 = listItemCategroy3.get(position).getCheckType();
-
-                }
-
-                @Override
-                public void onNothingSelected(AdapterView<?> parent) {
-
-                }
-            });
-            
-            
+            setSecondSpinner3();
         }
+    }
+
+    private void setSecondSpinner3() {
+        arrayAdapter = new ArrayAdapter<String>(InvitationReleaseActivity.this, R.layout.simple_spinner_item, thirdCategroyStr);
+        //设置下拉列表的风格
+        // arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        arrayAdapter.setDropDownViewResource(R.layout.spinner_layout);
+        spinner_third_kind.setAdapter(arrayAdapter);
+        if (listItemCategroy3!=null && categoryTree!=null) {
+            for (int i = 0; i < listItemCategroy3.size(); i++) {
+                if (listItemCategroy.get(i).getId().equals(eid[3])) {
+                    spinner_third_kind.setSelection(i);
+                }
+            }
+        }
+        spinner_third_kind.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                categroyId = listItemCategroy3.get(position).getId();
+                thirdKindId = categroyId;
+                checkType3 = listItemCategroy3.get(position).getCheckType();
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+    }
+
+    private void setSecondSpinner2() {
+        arrayAdapter = new ArrayAdapter<String>(InvitationReleaseActivity.this, R.layout.simple_spinner_item, secondCategroyStr);
+        //设置下拉列表的风格
+        //arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        arrayAdapter.setDropDownViewResource(R.layout.spinner_layout);
+        spinner_second_kind.setAdapter(arrayAdapter);
+        if (listItemCategroy!=null && categoryTree!=null){
+            for(int i=0;i<listItemCategroy.size();i++){
+                if (listItemCategroy.get(i).getId().equals(eid[2])){
+                    spinner_second_kind.setSelection(i);
+                }
+            }
+        }
+        spinner_second_kind.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                idao.requesItemCategory3(listItemCategroy.get(position).getId(), "2");
+                secondKindId = listItemCategroy.get(position).getId();
+                Log.i("tag", "secondKindId---" + secondKindId);
+                checkType2 = listItemCategroy.get(position).getCheckType();
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+    }
+
+    private void bitmapClick() {
+        iv01.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                if (mImageList.size() >= 1) {
+                    imageFlag = 1;
+                    showDelDialog(1);
+                }
+                return true;
+            }
+        });
+        iv02.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                if (mImageList.size() >= 2) {
+                    imageFlag = 2;
+                    showDelDialog(2);
+                }
+                return true;
+            }
+        });
+        iv03.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                if (mImageList.size() >= 3) {
+                    imageFlag = 3;
+                    showDelDialog(3);
+                }
+                return true;
+            }
+        });
+        iv04.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                if (mImageList.size() >= 4) {
+                    imageFlag = 4;
+                    showDelDialog(4);
+                }
+                return true;
+            }
+        });
+        iv05.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                if (mImageList.size() >= 5) {
+                    imageFlag = 5;
+                    showDelDialog(5);
+                }
+                return true;
+            }
+        });
+        iv06.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                if (mImageList.size() >= 6) {
+                    imageFlag = 6;
+                    showDelDialog(6);
+                }
+                return true;
+            }
+        });
+        iv07.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                if (mImageList.size() >= 7) {
+                    imageFlag = 7;
+                    showDelDialog(7);
+                }
+                return true;
+            }
+        });
+        iv08.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                if (mImageList.size() >= 8) {
+                    imageFlag = 8;
+                    showDelDialog(8);
+                }
+                return true;
+            }
+        });
+        iv09.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                if (mImageList.size() >= 9) {
+                    imageFlag = 9;
+                    showDelDialog(9);
+                }
+                return true;
+            }
+        });
+
     }
 
     private boolean checkInput(){
@@ -627,6 +746,7 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
                             idao.requesReleasePost(
                                     Arad.preferences.getString("memberId"),
                                     thirdKindId,
+                                    "",
                                     "0",
                                     "0",
                                     checkType3,
@@ -647,6 +767,7 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
                             idao.requesReleasePost(
                                     Arad.preferences.getString("memberId"),
                                     secondKindId,
+                                    "",
                                     "0",
                                     "0",
                                     checkType2,
@@ -677,6 +798,7 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
                                idao.requesReleasePost(
                                        Arad.preferences.getString("memberId"),
                                        thirdKindId,
+                                       "",
                                        "0",
                                        "1",
                                        checkType3,
@@ -697,6 +819,7 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
                            idao.requesReleasePost(
                                    Arad.preferences.getString("memberId"),
                                    secondKindId,
+                                   "",
                                    "0",
                                    "1",
                                    checkType2,
@@ -724,6 +847,7 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
                     idao.requesReleasePost(
                             Arad.preferences.getString("memberId"),
                             thirdKindId,
+                            "",
                             "0",
                             "1",
                             checkType2,
@@ -841,6 +965,9 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
 
                 //setBitmapImg();
                 break;
+            case R.id.tougao:
+                kdao.ueryDictionary("POST_PROTOCOL"); //投稿协议
+                break;
         }
 
     }
@@ -933,12 +1060,7 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
         params.height=w;
         android.util.Log.d("demo", "height : " + params.height);
         imageView.setLayoutParams(params);
-
     }
-
-
-
-
     private void setBitmapImg(){
 
         setImageViewWidth(iv01);

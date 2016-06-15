@@ -185,10 +185,13 @@ public class MineShopManagerActivity extends ToolBarActivity implements Compound
         if (isChecked){
             sdao.UpdateProduct(storeId,"1");
             MessageUtils.showShortToast(this, "商品上架");
+            Arad.preferences.putBoolean(storeId,true);
         }else{
             sdao.UpdateProduct(storeId,"0");
             MessageUtils.showShortToast(this, "商品下架");
+            Arad.preferences.putBoolean(storeId, false);
         }
+        Arad.preferences.flush();
     }
 
 }

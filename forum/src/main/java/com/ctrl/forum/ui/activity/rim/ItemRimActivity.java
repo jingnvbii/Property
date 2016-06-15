@@ -1,6 +1,10 @@
 package com.ctrl.forum.ui.activity.rim;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -18,6 +22,7 @@ import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
 import com.baidu.mapapi.SDKInitializer;
+import com.baidu.mapapi.VersionInfo;
 import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.MapView;
 import com.beanu.arad.Arad;
@@ -46,6 +51,8 @@ public class ItemRimActivity extends ToolBarActivity implements View.OnClickList
     MapView bmapView;
     @InjectView(R.id.tv_item_one)
     TextView tv_item_one;
+    @InjectView(R.id.tv_key)
+    TextView tv_key;
 
     private List<RimServiceCompany> rimServiceCompanies;
     private RimShopListAdapter rimShopListAdapter;
@@ -61,12 +68,43 @@ public class ItemRimActivity extends ToolBarActivity implements View.OnClickList
     public LocationClient mLocationClient = null;
     public BDLocationListener myListener = new MyLocationListener();
 
+    /**
+     * 构造广播监听类，监听 SDK key 验证以及网络异常广播
+     */
+    public class SDKReceiver extends BroadcastReceiver {
+        public void onReceive(Context context, Intent intent) {
+            String s = intent.getAction();
+            tv_key.setTextColor(Color.RED);
+            if (s.equals(SDKInitializer.SDK_BROADTCAST_ACTION_STRING_PERMISSION_CHECK_ERROR)) {
+                tv_key.setText("key 验证出错! 请在 AndroidManifest.xml 文件中检查 key 设置");
+            } else if (s
+                    .equals(SDKInitializer.SDK_BROADTCAST_ACTION_STRING_PERMISSION_CHECK_OK)) {
+                tv_key.setText("key 验证成功! 功能可以正常使用");
+                tv_key.setTextColor(Color.YELLOW);
+            }
+            else if (s
+                    .equals(SDKInitializer.SDK_BROADCAST_ACTION_STRING_NETWORK_ERROR)) {
+                tv_key.setText("网络出错");
+            }
+        }
+    }
+
+    private SDKReceiver mReceiver;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         SDKInitializer.initialize(getApplicationContext());
         setContentView(R.layout.activity_rim_item);
         ButterKnife.inject(this);
+        tv_key.setText("欢迎使用百度地图Android SDK v" + VersionInfo.getApiVersion());
+        // 注册 SDK 广播监听者
+        IntentFilter iFilter = new IntentFilter();
+        iFilter.addAction(SDKInitializer.SDK_BROADTCAST_ACTION_STRING_PERMISSION_CHECK_OK);
+        iFilter.addAction(SDKInitializer.SDK_BROADTCAST_ACTION_STRING_PERMISSION_CHECK_ERROR);
+        iFilter.addAction(SDKInitializer.SDK_BROADCAST_ACTION_STRING_NETWORK_ERROR);
+        mReceiver = new SDKReceiver();
+        registerReceiver(mReceiver, iFilter);
 
         Intent intent = getIntent();
         id = intent.getStringExtra("id");

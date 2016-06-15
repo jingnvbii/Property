@@ -8,7 +8,7 @@ public class MemeberOrder {
     private String id;//订单id
     private String totalCost;//订单总价格
     private String Img;//商家logo地址
-    private String createTime;//订单创建时间
+    private long createTime;//订单创建时间
     private String companyname;//商家名称
     private String companyId;//商家id
     private String evaluationState;//评价状态（0：未评价、1：已评价）
@@ -30,11 +30,11 @@ public class MemeberOrder {
         this.companyname = companyname;
     }
 
-    public String getCreateTime() {
+    public long getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(String createTime) {
+    public void setCreateTime(long createTime) {
         this.createTime = createTime;
     }
 

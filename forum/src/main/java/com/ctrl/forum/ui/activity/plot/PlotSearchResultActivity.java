@@ -1,9 +1,14 @@
 package com.ctrl.forum.ui.activity.plot;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -36,6 +41,8 @@ public class PlotSearchResultActivity extends AppToolBarActivity implements View
     TextView rim_post; //发帖
     @InjectView(R.id.rim_serve)
     TextView rim_serve; //周边服务
+    @InjectView(R.id.et_search)
+    EditText et_search; //周边服务
     @InjectView(R.id.lv_content)
     PullToRefreshListView lv_content; //周边服务
 
@@ -44,7 +51,6 @@ public class PlotSearchResultActivity extends AppToolBarActivity implements View
     private String keyWord;
     private PlotDao plotDao;
     private int PAGE_NUM =1;
-    private Intent intent;
     private Activity activity;
 
     @Override
@@ -54,6 +60,28 @@ public class PlotSearchResultActivity extends AppToolBarActivity implements View
         ButterKnife.inject(this);
 
         initView();
+
+        //为输入框注册键盘监听事件
+        et_search.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_GO) {
+                    //隐藏软键盘
+                    InputMethodManager imm = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    if (imm.isActive()) {
+                        imm.hideSoftInputFromWindow(v.getApplicationWindowToken(), 0);
+                    }
+                    if (!et_search.getText().toString().equals("")) {
+                        keyWord=et_search.getText().toString();
+                        plotDao.queryPostList(Arad.preferences.getString("memberId"),"1",keyWord,
+                                Arad.preferences.getString("communityId"),
+                                PAGE_NUM+"",Constant.PAGE_SIZE+"");
+                    }
+                    return true;
+                }
+                return false;
+            }
+        });
 
         invitationListViewFriendStyleAdapter = new InvitationListViewFriendStyleAdapter(this);
         lv_content.setAdapter(invitationListViewFriendStyleAdapter);
@@ -70,14 +98,18 @@ public class PlotSearchResultActivity extends AppToolBarActivity implements View
                     invitationListViewFriendStyleAdapter = new InvitationListViewFriendStyleAdapter(activity);
                     lv_content.setAdapter(invitationListViewFriendStyleAdapter);
                 }
-                plotDao.queryPostList(Arad.preferences.getString("memberId"), "1", keyWord, PAGE_NUM + "", Constant.PAGE_SIZE + "");
+                plotDao.queryPostList(Arad.preferences.getString("memberId"), "1", keyWord,
+                        Arad.preferences.getString("communityId"),
+                        PAGE_NUM + "", Constant.PAGE_SIZE + "");
             }
 
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
                 if (posts != null) {
                     PAGE_NUM += 1;
-                    plotDao.queryPostList(Arad.preferences.getString("memberId"), "1", keyWord, PAGE_NUM + "", Constant.PAGE_SIZE + "");
+                    plotDao.queryPostList(Arad.preferences.getString("memberId"), "1", keyWord,
+                            Arad.preferences.getString("communityId"),
+                            PAGE_NUM + "", Constant.PAGE_SIZE + "");
                 } else {
                     lv_content.onRefreshComplete();
                 }
@@ -87,14 +119,11 @@ public class PlotSearchResultActivity extends AppToolBarActivity implements View
     }
 
     private void initData() {
-        keyWord = intent.getStringExtra("keyWord");
         plotDao = new PlotDao(this);
-        plotDao.queryPostList(Arad.preferences.getString("memberId"),"1",keyWord,PAGE_NUM+"",Constant.PAGE_SIZE+"");
     }
 
     private void initView() {
         activity = this;
-        intent = getIntent();
 
         iv_back.setOnClickListener(this);
         tv_plot_name.setOnClickListener(this);
@@ -113,10 +142,10 @@ public class PlotSearchResultActivity extends AppToolBarActivity implements View
                 startActivity(new Intent(this,MineFindFlotActivity.class));
                 break;
             case R.id.rim_post:
-
+                startActivity(new Intent(this,PlotAddInvitationActivity.class));
                 break;
             case R.id.rim_serve:
-
+                startActivity(new Intent(this, PlotRimServeActivity.class));
                 break;
         }
     }

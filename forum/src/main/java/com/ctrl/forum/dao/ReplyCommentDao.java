@@ -106,6 +106,17 @@ public class ReplyCommentDao extends IDao{
         postRequest(Constant.RAW_URL + url, mapToRP(map), 3);
     }
 
+    /**
+     * 更改消息通知为已读
+     * @param id  消息的主键id
+     */
+    public void modifyReadState(String id){
+        String url="message/modifyReadState";
+        Map<String,String> map = new HashMap<>();
+        map.put("id",id);
+        postRequest(Constant.RAW_URL + url, mapToRP(map), 5);
+    }
+
     @Override
     public void onRequestSuccess(JsonNode result, int requestCode) throws IOException {
         if(requestCode == 0){
@@ -118,7 +129,8 @@ public class ReplyCommentDao extends IDao{
         }
         if (requestCode==3){
             Log.d("demo", "dao中结果集(个人中心====我的评论): " + result);
-            obtainMyReplies = JsonUtil.node2pojoList(result.findValue("postReplyList"),ObtainMyReply.class);
+            List<ObtainMyReply> list = JsonUtil.node2pojoList(result.findValue("postReplyList"),ObtainMyReply.class);
+            obtainMyReplies.addAll(list);
         }
         if (requestCode==4){
             messages = JsonUtil.node2pojoList(result.findValue("messageList"),Message.class);

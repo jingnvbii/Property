@@ -2,7 +2,6 @@ package com.ctrl.forum.ui.activity.Invitation;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
@@ -32,8 +31,18 @@ public class AddContactPhoneActivity extends AppToolBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_contact_phone);
         ButterKnife.inject(this);
+
+        initView();
+
         // 隐藏输入法
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+    }
+
+    private void initView() {
+        Intent intent = getIntent();
+        et_address.setText(intent.getStringExtra("adress"));
+        et_name.setText(intent.getStringExtra("name"));
+        et_tel.setText(intent.getStringExtra("tel"));
     }
 
 

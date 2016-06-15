@@ -1,5 +1,7 @@
 package com.ctrl.forum.entity;
 
+import java.util.List;
+
 /**
  * 周边店铺评论
  * Created by Administrator on 2016/5/17.
@@ -8,12 +10,20 @@ public class CompanyEvaluation {
     private String id; //评论id
     private String content; //评论内容
     private String soundUrl; //语音文件url
-    private String createTime; //评论创建时间
+    private long createTime; //评论创建时间
     private String memberName; //会员姓名
     private String imgUrl; //头像url
     private String memberLevel; //等级
-    private String img; //评价原图
-    private String thumbImg; //评价缩略图
+    private String contentType; //内容类型（0：文字或者表情、1：图片、2：语音）
+    private List<CompanyEvaluationPic> companyEvaluationPicList; //
+
+    public List<CompanyEvaluationPic> getCompanyEvaluationPicList() {
+        return companyEvaluationPicList;
+    }
+
+    public void setCompanyEvaluationPicList(List<CompanyEvaluationPic> companyEvaluationPicList) {
+        this.companyEvaluationPicList = companyEvaluationPicList;
+    }
 
     public String getContent() {
         return content;
@@ -23,11 +33,11 @@ public class CompanyEvaluation {
         this.content = content;
     }
 
-    public String getCreateTime() {
+    public long getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(String createTime) {
+    public void setCreateTime(long createTime) {
         this.createTime = createTime;
     }
 
@@ -39,13 +49,6 @@ public class CompanyEvaluation {
         this.id = id;
     }
 
-    public String getImg() {
-        return img;
-    }
-
-    public void setImg(String img) {
-        this.img = img;
-    }
 
     public String getImgUrl() {
         return imgUrl;
@@ -79,11 +82,11 @@ public class CompanyEvaluation {
         this.soundUrl = soundUrl;
     }
 
-    public String getThumbImg() {
-        return thumbImg;
+    public String getContentType() {
+        return contentType;
     }
 
-    public void setThumbImg(String thumbImg) {
-        this.thumbImg = thumbImg;
+    public void setContentType(String contentType) {
+        this.contentType = contentType;
     }
 }

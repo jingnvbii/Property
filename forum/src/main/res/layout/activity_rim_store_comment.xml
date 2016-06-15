@@ -17,159 +17,17 @@
         android:id="@+id/lv_content"
         android:background="@color/white" />
 
-
-    <RelativeLayout
+    <FrameLayout
+        android:id="@+id/rl_send_content"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:id="@+id/rl_send_content">
-        <!--评论文字-->
-        <RelativeLayout
-            android:background="@color/pic_bg"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:id="@+id/rl_comment_text">
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/comment_line"/>
+        android:layout_height="wrap_content">
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/iv_voice"
-                android:src="@mipmap/iconfont_yuyin"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="@dimen/margin_left_and_right"/>
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/iv_add"
-                android:src="@mipmap/add"
-                android:layout_toRightOf="@+id/iv_voice"
-                android:layout_marginLeft="5dp"
-                android:layout_centerVertical="true"
-                />
-
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/et_content"
-                android:hint="输入评论..."
-                android:textColorHint="@color/comment_bg"
-                android:background="@drawable/et_white"
-                android:layout_centerVertical="true"
-                android:textSize="@dimen/text_size_basic"
-                android:gravity="center_vertical"
-                android:layout_toRightOf="@+id/iv_add"
-                android:layout_toLeftOf="@+id/tv_huitie"
-                android:layout_marginRight="5dp"
-                android:layout_marginLeft="5dp"
-                />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="回帖"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:textSize="@dimen/text_size_basic"
-                android:layout_marginEnd="@dimen/margin_left_and_right"
-                android:textColor="#117fd5"
-                android:layout_marginRight="@dimen/margin_left_and_right"
-                android:id="@+id/tv_huitie" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_alignParentBottom="true"
-                android:background="@color/comment_line" />
-        </RelativeLayout>
-
-        <!--按增加按钮-->
-        <RelativeLayout
-            android:id="@+id/rl_add_phone"
+        <!-- 聊天输入框 -->
+        <include
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/rl_comment_text">
-
-            <ImageButton
-                android:id="@+id/jiabiaoqing"
-                android:layout_width="45dp"
-                android:layout_height="45dp"
-                android:background="@drawable/gray_borders"
-                android:src="@mipmap/iconfont_jiabiaoqing"
-                android:layout_marginBottom="@dimen/margin_left_and_right"
-                android:layout_marginTop="@dimen/margin_left_and_right"
-                android:layout_marginLeft="@dimen/margin_left_and_right"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="表情"
-                android:layout_alignLeft="@+id/jiabiaoqing"
-                android:layout_alignRight="@+id/jiabiaoqing"
-                android:gravity="center"
-                android:layout_marginBottom="10dp"
-                android:textSize="@dimen/text_size_basic"
-                android:layout_below="@+id/jiabiaoqing"/>
-
-            <ImageButton
-                android:id="@+id/picture"
-                android:layout_width="45dp"
-                android:layout_height="45dp"
-                android:background="@drawable/gray_borders"
-                android:src="@mipmap/picture"
-                android:paddingLeft="13dp"
-                android:paddingBottom="5dp"
-                android:layout_marginLeft="10dp"
-                android:layout_toRightOf="@+id/jiabiaoqing"
-                android:layout_alignBottom="@+id/jiabiaoqing" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="照片"
-                android:layout_alignLeft="@+id/picture"
-                android:layout_alignRight="@+id/picture"
-                android:gravity="center"
-                android:layout_marginBottom="10dp"
-                android:textSize="@dimen/text_size_basic"
-                android:layout_below="@+id/jiabiaoqing"/>
-
-            <ImageButton
-                android:id="@+id/shoot"
-                android:layout_width="45dp"
-                android:layout_height="45dp"
-                android:paddingBottom="15dp"
-                android:background="@drawable/gray_borders"
-                android:src="@mipmap/shoot"
-                android:layout_marginLeft="10dp"
-                android:layout_toRightOf="@+id/picture"
-                android:layout_alignBottom="@+id/picture" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="拍摄"
-                android:layout_alignLeft="@+id/shoot"
-                android:layout_alignRight="@+id/shoot"
-                android:gravity="center"
-                android:layout_marginBottom="10dp"
-                android:textSize="@dimen/text_size_basic"
-                android:layout_below="@+id/jiabiaoqing"/>
-
-        </RelativeLayout>
-
-        <HorizontalScrollView
-            android:id="@+id/show_photo"
-            android:layout_below="@+id/rl_add_phone"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            />
-
-    </RelativeLayout>
-
+            layout="@layout/custom_store_facerelativelayout"/>
+    </FrameLayout>
 
 </RelativeLayout>

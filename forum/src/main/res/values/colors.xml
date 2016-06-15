@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <color name="full_transparent_white_two">#33ffffff</color><!-- 0.2透明 -->
     <color name="text_gray">#949494</color>
     <color name="text_black">#474747</color>
     <color name="text_white">#ffffff</color>

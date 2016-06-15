@@ -13,7 +13,6 @@ import com.beanu.arad.Arad;
 import com.beanu.arad.utils.MessageUtils;
 import com.ctrl.forum.R;
 import com.ctrl.forum.base.AppToolBarActivity;
-import com.ctrl.forum.base.Constant;
 import com.ctrl.forum.dao.CouponsDao;
 import com.ctrl.forum.entity.Count;
 import com.ctrl.forum.ui.fragment.MineCouponFragment;
@@ -50,6 +49,7 @@ public class MineYouJuanActivity extends AppToolBarActivity {
     private List<Fragment> fragments;
     private CouponsDao cdao;
     private String wei,yi,past;
+    private String amount = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,10 +81,16 @@ public class MineYouJuanActivity extends AppToolBarActivity {
             public void onPageScrollStateChanged(int arg0) {
             }
         });
+
+        amount = getIntent().getStringExtra("amount");
     }
     private void initData() {
         fragments = new ArrayList<>();
         couponFragment = MineCouponFragment.newInstance();
+        Bundle bundle  = new Bundle();
+        bundle.putString("amount",amount);
+        couponFragment.setArguments(bundle);
+
         couponUseFragment = MineCouponUseFragment.newInstance();
         couponPastFragment = MineCouponPastFragment.newInstance();
         fragments.add(couponFragment);
@@ -96,7 +102,9 @@ public class MineYouJuanActivity extends AppToolBarActivity {
         lines.getChildAt(0).setBackgroundColor(getResources().getColor(R.color.red_bg));
 
         cdao = new CouponsDao(this);
-        cdao.getMemberRedenvelope("0","", Arad.preferences.getString("memberId"), Constant.PAGE_NUM+"", Constant.PAGE_SIZE+"");
+        cdao.getMemberRedenvelope("0","0",Arad.preferences.getString("memberId"),"","");
+        cdao.getMemberRedenvelope("0", "1", Arad.preferences.getString("memberId"), "", "");
+        cdao.getMemberRedenvelope("0","2",Arad.preferences.getString("memberId"),"","");
     }
 
     private void initCtrl() {
@@ -137,7 +145,6 @@ public class MineYouJuanActivity extends AppToolBarActivity {
         ((TextView) v).setTextColor(getResources().getColor(R.color.red_bg));
         (lines.getChildAt(text.indexOfChild(v))).setBackgroundColor(getResources().getColor(R.color.red_bg));
 
-
         fl_content.setCurrentItem(text.indexOfChild(v));
     }
 
@@ -145,7 +152,7 @@ public class MineYouJuanActivity extends AppToolBarActivity {
     public void onRequestSuccess(int requestCode) {
         super.onRequestSuccess(requestCode);
         if (requestCode==1){
-            Count count = cdao.getCount();
+            Count count = cdao.getCount1();
             wei = count.getNotUsed();
             yi = count.getUsed();
             past = count.getExpired();

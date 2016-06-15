@@ -8,9 +8,9 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.beanu.arad.Arad;
 import com.ctrl.forum.R;
 import com.ctrl.forum.entity.IntegralProduct;
-import com.ctrl.forum.utils.BitmapUtils;
 
 import java.util.List;
 
@@ -58,10 +58,12 @@ public class MineIntegralGridAdapter extends BaseAdapter{
         }else {
             holder=(ViewHolder)convertView.getTag();
         }
-        holder.tv_name.setText(product.get(position).getName());
-        holder.tv_money.setText(product.get(position).getNeedPoint());
-        String url = product.get(position).getListImgUrl();
-        holder.iv_pic.setImageBitmap( BitmapUtils.getBitMBitmap(url));
+        if (product!=null) {
+            holder.tv_name.setText(product.get(position).getName());
+            holder.tv_money.setText(product.get(position).getNeedPoint());
+            String url = product.get(position).getListImgUrl();
+            Arad.imageLoader.load(url).placeholder(context.getResources().getDrawable(R.mipmap.shop_item)).into(holder.iv_pic);
+        }
 
         return convertView;
     }

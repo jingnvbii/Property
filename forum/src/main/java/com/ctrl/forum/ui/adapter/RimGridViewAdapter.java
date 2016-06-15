@@ -1,6 +1,7 @@
 package com.ctrl.forum.ui.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +10,7 @@ import android.widget.Button;
 
 import com.ctrl.forum.R;
 import com.ctrl.forum.entity.RimServeCategorySecond;
+import com.ctrl.forum.ui.activity.rim.ItemRimActivity;
 
 import java.util.List;
 
@@ -22,8 +24,6 @@ import butterknife.InjectView;
 public class RimGridViewAdapter extends BaseAdapter{
     private List<RimServeCategorySecond> data;
     private Context context;
-    private View.OnClickListener onButton;
-    private String title;
 
     public RimGridViewAdapter(Context context){
         this.context = context;
@@ -31,10 +31,6 @@ public class RimGridViewAdapter extends BaseAdapter{
 
     public void setData(List<RimServeCategorySecond> data) {
         this.data = data;
-    }
-
-    public void setOnButton(View.OnClickListener onButton) {
-        this.onButton = onButton;
     }
 
     @Override
@@ -58,14 +54,26 @@ public class RimGridViewAdapter extends BaseAdapter{
         if(convertView==null){
             convertView= LayoutInflater.from(context).inflate(R.layout.item_rim,parent,false);
             holder=new ViewHolder(convertView);
-            holder.bt_rim.setOnClickListener(onButton);
             convertView.setTag(holder);
         }else {
             holder=(ViewHolder)convertView.getTag();
         }
+
+        final String title = data.get(position).getName();
+        final String id = data.get(position).getId();
         holder.bt_rim.setText(data.get(position).getName());
-        holder.bt_rim.setTag(data.get(position).getId());
-        title = holder.bt_rim.getText().toString();
+        if (data.get(position).getId()!=null){
+            holder.bt_rim.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(context, ItemRimActivity.class);
+                    intent.putExtra("id", id);
+                    intent.putExtra("title", title);
+                    context.startActivity(intent);
+                }
+            });
+        }
+
         return convertView;
     }
 

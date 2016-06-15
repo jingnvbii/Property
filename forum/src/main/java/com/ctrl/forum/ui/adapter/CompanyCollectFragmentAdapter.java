@@ -29,7 +29,7 @@ public class CompanyCollectFragmentAdapter extends BaseAdapter{
 
     public CompanyCollectFragmentAdapter(Context context) {
                this.mcontext=context;
-        list = new ArrayList<>();
+                list = new ArrayList<>();
     }
 
     public void setList(List<CompanyCollect> list) {
@@ -70,16 +70,26 @@ public class CompanyCollectFragmentAdapter extends BaseAdapter{
             Arad.imageLoader.load(company.getImg()).into(holder.iv_title_photo);
             holder.ratingBar.setRating(Integer.parseInt(company.getEvaluatLevel()));
             holder.ratingBar.setFocusable(false);
-            holder.tv_xianjinquan_content.setText(company.getCashName());
+            holder.tv_youhuiquan_name.setText(company.getCashName());
+
+            if (company.getCouponEnable().equals("0")){
+                holder.tv_xianjinquan_name.setText("不可用");
+            }else{
+                holder.tv_xianjinquan_name.setText("可用");
+            }
+
+            if (company.getPacketEnable().equals("0")){
+                holder.tv_youhuiquan_name.setText("不可用");
+            }
 
             String state = company.getState();
             if (!state.equals("")){
                 switch (state){
                     case "1":
-                        holder.business.setText("营业中");
+                        holder.tv_yingyezhong.setText("营业中");
                         break;
                     case "0":
-                        holder.business.setText("休息中");
+                        holder.tv_yingyezhong.setText("休息中");
                         break;
                 }
             }
@@ -95,16 +105,18 @@ public class CompanyCollectFragmentAdapter extends BaseAdapter{
         TextView  tv_name;
         @InjectView(R.id.ratingBar)
         RatingBar ratingBar;  //评分条
-        @InjectView(R.id.business)
-        TextView  business;  //是否营业中
-        @InjectView(R.id.tv_xianjinquan)
+        @InjectView(R.id.tv_yingyezhong)
+        TextView  tv_yingyezhong;  //是否营业中
+        /*@InjectView(R.id.tv_xianjinquan)
         TextView  tv_xianjinquan; //现金劵
         @InjectView(R.id.tv_xianjinquan_content)
         TextView  tv_xianjinquan_content; //现金劵的金额
         @InjectView(R.id.tv_youhuiquan)
-        TextView  tv_youhuiquan;  //优惠劵
-        @InjectView(R.id.tv_youhuiquan_content)
-        TextView  tv_youhuiquan_content;  //优惠劵的内容
+        TextView  tv_youhuiquan;  //优惠劵*/
+        @InjectView(R.id.tv_xianjinquan_name)
+        TextView  tv_xianjinquan_name;  //现金劵的内容
+        @InjectView(R.id.tv_youhuiquan_name)
+        TextView  tv_youhuiquan_name;  //优惠劵的内容
         @InjectView(R.id.tv_distance)
         TextView  tv_distance;   //距当前位置的距离
 

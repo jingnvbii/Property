@@ -5,6 +5,7 @@
     android:background="@color/white">
 
     <RelativeLayout
+        android:id="@+id/rl_bg"
         android:layout_width="match_parent"
         android:layout_height="80dp"
         android:background="@mipmap/juan_hui"
@@ -38,7 +39,7 @@
             android:layout_width="1dp"
             android:layout_height="match_parent"
             android:background="@color/red_juan"
-            android:id="@+id/textView40"
+            android:id="@+id/tv_line"
             android:layout_marginTop="@dimen/margin_left_and_right"
             android:layout_marginLeft="@dimen/margin_left_and_right"
             android:layout_centerVertical="true"
@@ -49,8 +50,8 @@
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_alignTop="@+id/textView40"
-            android:layout_toRightOf="@+id/textView40"
+            android:layout_alignTop="@+id/tv_line"
+            android:layout_toRightOf="@+id/tv_line"
             android:layout_marginLeft="@dimen/margin_left_and_right">
 
             <TextView

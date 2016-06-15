@@ -27,6 +27,7 @@ public class MineFindFlotActivity extends ToolBarActivity implements View.OnClic
     private List<Communitys> communities;
     private MinePlotiAdapter minePlotiAdapter;
     private PlotDao plotDao;
+    private String communityName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,25 +36,27 @@ public class MineFindFlotActivity extends ToolBarActivity implements View.OnClic
 
         initData();
 
+        lv_content.setMode(PullToRefreshBase.Mode.BOTH);
         lv_content.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
-                if (communities!=null){
+                if (communities != null) {
                     communities.clear();
                     PAGE_NUM = 1;
-                    minePlotiAdapter = new MinePlotiAdapter(getApplicationContext());
-                    lv_content.setAdapter(minePlotiAdapter);
                 }
-                plotDao.getPlot(Arad.preferences.getString("latitude"),Arad.preferences.getString("lontitude"),PAGE_NUM+"", Constant.PAGE_SIZE+"");
+                //plotDao.getPlot(Arad.preferences.getString("latitude"),Arad.preferences.getString("lontitude"),PAGE_NUM+"", Constant.PAGE_SIZE+"");
+                plotDao.getPlot("117.027055", "36.626039", PAGE_NUM + "", Constant.PAGE_SIZE + "");
             }
 
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
-                if (communities!=null){
+                if (communities != null) {
                     PAGE_NUM += 1;
-                    plotDao.getPlot(Arad.preferences.getString("latitude"), Arad.preferences.getString("lontitude"), PAGE_NUM + "", Constant.PAGE_SIZE + "");
+                    //plotDao.getPlot(Arad.preferences.getString("latitude"),Arad.preferences.getString("lontitude"), PAGE_NUM + "", Constant.PAGE_SIZE + "");
+                    plotDao.getPlot("117.027055", "36.626039", PAGE_NUM + "", Constant.PAGE_SIZE + "");
+                } else {
+                    lv_content.onRefreshComplete();
                 }
-               else {lv_content.onRefreshComplete();}
             }
         });
 
@@ -62,7 +65,8 @@ public class MineFindFlotActivity extends ToolBarActivity implements View.OnClic
     private void initData() {
         lv_content = (PullToRefreshListView) findViewById(R.id.lv_content);
         plotDao = new PlotDao(this);
-        plotDao.getPlot(Arad.preferences.getString("latitude"),Arad.preferences.getString("lontitude"),PAGE_NUM+"", Constant.PAGE_SIZE+"");
+       // plotDao.getPlot(Arad.preferences.getString("latitude"),Arad.preferences.getString("lontitude"),PAGE_NUM+"", Constant.PAGE_SIZE+"");
+        plotDao.getPlot("117.027055","36.626039",PAGE_NUM+"", Constant.PAGE_SIZE+"");
 
         minePlotiAdapter = new MinePlotiAdapter(this);
         lv_content.setAdapter(minePlotiAdapter);
@@ -97,6 +101,10 @@ public class MineFindFlotActivity extends ToolBarActivity implements View.OnClic
         }
         if (requestCode==1){
             MessageUtils.showShortToast(this, "加入小区成功!");
+            Arad.preferences.getString("communityName");
+            Arad.preferences.putString("communityName", communityName);
+            Arad.preferences.flush();
+            this.finish();
         }
     }
 
@@ -112,9 +120,9 @@ public class MineFindFlotActivity extends ToolBarActivity implements View.OnClic
         switch (v.getId()){
             case R.id.tv_join:
                 int position = (int) id;
-                MessageUtils.showShortToast(this,position+"");
                 if (communities!=null){
                     String goodId = communities.get(position).getId();
+                    communityName = communities.get(position).getCommunityName();
                     plotDao.joinCel(Arad.preferences.getString("memberId"),goodId);
                 }
                 break;

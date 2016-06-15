@@ -87,8 +87,18 @@ public class PostImage {
         this.remark = remark;
     }
 
-
-
-
-
+    @Override
+    public String toString() {
+        return "PostImage{" +
+                "createTime='" + createTime + '\'' +
+                ", id='" + id + '\'' +
+                ", img='" + img + '\'' +
+                ", thumbImg='" + thumbImg + '\'' +
+                ", targetId='" + targetId + '\'' +
+                ", remark='" + remark + '\'' +
+                ", pageNum='" + pageNum + '\'' +
+                ", pageSize='" + pageSize + '\'' +
+                ", type='" + type + '\'' +
+                '}';
+    }
 }

@@ -12,7 +12,10 @@ import android.widget.TextView;
 import com.beanu.arad.utils.MessageUtils;
 import com.ctrl.forum.R;
 import com.ctrl.forum.base.AppToolBarActivity;
+import com.ctrl.forum.dao.KeyDao;
 import com.ctrl.forum.dao.RegisteDao;
+import com.ctrl.forum.entity.ItemValues;
+import com.ctrl.forum.ui.activity.WebViewActivity;
 import com.ctrl.forum.utils.RegexpUtil;
 
 /**
@@ -27,6 +30,10 @@ public class MineUpdatepwdActivity extends AppToolBarActivity implements View.On
     private RegisteDao rdao;
     private TimeCount time;
     private String code;
+    private TextView xieyi;
+
+    private KeyDao kdao;
+    private ItemValues itemValues;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,6 +43,7 @@ public class MineUpdatepwdActivity extends AppToolBarActivity implements View.On
     }
 
     private void init() {
+        kdao = new KeyDao(this);
         activity = new MineUpdatepwdActivity();
         time = new TimeCount(60000, 1000);
         rdao = new RegisteDao(this);
@@ -43,9 +51,11 @@ public class MineUpdatepwdActivity extends AppToolBarActivity implements View.On
         get_test = (TextView) findViewById(R.id.get_test);
         et_phone = (EditText) findViewById(R.id.et_phone);
         et_test = (EditText) findViewById(R.id.et_test);
+        xieyi = (TextView) findViewById(R.id.xieyi);
 
         get_test.setOnClickListener(this);
         tv_next.setOnClickListener(this);
+        xieyi.setOnClickListener(this);
     }
 
     public boolean setupToolBarLeftButton(ImageView leftButton) {
@@ -89,6 +99,13 @@ public class MineUpdatepwdActivity extends AppToolBarActivity implements View.On
             code = rdao.getCode();
             MessageUtils.showShortToast(this, "获取短信验证码成功" + code);
         }
+        if (requestCode == 66) {
+            itemValues = kdao.getItemValues();
+            Intent intent = new Intent(this,WebViewActivity.class);
+            intent.putExtra("data",itemValues.getItemValue());
+            intent.putExtra("title","用户使用协议");
+            startActivity(intent);
+        }
     }
 
     @Override
@@ -116,6 +133,9 @@ public class MineUpdatepwdActivity extends AppToolBarActivity implements View.On
                 {
                     MessageUtils.showShortToast(this, "手机号不能为空");
                 }
+                break;
+            case R.id.xieyi:
+                kdao.ueryDictionary("APP_PROTOCOL"); //使用协议
                 break;
            default:
                break;

@@ -76,10 +76,10 @@ public class RimDao extends IDao {
      * @param content 评价内容(contentType为0时)
      * @param contentType 内容类型（0：文字或者表情、1：图片、2：语音）
      * @param soundUrl 语音文件URL(contentType为2时)
-     * @param img 评价原图url(contentType为1时)
-     * @param thumbImg 评价缩略图url(contentType为1时)
+     * @param imgStr 评价原图url串,多个之间用逗号隔开(contentType为1时)
+     * @param thumbImgStr 评价缩略图url串,多个之间用逗号隔开(contentType为1时)
      */
-    public void evaluateAroundCompany(String memberId,String companyId,String contentType,String content,String soundUrl,String img,String thumbImg){
+    public void evaluateAroundCompany(String memberId,String companyId,String contentType,String content,String soundUrl,String imgStr,String thumbImgStr){
         String url="companyEvaluation/evaluateAroundCompany";
         Map<String,String> map = new HashMap<>();
         map.put("memberId",memberId);
@@ -87,8 +87,8 @@ public class RimDao extends IDao {
         map.put("content",content);
         map.put("contentType",contentType);
         map.put("soundUrl",soundUrl);
-        map.put("img",img);
-        map.put("thumbImg",thumbImg);
+        map.put("imgStr",imgStr);
+        map.put("thumbImgStr",thumbImgStr);
         postRequest(Constant.RAW_URL + url, mapToRP(map), 6);
     }
 
@@ -227,7 +227,9 @@ public class RimDao extends IDao {
         }
         if (requestCode==2){
             Log.d("demo", "dao中结果集(获取周边商家评论列表): " + result);
-            evaluations = JsonUtil.node2pojoList(result.findValue("companyEvaluation"), CompanyEvaluation.class);
+            List<CompanyEvaluation> list = JsonUtil.node2pojoList(result.findValue("companyEvaluationList"), CompanyEvaluation.class);
+            Log.e("list===============",list.toString());
+            evaluations.addAll(list);
         }
         if (requestCode==4){
             rimServiceCompanies = JsonUtil.node2pojoList(result.findValue("aroundServiceCompany"), RimServiceCompany.class);

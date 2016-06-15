@@ -10,10 +10,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.beanu.arad.Arad;
-import com.beanu.arad.utils.MessageUtils;
 import com.ctrl.forum.R;
 import com.ctrl.forum.base.AppToolBarActivity;
-import com.ctrl.forum.base.Constant;
 import com.ctrl.forum.dao.CouponsDao;
 import com.ctrl.forum.entity.Count;
 import com.ctrl.forum.ui.fragment.MineCashCouponFragment;
@@ -97,7 +95,9 @@ public class MineXianJuanActivity extends AppToolBarActivity {
 
         //获取网络数据.给textView赋值
         cdao = new CouponsDao(this);
-        cdao.getMemberCoupons("0","", Arad.preferences.getString("memberId"), Constant.PAGE_NUM+"", Constant.PAGE_SIZE+"");
+        cdao.getMemberCoupons("0","0", Arad.preferences.getString("memberId"), "", "");
+        cdao.getMemberCoupons("0","1", Arad.preferences.getString("memberId"), "", "");
+        cdao.getMemberCoupons("0","2", Arad.preferences.getString("memberId"), "", "");
 
     }
 
@@ -146,16 +146,10 @@ public class MineXianJuanActivity extends AppToolBarActivity {
     public void onRequestSuccess(int requestCode) {
         super.onRequestSuccess(requestCode);
         if (requestCode==0){
-            MessageUtils.showShortToast(this,"获取数据成功");
-           /* wei = cdao.getCoupons().get(0).getNotUsed();
-            yi = cdao.getCoupons().get(0).getUsed();
-            past = cdao.getCoupons().get(0).getExpired();*/
-
             Count count = cdao.getCount();
             wei = count.getNotUsed();
             yi = count.getUsed();
             past = count.getExpired();
-            MessageUtils.showShortToast(this,past);
 
             tv_wei.setText("未使用("+wei+")");
             tv_yi.setText("已使用("+yi+")");

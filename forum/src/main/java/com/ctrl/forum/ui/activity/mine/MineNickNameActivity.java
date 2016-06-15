@@ -34,9 +34,11 @@ public class MineNickNameActivity extends AppToolBarActivity {
         tv_ni = (TextView) findViewById(R.id.tv_ni);
         et_nickname.setText(Arad.preferences.getString("nickName"));
         tv_ni.setText( et_nickname.length()+"/11");
-        et_nickname.addTextChangedListener(mTextWatcher);
+
         edao = new EditDao(this);
         id =  Arad.preferences.getString("memberId");
+
+        et_nickname.addTextChangedListener(mTextWatcher);
     }
 
 

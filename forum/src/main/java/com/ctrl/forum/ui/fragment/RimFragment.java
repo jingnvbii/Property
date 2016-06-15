@@ -13,7 +13,6 @@ import com.beanu.arad.utils.MessageUtils;
 import com.ctrl.forum.R;
 import com.ctrl.forum.dao.RimDao;
 import com.ctrl.forum.entity.RimServeCategory;
-import com.ctrl.forum.ui.activity.rim.ItemRimActivity;
 import com.ctrl.forum.ui.activity.rim.RimCollectServeActivity;
 import com.ctrl.forum.ui.activity.rim.RimSearchActivity;
 import com.ctrl.forum.ui.adapter.RimGridViewAdapter;
@@ -57,7 +56,6 @@ public class  RimFragment extends ToolBarFragment implements View.OnClickListene
 
         rimListViewAdapter.setRimGridViewAdapter(rimGridViewAdapter);
         lv_content.setAdapter(rimListViewAdapter);
-        rimGridViewAdapter.setOnButton(this);
         rimListViewAdapter.setOnCollect(this);
         rimListViewAdapter.setOnSearch(this);
 
@@ -79,19 +77,12 @@ public class  RimFragment extends ToolBarFragment implements View.OnClickListene
     }
 
     public void onClick(View v) {
-        Object position = v.getTag();
         switch (v.getId()){
             case R.id.rl_collect:
                 startActivity(new Intent(getActivity(),RimCollectServeActivity.class));
                 break;
             case R.id.rl_search:
                 startActivity(new Intent(getActivity(),RimSearchActivity.class));
-                break;
-            case R.id.bt_rim:
-                String id = (String) position;
-                Intent intent = new Intent(getActivity(), ItemRimActivity.class);
-                intent.putExtra("id", id);
-                startActivity(intent);
                 break;
         }
     }
