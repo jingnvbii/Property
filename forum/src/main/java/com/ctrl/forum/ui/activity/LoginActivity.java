@@ -57,7 +57,7 @@ public class LoginActivity extends AppToolBarActivity implements View.OnClickLis
         initView();
 
         mLocationClient = new LocationClient(getApplicationContext());     //声明LocationClient类
-        mLocationClient.registerLocationListener(myListener);    //注册监听函数
+        mLocationClient.registerLocationListener(myListener);    //注册监听函数1
         initLocation();
 
         mLocationClient.start();
