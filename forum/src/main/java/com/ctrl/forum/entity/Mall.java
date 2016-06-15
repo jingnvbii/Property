@@ -16,6 +16,15 @@ public class Mall {
     private String cashName;//现金券名称
     private String workStartTime;//营业起始时间
     private String workEndTime;//营业终止时间
+    private String companyStyle;//营业终止时间
+
+    public String getCompanyStyle() {
+        return companyStyle;
+    }
+
+    public void setCompanyStyle(String companyStyle) {
+        this.companyStyle = companyStyle;
+    }
 
     public String getWorkStartTime() {
         return workStartTime;

@@ -10,6 +10,7 @@
         ></include>
 
     <LinearLayout
+        android:id="@+id/ll_horzital_style"
         android:layout_width="match_parent"
         android:background="#feeeee"
         android:layout_height="wrap_content">
@@ -20,6 +21,7 @@
             android:layout_gravity="center"
             android:src="@mipmap/lapa_red"/>
         <TextView
+            android:id="@+id/tv_horzital_style_information"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:paddingTop="10dp"
@@ -27,9 +29,9 @@
             android:gravity="center_vertical"
             android:textColor="@color/text_red"
             android:layout_height="wrap_content"
-            android:text="dfsdfsdfsdfsdfsd"
             />
         <ImageView
+            android:id="@+id/iv_horzital_style_information_close"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@mipmap/close_gray"
@@ -41,8 +43,14 @@
             />
     </LinearLayout>
 
-    <EditText
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    <EditText
+        android:id="@+id/et_horzital_style_search"
+        android:layout_width="0dp"
+        android:layout_weight="1"
         android:layout_height="wrap_content"
         android:hint="请输入要搜索的内容"
         android:layout_marginLeft="10dp"
@@ -57,8 +65,24 @@
         android:background="@drawable/edit_white_shap"
         />
 
+     <TextView
+         android:id="@+id/tv_horzital_style_search"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:gravity="center"
+         android:layout_marginTop="5dp"
+         android:visibility="gone"
+         android:paddingTop="10dp"
+         android:paddingBottom="10dp"
+         android:paddingRight="10dp"
+         android:layout_marginRight="10dp"
+         android:text="搜索"/>
+
+    </LinearLayout>
+
     <RelativeLayout
         android:layout_width="match_parent"
+        android:padding="10dp"
         android:layout_height="100dp">
 
         <ImageView
@@ -66,14 +90,14 @@
             android:layout_width="100dp"
             android:layout_height="match_parent"
             android:scaleType="fitXY"
-            android:layout_margin="10dp"
             android:src="@mipmap/style1_img"/>
 
         <TextView
             android:id="@+id/tv_shop_name"
             android:layout_toRightOf="@+id/iv_style_img"
             android:layout_width="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="5dp"
             android:textSize="16sp"
             android:textColor="@color/text_black"
             android:layout_height="wrap_content"
@@ -83,7 +107,8 @@
             android:layout_below="@+id/tv_shop_name"
             android:layout_toRightOf="@+id/iv_style_img"
             android:layout_width="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="5dp"
             android:layout_height="wrap_content"
             android:text="营业时间  21：00-9:00"/>
 
@@ -95,6 +120,7 @@
             android:layout_below="@+id/tv_time"
             android:isIndicator="true"
             android:rating="4"
+            android:layout_marginLeft="5dp"
             android:layout_marginTop="5dp"
             android:layout_toRightOf="@+id/iv_style_img"
             />
@@ -154,6 +180,7 @@
             android:id="@+id/m_list_num"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             android:background="@drawable/goods_tv_bg_selector"
             android:layout_alignRight="@+id/m_list_car_lay"
             android:layout_alignTop="@+id/m_list_car_lay"
@@ -169,7 +196,7 @@
             android:layout_marginLeft="20dp"
             android:layout_centerVertical="true"
             android:textColor="@color/text_red"
-            android:text="共￥24元"/>
+            android:text="共￥0元"/>
         <View android:id="@+id/m_listview"
             android:layout_width="1dp"
             android:layout_height="26px"

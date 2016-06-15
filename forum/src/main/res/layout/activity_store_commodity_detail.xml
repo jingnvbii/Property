@@ -65,7 +65,6 @@
          android:id="@+id/tv_image_number"
          android:layout_width="wrap_content"
          android:layout_height="wrap_content"
-         android:text="1/4"
          android:textSize="16sp"
          android:textColor="@color/text_white"
          android:paddingTop="5dp"
@@ -88,7 +87,6 @@
             android:layout_marginTop="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="奥利奥原味夹心饼干100g"
             android:textColor="@color/text_black"
             android:layout_marginLeft="10dp"/>
 
@@ -100,7 +98,6 @@
             android:layout_marginTop="20dp"
             android:layout_marginLeft="10dp"
             android:layout_height="wrap_content"
-            android:text="$16.4"
             android:layout_marginBottom="20dp"
             android:textColor="@color/text_red"
             />
@@ -112,7 +109,6 @@
             android:layout_marginTop="20dp"
             android:layout_marginLeft="40dp"
             android:layout_height="wrap_content"
-            android:text="自己配送"
             android:textColor="@color/text_gray"
             />
         <TextView
@@ -123,7 +119,6 @@
             android:layout_marginTop="20dp"
             android:layout_marginLeft="20dp"
             android:layout_height="wrap_content"
-            android:text="销量：50份"
             android:textColor="@color/text_gray"
             />
 
@@ -235,6 +230,7 @@
         <TextView
             android:id="@+id/m_list_num"
             android:layout_width="wrap_content"
+            android:visibility="gone"
             android:layout_height="wrap_content"
             android:background="@drawable/goods_tv_bg_selector"
             android:layout_alignRight="@+id/m_list_car_lay"
@@ -251,7 +247,7 @@
             android:layout_marginLeft="20dp"
             android:layout_centerVertical="true"
             android:textColor="@color/text_red"
-            android:text="共￥24元"/>
+            android:text="共￥0元"/>
         <View android:id="@+id/m_listview"
             android:layout_width="1dp"
             android:layout_height="26px"

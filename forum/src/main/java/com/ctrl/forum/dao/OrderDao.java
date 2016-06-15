@@ -36,6 +36,8 @@ public class OrderDao extends IDao {
     private List<Redenvelope>listRedenvelope=new ArrayList<>();//我的优惠券列表
     private List<Address>listAddress=new ArrayList<>();//收货地址列表
     private String productsTotal;//商品总价
+    private String orderId;//订单id
+    private String orderNum;//订单总价
 
 
     public OrderDao(INetResult activity){
@@ -71,7 +73,8 @@ public class OrderDao extends IDao {
                                      String areaName,
                                      String address,
                                      String sourceType,
-                                     String remark){
+                                     String remark,
+                                     Double totalCost){
         String url="order/generateOrder";
         Map<String,String> map = new HashMap<String,String>();
         map.put("memberId",memberId);
@@ -87,6 +90,7 @@ public class OrderDao extends IDao {
         map.put("address",address);
         map.put("sourceType",sourceType);
         map.put("remark",remark);
+        map.put("totalCost",totalCost+"");
         postRequest(Constant.RAW_URL+url, mapToRP(map),0001);
     }
     /**
@@ -149,7 +153,7 @@ public class OrderDao extends IDao {
         Map<String,String> map = new HashMap<String,String>();
         map.put("memberId",memberId);
         map.put("evaluationState",evaluationState);
-        postRequest(Constant.RAW_URL+url, mapToRP(map),5);
+        postRequest(Constant.RAW_URL + url, mapToRP(map), 5);
     }
 
     /**
@@ -193,10 +197,10 @@ public class OrderDao extends IDao {
      * @param productStrs 商品信息,格式[{"id":1,"nums":1},{"id":2,"nums":2}]
      * @param discountAmount 优惠券金额
      * */
-    public void requestEvalutionOrder(String memberId,
+    public void requestOrderDetails(String memberId,
                                      String productStrs,
                                      String discountAmount){
-        String url="tOrderEvaluation/evaluationOrder";
+        String url="order/queryOrderDetails";
         Map<String,String> map = new HashMap<String,String>();
         map.put("memberId",memberId);
         map.put("productStrs",productStrs);
@@ -207,6 +211,11 @@ public class OrderDao extends IDao {
 
     @Override
     public void onRequestSuccess(JsonNode result, int requestCode) throws IOException {
+        if(requestCode==0001){
+            Log.d("demo","dao中结果集(生成订单返回): " + result);
+            orderId=result.findValue("orderId").asText();
+            orderNum=result.findValue("orderNum").asText();
+        }
         if(requestCode == 5){
             Log.d("demo","dao中结果集(订单评价列表返回): " + result);
             listOrderEvaluation = JsonUtil.node2pojoList(result.findValue("orderEvaluationList"), OrderEvaluation.class);
@@ -246,5 +255,13 @@ public class OrderDao extends IDao {
     }
     public String getProductsTotal() {
         return productsTotal;
+    }
+
+    public String getOrderId() {
+        return orderId;
+    }
+
+    public String getOrderNum() {
+        return orderNum;
     }
 }

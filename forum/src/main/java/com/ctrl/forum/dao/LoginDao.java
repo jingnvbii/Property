@@ -7,6 +7,7 @@ import com.beanu.arad.http.INetResult;
 import com.beanu.arad.utils.JsonUtil;
 import com.ctrl.forum.base.Constant;
 import com.ctrl.forum.entity.MemberInfo;
+import com.ctrl.forum.entity.NavigationBar;
 import com.ctrl.forum.entity.ReceiveAddress;
 import com.fasterxml.jackson.databind.JsonNode;
 
@@ -31,6 +32,7 @@ public class LoginDao extends IDao {
      * 收货地址列表
      * */
     private List<ReceiveAddress> listReceiveAddress = new ArrayList<>();
+    private List<NavigationBar> listNavigationBar=new ArrayList<>();
 
     public LoginDao(INetResult activity){
         super(activity);
@@ -91,6 +93,7 @@ public class LoginDao extends IDao {
             Log.d("demo","dao中结果集(登录返回): " + result);
             memberInfo = JsonUtil.node2pojo(result.findValue("memberInfo"), MemberInfo.class);
             listReceiveAddress = JsonUtil.node2pojoList(result.findValue("receiveAddressList"), ReceiveAddress.class);
+            listNavigationBar = JsonUtil.node2pojoList(result.findValue("navigationBar"), NavigationBar.class);
         }
         if(requestCode == 1){
             Log.d("demo","dao中结果集(修改密码): " + result);
@@ -108,4 +111,7 @@ public class LoginDao extends IDao {
         return listReceiveAddress;
     }
 
+    public List<NavigationBar> getListNavigationBar() {
+        return listNavigationBar;
+    }
 }

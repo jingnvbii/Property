@@ -14,7 +14,6 @@ import android.widget.TextView;
 
 import com.beanu.arad.Arad;
 import com.beanu.arad.utils.AnimUtil;
-import com.beanu.arad.utils.MessageUtils;
 import com.ctrl.forum.R;
 import com.ctrl.forum.base.AppToolBarActivity;
 import com.ctrl.forum.customview.ListViewForScrollView;
@@ -126,7 +125,7 @@ public class StoreShopDetailActivity extends AppToolBarActivity implements View.
     public void onRequestSuccess(int requestCode) {
         super.onRequestSuccess(requestCode);
          if(requestCode==666){
-             MessageUtils.showShortToast(this,"店铺藏成功");
+           //  MessageUtils.showShortToast(this,"店铺藏成功");
            /*  if(company.getCollectState().equals("0")){
              }
              if(company.getCollectState().equals("1")){
@@ -137,7 +136,7 @@ public class StoreShopDetailActivity extends AppToolBarActivity implements View.
 
          }
         if (requestCode == 002) {
-            MessageUtils.showShortToast(this, "获取店铺详情成功");
+          //  MessageUtils.showShortToast(this, "获取店铺详情成功");
             showProgress(false);
             listQualification = mdao.getListQualification();
             listCompanyUnion = mdao.getListCompanyUnion();
@@ -223,7 +222,7 @@ public class StoreShopDetailActivity extends AppToolBarActivity implements View.
     public String setupToolBarTitle() {
         TextView mTitle = getmTitle();
         mTitle.setTextColor(Color.BLACK);
-        return "小贝商品";
+        return getIntent().getStringExtra("name");
     }
 
     @Override

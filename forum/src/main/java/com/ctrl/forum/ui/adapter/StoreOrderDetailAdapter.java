@@ -8,7 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.ctrl.forum.R;
-import com.ctrl.forum.cart.datasave.GoodsBean;
+import com.ctrl.forum.entity.Product;
 
 import java.util.List;
 
@@ -21,13 +21,13 @@ import butterknife.InjectView;
  */
 public class StoreOrderDetailAdapter extends BaseAdapter{
     private Context mcontext;
-    private List<GoodsBean> list;
+    private List<Product> list;
 
     public StoreOrderDetailAdapter(Context context) {
                this.mcontext=context;
     }
 
-    public void setList(List<GoodsBean> list) {
+    public void setList(List<Product> list) {
         this.list = list;
         notifyDataSetChanged();
     }
@@ -58,10 +58,10 @@ public class StoreOrderDetailAdapter extends BaseAdapter{
         }else {
             holder=(ViewHolder)convertView.getTag();
         }
-        GoodsBean merchant=list.get(position);
-        holder.tv_item_order_detail_name.setText(merchant.getGoodsname());
-        holder.tv_item_order_detail_num.setText("*  "+merchant.getGoodsnum());
-        holder.tv_item_order_detail_price.setText(merchant.getGoodsprice()+"元");
+        Product merchant=list.get(position);
+        holder.tv_item_order_detail_name.setText(merchant.getName());
+        holder.tv_item_order_detail_num.setText("*  "+merchant.getNums());
+        holder.tv_item_order_detail_price.setText(merchant.getAmounts()+"元");
         return convertView;
     }
 

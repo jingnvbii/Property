@@ -142,6 +142,7 @@ public class StoreShopListVerticalStyleActivity extends AppToolBarActivity imple
     private TextView m_list_num_popup;
     private TextView m_list_all_price_popup;
     private Company company;
+    private Button m_list_submit_popup;
 
 
     @Override
@@ -187,7 +188,7 @@ public class StoreShopListVerticalStyleActivity extends AppToolBarActivity imple
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode==500&&resultCode==RESULT_OK){
+        if(requestCode==500&&resultCode==112){
             lv_Content.setAdapter(foodAdapter);
             setAll();
         }
@@ -380,7 +381,15 @@ public class StoreShopListVerticalStyleActivity extends AppToolBarActivity imple
 
     @Override
     public void onClick(View v) {
+        Intent intent=null;
         switch (v.getId()){
+            case R.id.m_list_submit_popup:
+                intent=new Intent(StoreShopListVerticalStyleActivity.this,StoreOrderDetailActivity.class);
+                intent.putExtra("companyId",getIntent().getStringExtra("id"));
+                startActivity(intent);
+                AnimUtil.intentSlidIn(StoreShopListVerticalStyleActivity.this);
+                popupWindow.dismiss();
+                break;
             case R.id.iv_store_information_close:
                 rl_store_information.setVisibility(View.GONE);
                 break;
@@ -396,7 +405,7 @@ public class StoreShopListVerticalStyleActivity extends AppToolBarActivity imple
                 if(mListAllNum.getText().toString().equals("0")) {
                     MessageUtils.showShortToast(StoreShopListVerticalStyleActivity.this,"购物车还是空的！");
                 }else {
-                    Intent intent=new Intent(StoreShopListVerticalStyleActivity.this,StoreOrderDetailActivity.class);
+                    intent=new Intent(StoreShopListVerticalStyleActivity.this,StoreOrderDetailActivity.class);
                     intent.putExtra("companyId",getIntent().getStringExtra("id"));
                     startActivity(intent);
                     AnimUtil.intentSlidIn(StoreShopListVerticalStyleActivity.this);
@@ -416,6 +425,7 @@ public class StoreShopListVerticalStyleActivity extends AppToolBarActivity imple
         final ListView lv_cart_popup=(ListView)contentView.findViewById(R.id.lv_cart_popup);
          m_list_num_popup = (TextView) contentView.findViewById(R.id.m_list_num_popup);
         m_list_all_price_popup = (TextView) contentView.findViewById(R.id.m_list_all_price_popup);
+        m_list_submit_popup = (Button) contentView.findViewById(R.id.m_list_submit_popup);
         TextView tv_cart_popup_delete = (TextView) contentView.findViewById(R.id.tv_cart_popup_delete);
         listGoodsBean= OperateGoodsDataBaseStatic.getSecondGoodsTypeList(mContext);
         //获取数据
@@ -436,6 +446,8 @@ public class StoreShopListVerticalStyleActivity extends AppToolBarActivity imple
         // 如果不设置PopupWindow的背景，无论是点击外部区域还是Back键都无法dismiss弹框
         // 我觉得这里是API的一个bug
         popupWindow.setBackgroundDrawable(dw);
+
+        m_list_submit_popup.setOnClickListener(this);
 
         contentView.setFocusable(true);
         contentView.setFocusableInTouchMode(true);
@@ -528,8 +540,6 @@ public class StoreShopListVerticalStyleActivity extends AppToolBarActivity imple
 
                 // 减完之后  数据为0
                 if (nums.equals("0")) {
-                  //  listGoodsBean.remove(v.getPosition());
-                  //  mCartPopupWindowListViewAdapter.setName(listNameStr);
                     listGoodsBean= OperateGoodsDataBaseStatic.getSecondGoodsTypeList(mContext);
                     mCartPopupWindowListViewAdapter.setList(listGoodsBean);
                 }

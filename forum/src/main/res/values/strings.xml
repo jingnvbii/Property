@@ -335,7 +335,4 @@
     <string name="shouzhishanghua">手指上滑，取消发送</string>
     <string name="tooshort">录音时间过短</string>
     <string name="title_activity_mine_order_detail">MineOrderDetailActivity</string>
-    <string name="title_activity_plot_add_invitation">PlotAddInvitationActivity</string>
-    <string name="title_activity_text">TextActivity</string>
-    <string name="title_activity_web_view">WebViewActivity</string>
 </resources>

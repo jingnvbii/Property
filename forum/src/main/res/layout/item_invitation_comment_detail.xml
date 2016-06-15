@@ -34,7 +34,7 @@
         android:layout_width="wrap_content"
         android:layout_marginLeft="5dp"
         android:layout_height="wrap_content"
-        android:src="@mipmap/vip_icon3"/>
+        />
     <TextView
         android:id="@+id/tv_reply_time"
         android:layout_alignParentRight="true"
@@ -60,7 +60,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/text_gray"
-        android:text="济南第三方就开始对福建省地方角色的"
         android:id="@+id/tv_reply_address" />
     </RelativeLayout>
 
@@ -70,7 +69,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/text_gray"
-        android:text="gdfgsdgsdgsgsdfgsdfsdfsdfsdfsd"/>
+        />
 
     <LinearLayout
         android:id="@+id/ll_reply_invitation_image"
@@ -124,7 +123,6 @@
             android:id="@+id/tv_reply_voice_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="26'"
             android:layout_gravity="center_vertical|left"
             android:textColor="@color/text_white"
             android:layout_alignParentRight="true"
@@ -146,7 +144,7 @@
             android:id="@+id/tv_pinglun_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="引用飘絮的回复"/>
+            />
 
         <TextView
             android:id="@+id/tv_pinglun_content"
@@ -154,7 +152,7 @@
             android:layout_marginTop="5dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="dfsdkfjksdf"/>
+            />
 
         <TextView
             android:id="@+id/tv_pinglun_floor"

@@ -23,7 +23,7 @@ public class BaseActivity extends ActionBarActivity implements INetResult {
     @Override
     public void onRequestFaild(String errorNo, String errorMessage) {
         showProgress(false);
-        if(errorNo.equals("002")){
+        if(errorNo.equals("006")){
             //
         }else {
             MessageUtils.showShortToast(this, errorMessage);

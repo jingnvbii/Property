@@ -22,6 +22,7 @@ import com.ctrl.forum.dao.LoginDao;
 import com.ctrl.forum.entity.MemberInfo;
 import com.ctrl.forum.ui.activity.mine.MineUpdatepwdActivity;
 
+import java.io.Serializable;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -56,7 +57,7 @@ public class LoginActivity extends AppToolBarActivity implements View.OnClickLis
         initView();
 
         mLocationClient = new LocationClient(getApplicationContext());     //声明LocationClient类
-        mLocationClient.registerLocationListener(myListener);    //注册监听函数
+        mLocationClient.registerLocationListener(myListener);    //注册监听函数1
         initLocation();
 
         mLocationClient.start();
@@ -198,8 +199,9 @@ public class LoginActivity extends AppToolBarActivity implements View.OnClickLis
 
             Arad.preferences.putString("address", address);
             Arad.preferences.flush();
-            MessageUtils.showShortToast(this, "登录成功");
+          //  MessageUtils.showShortToast(this, "登录成功");
             Intent intent02=new Intent(this,MainActivity.class);
+            intent02.putExtra("listNagationBar",(Serializable)ldao.getListNavigationBar());
             startActivity(intent02);
             AnimUtil.intentSlidIn(this);
         }

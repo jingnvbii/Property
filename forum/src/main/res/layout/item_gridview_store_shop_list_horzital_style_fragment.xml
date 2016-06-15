@@ -7,15 +7,13 @@
     <ImageView
         android:id="@+id/iv_title_photo"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:src="@mipmap/style1_img"
+        android:layout_height="100dp"
         android:scaleType="fitXY"/>
 
     <TextView
         android:id="@+id/tv_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="小贝日用百货便利店"
         android:textSize="16sp"
         android:textColor="@color/text_black"
         android:layout_below="@+id/iv_title_photo"
@@ -27,7 +25,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
-        android:text="月销：100"/>
+       />
     <TextView
         android:id="@+id/tv_price"
         android:layout_below="@+id/tv_xiaoliang"
@@ -35,7 +33,7 @@
         android:textColor="@color/text_red"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
-        android:text="165元/份"/>
+        />
 
 
     <ImageView
@@ -43,7 +41,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@mipmap/add_cart_red"
-        android:layout_marginTop="5dp"
+        android:padding="5dp"
         android:layout_alignParentRight="true"
         android:layout_below="@+id/tv_xiaoliang"
         />
@@ -52,11 +50,11 @@
         android:id="@+id/tv_numbers"
         android:layout_toLeftOf="@+id/iv_add"
         android:layout_width="wrap_content"
-        android:layout_marginTop="2dp"
+        android:text="3"
+        android:paddingTop="5dp"
         android:layout_marginRight="5dp"
         android:layout_below="@+id/tv_xiaoliang"
         android:layout_height="wrap_content"
-        android:text="10"
         android:textColor="@color/text_black"
         />
 
@@ -65,7 +63,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@mipmap/subtract_cart_red"
-        android:layout_marginTop="5dp"
+        android:padding="5dp"
         android:layout_toLeftOf="@+id/tv_numbers"
         android:layout_marginRight="5dp"
         android:layout_below="@+id/tv_xiaoliang"

@@ -119,7 +119,7 @@ public class InvitationPullDownActivity extends AppToolBarActivity implements Vi
     public void onRequestSuccess(int requestCode) {
         super.onRequestSuccess(requestCode);
         if (requestCode == 2) {
-            MessageUtils.showShortToast(this, "获取帖子分类成功");
+          //  MessageUtils.showShortToast(this, "获取帖子分类成功");
             listCategory = idao.getListCategory();
             setRadioGruop();
         }
@@ -132,7 +132,7 @@ public class InvitationPullDownActivity extends AppToolBarActivity implements Vi
             mPopupWindow.dismiss();
         }
         if (requestCode == 4) {
-            MessageUtils.showShortToast(this, "获取当前频道下所有帖子分类成功");
+          //  MessageUtils.showShortToast(this, "获取当前频道下所有帖子分类成功");
             listCategory2 = idao.getListCategory();
             showAllCategoryPopupWindow(iv_pull_down);
         }

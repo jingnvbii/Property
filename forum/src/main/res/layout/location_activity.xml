@@ -29,6 +29,8 @@
             android:layout_marginLeft="5dp"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:paddingLeft="30dp"
+            android:paddingRight="30dp"
             android:drawableLeft="@mipmap/search_gray"
             android:layout_centerInParent="true"
             android:textSize="@dimen/text_size_small"
@@ -43,7 +45,7 @@
         android:background="@color/line_gray" />
 
     <RelativeLayout
-        android:id="@+id/rl_loacte"
+        android:id="@+id/rl_loact_search"
         android:layout_width="match_parent"
         android:layout_height="@dimen/text_height">
         <TextView

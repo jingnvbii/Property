@@ -6,7 +6,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
@@ -49,8 +48,8 @@ import butterknife.InjectView;
 public class LocationActivity extends AppToolBarActivity implements View.OnClickListener {
     @InjectView(R.id.lv_locate)//下拉列表
             PullToRefreshListView lv_locate;
-    @InjectView(R.id.rl_loacte)//不显示位置
-            RelativeLayout rl_loacte;
+    @InjectView(R.id.rl_loact_search)//不显示位置
+            RelativeLayout rl_loact_search;
     @InjectView(R.id.et_search)//搜索
             EditText et_search;
 
@@ -104,7 +103,7 @@ public class LocationActivity extends AppToolBarActivity implements View.OnClick
      * 初始化组件
      */
     private void initView() {
-        rl_loacte.setOnClickListener(this);
+        rl_loact_search.setOnClickListener(this);
         et_search.addTextChangedListener(watcher);
         //第一步，创建POI检索实例
         mPoiSearch = PoiSearch.newInstance();
@@ -162,8 +161,6 @@ public class LocationActivity extends AppToolBarActivity implements View.OnClick
                     .pageCapacity(10))
             ;
 
-            Log.i("tag", "city---" + city);
-            Log.i("tag", "s---" + s.toString());
 
         }
         //文字变化前
@@ -313,7 +310,7 @@ public class LocationActivity extends AppToolBarActivity implements View.OnClick
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.rl_loacte:
+            case R.id.rl_loact_search:
                 setResult(RESULT_CANCELED);
                 finish();
                 break;

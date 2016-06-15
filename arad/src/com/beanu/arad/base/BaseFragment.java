@@ -19,7 +19,7 @@ public class BaseFragment extends Fragment implements INetResult {
     @Override
     public void onRequestFaild(String errorNo, String errorMessage) {
         showProgress(false);
-        if(errorNo.equals("002")){
+        if(errorNo.equals("006")){
             //
         }else {
             MessageUtils.showShortToast(getActivity(), errorMessage);

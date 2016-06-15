@@ -51,6 +51,8 @@ public class InvitationPinerestGalleyActivity extends AppToolBarActivity impleme
     TextView tv_image_remark;
     @InjectView(R.id.tv_image_tel)//电话连接
     TextView tv_image_tel;
+    @InjectView(R.id.tv_pinerest_gallery_zan_num)//赞数
+    TextView tv_pinerest_gallery_zan_num;
     @InjectView(R.id.iv_gallery_back)//返回按钮
     ImageView iv_gallery_back;
 
@@ -137,7 +139,6 @@ public class InvitationPinerestGalleyActivity extends AppToolBarActivity impleme
             listViews = new ArrayList<>();
            // listViews2 = new ArrayList<>();
            if(listPostImage==null)return;
-            Log.i("tag","imagesize---"+listPostImage.size());
             for (int i = 0; i <listPostImage.size(); i++) {
                 ImageView view = new ImageView(this);
                // TextView view2=new TextView(this);
@@ -150,6 +151,7 @@ public class InvitationPinerestGalleyActivity extends AppToolBarActivity impleme
             tv_titile.setText(1 + "/" + listViews.size());
             adapter = new MyPageAdapter(listViews);
             pager.setAdapter(adapter);
+            tv_pinerest_gallery_zan_num.setText(post.getPraiseNum()+"");
         }
     }
 
@@ -191,7 +193,7 @@ public class InvitationPinerestGalleyActivity extends AppToolBarActivity impleme
                 showPupupWindow();
                 break;
             case R.id.rl_pinerest_gallery_zan:
-
+              // idao.requesZambia();
                 break;
             case R.id.iv_pinerest_gallery_share:
                 showSharePopuwindow(iv_pinerest_gallery_share);

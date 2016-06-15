@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +23,7 @@ import com.beanu.arad.utils.AnimUtil;
 import com.ctrl.forum.R;
 import com.ctrl.forum.base.Constant;
 import com.ctrl.forum.dao.InvitationDao;
+import com.ctrl.forum.entity.Banner;
 import com.ctrl.forum.entity.Category;
 import com.ctrl.forum.entity.Category2;
 import com.ctrl.forum.entity.Merchant;
@@ -92,6 +92,7 @@ public class InvitationPullDownHaveThirdKindFragment extends ToolBarFragment {
     private ArrayList<String> mData;
     private TextView tv_search;
     private int newPosition;
+    private List<Banner> listBanner;
 
 
     public static InvitationPullDownHaveThirdKindFragment newInstance(String channelId,String styleType,String thirdKindId) {
@@ -120,17 +121,16 @@ public class InvitationPullDownHaveThirdKindFragment extends ToolBarFragment {
         super.setUserVisibleHint(isVisibleToUser);
         if(!InvitationPullDownActivity.isFromSelcet){
             thirdKindId=null;
-            Log.i("tag","dsfsdfsdf11");
         }
         if (isVisibleToUser&&bol==1 ) {
             showProgress(true);
             if(listCategroy3!=null)listCategroy3.clear();
             if(thirdKindId==null) {
                idao.requesPostCategory(channelId, "2", "0");
-                idao.requestPostListByCategory(Arad.preferences.getString("memberId"), channelId, "0", "", PAGE_NUM, Constant.PAGE_SIZE);
+                idao.requestPostListByCategory(Arad.preferences.getString("memberId"), channelId, "0", "","", PAGE_NUM, Constant.PAGE_SIZE);
             }else {
                 idao.requesPostCategory(channelId, "2", "0");
-                idao.requestPostListByCategory(Arad.preferences.getString("memberId"), thirdKindId, "0", "", PAGE_NUM, Constant.PAGE_SIZE);
+                idao.requestPostListByCategory(Arad.preferences.getString("memberId"), thirdKindId, "0", "","", PAGE_NUM, Constant.PAGE_SIZE);
             }
         }
     }
@@ -152,6 +152,7 @@ public class InvitationPullDownHaveThirdKindFragment extends ToolBarFragment {
         lv_invitation_pull_down_have_third_kind.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
+                if(listPost!=null)
                 listPost.clear();
                 PAGE_NUM = 1;
                 new Handler().postDelayed(new Runnable() {
@@ -160,9 +161,9 @@ public class InvitationPullDownHaveThirdKindFragment extends ToolBarFragment {
                     public void run() {
                         // TODO Auto-generated method stub
                         if (listCategroy3 != null) {
-                            idao.requestPostListByCategory(Arad.preferences.getString("memberId"), listCategroy3.get(Position).getId(), "0", "", PAGE_NUM, Constant.PAGE_SIZE);
+                            idao.requestPostListByCategory(Arad.preferences.getString("memberId"), listCategroy3.get(Position).getId(), "0", "","" ,PAGE_NUM, Constant.PAGE_SIZE);
                         } else {
-                            idao.requestPostListByCategory(Arad.preferences.getString("memberId"), channelId, "0", "", PAGE_NUM, Constant.PAGE_SIZE);
+                            idao.requestPostListByCategory(Arad.preferences.getString("memberId"), channelId, "0", "", "",PAGE_NUM, Constant.PAGE_SIZE);
 
                         }
                     }
@@ -179,9 +180,9 @@ public class InvitationPullDownHaveThirdKindFragment extends ToolBarFragment {
                     public void run() {
                         // TODO Auto-generated method stub
                         if (listCategroy3 != null) {
-                            idao.requestPostListByCategory(Arad.preferences.getString("memberId"), listCategroy3.get(Position).getId(), "0", "", PAGE_NUM, Constant.PAGE_SIZE);
+                            idao.requestPostListByCategory(Arad.preferences.getString("memberId"), listCategroy3.get(Position).getId(), "0", "","", PAGE_NUM, Constant.PAGE_SIZE);
                         } else {
-                            idao.requestPostListByCategory(Arad.preferences.getString("memberId"), channelId, "0", "", PAGE_NUM, Constant.PAGE_SIZE);
+                            idao.requestPostListByCategory(Arad.preferences.getString("memberId"), channelId, "0", "","", PAGE_NUM, Constant.PAGE_SIZE);
 
                         }
                     }
@@ -230,7 +231,7 @@ public class InvitationPullDownHaveThirdKindFragment extends ToolBarFragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 bol = 1;
                 Position = position;
-                idao.requestPostListByCategory(Arad.preferences.getString("memberId"), listCategroy3.get(position).getId(), "0", "", PAGE_NUM, Constant.PAGE_SIZE);
+                idao.requestPostListByCategory(Arad.preferences.getString("memberId"), listCategroy3.get(position).getId(), "0", "", "",PAGE_NUM, Constant.PAGE_SIZE);
             }
         });
 
@@ -261,7 +262,7 @@ public class InvitationPullDownHaveThirdKindFragment extends ToolBarFragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 bol = 1;
-                idao.requestPostListByCategory(Arad.preferences.getString("memberId"), listCategroy3.get(position).getId(), "0", "", PAGE_NUM, Constant.PAGE_SIZE);
+                idao.requestPostListByCategory(Arad.preferences.getString("memberId"), listCategroy3.get(position).getId(), "0", "", "", PAGE_NUM, Constant.PAGE_SIZE);
             }
         });
 
@@ -286,12 +287,19 @@ public class InvitationPullDownHaveThirdKindFragment extends ToolBarFragment {
         super.onRequestSuccess(requestCode);
         lv_invitation_pull_down_have_third_kind.onRefreshComplete();
         showProgress(false);
+        if(requestCode==19){
+            listBanner=idao.getListBanner();
+            if(listBanner!=null) {
+                //设置轮播图
+                setLoopView();
+            }
+        }
         if (requestCode == 1) {
             bol = 0;
             if(listCategroy3==null) {
                 framelayout.setVisibility(View.VISIBLE);
-                //设置轮播图
-                setLoopView();
+                idao.requestPostRotaingBanner("B_POST_MIDDLE");
+
                 ll.setVisibility(View.GONE);
                 // horizontalScrollView.setVisibility(View.VISIBLE);
                 gridView1.setVisibility(View.GONE);
@@ -348,7 +356,7 @@ public class InvitationPullDownHaveThirdKindFragment extends ToolBarFragment {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode==1111&&resultCode==2222){
             String keyword = data.getStringExtra("keyword");
-            idao.requestPostListByCategory(Arad.preferences.getString("memberId"), listCategroy3.get(Position).getId(), "0", keyword, PAGE_NUM, Constant.PAGE_SIZE);
+            idao.requestPostListByCategory(Arad.preferences.getString("memberId"), listCategroy3.get(Position).getId(), "0", keyword,"", PAGE_NUM, Constant.PAGE_SIZE);
         }
     }
 
@@ -364,13 +372,14 @@ public class InvitationPullDownHaveThirdKindFragment extends ToolBarFragment {
         framelayout.addView(autoPlayPicView);
         //4. 为轮播图设置数据
         mAutoSwitchPicHolder.setData(getData());
+        mAutoSwitchPicHolder.setData(listBanner);
     }
 
     public List<String> getData() {
         mData = new ArrayList<String>();
-        mData.add("http://pic.qqmail.com/imagecache/20101016/1287208885.png");
-        mData.add("http://v1.qzone.cc/pic/201308/01/16/44/51fa1fd3d9f0d545.jpg!600x600.jpg");
-        mData.add("http://img.blog.cctv.com/attachments/2009/02/810583_200902231053501.jpg");
+       for(int i=0;i<listBanner.size();i++){
+           mData.add(listBanner.get(i).getImgUrl());
+       }
         return mData;
     }
 

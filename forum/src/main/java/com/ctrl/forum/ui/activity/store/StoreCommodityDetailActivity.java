@@ -2,6 +2,7 @@ package com.ctrl.forum.ui.activity.store;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -25,6 +26,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.beanu.arad.Arad;
+import com.beanu.arad.utils.AnimUtil;
 import com.beanu.arad.utils.MessageUtils;
 import com.ctrl.forum.R;
 import com.ctrl.forum.base.AppToolBarActivity;
@@ -142,6 +144,7 @@ public class StoreCommodityDetailActivity extends AppToolBarActivity implements 
     private GoodsDataBaseInterface mGoodsDataBaseInterface;
     private StoreCommodityDetailActivity mContext;
     private int SELECTPOSITION = 0;
+    private Button m_list_submit_popup;
 
 
     @Override
@@ -176,7 +179,7 @@ public class StoreCommodityDetailActivity extends AppToolBarActivity implements 
              }*/
         }
         if (requestCode == 4) {
-            MessageUtils.showShortToast(this, "获取商品成功");
+          //  MessageUtils.showShortToast(this, "获取商品成功");
             product = mdao.getProduct2();
             listProductImg = mdao.getListProductImg();
             tv_commdity_name.setText(product.getName());
@@ -187,7 +190,11 @@ public class StoreCommodityDetailActivity extends AppToolBarActivity implements 
             if (product.getDeliveryType().equals("1")) {
                 tv_beizhu.setText("第三方配送");
             }
-            tv_product_number.setText("销量 ： " + product.getSalesVolume());
+            if(product.getSalesVolume()==null||product.getSalesVolume().equals("")){
+                tv_product_number.setText("销量 ：0 " );
+            }else {
+                tv_product_number.setText("销量 ： " + product.getSalesVolume());
+            }
             //图片数量初始值
             tv_image_number.setText(1 + "/" + listProductImg.size());
             for (int i = 0; i < listProductImg.size(); i++) {
@@ -265,6 +272,7 @@ public class StoreCommodityDetailActivity extends AppToolBarActivity implements 
         iv_commodity_detail_add.setOnClickListener(this);
         iv_commodity_detail_sub.setOnClickListener(this);
         tv_add_cart.setOnClickListener(this);
+        m_list_submit.setOnClickListener(this);
 
         inflater = getLayoutInflater();
 
@@ -311,6 +319,7 @@ public class StoreCommodityDetailActivity extends AppToolBarActivity implements 
         final ListView lv_cart_popup = (ListView) contentView.findViewById(R.id.lv_cart_popup);
         m_list_num_popup = (TextView) contentView.findViewById(R.id.m_list_num_popup);
         m_list_all_price_popup = (TextView) contentView.findViewById(R.id.m_list_all_price_popup);
+        m_list_submit_popup = (Button) contentView.findViewById(R.id.m_list_submit_popup);
         TextView tv_cart_popup_delete = (TextView) contentView.findViewById(R.id.tv_cart_popup_delete);
         // 设置SelectPicPopupWindow的View
         popupWindow.setContentView(contentView);
@@ -328,7 +337,7 @@ public class StoreCommodityDetailActivity extends AppToolBarActivity implements 
         // 如果不设置PopupWindow的背景，无论是点击外部区域还是Back键都无法dismiss弹框
         // 我觉得这里是API的一个bug
         popupWindow.setBackgroundDrawable(dw);
-
+        m_list_submit_popup.setOnClickListener(this);
         contentView.setFocusable(true);
         contentView.setFocusableInTouchMode(true);
         popupWindow.setTouchable(true);
@@ -513,7 +522,7 @@ public class StoreCommodityDetailActivity extends AppToolBarActivity implements 
 
         if (keyCode == KeyEvent.KEYCODE_BACK
                 && event.getRepeatCount() == 0) {
-            setResult(RESULT_OK);
+            setResult(112);
             onBackPressed();
             return true;
         }
@@ -524,8 +533,25 @@ public class StoreCommodityDetailActivity extends AppToolBarActivity implements 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.m_list_submit:
+                if (m_list_num.getText().toString().equals("0")) {
+                    MessageUtils.showShortToast(this, "购物车还是空的！");
+                } else {
+                    Intent intent = new Intent(this, StoreOrderDetailActivity.class);
+                    intent.putExtra("companyId", getIntent().getStringExtra("id"));
+                    startActivity(intent);
+                    AnimUtil.intentSlidIn(this);
+                }
+                break;
+            case R.id.m_list_submit_popup:
+                    Intent intent = new Intent(this, StoreOrderDetailActivity.class);
+                    intent.putExtra("companyId", getIntent().getStringExtra("id"));
+                    startActivity(intent);
+                    AnimUtil.intentSlidIn(this);
+                    popupWindow.dismiss();
+                break;
             case R.id.iv_back:
-                setResult(RESULT_OK);
+                setResult(112);
                 onBackPressed();
                 break;
             case R.id.iv_zan://收藏
@@ -613,9 +639,11 @@ public class StoreCommodityDetailActivity extends AppToolBarActivity implements 
                 break;
             case R.id.iv_commodity_detail_add://加号
                 String nums2 = tv_commodity_detail_num.getText().toString().trim();
-                if ((Integer.parseInt(nums2) + 1) > Integer.parseInt(product.getStock())) {
-                    MessageUtils.showShortToast(StoreCommodityDetailActivity.this, "库存不足");
-                    return;
+                if(product.getStock()!=null) {
+                    if ((Integer.parseInt(nums2) + 1) > Integer.parseInt(product.getStock())) {
+                        MessageUtils.showShortToast(StoreCommodityDetailActivity.this, "库存不足");
+                        return;
+                    }
                 }
                 tv_commodity_detail_num.setText(mGoodsDataBaseInterface.saveGoodsNumber(mContext, SELECTPOSITION,
                         product.getId(), String.valueOf(Integer.parseInt(nums2) + 1),

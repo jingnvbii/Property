@@ -52,7 +52,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/text_white"
-            android:text="萌的不要用不要的15132"/>
+            />
 
         <TextView
             android:id="@+id/tv_image_tel"

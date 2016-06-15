@@ -15,6 +15,7 @@ import com.ctrl.forum.entity.Mall;
 import com.ctrl.forum.entity.MallKind;
 import com.ctrl.forum.entity.MallRecommend;
 import com.ctrl.forum.entity.Notice;
+import com.ctrl.forum.entity.NoticeImage;
 import com.ctrl.forum.entity.Product2;
 import com.ctrl.forum.entity.ProductCategroy;
 import com.ctrl.forum.entity.Qualification2;
@@ -58,6 +59,8 @@ public class MallDao extends IDao {
     private List<TRedeemHistory> listTRedeemHistory=new ArrayList<>();//积分兑换商品历史记录列表
     private List<ProductCategroy>listProductCategroy=new ArrayList();//商品分类列表
     private Product2 product2;
+    private List<NoticeImage> listNoticeImage=new ArrayList<>();//公告图片
+    private List<Product2> listProducts=new ArrayList<>();
 
 
     public MallDao(INetResult activity){
@@ -234,20 +237,24 @@ public class MallDao extends IDao {
         map.put("companyId",companyId);
         postRequest(Constant.RAW_URL + url, mapToRP(map),9);
     }
-/*    *//**
-     * 获取店铺商品分类以及分类下的商品列表接口
-   //  * @param companyId //商家id
-    // * @param type //商家管理:不传  用户界面: 传type=1
+    /**
+     * 搜索店内商品
+     * @param companyId //商家id
+     * @param keyword //关键字
+     * @param pageNum //页数
+     * @param pageSize //每页条数
      *
-     * *//*
-    public void requestProductCategroy(String companyId,
-                               String type){
-        String url="productCategory/getProductCategory";
+     * */
+    public void requestQueryCompanyProducts(String companyId,String keyword,String pageNum,String pageSize
+                             ){
+        String url="product/queryCompanyProducts";
         Map<String,String> map = new HashMap<String,String>();
         map.put("companyId",companyId);
-        map.put("type",type);
-        postRequest(Constant.RAW_URL + url, mapToRP(map),9);
-    }*/
+        map.put("keyword",keyword);
+        map.put("pageNum",pageNum);
+        map.put("pageSize",pageSize);
+        postRequest(Constant.RAW_URL + url, mapToRP(map),10);
+    }
 
 
 
@@ -257,10 +264,11 @@ public class MallDao extends IDao {
     public void onRequestSuccess(JsonNode result, int requestCode) throws IOException {
         if(requestCode == 0){
             Log.d("demo", "dao中结果集(商城首页初始化返回): " + result);
-            listMallBanner = JsonUtil.node2pojoList(result.findValue("rotatingBannerList"), Banner.class);
+            listMallBanner = JsonUtil.node2pojoList(result.findValue("bannerList"), Banner.class);
             listMallKind = JsonUtil.node2pojoList(result.findValue("companyCategoryList"), MallKind.class);
             listMallRecommend = JsonUtil.node2pojoList(result.findValue("recommendItemList"), MallRecommend.class);
             listMallNotice = JsonUtil.node2pojoList(result.findValue("noticeList"), Notice.class);
+            listNoticeImage = JsonUtil.node2pojoList(result.findValue("noticeImgList"), NoticeImage.class);
         }
         if(requestCode == 1){
             Log.d("demo", "dao中结果集(商城首页商家推荐返回): " + result);
@@ -309,6 +317,11 @@ public class MallDao extends IDao {
             List<ProductCategroy> data = JsonUtil.node2pojo(result.findValue("productCategoryList"), new TypeReference<List<ProductCategroy>>() {
             });
             listProductCategroy.addAll(data);
+        }
+
+        if(requestCode == 10){
+            Log.d("demo", "dao中结果集(店铺内商品返回): " + result);
+            listProduct = JsonUtil.node2pojoList(result.findValue("productsList"), Product2.class);
         }
 
 
@@ -392,5 +405,13 @@ public class MallDao extends IDao {
 
     public Product2 getProduct2() {
         return product2;
+    }
+
+    public List<NoticeImage> getListNoticeImage() {
+        return listNoticeImage;
+    }
+
+    public List<Product2> getListProducts() {
+        return listProducts;
     }
 }

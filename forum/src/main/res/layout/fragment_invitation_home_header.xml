@@ -7,13 +7,36 @@
     <FrameLayout
         android:id="@+id/framelayout"
         android:layout_width="wrap_content"
-        android:layout_height="100dp">
+        android:layout_height="150dp">
     </FrameLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:background="@color/white"
+        android:layout_height="200dp">
+    <android.support.v4.view.ViewPager
+        android:id="@+id/myviewpager"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_gravity="top"
+        android:scaleType="fitXY" />
+
+    <LinearLayout
+        android:id="@+id/viewGroup"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/myviewpager"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal" >
+    </LinearLayout>
+    </LinearLayout>
 
 
     <HorizontalScrollView
         android:id="@+id/scrollView"
         android:background="@color/white"
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
 
@@ -43,10 +66,9 @@
             android:id="@+id/iv_invitation_notice_image"
             android:layout_width="80dp"
             android:layout_height="match_parent"
-            android:padding="5dp"
             android:adjustViewBounds="true"
             android:scaleType="fitXY"
-            android:src="@mipmap/jinrigonggao"/>
+           />
 
         <View
             android:layout_width="1px"
@@ -95,7 +117,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="fitXY"
-                android:src="@mipmap/ic_launcher"/>
+                />
         </LinearLayout>
 
         <View
@@ -119,7 +141,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:scaleType="fitXY"
-                    android:src="@mipmap/ic_launcher"/>
+                   />
             </LinearLayout>
 
             <View
@@ -142,7 +164,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:scaleType="fitXY"
-                        android:src="@mipmap/ic_launcher"/>
+                        />
                 </LinearLayout>
 
                 <View
@@ -159,7 +181,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:scaleType="fitXY"
-                        android:src="@mipmap/ic_launcher"/>
+                       />
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>

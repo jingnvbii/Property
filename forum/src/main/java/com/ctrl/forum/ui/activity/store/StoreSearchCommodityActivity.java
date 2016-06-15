@@ -101,6 +101,7 @@ public class StoreSearchCommodityActivity extends AppToolBarActivity implements 
     private TextView m_list_num_popup;
     private TextView m_list_all_price_popup;
     private ArrayList<GoodsBean> listGoodsBean;
+    private List<Product2> listProduct2;
 
 
     @Override
@@ -144,9 +145,13 @@ public class StoreSearchCommodityActivity extends AppToolBarActivity implements 
         mGoodsDataBaseInterface.deleteAll(mContext);
         tv_choose.setText("商品");
         mdao=new MallDao(this);
-        mdao.requestSearchCompanysOrProductByKeyword("0", "", " ",
-                "1", getIntent().getStringExtra("keyword"), Arad.preferences.getString("memberId"), String.valueOf(PAGE_NUM), String.valueOf(Constant.PAGE_SIZE)
-        );
+        if(getIntent().getFlags()==11){
+             mdao.requestQueryCompanyProducts(getIntent().getStringExtra("companyId"),getIntent().getStringExtra("keyword"),String.valueOf(PAGE_NUM), String.valueOf(Constant.PAGE_SIZE));
+        }else {
+            mdao.requestSearchCompanysOrProductByKeyword("0", "", " ",
+                    "1", getIntent().getStringExtra("keyword"), Arad.preferences.getString("memberId"), String.valueOf(PAGE_NUM), String.valueOf(Constant.PAGE_SIZE)
+            );
+        }
 /*        mdao.requestSearchCompanysOrProductByKeyword("0", Arad.preferences.getString("latitude"), Arad.preferences.getString("longitude"),
                 "1", getIntent().getStringExtra("keyword"), Arad.preferences.getString("memberId"), String.valueOf(PAGE_NUM), String.valueOf(Constant.PAGE_SIZE)
         );*/
@@ -158,7 +163,7 @@ public class StoreSearchCommodityActivity extends AppToolBarActivity implements 
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(StoreSearchCommodityActivity.this, StoreCommodityDetailActivity.class);
                 intent.putExtra("id", listProduct.get(position).getId());
-              //  startActivityForResult(intent, 500);
+                //  startActivityForResult(intent, 500);
                 startActivity(intent);
                 AnimUtil.intentSlidIn(StoreSearchCommodityActivity.this);
             }
@@ -227,7 +232,11 @@ public class StoreSearchCommodityActivity extends AppToolBarActivity implements 
         if(requestCode==6){
           //  MessageUtils.showShortToast(this,"根据关键字获取商品成功");
             listProduct=mdao.getListProduct();
-            adapter.setList(mdao.getListProduct());
+            adapter.setList(listProduct);
+        }
+        if(requestCode==10){
+            listProduct=mdao.getListProduct();
+            adapter.setList(listProduct);
         }
     }
 

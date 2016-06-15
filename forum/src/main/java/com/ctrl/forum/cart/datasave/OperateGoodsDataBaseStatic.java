@@ -38,7 +38,7 @@ public class OperateGoodsDataBaseStatic{
                 utils.save(goodsBean);
                 Log.e("TAG" , "该商品已经存储");
                 return getSecondGoodsNumber(context , menupos , goodsid);
-            }else{
+            } else{
                 Log.e("TAG" , "已经有该商品");
                 //返回添加商品之后的商品总数
                 return updateNum(context, menupos, goodsid, goodsnum);
@@ -89,6 +89,27 @@ public class OperateGoodsDataBaseStatic{
         utils.close();
         Log.e("TAG", "获取商品数量失败");
         return 0;
+    }
+    /**
+     *删除数量为0的商品
+     */
+    public static void DeleteSecondGoodsNumber(Context context , int menupos , String goodsid) {
+        DbUtils	utils = DbUtils.create(context);
+        if(utils == null){
+            Log.e("TAG" , "还没有该数据库");
+           // return 0;
+        }
+        try {
+            GoodsBean bean = utils.findFirst(Selector.from(GoodsBean.class).where("menupos", "=", menupos).and("goodsid", "=", goodsid));
+            if(bean.getGoodsnum().equals("0")){
+                utils.delete(bean);
+            }
+        } catch (DbException e) {
+            e.printStackTrace();
+        }
+        utils.close();
+      //  Log.e("TAG", "获取商品数量失败");
+     //   return 0;
     }
     /**
      * 根据第一级的下标 得到第二级的所有购物数量

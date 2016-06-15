@@ -5,25 +5,35 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.text.Editable;
 import android.text.TextUtils;
-import android.util.SparseArray;
+import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.RatingBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.beanu.arad.Arad;
 import com.beanu.arad.utils.AnimUtil;
 import com.ctrl.forum.R;
 import com.ctrl.forum.base.AppToolBarActivity;
-import com.ctrl.forum.entity.Merchant;
+import com.ctrl.forum.cart.animutils.GoodsAnimUtil;
+import com.ctrl.forum.cart.datasave.OperateGoodsDataBase;
+import com.ctrl.forum.dao.MallDao;
+import com.ctrl.forum.entity.Company;
+import com.ctrl.forum.entity.ProductCategroy;
+import com.ctrl.forum.ui.adapter.JasonViewPagerAdapter;
 import com.ctrl.forum.ui.fragment.StoreShopListHorzitalStyleFragment;
 
 import java.util.ArrayList;
@@ -44,59 +54,116 @@ public class StoreShopListHorzitalStyleActivity extends AppToolBarActivity imple
     @InjectView(R.id.horizontalScrollView_shop_horzital_style)
     HorizontalScrollView mHorizontalScrollView;
 
+    @InjectView(R.id.m_list_car_lay)//购物车布局
+    RelativeLayout m_list_car_lay;
+    @InjectView(R.id.m_list_car)//购物车图片
+    ImageView m_list_car;
+    @InjectView(R.id.m_list_num)//商品总数
+    TextView m_list_num;
+    @InjectView(R.id.m_list_all_price)//商品总价格
+    TextView m_list_all_price;
     @InjectView(R.id.m_list_submit)//马上结算按钮
     Button m_list_submit;
 
     @InjectView(R.id.viewpager_shop)
     ViewPager mViewpager;
 
-    SparseArray<Fragment> fragments = new SparseArray<Fragment>();
+    @InjectView(R.id.ll_horzital_style)//公告布局
+            LinearLayout ll_horzital_style;
+    @InjectView(R.id.tv_horzital_style_information)//公告内容
+            TextView tv_horzital_style_information;
+    @InjectView(R.id.iv_horzital_style_information_close)//关闭公告
+            ImageView iv_horzital_style_information_close;
+    @InjectView(R.id.iv_style_img)//店铺图片
+           ImageView iv_style_img;
+    @InjectView(R.id.tv_shop_name)//店铺名称
+            TextView tv_shop_name;
+    @InjectView(R.id.tv_time)//营业时间
+            TextView tv_time;
+    @InjectView(R.id.ratingBar)//评价等级
+    RatingBar ratingBar;
+
+    @InjectView(R.id.et_horzital_style_search)//搜索输入
+    EditText et_horzital_style_search;
+    @InjectView(R.id.tv_horzital_style_search)//搜索
+    TextView tv_horzital_style_search;
+
+    public static int SELECTPOSITION = 0;//一级列表下标值
+
+  //  SparseArray<Fragment> fragments = new SparseArray<Fragment>();
+  List<Fragment> fragments=new ArrayList<>();
 
     private int width;
     private float mCurrentCheckedRadioLeft;//当前被选中的RadioButton距离左侧的距离
-    private List<Merchant> list;
+    private MallDao mdao;
+    private Company company;
+    private List<ProductCategroy> listProductCategroy;
+    private OperateGoodsDataBase mGoodsDataBaseInterface;
+    private StoreShopListHorzitalStyleActivity mContext;
+    private JasonViewPagerAdapter viewPagerAdapter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_store_shop_list_horzital_style);
         ButterKnife.inject(this);
+        mContext=this;
         // 隐藏输入法
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         initData();
-        initView();
+
     }
+
+
+
 
     private void initData() {
-       list=new ArrayList<>();
-        for(int i=0;i<10;i++){
-            Merchant merchant=new Merchant();
-            merchant.setName("小贝便利"+i);
-            list.add(merchant);
-        }
+        mGoodsDataBaseInterface = OperateGoodsDataBase.getInstance();
+        //清空数据库缓存
+        mGoodsDataBaseInterface.deleteAll(mContext);
 
+        Arad.imageLoader.load(getIntent().getStringExtra("url")).placeholder(R.mipmap.default_error).into(iv_style_img);
+        tv_shop_name.setText(getIntent().getStringExtra("name"));
+        tv_time.setText("营业时间 " + getIntent().getStringExtra("startTime") + "-" + getIntent().getStringExtra("endTime"));
+        if(getIntent().getStringExtra("levlel")!=null)
+            ratingBar.setNumStars(Integer.parseInt(getIntent().getStringExtra("levlel")));
+        mdao = new MallDao(this);
+        showProgress(true);
+        mdao.requestProductCategroy(getIntent().getStringExtra("id"));
+        mdao.requestCompanysDetails(Arad.preferences.getString("memberId"), getIntent().getStringExtra("id"));
     }
 
+
+
+
+
     private void initView() {
-        m_list_submit.setOnClickListener(this);
+        tv_horzital_style_search.setOnClickListener(this);
+        et_horzital_style_search.addTextChangedListener(watcher);
+        iv_horzital_style_information_close.setOnClickListener(this);
+     //   m_list_car_lay.setOnClickListener(this);
+     //  m_list_submit.setOnClickListener(this);
         width = getResources().getDisplayMetrics().widthPixels;
         myRadioGroup = new RadioGroup(this);
         myRadioGroup.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         myRadioGroup.setOrientation(LinearLayout.HORIZONTAL);
         layout.addView(myRadioGroup);
-        for (int i = 0; i <10; i++) {
+        for (int i = 0; i <listProductCategroy.size(); i++) {
             RadioButton radio = new RadioButton(this);
             radio.setBackgroundResource(R.drawable.top_category_selector);
             LinearLayout.LayoutParams l;
-           /* if(dao.getCompanyCategoryList().size()==1){
+            if(listProductCategroy.size()==1){
                 l = new LinearLayout.LayoutParams(width, ViewGroup.LayoutParams.MATCH_PARENT, Gravity.CENTER);
-            }else if(dao.getCompanyCategoryList().size()==2){
+            }else if(listProductCategroy.size()==2){
                 l = new LinearLayout.LayoutParams(width/2, ViewGroup.LayoutParams.MATCH_PARENT, Gravity.CENTER);
-            }else if(dao.getCompanyCategoryList().size()==3){
+            }else if(listProductCategroy.size()==3){
                 l = new LinearLayout.LayoutParams(width/3, ViewGroup.LayoutParams.MATCH_PARENT, Gravity.CENTER);
-            }else {*/
+            }else if(listProductCategroy.size()==4){
+                l = new LinearLayout.LayoutParams(width/4, ViewGroup.LayoutParams.MATCH_PARENT, Gravity.CENTER);
+            }else {
             l = new LinearLayout.LayoutParams(width/5, ViewGroup.LayoutParams.MATCH_PARENT, Gravity.CENTER);
-            // }
+             }
             radio.setLayoutParams(l);
             radio.setGravity(Gravity.CENTER);
             //  radio.setPadding(20, 20, 20, 20);
@@ -104,7 +171,7 @@ public class StoreShopListHorzitalStyleActivity extends AppToolBarActivity imple
             radio.setButtonDrawable(getResources().getDrawable(R.color.white));
             radio.setTextSize(14.0f);
             radio.setTextColor(getResources().getColor(R.color.text_gray));//选择器
-            radio.setText("分类");//动态设置
+            radio.setText(listProductCategroy.get(i).getName());//动态设置
             radio.setSingleLine(true);
             radio.setEllipsize(TextUtils.TruncateAt.END);
             radio.setTag(i);
@@ -129,8 +196,9 @@ public class StoreShopListHorzitalStyleActivity extends AppToolBarActivity imple
               view.setBackgroundColor(Color.parseColor("#cccccc"));
             myRadioGroup.addView(radio);
              myRadioGroup.addView(view);
-            StoreShopListHorzitalStyleFragment fragment = StoreShopListHorzitalStyleFragment.newInstance(list);
-            fragments.put(i, fragment);
+            StoreShopListHorzitalStyleFragment fragment = StoreShopListHorzitalStyleFragment.newInstance(listProductCategroy,i,
+                    m_list_car,m_list_all_price,m_list_submit,m_list_num);
+            fragments.add(fragment);
         }
         myRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
 
@@ -140,17 +208,94 @@ public class StoreShopListHorzitalStyleActivity extends AppToolBarActivity imple
                 int radioButtonId = group.getCheckedRadioButtonId();
                 //根据ID获取RadioButton的实例
                 RadioButton rb = (RadioButton) findViewById(radioButtonId);
-                 mViewpager.setCurrentItem(radioButtonId);//让下方ViewPager跟随上面的HorizontalScrollView切换
+                mViewpager.setCurrentItem(radioButtonId);//让下方ViewPager跟随上面的HorizontalScrollView切换
                 mCurrentCheckedRadioLeft = rb.getLeft();
                 mHorizontalScrollView.smoothScrollTo((int) mCurrentCheckedRadioLeft - (width * 2) / 5, 0);
             }
         });
-        mViewpager.setAdapter(new com.ctrl.forum.ui.adapter.ViewPagerAdapter(getSupportFragmentManager(), fragments));
+        viewPagerAdapter = new JasonViewPagerAdapter(getSupportFragmentManager(), fragments);
+        mViewpager.setAdapter(viewPagerAdapter);
         mViewpager.setOnPageChangeListener(new FragmentOnPageChangeListener());
         mViewpager.setCurrentItem(0);
 
+            viewPagerAdapter.setOnReloadListener(new JasonViewPagerAdapter.OnReloadListener() {
+                @Override
+                public void onReload() {
+                    fragments = null;
+                    List<Fragment> list = new ArrayList<Fragment>();
+                    for (int i = 0; i < listProductCategroy.size(); i++) {
+                        list.add(StoreShopListHorzitalStyleFragment.newInstance(listProductCategroy, i,
+                                m_list_car, m_list_all_price, m_list_submit, m_list_num));
+                    }
+                    viewPagerAdapter.setPagerItems(list);
+                }
+            });
+            mViewpager.setOffscreenPageLimit(listProductCategroy.size());
     }
 
+    private TextWatcher watcher = new TextWatcher() {
+        //文字变化时
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            // TODO Auto-generated method stub
+            if(s.length()==0){
+                tv_horzital_style_search.setVisibility(View.GONE);
+            }else {
+                tv_horzital_style_search.setVisibility(View.VISIBLE);
+            }
+
+
+        }
+        //文字变化前
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count,
+                                      int after) {
+            // TODO Auto-generated method stub
+            if(s.length()==0){
+                tv_horzital_style_search.setVisibility(View.GONE);
+            }else {
+                tv_horzital_style_search.setVisibility(View.VISIBLE);
+            }
+
+        }
+
+        //文字变化后
+        @Override
+        public void afterTextChanged(Editable s) {
+            // TODO Auto-generated method stub
+            if (s.length() == 0&&tv_horzital_style_search.getVisibility()==View.VISIBLE) {
+                tv_horzital_style_search.setVisibility(View.GONE);
+            }
+        }
+    };
+
+    public JasonViewPagerAdapter getAdapter(){
+        return viewPagerAdapter;
+    }
+    @Override
+    public void onRequestSuccess(int requestCode) {
+        super.onRequestSuccess(requestCode);
+        if (requestCode == 002) {
+            //  MessageUtils.showShortToast(this, "获取店铺详情成功");
+            showProgress(false);
+            company = mdao.getCompany();
+            tv_horzital_style_information.setText(company.getInformation());
+            tv_horzital_style_information.requestFocus();
+        }
+
+       if(requestCode==9){
+           listProductCategroy=mdao.getListProductCategroy();
+           initView();
+       }
+    }
+
+    public RelativeLayout getRel(){
+        return m_list_car_lay;
+    }
+    public void setAnim(){
+        GoodsAnimUtil.setOnEndAnimListener(new onEndAnim());
+    }
 
     /**
      * ViewPager的PageChangeListener(页面改变的监听器)
@@ -179,25 +324,71 @@ public class StoreShopListHorzitalStyleActivity extends AppToolBarActivity imple
         }
     }
 
-
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        if(!et_horzital_style_search.getText().toString().equals("")){
+            et_horzital_style_search.setText("");
+            tv_horzital_style_search.setVisibility(View.GONE);
+        }
+    }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.m_list_submit:
-                Intent intent=new Intent(this,StoreOrderDetailActivity.class);
+            case R.id.tv_horzital_style_search:
+                Intent intent=new Intent(this,StoreSearchCommodityActivity.class);
+                intent.putExtra("keyword", et_horzital_style_search.getText().toString().trim());
+                intent.putExtra("companyId", getIntent().getStringExtra("id"));
+                intent.addFlags(11);
                 startActivity(intent);
                 AnimUtil.intentSlidIn(this);
                 break;
+            case R.id.iv_horzital_style_information_close:
+                ll_horzital_style.setVisibility(View.GONE);
+                break;
         }
-
-
     }
+
+
+
+
+    /**
+     * 动画结束后，更新所有数量和所有价格
+     */
+    class onEndAnim implements GoodsAnimUtil.OnEndAnimListener {
+        @Override
+        public void onEndAnim() {
+            setAll();
+        }
+    }
+
+    /**
+     * 点击加号和减号的时候设置总数和总价格
+     */
+    public void setAll() {
+
+        //设置所有购物数量
+        if (mGoodsDataBaseInterface.getSecondGoodsNumberAll(mContext, SELECTPOSITION) == 0) {
+            m_list_car.setImageResource(R.mipmap.cart_car_gray);
+            m_list_submit.setBackgroundResource(R.color.text_gray);
+            m_list_num.setVisibility(View.GONE);
+            m_list_all_price.setText("共￥0 元");
+            m_list_num.setText("0");
+        } else {
+            m_list_car.setImageResource(R.mipmap.cart_car_orange);
+            m_list_submit.setBackgroundResource(R.color.text_red);
+            m_list_all_price.setText("共￥" + String.valueOf(mGoodsDataBaseInterface.getSecondGoodsPriceAll(mContext, SELECTPOSITION))+" 元");
+            m_list_num.setText(mGoodsDataBaseInterface.getSecondGoodsNumberAll(mContext, SELECTPOSITION) + "");
+            m_list_num.setVisibility(View.VISIBLE);
+        }
+    }
+
 
 
     @Override
     public String setupToolBarTitle() {
-        return "小贝商品";
+        return getIntent().getStringExtra("name");
     }
 
     @Override
@@ -220,6 +411,8 @@ public class StoreShopListHorzitalStyleActivity extends AppToolBarActivity imple
             @Override
             public void onClick(View v) {
                 Intent intent=new Intent(StoreShopListHorzitalStyleActivity.this,StoreShopDetailActivity.class);
+                intent.putExtra("id",getIntent().getStringExtra("id"));
+                intent.putExtra("name",getIntent().getStringExtra("name"));
                 startActivity(intent);
                 AnimUtil.intentSlidIn(StoreShopListHorzitalStyleActivity.this);
             }

@@ -200,6 +200,15 @@ public class JsonUtil {
             }
         }
     }
+    public static String List2json(List<Object> node) throws JsonProcessingException, IOException {
+        //JsonGenerator jg = null;
+        try {
+           // jg = jf.createGenerator(System.out);
+            objectMapper.writeValueAsString(node);
+            return  objectMapper.writeValueAsString(node).toString();
+        } finally {
+            }
+    }
 
     public static void node2json(JsonNode node, Writer w) throws JsonGenerationException, JsonMappingException,
             IOException {
@@ -216,6 +225,9 @@ public class JsonUtil {
             }
         }
     }
+
+
+
 
     public static ObjectNode createObjectNode() {
         return objectMapper.createObjectNode();
