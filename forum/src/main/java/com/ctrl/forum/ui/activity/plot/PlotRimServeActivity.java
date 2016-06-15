@@ -176,7 +176,7 @@ public class PlotRimServeActivity extends AppToolBarActivity implements View.OnC
             if (rimServiceCompanies!=null){
                 plotRimServeAdapter.setRimServiceCompanies(rimServiceCompanies);
             }
-        }
+        }//
     }
 
     @Override
