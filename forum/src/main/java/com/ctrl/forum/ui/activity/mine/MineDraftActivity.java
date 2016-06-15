@@ -7,10 +7,10 @@ import android.widget.ListView;
 
 import com.beanu.arad.Arad;
 import com.beanu.arad.base.ToolBarActivity;
-import com.beanu.arad.utils.MessageUtils;
 import com.ctrl.forum.R;
 import com.ctrl.forum.base.ListItemTypeInterf;
 import com.ctrl.forum.dao.EditDao;
+import com.ctrl.forum.dao.InvitationDao;
 import com.ctrl.forum.entity.Drafts;
 import com.ctrl.forum.entity.DraftsPostList;
 import com.ctrl.forum.ui.adapter.MineDraftsListAdapter;
@@ -21,6 +21,9 @@ import java.util.List;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
+/**
+ * 草稿箱
+ */
 public class MineDraftActivity extends ToolBarActivity implements View.OnClickListener{
     @InjectView(R.id.lv_content)
     ListView lv_content;
@@ -30,6 +33,8 @@ public class MineDraftActivity extends ToolBarActivity implements View.OnClickLi
     private List<DraftsPostList> draftsPostLists;
     private List<Drafts> drafts;
     private MineDraftsListAdapter mineDraftsListAdapter;
+    private InvitationDao idao;
+    private List<Drafts> draftses;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,10 +47,10 @@ public class MineDraftActivity extends ToolBarActivity implements View.OnClickLi
     }
 
     private void initView() {
+        idao = new InvitationDao(this);
         datas = new ArrayList<>();
         mineDraftsListAdapter = new MineDraftsListAdapter(this);
         lv_content.setAdapter(mineDraftsListAdapter);
-        mineDraftsListAdapter.setOnEdit(this);
         mineDraftsListAdapter.setOnDelete(this);
     }
 
@@ -90,13 +95,24 @@ public class MineDraftActivity extends ToolBarActivity implements View.OnClickLi
 
     @Override
     public void onClick(View v) {
+        Object id = v.getTag();
+        String position;
         switch (v.getId()){
-            case R.id.bt_edit:
-                MessageUtils.showShortToast(this,"编辑");
-                break;
             case R.id.bt_delete:
-                MessageUtils.showShortToast(this,"删除");
+                position = (String)id;
+                idao.requesDeltePost(position);
+                datas.clear();
+                draftsPostLists.clear();
+                editDao.getDraftsList(Arad.preferences.getString("memberId"));
                 break;
         }
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        datas.clear();
+        draftsPostLists.clear();
+        editDao.getDraftsList(Arad.preferences.getString("memberId"));
     }
 }

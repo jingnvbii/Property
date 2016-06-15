@@ -11,7 +11,7 @@ public class Redenvelope {
     private String leastMoney; // 使用优惠劵最低金额
     private String useRule; // 使用规则
     private String number; //优惠劵编码
-    private String deadlineTime; //有效期
+    private long deadlineTime; //有效期
     private String useState;  //使用状态（0：未使用、1：已使用、2：已过期）
     private String used; //使用过总数
     private String notUsed; //未使用过总数
@@ -25,11 +25,11 @@ public class Redenvelope {
         this.amount = amount;
     }
 
-    public String getDeadlineTime() {
+    public long getDeadlineTime() {
         return deadlineTime;
     }
 
-    public void setDeadlineTime(String deadlineTime) {
+    public void setDeadlineTime(long deadlineTime) {
         this.deadlineTime = deadlineTime;
     }
 

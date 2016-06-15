@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:Android="http://schemas.android.com/apk/res/android">
+    <item Android:drawable="@mipmap/red_round" Android:state_enabled="true"/>
+    <item Android:drawable="@mipmap/white_round" Android:state_enabled="false"/>
+</selector>

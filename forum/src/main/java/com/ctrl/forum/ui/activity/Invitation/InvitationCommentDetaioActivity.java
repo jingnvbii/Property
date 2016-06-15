@@ -170,7 +170,7 @@ public class InvitationCommentDetaioActivity extends AppToolBarActivity implemen
 
     private void initData() {
         id=getIntent().getStringExtra("id");
-       reportid=getIntent().getStringExtra("reportid");
+        reportid=getIntent().getStringExtra("reportid");
 
         idao=new InvitationDao(this);
         Idao=new ImageDao(this);

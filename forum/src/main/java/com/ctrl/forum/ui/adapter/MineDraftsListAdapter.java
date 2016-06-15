@@ -1,6 +1,7 @@
 package com.ctrl.forum.ui.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,8 @@ import com.ctrl.forum.R;
 import com.ctrl.forum.base.ListItemTypeInterf;
 import com.ctrl.forum.entity.Drafts;
 import com.ctrl.forum.entity.DraftsPostList;
+import com.ctrl.forum.ui.activity.Invitation.InvitationReleaseActivity;
+import com.ctrl.forum.ui.activity.plot.PlotAddInvitationActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,16 +30,12 @@ import butterknife.InjectView;
 public class MineDraftsListAdapter extends BaseAdapter{
     private Context mcontext;
     private List<ListItemTypeInterf> list;
-    private View.OnClickListener onEdit;
     private View.OnClickListener onDelete;
 
     public void setOnDelete(View.OnClickListener onDelete) {
         this.onDelete = onDelete;
     }
 
-    public void setOnEdit(View.OnClickListener onEdit) {
-        this.onEdit = onEdit;
-    }
 
     public MineDraftsListAdapter(Context context) {
                this.mcontext=context;
@@ -91,7 +90,6 @@ public class MineDraftsListAdapter extends BaseAdapter{
                     convertView = LayoutInflater.from(mcontext).inflate(
                             R.layout.item_mine_drafts_content, parent, false);
                     viewHolder2 = new ViewHolder2(convertView);
-                    viewHolder2.bt_edit.setOnClickListener(onEdit);
                     viewHolder2.bt_delete.setOnClickListener(onDelete);
                     convertView.setTag(viewHolder2);
                     break;
@@ -119,10 +117,31 @@ public class MineDraftsListAdapter extends BaseAdapter{
                 viewHolder1.tv_num.setText("("+draftsPostList.getCount()+"封)");
                 break;
             case 1:
-                Drafts drafts = (Drafts) list.get(position);
+                final Drafts drafts = (Drafts) list.get(position);
                 viewHolder2.tv_title_content.setText(drafts.getTitle());
                 viewHolder2.bt_delete.setOnClickListener(onDelete);
-                viewHolder2.bt_edit.setOnClickListener(onEdit);
+                viewHolder2.bt_delete.setTag(drafts.getId());
+
+                viewHolder2.bt_edit.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                       if (drafts.getCommunityId()!=null && !drafts.getCommunityId().equals("")){
+                           Intent intent = new Intent(mcontext, PlotAddInvitationActivity.class);
+                           intent.putExtra("communityId",drafts.getCommunityId());
+                           intent.putExtra("communityName",drafts.getCommunityName());
+                           intent.putExtra("id",drafts.getId());
+                           intent.putExtra("edit","plot");
+                           mcontext.startActivity(intent);
+                       }else{
+                           Intent intent = new Intent(mcontext, InvitationReleaseActivity.class);
+                           intent.putExtra("id",drafts.getId());
+                           intent.putExtra("edit","invitation");
+                           mcontext.startActivity(intent);
+                       }
+
+                    }
+                });
+
                 if (drafts.getStatus()!=null){
                     if (drafts.getStatus().equals("2")){viewHolder2.iv_back.setVisibility(View.VISIBLE);}
                     else {viewHolder2.iv_back.setVisibility(View.GONE);}

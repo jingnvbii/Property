@@ -99,6 +99,14 @@ public class MineShopManagerAdapter extends SectionedBaseAdapter {
             }
             String storeId = cProducts.get(position).getId();//商品的id
             holder.iv_checkBox.setTag(storeId);
+
+            boolean isCheck = false;
+            if (Arad.preferences.getBoolean(storeId)){
+                holder.iv_checkBox.setChecked(true);
+            }else{
+                holder.iv_checkBox.setChecked(false);
+            }
+
         }
         return convertView;
     }

@@ -3,8 +3,8 @@
     android:layout_width="match_parent" android:layout_height="match_parent">
 
     <com.ctrl.forum.customview.MineHeadView
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:src="@mipmap/iconfont_head"
         android:layout_marginLeft="@dimen/margin_left_and_right"
         android:layout_marginTop="@dimen/margin_left_and_right"
@@ -18,7 +18,7 @@
         android:textSize="16sp"
         android:textColor="@color/text_black1"
         android:layout_marginLeft="@dimen/margin_left_and_right"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="15dp"
         android:layout_alignParentTop="true"
         android:layout_toRightOf="@+id/iv_head"
         android:layout_toEndOf="@+id/iv_head" />
@@ -29,6 +29,8 @@
         android:id="@+id/iv_grade"
         android:src="@mipmap/vip_icon2"
         android:layout_alignBottom="@+id/tv_name"
+        android:layout_marginBottom="2dp"
+        android:layout_marginLeft="2dp"
         android:layout_toRightOf="@+id/tv_name"
         android:layout_toEndOf="@+id/tv_name" />
 
@@ -57,7 +59,7 @@
         <ImageView
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:layout_height="wrap_content"
+            android:layout_height="100dp"
             android:id="@+id/iv_one"
             android:src="@mipmap/book"
             android:scaleType="fitXY"
@@ -65,7 +67,7 @@
         <ImageView
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:layout_height="wrap_content"
+            android:layout_height="100dp"
             android:id="@+id/iv_two"
             android:src="@mipmap/book"
             android:layout_marginLeft="5dp"
@@ -74,7 +76,7 @@
         <ImageView
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:layout_height="wrap_content"
+            android:layout_height="100dp"
             android:id="@+id/iv_three"
             android:src="@mipmap/book"
             android:scaleType="fitXY"

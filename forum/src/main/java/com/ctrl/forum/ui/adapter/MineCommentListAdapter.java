@@ -31,7 +31,7 @@ public class MineCommentListAdapter extends BaseAdapter {
     }
 
     public void setObtainMyReplies(List<ObtainMyReply> obtainMyReplies) {
-        this.obtainMyReplies.addAll(obtainMyReplies);
+        this.obtainMyReplies = obtainMyReplies;
         notifyDataSetChanged();
     }
 

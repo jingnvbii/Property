@@ -21,13 +21,14 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.beanu.arad.Arad;
-import com.beanu.arad.utils.MessageUtils;
 import com.beanu.arad.widget.SlidingUpPanelLayout;
 import com.ctrl.forum.R;
 import com.ctrl.forum.base.AppToolBarActivity;
 import com.ctrl.forum.customview.MineHeadView;
 import com.ctrl.forum.dao.EditDao;
 import com.ctrl.forum.entity.MemberInfo;
+import com.ctrl.forum.ui.activity.LoginActivity;
+import com.ctrl.forum.utils.DataCleanUtils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -65,6 +66,8 @@ public class MineEditActivity extends AppToolBarActivity implements View.OnClick
     TextView tv_xiaoqu;    //小区
     @InjectView(R.id.iv_head)
     MineHeadView iv_head; //头像
+    @InjectView(R.id.tv_tuichu)
+    TextView tv_tuichu;    //昵称
 
     private EditDao edao;
     private MemberInfo memberInfo;//会员基本信息
@@ -112,14 +115,16 @@ public class MineEditActivity extends AppToolBarActivity implements View.OnClick
         tv_phone.setText(Arad.preferences.getString("mobile"));
         tv_xiaoqu.setText(Arad.preferences.getString("communityName"));
 
-        Arad.imageLoader.load(Arad.preferences.getString("imgUrl")).into(iv_head);
+        String imgUrl = Arad.preferences.getString("imgUrl");
+        if (imgUrl!=null&&!imgUrl.equals(""))
+            Arad.imageLoader.load(imgUrl).placeholder(getResources().getDrawable(R.mipmap.iconfont_head)).into(iv_head);//设置头像
     }
 
     @Override
     public void onRequestSuccess(int requestCode) {
         super.onRequestSuccess(requestCode);
         if (requestCode==1){
-            MessageUtils.showShortToast(this, "获取个人信息成功");
+           // MessageUtils.showShortToast(this, "获取个人信息成功");
            /* memberInfo=edao.getMemberInfo();
             Arad.preferences.putString("nickName", memberInfo.getNickName());//昵称
             Arad.preferences.putString("mobile", memberInfo.getMobile()); //手机号
@@ -165,7 +170,7 @@ public class MineEditActivity extends AppToolBarActivity implements View.OnClick
         rl_phone.setOnClickListener(this);
         rl_xiaoqu.setOnClickListener(this);
         rl_pwd.setOnClickListener(this);
-
+        tv_tuichu.setOnClickListener(this);
     }
 
     @Override
@@ -218,21 +223,22 @@ public class MineEditActivity extends AppToolBarActivity implements View.OnClick
                 popupWindow.dismiss();
                 break;
             case R.id.choose_phone: //选择照片
-                if (Build.VERSION.SDK_INT < 19) {
-                    intent = new Intent(Intent.ACTION_GET_CONTENT, null);
-                    intent.addCategory(Intent.CATEGORY_OPENABLE);
-                    intent.setType("image/*");
-                } else {
-                    intent = new Intent(Intent.ACTION_OPEN_DOCUMENT, null);
-                    intent.setType("image/*");
-                }
-                intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
-                startActivityForResult(intent, LOOK_ALBUM_INTENT);
+                Intent intent1;
+                intent1 = new Intent(Intent.ACTION_GET_CONTENT, null);
+                intent1.addCategory(Intent.CATEGORY_OPENABLE);
+                intent1.setType("image*//*");
+                intent1.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
+                startActivityForResult(intent1,LOOK_ALBUM_INTENT);
                 //关闭弹窗
                 popupWindow.dismiss();
                 break;
             case R.id.cancel: //取消
                 popupWindow.dismiss();
+                break;
+            case R.id.tv_tuichu:
+                DataCleanUtils.clearAllCache(this.getApplicationContext());
+                this.finish();
+                startActivity(new Intent(this, LoginActivity.class));
                 break;
         }
     }
@@ -292,6 +298,8 @@ public class MineEditActivity extends AppToolBarActivity implements View.OnClick
     private void setPicToView(Intent arg2) {
         Bundle bundle = arg2.getExtras();
         bitmap = bundle.getParcelable("data");// 获取相机返回的数据，并转换为Bitmap图片格式
+        iv_head.setImageBitmap(bitmap);
+
         /*sv_loans_certificate.setImageBitmap(bitmap);
         Log.e("", "----------------------" + bitmap);*/
         //sv_loans_certificate.setImageURI(Uri.parse(MediaStore.Images.Media.insertImage(getContentResolver(), bitmap, null, null)));
@@ -302,7 +310,6 @@ public class MineEditActivity extends AppToolBarActivity implements View.OnClick
         encodeToString = Base64.encodeToString(bytes, Base64.DEFAULT);
         Log.e("", "-----------------------" + encodeToString);
 
-        iv_head.setImageBitmap(bitmap);
         //设置头像
         //-----------------------------------------------------------
         //调用接口上传服务器。。。encodeToString是String形式

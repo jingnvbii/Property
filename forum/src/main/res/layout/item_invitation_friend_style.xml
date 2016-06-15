@@ -94,7 +94,7 @@
             android:id="@+id/rl_friend_style_zan"
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:layout_margin="10dp"
+            android:layout_margin="5dp"
             android:layout_gravity="center"
             android:layout_height="match_parent">
         <TextView

@@ -120,9 +120,6 @@ public class InvitationFragment extends ToolBarFragment implements View.OnClickL
 
 
 
-
-
-
     /*
     * 实现文字上下轮播
     * */

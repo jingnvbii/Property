@@ -94,7 +94,7 @@
         android:layout_height="wrap_content"
         android:text="@string/time"
         android:textColor="@color/text_newpwd"
-        android:id="@+id/textView24"
+        android:id="@+id/tv_time"
         android:textSize="@dimen/text_size_basic"
         android:layout_below="@+id/textView22"
         android:layout_alignLeft="@+id/textView22"
@@ -107,9 +107,9 @@
         android:text="@string/offer"
         android:textColor="@color/text_newpwd"
         android:textSize="@dimen/text_size_basic"
-        android:layout_below="@+id/textView24"
-        android:layout_alignLeft="@+id/textView24"
-        android:layout_alignStart="@+id/textView24" />
+        android:layout_below="@+id/tv_time"
+        android:layout_alignLeft="@+id/tv_time"
+        android:layout_alignStart="@+id/tv_time" />
 
     <TextView
         android:layout_width="match_parent"

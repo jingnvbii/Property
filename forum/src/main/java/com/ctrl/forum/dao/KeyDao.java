@@ -8,9 +8,7 @@ import com.ctrl.forum.entity.ItemValues;
 import com.fasterxml.jackson.databind.JsonNode;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -18,7 +16,7 @@ import java.util.Map;
  * Created by Administrator on 2016/5/26.
  */
 public class KeyDao extends IDao {
-    private List<ItemValues> itemValues = new ArrayList<>();
+   private ItemValues itemValues = new ItemValues();
 
     public KeyDao(INetResult activity) {
         super(activity);
@@ -32,13 +30,17 @@ public class KeyDao extends IDao {
         String url="dictionary/queryDictionary";
         Map<String,String> map = new HashMap<>();
         map.put("itemKey",itemKey);
-        postRequest(Constant.RAW_URL + url, mapToRP(map), 0);
+        postRequest(Constant.RAW_URL + url, mapToRP(map), 66);
     }
 
     @Override
     public void onRequestSuccess(JsonNode result, int requestCode) throws IOException {
-       if (requestCode==0){
-           itemValues = JsonUtil.node2pojoList(result.findValue("itemValue"), ItemValues.class);
+       if (requestCode==66){
+           itemValues = JsonUtil.node2pojo(result.findValue("itemValue"), ItemValues.class);
        }
+    }
+
+    public ItemValues getItemValues() {
+        return itemValues;
     }
 }

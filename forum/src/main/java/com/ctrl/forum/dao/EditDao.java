@@ -1,14 +1,18 @@
 package com.ctrl.forum.dao;
 
 import android.util.Log;
+
 import com.beanu.arad.http.IDao;
 import com.beanu.arad.http.INetResult;
 import com.beanu.arad.utils.JsonUtil;
 import com.ctrl.forum.base.Constant;
 import com.ctrl.forum.entity.Blacklist;
+import com.ctrl.forum.entity.Drafts;
 import com.ctrl.forum.entity.DraftsPostList;
 import com.ctrl.forum.entity.MemberInfo;
+import com.ctrl.forum.entity.Plugin;
 import com.fasterxml.jackson.databind.JsonNode;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,6 +30,8 @@ public class EditDao extends IDao {
     private MemberInfo memberInfo=new MemberInfo();
     private List<Blacklist> blacklists = new ArrayList<>();
     private List<DraftsPostList> draftsPostLists = new ArrayList<>();//草稿箱
+    private List<Plugin> pluginList = new ArrayList<>(); //用户插件
+    private List<Drafts> draftsList = new ArrayList<>();
 
     public EditDao(INetResult activity) {super(activity);}
 
@@ -109,6 +115,15 @@ public class EditDao extends IDao {
         postRequest(Constant.RAW_URL + url, mapToRP(map), 5);
     }
 
+    /**
+     * 获取用户插件列表
+     */
+    public void getPlugins(){
+        String url="member/getPlugins";
+        Map<String,String> map = new HashMap<>();
+        postRequest(Constant.RAW_URL + url, mapToRP(map), 6);
+    }
+
     @Override
     public void onRequestSuccess(JsonNode result, int requestCode) throws IOException {
        if (requestCode==0){
@@ -128,6 +143,10 @@ public class EditDao extends IDao {
         if(requestCode==4){
             Log.d("demo","dao中结果集(获取草稿箱帖子列表接口): " + result);
             draftsPostLists = JsonUtil.node2pojoList(result.findValue("postList"), DraftsPostList.class);
+            draftsList = JsonUtil.node2pojoList(result.findValue("draftsList"), Drafts.class);
+        }
+        if(requestCode==6){
+            pluginList = JsonUtil.node2pojoList(result.findValue("list"),Plugin.class);
         }
     }
 
@@ -139,5 +158,11 @@ public class EditDao extends IDao {
     }
     public List<DraftsPostList> getDraftsPostLists() {
         return draftsPostLists;
+    }
+    public List<Plugin> getPluginList() {
+        return pluginList;
+    }
+    public List<Drafts> getDraftsList() {
+        return draftsList;
     }
 }

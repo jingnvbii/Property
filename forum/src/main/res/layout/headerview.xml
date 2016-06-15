@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:id="@+id/rl_main_nulllogin"
+        android:layout_width="match_parent"
+        android:layout_height="140dp"
+        >
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/imageView"
+            android:src="@mipmap/bacg_people"
+            android:scaleType="fitXY"
+            />
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/iv_bianji"
+            android:paddingBottom="20dp"
+            android:paddingTop="20dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="@dimen/margin_left_and_right"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:src="@mipmap/iconfont_more" />
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/text_round_head_shape"
+            android:id="@+id/iv_head"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/margin_left_and_right"
+            android:padding="10dp"
+            >
+            <com.ctrl.forum.customview.MineHeadView
+                android:id="@+id/iv_mine_login"
+                android:scaleType="fitXY"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:gravity="center"
+                android:background="@mipmap/iconfont_head"/>
+        </RelativeLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/my_name"
+            android:textSize="@dimen/text_size_basic"
+            android:textColor="@color/text_white"
+            android:id="@+id/tv_nickName"
+            android:layout_alignTop="@+id/iv_bianji"
+            android:layout_marginTop="30dp"
+            android:layout_alignRight="@+id/iv_head"
+            android:layout_alignEnd="@+id/iv_head" />
+
+        <Button
+            android:layout_width="70dp"
+            android:layout_height="30dp"
+            android:text="@string/sign"
+            android:textColor="@color/text_white"
+            android:textSize="@dimen/text_size_small"
+            android:id="@+id/bt_sign"
+            android:background="@drawable/btn_red_selector"
+            android:layout_below="@+id/tv_nickName"
+            android:layout_marginRight="35dp"
+            android:layout_marginTop="10dp"
+            android:layout_alignRight="@+id/iv_head"
+            android:layout_alignEnd="@+id/iv_head" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:text="@string/integral"
+            android:id="@+id/bt_integral"
+            android:background="@drawable/btn_red_selector"
+            android:textColor="@color/text_white"
+            android:textSize="@dimen/text_size_small"
+            android:layout_alignLeft="@+id/iv_head"
+            android:layout_marginLeft="37dp"
+            android:layout_alignTop="@+id/bt_sign" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/my_grade"
+            android:id="@+id/textView10"
+            android:textColor="@color/text_white"
+            android:textSize="@dimen/text_size_basic"
+            android:layout_above="@+id/bt_sign"
+            android:layout_marginLeft="7dp"
+            android:layout_toRightOf="@+id/tv_nickName"
+            android:layout_toEndOf="@+id/tv_nickName" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/iv_grade"
+            android:src="@mipmap/vip_icon2"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/textView10"
+            android:layout_marginLeft="4dp"
+            android:layout_marginBottom="3dp"
+            android:layout_alignBottom="@+id/textView10"
+            android:layout_toEndOf="@+id/textView10" />
+
+
+    </RelativeLayout>
+
+
+
+</RelativeLayout>

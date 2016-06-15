@@ -1,5 +1,6 @@
 package com.ctrl.forum.ui.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,11 +10,11 @@ import android.widget.ListView;
 
 import com.beanu.arad.Arad;
 import com.beanu.arad.base.ToolBarFragment;
-import com.beanu.arad.utils.MessageUtils;
 import com.ctrl.forum.R;
 import com.ctrl.forum.base.Constant;
 import com.ctrl.forum.dao.CollectDao;
 import com.ctrl.forum.entity.CompanyCollect;
+import com.ctrl.forum.ui.activity.store.StoreShopDetailActivity;
 import com.ctrl.forum.ui.adapter.CompanyCollectFragmentAdapter;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
@@ -46,7 +47,7 @@ public class MineCompanyCollectFragment extends ToolBarFragment{
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(final LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_mine_list, container, false);
@@ -63,6 +64,8 @@ public class MineCompanyCollectFragment extends ToolBarFragment{
                 if (companyCollects != null) {
                     companyCollects.clear();
                     PAGE_NUM = 1;
+                    companyCollectFragmentAdapter = new CompanyCollectFragmentAdapter(getActivity());
+                    lv_content.setAdapter(companyCollectFragmentAdapter);
                 }
                 cdao.companysCollection(Arad.preferences.getString("memberId"), "100", "100", PAGE_NUM + "", Constant.PAGE_SIZE + "");
             }
@@ -82,30 +85,14 @@ public class MineCompanyCollectFragment extends ToolBarFragment{
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (companyCollects!=null) {
-                    CompanyCollect company = companyCollects.get(position);
-                    couponEnable = company.getCouponEnable();//是否可以使用现金劵,0不可以,1可以
-                    packetEnable = company.getPacketEnable();
-                    useEnable();
+                    Intent intent = new Intent(getActivity(), StoreShopDetailActivity.class);
+                    intent.putExtra("id", companyCollects.get(position-1).getId());
+                    startActivity(intent);
                 }
             }
         });
 
         return view;
-    }
-
-    public void useEnable(){
-        if (couponEnable.equals("0")){
-            MessageUtils.showShortToast(getActivity(),"不可以使用现金劵");
-        }
-        if(couponEnable.equals("1")){
-            MessageUtils.showShortToast(getActivity(), "可以使用现金劵");
-        }
-        if (packetEnable.equals("0")){
-            MessageUtils.showShortToast(getActivity(),"不可以使用优惠劵");
-        }
-        if (packetEnable.equals("1")){
-            MessageUtils.showShortToast(getActivity(),"可以使用优惠劵劵");
-        }
     }
 
     private void initData() {
@@ -120,7 +107,7 @@ public class MineCompanyCollectFragment extends ToolBarFragment{
     public void onRequestSuccess(int requestCode) {
         super.onRequestSuccess(requestCode);
         lv_content.onRefreshComplete();
-        if(requestCode == 0){
+        if(requestCode == 1){
             companyCollects = cdao.getCompanyCollects();
             if (companyCollects!=null){
                 companyCollectFragmentAdapter.setList(companyCollects);

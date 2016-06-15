@@ -1,34 +1,36 @@
 package com.ctrl.forum.ui.fragment;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AbsListView;
-import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.beanu.arad.Arad;
 import com.beanu.arad.base.ToolBarFragment;
 import com.ctrl.forum.R;
 import com.ctrl.forum.base.Constant;
+import com.ctrl.forum.dao.InvitationDao;
 import com.ctrl.forum.dao.PlotDao;
+import com.ctrl.forum.entity.Banner;
 import com.ctrl.forum.entity.Post;
+import com.ctrl.forum.loopview.HomeAutoSwitchPicHolder;
 import com.ctrl.forum.ui.activity.mine.MineFindFlotActivity;
+import com.ctrl.forum.ui.activity.plot.PlotAddInvitationActivity;
 import com.ctrl.forum.ui.activity.plot.PlotRimServeActivity;
 import com.ctrl.forum.ui.activity.plot.PlotSearchResultActivity;
-import com.ctrl.forum.ui.adapter.InvitationListViewFriendStyleAdapter;
+import com.ctrl.forum.ui.adapter.PlotListViewFriendStyleAdapter;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -47,19 +49,23 @@ public class PlotFragment extends ToolBarFragment implements View.OnClickListene
     TextView rim_post; //发帖
     @InjectView(R.id.rim_serve)
     TextView rim_serve; //周边服务
-    @InjectView(R.id.et_search)
-    EditText et_search;
     @InjectView(R.id.iv_back)
     ImageView iv_back;
-    @InjectView(R.id.tv_sign)
-    TextView tv_sign;
+    @InjectView(R.id.rl_search)
+    RelativeLayout rl_search;
 
-    private InvitationListViewFriendStyleAdapter invitationListViewFriendStyleAdapter;
+    private PlotListViewFriendStyleAdapter invitationListViewFriendStyleAdapter;
     private List<Post> posts;
     private String communityId;
     private PlotDao plotDao;
     private int PAGE_NUM =1;
     private String str="";
+    private FrameLayout frameLayout;
+    private HomeAutoSwitchPicHolder mAutoSwitchPicHolder;
+
+    private ArrayList<String> mData;
+    private List<Banner> listBanner;
+    private InvitationDao idao;
 
     public static PlotFragment newInstance() {
         PlotFragment fragment = new PlotFragment();
@@ -84,8 +90,9 @@ public class PlotFragment extends ToolBarFragment implements View.OnClickListene
         checkActivity();
 
         initView();
-        invitationListViewFriendStyleAdapter = new InvitationListViewFriendStyleAdapter(getActivity());
+        invitationListViewFriendStyleAdapter = new PlotListViewFriendStyleAdapter(getActivity());
         lv_content.setAdapter(invitationListViewFriendStyleAdapter);
+        invitationListViewFriendStyleAdapter.setOnLove(this);
 
         initData();
 
@@ -96,17 +103,15 @@ public class PlotFragment extends ToolBarFragment implements View.OnClickListene
                 if (posts != null) {
                     posts.clear();
                     PAGE_NUM = 1;
-                    invitationListViewFriendStyleAdapter = new InvitationListViewFriendStyleAdapter(getActivity());
-                    lv_content.setAdapter(invitationListViewFriendStyleAdapter);
                 }
-                plotDao.initCommunity(Arad.preferences.getString("memberId"), communityId, PAGE_NUM + "", Constant.PAGE_SIZE + "");
+                plotDao.queryCommunityPostList(Arad.preferences.getString("memberId"), communityId, PAGE_NUM + "", Constant.PAGE_SIZE + "");
             }
 
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
                 if (posts != null) {
                     PAGE_NUM += 1;
-                    plotDao.initCommunity(Arad.preferences.getString("memberId"), communityId, PAGE_NUM + "", Constant.PAGE_SIZE + "");
+                    plotDao.queryCommunityPostList(Arad.preferences.getString("memberId"), communityId, PAGE_NUM + "", Constant.PAGE_SIZE + "");
                 } else {
                     lv_content.onRefreshComplete();
                 }
@@ -116,32 +121,37 @@ public class PlotFragment extends ToolBarFragment implements View.OnClickListene
         //listview增加头部布局
         AbsListView.LayoutParams layoutParams = new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, AbsListView.LayoutParams.WRAP_CONTENT);
         View headview = getActivity().getLayoutInflater().inflate(R.layout.item_plot_header_view, lv_content, false);
+        frameLayout = (FrameLayout) headview.findViewById(R.id.framelayout);
         headview.setLayoutParams(layoutParams);
         lv_content.getRefreshableView().addHeaderView(headview);
 
-        //为输入框注册键盘监听事件
-        et_search.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_GO) {
-                    //隐藏软键盘
-                    InputMethodManager imm = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                    if (imm.isActive()) {
-                        imm.hideSoftInputFromWindow(v.getApplicationWindowToken(), 0);
-                    }
-                    if (!et_search.getText().toString().equals("")) {
-                        Intent intent = new Intent(getActivity(), PlotSearchResultActivity.class);
-                        intent.putExtra("keyWord", et_search.getText().toString());
-                        et_search.setText("");
-                        startActivity(intent);
-                    }
-                    return true;
-                }
-                return false;
-            }
-        });
+        idao = new InvitationDao(this);
+        idao.postRotatingBanner("B_COMMUNITY_TOP");
 
         return view;
+    }
+
+    /**
+     * 轮播图
+     */
+    private void setLoopView() {
+        // 1.创建轮播的holder
+        mAutoSwitchPicHolder = new HomeAutoSwitchPicHolder(getActivity());
+        // 2.得到轮播图的视图view
+        View autoPlayPicView = mAutoSwitchPicHolder.getRootView();
+        // 把轮播图的视图添加到主界面中
+        frameLayout.addView(autoPlayPicView);
+        //4. 为轮播图设置数据
+        mAutoSwitchPicHolder.setData(getData());
+        mAutoSwitchPicHolder.setData(listBanner);
+    }
+
+    public List<String> getData() {
+        mData = new ArrayList<String>();
+        for(int i=0;i<listBanner.size();i++){
+            mData.add(listBanner.get(i).getImgUrl());
+        }
+        return mData;
     }
 
     //检查依附的activity
@@ -149,7 +159,7 @@ public class PlotFragment extends ToolBarFragment implements View.OnClickListene
         Bundle bundle = getArguments();
         str = bundle.getString("str");
         if (str.equals("我")){
-            tv_sign.setText("我");
+           iv_back.setImageDrawable(getResources().getDrawable(R.mipmap.white_arrow_left_none));
             iv_back.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -166,21 +176,13 @@ public class PlotFragment extends ToolBarFragment implements View.OnClickListene
         tv_plot_name.setOnClickListener(this);
         rim_post.setOnClickListener(this);
         rim_serve.setOnClickListener(this);
-
+        rl_search.setOnClickListener(this);
     }
 
     private void initData() {
         communityId = Arad.preferences.getString("communityId");
         plotDao = new PlotDao(this);
-
-       /* posts = new ArrayList<>();
-        for (int i = 0; i<9;i++){
-            Post post = new Post();
-            post.setId(i+"");
-            posts.add(post);
-        }
-        invitationListViewFriendStyleAdapter.setList(posts);*/
-        plotDao.initCommunity(Arad.preferences.getString("memberId"),communityId,PAGE_NUM+"", Constant.PAGE_SIZE+"");
+        plotDao.queryCommunityPostList(Arad.preferences.getString("memberId"), communityId, PAGE_NUM + "", Constant.PAGE_SIZE + "");
     }
 
     @Override
@@ -192,10 +194,16 @@ public class PlotFragment extends ToolBarFragment implements View.OnClickListene
     public void onRequestSuccess(int requestCode) {
         super.onRequestSuccess(requestCode);
         lv_content.onRefreshComplete();
-        if (requestCode==2){
-            posts = plotDao.getPostList();
+        if (requestCode==6){
+            posts = plotDao.getPlotPost();
             if (posts!=null){
                 invitationListViewFriendStyleAdapter.setList(posts);
+            }
+        }
+        if (requestCode==19){
+           listBanner = idao.getPlotBanner();
+            if (listBanner!=null){
+               setLoopView();
             }
         }
     }
@@ -208,16 +216,38 @@ public class PlotFragment extends ToolBarFragment implements View.OnClickListene
 
     @Override
     public void onClick(View v) {
+        Object id = v.getTag();
         switch (v.getId()){
             case R.id.tv_plot_name:
                 startActivity(new Intent(getActivity(),MineFindFlotActivity.class));
                 break;
             case R.id.rim_post:
-
+                startActivity(new Intent(getActivity(),PlotAddInvitationActivity.class));
                 break;
             case R.id.rim_serve:
                 startActivity(new Intent(getActivity(), PlotRimServeActivity.class));
                 break;
+            case R.id.rl_search:
+                Intent intent = new Intent(getActivity(), PlotSearchResultActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.rl_friend_style_zan:
+                int position = (int)id;
+                if (posts.get(position).getTitle()==null && posts.get(position).getTitle().equals("")){
+                    //标题为空时,传内容
+                    //idao.requesZambia("add",posts.get(position).getId(),Arad.preferences.getString("memberId"),posts.get(position).getTitle(),"");
+
+                }else {
+                    idao.requesZambia("add",posts.get(position).getId(),Arad.preferences.getString("memberId"),posts.get(position).getTitle(),"");
+                }
+                break;
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        tv_plot_name.setText(Arad.preferences.getString("communityName"));
+        plotDao.queryCommunityPostList(Arad.preferences.getString("memberId"), communityId, PAGE_NUM + "", Constant.PAGE_SIZE + "");
     }
 }

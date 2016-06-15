@@ -22,7 +22,7 @@ public class Post2 {
     private String locationName;//位置名称
     private String picturesStyle;//列表中是否总以多图方式显示（0：否、1：是） 注：只针对列表样式
     private String topShow;//是否置顶（0：否、1：是）
-
+    private String categoryTree; //帖子分类树形路径
 
     private String content;//帖子内容
     private String commentNum;//评论数
@@ -40,9 +40,13 @@ public class Post2 {
     private List<PostReply> postReplyList;//回复列表
 
 
+    public String getCategoryTree() {
+        return categoryTree;
+    }
 
-
-
+    public void setCategoryTree(String categoryTree) {
+        this.categoryTree = categoryTree;
+    }
 
     public String getCollectstate() {
         return collectstate;

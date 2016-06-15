@@ -9,12 +9,26 @@ public class Coupon {
     private String companyId;//商铺id
     private String name;//现金劵名称
     private String remark;//现金劵标注
-    private String validityStartTime;//使用起始时间
-    private String validityEndTime;//使用终止时间
+    private long validityStartTime;//使用起始时间
+    private long validityEndTime;//使用终止时间
     private String amount;//现金劵金额
     private String useType;//使用方式（0：使用核销、1：分享核销）
     private String useState;//使用状态（0：未使用、1：已使用、2：已过期）
 
+    @Override
+    public String toString() {
+        return "Coupon{" +
+                "amount='" + amount + '\'' +
+                ", id='" + id + '\'' +
+                ", companyId='" + companyId + '\'' +
+                ", name='" + name + '\'' +
+                ", remark='" + remark + '\'' +
+                ", validityStartTime='" + validityStartTime + '\'' +
+                ", validityEndTime='" + validityEndTime + '\'' +
+                ", useType='" + useType + '\'' +
+                ", useState='" + useState + '\'' +
+                '}';
+    }
 
     public Coupon() {
     }
@@ -75,20 +89,19 @@ public class Coupon {
         this.useType = useType;
     }
 
-    public String getValidityEndTime() {
+    public long getValidityEndTime() {
         return validityEndTime;
     }
 
-    public void setValidityEndTime(String validityEndTime) {
+    public void setValidityEndTime(long validityEndTime) {
         this.validityEndTime = validityEndTime;
     }
 
-    public String getValidityStartTime() {
+    public long getValidityStartTime() {
         return validityStartTime;
     }
 
-    public void setValidityStartTime(String validityStartTime) {
+    public void setValidityStartTime(long validityStartTime) {
         this.validityStartTime = validityStartTime;
     }
-
 }

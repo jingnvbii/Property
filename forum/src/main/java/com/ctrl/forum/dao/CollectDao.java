@@ -105,7 +105,7 @@ public class CollectDao extends IDao {
            productCollects = JsonUtil.node2pojoList(result.findValue("productsList"), ProductCollect.class);       }
        if (requestCode==1){
            Log.d("demo", "dao中结果集(获取店铺收藏): " + result);
-           companyCollects = JsonUtil.node2pojoList(result.findValue("companysCollectionLis"), ProductCollect.class);
+           companyCollects = JsonUtil.node2pojoList(result.findValue("companysCollectionList"), CompanyCollect.class);
        }
         if (requestCode==2){
             Log.d("demo", "dao中结果集(获取帖子收藏): " + result);

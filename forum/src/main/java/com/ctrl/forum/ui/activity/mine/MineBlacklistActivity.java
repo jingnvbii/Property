@@ -79,8 +79,10 @@ public class MineBlacklistActivity extends AppToolBarActivity implements View.On
         }
         if (requestCode==3){
             MessageUtils.showShortToast(this,"去除成功");
-            blacklists = edao.getBlacklists();
-            blacklistAdapter.setBlacklists(blacklists);
+            blacklists.clear();
+            blacklistAdapter = new MineBlacklistAdapter(getApplicationContext());
+            lv_blacklist.setAdapter(blacklistAdapter);
+            edao.getBlackList(Arad.preferences.getString("memberId"),PAGE_NUM+"",Constant.PAGE_SIZE+"");
         }
     }
 
@@ -106,7 +108,7 @@ public class MineBlacklistActivity extends AppToolBarActivity implements View.On
             case R.id.bt_clear: //取消屏蔽
                 int position = (int) tag;
                 if (blacklists!=null){
-                    String id = blacklists.get(position).getId();
+                    String id = blacklists.get(position).getMemberId();
                     edao.cancelBlack(Arad.preferences.getString("memberId"),id);}
                 break;
         }

@@ -1,5 +1,6 @@
 package com.ctrl.forum.ui.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.text.TextUtils;
@@ -14,6 +15,7 @@ import com.ctrl.forum.R;
 import com.ctrl.forum.base.AppToolBarActivity;
 import com.ctrl.forum.dao.KeyDao;
 import com.ctrl.forum.dao.RegisteDao;
+import com.ctrl.forum.entity.ItemValues;
 import com.ctrl.forum.utils.RegexpUtil;
 
 import butterknife.ButterKnife;
@@ -45,6 +47,7 @@ public class RegisterActivity extends AppToolBarActivity implements View.OnClick
     private String code;
     private RegisterActivity activity;
     private KeyDao kdao;
+    private ItemValues itemValues;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +68,6 @@ public class RegisterActivity extends AppToolBarActivity implements View.OnClick
 
     }
 
-
     @Override
     public void onRequestSuccess(int requestCode) {
         super.onRequestSuccess(requestCode);
@@ -77,6 +79,14 @@ public class RegisterActivity extends AppToolBarActivity implements View.OnClick
         if (requestCode == 1) {
             code = rdao.getCode();
             MessageUtils.showShortToast(this, "获取短信验证码成功" + code);
+        }
+
+        if (requestCode == 66) {
+            itemValues = kdao.getItemValues();
+            Intent intent = new Intent(this,WebViewActivity.class);
+            intent.putExtra("data",itemValues.getItemValue());
+            intent.putExtra("title","用户使用协议");
+            startActivity(intent);
         }
     }
 
@@ -120,8 +130,6 @@ public class RegisterActivity extends AppToolBarActivity implements View.OnClick
                 }
             case R.id.tv_user_agreement:
                 kdao.ueryDictionary("APP_PROTOCOL"); //用户使用协议
-                kdao.ueryDictionary("HOW_STEP_UP"); //如何快速升级
-                kdao.ueryDictionary("LEVEL_EFFECT"); //等级有什么用
                 break;
         }
 
@@ -182,7 +190,6 @@ public class RegisterActivity extends AppToolBarActivity implements View.OnClick
 
     }
 
-
     class TimeCount extends CountDownTimer {
         public TimeCount(long millisInFuture, long countDownInterval) {
             super(millisInFuture, countDownInterval);
@@ -204,6 +211,5 @@ public class RegisterActivity extends AppToolBarActivity implements View.OnClick
             }
         }
     }
-
 
 }

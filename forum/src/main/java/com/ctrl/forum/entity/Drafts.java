@@ -11,6 +11,25 @@ public class Drafts implements ListItemTypeInterf{
     private String title;//帖子标题
     private String status;//帖子状态 2标示审核未通过
     private String publishState;//帖子状态 0标示草稿
+    private String communityId; //小区id
+    private String communityName; //小区名字
+
+
+    public String getCommunityName() {
+        return communityName;
+    }
+
+    public void setCommunityName(String communityName) {
+        this.communityName = communityName;
+    }
+
+    public String getCommunityId() {
+        return communityId;
+    }
+
+    public void setCommunityId(String communityId) {
+        this.communityId = communityId;
+    }
 
     public String getId() {
         return id;
@@ -47,5 +66,17 @@ public class Drafts implements ListItemTypeInterf{
     @Override
     public int getType() {
         return 1;
+    }
+
+    @Override
+    public String toString() {
+        return "Drafts{" +
+                "communityId='" + communityId + '\'' +
+                ", id='" + id + '\'' +
+                ", title='" + title + '\'' +
+                ", status='" + status + '\'' +
+                ", publishState='" + publishState + '\'' +
+                ", communityName='" + communityName + '\'' +
+                '}';
     }
 }

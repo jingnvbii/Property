@@ -1,5 +1,6 @@
 package com.ctrl.forum.ui.activity.mine;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -13,8 +14,11 @@ import com.ctrl.forum.R;
 import com.ctrl.forum.base.AppToolBarActivity;
 import com.ctrl.forum.base.SetMemberLevel;
 import com.ctrl.forum.customview.MineHeadView;
+import com.ctrl.forum.dao.KeyDao;
 import com.ctrl.forum.dao.MemberDao;
+import com.ctrl.forum.entity.ItemValues;
 import com.ctrl.forum.entity.LevelInfo;
+import com.ctrl.forum.ui.activity.WebViewActivity;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -48,13 +52,16 @@ public class MineGradeActivity extends AppToolBarActivity implements View.OnClic
 
     private MemberDao mdao;
     private LevelInfo levelInfo;
+    private KeyDao kdao;
+    private ItemValues itemValues;
+    private String title;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mine_grade);
         ButterKnife.inject(this);
-
+        kdao = new KeyDao(this);
         initView();
         initData();
         putViewData();
@@ -74,7 +81,8 @@ public class MineGradeActivity extends AppToolBarActivity implements View.OnClic
         tv_name.setText(Arad.preferences.getString("nickName"));
         String grad = Arad.preferences.getString("memberLevel"); //等级
         String imgUrl = Arad.preferences.getString("imgUrl");
-        Arad.imageLoader.load(imgUrl).into(iv_header);//设置头像
+        if (imgUrl!=null&&!imgUrl.equals(""))
+            Arad.imageLoader.load(imgUrl).placeholder(getResources().getDrawable(R.mipmap.iconfont_head)).into(iv_header);//设置头像
         SetMemberLevel.setLevelImage(this, iv_grade, grad);//设置等级
     }
 
@@ -108,8 +116,12 @@ public class MineGradeActivity extends AppToolBarActivity implements View.OnClic
         int id = v.getId();
         switch (id){
             case R.id.fast_stage:
+                kdao.ueryDictionary("HOW_STEP_UP"); //如何快速升级
+                title = "如何快速升级";
                 break;
             case R.id.use_grade:
+                kdao.ueryDictionary("LEVEL_EFFECT"); //等级有什么用
+                title = "等级有什么用";
                 break;
         }
     }
@@ -129,6 +141,13 @@ public class MineGradeActivity extends AppToolBarActivity implements View.OnClic
                 Arad.preferences.putInteger("nextLevelExp", levelInfo.getNextLevelExp());
                 putViewData();
             }
+        }
+        if (requestCode == 66) {
+            itemValues = kdao.getItemValues();
+            Intent intent = new Intent(this,WebViewActivity.class);
+            intent.putExtra("data",itemValues.getItemValue());
+            intent.putExtra("title",title);
+            startActivity(intent);
         }
     }
 

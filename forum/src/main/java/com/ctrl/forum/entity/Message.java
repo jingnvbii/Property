@@ -13,6 +13,15 @@ public class Message {
     private String memberName;//会员昵称
     private String memberLevel;//会员等级
     private String imgUrl;//会员头像
+    private String content; //消息内容
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
 
     public String getId() {
         return id;

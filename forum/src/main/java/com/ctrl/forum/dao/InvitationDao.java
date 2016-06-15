@@ -84,18 +84,16 @@ public class InvitationDao extends IDao {
      * @param categoryId //帖子分类id
      * @param categoryType //分类类型（0：广场帖子、1：小区帖子）
      * @param keyword //搜索关键字
-     * @param communityId //搜索关键字
      * @param pageNum   //当前页码
      * @param pageSize  //每页条数
      * */
-    public void requestPostListByCategory(String reporterId,String categoryId,String categoryType,String keyword,String communityId,int pageNum,int pageSize){
+    public void requestPostListByCategory(String reporterId,String categoryId,String categoryType,String keyword,int pageNum,int pageSize){
         String url="post/queryPostListByCategory";
         Map<String,String> map = new HashMap<String,String>();
         map.put("reporterId",reporterId);
         map.put("categoryId",categoryId);
         map.put("categoryType",categoryType);
         map.put("keyword",keyword);
-        map.put("communityId",communityId);
         map.put("pageNum",String.valueOf(pageNum));
         map.put("pageSize",String.valueOf(pageSize));
 
@@ -218,7 +216,6 @@ public class InvitationDao extends IDao {
      * 发布帖子
      * @param reporterId //发帖人id（会员id)
      * @param categoryId //分类id
-     * @param communityId //小区id
      * @param categoryType //分类类型（0：广场帖子、1：小区帖子）
      * @param publishState //发布状态（0：存为草稿、1：已发布）
      * @param checkType //审核类型（0：无需审核、1：需审核)   (当分类id修改后, 该参数必须传 )
@@ -236,7 +233,6 @@ public class InvitationDao extends IDao {
      * */
     public void requesReleasePost(String reporterId,
                                  String categoryId,
-                                 String communityId,
                                  String categoryType,
                                  String publishState,
                                  String checkType,
@@ -256,7 +252,6 @@ public class InvitationDao extends IDao {
         Map<String,String> map = new HashMap<String,String>();
         map.put("reporterId",reporterId);
         map.put("categoryId",categoryId);
-        map.put("communityId",communityId);
         map.put("categoryType",categoryType);
         map.put("publishState",publishState);
         map.put("checkType",checkType);
@@ -362,17 +357,15 @@ public class InvitationDao extends IDao {
      * @param zambiaType //add是点赞reduce是取消赞
      * @param id //帖子id
      * @param zambiaID//当前操作用户id
-     * @param title//帖子标题
-     * @param content//帖子内容(没标题时传入)
      * */
-    public void requesZambia(String zambiaType,String id,String zambiaID,String title,String content){
+    public void requesZambia(String zambiaType,String id,String zambiaID){
         String url="post/Zambia";
         Map<String,String> map = new HashMap<String,String>();
         map.put("zambiaType",zambiaType);
         map.put("id",id);
-        map.put("zambiaID",zambiaID);
-        map.put("title",title);
-        map.put("content",content);
+        map.put("zambiaID",zambiaID
+        );
+
         postRequest(Constant.RAW_URL+url, mapToRP(map),14);
     }
     /**
@@ -467,16 +460,6 @@ public class InvitationDao extends IDao {
 
         postRequest(Constant.RAW_URL+url, mapToRP(map),18);
     }
-    /**
-     * 获取我发布的帖子
-     * @param location //轮播图位置KEY(固定：B_POST_MIDDLE)
-     * */
-    public void requestPostRotaingBanner(String location){
-        String url="rotatingBanner/getPostRotatingBanner";
-        Map<String,String> map = new HashMap<String,String>();
-        map.put("location",location);
-        postRequest(Constant.RAW_URL+url, mapToRP(map),19);
-    }
 
 
 
@@ -543,7 +526,7 @@ public class InvitationDao extends IDao {
         }
 
         if(requestCode == 4){
-            Log.d("demo", "dao中结果集(获取当前频道下所有帖子列表分类): " + result);
+            Log.d("demo","dao中结果集(获取当前频道下所有帖子列表分类): " + result);
             List<Category> data = JsonUtil.node2pojo(result.findValue("category"),new TypeReference<List<Category>>(){});
             listCategory.addAll(data);
         }
@@ -569,10 +552,6 @@ public class InvitationDao extends IDao {
         if (requestCode == 18){
             Log.d("demo","dao中结果集(获取我发布的帖子接口): " + result);
             minePost = JsonUtil.node2pojoList(result.findValue("postList"),Post.class);
-        }
-        if (requestCode == 19){
-            Log.d("demo","dao中结果集(获取我帖子轮播图接口): " + result);
-            listBanner = JsonUtil.node2pojoList(result.findValue("rotatingBannerList"),Banner.class);
         }
 
 

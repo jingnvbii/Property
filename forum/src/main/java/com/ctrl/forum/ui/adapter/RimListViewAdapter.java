@@ -146,8 +146,19 @@ public class RimListViewAdapter extends BaseAdapter{
                    if (grid!=null){
                        if (grid.size()%3==0){
                           //直接给gridView赋值
+                           rimGridViewAdapter.setData(grid);
+                       }if (grid.size()%3==1){
+                           RimServeCategorySecond da = new RimServeCategorySecond();
+                           grid.add(da);
+                           RimServeCategorySecond da1 = new RimServeCategorySecond();
+                           grid.add(da1);
+                           rimGridViewAdapter.setData(grid);
                        }
-                       rimGridViewAdapter.setData(grid);
+                       if (grid.size()%3==2){
+                           RimServeCategorySecond da = new RimServeCategorySecond();
+                           grid.add(da);
+                           rimGridViewAdapter.setData(grid);
+                       }
                    }
                 }
                 break;

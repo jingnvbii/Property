@@ -1,17 +1,22 @@
 package com.ctrl.forum.ui.fragment;
 
+import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -20,11 +25,13 @@ import com.beanu.arad.base.ToolBarFragment;
 import com.beanu.arad.utils.MessageUtils;
 import com.ctrl.forum.R;
 import com.ctrl.forum.base.SetMemberLevel;
+import com.ctrl.forum.customview.MineHeadView;
+import com.ctrl.forum.customview.NoScrollGridView;
 import com.ctrl.forum.customview.NumView;
 import com.ctrl.forum.dao.EditDao;
 import com.ctrl.forum.dao.MemberDao;
-import com.ctrl.forum.entity.Member;
 import com.ctrl.forum.entity.MemberInfo;
+import com.ctrl.forum.entity.Plugin;
 import com.ctrl.forum.ui.activity.mine.MineAssessActivity;
 import com.ctrl.forum.ui.activity.mine.MineBlacklistActivity;
 import com.ctrl.forum.ui.activity.mine.MineCollectActivity;
@@ -42,6 +49,7 @@ import com.ctrl.forum.ui.activity.mine.MineOrderManageActivity;
 import com.ctrl.forum.ui.activity.mine.MinePlotActivity;
 import com.ctrl.forum.ui.activity.mine.MineQueryPostActivity;
 import com.ctrl.forum.ui.activity.mine.MineSettingActivity;
+import com.ctrl.forum.ui.activity.store.StoreManageAddressActivity;
 import com.ctrl.forum.ui.adapter.MineMemberGridAdapter;
 
 import java.util.ArrayList;
@@ -55,8 +63,6 @@ import butterknife.InjectView;
  * Created by jaosn on 2016/4/7.
  */
 public class MyFragment extends ToolBarFragment implements View.OnClickListener{
-    @InjectView(R.id.membergridView)
-    GridView memberGridView;
     @InjectView(R.id.my_comment)
     RelativeLayout my_comment; //我的评论
     @InjectView(R.id.my_collect)
@@ -92,17 +98,28 @@ public class MyFragment extends ToolBarFragment implements View.OnClickListener{
     @InjectView(R.id.tv_nickName)
     TextView tv_nickName; //昵称
     @InjectView(R.id.iv_head)
-    ImageView iv_head; //头像
+    MineHeadView iv_head; //头像
     @InjectView(R.id.bt_sign)
     Button bt_sign;
     @InjectView(R.id.num_juan)
     NumView num_juan;
+    @InjectView(R.id.vp_plug)
+    ViewPager vp_plug;
+    @InjectView(R.id.ll_icons)
+    LinearLayout ll_icons;
 
-    private List<Member> datas;
     private MemberDao mdao;
     private EditDao editDao;
     private MemberInfo memberInfo;//会员基本信息
     private Dialog alertDialog;
+    private List<Plugin> pluginList; //用户插件
+    private MyPagerAdapter pagerAdapter;
+    private List<Plugin> plugins = new ArrayList<>();
+    private int len;  //viewPager的页数
+    private NoScrollGridView gridView;
+    private MineMemberGridAdapter gridListAdapter;
+
+    private View[] views;
 
     public static MyFragment newInstance() {
         MyFragment fragment = new MyFragment();
@@ -114,28 +131,22 @@ public class MyFragment extends ToolBarFragment implements View.OnClickListener{
         super.onCreate(savedInstanceState);
     }
 
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     public void initData(){
         mdao = new MemberDao(this);
         editDao = new EditDao(this);
 
-        datas = new ArrayList<>();
-        datas.add(new Member("美食"));
-        datas.add(new Member("电影"));
-        datas.add(new Member("酒店"));
-        datas.add(new Member("休闲娱乐"));
-        datas.add(new Member("优惠劵"));
-        datas.add(new Member("拼车一族"));
-        datas.add(new Member("家居广场"));
-        datas.add(new Member("同城有约"));
-        datas.add(new Member("二手市场"));
-        datas.add(new Member("宠物吧"));
+        String id = Arad.preferences.getString("memberId");
+        editDao.getVipInfo(id);
+        editDao.getPlugins();
 
         bt_integral.setText("积分:" + Arad.preferences.getString("point"));
         tv_nickName.setText("昵称:" + Arad.preferences.getString("nickName"));
         String grad = Arad.preferences.getString("memberLevel"); //等级
         String imgUrl = Arad.preferences.getString("imgUrl");
 
-        Arad.imageLoader.load(imgUrl).into(iv_head);//设置头像
+        if (imgUrl!=null&&!imgUrl.equals(""))
+        Arad.imageLoader.load(imgUrl).placeholder(getResources().getDrawable(R.mipmap.iconfont_head)).into(iv_head);//设置头像
         SetMemberLevel.setLevelImage(getActivity(), iv_grade, grad);//设置等级
 
         alertDialog = new AlertDialog.Builder(getActivity()).
@@ -169,10 +180,6 @@ public class MyFragment extends ToolBarFragment implements View.OnClickListener{
         initData();
         init();
 
-        String id = Arad.preferences.getString("memberId");
-        editDao.getVipInfo(id);
-        memberGridView.setAdapter(new MineMemberGridAdapter(datas, getActivity()));
-
         return view;
     }
     //注册点击监听事件
@@ -194,6 +201,56 @@ public class MyFragment extends ToolBarFragment implements View.OnClickListener{
         iv_grade.setOnClickListener(this);
         bt_integral.setOnClickListener(this);
         bt_sign.setOnClickListener(this);
+    }
+
+    //用户插件
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+    public void setPlugins(){
+        pagerAdapter = new MyPagerAdapter();
+        gridListAdapter = new MineMemberGridAdapter(getActivity());
+
+        final int len=plugins.size()%10==0?plugins.size()/10:plugins.size()/10+1;
+        this.views=new View[len];
+        for(int i=0;i<len;i++){
+            NoScrollGridView gridView = new NoScrollGridView(getActivity());
+            gridView.setNumColumns(5);
+            gridView.setAdapter(gridListAdapter);
+            gridListAdapter.setOnImage(this);
+            this.views[i]=gridView;
+        }
+
+        //设置小圆点
+        if (len>1) {
+            for (int i = 0; i < len; i++) {
+                ImageView imageView = new ImageView(getActivity());
+                imageView.setBackground(getResources().getDrawable(R.drawable.red_round_select));
+                imageView.setEnabled(false);
+                ll_icons.addView(imageView);
+                ll_icons.getChildAt(0).setEnabled(true);//默认第一个为选中的情况
+            }
+        }
+
+        this.pagerAdapter=new MyPagerAdapter();
+        this.vp_plug.setAdapter(pagerAdapter);
+        vp_plug.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                for (int i = 0; i < len; i++) {
+                    ll_icons.getChildAt(i).setEnabled(false);
+                }
+                ll_icons.getChildAt(position).setEnabled(true);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
     }
 
     @Override
@@ -253,6 +310,25 @@ public class MyFragment extends ToolBarFragment implements View.OnClickListener{
         if (view == my_post){startActivity(new Intent(getActivity(), MineQueryPostActivity.class));}
         //我的草稿箱
         if (view==my_drafts){startActivity(new Intent(getActivity(), MineDraftActivity.class));}
+        //收货地址
+        if (view==my_address){startActivity(new Intent(getActivity(), StoreManageAddressActivity.class));
+        }
+
+        Object uriId = view.getTag();
+        switch(view.getId()){
+            case R.id.iv_grid_item:
+                int position = (int)uriId;
+                String uri = plugins.get(position).getLinkUrl();
+                Intent intent = new Intent();
+                intent.setAction(Intent.ACTION_VIEW);//没有指明调用哪个浏览器
+                //intent.setData(Uri.parse("http://" + uri));   //网址不全
+                intent.setData(Uri.parse(uri));   //网址不对
+                //intent.setData(Uri.parse("http://www.baidu.com"));
+                startActivity(intent);
+                break;
+            default:
+                break;
+        }
     }
 
     @Override
@@ -268,11 +344,11 @@ public class MyFragment extends ToolBarFragment implements View.OnClickListener{
     public void onRequestSuccess(int requestCode) {
         super.onRequestSuccess(requestCode);
         if (requestCode==0){
-            MessageUtils.showShortToast(getActivity(), "签到成功!");
+            MessageUtils.showShortToast(getActivity(), "签到成功!连续签到"+Arad.preferences.getString("signTimes")+"天");
+            editDao.getVipInfo(Arad.preferences.getString("memberId"));
             bt_sign.setText("已签到");
         }
-        if (requestCode==1){
-            //MessageUtils.showShortToast(getActivity(), "获取个人信息成功");
+        if (requestCode==1) {
             memberInfo = editDao.getMemberInfo();
             Arad.preferences.putString("nickName", memberInfo.getNickName());//昵称
             Arad.preferences.putString("mobile", memberInfo.getMobile()); //手机号
@@ -290,27 +366,41 @@ public class MyFragment extends ToolBarFragment implements View.OnClickListener{
             Arad.preferences.putString("signState", memberInfo.getSignState());//是否签到; 0:没签到   1:已签到
 
             Arad.preferences.flush();
-            if (memberInfo.getSignState().equals("0")){
-                    bt_sign.setText("签到");
-            }else{
-                    bt_sign.setText("已签到");
-                }
+            if (memberInfo.getSignState().equals("0")) {
+                bt_sign.setText("签到");
+            } else {
+                bt_sign.setText("已签到");
             }
-        if (memberInfo.getMessageCount()!=null){
-            iv_message.setShowNumMode(2);
-            int num = Integer.parseInt(memberInfo.getMessageCount());
-            iv_message.setNum(num);
-        }
 
-        int redenvelopeNum=0;
-        int couponsNum=0;
-        if (memberInfo.getRedenvelopeNum()!=null){
-            redenvelopeNum = Integer.parseInt(memberInfo.getRedenvelopeNum()); }
-        if (memberInfo.getCouponsNum()!=null){
-            couponsNum = Integer.parseInt(memberInfo.getCouponsNum());
+            if (memberInfo.getMessageCount() != null) {
+                iv_message.setShowNumMode(2);
+                int num = Integer.parseInt(memberInfo.getMessageCount());
+                iv_message.setNum(num);
+            }
+
+            int redenvelopeNum = 0;
+            int couponsNum = 0;
+            if (memberInfo.getRedenvelopeNum() != null) {
+                redenvelopeNum = Integer.parseInt(memberInfo.getRedenvelopeNum());
+            }
+            if (memberInfo.getCouponsNum() != null) {
+                couponsNum = Integer.parseInt(memberInfo.getCouponsNum());
+            }
+            num_juan.setShowNumMode(1);
+            num_juan.setNum(redenvelopeNum + couponsNum);
+
+            bt_integral.setText("积分:" + Arad.preferences.getString("point"));
         }
-        num_juan.setShowNumMode(1);
-        num_juan.setNum(redenvelopeNum+couponsNum);
+        if(requestCode==6){
+            pluginList = editDao.getPluginList();
+            if (pluginList!=null){
+                //往gridView里添值。10个为一页
+                // %取模  \取整
+                this.plugins = pluginList;
+                setPlugins();
+                gridListAdapter.setData(pluginList);
+            }
+        }
     }
 
     @Override
@@ -319,5 +409,35 @@ public class MyFragment extends ToolBarFragment implements View.OnClickListener{
         if (errorNo.equals("022")){
             MessageUtils.showShortToast(getActivity(), "已签到,无需重复签到!");
         }
+    }
+
+    //viewPager的适配器
+    private final class MyPagerAdapter extends PagerAdapter {
+
+        @Override
+        public int getCount() {
+            // TODO Auto-generated method stub
+            return views.length;
+        }
+
+        @Override
+        public Object instantiateItem(ViewGroup container, int position) {
+            View view=views[position];
+            container.addView(view);
+            return view;
+        }
+
+        @Override
+        public void destroyItem(ViewGroup container, int position, Object object) {
+            View view=views[position];
+            container.removeView(view);
+        }
+
+        @Override
+        public boolean isViewFromObject(View view, Object obj) {
+            // TODO Auto-generated method stub
+            return view==obj;
+        }
+
     }
 }

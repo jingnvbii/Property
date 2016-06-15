@@ -8,6 +8,7 @@ import com.beanu.arad.utils.JsonUtil;
 import com.ctrl.forum.base.Constant;
 import com.ctrl.forum.entity.Count;
 import com.ctrl.forum.entity.Coupon;
+import com.ctrl.forum.entity.CouponImg;
 import com.ctrl.forum.entity.Redenvelope;
 import com.fasterxml.jackson.databind.JsonNode;
 
@@ -26,6 +27,7 @@ public class CouponsDao extends IDao {
     private List<Redenvelope> redenvelopes= new ArrayList<>();  //优惠劵
     private Count count = new Count();
     private Count count1 = new Count();
+    private CouponImg couponImg = new CouponImg();
 
     public CouponsDao(INetResult activity) {
         super(activity);
@@ -53,7 +55,7 @@ public class CouponsDao extends IDao {
     /**
      * 获取我的优惠券列表
      * @param type  查询状态 0-查询状态条数  1-查询状态下优惠券
-     * @param state  查询状态 0-未使用 1-未使用 2-已过期 在type=1下配合使用
+     * @param state  查询状态 0-未使用 1-未使用 2-已过期
      * @param memberId  用户id
      * @param pageNum  第几页
      * @param pageSize  每页几条
@@ -69,6 +71,7 @@ public class CouponsDao extends IDao {
         postRequest(Constant.RAW_URL + url, mapToRP(map), 1);
     }
 
+
     /**
      * 用户使用现金券
      * @param id  现金券id
@@ -78,6 +81,17 @@ public class CouponsDao extends IDao {
         Map<String,String> map = new HashMap<>();
         map.put("id",id);
         postRequest(Constant.RAW_URL + url, mapToRP(map), 2);
+    }
+
+    /**
+     * 获取优惠券图片
+     * @param imgKey  现金券id
+     */
+    public void queryCouponImg(String imgKey){
+        String url="otherImg/queryCouponImg";
+        Map<String,String> map = new HashMap<>();
+        map.put("imgKey",imgKey);
+        postRequest(Constant.RAW_URL + url, mapToRP(map), 3);
     }
 
     @Override
@@ -92,6 +106,9 @@ public class CouponsDao extends IDao {
             redenvelopes = JsonUtil.node2pojoList(result.findValue("memberCouponsList"), Redenvelope.class);
             count1 = JsonUtil.node2pojo(result.findValue("count"), Count.class);//获取总数
         }
+        if (requestCode==3){
+           couponImg = JsonUtil.node2pojo(result.findValue("couponImg"), CouponImg.class);
+        }
     }
 
     public List<Coupon> getCoupons() {
@@ -104,5 +121,13 @@ public class CouponsDao extends IDao {
 
     public Count getCount() {
         return count;
+    }
+
+    public Count getCount1() {
+        return count1;
+    }
+
+    public CouponImg getCouponImg() {
+        return couponImg;
     }
 }

@@ -7,10 +7,13 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.beanu.arad.Arad;
 import com.ctrl.forum.R;
-import com.ctrl.forum.entity.Member;
+import com.ctrl.forum.entity.Plugin;
 
 import java.util.List;
+
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
@@ -19,12 +22,20 @@ import butterknife.InjectView;
  * Created by Administrator on 2016/4/12.
  */
 public class MineMemberGridAdapter extends BaseAdapter {
-    private List<Member> data;
+    private List<Plugin> data;
     private Context context;
-    public MineMemberGridAdapter(List<Member> data, Context context){
+    private View.OnClickListener onImage;
+    public MineMemberGridAdapter( Context context){
         this.context = context;
+    }
+
+    public void setData(List<Plugin> data) {
         this.data = data;
         notifyDataSetChanged();
+    }
+
+    public void setOnImage(View.OnClickListener onImage) {
+        this.onImage = onImage;
     }
 
     @Override
@@ -48,12 +59,19 @@ public class MineMemberGridAdapter extends BaseAdapter {
         if(convertView==null){
             convertView= LayoutInflater.from(context).inflate(R.layout.gridview_invitation_item,parent,false);
             holder=new ViewHolder(convertView);
+            holder.iv_grid_item.setOnClickListener(onImage);
             convertView.setTag(holder);
         }else {
             holder=(ViewHolder)convertView.getTag();
         }
-        holder.tv_grid_item.setText(data.get(position).getName());
-        holder.iv_grid_item.setImageResource(R.mipmap.ic_launcher);
+
+        holder.iv_grid_item.setTag(position);
+
+        if (data!=null && data.get(position)!=null){
+            Arad.imageLoader.load(data.get(position).getIconUrl()).placeholder(context.getResources().getDrawable(R.drawable.ic_launcher)).into(holder.iv_grid_item);
+            holder.tv_grid_item.setText(data.get(position).getName());
+        }
+
         return convertView;
     }
 
