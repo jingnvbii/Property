@@ -32,7 +32,7 @@ import butterknife.ButterKnife;
  * */
 public class LoginActivity extends AppToolBarActivity implements View.OnClickListener{
 
-    private TextView tv_register;//注册按钮
+    private TextView tv_register;//注册按钮1
     private EditText et_username;//用户名
     private TextView et_pass_word;//密码
     private TextView tv_login;//登录
