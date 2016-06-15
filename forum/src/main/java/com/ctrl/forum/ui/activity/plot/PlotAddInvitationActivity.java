@@ -526,7 +526,7 @@ public class PlotAddInvitationActivity extends AppToolBarActivity implements Vie
         return imagesUrl;
     }
     /*
-    * 缩略图url串4
+    * 缩略图url串
     * */
     public String getThumbImagesUrl(List<Image>mImageList){
         String thumbImagesUrl=null;
