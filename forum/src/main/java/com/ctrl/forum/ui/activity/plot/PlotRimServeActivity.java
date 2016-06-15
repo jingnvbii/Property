@@ -127,7 +127,7 @@ public class PlotRimServeActivity extends AppToolBarActivity implements View.OnC
 
     }
 
-    //初始化弹窗
+    //初始化弹窗1
     private void initPop() {
         view = LayoutInflater.from(this).inflate(R.layout.call_phone,null);
         popupWindow = new PopupWindow(view, SlidingUpPanelLayout.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
@@ -176,7 +176,7 @@ public class PlotRimServeActivity extends AppToolBarActivity implements View.OnC
             if (rimServiceCompanies!=null){
                 plotRimServeAdapter.setRimServiceCompanies(rimServiceCompanies);
             }
-        }//
+        }
     }
 
     @Override
