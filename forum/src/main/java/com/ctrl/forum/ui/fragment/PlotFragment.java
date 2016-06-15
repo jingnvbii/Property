@@ -126,8 +126,7 @@ public class PlotFragment extends ToolBarFragment implements View.OnClickListene
         lv_content.getRefreshableView().addHeaderView(headview);
 
         idao = new InvitationDao(this);
-        idao.postRotatingBanner("B_COMMUNITY_TOP");
-
+        idao.requestPostRotaingBanner("B_COMMUNITY_TOP");
         return view;
     }
 
@@ -201,7 +200,7 @@ public class PlotFragment extends ToolBarFragment implements View.OnClickListene
             }
         }
         if (requestCode==19){
-           listBanner = idao.getPlotBanner();
+           listBanner = idao.getListBanner();
             if (listBanner!=null){
                setLoopView();
             }

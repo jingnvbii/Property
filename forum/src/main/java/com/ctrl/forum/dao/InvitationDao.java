@@ -84,16 +84,18 @@ public class InvitationDao extends IDao {
      * @param categoryId //帖子分类id
      * @param categoryType //分类类型（0：广场帖子、1：小区帖子）
      * @param keyword //搜索关键字
+     * @param communityId //搜索关键字
      * @param pageNum   //当前页码
      * @param pageSize  //每页条数
      * */
-    public void requestPostListByCategory(String reporterId,String categoryId,String categoryType,String keyword,int pageNum,int pageSize){
+    public void requestPostListByCategory(String reporterId,String categoryId,String categoryType,String keyword,String communityId,int pageNum,int pageSize){
         String url="post/queryPostListByCategory";
         Map<String,String> map = new HashMap<String,String>();
         map.put("reporterId",reporterId);
         map.put("categoryId",categoryId);
         map.put("categoryType",categoryType);
         map.put("keyword",keyword);
+        map.put("communityId",communityId);
         map.put("pageNum",String.valueOf(pageNum));
         map.put("pageSize",String.valueOf(pageSize));
 
@@ -154,6 +156,66 @@ public class InvitationDao extends IDao {
 
         postRequest(Constant.RAW_URL+url, mapToRP(map),5);
     }
+
+    /**
+     * 编辑帖子(小区)
+     * @param id //帖子id（唯一id标示）
+     * @param categoryType //分类类型（0：广场帖子、1：小区帖子）
+     * @param communityId  //小区id  (分类为小区帖子时传入)
+     * @param publishState //发布状态（0：存为草稿、1：已发布）
+     * @param checkType //审核类型（0：无需审核、1：需审核)   (当分类id修改后, 该参数必须传 )
+     * @param title //标题  (朋友圈样式时不填写)
+     * @param content //帖子内容 (帖子标题和内容不能同时为空)
+     * @param vcardDisplay //是否显示名片（0：不显示、1：显示）
+     * @param contactName //联系人姓名 ( 是否显示名片状态为1时必须传)
+     * @param contactAddress //联系地址   ( 是否显示名片状态为1时必须传)
+     * @param contactPhone //联系电话   ( 是否显示名片状态为1时必须传)
+     * @param locationLongitude //发帖位置_经度
+     * @param locationLatitude //发帖位置_纬度
+     * @param locationName //位置名称
+     * @param delPostPicStr //要删除的图片该参数里面放的是要删除图片的id(多张图片id之间用逗号分隔)
+     * @param UploadPostPicStr //要上传的图片该参数里面放的是要上传图片的 url :(多个图片 url之间用逗号分隔)
+     * */
+    public void requesPlotPostEditor(String id,
+                                     String categoryType,
+                                     String communityId,
+                                     String publishState,
+                                     String checkType,
+                                     String title,
+                                     String content,
+                                     String vcardDisplay,
+                                     String contactName,
+                                     String contactAddress,
+                                     String contactPhone,
+                                     String locationLongitude,
+                                     String locationLatitude,
+                                     String locationName,
+                                     String delPostPicStr,
+                                     String UploadPostPicStr
+    ){
+        Map<String,String> map = new HashMap<String,String>();
+        String url = "post/editorPost";
+        map.put("id",id);
+        map.put("categoryType",categoryType);
+        map.put("communityId",communityId);
+        map.put("publishState",publishState);
+        map.put("checkType",checkType);
+        map.put("title",title);
+        map.put("content",content);
+        map.put("vcardDisplay",vcardDisplay);
+        map.put("contactName",contactName);
+        map.put("contactAddress",contactAddress);
+        map.put("contactPhone",contactPhone);
+        map.put("locationLongitude",locationLongitude);
+        map.put("locationLatitude",locationLatitude);
+        map.put("locationName",locationName);
+        map.put("delPostPicStr",delPostPicStr);
+        map.put("UploadPostPicStr",UploadPostPicStr);
+
+        postRequest(Constant.RAW_URL+url, mapToRP(map),6);
+    }
+
+
     /**
      * 编辑帖子
      * @param id //帖子id（唯一id标示）
@@ -216,6 +278,7 @@ public class InvitationDao extends IDao {
      * 发布帖子
      * @param reporterId //发帖人id（会员id)
      * @param categoryId //分类id
+     * @param communityId //分类id
      * @param categoryType //分类类型（0：广场帖子、1：小区帖子）
      * @param publishState //发布状态（0：存为草稿、1：已发布）
      * @param checkType //审核类型（0：无需审核、1：需审核)   (当分类id修改后, 该参数必须传 )
@@ -233,6 +296,7 @@ public class InvitationDao extends IDao {
      * */
     public void requesReleasePost(String reporterId,
                                  String categoryId,
+                                  String communityId,
                                  String categoryType,
                                  String publishState,
                                  String checkType,
@@ -252,6 +316,7 @@ public class InvitationDao extends IDao {
         Map<String,String> map = new HashMap<String,String>();
         map.put("reporterId",reporterId);
         map.put("categoryId",categoryId);
+        map.put("communityId",communityId);
         map.put("categoryType",categoryType);
         map.put("publishState",publishState);
         map.put("checkType",checkType);
@@ -269,6 +334,65 @@ public class InvitationDao extends IDao {
 
         postRequest(Constant.RAW_URL+url, mapToRP(map),7);
     }
+
+    /**
+     * 发布帖子(小区发布帖子)
+     * @param reporterId //发帖人id（会员id)
+     * @param categoryType //分类类型（0：广场帖子、1：小区帖子）
+     * @param communityId //小区id (当发小区帖子时,该参数需要)
+     * @param publishState //发布状态（0：存为草稿、1：已发布）
+     * @param checkType //审核类型（0：无需审核、1：需审核)   (当分类id修改后, 该参数必须传 )
+     * @param title //标题  (朋友圈样式时不填写)
+     * @param content //帖子内容 (帖子标题和内容不能同时为空)
+     * @param vcardDisplay //是否显示名片（0：不显示、1：显示）
+     * @param contactName //联系人姓名 ( 是否显示名片状态为1时必须传)
+     * @param contactAddress //联系地址   ( 是否显示名片状态为1时必须传)
+     * @param contactPhone //联系电话   ( 是否显示名片状态为1时必须传)
+     * @param locationLongitude //发帖位置_经度
+     * @param locationLatitude //发帖位置_纬度
+     * @param locationName //位置名称
+     * @param postImgStr //帖子图片串:(跟帖子图片一一对应,之间用逗号分隔)
+     * @param thumbImgPostPicStr //帖子缩略图片串:(url之间用逗号分隔)
+     * */
+    public void requesReleasePost(String reporterId,
+                                  String communityId,
+                                  String categoryType,
+                                  String publishState,
+                                  String checkType,
+                                  String title,
+                                  String content,
+                                  String vcardDisplay,
+                                  String contactName,
+                                  String contactAddress,
+                                  String contactPhone,
+                                  String locationLongitude,
+                                  String locationLatitude,
+                                  String locationName,
+                                  String postImgStr,
+                                  String thumbImgPostPicStr
+    ){
+        String url="post/reportPost";
+        Map<String,String> map = new HashMap<String,String>();
+        map.put("reporterId",reporterId);
+        map.put("communityId",communityId);
+        map.put("categoryType",categoryType);
+        map.put("publishState",publishState);
+        map.put("checkType",checkType);
+        map.put("title",title);
+        map.put("content",content);
+        map.put("vcardDisplay",vcardDisplay);
+        map.put("contactName",contactName);
+        map.put("contactAddress",contactAddress);
+        map.put("contactPhone",contactPhone);
+        map.put("locationLongitude",locationLongitude);
+        map.put("locationLatitude",locationLatitude);
+        map.put("locationName",locationName);
+        map.put("postImgStr",postImgStr);
+        map.put("thumbImgPostPicStr",thumbImgPostPicStr);
+
+        postRequest(Constant.RAW_URL+url, mapToRP(map),7);
+    }
+
 
 
 
@@ -368,6 +492,26 @@ public class InvitationDao extends IDao {
 
         postRequest(Constant.RAW_URL+url, mapToRP(map),14);
     }
+
+    /**
+     *设置点赞/取消点赞
+     * @param zambiaType //add是点赞reduce是取消赞
+     * @param id //帖子id
+     * @param zambiaID//当前操作用户id
+     * @param title//帖子标题
+     * @param content//帖子内容(没标题时传入)
+     * */
+    public void requesZambia(String zambiaType,String id,String zambiaID,String title,String content){
+        String url="post/Zambia";
+        Map<String,String> map = new HashMap<String,String>();
+        map.put("zambiaType",zambiaType);
+        map.put("id",id);
+        map.put("zambiaID",zambiaID);
+        map.put("title",title);
+        map.put("content",content);
+        postRequest(Constant.RAW_URL + url, mapToRP(map),14);
+    }
+
     /**
      *对帖子进行回复
      注：1、内容类型为“0：文字或者表情”时，帖子内容不能为空。为“1：图片”时，
@@ -462,6 +606,18 @@ public class InvitationDao extends IDao {
     }
 
 
+    /**
+     * 获取我发布的帖子
+     * @param location //轮播图位置KEY(固定：B_POST_MIDDLE)
+     * */
+    public void requestPostRotaingBanner(String location){
+        String url="rotatingBanner/getPostRotatingBanner";
+        Map<String,String> map = new HashMap<String,String>();
+        map.put("location",location);
+        postRequest(Constant.RAW_URL+url, mapToRP(map),19);
+    }
+
+
 
 
 
@@ -552,6 +708,11 @@ public class InvitationDao extends IDao {
         if (requestCode == 18){
             Log.d("demo","dao中结果集(获取我发布的帖子接口): " + result);
             minePost = JsonUtil.node2pojoList(result.findValue("postList"),Post.class);
+        }
+
+        if (requestCode == 19){
+            Log.d("demo","dao中结果集(获取我帖子轮播图接口): " + result);
+            listBanner = JsonUtil.node2pojoList(result.findValue("rotatingBannerList"),Banner.class);
         }
 
 

@@ -236,7 +236,7 @@ public class LoginActivity extends AppToolBarActivity implements View.OnClickLis
                 if(checkInput()){
                     ldao.requestLogin(et_username.getText().toString().trim(), et_pass_word.getText().toString().trim(), "1");
                     //没网的时候可以登陆
-                    startActivity(new Intent(this,MainActivity.class));
+                  //  startActivity(new Intent(this,MainActivity.class));
 
                 }
                 break;

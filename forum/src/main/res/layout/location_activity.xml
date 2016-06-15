@@ -15,7 +15,7 @@
         android:background="@color/line_gray" />
 
     <RelativeLayout
-        android:id="@+id/rl_search_loacte"
+        android:id="@+id/rl_loacte"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:background="@drawable/edit_shap"
