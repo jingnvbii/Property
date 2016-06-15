@@ -44,7 +44,7 @@ public class PlotFragment extends ToolBarFragment implements View.OnClickListene
     @InjectView(R.id.lv_content)
     PullToRefreshListView lv_content;
     @InjectView(R.id.tv_plot_name)
-    TextView tv_plot_name; //小区名
+    TextView tv_plot_name; //小区名2
     @InjectView(R.id.rim_post)
     TextView rim_post; //发帖
     @InjectView(R.id.rim_serve)
