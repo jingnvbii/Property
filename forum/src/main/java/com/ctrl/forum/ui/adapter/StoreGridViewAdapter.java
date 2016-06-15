@@ -8,6 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.beanu.arad.Arad;
 import com.ctrl.forum.R;
 import com.ctrl.forum.entity.MallKind;
 
@@ -60,7 +61,9 @@ public class StoreGridViewAdapter extends BaseAdapter{
             holder=(ViewHolder)convertView.getTag();
         }
         MallKind kind=kindList.get(position);
-        holder.tv_grid_item.setText(kind.getName());
+        holder.tv_grid_item.setText(kind.getKindName());
+        if(kind.getKindIcon()!=null)
+        Arad.imageLoader.load(kind.getKindIcon()).placeholder(R.drawable.ic_launcher).into(holder.iv_grid_item);
         return convertView;
     }
 

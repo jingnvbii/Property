@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
@@ -16,7 +15,6 @@ import android.widget.LinearLayout;
 
 import com.beanu.arad.Arad;
 import com.beanu.arad.utils.AnimUtil;
-import com.beanu.arad.utils.MessageUtils;
 import com.ctrl.forum.R;
 import com.ctrl.forum.entity.Banner;
 import com.ctrl.forum.ui.activity.Invitation.InvitationDetailActivity;
@@ -172,8 +170,6 @@ public class HomeAutoSwitchPicHolder extends BaseHolder<List<String>>
             }else {
                 mPosition=position-1;
             }
-
-            Log.i("tag", "position===" + mPosition);
             ImageView iv = new ImageView(UIUtils.getContext());
             iv.setScaleType(ImageView.ScaleType.FIT_XY);
             // 设置网络图片
@@ -187,7 +183,7 @@ public class HomeAutoSwitchPicHolder extends BaseHolder<List<String>>
             iv.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    MessageUtils.showShortToast(mContext,"dfsdf"+mPosition);
+                  //  MessageUtils.showShortToast(mContext,"dfsdf"+mPosition);
                     String type = listBanner.get(mPosition).getType();
                     Intent intent=null;
                     switch (type){

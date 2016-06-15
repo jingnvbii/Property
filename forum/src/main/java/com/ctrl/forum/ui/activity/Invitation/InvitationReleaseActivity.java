@@ -13,7 +13,6 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Base64;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -242,9 +241,6 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
 
     public void Init() {
         channelId=getIntent().getStringExtra("channelId");
-
-
-
         Idao=new ImageDao(this);
 
     }
@@ -431,12 +427,11 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
         }
 
         if(requestCode==12){
-            MessageUtils.showShortToast(this, "获取二级分类成功");
+          //  MessageUtils.showShortToast(this, "获取二级分类成功");
             if(listItemCategroy!=null){
                 listItemCategroy.clear();
             }
             listItemCategroy=idao.getListCategroyItem();
-            Log.i("tag", "size---" + listItemCategroy.size());
             for(int i=0;i<listItemCategroy.size();i++){
                 secondCategroyStr.add(listItemCategroy.get(i).getName());
             }
@@ -449,10 +444,14 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
             spinner_second_kind.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
+                    if (thirdCategroyStr != null) {
+                        thirdCategroyStr.clear();
+                    }
+                    if (listItemCategroy3 != null) {
+                        listItemCategroy3.clear();
+                    }
                     idao.requesItemCategory3(listItemCategroy.get(position).getId(), "2");
                     secondKindId = listItemCategroy.get(position).getId();
-                    Log.i("tag", "secondKindId---" + secondKindId);
                     checkType2 = listItemCategroy.get(position).getCheckType();
 
                 }
@@ -465,10 +464,7 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
 
         }
         if(requestCode==13){
-            if(listItemCategroy3!=null){
-                listItemCategroy3.clear();
-            }
-            MessageUtils.showShortToast(this,"获取三级分类成功");
+        //    MessageUtils.showShortToast(this,"获取三级分类成功");
             spinner_third_kind.setVisibility(View.VISIBLE);
             listItemCategroy3=idao.getListCategroyItem();
             for(int i=0;i<listItemCategroy3.size();i++){
@@ -617,16 +613,13 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
         switch (v.getId()){
             case R.id.tv_release_save:
                 isSave=true;
-                if(et_content.getText().toString().trim().length()<20){
-                    MessageUtils.showShortToast(this,"帖子内容少于20个字符");
-                    return;
-                }
                 String imagesUrl1=getImagesUrl(mImageList);
                 String thumbImagesUrl1= getThumbImagesUrl(mImageList);
                         if(spinner_third_kind.getVisibility()==View.VISIBLE){
                             idao.requesReleasePost(
                                     Arad.preferences.getString("memberId"),
                                     thirdKindId,
+                                    "",
                                     "0",
                                     "0",
                                     checkType3,
@@ -647,6 +640,7 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
                             idao.requesReleasePost(
                                     Arad.preferences.getString("memberId"),
                                     secondKindId,
+                                    "",
                                     "0",
                                     "0",
                                     checkType2,
@@ -677,6 +671,7 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
                                idao.requesReleasePost(
                                        Arad.preferences.getString("memberId"),
                                        thirdKindId,
+                                       "",
                                        "0",
                                        "1",
                                        checkType3,
@@ -697,6 +692,7 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
                            idao.requesReleasePost(
                                    Arad.preferences.getString("memberId"),
                                    secondKindId,
+                                   "",
                                    "0",
                                    "1",
                                    checkType2,
@@ -724,6 +720,7 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
                     idao.requesReleasePost(
                             Arad.preferences.getString("memberId"),
                             thirdKindId,
+                            "",
                             "0",
                             "1",
                             checkType2,

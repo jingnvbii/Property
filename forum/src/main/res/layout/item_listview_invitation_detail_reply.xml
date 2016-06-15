@@ -32,7 +32,7 @@
         android:layout_width="wrap_content"
         android:layout_marginLeft="5dp"
         android:layout_height="wrap_content"
-        android:src="@mipmap/vip_icon3"/>
+        />
     <TextView
         android:id="@+id/tv_reply_time"
         android:layout_toRightOf="@id/iv_reply_level"
@@ -59,7 +59,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/text_gray"
-        android:text="济南第三方就开始对福建省地方角色的"
         android:id="@+id/tv_reply_address" />
     </RelativeLayout>
 

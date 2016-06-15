@@ -77,6 +77,7 @@ public class InvitationDetailReplyAdapter extends BaseAdapter {
         }
         final PostReply2 mPostReply2 = list.get(position);
         holder.tv_reply_time.setText(TimeUtils.date(Long.parseLong(mPostReply2.getCreateTime())));
+        holder.tv_reply_address.setText("");
         if(mPostReply2.getMemberLevel()!=null){
             switch (mPostReply2.getMemberLevel()){
                 case "1":

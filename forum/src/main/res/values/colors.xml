@@ -258,6 +258,14 @@
     <color name="list_item_press_color">#f0f2f3</color>
 
 
+    <!--********微信支付 配置*************************************************-->
+    <color name="toasterro">#9fd524</color>
+    <color name="semitransparent">#80000000</color>
+    <color name="lightransparent">#a0000000</color>
+    <color name="navpage">#FFE1E8EB</color>
+    <!--********微信支付 配置*************************************************-->
+
+
 
 
 </resources>

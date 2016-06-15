@@ -1,20 +1,29 @@
 package com.ctrl.forum.ui.activity;
 
+import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.RadioButton;
 
 import com.ctrl.forum.R;
 import com.ctrl.forum.base.AppToolBarActivity;
+import com.ctrl.forum.entity.NavigationBar;
 import com.ctrl.forum.ui.fragment.InvitationFragment;
 import com.ctrl.forum.ui.fragment.MyFragment;
 import com.ctrl.forum.ui.fragment.PlotFragment;
 import com.ctrl.forum.ui.fragment.RimFragment;
 import com.ctrl.forum.ui.fragment.StroeFragment;
+import com.ctrl.forum.utils.BitmapUtils;
 
-public class MainActivity extends AppToolBarActivity implements View.OnClickListener {
+import java.util.ArrayList;
+
+public class MainActivity extends AppToolBarActivity implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
     private RadioButton rb1;//帖子按钮
     private RadioButton rb2;//商城按钮
     private RadioButton rb3;//小区按钮
@@ -26,13 +35,173 @@ public class MainActivity extends AppToolBarActivity implements View.OnClickList
     private RimFragment rimFragment;
     private MyFragment myFragment;
     private FragmentManager fragmentManager;
+    private ArrayList<Drawable> listDrawable;
+    private ArrayList<Drawable> listDrawable2;
+    private ArrayList<NavigationBar> listNavigation;
+    private Drawable drawable;
+    private Drawable drawable2;
+    private Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            if (msg.what == 2) {
+                if (rb1.isChecked()) {
+                    drawable.setBounds(0, 0, 40, 40);
+                    rb1.setCompoundDrawables(null, listDrawable.get(0), null, null);
+                } else {
+                    drawable2.setBounds(0, 0, 40, 40);
+                    rb1.setCompoundDrawables(null, listDrawable2.get(0), null, null);
+                }
+                if (rb2.isChecked()) {
+                    drawable.setBounds(0, 0, 40, 40);
+                    rb2.setCompoundDrawables(null, listDrawable.get(1), null, null);
+                } else {
+                    drawable2.setBounds(0, 0, 40, 40);
+                    rb2.setCompoundDrawables(null, listDrawable2.get(1), null, null);
+                }
+                if (rb3.isChecked()) {
+                    drawable.setBounds(0, 0, 40, 40);
+                    rb3.setCompoundDrawables(null, listDrawable.get(2), null, null);
+                } else {
+                    drawable2.setBounds(0, 0, 40, 40);
+                    rb3.setCompoundDrawables(null, listDrawable2.get(2), null, null);
+                }
+                if (rb4.isChecked()) {
+                    drawable.setBounds(0, 0, 40, 40);
+                    rb4.setCompoundDrawables(null, listDrawable.get(3), null, null);
+                } else {
+                    drawable2.setBounds(0, 0, 40, 40);
+                    rb4.setCompoundDrawables(null, listDrawable2.get(3), null, null);
+                }
+                if (rb5.isChecked()) {
+                    drawable.setBounds(0, 0, 40, 40);
+                    rb5.setCompoundDrawables(null, listDrawable.get(4), null, null);
+                } else {
+                    drawable2.setBounds(0, 0, 40, 40);
+                    rb5.setCompoundDrawables(null, listDrawable2.get(4), null, null);
+                }
+            }
+            if (msg.what == 1) {
+                int size = listNavigation.size();
+                if (size == 5) {
+                    for (int i = 0; i < 5; i++) {
+                        drawable = listDrawable.get(i);
+                        drawable2 = listDrawable2.get(i);
+                        switch (i) {
+                            case 0:
+                                //设置默认的fragment
+                                setDefaultFragment();
+                                rb1.setText(listNavigation.get(0).getKindName());
+                                if (rb1.isChecked()) {
+                                    drawable.setBounds(0, 0, 40, 40);
+                                    rb1.setCompoundDrawables(null, drawable, null, null);
+                                } else {
+                                    drawable2.setBounds(0, 0, 40, 40);
+                                    rb1.setCompoundDrawables(null, listDrawable2.get(0), null, null);
+                                }
+                                break;
+                            case 1:
+                                rb2.setText(listNavigation.get(1).getKindName());
+                                if (rb2.isChecked()) {
+                                    drawable.setBounds(0, 0, 40, 40);
+                                    rb2.setCompoundDrawables(null, drawable, null, null);
+                                } else {
+                                    drawable2.setBounds(0, 0, 40, 40);
+                                    rb2.setCompoundDrawables(null, listDrawable2.get(1), null, null);
+                                }
+                                break;
+                            case 2:
+                                rb3.setText(listNavigation.get(2).getKindName());
+                                if (rb3.isChecked()) {
+                                    drawable.setBounds(0, 0, 40, 40);
+                                    rb3.setCompoundDrawables(null, drawable, null, null);
+                                } else {
+                                    drawable2.setBounds(0, 0, 40, 40);
+                                    rb3.setCompoundDrawables(null, listDrawable2.get(2), null, null);
+                                }
+                                break;
+                            case 3:
+                                rb4.setText(listNavigation.get(3).getKindName());
+                                if (rb4.isChecked()) {
+                                    drawable.setBounds(0, 0, 40, 40);
+                                    rb4.setCompoundDrawables(null, drawable, null, null);
+                                } else {
+                                    drawable2.setBounds(0, 0, 40, 40);
+                                    rb4.setCompoundDrawables(null, listDrawable2.get(3), null, null);
+                                }
+                                break;
+                            case 4:
+                                rb5.setText(listNavigation.get(4).getKindName());
+                                if (rb5.isChecked()) {
+                                    drawable.setBounds(0, 0, 40, 40);
+                                    rb5.setCompoundDrawables(null, drawable, null, null);
+                                } else {
+                                    drawable2.setBounds(0, 0, 40, 40);
+                                    rb5.setCompoundDrawables(null, listDrawable2.get(4), null, null);
+                                }
+                                break;
+                        }
+                    }
+                }
+
+            }
+
+
+        }
+
+
+    };
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initView();
+        initData();
     }
+
+    private void initData() {
+        listNavigation = (ArrayList<NavigationBar>) getIntent().getSerializableExtra("listNagationBar");
+
+        listDrawable = new ArrayList<>();
+        listDrawable2 = new ArrayList<>();
+        Resources res = getResources();
+        for (int i = 0; i < listNavigation.size(); i++) {
+            if (listNavigation.get(i).getCommentCode().equals("0")) {
+                drawable2 = res.getDrawable(R.drawable.guangchang_gray);
+                listDrawable2.add(drawable2);
+            }
+            if (listNavigation.get(i).getCommentCode().equals("1")) {
+                drawable2 = res.getDrawable(R.drawable.shangcheng_gray);
+                listDrawable2.add(drawable2);
+            }
+            if (listNavigation.get(i).getCommentCode().equals("2")) {
+                drawable2 = res.getDrawable(R.drawable.xiaoqu_gray);
+                listDrawable2.add(drawable2);
+            }
+            if (listNavigation.get(i).getCommentCode().equals("3")) {
+                drawable2 = res.getDrawable(R.drawable.zhoubian_gray);
+                listDrawable2.add(drawable2);
+            }
+            if (listNavigation.get(i).getCommentCode().equals("4")) {
+                drawable2 = res.getDrawable(R.drawable.my_gray);
+                listDrawable2.add(drawable2);
+            }
+        }
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                for (int i = 0; i < listNavigation.size(); i++) {
+                    drawable = BitmapUtils.getDrawable(listNavigation.get(i).getKindIcon());
+                    listDrawable.add(drawable);
+                }
+                mHandler.sendEmptyMessage(1);
+            }
+        }).start();
+
+    }
+
 
     private void initView() {
         rb1 = (RadioButton) findViewById(R.id.rb_1);
@@ -45,8 +214,12 @@ public class MainActivity extends AppToolBarActivity implements View.OnClickList
         rb3.setOnClickListener(this);
         rb4.setOnClickListener(this);
         rb5.setOnClickListener(this);
-        //设置默认的fragment
-        setDefaultFragment();
+        rb1.setOnCheckedChangeListener(this);
+        rb2.setOnCheckedChangeListener(this);
+        rb3.setOnCheckedChangeListener(this);
+        rb4.setOnCheckedChangeListener(this);
+        rb5.setOnCheckedChangeListener(this);
+
 
     }
 
@@ -60,18 +233,28 @@ public class MainActivity extends AppToolBarActivity implements View.OnClickList
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.rb_1:
+                //  rb1.setChecked(true);
+                //  mHandler.sendEmptyMessage(1);
                 setTabSelection(0);
                 break;
             case R.id.rb_2:
+                //    rb2.setChecked(true);
+                //   mHandler.sendEmptyMessage(1);
                 setTabSelection(1);
                 break;
             case R.id.rb_3:
+                //  rb3.setChecked(true);
+                //   mHandler.sendEmptyMessage(1);
                 setTabSelection(2);
                 break;
             case R.id.rb_4:
+                //   rb4.setChecked(true);
+                // mHandler.sendEmptyMessage(1);
                 setTabSelection(3);
                 break;
             case R.id.rb_5:
+                //  rb5.setChecked(true);
+                //  mHandler.sendEmptyMessage(1);
                 setTabSelection(4);
                 break;
         }
@@ -93,56 +276,278 @@ public class MainActivity extends AppToolBarActivity implements View.OnClickList
         hideFragments(transaction);
         switch (index) {
             case 0:
-                if (invitationFragment == null) {
-                    // invitationFragment，则创建一个并添加到界面上
-                    invitationFragment = InvitationFragment.newInstance();
-                    transaction.add(R.id.content, invitationFragment);
-                } else {
-                    // 如果MessageFragment不为空，则直接将它显示出来
-                    transaction.show(invitationFragment);
+                if (listNavigation.get(0).getCommentCode().equals("0")) {
+                    if (invitationFragment == null) {
+                        // invitationFragment，则创建一个并添加到界面上
+                        invitationFragment = InvitationFragment.newInstance();
+                        transaction.add(R.id.content, invitationFragment);
+                    } else {
+                        // 如果MessageFragment不为空，则直接将它显示出来
+                        transaction.show(invitationFragment);
+                    }
+                }
+                if (listNavigation.get(0).getCommentCode().equals("1")) {
+                    if (storeFragment == null) {
+                        // 如果ContactsFragment为空，则创建一个并添加到界面上
+                        storeFragment = StroeFragment.newInstance();
+                        transaction.add(R.id.content, storeFragment);
+                    } else {
+                        // 如果ContactsFragment不为空，则直接将它显示出来
+                        transaction.show(storeFragment);
+                    }
+                }
+                if (listNavigation.get(0).getCommentCode().equals("2")) {
+                    if (plotFragment == null) {
+                        // 如果NewsFragment为空，则创建一个并添加到界面上
+                        plotFragment = PlotFragment.newInstance();
+                        Bundle bundle = new Bundle();
+                        bundle.putString("str", "小区");
+                        plotFragment.setArguments(bundle);
+                        transaction.add(R.id.content, plotFragment);
+                    } else {
+                        // 如果NewsFragment不为空，则直接将它显示出来
+                        transaction.show(plotFragment);
+                    }
+                }
+                if (listNavigation.get(0).getCommentCode().equals("3")) {
+                    if (rimFragment == null) {
+                        // 如果SettingFragment为空，则创建一个并添加到界面上
+                        rimFragment = RimFragment.newInstance();
+                        transaction.add(R.id.content, rimFragment);
+                    } else {
+                        // 如果SettingFragment不为空，则直接将它显示出来
+                        transaction.show(rimFragment);
+                    }
+                }
+                if (listNavigation.get(0).getCommentCode().equals("4")) {
+                    if (myFragment == null) {
+                        // 如果SettingFragment为空，则创建一个并添加到界面上
+                        myFragment = MyFragment.newInstance();
+                        transaction.add(R.id.content, myFragment);
+                    } else {
+                        // 如果SettingFragment不为空，则直接将它显示出来
+                        transaction.show(myFragment);
+                    }
                 }
                 break;
             case 1:
-                if (storeFragment == null) {
-                    // 如果ContactsFragment为空，则创建一个并添加到界面上
-                    storeFragment = StroeFragment.newInstance();
-                    transaction.add(R.id.content, storeFragment);
-                } else {
-                    // 如果ContactsFragment不为空，则直接将它显示出来
-                    transaction.show(storeFragment);
+                if (listNavigation.get(1).getCommentCode().equals("0")) {
+                    if (invitationFragment == null) {
+                        // invitationFragment，则创建一个并添加到界面上
+                        invitationFragment = InvitationFragment.newInstance();
+                        transaction.add(R.id.content, invitationFragment);
+                    } else {
+                        // 如果MessageFragment不为空，则直接将它显示出来
+                        transaction.show(invitationFragment);
+                    }
+                }
+                if (listNavigation.get(1).getCommentCode().equals("1")) {
+                    if (storeFragment == null) {
+                        // 如果ContactsFragment为空，则创建一个并添加到界面上
+                        storeFragment = StroeFragment.newInstance();
+                        transaction.add(R.id.content, storeFragment);
+                    } else {
+                        // 如果ContactsFragment不为空，则直接将它显示出来
+                        transaction.show(storeFragment);
+                    }
+                }
+                if (listNavigation.get(1).getCommentCode().equals("2")) {
+                    if (plotFragment == null) {
+                        // 如果NewsFragment为空，则创建一个并添加到界面上
+                        plotFragment = PlotFragment.newInstance();
+                        Bundle bundle = new Bundle();
+                        bundle.putString("str", "小区");
+                        plotFragment.setArguments(bundle);
+                        transaction.add(R.id.content, plotFragment);
+                    } else {
+                        // 如果NewsFragment不为空，则直接将它显示出来
+                        transaction.show(plotFragment);
+                    }
+                }
+                if (listNavigation.get(1).getCommentCode().equals("3")) {
+                    if (rimFragment == null) {
+                        // 如果SettingFragment为空，则创建一个并添加到界面上
+                        rimFragment = RimFragment.newInstance();
+                        transaction.add(R.id.content, rimFragment);
+                    } else {
+                        // 如果SettingFragment不为空，则直接将它显示出来
+                        transaction.show(rimFragment);
+                    }
+                }
+                if (listNavigation.get(1).getCommentCode().equals("4")) {
+                    if (myFragment == null) {
+                        // 如果SettingFragment为空，则创建一个并添加到界面上
+                        myFragment = MyFragment.newInstance();
+                        transaction.add(R.id.content, myFragment);
+                    } else {
+                        // 如果SettingFragment不为空，则直接将它显示出来
+                        transaction.show(myFragment);
+                    }
                 }
                 break;
             case 2:
-                if (plotFragment == null) {
-                    // 如果NewsFragment为空，则创建一个并添加到界面上
-                    plotFragment = PlotFragment.newInstance();
-                    Bundle bundle = new Bundle();
-                    bundle.putString("str", "小区");
-                    plotFragment.setArguments(bundle);
-                    transaction.add(R.id.content, plotFragment);
-                } else {
-                    // 如果NewsFragment不为空，则直接将它显示出来
-                    transaction.show(plotFragment);
+                if (listNavigation.get(2).getCommentCode().equals("0")) {
+                    if (invitationFragment == null) {
+                        // invitationFragment，则创建一个并添加到界面上
+                        invitationFragment = InvitationFragment.newInstance();
+                        transaction.add(R.id.content, invitationFragment);
+                    } else {
+                        // 如果MessageFragment不为空，则直接将它显示出来
+                        transaction.show(invitationFragment);
+                    }
+                }
+                if (listNavigation.get(2).getCommentCode().equals("1")) {
+                    if (storeFragment == null) {
+                        // 如果ContactsFragment为空，则创建一个并添加到界面上
+                        storeFragment = StroeFragment.newInstance();
+                        transaction.add(R.id.content, storeFragment);
+                    } else {
+                        // 如果ContactsFragment不为空，则直接将它显示出来
+                        transaction.show(storeFragment);
+                    }
+                }
+                if (listNavigation.get(2).getCommentCode().equals("2")) {
+                    if (plotFragment == null) {
+                        // 如果NewsFragment为空，则创建一个并添加到界面上
+                        plotFragment = PlotFragment.newInstance();
+                        Bundle bundle = new Bundle();
+                        bundle.putString("str", "小区");
+                        plotFragment.setArguments(bundle);
+                        transaction.add(R.id.content, plotFragment);
+                    } else {
+                        // 如果NewsFragment不为空，则直接将它显示出来
+                        transaction.show(plotFragment);
+                    }
+                }
+                if (listNavigation.get(2).getCommentCode().equals("3")) {
+                    if (rimFragment == null) {
+                        // 如果SettingFragment为空，则创建一个并添加到界面上
+                        rimFragment = RimFragment.newInstance();
+                        transaction.add(R.id.content, rimFragment);
+                    } else {
+                        // 如果SettingFragment不为空，则直接将它显示出来
+                        transaction.show(rimFragment);
+                    }
+                }
+                if (listNavigation.get(2).getCommentCode().equals("4")) {
+                    if (myFragment == null) {
+                        // 如果SettingFragment为空，则创建一个并添加到界面上
+                        myFragment = MyFragment.newInstance();
+                        transaction.add(R.id.content, myFragment);
+                    } else {
+                        // 如果SettingFragment不为空，则直接将它显示出来
+                        transaction.show(myFragment);
+                    }
                 }
                 break;
             case 3:
-                if (rimFragment == null) {
-                    // 如果SettingFragment为空，则创建一个并添加到界面上
-                    rimFragment = RimFragment.newInstance();
-                    transaction.add(R.id.content, rimFragment);
-                } else {
-                    // 如果SettingFragment不为空，则直接将它显示出来
-                    transaction.show(rimFragment);
+                if (listNavigation.get(3).getCommentCode().equals("0")) {
+                    if (invitationFragment == null) {
+                        // invitationFragment，则创建一个并添加到界面上
+                        invitationFragment = InvitationFragment.newInstance();
+                        transaction.add(R.id.content, invitationFragment);
+                    } else {
+                        // 如果MessageFragment不为空，则直接将它显示出来
+                        transaction.show(invitationFragment);
+                    }
+                }
+                if (listNavigation.get(3).getCommentCode().equals("1")) {
+                    if (storeFragment == null) {
+                        // 如果ContactsFragment为空，则创建一个并添加到界面上
+                        storeFragment = StroeFragment.newInstance();
+                        transaction.add(R.id.content, storeFragment);
+                    } else {
+                        // 如果ContactsFragment不为空，则直接将它显示出来
+                        transaction.show(storeFragment);
+                    }
+                }
+                if (listNavigation.get(3).getCommentCode().equals("2")) {
+                    if (plotFragment == null) {
+                        // 如果NewsFragment为空，则创建一个并添加到界面上
+                        plotFragment = PlotFragment.newInstance();
+                        Bundle bundle = new Bundle();
+                        bundle.putString("str", "小区");
+                        plotFragment.setArguments(bundle);
+                        transaction.add(R.id.content, plotFragment);
+                    } else {
+                        // 如果NewsFragment不为空，则直接将它显示出来
+                        transaction.show(plotFragment);
+                    }
+                }
+                if (listNavigation.get(3).getCommentCode().equals("3")) {
+                    if (rimFragment == null) {
+                        // 如果SettingFragment为空，则创建一个并添加到界面上
+                        rimFragment = RimFragment.newInstance();
+                        transaction.add(R.id.content, rimFragment);
+                    } else {
+                        // 如果SettingFragment不为空，则直接将它显示出来
+                        transaction.show(rimFragment);
+                    }
+                }
+                if (listNavigation.get(3).getCommentCode().equals("4")) {
+                    if (myFragment == null) {
+                        // 如果SettingFragment为空，则创建一个并添加到界面上
+                        myFragment = MyFragment.newInstance();
+                        transaction.add(R.id.content, myFragment);
+                    } else {
+                        // 如果SettingFragment不为空，则直接将它显示出来
+                        transaction.show(myFragment);
+                    }
                 }
                 break;
             case 4:
-                if (myFragment == null) {
-                    // 如果SettingFragment为空，则创建一个并添加到界面上
-                    myFragment = MyFragment.newInstance();
-                    transaction.add(R.id.content, myFragment);
-                } else {
-                    // 如果SettingFragment不为空，则直接将它显示出来
-                    transaction.show(myFragment);
+                if (listNavigation.get(4).getCommentCode().equals("0")) {
+                    if (invitationFragment == null) {
+                        // invitationFragment，则创建一个并添加到界面上
+                        invitationFragment = InvitationFragment.newInstance();
+                        transaction.add(R.id.content, invitationFragment);
+                    } else {
+                        // 如果MessageFragment不为空，则直接将它显示出来
+                        transaction.show(invitationFragment);
+                    }
+                }
+                if (listNavigation.get(4).getCommentCode().equals("1")) {
+                    if (storeFragment == null) {
+                        // 如果ContactsFragment为空，则创建一个并添加到界面上
+                        storeFragment = StroeFragment.newInstance();
+                        transaction.add(R.id.content, storeFragment);
+                    } else {
+                        // 如果ContactsFragment不为空，则直接将它显示出来
+                        transaction.show(storeFragment);
+                    }
+                }
+                if (listNavigation.get(4).getCommentCode().equals("2")) {
+                    if (plotFragment == null) {
+                        // 如果NewsFragment为空，则创建一个并添加到界面上
+                        plotFragment = PlotFragment.newInstance();
+                        Bundle bundle = new Bundle();
+                        bundle.putString("str", "小区");
+                        plotFragment.setArguments(bundle);
+                        transaction.add(R.id.content, plotFragment);
+                    } else {
+                        // 如果NewsFragment不为空，则直接将它显示出来
+                        transaction.show(plotFragment);
+                    }
+                }
+                if (listNavigation.get(4).getCommentCode().equals("3")) {
+                    if (rimFragment == null) {
+                        // 如果SettingFragment为空，则创建一个并添加到界面上
+                        rimFragment = RimFragment.newInstance();
+                        transaction.add(R.id.content, rimFragment);
+                    } else {
+                        // 如果SettingFragment不为空，则直接将它显示出来
+                        transaction.show(rimFragment);
+                    }
+                }
+                if (listNavigation.get(4).getCommentCode().equals("4")) {
+                    if (myFragment == null) {
+                        // 如果SettingFragment为空，则创建一个并添加到界面上
+                        myFragment = MyFragment.newInstance();
+                        transaction.add(R.id.content, myFragment);
+                    } else {
+                        // 如果SettingFragment不为空，则直接将它显示出来
+                        transaction.show(myFragment);
+                    }
                 }
                 break;
         }
@@ -174,4 +579,43 @@ public class MainActivity extends AppToolBarActivity implements View.OnClickList
     }
 
 
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        if (rb1.isChecked()) {
+            listDrawable.get(0).setBounds(0, 0, 40, 40);
+            rb1.setCompoundDrawables(null, listDrawable.get(0), null, null);
+        } else {
+            drawable2.setBounds(0, 0, 40, 40);
+            rb1.setCompoundDrawables(null, listDrawable2.get(0), null, null);
+        }
+        if (rb2.isChecked()) {
+            listDrawable.get(1).setBounds(0, 0, 40, 40);
+            rb2.setCompoundDrawables(null, listDrawable.get(1), null, null);
+        } else {
+            drawable2.setBounds(0, 0, 40, 40);
+            rb2.setCompoundDrawables(null, listDrawable2.get(1), null, null);
+        }
+        if (rb3.isChecked()) {
+            listDrawable.get(2).setBounds(0, 0, 40, 40);
+            rb3.setCompoundDrawables(null, listDrawable.get(2), null, null);
+        } else {
+            drawable2.setBounds(0, 0, 40, 40);
+            rb3.setCompoundDrawables(null, listDrawable2.get(2), null, null);
+        }
+        if (rb4.isChecked()) {
+            listDrawable.get(3).setBounds(0, 0, 40, 40);
+            rb4.setCompoundDrawables(null, listDrawable.get(3), null, null);
+        } else {
+            drawable2.setBounds(0, 0, 40, 40);
+            rb4.setCompoundDrawables(null, listDrawable2.get(3), null, null);
+        }
+        if (rb5.isChecked()) {
+            listDrawable.get(4).setBounds(0, 0, 40, 40);
+            rb5.setCompoundDrawables(null, listDrawable.get(4), null, null);
+        } else {
+            drawable2.setBounds(0, 0, 40, 40);
+            rb5.setCompoundDrawables(null, listDrawable2.get(4), null, null);
+        }
+
+    }
 }

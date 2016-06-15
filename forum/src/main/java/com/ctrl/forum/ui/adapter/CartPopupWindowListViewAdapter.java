@@ -79,23 +79,23 @@ public class CartPopupWindowListViewAdapter extends BaseAdapter {
         }
 
         /** 获取存储的商品数量 */
+
+
+        GoodsBean mGoodsBean = list.get(position);
+        holder.setPosition(position);
         if (mGoodsDataBaseInterface.getSecondGoodsNumber(mcontext, StoreShopListVerticalStyleActivity.SELECTPOSITION, list.get(position).getGoodsid()) == 0) {
             holder.tv_popup_lv_number.setText("");
             holder.iv_popup_lv_subtract.setVisibility(View.GONE);
             holder.tv_popup_lv_number.setVisibility(View.GONE);
-            holder.rl_all.setVisibility(View.GONE);
+            //   holder.rl_all.setVisibility(View.GONE);
         } else {
             holder.tv_popup_lv_number.setText("" + mGoodsDataBaseInterface.getSecondGoodsNumber(mcontext, StoreShopListVerticalStyleActivity.SELECTPOSITION, list.get(position).getGoodsid()));
             holder.tv_popup_lv_number.setVisibility(View.VISIBLE);
             holder.iv_popup_lv_subtract.setVisibility(View.VISIBLE);
+            holder.tv_popup_lv_price.setText(mGoodsBean.getGoodsprice() + "");
+            holder.tv_popup_lv_number.setText(mGoodsBean.getGoodsnum());
+            holder.tv_popup_lv_name.setText(mGoodsBean.getGoodsname());
         }
-
-        GoodsBean mGoodsBean = list.get(position);
-        holder.setPosition(position);
-        holder.tv_popup_lv_price.setText(mGoodsBean.getGoodsprice()+"");
-        holder.tv_popup_lv_number.setText(mGoodsBean.getGoodsnum());
-        holder.tv_popup_lv_name.setText(mGoodsBean.getGoodsname());
-
         setOnListtener(holder);
         return convertView;
     }

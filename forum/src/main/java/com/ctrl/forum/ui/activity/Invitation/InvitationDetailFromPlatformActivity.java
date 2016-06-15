@@ -63,7 +63,7 @@ import com.ctrl.forum.entity.Post2;
 import com.ctrl.forum.entity.PostReply2;
 import com.ctrl.forum.face.FaceRelativeLayout;
 import com.ctrl.forum.manager.MediaManager;
-import com.ctrl.forum.ui.adapter.InvitationDetailReplyAdapter;
+import com.ctrl.forum.ui.adapter.InvitationDetailFromPlatAdapter;
 import com.ctrl.forum.ui.adapter.InvitationListViewAdapter;
 import com.ctrl.forum.utils.Base64Util;
 import com.ctrl.forum.utils.TimeUtils;
@@ -152,7 +152,7 @@ public class InvitationDetailFromPlatformActivity extends AppToolBarActivity imp
     private PopupWindow popupWindow_share;
     private int PAGE_NUM = 1;
     private List<PostReply2> listPostReply2;
-    private InvitationDetailReplyAdapter replyAdapter;
+    private InvitationDetailFromPlatAdapter replyAdapter;
     private View headview;
     private ImageView title_image;
     private TextView tv_name;
@@ -275,7 +275,7 @@ public class InvitationDetailFromPlatformActivity extends AppToolBarActivity imp
 
 
         FaceRelativeLayout.setVisibility(View.GONE);
-        replyAdapter = new InvitationDetailReplyAdapter(this,2);
+        replyAdapter = new InvitationDetailFromPlatAdapter(this);
         tv_delete.setOnClickListener(this);
         idao = new InvitationDao(this);
         Idao = new ImageDao(this);
@@ -461,7 +461,6 @@ public class InvitationDetailFromPlatformActivity extends AppToolBarActivity imp
             listRelateMap = idao.getListRelateMap();
             mInvitationListViewAdapter.setList(listRelateMap);
 
-            Log.i("tag", "listRelateMap-----" + listRelateMap.size());
 
             //加载富文本
             loadRichText();
@@ -578,7 +577,7 @@ public class InvitationDetailFromPlatformActivity extends AppToolBarActivity imp
                 break;
             case R.id.iv_zan:
                 //  if(post.getZambiastate().equals())
-                idao.requesZambia("add", post.getId(), Arad.preferences.getString("memberId"));
+              //  idao.requesZambia("add", post.getId(), Arad.preferences.getString("memberId"));
                 break;
             case R.id.btn_send:
                 reply();

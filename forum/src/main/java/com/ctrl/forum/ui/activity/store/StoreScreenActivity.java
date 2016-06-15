@@ -65,6 +65,7 @@ public class StoreScreenActivity extends AppToolBarActivity implements View.OnCl
     private ArrayAdapter<String> adapter;
     private List<Mall> listMall;
     private boolean isFromAll;
+    private int bol=1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -130,12 +131,14 @@ public class StoreScreenActivity extends AppToolBarActivity implements View.OnCl
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
                 PAGE_NEM+=1;
+                bol=0;
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         mdao.requestCompanyByKind("0", latitude, longitude, channelId, String.valueOf(PAGE_NEM), String.valueOf(Constant.PAGE_SIZE));
                     }
                 },500);
+                PAGE_NEM=1;
             }
         });
 
@@ -150,9 +153,11 @@ public class StoreScreenActivity extends AppToolBarActivity implements View.OnCl
     public void onRequestFaild(String errorNo, String errorMessage) {
         super.onRequestFaild(errorNo, errorMessage);
         lv_store_screen.onRefreshComplete();
-        if(errorNo.equals("006")){
-            if(listMall!=null)
-            listMall.clear();
+        if(errorNo.equals("006")&&bol==1){
+            if(listMall!=null) {
+                listMall.clear();
+                listviewAdapter.setList(listMall);
+            }
             if(popupWindow!=null)
                 popupWindow.dismiss();
 
@@ -187,11 +192,13 @@ public class StoreScreenActivity extends AppToolBarActivity implements View.OnCl
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.rl_all:
+                bol=1;
                 showAllPopupWindow(listKindStr);
                 isFromAll = true;
                 break;
             case R.id.rl_sort:
                 isFromAll = false;
+                bol=1;
                 showAllPopupWindow(sortList);
                 break;
         }

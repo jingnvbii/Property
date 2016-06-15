@@ -6,8 +6,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.support.annotation.Nullable;
+import android.support.v4.view.ViewPager;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,7 +27,9 @@ import android.widget.TextView;
 import com.beanu.arad.Arad;
 import com.beanu.arad.base.ToolBarFragment;
 import com.beanu.arad.utils.AnimUtil;
-import com.beanu.arad.utils.MessageUtils;
+import com.ctrl.forum.HorzitalGridView.adapter.AppAdapter;
+import com.ctrl.forum.HorzitalGridView.adapter.MyViewPagerAdapter;
+import com.ctrl.forum.HorzitalGridView.control.PageControl;
 import com.ctrl.forum.R;
 import com.ctrl.forum.base.Constant;
 import com.ctrl.forum.customview.GridViewForScrollView;
@@ -50,12 +52,13 @@ import com.ctrl.forum.ui.activity.store.StoreCommodityDetailActivity;
 import com.ctrl.forum.ui.activity.store.StoreShopListVerticalStyleActivity;
 import com.ctrl.forum.ui.adapter.InvitationGridViewAdapter;
 import com.ctrl.forum.ui.adapter.InvitationListViewAdapter;
-import com.ctrl.forum.ui.adapter.testAdapter;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -150,10 +153,18 @@ public class InvitationFragment extends ToolBarFragment implements View.OnClickL
 
         ;
     };
-    private testAdapter adapter;
     private HomeAutoSwitchPicHolder mAutoSwitchPicHolder;
     private ArrayList<String> mData;
     private ImageView iv_invitation_notice_image;
+    private ViewPager myViewPager;
+    private static final float APP_PAGE_SIZE = 10.0f;
+    private MyViewPagerAdapter viewpagerAdapter;
+    LayoutInflater inflater;
+
+    private PageControl pageControl;
+
+    private Map<Integer, GridView> map;
+    private LinearLayout viewGroup;
 
 
     public static InvitationFragment newInstance() {
@@ -166,6 +177,9 @@ public class InvitationFragment extends ToolBarFragment implements View.OnClickL
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         invitationListViewAdapter = new InvitationListViewAdapter(getActivity());
+        inflater = getActivity().getLayoutInflater();
+        ViewGroup main = (ViewGroup) inflater.inflate(R.layout.fragment_invitation_home_header,
+                null);
 
     }
 
@@ -216,6 +230,8 @@ public class InvitationFragment extends ToolBarFragment implements View.OnClickL
         iv_recommend_3=(ImageView)headview.findViewById(R.id.iv_recommend_3);
         iv_recommend_4=(ImageView)headview.findViewById(R.id.iv_recommend_4);
         gridView1=(GridViewForScrollView)headview.findViewById(R.id.gridView1);
+        myViewPager=(ViewPager)headview.findViewById(R.id.myviewpager);
+       viewGroup=(LinearLayout)headview.findViewById(R.id.viewGroup);
         lv01.addHeaderView(headview);
     }
 
@@ -247,7 +263,7 @@ public class InvitationFragment extends ToolBarFragment implements View.OnClickL
         idao = new InvitationDao(this);
         showProgress(true);
         idao.requestInitPostHomePage();
-        idao.requestPostListByCategory(Arad.preferences.getString("memberId"), "", "0", "", PAGE_NUM, Constant.PAGE_SIZE);
+        idao.requestPostListByCategory(Arad.preferences.getString("memberId"), "", "0", "","", PAGE_NUM, Constant.PAGE_SIZE);
         lv_invitation_fragment_home.setMode(PullToRefreshBase.Mode.BOTH);
         lv_invitation_fragment_home.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
             @Override
@@ -258,7 +274,7 @@ public class InvitationFragment extends ToolBarFragment implements View.OnClickL
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        idao.requestPostListByCategory(Arad.preferences.getString("memberId"), "", "0", "", PAGE_NUM, Constant.PAGE_SIZE);
+                        idao.requestPostListByCategory(Arad.preferences.getString("memberId"), "", "0", "", "",PAGE_NUM, Constant.PAGE_SIZE);
                     }
                 }, 500);
             }
@@ -270,7 +286,7 @@ public class InvitationFragment extends ToolBarFragment implements View.OnClickL
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        idao.requestPostListByCategory(Arad.preferences.getString("memberId"), "", "0", "", PAGE_NUM, Constant.PAGE_SIZE);
+                        idao.requestPostListByCategory(Arad.preferences.getString("memberId"), "", "0", "", "",PAGE_NUM, Constant.PAGE_SIZE);
                     }
                 }, 500);
             }
@@ -320,23 +336,59 @@ public class InvitationFragment extends ToolBarFragment implements View.OnClickL
             listPostKind = idao.getListPostKind();
             listNotice = idao.getListNotice();
             listRecommend = idao.getListRecommend();
-            MessageUtils.showShortToast(getActivity(), "初始化成功");
+           // MessageUtils.showShortToast(getActivity(), "初始化成功");
             setValue();
             initRecommend();//推荐列表初始化
             initNotice();//公告栏数据初始化
             //调用轮播图
             setLoopView();
+            initViewPager();
+            viewpagerAdapter = new MyViewPagerAdapter(getActivity(), map);
+            myViewPager.setAdapter(viewpagerAdapter);
+            myViewPager.setOnPageChangeListener(new MyListener());
         }
 
         if (requestCode == 1) {
-            MessageUtils.showShortToast(getActivity(), "获取帖子列表成功");
+          //  MessageUtils.showShortToast(getActivity(), "获取帖子列表成功");
             listPost=idao.getListPost();
-            Log.i("tag", "listPost---" + listPost.size());
             if(listPost!=null) {
                invitationListViewAdapter.setList(listPost);
             }
         }
 
+
+    }
+
+    private void initViewPager() {
+        final int PageCount = (int) Math.ceil(listPostKind.size() / APP_PAGE_SIZE);
+        map = new HashMap<Integer, GridView>();
+        for (int i = 0; i < PageCount; i++) {
+            GridView appPage = new GridView(getActivity());
+            final AppAdapter adapter =new AppAdapter(getActivity(), listPostKind, i);
+            appPage.setAdapter(adapter);
+            appPage.setNumColumns(5);
+//			appPage.setOnItemClickListener(new OnItemClickListener() {
+//
+//				@Override
+//				public void onItemClick(AdapterView<?> arg0, View arg1,
+//						int arg2, long arg3) {
+//					// TODO Auto-generated method stub
+//		          Toast.makeText(MainActivity.this, "这是第"+((adapter.getPage()*8)+arg2)+"个", Toast.LENGTH_LONG).show();
+//
+//
+//				}
+//			});
+            appPage.setOnItemClickListener(adapter);
+            map.put(i, appPage);
+
+        }
+
+       /* ViewGroup main = (ViewGroup) inflater.inflate(R.layout.fragment_invitation_home_header,
+                null);
+        // group是R.layou.main中的负责包裹小圆点的LinearLayout.
+        ViewGroup group = (ViewGroup) main.findViewById(R.id.viewGroup);*/
+        pageControl = new PageControl(getActivity(), viewGroup, PageCount);
+      //  getActivity().setContentView(main);
 
     }
 
@@ -419,13 +471,7 @@ public class InvitationFragment extends ToolBarFragment implements View.OnClickL
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        MessageUtils.showShortToast(getActivity(), "fddfdf");
-       // adapter=new testAdapter(getActivity());
-      //  adapter.setList(listMerchant);
-        lv_invitation_fragment_home.setAdapter(adapter);
-        if(lv_invitation_fragment_home!=null) {
             lv_invitation_fragment_home.setAdapter(invitationListViewAdapter);
-        }
     }
 
     @Override
@@ -554,6 +600,27 @@ public class InvitationFragment extends ToolBarFragment implements View.OnClickL
                         break;
                 }
                 break;
+        }
+
+    }
+
+    class MyListener implements ViewPager.OnPageChangeListener {
+
+        @Override
+        public void onPageScrollStateChanged(int arg0) {
+            // TODO Auto-generated method stub
+
+        }
+
+        @Override
+        public void onPageScrolled(int arg0, float arg1, int arg2) {
+            // TODO Auto-generated method stub
+
+        }
+
+        @Override
+        public void onPageSelected(int arg0) {
+            pageControl.selectPage(arg0);
         }
 
     }

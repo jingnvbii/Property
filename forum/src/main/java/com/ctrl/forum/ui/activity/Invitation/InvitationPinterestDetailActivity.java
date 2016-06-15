@@ -33,12 +33,14 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.beanu.arad.Arad;
+import com.beanu.arad.utils.AndroidUtil;
 import com.beanu.arad.utils.AnimUtil;
 import com.beanu.arad.utils.MessageUtils;
 import com.ctrl.forum.R;
 import com.ctrl.forum.base.AppToolBarActivity;
 import com.ctrl.forum.base.Constant;
 import com.ctrl.forum.customview.AudioRecordButton;
+import com.ctrl.forum.customview.RoundImageView;
 import com.ctrl.forum.customview.ShareDialog;
 import com.ctrl.forum.dao.ImageDao;
 import com.ctrl.forum.dao.InvitationDao;
@@ -49,7 +51,8 @@ import com.ctrl.forum.entity.Post2;
 import com.ctrl.forum.entity.PostReply2;
 import com.ctrl.forum.face.FaceRelativeLayout;
 import com.ctrl.forum.manager.MediaManager;
-import com.ctrl.forum.ui.adapter.InvitationDetailReplyAdapter;
+import com.ctrl.forum.ui.activity.mine.MineDetailActivity;
+import com.ctrl.forum.ui.adapter.InvitationPinetestDetailAdapter;
 import com.ctrl.forum.utils.Base64Util;
 import com.ctrl.forum.utils.TimeUtils;
 import com.ctrl.forum.utils.Utils;
@@ -145,7 +148,8 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
     private PopupWindow popupWindow_share;
     private int PAGE_NUM = 1;
     private List<PostReply2> listPostReply2;
-    private InvitationDetailReplyAdapter replyAdapter;
+    //  private InvitationDetailReplyAdapter replyAdapter;
+    private InvitationPinetestDetailAdapter mInvitationCommentDetailAdapter;
     private View headview;
     private ImageView title_image;
     private TextView tv_name;
@@ -183,6 +187,10 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
     private LinearLayout ll_image_first;
     private LinearLayout ll_image_third;
     private ImageDao Idao;
+    private RelativeLayout rl_detail_user;
+    private RoundImageView title_image_2;
+
+    private int count = 0;//点击计数器
 
 
     @Override
@@ -209,6 +217,7 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
     }
 
     private void initView() {
+        count = 0;
         title_image = (ImageView) headview.findViewById(R.id.title_image);//用户头像
         iv_levlel = (ImageView) headview.findViewById(R.id.iv_levlel);//等级
         iv001 = (ImageView) headview.findViewById(R.id.iv01);//图片
@@ -220,9 +229,9 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
         iv007 = (ImageView) headview.findViewById(R.id.iv07);
         iv008 = (ImageView) headview.findViewById(R.id.iv08);
         iv009 = (ImageView) headview.findViewById(R.id.iv09);
-        ll_image_first=(LinearLayout)headview.findViewById(R.id.ll_image_first);
-        ll_image_second=(LinearLayout)headview.findViewById(R.id.ll_image_second);
-        ll_image_third=(LinearLayout)headview.findViewById(R.id.ll_image_third);
+        ll_image_first = (LinearLayout) headview.findViewById(R.id.ll_image_first);
+        ll_image_second = (LinearLayout) headview.findViewById(R.id.ll_image_second);
+        ll_image_third = (LinearLayout) headview.findViewById(R.id.ll_image_third);
         tv_name = (TextView) headview.findViewById(R.id.tv_name);//发帖人昵称
         tv_release_time = (TextView) headview.findViewById(R.id.tv_release_time);//发布时间
         tv_address = (TextView) headview.findViewById(R.id.tv_address);//发布地点
@@ -230,14 +239,16 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
         tv_introduction = (TextView) headview.findViewById(R.id.tv_introduction);//导语
         tv_content = (TextView) headview.findViewById(R.id.tv_content);//内容
         tv_tel = (TextView) headview.findViewById(R.id.tv_tel);//电话
+        rl_detail_user = (RelativeLayout) headview.findViewById(R.id.rl_detail_user);//用户布局
         ll_tel = (LinearLayout) headview.findViewById(R.id.ll_tel);//拨打电话
+        title_image_2 = (RoundImageView) headview.findViewById(R.id.title_image_2);//头像
 
         btn_yuyin.setAudioFinishRecorderListener(new AudioRecordButton.AudioFinishRecorderListener() {
             @Override
             public void onFinished(float seconds, String filePath) {
                 MessageUtils.showShortToast(InvitationPinterestDetailActivity.this, "语音说话");
                 try {
-                    second=seconds;
+                    second = seconds;
                     String voice = Base64Util.encodeBase64File(filePath);
                     sdao.requestSoundUpload(voice);
 
@@ -252,16 +263,17 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
         listImg.add(iv02);
         listImg.add(iv03);
 
-        isFromPinglun=false;
+        isFromPinglun = false;
 
 
         FaceRelativeLayout.setVisibility(View.GONE);
-        replyAdapter = new InvitationDetailReplyAdapter(this,1);
+        //  replyAdapter = new InvitationDetailReplyAdapter(this,1);
+        mInvitationCommentDetailAdapter = new InvitationPinetestDetailAdapter(this);
         tv_delete.setOnClickListener(this);
         idao = new InvitationDao(this);
-        Idao=new ImageDao(this);
-        sdao=new SoundDao(this);
-        idao.requesPostDetail(getIntent().getStringExtra("id"),Arad.preferences.getString("zambiaID"));
+        Idao = new ImageDao(this);
+        sdao = new SoundDao(this);
+        idao.requesPostDetail(getIntent().getStringExtra("id"), Arad.preferences.getString("zambiaID"));
         idao.requesPostReplyList(getIntent().getStringExtra("id"), "1", String.valueOf(PAGE_NUM), String.valueOf(Constant.PAGE_SIZE));
         iv_share.setOnClickListener(this);
         iv_zan.setOnClickListener(this);
@@ -269,6 +281,8 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
         iv_input_yuyin.setOnClickListener(this);
         iv_input_add.setOnClickListener(this);
         btn_send.setOnClickListener(this);
+        ll_tel.setOnClickListener(this);
+        rl_detail_user.setOnClickListener(this);
 
         lv_reply_detail.setMode(PullToRefreshBase.Mode.PULL_FROM_END);
         lv_reply_detail.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
@@ -279,7 +293,7 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
             }
         });
 
-        lv_reply_detail.setAdapter(replyAdapter);
+        lv_reply_detail.setAdapter(mInvitationCommentDetailAdapter);
 
     }
 
@@ -288,6 +302,9 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
     public void onRequestFaild(String errorNo, String errorMessage) {
         super.onRequestFaild(errorNo, errorMessage);
         lv_reply_detail.onRefreshComplete();
+        if(errorNo.equals("027")){
+          //  MessageUtils.showShortToast(this, "已经拉黑过，无需重复拉黑");
+        }
     }
 
     @Override
@@ -333,31 +350,30 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
 
         }
 
-        if(requestCode==10){
-            MessageUtils.showShortToast(this,"拉黑成功");
+        if (requestCode == 10) {
+            MessageUtils.showShortToast(this, "拉黑成功");
             popupWindow.dismiss();
         }
-        if(requestCode==11){
-            MessageUtils.showShortToast(this,"帖子举报成功");
+        if (requestCode == 11) {
+            MessageUtils.showShortToast(this, "帖子举报成功");
             popupWindow.dismiss();
         }
-        if(requestCode==889){
-            MessageUtils.showShortToast(this,"语音上传成功");
-            soundUrl=sdao.getSoundUrl();
-           // replyAdapter.setSoundrUrl(soundUrl);
-            Log.i("tag","soundUrl---"+soundUrl);
+        if (requestCode == 889) {
+            MessageUtils.showShortToast(this, "语音上传成功");
+            soundUrl = sdao.getSoundUrl();
+            // replyAdapter.setSoundrUrl(soundUrl);
             if (soundUrl != null) {
                 if (!isFromPinglun) {//无评论
-                    idao.requestReplyPost(post.getId(), post.getReporterId(),"", Arad.preferences.getString("memberId"), "2", "", soundUrl, "", "", "", "");
-                }else{//有评论
-                    idao.requestReplyPost(post.getId(), post.getReporterId(), listPostReply2.get(itemPosition).getId(), Arad.preferences.getString("memberId"), "2","" ,soundUrl,listPostReply2.get(itemPosition).getMemberId(), "", "", "");
+                    idao.requestReplyPost(post.getId(), post.getReporterId(), "", Arad.preferences.getString("memberId"), "2", "", soundUrl, "", "", "", "");
+                } else {//有评论
+                    idao.requestReplyPost(post.getId(), post.getReporterId(), listPostReply2.get(itemPosition).getId(), Arad.preferences.getString("memberId"), "2", "", soundUrl, listPostReply2.get(itemPosition).getMemberId(), "", "", "");
                 }
 
 
             }
         }
         if (requestCode == 15) {
-            MessageUtils.showShortToast(this, "回复成功");
+            //  MessageUtils.showShortToast(this, "回复成功");
             reset();
             if (listPostReply2 != null) {
                 listPostReply2.clear();
@@ -368,39 +384,55 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
         }
         if (requestCode == 5) {
             lv_reply_detail.onRefreshComplete();
-            MessageUtils.showShortToast(this, "获取评论列表成功");
-            if(popupWindow!=null){
-                if(popupWindow.isShowing()) {
+            //   MessageUtils.showShortToast(this, "获取评论列表成功");
+            if (popupWindow != null) {
+                if (popupWindow.isShowing()) {
                     popupWindow.dismiss();
                 }
             }
 
             listPostReply2 = idao.getListPostReply2();
-            replyAdapter.setList(listPostReply2);
+            mInvitationCommentDetailAdapter.setList(listPostReply2);
             //  lv_reply_detail.setAdapter(replyAdapter);
 
         }
         if (requestCode == 14) {
-            MessageUtils.showShortToast(this, "点赞成功");
-        }
+            if (count % 2 == 0) {//奇数次点击
+                if (post.getZambiastate().equals("0")) {
+                    MessageUtils.showShortToast(this, "取消点赞成功");
+                }
+                if (post.getZambiastate().equals("1")) {
+                    MessageUtils.showShortToast(this, "点赞成功");
+                }
+            }
+            if (count % 2 == 1) {//偶数次点击
+                if (post.getZambiastate().equals("0")) {
+                    MessageUtils.showShortToast(this, "点赞成功");
 
+                }
+                if (post.getZambiastate().equals("1")) {
+                    MessageUtils.showShortToast(this, "取消点赞成功");
+                }
+            }
+        }
         if (requestCode == 8) {
             MessageUtils.showShortToast(this, "删除帖子成功");
             finish();
         }
         if (requestCode == 3) {
-            MessageUtils.showShortToast(this, "获取帖子详情成功ghfgh");
+            // MessageUtils.showShortToast(this, "获取帖子详情成功ghfgh");
             post = idao.getPost2();
-            user=idao.getUser();
-            Log.i("tag","listpostimag----size"+ idao.getListPostImage().size());
-            if(user!=null) {
+            user = idao.getUser();
+            if (user != null) {
                 Arad.imageLoader.load(user.getImgUrl()).placeholder(R.mipmap.round_img).into(title_image);
+                Arad.imageLoader.load(user.getImgUrl()).placeholder(R.mipmap.round_img).into(title_image_2);
                 tv_name.setText(user.getNickName());
                 tv_address.setText(idao.getUser().getAddress());
                 tv_tel.setText(idao.getUser().getMobile());
+
             }
             String levlel = idao.getUser().getMemberLevel();
-            if(levlel!=null) {
+            if (levlel != null) {
                 switch (levlel) {
                     case "1":
                         iv_levlel.setImageResource(R.mipmap.vip_icon1);
@@ -425,55 +457,55 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
                         break;
                 }
             }
-            tv_release_time.setText(TimeUtils.date(Long.parseLong(post.getPublishTime())));
+            tv_release_time.setText("发布时间：" + TimeUtils.date(Long.parseLong(post.getPublishTime())));
             tv_introduction.setText(post.getBlurbs());
             tv_content.setText(post.getContent());
-            if(idao.getListPostImage()!=null) {
-                    if(idao.getListPostImage().size()>=1){
-                        ll_image_first.setVisibility(View.VISIBLE);
-                        iv001.setVisibility(View.VISIBLE);
-                        Arad.imageLoader.load(idao.getListPostImage().get(0).getImg()).placeholder(R.mipmap.default_error).into(iv001);
-                    }
-                    if(idao.getListPostImage().size()>=2){
-                        iv002.setVisibility(View.VISIBLE);
-                        Arad.imageLoader.load(idao.getListPostImage().get(1).getImg()).placeholder(R.mipmap.default_error).into(iv002);
-                    }
-                    if(idao.getListPostImage().size()>=3){
-                        iv003.setVisibility(View.VISIBLE);
-                        Arad.imageLoader.load(idao.getListPostImage().get(2).getImg()).placeholder(R.mipmap.default_error).into(iv003);
-                    }
-                    if(idao.getListPostImage().size()>=4){
-                        iv004.setVisibility(View.VISIBLE);
-                        Arad.imageLoader.load(idao.getListPostImage().get(3).getImg()).placeholder(R.mipmap.default_error).into(iv004);
-                    }
-                    if(idao.getListPostImage().size()>=5){
-                        ll_image_second.setVisibility(View.VISIBLE);
-                        iv005.setVisibility(View.VISIBLE);
-                        Arad.imageLoader.load(idao.getListPostImage().get(4).getImg()).placeholder(R.mipmap.default_error).into(iv005);
-                    }
-                    if(idao.getListPostImage().size()>=6){
-                        iv006.setVisibility(View.VISIBLE);
-                        Arad.imageLoader.load(idao.getListPostImage().get(5).getImg()).placeholder(R.mipmap.default_error).into(iv006);
-                    }
-                    if(idao.getListPostImage().size()>=7){
-                        iv007.setVisibility(View.VISIBLE);
-                        Arad.imageLoader.load(idao.getListPostImage().get(6).getImg()).placeholder(R.mipmap.default_error).into(iv007);
-                    }
-                    if(idao.getListPostImage().size()>=8){
-                        iv008.setVisibility(View.VISIBLE);
-                        Arad.imageLoader.load(idao.getListPostImage().get(7).getImg()).placeholder(R.mipmap.default_error).into(iv008);
-                    }
-                    if(idao.getListPostImage().size()>=9){
-                        ll_image_third.setVisibility(View.VISIBLE);
-                        iv009.setVisibility(View.VISIBLE);
-                        Arad.imageLoader.load(idao.getListPostImage().get(8).getImg()).placeholder(R.mipmap.default_error).into(iv009);
-                    }
-
+            if (idao.getListPostImage() != null) {
+                if (idao.getListPostImage().size() >= 1) {
+                    ll_image_first.setVisibility(View.VISIBLE);
+                    iv001.setVisibility(View.VISIBLE);
+                    Arad.imageLoader.load(idao.getListPostImage().get(0).getImg()).placeholder(R.mipmap.default_error).into(iv001);
                 }
+                if (idao.getListPostImage().size() >= 2) {
+                    iv002.setVisibility(View.VISIBLE);
+                    Arad.imageLoader.load(idao.getListPostImage().get(1).getImg()).placeholder(R.mipmap.default_error).into(iv002);
+                }
+                if (idao.getListPostImage().size() >= 3) {
+                    iv003.setVisibility(View.VISIBLE);
+                    Arad.imageLoader.load(idao.getListPostImage().get(2).getImg()).placeholder(R.mipmap.default_error).into(iv003);
+                }
+                if (idao.getListPostImage().size() >= 4) {
+                    iv004.setVisibility(View.VISIBLE);
+                    Arad.imageLoader.load(idao.getListPostImage().get(3).getImg()).placeholder(R.mipmap.default_error).into(iv004);
+                }
+                if (idao.getListPostImage().size() >= 5) {
+                    ll_image_second.setVisibility(View.VISIBLE);
+                    iv005.setVisibility(View.VISIBLE);
+                    Arad.imageLoader.load(idao.getListPostImage().get(4).getImg()).placeholder(R.mipmap.default_error).into(iv005);
+                }
+                if (idao.getListPostImage().size() >= 6) {
+                    iv006.setVisibility(View.VISIBLE);
+                    Arad.imageLoader.load(idao.getListPostImage().get(5).getImg()).placeholder(R.mipmap.default_error).into(iv006);
+                }
+                if (idao.getListPostImage().size() >= 7) {
+                    iv007.setVisibility(View.VISIBLE);
+                    Arad.imageLoader.load(idao.getListPostImage().get(6).getImg()).placeholder(R.mipmap.default_error).into(iv007);
+                }
+                if (idao.getListPostImage().size() >= 8) {
+                    iv008.setVisibility(View.VISIBLE);
+                    Arad.imageLoader.load(idao.getListPostImage().get(7).getImg()).placeholder(R.mipmap.default_error).into(iv008);
+                }
+                if (idao.getListPostImage().size() >= 9) {
+                    ll_image_third.setVisibility(View.VISIBLE);
+                    iv009.setVisibility(View.VISIBLE);
+                    Arad.imageLoader.load(idao.getListPostImage().get(8).getImg()).placeholder(R.mipmap.default_error).into(iv009);
+                }
+
             }
-
-
         }
+
+
+    }
 
 
     @Override
@@ -511,19 +543,29 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.rl_detail_user:
+                Intent intent = new Intent(this, MineDetailActivity.class);
+                intent.putExtra("id", user.getId());
+                startActivity(intent);
+                AnimUtil.intentSlidIn(this);
+                break;
+            case R.id.ll_tel://一键拨打电话
+                if (user.getMobile() != null)
+                    AndroidUtil.dial(this, user.getMobile());
+                break;
             case R.id.tv_zhikanlouzhu://只看楼主
                 break;
             case R.id.tv_daoxu://倒叙查看
-                if(listPostReply2!=null){
+                if (listPostReply2 != null) {
                     listPostReply2.clear();
                 }
                 idao.requesPostReplyList(getIntent().getStringExtra("id"), "0", String.valueOf(PAGE_NUM), String.valueOf(Constant.PAGE_SIZE));
                 break;
             case R.id.tv_pinbizuozhe://屏蔽作者
-                idao.requeMemberBlackListAdd(Arad.preferences.getString("memberId"),user.getId());
+                idao.requeMemberBlackListAdd(Arad.preferences.getString("memberId"), user.getId());
                 break;
             case R.id.tv_jubao://举报
-                idao.requePostReport(post.getId(),"",user.getId(),Arad.preferences.getString("memberId"));
+                idao.requePostReport(post.getId(), "", user.getId(), Arad.preferences.getString("memberId"));
                 break;
 
             case R.id.tv_delete:
@@ -533,14 +575,29 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
                 showSharePopuwindow(iv_share);
                 break;
             case R.id.iv_zan:
-                //  if(post.getZambiastate().equals())
-                idao.requesZambia("add", post.getId(), Arad.preferences.getString("memberId"));
+                if (count % 2 == 0) {//奇数次点击
+                    if (post.getZambiastate().equals("0")) {
+                        idao.requesZambia("reduce", post.getId(), Arad.preferences.getString("memberId"), "", "");
+                    }
+                    if (post.getZambiastate().equals("1")) {
+                        idao.requesZambia("add", post.getId(), Arad.preferences.getString("memberId"), "", "");
+                    }
+                }
+                if (count % 2 == 1) {//偶数次点击
+                    if (post.getZambiastate().equals("0")) {
+                        idao.requesZambia("add", post.getId(), Arad.preferences.getString("memberId"), "", "");
+                    }
+                    if (post.getZambiastate().equals("1")) {
+                        idao.requesZambia("reduce", post.getId(), Arad.preferences.getString("memberId"), "", "");
+                    }
+                }
+                count++;
                 break;
             case R.id.btn_send:
                 reply();
                 break;
             case R.id.tv_pinglun:
-                isFromPinglun=false;
+                isFromPinglun = false;
                 if (ll_pinglun.getVisibility() == View.VISIBLE) {
                     ll_pinglun.setVisibility(View.GONE);
                     FaceRelativeLayout.setVisibility(View.VISIBLE);
@@ -816,71 +873,70 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
     }
 
     private void reply() {
-        if(isFromPinglun){
+        if (isFromPinglun) {
 
-            if(et_sendmessage.getText().toString().equals("")&&mImageList.size()>0){
+            if (et_sendmessage.getText().toString().equals("") && mImageList.size() > 0) {
 
                 idao.requestReplyPost(post.getId(), post.getReporterId(), listPostReply2.get(itemPosition).getId(),
                         Arad.preferences.getString("memberId"), "1", et_sendmessage.getText().toString().trim(), "",
-                        listPostReply2.get(itemPosition).getMemberId(), listPostReply2.get(itemPosition).getMemberFloor(),setURL(),
+                        listPostReply2.get(itemPosition).getMemberId(), listPostReply2.get(itemPosition).getMemberFloor(), setURL(),
                         setThunbUrl());
 
-            }else if(!TextUtils.isEmpty(et_sendmessage.getText().toString().trim())&&mImageList.size()==0){
+            } else if (!TextUtils.isEmpty(et_sendmessage.getText().toString().trim()) && mImageList.size() == 0) {
 
                 idao.requestReplyPost(post.getId(), post.getReporterId(), listPostReply2.get(itemPosition).getId(),
                         Arad.preferences.getString("memberId"), "0", et_sendmessage.getText().toString().trim(), "",
-                        listPostReply2.get(itemPosition).getMemberId(), listPostReply2.get(itemPosition).getMemberFloor(),"",
+                        listPostReply2.get(itemPosition).getMemberId(), listPostReply2.get(itemPosition).getMemberFloor(), "",
                         "");
 
-            }else {
-                MessageUtils.showShortToast(this,"回复内容为空");
+            } else {
+                MessageUtils.showShortToast(this, "回复内容为空");
             }
 
 
-
-        }else {
-            if(et_sendmessage.getText().toString().equals("")&&mImageList.size()>0){
+        } else {
+            if (et_sendmessage.getText().toString().equals("") && mImageList.size() > 0) {
 
                 idao.requestReplyPost(post.getId(), post.getReporterId(), "", Arad.preferences.getString("memberId"), "1",
                         et_sendmessage.getText().toString().trim(), "", "", "",
-                        setURL(),setThunbUrl());
+                        setURL(), setThunbUrl());
 
-            }else if(!TextUtils.isEmpty(et_sendmessage.getText().toString().trim())&&mImageList.size()==0){
+            } else if (!TextUtils.isEmpty(et_sendmessage.getText().toString().trim()) && mImageList.size() == 0) {
 
                 idao.requestReplyPost(post.getId(), post.getReporterId(), "", Arad.preferences.getString("memberId"), "0",
                         et_sendmessage.getText().toString().trim(), "", "", "",
-                        "","");
-            }else {
-                MessageUtils.showShortToast(this,"回复内容为空");
+                        "", "");
+            } else {
+                MessageUtils.showShortToast(this, "回复内容为空");
             }
 
         }
     }
 
     private String setThunbUrl() {
-        String url=null;
-        if(mImageList.size()==1){
-            url=mImageList.get(0).getThumbImgUrl();
+        String url = null;
+        if (mImageList.size() == 1) {
+            url = mImageList.get(0).getThumbImgUrl();
         }
-        if(mImageList.size()==2){
-            url=mImageList.get(0).getImgUrl()+","+mImageList.get(1).getThumbImgUrl();
+        if (mImageList.size() == 2) {
+            url = mImageList.get(0).getImgUrl() + "," + mImageList.get(1).getThumbImgUrl();
         }
-        if(mImageList.size()==3){
-            url=mImageList.get(0).getImgUrl()+","+mImageList.get(1).getImgUrl()+","+mImageList.get(2).getThumbImgUrl();
+        if (mImageList.size() == 3) {
+            url = mImageList.get(0).getImgUrl() + "," + mImageList.get(1).getImgUrl() + "," + mImageList.get(2).getThumbImgUrl();
         }
         return url;
     }
 
     private String setURL() {
-        String url=null;
-        if(mImageList.size()==1){
-            url=mImageList.get(0).getImgUrl();
+        String url = null;
+        if (mImageList.size() == 1) {
+            url = mImageList.get(0).getImgUrl();
         }
-        if(mImageList.size()==2){
-            url=mImageList.get(0).getImgUrl()+","+mImageList.get(1).getImgUrl();
+        if (mImageList.size() == 2) {
+            url = mImageList.get(0).getImgUrl() + "," + mImageList.get(1).getImgUrl();
         }
-        if(mImageList.size()==3){
-            url=mImageList.get(0).getImgUrl()+","+mImageList.get(1).getImgUrl()+","+mImageList.get(2).getImgUrl();
+        if (mImageList.size() == 3) {
+            url = mImageList.get(0).getImgUrl() + "," + mImageList.get(1).getImgUrl() + "," + mImageList.get(2).getImgUrl();
         }
         return url;
     }
@@ -891,16 +947,16 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
     * */
     private void reset() {
         isFromPinglun = false;
-        if(!et_sendmessage.isEnabled()){
+        if (!et_sendmessage.isEnabled()) {
             et_sendmessage.setEnabled(true);
         }
-        if(mImageList!=null){
+        if (mImageList != null) {
             mImageList.clear();
         }
-        if(ll_bottom_edit.getVisibility()==View.VISIBLE){
+        if (ll_bottom_edit.getVisibility() == View.VISIBLE) {
             ll_bottom_edit.setVisibility(View.GONE);
         }
-        if(ll_image_custom_facerelativelayout.getVisibility()==View.VISIBLE){
+        if (ll_image_custom_facerelativelayout.getVisibility() == View.VISIBLE) {
             ll_image_custom_facerelativelayout.setVisibility(View.GONE);
         }
         if (FaceRelativeLayout.getVisibility() == View.VISIBLE) {
@@ -972,10 +1028,10 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
     private void showMorePopupwindow(View v) {
         View contentView = LayoutInflater.from(this).inflate(R.layout.popupwindow_more, null);
 
-        TextView tv_zhikanlouzhu=(TextView)contentView.findViewById(R.id.tv_zhikanlouzhu);
-        TextView tv_daoxu=(TextView)contentView.findViewById(R.id.tv_daoxu);
-        TextView tv_pinbizuozhe=(TextView)contentView.findViewById(R.id.tv_pinbizuozhe);
-        TextView tv_jubao=(TextView)contentView.findViewById(R.id.tv_jubao);
+        TextView tv_zhikanlouzhu = (TextView) contentView.findViewById(R.id.tv_zhikanlouzhu);
+        TextView tv_daoxu = (TextView) contentView.findViewById(R.id.tv_daoxu);
+        TextView tv_pinbizuozhe = (TextView) contentView.findViewById(R.id.tv_pinbizuozhe);
+        TextView tv_jubao = (TextView) contentView.findViewById(R.id.tv_jubao);
 
         tv_zhikanlouzhu.setOnClickListener(this);
         tv_daoxu.setOnClickListener(this);
@@ -993,7 +1049,7 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
         // 设置SelectPicPopupWindow弹出窗体可点击
         popupWindow.setFocusable(true);
         // 设置SelectPicPopupWindow弹出窗体动画效果
-     //   popupWindow.setAnimationStyle(R.style.AnimBottom);
+        //   popupWindow.setAnimationStyle(R.style.AnimBottom);
         // 实例化一个ColorDrawable颜色为半透明
         ColorDrawable dw = new ColorDrawable(0x90000000);
         // 设置SelectPicPopupWindow弹出窗体的背景
@@ -1057,16 +1113,16 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
 
     }
 
-/*
-* 播放语音
-* */
-    public void playSound(View view,String soundUrl) {
+    /*
+    * 播放语音
+    * */
+    public void playSound(View view, String soundUrl) {
         // TODO Auto-generated method stub
 
         // 播放动画
-        if (viewanim!=null) {//让第二个播放的时候第一个停止播放
+        if (viewanim != null) {//让第二个播放的时候第一个停止播放
             viewanim.setBackgroundResource(R.drawable.voice_default);
-            viewanim=null;
+            viewanim = null;
         }
         viewanim = view.findViewById(R.id.id_recorder_anim);
         viewanim.setBackgroundResource(R.drawable.play);
@@ -1081,7 +1137,6 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
                     @Override
                     public void onCompletion(MediaPlayer mp) {
                         viewanim.setBackgroundResource(R.drawable.voice_default);
-
                     }
                 });
 

@@ -75,7 +75,7 @@ public class InvitationCommentDetailAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
         final PostReply2 mPostReply2 = list.get(position);
-        holder.tv_reply_time.setText(TimeUtils.date(Long.parseLong(mPostReply2.getCreateTime())));
+        holder.tv_reply_time.setText(TimeUtils.timeFormat(Long.parseLong(mPostReply2.getCreateTime()),"yyyy-MM-dd"));
         holder.tv_comment_detail_floor.setText(mPostReply2.getMemberFloor() + " 楼");
         if(mPostReply2.getMemberLevel()!=null){
             switch (mPostReply2.getMemberLevel()){

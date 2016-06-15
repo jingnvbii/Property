@@ -30,9 +30,9 @@
             android:textColor="@color/text_black"/>
 
         <TextView
+            android:id="@+id/tv_payment_order_id"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="154564654654"
             android:textColor="@color/text_gray"
             android:layout_alignParentRight="true"/>
     </RelativeLayout>
@@ -55,9 +55,9 @@
             android:textColor="@color/text_black"/>
 
         <TextView
+            android:id="@+id/tv_payment_order_total_price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="23元"
             android:textColor="@color/text_red"
             android:layout_alignParentRight="true"/>
     </RelativeLayout>
@@ -79,9 +79,9 @@
             android:textColor="@color/text_black"/>
 
         <TextView
+            android:id="@+id/tv_payment_order_youhui_price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="14元"
             android:textColor="@color/text_red"
             android:layout_alignParentRight="true"/>
     </RelativeLayout>
@@ -103,9 +103,9 @@
             android:textColor="@color/text_black"/>
 
         <TextView
+            android:id="@+id/tv_payment_order_residue_price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="8元"
             android:textColor="@color/text_red"
             android:layout_alignParentRight="true"/>
     </RelativeLayout>
@@ -118,6 +118,7 @@
         android:text="请选择支付方式"/>
 
     <RelativeLayout
+        android:id="@+id/rl_weixin"
         android:layout_width="match_parent"
         android:padding="10dp"
         android:background="@color/white"
@@ -150,10 +151,12 @@
             android:text="推荐安装5.0以上版本使用"/>
 
         <CheckBox
+            android:id="@+id/checkbox_payment_order_weixin"
             android:background="@drawable/online_payment_selector"
             android:button="@null"
             android:layout_width="wrap_content"
             android:checked="true"
+            android:clickable="false"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_marginRight="@dimen/margin_left_and_right"
@@ -166,6 +169,7 @@
         android:layout_height="1px"
         android:background="@color/line_gray"></View>
     <RelativeLayout
+        android:id="@+id/rl_zfb"
         android:layout_width="match_parent"
         android:padding="10dp"
         android:background="@color/white"
@@ -198,11 +202,12 @@
             android:text="推荐有支付宝账号的用户使用"/>
 
         <CheckBox
+            android:id="@+id/checkbox_payment_order_zhifubao"
             android:background="@drawable/online_payment_selector"
             android:button="@null"
             android:layout_width="wrap_content"
-            android:checked="true"
             android:layout_height="wrap_content"
+            android:clickable="false"
             android:layout_alignParentRight="true"
             android:layout_marginRight="@dimen/margin_left_and_right"
             android:layout_centerVertical="true"

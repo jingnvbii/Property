@@ -68,14 +68,14 @@ public class StoreFragmentAdapter extends BaseAdapter{
         holder.tv_xianjinquan_name.setText(mall.getCashName());
         if(mall.getState().equals("0")){
             holder.tv_yingyezhong.setText("休息中");
-            holder.tv_yingyezhong.setBackgroundResource(R.color.text_gray);
+            holder.tv_yingyezhong.setBackgroundResource(R.drawable.tv_gray_bg);
         }
         if(mall.getState().equals("1")){
             holder.tv_yingyezhong.setText("营业中");
             holder.tv_yingyezhong.setBackgroundResource(R.mipmap.tv_blue_bg);
         }
+        holder.ratingBar.setNumStars(5);
         holder.ratingBar.setRating(Float.parseFloat(mall.getEvaluatLevel())/2);
-
         Arad.imageLoader.load(mall.getImg()).placeholder(R.mipmap.default_error).into(holder.iv_title_photo);
         return convertView;
     }

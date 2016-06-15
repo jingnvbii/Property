@@ -79,11 +79,7 @@ public class MediaManager {
 			mPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
 			mPlayer.setOnCompletionListener(onCompletionListener);
 			// 通过Uri解析一个网络地址
-
-			Uri uri = Uri
-
-					.parse(soundUrl);
-
+			Uri uri = Uri.parse(soundUrl);
 			mPlayer.setDataSource(mContext,uri);
 			mPlayer.prepare();
 			mPlayer.start();

@@ -5,7 +5,8 @@
 
     <ImageView
         android:id="@+id/iv_zizhi"
-        android:layout_width="wrap_content"
+        android:layout_width="60dp"
+        android:scaleType="fitXY"
         android:layout_height="60dp" />
 
 </LinearLayout>

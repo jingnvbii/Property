@@ -217,14 +217,14 @@ public class InvitationCommentDetaioActivity extends AppToolBarActivity implemen
         super.onRequestSuccess(requestCode);
         lv_comment_detail.onRefreshComplete();
         if(requestCode==5){
-            MessageUtils.showShortToast(this,"获取帖子评论成功");
+          //  MessageUtils.showShortToast(this,"获取帖子评论成功");
             listPostReply=idao.getListPostReply2();
             mInvitationCommentDetailAdapter.setList(listPostReply);
         }
 
         if (requestCode == 15) {
             isFromPinglun = false;
-            MessageUtils.showShortToast(this, "回复成功");
+         //   MessageUtils.showShortToast(this, "回复成功");
             reset();
             if (listPostReply != null) {
                 listPostReply.clear();
@@ -234,7 +234,7 @@ public class InvitationCommentDetaioActivity extends AppToolBarActivity implemen
         }
 
         if(requestCode==889){
-            MessageUtils.showShortToast(this, "语音上传成功");
+           // MessageUtils.showShortToast(this, "语音上传成功");
             soundUrl=sdao.getSoundUrl();
             // replyAdapter.setSoundrUrl(soundUrl);
             Log.i("tag", "soundUrl---" + soundUrl);
@@ -251,7 +251,7 @@ public class InvitationCommentDetaioActivity extends AppToolBarActivity implemen
 
         if (requestCode == 888) {
             showProgress(false);
-            MessageUtils.showShortToast(this, "图片上传成功");
+           // MessageUtils.showShortToast(this, "图片上传成功");
             et_sendmessage.setEnabled(false);
             Image image = Idao.getImage();
             mImageList.add(image);

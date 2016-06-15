@@ -6,8 +6,8 @@ package com.ctrl.forum.entity;
  */
 public class MallKind {
     private String id;//帖子一级分类id
-    private String name;//分类名称（频道名称）
-    private String icon;//分类图标（频道图标）
+    private String kindName;//分类名称（频道名称）
+    private String kindIcon;//分类图标（频道图标）
 
     public String getId() {
         return id;
@@ -17,22 +17,19 @@ public class MallKind {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getKindName() {
+        return kindName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setKindName(String kindName) {
+        this.kindName = kindName;
     }
 
-    public String getIcon() {
-        return icon;
+    public String getKindIcon() {
+        return kindIcon;
     }
 
-    public void setIcon(String icon) {
-        this.icon = icon;
+    public void setKindIcon(String kindIcon) {
+        this.kindIcon = kindIcon;
     }
-
-
-
 }

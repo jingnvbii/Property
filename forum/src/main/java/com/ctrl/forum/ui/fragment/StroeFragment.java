@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.support.annotation.Nullable;
+import android.support.v4.view.ViewPager;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -37,6 +38,9 @@ import com.beanu.arad.Arad;
 import com.beanu.arad.base.ToolBarFragment;
 import com.beanu.arad.utils.AnimUtil;
 import com.beanu.arad.utils.MessageUtils;
+import com.ctrl.forum.HorzitalGridView.adapter.App2Adapter;
+import com.ctrl.forum.HorzitalGridView.adapter.MyViewPagerAdapter;
+import com.ctrl.forum.HorzitalGridView.control.PageControl;
 import com.ctrl.forum.R;
 import com.ctrl.forum.base.Constant;
 import com.ctrl.forum.base.MyApplication;
@@ -48,12 +52,14 @@ import com.ctrl.forum.entity.MallKind;
 import com.ctrl.forum.entity.MallRecommend;
 import com.ctrl.forum.entity.Merchant;
 import com.ctrl.forum.entity.Notice;
+import com.ctrl.forum.entity.NoticeImage;
 import com.ctrl.forum.loopview.HomeAutoSwitchPicHolder;
 import com.ctrl.forum.service.LocationService;
 import com.ctrl.forum.ui.activity.Invitation.InvitationDetailActivity;
 import com.ctrl.forum.ui.activity.store.StoreCommodityDetailActivity;
 import com.ctrl.forum.ui.activity.store.StoreLocateActivity;
 import com.ctrl.forum.ui.activity.store.StoreScreenActivity;
+import com.ctrl.forum.ui.activity.store.StoreShopListHorzitalStyleActivity;
 import com.ctrl.forum.ui.activity.store.StoreShopListVerticalStyleActivity;
 import com.ctrl.forum.ui.adapter.StoreFragmentAdapter;
 import com.ctrl.forum.ui.adapter.StoreGridViewAdapter;
@@ -61,6 +67,7 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -117,6 +124,16 @@ public class StroeFragment extends ToolBarFragment implements View.OnClickListen
     private String longitude_search;
     private String address_search;
     private TextView tv_store_home_more;
+    private ImageView iv_notice_store_home;
+    private List<NoticeImage> listNoticeImage;
+    private HashMap<Integer, GridView> map;
+
+    private ViewPager myViewPager;
+    private static final float APP_PAGE_SIZE = 10.0f;
+    private MyViewPagerAdapter viewpagerAdapter;
+    LayoutInflater inflater;
+    private PageControl pageControl;
+    private LinearLayout viewGroup;
 
 
     public static StroeFragment newInstance() {
@@ -218,8 +235,6 @@ public class StroeFragment extends ToolBarFragment implements View.OnClickListen
         // scrollView.setHorizontalScrollBarEnabled(false);// 隐藏滚动条
         getScreenDen();
         initView();
-        //调用轮播图
-        setLoopView();
         //公告轮播控件初始化
         initNoticeView();
         initData();
@@ -266,15 +281,28 @@ public class StroeFragment extends ToolBarFragment implements View.OnClickListen
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 int newpositon = position - lv01.getHeaderViewsCount();
-                Intent intent = new Intent(getActivity(), StoreShopListVerticalStyleActivity.class);
-                intent.putExtra("id", listMall.get(newpositon).getId());
-                intent.putExtra("url", listMall.get(newpositon).getImg());
-                intent.putExtra("name", listMall.get(newpositon).getName());
-                intent.putExtra("startTime", listMall.get(newpositon).getWorkStartTime());
-                intent.putExtra("endTime", listMall.get(newpositon).getWorkEndTime());
-                intent.putExtra("levlel", listMall.get(newpositon).getEvaluatLevel());
-                startActivity(intent);
-                AnimUtil.intentSlidIn(getActivity());
+                if(listMall.get(newpositon).getCompanyStyle().equals("0")) {
+                    Intent intent = new Intent(getActivity(), StoreShopListVerticalStyleActivity.class);
+                    intent.putExtra("id", listMall.get(newpositon).getId());
+                    intent.putExtra("url", listMall.get(newpositon).getImg());
+                    intent.putExtra("name", listMall.get(newpositon).getName());
+                    intent.putExtra("startTime", listMall.get(newpositon).getWorkStartTime());
+                    intent.putExtra("endTime", listMall.get(newpositon).getWorkEndTime());
+                    intent.putExtra("levlel", listMall.get(newpositon).getEvaluatLevel());
+                    startActivity(intent);
+                    AnimUtil.intentSlidIn(getActivity());
+                }
+                if(listMall.get(newpositon).getCompanyStyle().equals("1")) {
+                    Intent intent = new Intent(getActivity(), StoreShopListHorzitalStyleActivity.class);
+                    intent.putExtra("id", listMall.get(newpositon).getId());
+                    intent.putExtra("url", listMall.get(newpositon).getImg());
+                    intent.putExtra("name", listMall.get(newpositon).getName());
+                    intent.putExtra("startTime", listMall.get(newpositon).getWorkStartTime());
+                    intent.putExtra("endTime", listMall.get(newpositon).getWorkEndTime());
+                    intent.putExtra("levlel", listMall.get(newpositon).getEvaluatLevel());
+                    startActivity(intent);
+                    AnimUtil.intentSlidIn(getActivity());
+                }
 
             }
         });
@@ -353,10 +381,18 @@ public class StroeFragment extends ToolBarFragment implements View.OnClickListen
             listMallKind = mdao.getListMallKind();
             listMallNotice = mdao.getListMallNotice();
             listMallRecommend = mdao.getListMallRecommend();
+            listNoticeImage=mdao.getListNoticeImage();
+            Arad.imageLoader.load(listNoticeImage.get(0).getImgUrl()).placeholder(R.mipmap.jinrigonggao_red).into(iv_notice_store_home);
             //    MessageUtils.showShortToast(getActivity(), "商城初始化成功");
             setValue();
             initRecommend();//推荐列表初始化
             initNotice();//公告栏数据初始化
+            //调用轮播图
+            setLoopView();
+            initViewPager();
+            viewpagerAdapter = new MyViewPagerAdapter(getActivity(), map);
+            myViewPager.setAdapter(viewpagerAdapter);
+            myViewPager.setOnPageChangeListener(new MyListener());
         }
 
         if (requestCode == 1) {
@@ -366,6 +402,45 @@ public class StroeFragment extends ToolBarFragment implements View.OnClickListen
             listviewAdapter.setList(listMall);
         }
 
+
+    }
+
+    private void initViewPager() {
+        final int PageCount = (int) Math.ceil(listMallKind.size() / APP_PAGE_SIZE);
+        map = new HashMap<Integer, GridView>();
+        for (int i = 0; i < PageCount; i++) {
+            GridView appPage = new GridView(getActivity());
+            final App2Adapter adapter =new App2Adapter(getActivity(), listMallKind, i);
+            appPage.setAdapter(adapter);
+            appPage.setNumColumns(5);
+			appPage.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> arg0, View arg1,
+                                        int arg2, long arg3) {
+                    // TODO Auto-generated method stub
+                  //  MessageUtils.showShortToast(getActivity(),"fdfsdfsd");
+                    if (latitude != null && longitude != null) {
+                        Intent intent = new Intent(getActivity(), StoreScreenActivity.class);
+                        intent.putExtra("channelId", listMallKind.get(arg2).getId());
+                        intent.putExtra("latitude", latitude);
+                        intent.putExtra("longitude", longitude);
+                        getActivity().startActivity(intent);
+                        AnimUtil.intentSlidIn(getActivity());
+                    }
+
+                }
+            });
+           // appPage.setOnItemClickListener(adapter);
+            map.put(i, appPage);
+
+        }
+
+       /* ViewGroup main = (ViewGroup) inflater.inflate(R.layout.fragment_invitation_home_header,
+                null);
+        // group是R.layou.main中的负责包裹小圆点的LinearLayout.
+        ViewGroup group = (ViewGroup) main.findViewById(R.id.viewGroup);*/
+        pageControl = new PageControl(getActivity(), viewGroup, PageCount);
+        //  getActivity().setContentView(main);
 
     }
 
@@ -459,11 +534,15 @@ public class StroeFragment extends ToolBarFragment implements View.OnClickListen
         lv01 = lv_store_home.getRefreshableView();
         tv_change = (TextView) headview.findViewById(R.id.tv_change);
         tv_store_home_more = (TextView) headview.findViewById(R.id.tv_store_home_more);
+        iv_notice_store_home = (ImageView) headview.findViewById(R.id.iv_notice_store_home);
         framelayout = (FrameLayout) headview.findViewById(R.id.framelayout_store_home);
         iv01_store_recomend = (ImageView) headview.findViewById(R.id.iv01_store_recomend);
         iv02_store_recomend = (ImageView) headview.findViewById(R.id.iv02_store_recomend);
         iv03_store_recomend = (ImageView) headview.findViewById(R.id.iv03_store_recomend);
         iv04_store_recomend = (ImageView) headview.findViewById(R.id.iv04_store_recomend);
+
+        myViewPager=(ViewPager)headview.findViewById(R.id.myviewpager);
+        viewGroup=(LinearLayout)headview.findViewById(R.id.viewGroup);
         tv_store_home_more.setOnClickListener(this);
         gridView1 = (GridViewForScrollView) headview.findViewById(R.id.gridView1_store_home);
         lv01.addHeaderView(headview);
@@ -483,13 +562,14 @@ public class StroeFragment extends ToolBarFragment implements View.OnClickListen
         framelayout.addView(autoPlayPicView);
         //4. 为轮播图设置数据
         mAutoSwitchPicHolder.setData(getData());
+        mAutoSwitchPicHolder.setData(listBanner);
     }
 
     public List<String> getData() {
         mData = new ArrayList<String>();
-        mData.add("http://pic.qqmail.com/imagecache/20101016/1287208885.png");
-        mData.add("http://v1.qzone.cc/pic/201308/01/16/44/51fa1fd3d9f0d545.jpg!600x600.jpg");
-        mData.add("http://img.blog.cctv.com/attachments/2009/02/810583_200902231053501.jpg");
+        for(int i=0;i<listBanner.size();i++){
+            mData.add(listBanner.get(i).getImgUrl());
+        }
         return mData;
     }
 
@@ -680,6 +760,27 @@ public class StroeFragment extends ToolBarFragment implements View.OnClickListen
                 }
                 break;
         }
+    }
+
+    class MyListener implements ViewPager.OnPageChangeListener {
+
+        @Override
+        public void onPageScrollStateChanged(int arg0) {
+            // TODO Auto-generated method stub
+
+        }
+
+        @Override
+        public void onPageScrolled(int arg0, float arg1, int arg2) {
+            // TODO Auto-generated method stub
+
+        }
+
+        @Override
+        public void onPageSelected(int arg0) {
+            pageControl.selectPage(arg0);
+        }
+
     }
 
 

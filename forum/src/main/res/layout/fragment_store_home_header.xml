@@ -7,13 +7,36 @@
      <FrameLayout
          android:id="@+id/framelayout_store_home"
          android:layout_width="wrap_content"
-         android:layout_height="100dp">
+         android:layout_height="150dp">
      </FrameLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:background="@color/white"
+        android:layout_height="200dp">
+        <android.support.v4.view.ViewPager
+            android:id="@+id/myviewpager"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_gravity="top"
+            android:scaleType="fitXY" />
+
+        <LinearLayout
+            android:id="@+id/viewGroup"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/myviewpager"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal" >
+        </LinearLayout>
+    </LinearLayout>
 
 
      <HorizontalScrollView
          android:id="@+id/scrollView_store_home"
          android:background="@color/white"
+         android:visibility="gone"
          android:layout_width="match_parent"
          android:layout_height="wrap_content" >
 
@@ -38,13 +61,15 @@
          android:layout_height="40dp">
 
        <ImageView
-           android:layout_width="wrap_content"
+           android:id="@+id/iv_notice_store_home"
+           android:layout_width="80dp"
            android:layout_height="match_parent"
+           android:scaleType="fitXY"
            android:paddingTop="5dp"
            android:paddingBottom="5dp"
            android:paddingLeft="10dp"
            android:paddingRight="10dp"
-           android:src="@mipmap/jinrigonggao_red"/>
+        />
 
          <View
              android:layout_width="1px"
@@ -87,7 +112,6 @@
                android:id="@+id/iv01_store_recomend"
                android:layout_width="match_parent"
                android:layout_height="match_parent"
-               android:src="@mipmap/tuijian_1"
                android:scaleType="fitXY"
                />
          </LinearLayout>
@@ -101,21 +125,18 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:scaleType="fitXY"
-                android:src="@mipmap/tuijian_2"
                 android:layout_weight="1"/>
             <ImageView
                 android:id="@+id/iv03_store_recomend"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:scaleType="fitXY"
-                android:src="@mipmap/tuijian_3"
                 android:layout_weight="1"/>
             <ImageView
                 android:id="@+id/iv04_store_recomend"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:scaleType="fitXY"
-                android:src="@mipmap/tuijian_4"
                 android:layout_weight="1"/>
          </LinearLayout>
        </LinearLayout>

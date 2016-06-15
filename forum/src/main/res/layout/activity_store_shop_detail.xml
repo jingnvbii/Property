@@ -33,7 +33,7 @@
             android:layout_height="80dp"
             android:scaleType="fitXY"
             android:layout_margin="10dp"
-            android:src="@mipmap/style1_img"/>
+           />
 
         <TextView
             android:id="@+id/tv_shop_name"
@@ -43,15 +43,15 @@
             android:textSize="16sp"
             android:textColor="@color/text_black"
             android:layout_height="wrap_content"
-            android:text="小贝日用百货便利店"/>
+            />
         <TextView
             android:id="@+id/tv_time"
             android:layout_below="@+id/tv_shop_name"
             android:layout_toRightOf="@+id/iv_style_img"
             android:layout_width="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="5dp"
             android:layout_height="wrap_content"
-            android:text="营业时间  21：00-9:00"/>
+            />
 
         <RatingBar
             style="@style/roomRatingBar"
@@ -60,7 +60,6 @@
             android:id="@+id/ratingBar"
             android:layout_below="@+id/tv_time"
             android:isIndicator="true"
-            android:rating="4"
             android:layout_marginTop="5dp"
             android:layout_toRightOf="@+id/iv_style_img"
             />
@@ -70,7 +69,6 @@
         android:id="@+id/tv_shop_detail_address"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="济南市中润世纪广场"
         android:drawableLeft="@mipmap/locate_black"
         android:background="@color/white"
         android:drawablePadding="15dp"
@@ -83,7 +81,6 @@
         android:id="@+id/tv_shop_tel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="024555"
         android:drawableLeft="@mipmap/phone_black"
         android:background="@color/white"
         android:drawablePadding="15dp"
@@ -106,7 +103,6 @@
         android:id="@+id/tv_shop_notifcation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="sdfsdajkfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfdfhsdafsd f "
         android:background="@color/white"
         android:textColor="@color/text_black"
         android:paddingLeft="35dp"
@@ -130,7 +126,6 @@
         android:id="@+id/tv_shop_introduce"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="sdfsdajkfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfdfhsdafsd f "
         android:background="@color/white"
         android:textColor="@color/text_black"
         android:paddingLeft="35dp"
@@ -231,24 +226,29 @@
         android:id="@+id/tv_xianjinquan_remark"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="sdfsdajkfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfdfhsdafsd f "
         android:background="@color/white"
         android:paddingBottom="10dp"
         android:textColor="@color/text_black"
         android:paddingLeft="35dp"
         />
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
     <com.ctrl.forum.customview.ListViewForScrollView
         android:id="@+id/lv_xianjinquan"
         android:layout_width="match_parent"
         android:layout_margin="10dp"
-        android:dividerHeight="10dp"
         android:divider="@null"
+        android:dividerHeight="3dp"
         android:layout_height="wrap_content">
     </com.ctrl.forum.customview.ListViewForScrollView>
 
+    </LinearLayout>
 
-    <TextView
+
+        <TextView
         android:id="@+id/tv_reply_detail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -262,8 +262,6 @@
         android:padding="10dp"
         />
 
-
-
     <com.ctrl.forum.customview.ListViewForScrollView
         android:id="@+id/lv_pinglun"
         android:layout_width="match_parent"
@@ -272,13 +270,6 @@
         android:layout_height="wrap_content">
     </com.ctrl.forum.customview.ListViewForScrollView>
 
-
     </LinearLayout>
-
     </ScrollView>
-
-
-
-
-
 </LinearLayout>
