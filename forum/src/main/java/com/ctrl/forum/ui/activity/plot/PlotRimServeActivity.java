@@ -168,7 +168,7 @@ public class PlotRimServeActivity extends AppToolBarActivity implements View.OnC
         if (requestCode==4){
             category2s = plotDao.getCategory2();
             if (category2s!=null){
-               initView();
+               //initView();
             }
         }
         if (requestCode==5){
