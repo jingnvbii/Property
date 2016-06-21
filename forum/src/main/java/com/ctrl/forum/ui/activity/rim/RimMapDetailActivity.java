@@ -23,6 +23,9 @@ import com.baidu.mapapi.map.Marker;
 import com.baidu.mapapi.map.MarkerOptions;
 import com.baidu.mapapi.model.LatLng;
 import com.baidu.mapapi.model.LatLngBounds;
+import com.baidu.mapapi.navi.BaiduMapAppNotSupportNaviException;
+import com.baidu.mapapi.navi.BaiduMapNavigation;
+import com.baidu.mapapi.navi.NaviParaOption;
 import com.beanu.arad.Arad;
 import com.beanu.arad.base.ToolBarActivity;
 import com.beanu.arad.widget.SlidingUpPanelLayout;
@@ -67,6 +70,13 @@ public class RimMapDetailActivity extends ToolBarActivity implements View.OnClic
      * MapView 是地图主控件
      */
     private BaiduMap mBaiduMap;
+    // 天安门坐标
+    double mLat1 = 39.915291;
+    double mLon1 = 116.403857;
+    // 百度大厦坐标
+    double mLat2 = 40.056858;
+    double mLon2 = 116.308194;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -122,7 +132,7 @@ public class RimMapDetailActivity extends ToolBarActivity implements View.OnClic
         tv_name.setText(name);
         tv_address.setText(address);
         tv_number.setText(telephone);
-        tv_total.setText(callTimes+"");
+        tv_total.setText(callTimes + "");
     }
 
     private void initData() {
@@ -179,7 +189,30 @@ public class RimMapDetailActivity extends ToolBarActivity implements View.OnClic
             case R.id.cancel: //取消
                 popupWindow.dismiss();
                 break;
+            case R.id.tv_dh:
+               // startNavi();
+                break;
         }
+    }
+
+    /**
+     * 启动百度地图导航(Native)
+     */
+    public void startNavi() {
+        LatLng pt1 = new LatLng(mLat1, mLon1);
+        LatLng pt2 = new LatLng(mLat2, mLon2);
+
+        // 构建 导航参数
+        NaviParaOption para = new NaviParaOption()
+                .startPoint(pt1).endPoint(pt2)
+                .startName("天安门").endName("百度大厦");
+
+        try {
+            BaiduMapNavigation.openBaiduMapNavi(para, this);
+        } catch (BaiduMapAppNotSupportNaviException e) {
+            e.printStackTrace();
+        }
+
     }
 
     @Override
