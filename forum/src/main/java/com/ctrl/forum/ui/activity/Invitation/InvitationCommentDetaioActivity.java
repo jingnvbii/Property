@@ -184,24 +184,24 @@ public class InvitationCommentDetaioActivity extends AppToolBarActivity implemen
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
                 listPostReply.clear();
-                PAGE_NUM=1;
+                PAGE_NUM = 1;
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         idao.requesPostReplyList(getIntent().getStringExtra("id"), "1", String.valueOf(PAGE_NUM), String.valueOf(Constant.PAGE_SIZE));
                     }
-                },500);
+                }, 500);
             }
 
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
-                    PAGE_NUM+=1;
+                PAGE_NUM += 1;
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         idao.requesPostReplyList(getIntent().getStringExtra("id"), "1", String.valueOf(PAGE_NUM), String.valueOf(Constant.PAGE_SIZE));
                     }
-                },500);
+                }, 500);
             }
         });
     }
@@ -546,6 +546,11 @@ public class InvitationCommentDetaioActivity extends AppToolBarActivity implemen
     }
 
     private void reply() {
+        if(Arad.preferences.getString("isShielded").equals("1")){
+            MessageUtils.showShortToast(InvitationCommentDetaioActivity.this,"您已经被屏蔽，不能发评论");
+        }
+        if(Arad.preferences.getString("isShielded").equals("0")){
+
         if(isFromPinglun){
 
             if(et_sendmessage.getText().toString().equals("")&&mImageList.size()>0){
@@ -585,13 +590,19 @@ public class InvitationCommentDetaioActivity extends AppToolBarActivity implemen
             }
 
         }
+        }
     }
 
     public void replyPinglun(int position){
+        if(Arad.preferences.getString("isShielded").equals("1")){
+            MessageUtils.showShortToast(InvitationCommentDetaioActivity.this,"您已经被屏蔽，不能回复评论");
+        }
+        if(Arad.preferences.getString("isShielded").equals("0")){
         InputMethodManager m=(InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         m.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
         mPosition=position;
         isFromPinglun=true;
+        }
     }
 
     private String setThunbUrl() {

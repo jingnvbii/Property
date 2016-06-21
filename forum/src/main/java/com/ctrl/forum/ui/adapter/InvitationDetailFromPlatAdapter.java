@@ -1,6 +1,9 @@
 package com.ctrl.forum.ui.adapter;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.text.SpannableString;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,11 +14,14 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.beanu.arad.Arad;
+import com.beanu.arad.utils.AnimUtil;
 import com.ctrl.forum.R;
 import com.ctrl.forum.customview.RoundImageView;
 import com.ctrl.forum.entity.PostReply2;
+import com.ctrl.forum.face.FaceConversionUtil;
 import com.ctrl.forum.ui.activity.Invitation.InvitationDetailFromPlatformActivity;
 import com.ctrl.forum.ui.activity.Invitation.InvitationPinterestDetailActivity;
+import com.ctrl.forum.ui.activity.mine.MineDetailActivity;
 import com.ctrl.forum.utils.TimeUtils;
 
 import java.util.List;
@@ -110,6 +116,8 @@ public class InvitationDetailFromPlatAdapter extends BaseAdapter {
                 holder.ll_reply_invitation_image.setVisibility(View.GONE);
                 holder.rl_reply_voice.setVisibility(View.GONE);
                 holder.tv_reply_content.setVisibility(View.VISIBLE);
+                SpannableString spannableString = FaceConversionUtil.getInstace().getExpressionString(mcontext, mPostReply2.getReplyContent());
+                holder.tv_reply_content.setText(spannableString);
                 holder.tv_reply_content.setText(mPostReply2.getReplyContent());
                 holder.tv_reply_name.setText(mPostReply2.getMemberName());
 
@@ -153,31 +161,37 @@ public class InvitationDetailFromPlatAdapter extends BaseAdapter {
                 holder.tv_reply_content.setVisibility(View.VISIBLE);
                 holder.rl_reply_voice.setVisibility(View.GONE);
                 holder.rl_pinglun.setVisibility(View.VISIBLE);
+                SpannableString spannableString = FaceConversionUtil.getInstace().getExpressionString(mcontext, mPostReply2.getReplyContent());
+                holder.tv_reply_content.setText(spannableString);
                 holder.ll_reply_invitation_image.setVisibility(View.GONE);
                 holder.tv_reply_content.setText(mPostReply2.getReplyContent());
                 holder.tv_pinglun_content.setText(mPostReply2.getPreContent());
                 holder.tv_reply_name.setText(mPostReply2.getMemberName());
-                holder.tv_pinglun_title.setText("引用" + mPostReply2.getMemberName() + "的回复");
+                holder.tv_pinglun_title.setText("引用  " + mPostReply2.getReceiverName() + "  的回复");
                 holder.tv_pinglun_floor.setText(mPostReply2.getReceiverFloor() + "楼");
             } else if (mPostReply2.getContentType().equals("0") && mPostReply2.getPreContentType().equals("1")) {//评论文字 回复 图片
                 holder.tv_reply_content.setVisibility(View.VISIBLE);
                 holder.rl_reply_voice.setVisibility(View.GONE);
                 holder.rl_pinglun.setVisibility(View.VISIBLE);
                 holder.ll_reply_invitation_image.setVisibility(View.GONE);
+                SpannableString spannableString = FaceConversionUtil.getInstace().getExpressionString(mcontext, mPostReply2.getReplyContent());
+                holder.tv_reply_content.setText(spannableString);
                 holder.tv_reply_content.setText(mPostReply2.getReplyContent());
                 holder.tv_reply_name.setText(mPostReply2.getMemberName());
                 holder.tv_pinglun_content.setText("[图片]");
-                holder.tv_pinglun_title.setText("引用" + mPostReply2.getMemberName() + "的回复");
+                holder.tv_pinglun_title.setText("引用  " + mPostReply2.getReceiverName() + "  的回复");
                 holder.tv_pinglun_floor.setText(mPostReply2.getReceiverFloor() + "楼");
 
             } else if (mPostReply2.getContentType().equals("0") && mPostReply2.getPreContentType().equals("2")) {//评论文字 回复 语音
                 holder.tv_reply_content.setVisibility(View.VISIBLE);
                 holder.rl_reply_voice.setVisibility(View.GONE);
                 holder.rl_pinglun.setVisibility(View.VISIBLE);
+                SpannableString spannableString = FaceConversionUtil.getInstace().getExpressionString(mcontext, mPostReply2.getReplyContent());
+                holder.tv_reply_content.setText(spannableString);
                 holder.tv_reply_content.setText(mPostReply2.getReplyContent());
                 holder.tv_reply_name.setText(mPostReply2.getMemberName());
                 holder.tv_pinglun_content.setText("[语音]");
-                holder.tv_pinglun_title.setText("引用" + mPostReply2.getMemberName() + "的回复");
+                holder.tv_pinglun_title.setText("引用  " + mPostReply2.getReceiverName() + "  的回复");
                 holder.tv_pinglun_floor.setText(mPostReply2.getReceiverFloor() + "楼");
 
             } else if (mPostReply2.getContentType().equals("1") && mPostReply2.getPreContentType().equals("0")) {//评论图片  回复 文字
@@ -200,7 +214,7 @@ public class InvitationDetailFromPlatAdapter extends BaseAdapter {
                 //TODO 加载图片
 
                 holder.tv_pinglun_content.setText(mPostReply2.getReplyContent());
-                holder.tv_pinglun_title.setText("引用" + mPostReply2.getMemberName() + "的回复");
+                holder.tv_pinglun_title.setText("引用  " + mPostReply2.getReceiverName() + "  的回复");
                 holder.tv_pinglun_content.setText(mPostReply2.getPreContent());
                 holder.tv_pinglun_floor.setText(mPostReply2.getReceiverFloor() + "楼");
 
@@ -225,7 +239,7 @@ public class InvitationDetailFromPlatAdapter extends BaseAdapter {
                 //TODO 加载图片
 
                 holder.tv_pinglun_content.setText("[图片]");
-                holder.tv_pinglun_title.setText("引用" + mPostReply2.getMemberName() + "的回复");
+                holder.tv_pinglun_title.setText("引用  " + mPostReply2.getReceiverName() + "  的回复");
                 holder.tv_pinglun_floor.setText(mPostReply2.getReceiverFloor() + "楼");
 
             } else if (mPostReply2.getContentType().equals("1") && mPostReply2.getPreContentType().equals("2")) {//评论图片  回复 语音
@@ -257,7 +271,7 @@ public class InvitationDetailFromPlatAdapter extends BaseAdapter {
                 holder.rl_pinglun.setVisibility(View.VISIBLE);
                 holder.tv_reply_name.setText(mPostReply2.getMemberName());
                 holder.tv_pinglun_content.setText(mPostReply2.getPreContent());
-                holder.tv_pinglun_title.setText("引用" + mPostReply2.getMemberName() + "的回复");
+                holder.tv_pinglun_title.setText("引用  " + mPostReply2.getReceiverName() + "  的回复");
                 holder.tv_pinglun_floor.setText(mPostReply2.getReceiverFloor() + "楼");
                 holder.tv_pinglun_content.setText(mPostReply2.getPreContent());
 
@@ -275,7 +289,7 @@ public class InvitationDetailFromPlatAdapter extends BaseAdapter {
                         activity.playSound(v, mPostReply2.getSoundUrl());
                     }
                 });
-                holder.tv_pinglun_title.setText("引用" + mPostReply2.getMemberName() + "的回复");
+                holder.tv_pinglun_title.setText("引用  " + mPostReply2.getReceiverName() + "  的回复");
                 holder.tv_pinglun_floor.setText(mPostReply2.getMemberFloor() + "楼");
 
             } else if (mPostReply2.getContentType().equals("2") && mPostReply2.getPreContentType().equals("2")) {//评论 语音  回复 语音
@@ -285,7 +299,7 @@ public class InvitationDetailFromPlatAdapter extends BaseAdapter {
                 holder.rl_pinglun.setVisibility(View.VISIBLE);
                 holder.tv_pinglun_content.setText("[语音]");
                 holder.tv_reply_name.setText(mPostReply2.getMemberName());
-                holder.tv_pinglun_title.setText("引用" + mPostReply2.getMemberName() + "的回复");
+                holder.tv_pinglun_title.setText("引用  " + mPostReply2.getReceiverName() + "  的回复");
                 holder.tv_pinglun_floor.setText(mPostReply2.getReceiverFloor() + "楼");
             } else {
                 //
@@ -298,6 +312,16 @@ public class InvitationDetailFromPlatAdapter extends BaseAdapter {
                 InvitationDetailFromPlatformActivity activity=(InvitationDetailFromPlatformActivity)mcontext;
                 activity.replyPinglun(position);
 
+            }
+        });
+
+        holder.iv_reply_photo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mcontext, MineDetailActivity.class);
+                intent.putExtra("id", mPostReply2.getMemberId());
+                mcontext.startActivity(intent);
+                AnimUtil.intentSlidIn((Activity) mcontext);
             }
         });
         return convertView;

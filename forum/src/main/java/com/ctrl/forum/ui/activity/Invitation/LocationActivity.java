@@ -88,7 +88,7 @@ public class LocationActivity extends AppToolBarActivity implements View.OnClick
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
         String locationName = getIntent().getStringExtra("tv_location_name");
-        if (locationName!=null) {
+        if(locationName!=null) {
             mPoiInfoListStr.add(locationName);
         }
         adapter2 = new ArrayAdapter<String>(LocationActivity.this, android.R.layout.simple_list_item_1, mPoiInfoListStr);

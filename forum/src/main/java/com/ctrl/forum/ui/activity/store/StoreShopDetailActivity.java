@@ -3,6 +3,8 @@ package com.ctrl.forum.ui.activity.store;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.AdapterView;
@@ -81,6 +83,24 @@ public class StoreShopDetailActivity extends AppToolBarActivity implements View.
     private StoreZiZhiGridViewAdapter mStoreZiZhiGridViewAdapter;
 
     private int count=0;//点击计数器
+    private ImageView mRightButton;
+
+    private Handler handler= new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what){
+                case 1:
+                    if(company.getCollectState().equals("0")){
+                        mRightButton.setImageResource(R.mipmap.zan_red);
+                    }
+                    if(company.getCollectState().equals("1")){
+                        mRightButton.setImageResource(R.mipmap.zan_red_shixin);
+                    }
+                    break;
+            }
+
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,15 +145,26 @@ public class StoreShopDetailActivity extends AppToolBarActivity implements View.
     public void onRequestSuccess(int requestCode) {
         super.onRequestSuccess(requestCode);
          if(requestCode==666){
-           //  MessageUtils.showShortToast(this,"店铺藏成功");
-           /*  if(company.getCollectState().equals("0")){
+             if (count % 2 == 0) {//奇数次点击
+                 if (company.getCollectState().equals("0")) {
+                     mRightButton.setImageResource(R.mipmap.zan_red_shixin);
+                 }
+
+                 if (company.getCollectState().equals("1")) {
+                     mRightButton.setImageResource(R.mipmap.zan_red);
+                 }
              }
-             if(company.getCollectState().equals("1")){
-                 MessageUtils.showShortToast(this,"取消店铺收藏成功");
-             }*/
+             if(count%2==1){//偶数次点击
+                 if (company.getCollectState().equals("0")) {
+                     mRightButton.setImageResource(R.mipmap.zan_red);
+                 }
 
+                 if (company.getCollectState().equals("1")) {
+                     mRightButton.setImageResource(R.mipmap.zan_red_shixin);
 
-
+                 }
+             }
+             count++;
          }
         if (requestCode == 002) {
           //  MessageUtils.showShortToast(this, "获取店铺详情成功");
@@ -155,13 +186,17 @@ public class StoreShopDetailActivity extends AppToolBarActivity implements View.
             tv_shop_name.setText(company.getName());
             tv_time.setText("营业时间  " + company.getWorkStartTime() + "-" + company.getWorkEndTime());
             if(company.getEvaluatLevel()!=null) {
-                ratingBar.setRating(Float.parseFloat(company.getEvaluatLevel()));
+                ratingBar.setRating(Float.parseFloat(company.getEvaluatLevel())/2);
+            }else {
+                ratingBar.setRating(Float.parseFloat("0"));
+
             }
             tv_shop_detail_address.setText(company.getAddress());
             tv_shop_tel.setText(company.getMobile());
-            tv_shop_notifcation.setText(company.getInformation());
-            tv_shop_introduce.setText(company.getNotice());
+            tv_shop_notifcation.setText(company.getNotice());
+            tv_shop_introduce.setText(company.getInformation());
             tv_xianjinquan_remark.setText(remark);
+            handler.sendEmptyMessage(1);
         }
     }
 
@@ -239,8 +274,9 @@ public class StoreShopDetailActivity extends AppToolBarActivity implements View.
 
     @Override
     public boolean setupToolBarRightButton(ImageView rightButton) {
-        rightButton.setImageResource(R.mipmap.zan_red);
-        rightButton.setOnClickListener(new View.OnClickListener() {
+       mRightButton=getmRightButton();
+       // Button.setImageResource(R.mipmap.zan_red);
+        mRightButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 CollectDao cdao = new CollectDao(StoreShopDetailActivity.this);
@@ -288,7 +324,7 @@ public class StoreShopDetailActivity extends AppToolBarActivity implements View.
                 }
 
 
-                count++;
+
             }
         });
         return true;

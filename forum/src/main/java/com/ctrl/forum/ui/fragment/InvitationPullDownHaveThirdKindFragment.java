@@ -93,12 +93,14 @@ public class InvitationPullDownHaveThirdKindFragment extends ToolBarFragment {
     private TextView tv_search;
     private int newPosition;
     private List<Banner> listBanner;
+    private String keyword;
 
 
-    public static InvitationPullDownHaveThirdKindFragment newInstance(String channelId,String styleType,String thirdKindId) {
+    public static InvitationPullDownHaveThirdKindFragment newInstance(String channelId,String styleType,String thirdKindId,String keyword) {
         InvitationPullDownHaveThirdKindFragment fragment = new InvitationPullDownHaveThirdKindFragment();
         fragment.channelId = channelId;
         fragment.styleType = styleType;
+        fragment.keyword = keyword;
         fragment.thirdKindId = thirdKindId;
         return fragment;
     }
@@ -106,6 +108,7 @@ public class InvitationPullDownHaveThirdKindFragment extends ToolBarFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        bol=1;
         idao = new InvitationDao(this);
         invitationListViewAdapter = new InvitationListViewAdapter(getActivity());
         mInvitationListViewBlockStyleAdapter = new InvitationListViewBlockStyleAdapter(getActivity());
@@ -125,12 +128,17 @@ public class InvitationPullDownHaveThirdKindFragment extends ToolBarFragment {
         if (isVisibleToUser&&bol==1 ) {
             showProgress(true);
             if(listCategroy3!=null)listCategroy3.clear();
-            if(thirdKindId==null) {
+            if(keyword!=null){
+                idao.requesPostCategory(channelId, "2", "0");
+                idao.requestPostListByCategory(Arad.preferences.getString("memberId"), thirdKindId, "0", keyword,"", PAGE_NUM, Constant.PAGE_SIZE);
+            }else if(thirdKindId==null) {
                idao.requesPostCategory(channelId, "2", "0");
                 idao.requestPostListByCategory(Arad.preferences.getString("memberId"), channelId, "0", "","", PAGE_NUM, Constant.PAGE_SIZE);
-            }else {
+            }else if(thirdKindId!=null) {
                 idao.requesPostCategory(channelId, "2", "0");
                 idao.requestPostListByCategory(Arad.preferences.getString("memberId"), thirdKindId, "0", "","", PAGE_NUM, Constant.PAGE_SIZE);
+            }else {
+                //
             }
         }
     }
@@ -229,6 +237,9 @@ public class InvitationPullDownHaveThirdKindFragment extends ToolBarFragment {
         gridView1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if(listPost!=null){
+                    listPost.clear();
+                }
                 bol = 1;
                 Position = position;
                 idao.requestPostListByCategory(Arad.preferences.getString("memberId"), listCategroy3.get(position).getId(), "0", "", "",PAGE_NUM, Constant.PAGE_SIZE);
@@ -261,6 +272,9 @@ public class InvitationPullDownHaveThirdKindFragment extends ToolBarFragment {
         gridView1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (listPost != null) {
+                    listPost.clear();
+                }
                 bol = 1;
                 idao.requestPostListByCategory(Arad.preferences.getString("memberId"), listCategroy3.get(position).getId(), "0", "", "", PAGE_NUM, Constant.PAGE_SIZE);
             }
@@ -355,8 +369,10 @@ public class InvitationPullDownHaveThirdKindFragment extends ToolBarFragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode==1111&&resultCode==2222){
-            String keyword = data.getStringExtra("keyword");
-            idao.requestPostListByCategory(Arad.preferences.getString("memberId"), listCategroy3.get(Position).getId(), "0", keyword,"", PAGE_NUM, Constant.PAGE_SIZE);
+            keyword = data.getStringExtra("keyword");
+            InvitationPullDownActivity activity = (InvitationPullDownActivity) getActivity();
+            activity.setKeyword(keyword);
+            activity.getAdapter().reLoad();
         }
     }
 

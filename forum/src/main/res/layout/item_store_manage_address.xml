@@ -27,7 +27,6 @@
           android:layout_toRightOf="@id/cb_manage_address"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:text="李晨"
           android:textColor="@color/text_black"
           android:textSize="14sp"
           />
@@ -36,7 +35,6 @@
           android:layout_toRightOf="@id/tv_manage_address_name"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:text="15465456"
           android:layout_marginLeft="10dp"
           android:textColor="@color/text_black"
           android:textSize="14sp"
@@ -47,11 +45,11 @@
           android:layout_below="@id/tv_manage_address_name"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:text="15465456"
           android:layout_marginTop="10dp"
           android:textColor="@color/text_gray"
           android:textSize="14sp"
-          />
+          android:layout_toLeftOf="@+id/iv_manage_address_edit"
+          android:layout_toStartOf="@+id/iv_manage_address_edit" />
 
         <ImageView
             android:id="@+id/iv_manage_address_edit"

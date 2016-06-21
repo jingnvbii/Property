@@ -8,7 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.ctrl.forum.R;
-import com.ctrl.forum.entity.SearchHistory;
+import com.ctrl.forum.entity.HotSearch;
 
 import java.util.List;
 
@@ -21,13 +21,13 @@ import butterknife.InjectView;
  */
 public class InvitationSearchGridViewAdapter extends BaseAdapter{
     private Context mcontext;
-    private List<SearchHistory> list;
+    private List<HotSearch> list;
 
     public InvitationSearchGridViewAdapter(Context context) {
                this.mcontext=context;
     }
 
-    public void setList(List<SearchHistory> list) {
+    public void setList(List<HotSearch> list) {
         this.list = list;
         notifyDataSetChanged();
     }
@@ -58,7 +58,7 @@ public class InvitationSearchGridViewAdapter extends BaseAdapter{
         }else {
             holder=(ViewHolder)convertView.getTag();
         }
-        SearchHistory merchant=list.get(position);
+        HotSearch merchant=list.get(position);
         holder.tv_hot_search_item.setText(merchant.getKeyword());
         return convertView;
     }

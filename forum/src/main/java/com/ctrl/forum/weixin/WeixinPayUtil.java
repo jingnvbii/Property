@@ -96,7 +96,7 @@ public class WeixinPayUtil {
      * @param proName 商品名称
      * @param totalFee 订单支付总额(单位:分)
      * */
-    public void pay(String orderIds, String proName,int totalFee){
+    public void pay(String orderIds, String url, String proName,int totalFee){
         this.orderIds = orderIds;
         this.proName = proName;
         this.totalFee = totalFee;

@@ -126,6 +126,9 @@ public class StoreShopListVerticalStyleActivity extends AppToolBarActivity imple
                     titleAdapter.setPos(typePosition);
                     titleAdapter.notifyDataSetChanged();
                     break;
+                case 2:
+                    tv.setText(name);
+                    break;
 
                 default:
                     break;
@@ -143,6 +146,8 @@ public class StoreShopListVerticalStyleActivity extends AppToolBarActivity imple
     private TextView m_list_all_price_popup;
     private Company company;
     private Button m_list_submit_popup;
+    private String name;
+    private TextView tv;
 
 
     @Override
@@ -166,12 +171,12 @@ public class StoreShopListVerticalStyleActivity extends AppToolBarActivity imple
         m_list_car_vertical_style.setOnClickListener(this);
         m_list_submit_vertical_style.setOnClickListener(this);
         iv_store_information_close.setOnClickListener(this);
-
+/*
         Arad.imageLoader.load(getIntent().getStringExtra("url")).placeholder(R.mipmap.default_error).into(iv_style_img);
         tv_shop_name.setText(getIntent().getStringExtra("name"));
         tv_time.setText("营业时间 " + getIntent().getStringExtra("startTime") + "-" + getIntent().getStringExtra("endTime"));
         if(getIntent().getStringExtra("levlel")!=null)
-        ratingBar.setNumStars(Integer.parseInt(getIntent().getStringExtra("levlel")));
+        ratingBar.setRating(Float.parseFloat(getIntent().getStringExtra("levlel"))/2);*/
 
         lv_Content.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -197,28 +202,12 @@ public class StoreShopListVerticalStyleActivity extends AppToolBarActivity imple
     public void initFoodData() {
         mdao = new MallDao(this);
         showProgress(true);
-        mdao.requestProductCategroy(getIntent().getStringExtra("id"));
+        mdao.requestProductCategroy(getIntent().getStringExtra("id"),"1");
         mdao.requestCompanysDetails(Arad.preferences.getString("memberId"), getIntent().getStringExtra("id"));
-       // mdao.requestProductCategroy("1");
 
         foodList = new ArrayList<FoodModel>();
         foodTypeList = new ArrayList<FoodTypeModel>();
         foodTpyePositionList = new ArrayList<Integer>();
-
-        //   int itemPosition = 0;// 每个item在list中的位置
-       /* for (char i = 0; i < 13; i++) {
-            String type = String.valueOf((char) ('A' + i)); // 菜品类型
-
-            foodTpyePositionList.add(itemPosition);
-
-            // 给菜品类型添加菜品
-            for (int j = 0; j < 1; j++) {
-                FoodModel foodModel = new FoodModel("松子玉米" + type + " - " + j);
-                itemPosition++;
-                foodList.add(foodModel);
-            }
-
-        }*/
     }
 
     @Override
@@ -235,8 +224,18 @@ public class StoreShopListVerticalStyleActivity extends AppToolBarActivity imple
           //  MessageUtils.showShortToast(this, "获取店铺详情成功");
             showProgress(false);
             company = mdao.getCompany();
-            tv_store_information.setText(company.getInformation());
+            tv_store_information.setText(company.getNotice());
             tv_store_information.requestFocus();
+            Arad.imageLoader.load(company.getImg()).placeholder(R.mipmap.default_error).into(iv_style_img);
+            tv_shop_name.setText(company.getName());
+            tv_time.setText("营业时间："+ company.getWorkStartTime()+"-"+company.getWorkEndTime());
+            if(company.getEvaluatLevel()!=null) {
+                ratingBar.setRating(Float.parseFloat(company.getEvaluatLevel()) / 2);
+            }else {
+                ratingBar.setRating(Float.parseFloat("0"));
+            }
+            name=company.getName();
+            handler.sendEmptyMessage(2);
         }
 
 
@@ -574,7 +573,9 @@ public class StoreShopListVerticalStyleActivity extends AppToolBarActivity imple
 
     @Override
     public String setupToolBarTitle() {
-        return "小贝商品";
+        tv=getmTitle();
+        tv.setText(name);
+        return tv.getText().toString();
     }
 
     @Override
@@ -598,6 +599,7 @@ public class StoreShopListVerticalStyleActivity extends AppToolBarActivity imple
             public void onClick(View v) {
                 Intent intent=new Intent(StoreShopListVerticalStyleActivity.this,StoreShopDetailActivity.class);
                 intent.putExtra("id",getIntent().getStringExtra("id"));
+                intent.putExtra("name",name);
                 startActivity(intent);
                 AnimUtil.intentSlidIn(StoreShopListVerticalStyleActivity.this);
             }

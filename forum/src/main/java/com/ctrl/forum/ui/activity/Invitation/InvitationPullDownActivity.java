@@ -3,6 +3,8 @@ package com.ctrl.forum.ui.activity.Invitation;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
@@ -22,6 +24,7 @@ import android.widget.PopupWindow;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.beanu.arad.Arad;
 import com.beanu.arad.utils.AnimUtil;
@@ -41,16 +44,27 @@ import com.ctrl.forum.ui.fragment.InvitationPullDownHaveThirdKindFragment;
 import com.ctrl.forum.ui.fragment.InvitationPullDownHaveThirdKindPinterestStyleFragment;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import cn.sharesdk.framework.Platform;
+import cn.sharesdk.framework.PlatformActionListener;
+import cn.sharesdk.framework.ShareSDK;
+import cn.sharesdk.sina.weibo.SinaWeibo;
+import cn.sharesdk.system.email.Email;
+import cn.sharesdk.system.text.ShortMessage;
+import cn.sharesdk.tencent.qq.QQ;
+import cn.sharesdk.tencent.weibo.TencentWeibo;
+import cn.sharesdk.wechat.friends.Wechat;
+import cn.sharesdk.wechat.moments.WechatMoments;
 
 /**
  * 帖子列表 三级分类下拉页面 activity
  * Created by jason on 2016/4/8
  */
-public class InvitationPullDownActivity extends AppToolBarActivity implements View.OnClickListener, XListView.IXListViewListener {
+public class InvitationPullDownActivity extends AppToolBarActivity implements View.OnClickListener, XListView.IXListViewListener ,PlatformActionListener{
     @InjectView(R.id.viewpager_invitation_pull_down)
     CustomViewPager viewpager_invitation_pull_down;
     @InjectView(R.id.lay)
@@ -95,6 +109,7 @@ public class InvitationPullDownActivity extends AppToolBarActivity implements Vi
     private int mChildrenPosition;
 
     public static boolean isFromSelcet=false;
+    private String keyword;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,11 +123,18 @@ public class InvitationPullDownActivity extends AppToolBarActivity implements Vi
     }
 
     private void initView() {
+        ShareSDK.initSDK(this);
         idao = new InvitationDao(this);
         idao.requesPostCategory(channelId, "1", "0");
         iv_pull_down.setOnClickListener(this);
      //   viewpager_invitation_pull_down.setScrollble(false);//禁止viewpager滚动
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ShareSDK.stopSDK(this);
     }
 
     @Override
@@ -184,10 +206,10 @@ public class InvitationPullDownActivity extends AppToolBarActivity implements Vi
             myRadioGroup.addView(view);
             styleType = listCategory.get(i).getStyleType();
             if (styleType.equals("3")) {
-                invitationPullDownHaveThirdKindPinterestStyleFragment = InvitationPullDownHaveThirdKindPinterestStyleFragment.newInstance(listCategory.get(i).getId(),null);
+                invitationPullDownHaveThirdKindPinterestStyleFragment = InvitationPullDownHaveThirdKindPinterestStyleFragment.newInstance(InvitationPullDownActivity.this,listCategory.get(i).getId(),null);
                 fragments.add(invitationPullDownHaveThirdKindPinterestStyleFragment);
             } else {
-               invitationPullDownHaveThirdKindFragment = InvitationPullDownHaveThirdKindFragment.newInstance(listCategory.get(i).getId(), listCategory.get(i).getStyleType(),null);
+               invitationPullDownHaveThirdKindFragment = InvitationPullDownHaveThirdKindFragment.newInstance(listCategory.get(i).getId(), listCategory.get(i).getStyleType(),null,null);
                 fragments.add(invitationPullDownHaveThirdKindFragment);
             }
         }
@@ -214,13 +236,25 @@ public class InvitationPullDownActivity extends AppToolBarActivity implements Vi
             @Override
             public void onReload() {
                 fragments = null;
+                String keyword1 = keyword;
                 List<Fragment> list = new ArrayList<Fragment>();
-                for(int i=0;i<listCategory2.size();i++){
-                    styleType=listCategory2.get(i).getStyleType();
-                    if (styleType.equals("3")) {
-                       list.add(InvitationPullDownHaveThirdKindPinterestStyleFragment.newInstance(listCategory2.get(i).getId(), thirdKindId));
-                    } else {
-                       list.add(InvitationPullDownHaveThirdKindFragment.newInstance(listCategory2.get(i).getId(), listCategory2.get(i).getStyleType(),thirdKindId));
+                if (listCategory2 == null) {
+                    for (int i = 0; i < listCategory.size(); i++) {
+                        styleType = listCategory.get(i).getStyleType();
+                        if (styleType.equals("3")) {
+                            list.add(InvitationPullDownHaveThirdKindPinterestStyleFragment.newInstance(InvitationPullDownActivity.this, listCategory.get(i).getId(), thirdKindId));
+                        } else {
+                            list.add(InvitationPullDownHaveThirdKindFragment.newInstance(listCategory.get(i).getId(), listCategory.get(i).getStyleType(), thirdKindId, keyword1));
+                        }
+                    }
+                } else {
+                    for (int i = 0; i < listCategory2.size(); i++) {
+                        styleType = listCategory2.get(i).getStyleType();
+                        if (styleType.equals("3")) {
+                            list.add(InvitationPullDownHaveThirdKindPinterestStyleFragment.newInstance(InvitationPullDownActivity.this, listCategory2.get(i).getId(), thirdKindId));
+                        } else {
+                            list.add(InvitationPullDownHaveThirdKindFragment.newInstance(listCategory2.get(i).getId(), listCategory2.get(i).getStyleType(), thirdKindId, keyword1));
+                        }
                     }
                 }
                 viewPagerAdapter.setPagerItems(list);
@@ -300,10 +334,16 @@ public class InvitationPullDownActivity extends AppToolBarActivity implements Vi
         rightButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(InvitationPullDownActivity.this, InvitationReleaseActivity.class);
-                intent.putExtra("channelId", channelId);
-                startActivity(intent);
-                AnimUtil.intentSlidIn(InvitationPullDownActivity.this);
+                if(Arad.preferences.getString("isShielded").equals("1")){
+                    MessageUtils.showShortToast(InvitationPullDownActivity.this,"您已经被屏蔽，不能发帖");
+                }
+                if(Arad.preferences.getString("isShielded").equals("0")){
+                    Intent intent = new Intent(InvitationPullDownActivity.this, InvitationReleaseActivity.class);
+                    intent.putExtra("channelId", channelId);
+                    startActivity(intent);
+                    AnimUtil.intentSlidIn(InvitationPullDownActivity.this);
+                }
+
             }
         });
 
@@ -327,6 +367,12 @@ public class InvitationPullDownActivity extends AppToolBarActivity implements Vi
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode==1111&&resultCode==RESULT_OK){
         }
+    }
+
+
+    public void setKeyword(String keyword){
+        this.keyword=keyword;
+
     }
 
     private void showAllCategoryPopupWindow(ImageView iv_pull_down) {
@@ -429,6 +475,85 @@ public class InvitationPullDownActivity extends AppToolBarActivity implements Vi
         idao.requeMemberBlackListAdd(Arad.preferences.getString("memberId"),reportId );
         mPopupWindow=popupWindow;
     }
+
+
+    @Override
+    public void onComplete(Platform platform, int i, HashMap<String, Object> hashMap) {
+        if (platform.getName().equals(QQ.NAME)) {// 判断成功的平台是不是QQ
+            handler.sendEmptyMessage(1);
+        } else if (platform.getName().equals(Wechat.NAME)) {//判断成功的平台是不是微信
+            handler.sendEmptyMessage(2);
+        }else if(platform.getName().equals(SinaWeibo.NAME)){//判断成功的平台是不是新浪微博
+            handler.sendEmptyMessage(3);
+        }else if(platform.getName().equals(WechatMoments.NAME)){//判断成功平台是不是微信朋友圈
+            handler.sendEmptyMessage(4);
+        }else if(platform.getName().equals(TencentWeibo.NAME)){//判断成功平台是不是腾讯微博
+            handler.sendEmptyMessage(5);
+        }else if(platform.getName().equals(Email.NAME)){//判断成功平台是不是邮件
+            handler.sendEmptyMessage(6);
+        }else if(platform.getName().equals(ShortMessage.NAME)){//判断成功平台是不是短信
+            handler.sendEmptyMessage(7);
+        }else {
+            //
+        }
+
+    }
+
+    @Override
+    public void onError(Platform platform, int i, Throwable throwable) {
+        throwable.printStackTrace();
+        Message msg = new Message();
+        msg.what = 8;
+        msg.obj = throwable.getMessage();
+        handler.sendMessage(msg);
+
+    }
+
+    @Override
+    public void onCancel(Platform platform, int i) {
+        handler.sendEmptyMessage(9);
+    }
+
+    Handler handler = new Handler() {
+
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case 1:
+                    //  Toast.makeText(getApplicationContext(), "QQ分享成功", Toast.LENGTH_LONG).show();
+                    break;
+
+                case 2:
+                    //Toast.makeText(getApplicationContext(), "微信分享成功", Toast.LENGTH_LONG).show();
+                    break;
+                case 3:
+                    //Toast.makeText(getApplicationContext(), "微信分享成功", Toast.LENGTH_LONG).show();
+                    break;
+                case 4:
+                    //Toast.makeText(getApplicationContext(), "微信分享成功", Toast.LENGTH_LONG).show();
+                    break;
+                case 5:
+                    //Toast.makeText(getApplicationContext(), "微信分享成功", Toast.LENGTH_LONG).show();
+                    break;
+                case 6:
+                    //Toast.makeText(getApplicationContext(), "微信分享成功", Toast.LENGTH_LONG).show();
+                    break;
+                case 7:
+                    //Toast.makeText(getApplicationContext(), "微信分享成功", Toast.LENGTH_LONG).show();
+                    break;
+                case 8:
+                    Toast.makeText(getApplicationContext(), "分享失败啊", Toast.LENGTH_LONG).show();
+                    break;
+                case 9:
+                    Toast.makeText(getApplicationContext(), "已取消", Toast.LENGTH_LONG).show();
+                    break;
+
+                default:
+                    break;
+            }
+        }
+
+    };
 
 
 

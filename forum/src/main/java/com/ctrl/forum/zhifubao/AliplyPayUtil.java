@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.alipay.sdk.app.PayTask;
@@ -90,8 +91,10 @@ public class AliplyPayUtil {
     };
 
     public void pay(String trade_no, String aliply_notifyUrl, String subject, String body, Double total_fee) {
-        String orderInfo = getOrderInfo(trade_no,aliply_notifyUrl, subject, body, total_fee + "");
+        String orderInfo = getOrderInfo(trade_no, aliply_notifyUrl, subject, body, total_fee + "");
+        Log.i("tag", "orderInfo" + orderInfo);
         String sign = sign(orderInfo);
+        Log.i("tag", "sign" + sign);
         if (sign == null || sign.equals("")) {
             MessageUtils.showLongToast(mActivity.getApplicationContext(), "商户支付宝签名错误！");
             return;

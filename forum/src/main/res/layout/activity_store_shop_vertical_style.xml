@@ -79,7 +79,7 @@
             android:layout_width="70dp"
             android:layout_height="80dp"
             android:scaleType="fitXY"
-            android:src="@mipmap/style1_img"/>
+            />
 
         <TextView
             android:id="@+id/tv_shop_name"
@@ -89,7 +89,7 @@
             android:layout_marginLeft="10dp"
             android:textColor="@color/text_black"
             android:layout_height="wrap_content"
-            android:text="小贝日用百货便利店"/>
+           />
         <TextView
             android:id="@+id/tv_time"
             android:layout_below="@+id/tv_shop_name"
@@ -98,7 +98,7 @@
             android:layout_width="wrap_content"
             android:layout_marginTop="5dp"
             android:layout_height="wrap_content"
-            android:text="营业时间  21：00-9:00"/>
+            />
 
         <RatingBar
             style="@style/roomRatingBar"
@@ -108,7 +108,7 @@
             android:layout_below="@+id/tv_time"
             android:layout_marginLeft="10dp"
             android:isIndicator="true"
-            android:rating="4"
+            android:rating="0"
             android:layout_marginTop="5dp"
             android:layout_toRightOf="@+id/iv_style_img"
             />

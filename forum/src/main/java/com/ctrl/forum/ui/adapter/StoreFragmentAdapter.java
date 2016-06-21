@@ -64,8 +64,6 @@ public class StoreFragmentAdapter extends BaseAdapter{
        Mall mall=list.get(position);
         holder.tv_name.setText(mall.getName());
         holder.tv_distance.setText((Double.parseDouble(mall.getDis())) / 1000.0 + " 千米");
-        holder.ratingBar.setNumStars(Integer.parseInt(mall.getEvaluatLevel()));
-        holder.tv_xianjinquan_name.setText(mall.getCashName());
         if(mall.getState().equals("0")){
             holder.tv_yingyezhong.setText("休息中");
             holder.tv_yingyezhong.setBackgroundResource(R.drawable.tv_gray_bg);
@@ -73,6 +71,27 @@ public class StoreFragmentAdapter extends BaseAdapter{
         if(mall.getState().equals("1")){
             holder.tv_yingyezhong.setText("营业中");
             holder.tv_yingyezhong.setBackgroundResource(R.mipmap.tv_blue_bg);
+        }
+        if(mall.getPacketEnable()!=null) {
+            if (mall.getPacketEnable().equals("0")) {
+                holder.tv_youhuiquan.setVisibility(View.GONE);
+                holder.tv_youhuiquan_name.setText("");
+            }
+            if (mall.getPacketEnable().equals("1")) {
+                holder.tv_youhuiquan.setVisibility(View.VISIBLE);
+                //   holder.tv_youhuiquan_name.setText(mall.);
+
+            }
+        }
+        if(mall.getCouponEnable()!=null) {
+            if (mall.getCouponEnable().equals("0")) {
+                holder.tv_xianjinquan.setVisibility(View.GONE);
+                holder.tv_xianjinquan_name.setText("");
+            }
+            if (mall.getCouponEnable().equals("1")) {
+                holder.tv_xianjinquan.setVisibility(View.VISIBLE);
+                holder.tv_xianjinquan_name.setText(mall.getCashName());
+            }
         }
         holder.ratingBar.setNumStars(5);
         holder.ratingBar.setRating(Float.parseFloat(mall.getEvaluatLevel())/2);
@@ -93,6 +112,10 @@ public class StoreFragmentAdapter extends BaseAdapter{
                 TextView  tv_xianjinquan_name;
         @InjectView(R.id.tv_youhuiquan_name)//优惠券名称
                 TextView  tv_youhuiquan_name;
+        @InjectView(R.id.tv_xianjinquan)//现金券
+                TextView  tv_xianjinquan;
+        @InjectView(R.id.tv_youhuiquan)//优惠券
+                TextView  tv_youhuiquan;
         @InjectView(R.id.tv_distance)//优惠券名称
                 TextView  tv_distance;
         @InjectView(R.id.tv_yingyezhong)//优惠券名称

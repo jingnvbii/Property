@@ -176,13 +176,11 @@ public class HomeAutoSwitchPicHolder extends BaseHolder<List<String>>
 
             // BitmapHelper.display(iv, mPictures.get(position));
        //     Arad.imageLoader.load(listBanner.get(position).getImgUrl()).placeholder(R.mipmap.default_error).into(iv);
-            //
-
+            if(mPictures.get(position)!=null&&!mPictures.get(position).equals(""))
            Arad.imageLoader.load(mPictures.get(position)).placeholder(R.mipmap.default_error).into(iv);
           // ImageLoader.getInstance().displayImage(mPictures.get(position),iv);
             container.addView(iv, 0);
 
-            if (listBanner.get(position).getType()!=null)
             iv.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -192,27 +190,29 @@ public class HomeAutoSwitchPicHolder extends BaseHolder<List<String>>
                     switch (type){
                         case "0"://跳商家
                            intent=new Intent(mContext, StoreShopListVerticalStyleActivity.class);
-                            intent.putExtra("targerId",listBanner.get(mPosition).getTargetId());
+                            intent.putExtra("id",listBanner.get(mPosition).getTargetId());
                             mContext.startActivity(intent);
                             AnimUtil.intentSlidIn((Activity)mContext);
                             break;
                         case "1"://跳商品详情
                             intent=new Intent(mContext, StoreCommodityDetailActivity.class);
-                            intent.putExtra("targerId",listBanner.get(mPosition).getTargetId());
+                            intent.putExtra("id",listBanner.get(mPosition).getTargetId());
                             mContext.startActivity(intent);
                             AnimUtil.intentSlidIn((Activity)mContext);
                             break;
                         case "2"://跳帖子详情
                             intent=new Intent(mContext, InvitationDetailActivity.class);
-                            intent.putExtra("targerId",listBanner.get(mPosition).getTargetId());
+                            intent.putExtra("id",listBanner.get(mPosition).getTargetId());
                             mContext.startActivity(intent);
                             AnimUtil.intentSlidIn((Activity)mContext);
                             break;
                         case "3"://外部链接
-                            Uri uri = Uri.parse(listBanner.get(mPosition).getTargetUrl());
-                            intent = new Intent(Intent.ACTION_VIEW, uri);
-                            mContext.startActivity(intent);
-                            AnimUtil.intentSlidIn((Activity) mContext);
+                            if(listBanner.get(mPosition).getTargetUrl().length()>0) {
+                                Uri uri = Uri.parse(listBanner.get(mPosition).getTargetUrl());
+                                    intent = new Intent(Intent.ACTION_VIEW, uri);
+                                    mContext.startActivity(intent);
+                                    AnimUtil.intentSlidIn((Activity) mContext);
+                            }
                             break;
                     }
 

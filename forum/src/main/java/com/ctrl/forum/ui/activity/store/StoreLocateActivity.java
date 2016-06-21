@@ -40,6 +40,7 @@ import com.beanu.arad.utils.AnimUtil;
 import com.beanu.arad.utils.MessageUtils;
 import com.ctrl.forum.R;
 import com.ctrl.forum.base.AppToolBarActivity;
+import com.ctrl.forum.customview.ListViewForScrollView;
 import com.ctrl.forum.dao.AddressDao;
 import com.ctrl.forum.dao.SearchDao;
 import com.ctrl.forum.entity.Address;
@@ -62,9 +63,9 @@ public class StoreLocateActivity extends AppToolBarActivity implements View.OnCl
     @InjectView(R.id.tv_locate_history)//暂无历史记录
             TextView tv_locate_history;
     @InjectView(R.id.lv_locate_address)//地址列表
-            ListView lv_locate_address;
+            ListViewForScrollView lv_locate_address;
     @InjectView(R.id.lv_locate_history)//历史记录列表
-            ListView lv_locate_history;
+            ListViewForScrollView lv_locate_history;
     @InjectView(R.id.tv_locate_now)//定位当前
             TextView tv_locate_now;
     @InjectView(R.id.tv_delete_store_history)//清空历史记录
@@ -179,7 +180,7 @@ public class StoreLocateActivity extends AppToolBarActivity implements View.OnCl
         adao = new AddressDao(this);
         sdao = new SearchDao(this);
         adao.requestGetAddressList(Arad.preferences.getString("memberId"));
-        sdao.requestSearchHistory(Arad.preferences.getString("memberId"), "4", "", "");
+        sdao.requestSearchHistory(Arad.preferences.getString("memberId"), "5", "", "");
 
         adapter = new StoreSearchAddressListAdapter(StoreLocateActivity.this);
         lv_search_address.setAdapter(adapter);
@@ -187,6 +188,8 @@ public class StoreLocateActivity extends AppToolBarActivity implements View.OnCl
         lv_search_address.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                sdao.requestAddLoactionSearch(Arad.preferences.getString("memberId"), et_locate_search.getText().toString().trim(),
+                        poiInfoList.get(position).location.latitude + "", poiInfoList.get(position).location.longitude + "");
                 intent=new Intent();
                 intent.putExtra("address",poiInfoList.get(position).address);
                 intent.putExtra("latitude",poiInfoList.get(position).location.latitude);
@@ -325,6 +328,10 @@ public class StoreLocateActivity extends AppToolBarActivity implements View.OnCl
     public void onRequestSuccess(int requestCode) {
         super.onRequestSuccess(requestCode);
         showProgress(false);
+        if(requestCode==1001){
+           //   MessageUtils.showShortToast(this, "新增搜索记录成功");
+
+        }
         if (requestCode == 0) {
             //   MessageUtils.showShortToast(this, "获取收货地址列表成功");
             listAddress = adao.getListAddress();
@@ -340,7 +347,7 @@ public class StoreLocateActivity extends AppToolBarActivity implements View.OnCl
             lv_locate_address.setAdapter(adapter);
         }
         if (requestCode == 999) {
-            MessageUtils.showShortToast(this, "获取搜索历史记录列表成功");
+          //  MessageUtils.showShortToast(this, "获取搜索历史记录列表成功");
             listLocateSearch = sdao.getListSearchHistory();
             if (listLocateSearch.size() > 0) {
                 tv_locate_history.setVisibility(View.GONE);
@@ -355,9 +362,12 @@ public class StoreLocateActivity extends AppToolBarActivity implements View.OnCl
         }
 
         if (requestCode == 1000) {
-            MessageUtils.showShortToast(this, "清空搜索历史记录列表成功");
-            if (listHistoryStr != null) listLocateSearch.clear();
-            historyAdapter.notifyDataSetChanged();
+           // MessageUtils.showShortToast(this, "清空搜索历史记录列表成功");
+            if (listHistoryStr != null) {
+                listLocateSearch.clear();
+                historyAdapter.notifyDataSetChanged();
+            }
+            tv_locate_history.setVisibility(View.VISIBLE);
         }
 
     }
@@ -370,7 +380,7 @@ public class StoreLocateActivity extends AppToolBarActivity implements View.OnCl
                 mLocationClient.start();
                 break;
             case R.id.tv_delete_store_history:
-                sdao.requestDeleteSearchHistory(Arad.preferences.getString("memberId"), "4");
+                sdao.requestDeleteSearchHistory(Arad.preferences.getString("memberId"), "5");
                 break;
             case R.id.tv_seach:
                 if (TextUtils.isEmpty(et_locate_search.getText().toString().trim())) {
@@ -409,13 +419,14 @@ public class StoreLocateActivity extends AppToolBarActivity implements View.OnCl
         tv.setCompoundDrawables(drawable, null, null, null);
         tv.setCompoundDrawablePadding(10);
         tv.setTextColor(Color.WHITE);
-        tv.setWidth(200);
+        tv.setWidth(250);
         tv.setText(getIntent().getStringExtra("address"));
         tv.setSingleLine(true);
         tv.setEllipsize(TextUtils.TruncateAt.MARQUEE);
         tv.setFocusableInTouchMode(true);
         tv.setMarqueeRepeatLimit(100000000);
-        tv.setHorizontallyScrolling(true);
+        tv.setHorizontalFadingEdgeEnabled(true);
+        tv.setFadingEdgeLength(20);
         tv.setFocusable(true);
         tv.requestFocus();
         return tv.getText().toString();

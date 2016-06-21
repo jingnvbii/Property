@@ -2,11 +2,14 @@ package com.ctrl.forum.ui.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
@@ -21,17 +24,25 @@ import com.ctrl.forum.base.AppToolBarActivity;
 import com.ctrl.forum.dao.LoginDao;
 import com.ctrl.forum.entity.MemberInfo;
 import com.ctrl.forum.ui.activity.mine.MineUpdatepwdActivity;
+import com.mob.tools.utils.UIHandler;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.ButterKnife;
+import cn.sharesdk.framework.Platform;
+import cn.sharesdk.framework.PlatformActionListener;
+import cn.sharesdk.framework.ShareSDK;
+import cn.sharesdk.sina.weibo.SinaWeibo;
+import cn.sharesdk.tencent.qq.QQ;
+import cn.sharesdk.wechat.friends.Wechat;
 
 /**
  * 登录 activity
  * Created by Eric on 2015/11/23.
  * */
-public class LoginActivity extends AppToolBarActivity implements View.OnClickListener{
+public class LoginActivity extends AppToolBarActivity implements View.OnClickListener,PlatformActionListener,Handler.Callback{
 
     private TextView tv_register;//注册按钮1
     private EditText et_username;//用户名
@@ -49,19 +60,34 @@ public class LoginActivity extends AppToolBarActivity implements View.OnClickLis
     private String latitude,lontitude;
     private String address;
 
+    private static final int MSG_USERID_FOUND = 1;
+    private static final int MSG_LOGIN = 2;
+    private static final int MSG_AUTH_CANCEL = 3;
+    private static final int MSG_AUTH_ERROR= 4;
+    private static final int MSG_AUTH_COMPLETE = 5;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_activity);
         ButterKnife.inject(this);
+        ShareSDK.initSDK(this);
         initView();
 
         mLocationClient = new LocationClient(getApplicationContext());     //声明LocationClient类
         mLocationClient.registerLocationListener(myListener);    //注册监听函数1
         initLocation();
-
         mLocationClient.start();
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ShareSDK.stopSDK(this);
+        mLocationClient.stop();
+        mLocationClient.unRegisterLocationListener(myListener);
+        mLocationClient = null;
     }
 
     private void initLocation(){
@@ -81,6 +107,9 @@ public class LoginActivity extends AppToolBarActivity implements View.OnClickLis
        // option.setEnableSimulateGps(false);//可选，默认false，设置是否需要过滤gps仿真结果，默认需要
         mLocationClient.setLocOption(option);
     }
+
+
+
     public class MyLocationListener implements BDLocationListener {
         @Override
         public void onReceiveLocation(BDLocation location) {
@@ -193,6 +222,7 @@ public class LoginActivity extends AppToolBarActivity implements View.OnClickLis
             Arad.preferences.putString("companyId", memberInfo.getCompanyId());
             Arad.preferences.putString("communityName", memberInfo.getCommunityName());
             Arad.preferences.putString("communityId",memberInfo.getCommunityId());
+            Arad.preferences.putString("isShielded",memberInfo.getIsShielded());
 
             Arad.preferences.putString("latitude", latitude);
             Arad.preferences.putString("lontitude", lontitude);
@@ -213,15 +243,6 @@ public class LoginActivity extends AppToolBarActivity implements View.OnClickLis
         if(errorNo.equals("002")){
             MessageUtils.showShortToast(this, "账号或密码错误");
         }
-
-     /*   if(errorNo.equals("003")){
-            MessageUtils.showShortToast(this,"登录成功");
-            Intent intent02=new Intent(this,MainActivity.class);
-            startActivity(intent02);
-            AnimUtil.intentSlidIn(this);
-        }*/
-
-
     }
 
     @Override
@@ -244,14 +265,106 @@ public class LoginActivity extends AppToolBarActivity implements View.OnClickLis
                 startActivity(new Intent(this, MineUpdatepwdActivity.class));
                 break;
             case R.id.iv_weibo :
+                authorize(new SinaWeibo(this));
                 break;
             case R.id.iv_qqzone :
+                authorize(new QQ(this));
                 break;
             case R.id.iv_weixin :
+                authorize(new Wechat(this));
                 break;
         }
 
     }
+
+    private void authorize(Platform plat) {
+        if(plat.isValid()) {
+            String userId = plat.getDb().getUserId();
+            if (!TextUtils.isEmpty(userId)) {
+                UIHandler.sendEmptyMessage(MSG_USERID_FOUND,this);
+                login(plat.getName(), userId, null);
+                return;
+            }
+        }
+        plat.setPlatformActionListener(this);
+        plat.SSOSetting(true);
+        plat.showUser(null);
+    }
+
+    @Override
+    public void onComplete(Platform platform, int action, HashMap<String, Object> res) {
+        if (action == Platform.ACTION_USER_INFOR) {
+            UIHandler.sendEmptyMessage(MSG_AUTH_COMPLETE, this);
+            login(platform.getName(), platform.getDb().getUserId(), res);
+        }
+        System.out.println(res);
+        System.out.println("------User Name ---------" + platform.getDb().getUserName());
+        System.out.println("------User ID ---------" + platform.getDb().getUserId());
+    }
+
+    @Override
+    public void onError(Platform platform, int action, Throwable throwable) {
+        if (action == Platform.ACTION_USER_INFOR) {
+            UIHandler.sendEmptyMessage(MSG_AUTH_ERROR, this);
+        }
+        throwable.printStackTrace();
+    }
+
+    @Override
+    public void onCancel(Platform platform, int action) {
+        if (action == Platform.ACTION_USER_INFOR) {
+            UIHandler.sendEmptyMessage(MSG_AUTH_CANCEL, this);
+        }
+    }
+
+    private void login(String plat, String userId, HashMap<String, Object> userInfo) {
+        Message msg = new Message();
+        msg.what = MSG_LOGIN;
+        msg.obj = plat;
+        UIHandler.sendMessage(msg, this);
+    }
+
+    public boolean handleMessage(Message msg) {
+        switch(msg.what) {
+            case MSG_USERID_FOUND: {
+                Toast.makeText(this, R.string.userid_found, Toast.LENGTH_SHORT).show();
+            }
+            break;
+            case MSG_LOGIN: {
+
+                String text = getString(R.string.logining, msg.obj);
+                Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
+                System.out.println("---------------");
+
+//				Builder builder = new Builder(this);
+//				builder.setTitle(R.string.if_register_needed);
+//				builder.setMessage(R.string.after_auth);
+//				builder.setPositiveButton(R.string.ok, null);
+//				builder.create().show();
+            }
+            break;
+            case MSG_AUTH_CANCEL: {
+                Toast.makeText(this, R.string.auth_cancel, Toast.LENGTH_SHORT).show();
+                System.out.println("-------MSG_AUTH_CANCEL--------");
+            }
+            break;
+            case MSG_AUTH_ERROR: {
+                Toast.makeText(this, R.string.auth_error, Toast.LENGTH_SHORT).show();
+                System.out.println("-------MSG_AUTH_ERROR--------");
+            }
+            break;
+            case MSG_AUTH_COMPLETE: {
+                Toast.makeText(this, R.string.auth_complete, Toast.LENGTH_SHORT).show();
+                System.out.println("--------MSG_AUTH_COMPLETE-------");
+            }
+            break;
+        }
+        return false;
+    }
+
+
+
+
 
     private boolean checkInput(){
           if(TextUtils.isEmpty(et_username.getText().toString().trim())){
@@ -265,6 +378,8 @@ public class LoginActivity extends AppToolBarActivity implements View.OnClickLis
 
         return true;
     }
+
+
 
 
 }

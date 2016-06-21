@@ -207,7 +207,8 @@ public class StoreShopListHorzitalStyleFragment extends ToolBarFragment implemen
                 AnimUtil.intentSlidIn(getActivity());
             }
         }
-        if(m_list_submit_popup.getId()==v.getId()){
+
+        if(m_list_num_popup!=null&&m_list_submit_popup.getId()==v.getId()&&popupWindow.isShowing()){
             Intent intent = new Intent(getActivity(), StoreOrderDetailActivity.class);
             intent.putExtra("companyId", getActivity().getIntent().getStringExtra("id"));
             startActivity(intent);

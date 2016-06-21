@@ -72,6 +72,7 @@ public class MyApplication extends AradApplication {
     @Override
     public void onCreate() {
         super.onCreate();
+
         /***
          * 初始化定位sdk，建议在Application中创建
          */
@@ -103,6 +104,7 @@ public class MyApplication extends AradApplication {
 
 
     }
+
 
     public static Context getContext()
     {

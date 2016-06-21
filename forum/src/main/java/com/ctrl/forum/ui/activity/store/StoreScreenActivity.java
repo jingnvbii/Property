@@ -6,6 +6,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -65,7 +66,9 @@ public class StoreScreenActivity extends AppToolBarActivity implements View.OnCl
     private ArrayAdapter<String> adapter;
     private List<Mall> listMall;
     private boolean isFromAll;
-    private int bol=1;
+    private int bol = 1;
+    private String companyKindId=null;
+    private String address;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,9 +89,10 @@ public class StoreScreenActivity extends AppToolBarActivity implements View.OnCl
         channelId = getIntent().getStringExtra("channelId");
         latitude = getIntent().getStringExtra("latitude");
         longitude = getIntent().getStringExtra("longitude");
-        if(getIntent().getFlags()==303){
+        address = getIntent().getStringExtra("address");
+        if (getIntent().getFlags() == 303) {
             mdao.requestCompanyByKind("0", getIntent().getStringExtra("latitude"), getIntent().getStringExtra("longitude"), "", String.valueOf(PAGE_NEM), String.valueOf(Constant.PAGE_SIZE));
-        }else {
+        } else {
             mdao.requestCompanyByKind("0", latitude, longitude, channelId, String.valueOf(PAGE_NEM), String.valueOf(Constant.PAGE_SIZE));
         }
         sortList = new ArrayList<>();
@@ -102,15 +106,28 @@ public class StoreScreenActivity extends AppToolBarActivity implements View.OnCl
         lv_store_screen.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(StoreScreenActivity.this, StoreShopListVerticalStyleActivity.class);
-                intent.putExtra("id", listMall.get(position - 1).getId());
-                intent.putExtra("url", listMall.get(position - 1).getImg());
-                intent.putExtra("name", listMall.get(position - 1).getName());
-                intent.putExtra("startTime", listMall.get(position - 1).getWorkStartTime());
-                intent.putExtra("endTime", listMall.get(position - 1).getWorkEndTime());
-                intent.putExtra("levlel", listMall.get(position - 1).getEvaluatLevel());
-                startActivity(intent);
-                AnimUtil.intentSlidIn(StoreScreenActivity.this);
+                if (listMall.get(position - 1).getCompanyStyle().equals("0")) {
+                    Intent intent = new Intent(StoreScreenActivity.this, StoreShopListVerticalStyleActivity.class);
+                    intent.putExtra("id", listMall.get(position - 1).getId());
+                    intent.putExtra("url", listMall.get(position - 1).getImg());
+                    intent.putExtra("name", listMall.get(position - 1).getName());
+                    intent.putExtra("startTime", listMall.get(position - 1).getWorkStartTime());
+                    intent.putExtra("endTime", listMall.get(position - 1).getWorkEndTime());
+                    intent.putExtra("levlel", listMall.get(position - 1).getEvaluatLevel());
+                    startActivity(intent);
+                    AnimUtil.intentSlidIn(StoreScreenActivity.this);
+                }
+                if (listMall.get(position - 1).getCompanyStyle().equals("1")) {
+                    Intent intent = new Intent(StoreScreenActivity.this, StoreShopListVerticalStyleActivity.class);
+                    intent.putExtra("id", listMall.get(position - 1).getId());
+                    intent.putExtra("url", listMall.get(position - 1).getImg());
+                    intent.putExtra("name", listMall.get(position - 1).getName());
+                    intent.putExtra("startTime", listMall.get(position - 1).getWorkStartTime());
+                    intent.putExtra("endTime", listMall.get(position - 1).getWorkEndTime());
+                    intent.putExtra("levlel", listMall.get(position - 1).getEvaluatLevel());
+                    startActivity(intent);
+                    AnimUtil.intentSlidIn(StoreScreenActivity.this);
+                }
             }
         });
 
@@ -118,27 +135,35 @@ public class StoreScreenActivity extends AppToolBarActivity implements View.OnCl
         lv_store_screen.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
-                PAGE_NEM=1;
+                PAGE_NEM = 1;
                 listMall.clear();
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        mdao.requestCompanyByKind("0", latitude, longitude, channelId, String.valueOf(PAGE_NEM), String.valueOf(Constant.PAGE_SIZE));
+                        if(getIntent().getFlags()==303){
+                            mdao.requestCompanyByKind("0", latitude, longitude, companyKindId, String.valueOf(PAGE_NEM), String.valueOf(Constant.PAGE_SIZE));
+                        }else {
+                            mdao.requestCompanyByKind("0", latitude, longitude, channelId, String.valueOf(PAGE_NEM), String.valueOf(Constant.PAGE_SIZE));
+                        }
                     }
-                },500);
+                }, 500);
             }
 
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
-                PAGE_NEM+=1;
-                bol=0;
+                PAGE_NEM += 1;
+                bol = 0;
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        mdao.requestCompanyByKind("0", latitude, longitude, channelId, String.valueOf(PAGE_NEM), String.valueOf(Constant.PAGE_SIZE));
+                        if(getIntent().getFlags()==303){
+                            mdao.requestCompanyByKind("0", latitude, longitude, companyKindId, String.valueOf(PAGE_NEM), String.valueOf(Constant.PAGE_SIZE));
+                        }else {
+                            mdao.requestCompanyByKind("0", latitude, longitude, channelId, String.valueOf(PAGE_NEM), String.valueOf(Constant.PAGE_SIZE));
+                        }
                     }
-                },500);
-                PAGE_NEM=1;
+                }, 500);
+                PAGE_NEM = 1;
             }
         });
 
@@ -153,12 +178,12 @@ public class StoreScreenActivity extends AppToolBarActivity implements View.OnCl
     public void onRequestFaild(String errorNo, String errorMessage) {
         super.onRequestFaild(errorNo, errorMessage);
         lv_store_screen.onRefreshComplete();
-        if(errorNo.equals("006")&&bol==1){
-            if(listMall!=null) {
+        if (errorNo.equals("006") && bol == 1) {
+            if (listMall != null) {
                 listMall.clear();
                 listviewAdapter.setList(listMall);
             }
-            if(popupWindow!=null)
+            if (popupWindow != null)
                 popupWindow.dismiss();
 
         }
@@ -169,15 +194,15 @@ public class StoreScreenActivity extends AppToolBarActivity implements View.OnCl
         super.onRequestSuccess(requestCode);
         lv_store_screen.onRefreshComplete();
         if (requestCode == 5) {
-          //  MessageUtils.showShortToast(this, "获取店铺列表成功");
+            //  MessageUtils.showShortToast(this, "获取店铺列表成功");
             listMall = mdao.getListMall();
             listviewAdapter.setList(listMall);
-            if(popupWindow!=null){
+            if (popupWindow != null) {
                 popupWindow.dismiss();
             }
         }
         if (requestCode == 777) {
-          //  MessageUtils.showShortToast(this, "获取全部分类列表成功");
+            //  MessageUtils.showShortToast(this, "获取全部分类列表成功");
             listKind = kdao.getListKind();
             listKindStr = new ArrayList<String>();
             for (int i = 0; i < listKind.size(); i++) {
@@ -192,13 +217,13 @@ public class StoreScreenActivity extends AppToolBarActivity implements View.OnCl
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.rl_all:
-                bol=1;
+                bol = 1;
                 showAllPopupWindow(listKindStr);
                 isFromAll = true;
                 break;
             case R.id.rl_sort:
                 isFromAll = false;
-                bol=1;
+                bol = 1;
                 showAllPopupWindow(sortList);
                 break;
         }
@@ -215,28 +240,61 @@ public class StoreScreenActivity extends AppToolBarActivity implements View.OnCl
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (isFromAll) {
-                    if(listMall!=null){
+                    if (listMall != null) {
                         listMall.clear();
                     }
+                    companyKindId = listKind.get(position).getId();
                     mdao.requestCompanyByKind("0", latitude, longitude, listKind.get(position).getId(), String.valueOf(PAGE_NEM), String.valueOf(Constant.PAGE_SIZE));
-                }else {
-                    if(listMall!=null){
+                } else {
+                    if (listMall != null) {
                         listMall.clear();
                     }
-                    switch (position){
+                    if (companyKindId==null&&channelId==null) {
+                        switch (position) {
+                            case 0:
+                                mdao.requestCompanyByKind("0", latitude, longitude, "", String.valueOf(PAGE_NEM), String.valueOf(Constant.PAGE_SIZE));
+                                break;
+                            case 1:
+                                mdao.requestCompanyByKind("1", latitude, longitude, "", String.valueOf(PAGE_NEM), String.valueOf(Constant.PAGE_SIZE));
+                                break;
+                            case 2:
+                                mdao.requestCompanyByKind("2", latitude, longitude, "", String.valueOf(PAGE_NEM), String.valueOf(Constant.PAGE_SIZE));
+                                break;
+                            case 3:
+                                mdao.requestCompanyByKind("3", latitude, longitude, "", String.valueOf(PAGE_NEM), String.valueOf(Constant.PAGE_SIZE));
+                                break;
+                        }
+                    } else if(channelId!=null&&companyKindId==null){
+                        switch (position) {
+                            case 0:
+                                mdao.requestCompanyByKind("0", latitude, longitude, channelId, String.valueOf(PAGE_NEM), String.valueOf(Constant.PAGE_SIZE));
+                                break;
+                            case 1:
+                                mdao.requestCompanyByKind("1", latitude, longitude, channelId, String.valueOf(PAGE_NEM), String.valueOf(Constant.PAGE_SIZE));
+                                break;
+                            case 2:
+                                mdao.requestCompanyByKind("2", latitude, longitude, channelId, String.valueOf(PAGE_NEM), String.valueOf(Constant.PAGE_SIZE));
+                                break;
+                            case 3:
+                                mdao.requestCompanyByKind("3", latitude, longitude, channelId, String.valueOf(PAGE_NEM), String.valueOf(Constant.PAGE_SIZE));
+                                break;}
 
-                        case 0:
-                            mdao.requestCompanyByKind("0", latitude, longitude, "", String.valueOf(PAGE_NEM), String.valueOf(Constant.PAGE_SIZE));
-                            break;
-                        case 1:
-                            mdao.requestCompanyByKind("1", latitude, longitude, "", String.valueOf(PAGE_NEM), String.valueOf(Constant.PAGE_SIZE));
-                            break;
-                        case 2:
-                            mdao.requestCompanyByKind("2", latitude, longitude, "", String.valueOf(PAGE_NEM), String.valueOf(Constant.PAGE_SIZE));
-                            break;
-                        case 3:
-                            mdao.requestCompanyByKind("3", latitude, longitude, "", String.valueOf(PAGE_NEM), String.valueOf(Constant.PAGE_SIZE));
-                            break;
+
+                    }else {
+                        switch (position) {
+                            case 0:
+                                mdao.requestCompanyByKind("0", latitude, longitude, companyKindId, String.valueOf(PAGE_NEM), String.valueOf(Constant.PAGE_SIZE));
+                                break;
+                            case 1:
+                                mdao.requestCompanyByKind("1", latitude, longitude, companyKindId, String.valueOf(PAGE_NEM), String.valueOf(Constant.PAGE_SIZE));
+                                break;
+                            case 2:
+                                mdao.requestCompanyByKind("2", latitude, longitude, companyKindId, String.valueOf(PAGE_NEM), String.valueOf(Constant.PAGE_SIZE));
+                                break;
+                            case 3:
+                                mdao.requestCompanyByKind("3", latitude, longitude, companyKindId, String.valueOf(PAGE_NEM), String.valueOf(Constant.PAGE_SIZE));
+                                break;
+                        }
                     }
 
                 }
@@ -308,10 +366,20 @@ public class StoreScreenActivity extends AppToolBarActivity implements View.OnCl
         TextView tv = getmTitle();
         Drawable drawable = getResources().getDrawable(R.mipmap.locate_img);
         drawable.setBounds(0, 0, 32, 32);
+        tv.setText(getIntent().getStringExtra("address"));
         tv.setCompoundDrawables(drawable, null, null, null);
         tv.setCompoundDrawablePadding(10);
         tv.setTextColor(Color.WHITE);
-        tv.setText("中润世纪广场");
+        tv.setWidth(250);
+        tv.setText(getIntent().getStringExtra("address"));
+        tv.setSingleLine(true);
+        tv.setEllipsize(TextUtils.TruncateAt.MARQUEE);
+        tv.setFocusableInTouchMode(true);
+        tv.setMarqueeRepeatLimit(100000000);
+        tv.setHorizontalFadingEdgeEnabled(true);
+        tv.setFadingEdgeLength(10);
+        tv.setFocusable(true);
+        tv.requestFocus();
         return tv.getText().toString();
     }
 

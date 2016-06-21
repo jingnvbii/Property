@@ -14,7 +14,6 @@ import android.widget.TextView;
 import com.beanu.arad.Arad;
 import com.beanu.arad.utils.AnimUtil;
 import com.beanu.arad.utils.JsonUtil;
-import com.beanu.arad.utils.MessageUtils;
 import com.ctrl.forum.R;
 import com.ctrl.forum.base.AppToolBarActivity;
 import com.ctrl.forum.cart.datasave.GoodsBean;
@@ -195,7 +194,7 @@ public class StoreOrderDetailActivity extends AppToolBarActivity implements View
             AnimUtil.intentSlidIn(this);
         }
         if (requestCode == 1) {
-            MessageUtils.showShortToast(this, "获取优惠券列表成功");
+          //  MessageUtils.showShortToast(this, "获取优惠券列表成功");
         }
         if (requestCode == 0) {
             listAddress = adao.getListAddress();
@@ -244,14 +243,14 @@ public class StoreOrderDetailActivity extends AppToolBarActivity implements View
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK && requestCode == 300) {
-            tv_order_name.setText(name + "     " + tel);
-            tv_order_address.setText(address);
             name = data.getStringExtra("name");
             tel = data.getStringExtra("tel");
             address = data.getStringExtra("address");
             province = data.getStringExtra("province");
             city = data.getStringExtra("city");
             area = data.getStringExtra("area");
+            tv_order_name.setText(name + "     " + tel);
+            tv_order_address.setText(address);
         }
     }
 

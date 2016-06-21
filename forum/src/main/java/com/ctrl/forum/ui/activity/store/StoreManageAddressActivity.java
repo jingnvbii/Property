@@ -10,12 +10,14 @@ import android.widget.RelativeLayout;
 
 import com.beanu.arad.Arad;
 import com.beanu.arad.utils.AnimUtil;
-import com.beanu.arad.utils.MessageUtils;
 import com.ctrl.forum.R;
 import com.ctrl.forum.base.AppToolBarActivity;
 import com.ctrl.forum.dao.AddressDao;
+import com.ctrl.forum.entity.Address;
 import com.ctrl.forum.ui.adapter.StoreManageAddressListViewAdapter;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
+
+import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -33,6 +35,7 @@ public class StoreManageAddressActivity extends AppToolBarActivity implements Vi
     private StoreManageAddressListViewAdapter adapter;
     private int mposition;
     private Intent intent;
+    private List<Address> listAddress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +52,7 @@ public class StoreManageAddressActivity extends AppToolBarActivity implements Vi
         adao = new AddressDao(this);
         adapter=new StoreManageAddressListViewAdapter(this);
         lv_manage_address.setAdapter(adapter);
-         intent = new Intent();
+        intent = new Intent();
     }
 
     private void initView() {
@@ -75,11 +78,13 @@ public class StoreManageAddressActivity extends AppToolBarActivity implements Vi
     public void onRequestSuccess(int requestCode) {
         super.onRequestSuccess(requestCode);
         if (requestCode == 0) {
-            MessageUtils.showShortToast(this, "获取地址列表成功");
-            adapter.setList(adao.getListAddress());
+            listAddress=adao.getListAddress();
+           // MessageUtils.showShortToast(this, "获取地址列表成功");
+                adapter.setList(listAddress);
         }
         if (requestCode == 4) {
-            MessageUtils.showShortToast(this, "设置默认地址成功");
+         //   MessageUtils.showShortToast(this, "设置默认地址成功");
+            adao.requestGetAddressList(Arad.preferences.getString("memberId"));
             intent.putExtra("province",adao.getListAddress().get(mposition).getProvince());
             intent.putExtra("city",adao.getListAddress().get(mposition).getCity());
             intent.putExtra("area",adao.getListAddress().get(mposition).getArea());

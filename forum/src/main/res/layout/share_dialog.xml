@@ -67,15 +67,7 @@
             android:drawablePadding="5dp"
             android:gravity="center"
             android:layout_weight="1"/>
-        <TextView
-            android:id="@+id/tv_renren"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="人人网"
-            android:drawableTop="@mipmap/renren"
-            android:drawablePadding="5dp"
-            android:gravity="center"
-            android:layout_weight="1"/>
+
         <TextView
             android:id="@+id/tv_email"
             android:layout_width="0dp"
@@ -91,6 +83,17 @@
             android:layout_height="wrap_content"
             android:text="短信"
             android:drawableTop="@mipmap/duanxin"
+            android:drawablePadding="5dp"
+            android:gravity="center"
+            android:layout_weight="1"/>
+
+        <TextView
+            android:id="@+id/tv_renren"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="人人网"
+            android:visibility="invisible"
+            android:drawableTop="@mipmap/renren"
             android:drawablePadding="5dp"
             android:gravity="center"
             android:layout_weight="1"/>

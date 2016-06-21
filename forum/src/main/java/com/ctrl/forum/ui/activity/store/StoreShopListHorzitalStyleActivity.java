@@ -127,10 +127,10 @@ public class StoreShopListHorzitalStyleActivity extends AppToolBarActivity imple
         tv_shop_name.setText(getIntent().getStringExtra("name"));
         tv_time.setText("营业时间 " + getIntent().getStringExtra("startTime") + "-" + getIntent().getStringExtra("endTime"));
         if(getIntent().getStringExtra("levlel")!=null)
-            ratingBar.setNumStars(Integer.parseInt(getIntent().getStringExtra("levlel")));
+            ratingBar.setRating(Float.parseFloat(getIntent().getStringExtra("levlel")) / 2);
         mdao = new MallDao(this);
         showProgress(true);
-        mdao.requestProductCategroy(getIntent().getStringExtra("id"));
+        mdao.requestProductCategroy(getIntent().getStringExtra("id"),"1");
         mdao.requestCompanysDetails(Arad.preferences.getString("memberId"), getIntent().getStringExtra("id"));
     }
 
