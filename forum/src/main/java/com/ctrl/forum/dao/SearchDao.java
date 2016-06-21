@@ -38,7 +38,6 @@ public class SearchDao extends IDao {
 
     /**
      * 获取我的搜索历史记录
-<<<<<<< HEAD
      * @param memberId 会员id
      * @param searchType 搜索类型（0：帖子、1：商品、2：店铺、3：周边服务）
      * @param pageNum 页数
@@ -54,7 +53,7 @@ public class SearchDao extends IDao {
         map.put("searchType",searchType);
         map.put("pageNum",pageNum);
         map.put("pageSize",pageSize);
-        postRequest(Constant.RAW_URL + url, mapToRP(map), 0);
+        postRequest(Constant.RAW_URL + url, mapToRP(map), 999);
     }
     /**
      * 清空我的搜索历史记录
@@ -118,23 +117,6 @@ public class SearchDao extends IDao {
         String url="searchHistory/deleteSearchHistory";
         Map<String,String> map = new HashMap<String,String>();
         map.put("memberId",memberId);
-        map.put("searchType",searchType);
-        postRequest(Constant.RAW_URL + url, mapToRP(map),1000);
-    }
-
-    /**
-     * 清空我的搜索历史记录
-     * @param memberId //会员id
-     * @param searchType //搜索类型（0：帖子、1：商品、2：店铺、3：周边服务）
-     * */
-    public void requestAddLocationSearch(String memberId,
-                                     String searchType
-                                     ){
-        String url="searchHistory/addLocationSearch";
-        Map<String,String> map = new HashMap<String,String>();
-        map.put("memberId",memberId);
-        map.put("searchType",searchType);
-        map.put("searchType",searchType);
         map.put("searchType",searchType);
         postRequest(Constant.RAW_URL + url, mapToRP(map),1000);
     }

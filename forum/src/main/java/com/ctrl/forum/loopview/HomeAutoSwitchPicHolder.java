@@ -176,10 +176,13 @@ public class HomeAutoSwitchPicHolder extends BaseHolder<List<String>>
 
             // BitmapHelper.display(iv, mPictures.get(position));
        //     Arad.imageLoader.load(listBanner.get(position).getImgUrl()).placeholder(R.mipmap.default_error).into(iv);
+            //
+
            Arad.imageLoader.load(mPictures.get(position)).placeholder(R.mipmap.default_error).into(iv);
           // ImageLoader.getInstance().displayImage(mPictures.get(position),iv);
-            container.addView(iv,0);
+            container.addView(iv, 0);
 
+            if (listBanner.get(position).getType()!=null)
             iv.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

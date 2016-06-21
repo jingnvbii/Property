@@ -15,8 +15,8 @@ public class RimServiceCompany {
     private String cityName; //市名称
     private String area; //区代号
     private String areaName; //区名称
-    private String latitude; //纬度
-    private String longitude; //经度
+    private Double latitude; //纬度
+    private Double longitude; //经度
     private String distance; //距离我当前位置距离
     private String address; //详细地址
 
@@ -103,19 +103,19 @@ public class RimServiceCompany {
         this.id = id;
     }
 
-    public String getLatitude() {
+    public Double getLatitude() {
         return latitude;
     }
 
-    public void setLatitude(String latitude) {
+    public void setLatitude(Double latitude) {
         this.latitude = latitude;
     }
 
-    public String getLongitude() {
+    public Double getLongitude() {
         return longitude;
     }
 
-    public void setLongitude(String longitude) {
+    public void setLongitude(Double longitude) {
         this.longitude = longitude;
     }
 

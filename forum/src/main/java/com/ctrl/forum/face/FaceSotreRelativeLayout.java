@@ -76,6 +76,7 @@ public class FaceSotreRelativeLayout extends RelativeLayout implements
 	private TextView tv_photo_graph;
 	private TextView btn_face;
 	private ImageView iv_input_add;
+	private LinearLayout ll_image_custom_facerelativelayout;
 
 	public FaceSotreRelativeLayout(Context context) {
 		super(context);
@@ -129,11 +130,15 @@ public class FaceSotreRelativeLayout extends RelativeLayout implements
 		switch (v.getId()) {
 		case R.id.btn_face:
 			//隐藏表情选择框
-			ll_add.setVisibility(GONE);
-			if (view.getVisibility() == View.VISIBLE) {
-				view.setVisibility(View.GONE);
-			} else {
-				view.setVisibility(View.VISIBLE);
+			if (ll_image_custom_facerelativelayout.getVisibility()== View.VISIBLE){
+				break;
+			}else {
+				ll_add.setVisibility(GONE);
+				if (view.getVisibility() == View.VISIBLE) {
+					view.setVisibility(View.GONE);
+				} else {
+					view.setVisibility(View.VISIBLE);
+				}
 			}
 			break;
 		case R.id.et_sendmessage:
@@ -168,6 +173,12 @@ public class FaceSotreRelativeLayout extends RelativeLayout implements
 				activity2.goToGraph();
 			}
 			break;
+			case R.id.iv_input_add:
+				ll_add.setVisibility(GONE);
+				if (view.getVisibility() == View.VISIBLE) {
+					view.setVisibility(View.GONE);
+				}
+				break;
 
 		}
 	}
@@ -191,6 +202,7 @@ public class FaceSotreRelativeLayout extends RelativeLayout implements
 		vp_face = (ViewPager) findViewById(R.id.vp_contains);
 		et_sendmessage = (EditText) findViewById(R.id.et_sendmessage);
 		layout_point = (LinearLayout) findViewById(R.id.iv_image);
+		ll_image_custom_facerelativelayout = (LinearLayout) findViewById(R.id.ll_image_custom_facerelativelayout);
 		et_sendmessage.setOnClickListener(this);
 		findViewById(R.id.btn_face).setOnClickListener(this);
 		view = findViewById(R.id.ll_facechoose);

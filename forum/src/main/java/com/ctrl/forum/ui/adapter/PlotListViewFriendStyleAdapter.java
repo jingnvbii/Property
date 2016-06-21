@@ -28,8 +28,8 @@ import com.ctrl.forum.entity.Post;
 import com.ctrl.forum.entity.PostImage;
 import com.ctrl.forum.ui.activity.Invitation.InvitationCommentDetaioActivity;
 import com.ctrl.forum.ui.activity.Invitation.InvitationPullDownActivity;
+import com.ctrl.forum.utils.DateUtil;
 import com.ctrl.forum.utils.SysUtils;
-import com.ctrl.forum.utils.TimeUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -112,7 +112,7 @@ public class PlotListViewFriendStyleAdapter extends BaseAdapter {
         }else {
             locationName = post.getLocationName();
         }
-        holder.tv_friend_style_time.setText(TimeUtils.date(Long.parseLong(post.getPublishTime()))+"   "+locationName);
+        holder.tv_friend_style_time.setText(DateUtil.getStringByFormat(post.getPublishTime(),"yyyy-MM-dd  hh:mm:ss")+"   "+locationName);
         holder.tv_friend_style_zan_num.setText(post.getPraiseNum()+"");
         holder.tv_friend_style_pinglun_num.setText(post.getCommentNum()+"");
         holder.tv_friend_style_share_num.setText(post.getShareNum() + "");

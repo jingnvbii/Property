@@ -34,14 +34,14 @@ public class ReplyCommentDao extends IDao{
 
     /**
      * 获取我收到的评论列表--消息通知
-     * @param memberId  会员id
+     * @param reporterId  会员id
      * @param pageNum  当前页码
      * @param pageSize  每页条数
      */
-    public void obtainReply(String memberId,int pageNum,int pageSize){
+    public void obtainReply(String reporterId,int pageNum,int pageSize){
         String url="postReply/obtainReplyListForMe";
         Map<String,String> map = new HashMap<>();
-        map.put("memberId",memberId);
+        map.put("reporterId",reporterId);
         map.put("pageNum",pageNum+"");
         map.put("pageSize",pageSize+"");
         postRequest(Constant.RAW_URL + url, mapToRP(map), 0);
@@ -121,7 +121,8 @@ public class ReplyCommentDao extends IDao{
     public void onRequestSuccess(JsonNode result, int requestCode) throws IOException {
         if(requestCode == 0){
             Log.d("demo", "dao中结果集(我的评论): " + result);
-            replyForMes = JsonUtil.node2pojoList(result.findValue("replyForMeList"),ReplyForMe.class);
+            List<ReplyForMe> list = JsonUtil.node2pojoList(result.findValue("replyForMeList"),ReplyForMe.class);
+            replyForMes.addAll(list);
         }
         if (requestCode==1){
             Log.d("demo", "dao中结果集(我的评价): " + result);

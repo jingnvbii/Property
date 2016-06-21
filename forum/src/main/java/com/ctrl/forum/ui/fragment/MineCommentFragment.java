@@ -66,7 +66,7 @@ public class MineCommentFragment extends ToolBarFragment {
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
                 PAGE_NUM += 1;
-                rcdao.obtainReply(Arad.preferences.getString("memberId"), Constant.PAGE_NUM, Constant.PAGE_SIZE);
+                rcdao.obtainReply(Arad.preferences.getString("memberId"),PAGE_NUM, Constant.PAGE_SIZE);
             }
         });
 
@@ -97,4 +97,6 @@ public class MineCommentFragment extends ToolBarFragment {
         super.onRequestFaild(errorNo, errorMessage);
         lv_content.onRefreshComplete();
     }
+
+
 }

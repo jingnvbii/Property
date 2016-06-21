@@ -401,8 +401,6 @@ public class StroeFragment extends ToolBarFragment implements View.OnClickListen
             // Log.i("tag", "listPost---" + listPost.size());
             listviewAdapter.setList(listMall);
         }
-
-
     }
 
     private void initViewPager() {
@@ -481,7 +479,6 @@ public class StroeFragment extends ToolBarFragment implements View.OnClickListen
             iv04_store_recomend.setOnClickListener(this);
         }
     }
-
 
     private void setValue() {
         StoreGridViewAdapter adapter = new StoreGridViewAdapter(getActivity());

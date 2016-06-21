@@ -46,16 +46,34 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
 
-    <TextView
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:id="@+id/rl_reply_voice"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:text="语音"
-        android:id="@+id/tv_replay"
-        android:textColor="@color/text_black1"
-        android:textSize="14sp"
+        android:background="@drawable/blue_border_bg_voice"
         android:layout_below="@+id/iv_head"
         android:layout_alignLeft="@+id/tv_name"
         android:layout_alignStart="@+id/tv_name"
-        android:layout_marginBottom="10dp"/>
+        android:layout_marginBottom="10dp">
+
+        <View
+            android:id="@+id/id_recorder_anim"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_gravity="center_vertical|left"
+            android:background="@drawable/voice_default"/>
+
+        <TextView
+            android:id="@+id/tv_reply_voice_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|left"
+            android:textColor="@color/text_white"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="10dp"
+            />
+
+    </RelativeLayout>
+
 
 </RelativeLayout>

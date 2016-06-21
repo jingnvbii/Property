@@ -20,8 +20,26 @@ public class RimSeverCompanyDetail {
     private String longitude; //经度
     private String distance; //距离我当前位置距离
     private String address; //详细地址
+    private String img;
     private String collecttionState; //是否被收藏（0-不被收藏，1-被收藏）
-    private List<String> imgList; //图片地址
+    private List<RimImage> imgList; //图片地址
+    private String detailInfo;
+
+    public String getImg() {
+        return img;
+    }
+
+    public void setImg(String img) {
+        this.img = img;
+    }
+
+    public String getDetailInfo() {
+        return detailInfo;
+    }
+
+    public void setDetailInfo(String detailInfo) {
+        this.detailInfo = detailInfo;
+    }
 
     public String getAddress() {
         return address;
@@ -87,11 +105,11 @@ public class RimSeverCompanyDetail {
         this.id = id;
     }
 
-    public List<String> getImgList() {
+    public List<RimImage> getImgList() {
         return imgList;
     }
 
-    public void setImgList(List<String> imgList) {
+    public void setImgList(List<RimImage> imgList) {
         this.imgList = imgList;
     }
 

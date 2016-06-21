@@ -48,7 +48,9 @@ import com.ctrl.forum.utils.Utils;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -127,8 +129,10 @@ public class PlotAddInvitationActivity extends AppToolBarActivity implements Vie
     private InvitationDao idao;
     private String edit = ""; //是否是编辑状态
     private String id; //编辑状态时的帖子id
-    private List<String> delImageId = new ArrayList<>(); //编辑时删除的图片的原图的id
-    private List<String> imageId = new ArrayList<>(); //图片id
+
+    private Map<String,String> delIds = new HashMap<>();
+    private List<Image> delImages = new ArrayList<>(); //删除的图片
+    private List<Image> addImages = new ArrayList<>(); //添加的图片
 
     private boolean isSave;//是否存草稿
     private String delId = "";
@@ -204,7 +208,7 @@ public class PlotAddInvitationActivity extends AppToolBarActivity implements Vie
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         // iDao.requestDelImg(iDao.getImg().getImgId());
-                        delImageId.add(imageId.get(imageFlag-1));
+                        delImages.add(mImageList.get(imageFlag-1)); //删除的图片
                         delImg(imageFlag);
                     }
                 })
@@ -331,8 +335,8 @@ public class PlotAddInvitationActivity extends AppToolBarActivity implements Vie
                 Image image=new Image();
                 image.setImgUrl(post.getImg());
                 image.setThumbImgUrl(post.getThumbImg());
-                imageId.add(listPostImage.get(i).getId());
                 mImageList.add(image);
+                delIds.put(mImageList.get(i).getImgUrl(),listPostImage.get(i).getId());
             }
             if (mImageList.size()>3){
                 ll_image_second.setVisibility(View.VISIBLE);
@@ -359,8 +363,18 @@ public class PlotAddInvitationActivity extends AppToolBarActivity implements Vie
             MessageUtils.showShortToast(this, "图片上传成功");
             Image image=Idao.getImage();
             mImageList.add(image);
+            addImages.add(image); //添加的图片
             setBitmapImg();
             bitmapClick();
+        }
+        if(requestCode==6){
+            if(isSave){
+                MessageUtils.showShortToast(this, "存草稿成功");
+            }else {
+                MessageUtils.showShortToast(this, "帖子发布成功");
+            }
+            isSave=false;
+            finish();
         }
     }
 
@@ -573,16 +587,22 @@ public class PlotAddInvitationActivity extends AppToolBarActivity implements Vie
         return thumbImagesUrl;
     }
 
-    //删除的图片的id的String
-    public String getDelImageId(List<String> imageId){
+    //删除的图片的url转成id形式的String
+    public String getDelImageId(List<Image> imageId){
         if (imageId.size()!=0) {
-            for (int i = 0; i < imageId.size(); i++) {
+            List<String> delImageIds  = new ArrayList<>();
+            for (int i=0;i< imageId.size();i++){
+                delImageIds.add(delIds.get(imageId.get(i).getImgUrl()));
+            }
+            for (int i = 0; i < delImageIds.size(); i++) {
                 //转换成字符串
-                delId = delId + imageId.get(i) + ",";
+                delId = delId + delImageIds.get(i) + ",";
             }
             return delId.substring(0, delId.length() - 1);
         }
         return "";
+
+
     }
 
     @Override
@@ -590,13 +610,21 @@ public class PlotAddInvitationActivity extends AppToolBarActivity implements Vie
         Intent intent=null;
         switch (v.getId()){
             case R.id.tv_release_save: //存草稿
-                isSave=true;
-                if(et_content.getText().toString().trim().length()<20){
-                    MessageUtils.showShortToast(this,"帖子内容少于20个字符");
-                    return;
+                //遍历比价两个集合，若是有相同的，则为删除的图片的url,不同的，增加的集合里面是新增加的图片的url,删除的集合里是删除的图片的url
+                for (int i=0;i<addImages.size();i++){
+                    String addUrl = addImages.get(i).getImgUrl();
+                    for (int j=0;j<delImages.size();j++){
+                        String delurl = delImages.get(j).getImgUrl();
+                        if (delurl.equals(addUrl)){
+                            addImages.remove(i);
+                            delImages.remove(j);
+                        }
+                    }
                 }
+                isSave=true;
                 String imagesUrl1=getImagesUrl(mImageList);
                 String thumbImagesUrl1= getThumbImagesUrl(mImageList);
+
                 if(edit==null || edit.equals("")) {
                     idao.requesReleasePost(
                             Arad.preferences.getString("memberId"),
@@ -616,7 +644,7 @@ public class PlotAddInvitationActivity extends AppToolBarActivity implements Vie
                             imagesUrl1,
                             thumbImagesUrl1
                     );
-                }else{//编辑状态下发布帖子
+                }else{//编辑状态下存草稿
                    // getImagesUrl(imageId);
                     idao.requesPlotPostEditor(
                             id,
@@ -633,37 +661,72 @@ public class PlotAddInvitationActivity extends AppToolBarActivity implements Vie
                             locationLongitude,
                             locationLatitude,
                             tv_location_name,
-                            getDelImageId(delImageId),  //删除图片的id的字符串
-                            imagesUrl1); //不对
+                            getDelImageId(delImages),  //删除图片的id的字符串
+                            getImagesUrl(addImages),
+                            getThumbImagesUrl(addImages)); //不对
                 }
                 break;
             case R.id.tv_release: //发布
+
+                //遍历比价两个集合，若是有相同的，则为删除的图片的url,不同的，增加的集合里面是新增加的图片的url,删除的集合里是删除的图片的url
+                for (int i=0;i<addImages.size();i++){
+                    String addUrl = addImages.get(i).getImgUrl();
+                    for (int j=0;j<delImages.size();j++){
+                        String delurl = delImages.get(j).getImgUrl();
+                        if (delurl.equals(addUrl)){
+                            addImages.remove(i);
+                            delImages.remove(j);
+                        }
+                    }
+                }
+
                 String imagesUrl=getImagesUrl(mImageList);
                 String thumbImagesUrl= getThumbImagesUrl(mImageList);
                 if(et_content.getText().toString().trim().length()<20){
                     MessageUtils.showShortToast(this,"帖子内容少于20个字符");
                     return;
                 }
-                if(checkInput()){
-                    idao.requesReleasePost(
-                            Arad.preferences.getString("memberId"),
-                            Arad.preferences.getString("communityId"),
-                            "1",
-                            "1",
-                            "0",
-                            "",
-                            et_content.getText().toString().trim(),
-                            vcardDisplay,
-                            name,
-                            adress,
-                            tel,
-                            locationLongitude,
-                            locationLatitude,
-                            tv_location_name,
-                            imagesUrl,
-                            thumbImagesUrl
-                            );
+                if(checkInput()) {
+                    if (edit == null || edit.equals("")) {
+                        idao.requesReleasePost(
+                                Arad.preferences.getString("memberId"),
+                                Arad.preferences.getString("communityId"),
+                                "1",
+                                "1",
+                                "0",
+                                "",
+                                et_content.getText().toString().trim(),
+                                vcardDisplay,
+                                name,
+                                adress,
+                                tel,
+                                locationLongitude,
+                                locationLatitude,
+                                tv_location_name,
+                                imagesUrl,
+                                thumbImagesUrl
+                        );
+                    }else{//编辑状态下发布帖子
+                        idao.requesPlotPostEditor(
+                                id,
+                                "1",
+                                Arad.preferences.getString("communityId"),
+                                "0",
+                                "1",
+                                "",
+                                et_content.getText().toString().trim(),
+                                vcardDisplay,
+                                name,
+                                adress,
+                                tel,
+                                locationLongitude,
+                                locationLatitude,
+                                tv_location_name,
+                                getDelImageId(delImages),  //删除图片的id的字符串
+                                getImagesUrl(addImages),
+                                getThumbImagesUrl(addImages)); //不对
                     }
+                }
                 break;
             case R.id.tv_tel:
                 intent=new Intent(this,AddContactPhoneActivity.class);
@@ -1051,7 +1114,7 @@ public class PlotAddInvitationActivity extends AppToolBarActivity implements Vie
         }
     }
 
-    private void delImg(int imgFlg) {
+    private void delImg(int imgFlg)  {
         if(mImageList != null){
 
             /**长按 第一张图*/
@@ -1094,7 +1157,6 @@ public class PlotAddInvitationActivity extends AppToolBarActivity implements Vie
 
                 if(mImageList.size() == 3){
                     mImageList.remove(0);
-
 
                     iv01.setVisibility(View.VISIBLE);
                     iv02.setVisibility(View.VISIBLE);

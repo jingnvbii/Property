@@ -174,6 +174,9 @@ public class RimSearchActivity extends ToolBarActivity implements View.OnClickLi
     @Override
     protected void onRestart() {
         super.onRestart();
+        if (searchHistory!=null){
+            searchHistory.clear();
+        }
         searchDao.getSearchHistoryList(memberId, "3", PAGE_NUM + "", Constant.PAGE_SIZE + "");
     }
 

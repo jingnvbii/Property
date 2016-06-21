@@ -12,11 +12,29 @@ public class ReplyForMe {
     private String memberName; //评论者名称
     private String imgUrl; //评论者头像Url
     private String memberLevel; //评论者等级
-    private String contentType; //评论类型（0：对帖子的评论、1：对评论的回复）
+    private String replyType; //评论类型（0：对帖子的评论、1：对评论的回复）
     private String replyContent;//评论内容
     private String soundUrl;//语音Url
-    private String createTime;//评论时间
+    private long createTime;//评论时间
     private String myReplyContent;//我的回复内容
+    private String contentType; //评论内容类型（0：文字或者表情、1：图片、2：语音）
+    private String myContentType; //回复内容类型（0：文字或者表情、1：图片、2：语音）
+
+    public String getReplyType() {
+        return replyType;
+    }
+
+    public void setReplyType(String replyType) {
+        this.replyType = replyType;
+    }
+
+    public String getMyContentType() {
+        return myContentType;
+    }
+
+    public void setMyContentType(String myContentType) {
+        this.myContentType = myContentType;
+    }
 
     public ReplyForMe() {}
 
@@ -28,11 +46,11 @@ public class ReplyForMe {
         this.contentType = contentType;
     }
 
-    public String getCreateTime() {
+    public long getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(String createTime) {
+    public void setCreateTime(long createTime) {
         this.createTime = createTime;
     }
 

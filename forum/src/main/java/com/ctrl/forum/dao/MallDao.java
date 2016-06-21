@@ -230,8 +230,7 @@ public class MallDao extends IDao {
      * @param companyId //商家id
      *
      * */
-    public void requestProductCategroy(String companyId
-                             ){
+    public void requestProductCategroy(String companyId){
         String url="productCategory/getProductCategory";
         Map<String,String> map = new HashMap<String,String>();
         map.put("companyId",companyId);

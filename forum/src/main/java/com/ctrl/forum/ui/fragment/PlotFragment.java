@@ -246,7 +246,12 @@ public class PlotFragment extends ToolBarFragment implements View.OnClickListene
     @Override
     public void onResume() {
         super.onResume();
+        if (posts!=null){
+            posts.clear();
+        }
         tv_plot_name.setText(Arad.preferences.getString("communityName"));
-        plotDao.queryCommunityPostList(Arad.preferences.getString("memberId"), communityId, PAGE_NUM + "", Constant.PAGE_SIZE + "");
+        plotDao.queryCommunityPostList(Arad.preferences.getString("memberId"),
+                                       Arad.preferences.getString("communityId"),
+                                       PAGE_NUM + "", Constant.PAGE_SIZE + "");
     }
 }

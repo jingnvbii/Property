@@ -33,6 +33,8 @@ public class MineQueryPostActivity extends AppToolBarActivity {
     private MineQueryPostAdapter mineQueryPostAdapter;
     private InvitationDao invitationDao;
     private Activity activity;
+    private String ids = "";
+    static String title;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,8 +42,17 @@ public class MineQueryPostActivity extends AppToolBarActivity {
         setContentView(R.layout.activity_mine_query_post);
         ButterKnife.inject(this);
 
+        ids = getIntent().getStringExtra("id");
+
         invitationDao = new InvitationDao(this);
-        invitationDao.queryMyPostList(Arad.preferences.getString("memberId"),PAGE_NUM+"",Constant.PAGE_SIZE+"");
+        if (ids!=null && !ids.equals("")){
+            invitationDao.queryMyPostList(ids,PAGE_NUM+"",Constant.PAGE_SIZE+"");
+            title = "他的发帖";
+        }else{
+            invitationDao.queryMyPostList(Arad.preferences.getString("memberId"),PAGE_NUM+"",Constant.PAGE_SIZE+"");
+            title = getResources().getString(R.string.my_post);
+        }
+
         mineQueryPostAdapter = new MineQueryPostAdapter(this);
         lv_content.setAdapter(mineQueryPostAdapter);
         activity = this;
@@ -85,7 +96,7 @@ public class MineQueryPostActivity extends AppToolBarActivity {
     }
 
     @Override
-    public String setupToolBarTitle() {return getResources().getString(R.string.my_post);}
+    public String setupToolBarTitle() {return title;}
 
     @Override
     public void onRequestSuccess(int requestCode) {

@@ -39,6 +39,7 @@
             android:layout_height="wrap_content"
             android:background="@color/line_gray"
             android:id="@+id/gv_hot"
+            android:scrollbars="none"
             android:numColumns="3"
             android:paddingLeft="1dp"
             android:paddingTop="1dp"

@@ -1,10 +1,6 @@
 package com.ctrl.forum.ui.activity.rim;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -17,14 +13,18 @@ import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
-import com.baidu.location.BDLocation;
-import com.baidu.location.BDLocationListener;
-import com.baidu.location.LocationClient;
-import com.baidu.location.LocationClientOption;
 import com.baidu.mapapi.SDKInitializer;
-import com.baidu.mapapi.VersionInfo;
 import com.baidu.mapapi.map.BaiduMap;
+import com.baidu.mapapi.map.BitmapDescriptor;
+import com.baidu.mapapi.map.BitmapDescriptorFactory;
+import com.baidu.mapapi.map.MapStatusUpdate;
+import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
+import com.baidu.mapapi.map.Marker;
+import com.baidu.mapapi.map.MarkerOptions;
+import com.baidu.mapapi.map.Overlay;
+import com.baidu.mapapi.model.LatLng;
+import com.baidu.mapapi.model.LatLngBounds;
 import com.beanu.arad.Arad;
 import com.beanu.arad.base.ToolBarActivity;
 import com.beanu.arad.widget.SlidingUpPanelLayout;
@@ -47,49 +47,26 @@ import butterknife.InjectView;
 public class ItemRimActivity extends ToolBarActivity implements View.OnClickListener{
     @InjectView(R.id.lv_shop)
     PullToRefreshListView lv_shop;
-    @InjectView(R.id.bmapView)
-    MapView bmapView;
     @InjectView(R.id.tv_item_one)
     TextView tv_item_one;
-    @InjectView(R.id.tv_key)
-    TextView tv_key;
 
+    private BitmapDescriptor bdA = BitmapDescriptorFactory.fromResource(R.drawable.ic_location_chatbox);
     private List<RimServiceCompany> rimServiceCompanies;
     private RimShopListAdapter rimShopListAdapter;
     private RimDao rimDao;
     private int PAGE_NUM=1;
     private String id,title;
-    private BaiduMap mBaiduMap;
 
     private View view;
     private PopupWindow popupWindow;
     private TextView bo_hao,call_up,cancel;
-
-    public LocationClient mLocationClient = null;
-    public BDLocationListener myListener = new MyLocationListener();
-
+    static int position;
+    private static final LatLng GEO_SHENGDONG = new LatLng(36, 117);
     /**
-     * 构造广播监听类，监听 SDK key 验证以及网络异常广播
+     * MapView 是地图主控件
      */
-    public class SDKReceiver extends BroadcastReceiver {
-        public void onReceive(Context context, Intent intent) {
-            String s = intent.getAction();
-            tv_key.setTextColor(Color.RED);
-            if (s.equals(SDKInitializer.SDK_BROADTCAST_ACTION_STRING_PERMISSION_CHECK_ERROR)) {
-                tv_key.setText("key 验证出错! 请在 AndroidManifest.xml 文件中检查 key 设置");
-            } else if (s
-                    .equals(SDKInitializer.SDK_BROADTCAST_ACTION_STRING_PERMISSION_CHECK_OK)) {
-                tv_key.setText("key 验证成功! 功能可以正常使用");
-                tv_key.setTextColor(Color.YELLOW);
-            }
-            else if (s
-                    .equals(SDKInitializer.SDK_BROADCAST_ACTION_STRING_NETWORK_ERROR)) {
-                tv_key.setText("网络出错");
-            }
-        }
-    }
-
-    private SDKReceiver mReceiver;
+    private MapView mMapView;
+    private BaiduMap mBaiduMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,31 +74,13 @@ public class ItemRimActivity extends ToolBarActivity implements View.OnClickList
         SDKInitializer.initialize(getApplicationContext());
         setContentView(R.layout.activity_rim_item);
         ButterKnife.inject(this);
-        tv_key.setText("欢迎使用百度地图Android SDK v" + VersionInfo.getApiVersion());
-        // 注册 SDK 广播监听者
-        IntentFilter iFilter = new IntentFilter();
-        iFilter.addAction(SDKInitializer.SDK_BROADTCAST_ACTION_STRING_PERMISSION_CHECK_OK);
-        iFilter.addAction(SDKInitializer.SDK_BROADTCAST_ACTION_STRING_PERMISSION_CHECK_ERROR);
-        iFilter.addAction(SDKInitializer.SDK_BROADCAST_ACTION_STRING_NETWORK_ERROR);
-        mReceiver = new SDKReceiver();
-        registerReceiver(mReceiver, iFilter);
+        mMapView = (MapView) findViewById(R.id.bmapView);
 
         Intent intent = getIntent();
         id = intent.getStringExtra("id");
         title = intent.getStringExtra("title");
         initView();
         initPop();
-        //initData();
-
-        bmapView = (MapView) findViewById(R.id.bmapView);
-        mBaiduMap = bmapView.getMap();
-        //普通地图
-        mBaiduMap.setMapType(BaiduMap.MAP_TYPE_NORMAL);
-
-        //initMap();
-        mLocationClient = new LocationClient(getApplicationContext()); //声明LocationClient类
-        mLocationClient.registerLocationListener(myListener);    //注册监听函数
-        initLocation();
 
         rimShopListAdapter = new RimShopListAdapter(this);
         lv_shop.setAdapter(rimShopListAdapter);
@@ -134,18 +93,16 @@ public class ItemRimActivity extends ToolBarActivity implements View.OnClickList
                 if (rimServiceCompanies != null) {
                     rimServiceCompanies.clear();
                     PAGE_NUM = 1;
-                    rimShopListAdapter = new RimShopListAdapter(getApplication());
-                    lv_shop.setAdapter(rimShopListAdapter);
                 }
-                rimDao.getAroundServiceCompanyList(PAGE_NUM+ "", Constant.PAGE_SIZE + "", Arad.preferences.getString("memberId"), id, "", Arad.preferences.getString("latitude"), Arad.preferences.getString("lontitude"));
+                rimDao.getAroundServiceCompanyList(PAGE_NUM + "", Constant.PAGE_SIZE + "", Arad.preferences.getString("memberId"), id, "", Arad.preferences.getString("latitude"), Arad.preferences.getString("lontitude"));
             }
 
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
                 if (rimServiceCompanies != null) {
                     PAGE_NUM += 1;
-                    rimDao.getAroundServiceCompanyList(PAGE_NUM+ "", Constant.PAGE_SIZE + "", Arad.preferences.getString("memberId"), id, "", Arad.preferences.getString("latitude"), Arad.preferences.getString("lontitude"));
-                }else {
+                    rimDao.getAroundServiceCompanyList(PAGE_NUM + "", Constant.PAGE_SIZE + "", Arad.preferences.getString("memberId"), id, "", Arad.preferences.getString("latitude"), Arad.preferences.getString("lontitude"));
+                } else {
                     lv_shop.onRefreshComplete();
                 }
             }
@@ -154,20 +111,77 @@ public class ItemRimActivity extends ToolBarActivity implements View.OnClickList
         lv_shop.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (rimServiceCompanies!=null){
-                    String rimServiceCompaniesId = rimServiceCompanies.get(position-1).getId();
-                    Intent intent = new Intent(getApplicationContext(), RimMapDetailActivity .class);
-                    intent.putExtra("rimServiceCompaniesId",rimServiceCompaniesId);
-                    intent.putExtra("name",rimServiceCompanies.get(position-1).getName());
-                    intent.putExtra("address",rimServiceCompanies.get(position-1).getAddress());
-                    intent.putExtra("telephone",rimServiceCompanies.get(position-1).getTelephone());
-                    intent.putExtra("callTimes",rimServiceCompanies.get(position-1).getCallTimes());
+                if (rimServiceCompanies != null) {
+                    String rimServiceCompaniesId = rimServiceCompanies.get(position - 1).getId();
+                    Intent intent = new Intent(getApplicationContext(), RimMapDetailActivity.class);
+                    intent.putExtra("rimServiceCompaniesId", rimServiceCompaniesId);
+                    intent.putExtra("name", rimServiceCompanies.get(position - 1).getName());
+                    intent.putExtra("address", rimServiceCompanies.get(position - 1).getAddress());
+                    intent.putExtra("telephone", rimServiceCompanies.get(position - 1).getTelephone());
+                    intent.putExtra("callTimes", rimServiceCompanies.get(position - 1).getCallTimes());
+                    intent.putExtra("latitude",rimServiceCompanies.get(position-1).getLatitude());
+                    intent.putExtra("longitude",rimServiceCompanies.get(position-1).getLongitude());
                     startActivity(intent);
                 }
             }
         });
 
-        mLocationClient.start();
+    }
+
+    private void initMap() {
+        mBaiduMap = mMapView.getMap();
+        MapStatusUpdate msu = MapStatusUpdateFactory.zoomTo(14.0f);
+        mBaiduMap.setMapStatus(msu);
+
+        //MapStatusUpdate u4 = MapStatusUpdateFactory.newLatLng(GEO_SHENGDONG);
+        //MapStatusUpdate u41 = MapStatusUpdateFactory.zoomBy(14);
+       // mBaiduMap.setMapStatus(u4);
+       // mBaiduMap.setMapStatus(u41);
+
+        initOverlay();
+    }
+
+    private void initOverlay() {
+
+        Marker mMarker = null;
+        for(int i=0;i<rimServiceCompanies.size();i++){
+
+            Double latitude = rimServiceCompanies.get(i).getLatitude();
+            Double longitude = rimServiceCompanies.get(i).getLongitude();
+            MarkerOptions ooA = new MarkerOptions().position(new LatLng(latitude, longitude)).icon(bdA).zIndex(9).draggable(false);
+            //掉下动画
+            ooA.animateType(MarkerOptions.MarkerAnimateType.drop);
+            mMarker = (Marker) (mBaiduMap.addOverlay(ooA));
+            mBaiduMap.addOverlay(ooA);
+        }
+
+        Overlay overlay;
+        LatLngBounds.Builder builder = new LatLngBounds.Builder();
+        builder.include(mMarker.getPosition());
+        mBaiduMap.setMapStatus(MapStatusUpdateFactory
+                .newLatLngBounds(builder.build()));
+
+    }
+
+
+    @Override
+    protected void onPause() {
+        mMapView.onPause();
+        super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        mMapView.onResume();
+        super.onResume();
+    }
+
+    @Override
+    protected void onDestroy() {
+        // 退出时销毁定位
+        mMapView.onDestroy();
+        super.onDestroy();
+        bdA.recycle();
     }
 
     //初始化弹窗
@@ -189,61 +203,16 @@ public class ItemRimActivity extends ToolBarActivity implements View.OnClickList
         cancel.setOnClickListener(this);
     }
 
-    private void initLocation(){
-        LocationClientOption option = new LocationClientOption();
-        option.setLocationMode(LocationClientOption.LocationMode.Hight_Accuracy
-        );//可选，默认高精度，设置定位模式，高精度，低功耗，仅设备
-        option.setCoorType("bd09ll");//可选，默认gcj02，设置返回的定位结果坐标系
-        int span=1000;
-        option.setScanSpan(span);//可选，默认0，即仅定位一次，设置发起定位请求的间隔需要大于等于1000ms才是有效的
-        option.setIsNeedAddress(true);//可选，设置是否需要地址信息，默认不需要
-        option.setOpenGps(true);//可选，默认false,设置是否使用gps
-        option.setLocationNotify(false);//可选，默认false，设置是否当gps有效时按照1S1次频率输出GPS结果
-        option.setIsNeedLocationDescribe(true);//可选，默认false，设置是否需要位置语义化结果，可以在BDLocation.getLocationDescribe里得到，结果类似于“在北京天安门附近”
-        option.setIsNeedLocationPoiList(true);//可选，默认false，设置是否需要POI结果，可以在BDLocation.getPoiList里得到
-        option.setIgnoreKillProcess(false);//可选，默认true，定位SDK内部是一个SERVICE，并放到了独立进程，设置是否在stop的时候杀死这个进程，默认不杀死
-        option.SetIgnoreCacheException(false);//可选，默认false，设置是否收集CRASH信息，默认收集
-        option.setEnableSimulateGps(false);//可选，默认false，设置是否需要过滤gps仿真结果，默认需要
-        mLocationClient.setLocOption(option);
-    }
-    public class MyLocationListener implements BDLocationListener {
-        @Override
-        public void onReceiveLocation(BDLocation location) {
-            Arad.preferences.putString("latitude", location.getLatitude() + "");
-            Arad.preferences.putString("lontitude",location.getLongitude()+"");
-        }
-    }
-    /*private void initMap() {
-        mPoiSearch = PoiSearch.newInstance();
-        mPoiSearch.setOnGetPoiSearchResultListener(new OnGetPoiSearchResultListener() {
-            @Override
-            public void onGetPoiResult(PoiResult poiResult) {
-                //获取POI检索结果
-            }
-
-            @Override
-            public void onGetPoiDetailResult(PoiDetailResult poiDetailResult) {
-                //获取Place详情页检索结果
-            }
-        });
-        mPoiSearch.searchInCity((new PoiCitySearchOption())
-                .city("济南")
-                .keyword("美食")
-                .pageNum(10));
-        //mPoiSearch.destroy();
-    }*/
-
     private void initView() {
         tv_item_one.setText(title);
 
         rimDao = new RimDao(this);
-        rimDao.getAroundServiceCompanyList(PAGE_NUM+ "", Constant.PAGE_SIZE + "", Arad.preferences.getString("memberId"), id, "", Arad.preferences.getString("latitude"), Arad.preferences.getString("lontitude"));
+        rimDao.getAroundServiceCompanyList(PAGE_NUM + "", Constant.PAGE_SIZE + "", Arad.preferences.getString("memberId"), id, "", Arad.preferences.getString("latitude"), Arad.preferences.getString("lontitude"));
     }
 
     @Override
     public void onClick(View v) {
         Object id =v.getTag();
-        int position = 0;
         switch (v.getId()){
           case R.id.iv_map://地图
               Intent intent = new Intent(this,RimMapDetailActivity.class);
@@ -263,7 +232,7 @@ public class ItemRimActivity extends ToolBarActivity implements View.OnClickList
           case R.id.call_up: //打电话
               if (!bo_hao.getText().equals("")){
                   startActivity(new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + bo_hao.getText())));
-                  rimDao.addCallHistory(rimServiceCompanies.get(position).getAroundServiceId(), bo_hao.getText().toString(), Arad.preferences.getString("memberId"));
+                  rimDao.addCallHistory(rimServiceCompanies.get(position).getId(), bo_hao.getText().toString(), Arad.preferences.getString("memberId"));
                   popupWindow.dismiss();}
               break;
           case R.id.cancel: //取消
@@ -283,6 +252,14 @@ public class ItemRimActivity extends ToolBarActivity implements View.OnClickList
             if (rimServiceCompanies!=null){
                 rimShopListAdapter.setRimServiceCompanies(rimServiceCompanies);
             }
+            initMap();
+        }
+        if (requestCode==9){
+            if (rimServiceCompanies!=null){
+                rimServiceCompanies.clear();
+            }
+            rimDao.getAroundServiceCompanyList(PAGE_NUM+ "", Constant.PAGE_SIZE + "", Arad.preferences.getString("memberId"),
+                    id, "", Arad.preferences.getString("latitude"), Arad.preferences.getString("lontitude"));
         }
     }
 
@@ -292,4 +269,13 @@ public class ItemRimActivity extends ToolBarActivity implements View.OnClickList
         lv_shop.onRefreshComplete();
     }
 
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        if (rimServiceCompanies!=null){
+            rimServiceCompanies.clear();
+        }
+        rimDao.getAroundServiceCompanyList(PAGE_NUM + "", Constant.PAGE_SIZE + "", Arad.preferences.getString("memberId"),
+                id, "", Arad.preferences.getString("latitude"), Arad.preferences.getString("lontitude"));
+    }
 }

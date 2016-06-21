@@ -38,14 +38,22 @@ import com.ctrl.forum.base.AppToolBarActivity;
 import com.ctrl.forum.customview.GridViewForScrollView;
 import com.ctrl.forum.dao.ImageDao;
 import com.ctrl.forum.dao.InvitationDao;
+import com.ctrl.forum.dao.KeyDao;
 import com.ctrl.forum.entity.CategoryItem;
 import com.ctrl.forum.entity.Image;
+import com.ctrl.forum.entity.ItemValues;
+import com.ctrl.forum.entity.List2;
+import com.ctrl.forum.entity.Post2;
+import com.ctrl.forum.entity.PostImage;
+import com.ctrl.forum.ui.activity.WebViewActivity;
 import com.ctrl.forum.utils.Utils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -55,6 +63,9 @@ import butterknife.InjectView;
  * Created by Administrator on 2016/4/11.
  */
 public class InvitationReleaseActivity extends AppToolBarActivity implements View.OnClickListener{
+    private KeyDao kdao;
+    private ItemValues itemValues;
+
     private GridViewForScrollView noScrollgridview;
     private View parentView;
     private PopupWindow pop = null;
@@ -114,11 +125,20 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
     @InjectView(R.id.et_content)//内容
     EditText et_content;
 
-    @InjectView(R.id.tv_release_back)//取消
-    TextView tv_release_back;
-    @InjectView(R.id.tv_release_save)//存草稿
-    TextView tv_release_save;
+    @InjectView(R.id.tougao)
+    TextView tougao;
 
+    @InjectView(R.id.tv_release_back)//取消
+            TextView tv_release_back;
+    @InjectView(R.id.tv_release_save)//存草稿
+            TextView tv_release_save;
+
+
+    private String vcardDisplay;
+    private List<List2> list;
+    private String categoryTree; //分类
+
+    private String[] eid;
 
     /* 请求码*/
     private static final int IMAGE_REQUEST_CODE = 0;
@@ -136,6 +156,14 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
     private List<CategoryItem> listItemCategroy3;
 
     private boolean isSave;//是否存草稿
+    private String delId = "";
+
+    private String edit = ""; //是否是编辑状态
+    private String id; //编辑状态时的帖子id
+
+    private Map<String,String> delIds = new HashMap<>();
+    private List<Image> delImages = new ArrayList<>(); //删除的图片
+    private List<Image> addImages = new ArrayList<>(); //添加的图片
 
 
     @Override
@@ -145,14 +173,27 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
         // 隐藏输入法
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         ButterKnife.inject(this);
+
+        edit = getIntent().getStringExtra("edit");
+
        Init();
        initView();
+        checkActivity();
 
+    }
+
+    private void checkActivity() {
+        String id = getIntent().getStringExtra("id");
+        if (id!=null && !id.equals("")){
+            idao = new InvitationDao(this);
+            idao.requesPostDetail(id, Arad.preferences.getString("memberId"));
+        }
     }
 
     private void initView() {
         idao=new InvitationDao(this);
         idao.requesItemCategory2(channelId,"1");
+        kdao = new KeyDao(this);
 
         tv_tel=(TextView)findViewById(R.id.tv_tel);
         tv_location=(TextView)findViewById(R.id.tv_location);
@@ -168,6 +209,7 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
         tv_release_back.setOnClickListener(this);
         tv_release.setOnClickListener(this);
         tv_release_save.setOnClickListener(this);
+        tougao.setOnClickListener(this);
 
         //初始化控件宽高
         setImageViewWidth(iv01);
@@ -190,7 +232,6 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
         iv08.setOnClickListener(this);
         iv09.setOnClickListener(this);
     }
-
 
     private void showDelDialog(final int posititon) {
         new AlertDialog.Builder(this)
@@ -321,6 +362,74 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
     @Override
     public void onRequestSuccess(int requestCode) {
         super.onRequestSuccess(requestCode);
+        if (requestCode == 66) {
+            itemValues = kdao.getItemValues();
+            Intent intent = new Intent(this,WebViewActivity.class);
+            intent.putExtra("data",itemValues.getItemValue());
+            intent.putExtra("title","投稿协议");
+            startActivity(intent);
+        }
+        if (requestCode == 3){
+            Post2 post2 = idao.getPost2(); //帖子内容
+            name = post2.getContactName();
+            adress = post2.getContactAddress();
+            tel = post2.getContactPhone();
+            id = post2.getId();
+            locationLongitude = post2.getLocationLongitude();
+            locationLatitude = post2.getLocationLatitude();
+            tv_location_name = post2.getLocationName();
+            et_content.setText(post2.getContent());
+            et_tittle.setText(post2.getTitle());
+            categoryTree = post2.getCategoryTree();
+            eid = categoryTree.split(",", categoryTree.length());
+
+            //二级菜单列表
+            listItemCategroy = idao.getList2s();
+            for(int i=0;i<listItemCategroy.size();i++){
+                secondCategroyStr.add(listItemCategroy.get(i).getName());
+                secondKindId = listItemCategroy.get(i).getId();
+            }
+            setSecondSpinner2();
+
+            //三级菜单列表
+            listItemCategroy3 = idao.getList3();
+            if (listItemCategroy3!=null) {
+                spinner_third_kind.setVisibility(View.VISIBLE);
+                for (int i = 0; i < listItemCategroy3.size(); i++) {
+                    thirdCategroyStr.add(listItemCategroy3.get(i).getName());
+                    thirdKindId = listItemCategroy3.get(i).getId();
+                }
+                setSecondSpinner3();
+            }
+
+
+            //名片
+            vcardDisplay = post2.getVcardDisplay();
+            if (vcardDisplay.equals("0")){
+                Arad.preferences.putBoolean("isCallingChecked",false);
+            }else{
+                Arad.preferences.putBoolean("isCallingChecked",true);
+            }
+            Arad.preferences.flush();
+
+            List<PostImage> listPostImage = idao.getListPostImage();//图片
+            for (int i=0;i<listPostImage.size();i++){
+                PostImage post = listPostImage.get(i);
+                Image image=new Image();
+                image.setImgUrl(post.getImg());
+                image.setThumbImgUrl(post.getThumbImg());
+                mImageList.add(image);
+                delIds.put(mImageList.get(i).getImgUrl(),listPostImage.get(i).getId());
+            }
+            if (mImageList.size()>3){
+                ll_image_second.setVisibility(View.VISIBLE);
+            }
+            if (mImageList.size()>7){
+                ll_image_third.setVisibility(View.VISIBLE);
+            }
+            setBitmapImg();
+            bitmapClick();
+        }
         if(requestCode==7){
             if(isSave){
                 MessageUtils.showShortToast(this,"存草稿成功");
@@ -333,101 +442,11 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
 
         if(requestCode==888){
             showProgress(false);
-            MessageUtils.showShortToast(this,"图片上传成功");
+            MessageUtils.showShortToast(this, "图片上传成功");
             Image image=Idao.getImage();
             mImageList.add(image);
             setBitmapImg();
-            iv01.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    if (mImageList.size() >= 1) {
-                        imageFlag = 1;
-                        showDelDialog(1);
-                    }
-                    return true;
-                }
-            });
-            iv02.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    if (mImageList.size() >= 2) {
-                        imageFlag = 2;
-                        showDelDialog(2);
-                    }
-                    return true;
-                }
-            });
-            iv03.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    if (mImageList.size() >= 3) {
-                        imageFlag = 3;
-                        showDelDialog(3);
-                    }
-                    return true;
-                }
-            });
-            iv04.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    if (mImageList.size() >= 4) {
-                        imageFlag = 4;
-                        showDelDialog(4);
-                    }
-                    return true;
-                }
-            });
-            iv05.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    if (mImageList.size() >= 5) {
-                        imageFlag = 5;
-                        showDelDialog(5);
-                    }
-                    return true;
-                }
-            });
-            iv06.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    if (mImageList.size() >= 6) {
-                        imageFlag = 6;
-                        showDelDialog(6);
-                    }
-                    return true;
-                }
-            });
-            iv07.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    if (mImageList.size() >= 7) {
-                        imageFlag = 7;
-                        showDelDialog(7);
-                    }
-                    return true;
-                }
-            });
-            iv08.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    if (mImageList.size() >= 8) {
-                        imageFlag = 8;
-                        showDelDialog(8);
-                    }
-                    return true;
-                }
-            });
-            iv09.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    if (mImageList.size() >= 9) {
-                        imageFlag = 9;
-                        showDelDialog(9);
-                    }
-                    return true;
-                }
-            });
-
+            bitmapClick();
         }
 
         if(requestCode==12){
@@ -440,64 +459,185 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
             for(int i=0;i<listItemCategroy.size();i++){
                 secondCategroyStr.add(listItemCategroy.get(i).getName());
             }
-
-            arrayAdapter = new ArrayAdapter<String>(InvitationReleaseActivity.this, R.layout.simple_spinner_item, secondCategroyStr);
-            //设置下拉列表的风格
-            //arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            arrayAdapter.setDropDownViewResource(R.layout.spinner_layout);
-            spinner_second_kind.setAdapter(arrayAdapter);
-            spinner_second_kind.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-                    idao.requesItemCategory3(listItemCategroy.get(position).getId(), "2");
-                    secondKindId = listItemCategroy.get(position).getId();
-                    Log.i("tag", "secondKindId---" + secondKindId);
-                    checkType2 = listItemCategroy.get(position).getCheckType();
-
-                }
-
-                @Override
-                public void onNothingSelected(AdapterView<?> parent) {
-
-                }
-            });
+            setSecondSpinner2();
 
         }
-        if(requestCode==13){
-            if(listItemCategroy3!=null){
+        if (requestCode == 13) {
+            if (listItemCategroy3 != null) {
                 listItemCategroy3.clear();
             }
-            MessageUtils.showShortToast(this,"获取三级分类成功");
+            if (thirdCategroyStr!=null){
+                thirdCategroyStr.clear();
+            }
+            MessageUtils.showShortToast(this, "获取三级分类成功");
             spinner_third_kind.setVisibility(View.VISIBLE);
-            listItemCategroy3=idao.getListCategroyItem();
-            for(int i=0;i<listItemCategroy3.size();i++){
+            listItemCategroy3 = idao.getListCategroyItem();
+            for (int i = 0; i < listItemCategroy3.size(); i++) {
                 thirdCategroyStr.add(listItemCategroy3.get(i).getName());
             }
-
-            arrayAdapter = new ArrayAdapter<String>(InvitationReleaseActivity.this, R.layout.simple_spinner_item, thirdCategroyStr);
-            //设置下拉列表的风格
-           // arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            arrayAdapter.setDropDownViewResource(R.layout.spinner_layout);
-            spinner_third_kind.setAdapter(arrayAdapter);
-
-            spinner_third_kind.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    categroyId = listItemCategroy3.get(position).getId();
-                    thirdKindId = categroyId;
-                    checkType3 = listItemCategroy3.get(position).getCheckType();
-
-                }
-
-                @Override
-                public void onNothingSelected(AdapterView<?> parent) {
-
-                }
-            });
-            
-            
+            setSecondSpinner3();
         }
+        if(requestCode==6){
+            if(isSave){
+                MessageUtils.showShortToast(this, "存草稿成功");
+            }else {
+                MessageUtils.showShortToast(this, "帖子发布成功");
+            }
+            isSave=false;
+            finish();
+        }
+    }
+
+    private void setSecondSpinner2() {
+        arrayAdapter = new ArrayAdapter<String>(InvitationReleaseActivity.this, R.layout.simple_spinner_item, secondCategroyStr);
+        //设置下拉列表的风格
+        //arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        arrayAdapter.setDropDownViewResource(R.layout.spinner_layout);
+        spinner_second_kind.setAdapter(arrayAdapter);
+        if (listItemCategroy!=null && categoryTree!=null){
+            for(int i=0;i<listItemCategroy.size();i++){
+                if (listItemCategroy.get(i).getId().equals(eid[2])){
+                    spinner_second_kind.setSelection(i);
+                }
+            }
+        }
+        spinner_second_kind.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                idao.requesItemCategory3(listItemCategroy.get(position).getId(), "2");
+                secondKindId = listItemCategroy.get(position).getId();
+                Log.i("tag", "secondKindId---" + secondKindId);
+                checkType2 = listItemCategroy.get(position).getCheckType();
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+    }
+
+    private void setSecondSpinner3() {
+        arrayAdapter = new ArrayAdapter<String>(InvitationReleaseActivity.this, R.layout.simple_spinner_item, thirdCategroyStr);
+        //设置下拉列表的风格
+        // arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        arrayAdapter.setDropDownViewResource(R.layout.spinner_layout);
+        spinner_third_kind.setAdapter(arrayAdapter);
+        if (listItemCategroy3!=null && categoryTree!=null) {
+            for (int i = 0; i < listItemCategroy3.size(); i++) {
+                if (listItemCategroy.get(i).getId().equals(eid[3])) {
+                    spinner_third_kind.setSelection(i);
+                }
+            }
+        }
+        spinner_third_kind.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                categroyId = listItemCategroy3.get(position).getId();
+                thirdKindId = categroyId;
+                checkType3 = listItemCategroy3.get(position).getCheckType();
+
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+    }
+
+    private void bitmapClick() {
+        iv01.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                if (mImageList.size() >= 1) {
+                    imageFlag = 1;
+                    showDelDialog(1);
+                }
+                return true;
+            }
+        });
+        iv02.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                if (mImageList.size() >= 2) {
+                    imageFlag = 2;
+                    showDelDialog(2);
+                }
+                return true;
+            }
+        });
+        iv03.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                if (mImageList.size() >= 3) {
+                    imageFlag = 3;
+                    showDelDialog(3);
+                }
+                return true;
+            }
+        });
+        iv04.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                if (mImageList.size() >= 4) {
+                    imageFlag = 4;
+                    showDelDialog(4);
+                }
+                return true;
+            }
+        });
+        iv05.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                if (mImageList.size() >= 5) {
+                    imageFlag = 5;
+                    showDelDialog(5);
+                }
+                return true;
+            }
+        });
+        iv06.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                if (mImageList.size() >= 6) {
+                    imageFlag = 6;
+                    showDelDialog(6);
+                }
+                return true;
+            }
+        });
+        iv07.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                if (mImageList.size() >= 7) {
+                    imageFlag = 7;
+                    showDelDialog(7);
+                }
+                return true;
+            }
+        });
+        iv08.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                if (mImageList.size() >= 8) {
+                    imageFlag = 8;
+                    showDelDialog(8);
+                }
+                return true;
+            }
+        });
+        iv09.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                if (mImageList.size() >= 9) {
+                    imageFlag = 9;
+                    showDelDialog(9);
+                }
+                return true;
+            }
+        });
     }
 
     private boolean checkInput(){
@@ -610,58 +750,126 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
         return thumbImagesUrl;
     }
 
+    //删除的图片的url转成id形式的String
+    public String getDelImageId(List<Image> imageId){
+        if (imageId.size()!=0) {
+            List<String> delImageIds  = new ArrayList<>();
+            for (int i=0;i< imageId.size();i++){
+                delImageIds.add(delIds.get(imageId.get(i).getImgUrl()));
+            }
+            for (int i = 0; i < delImageIds.size(); i++) {
+                //转换成字符串
+                delId = delId + delImageIds.get(i) + ",";
+            }
+            return delId.substring(0, delId.length() - 1);
+        }
+        return "";
+
+
+    }
 
     @Override
     public void onClick(View v) {
        Intent intent=null;
         switch (v.getId()){
-            case R.id.tv_release_save:
-                isSave=true;
-                if(et_content.getText().toString().trim().length()<20){
-                    MessageUtils.showShortToast(this,"帖子内容少于20个字符");
-                    return;
+            case R.id.tv_release_save://存草稿
+
+                //遍历比价两个集合，若是有相同的，则为删除的图片的url,不同的，增加的集合里面是新增加的图片的url,删除的集合里是删除的图片的url
+                for (int i=0;i<addImages.size();i++){
+                    String addUrl = addImages.get(i).getImgUrl();
+                    for (int j=0;j<delImages.size();j++){
+                        String delurl = delImages.get(j).getImgUrl();
+                        if (delurl.equals(addUrl)){
+                            addImages.remove(i);
+                            delImages.remove(j);
+                        }
+                    }
                 }
+
+                isSave=true;
                 String imagesUrl1=getImagesUrl(mImageList);
                 String thumbImagesUrl1= getThumbImagesUrl(mImageList);
                         if(spinner_third_kind.getVisibility()==View.VISIBLE){
-                            idao.requesReleasePost(
-                                    Arad.preferences.getString("memberId"),
-                                    thirdKindId,
-                                    "0",
-                                    "0",
-                                    checkType3,
-                                    et_tittle.getText().toString().trim(),
-                                    et_content.getText().toString().trim(),
-                                    "0",
-                                    name,
-                                    adress,
-                                    tel,
-                                    locationLongitude,
-                                    locationLatitude,
-                                    tv_location_name,
-                                    imagesUrl1,
-                                    thumbImagesUrl1
-                            );
+                            if(edit==null || edit.equals("")) {
+                                idao.requesReleasePost(
+                                        Arad.preferences.getString("memberId"),
+                                        thirdKindId,
+                                        "",
+                                        "0",
+                                        "0",
+                                        checkType3,
+                                        et_tittle.getText().toString().trim(),
+                                        et_content.getText().toString().trim(),
+                                        "0",
+                                        name,
+                                        adress,
+                                        tel,
+                                        locationLongitude,
+                                        locationLatitude,
+                                        tv_location_name,
+                                        imagesUrl1,
+                                        thumbImagesUrl1
+                                );
+                            }else{
+                                idao.requesPostEditor(
+                                        id,
+                                        thirdKindId,
+                                        "0",
+                                        "0",
+                                        checkType3,
+                                        et_content.getText().toString().trim(),
+                                        et_content.getText().toString().trim(),
+                                        vcardDisplay,
+                                        name,
+                                        adress,
+                                        tel,
+                                        locationLongitude,
+                                        locationLatitude,
+                                        tv_location_name,
+                                        getDelImageId(delImages),  //删除图片的id的字符串
+                                        getImagesUrl(addImages),
+                                        getThumbImagesUrl(addImages));
+                            }
                         }else {
-
-                            idao.requesReleasePost(
-                                    Arad.preferences.getString("memberId"),
-                                    secondKindId,
-                                    "0",
-                                    "0",
-                                    checkType2,
-                                    et_tittle.getText().toString().trim(),
-                                    et_content.getText().toString().trim(),
-                                    "0",
-                                    name,
-                                    adress,
-                                    tel,
-                                    locationLongitude,
-                                    locationLatitude,
-                                    tv_location_name,
-                                    imagesUrl1,
-                                    thumbImagesUrl1
-                            );
+                            if(edit==null || edit.equals("")) {
+                                idao.requesReleasePost(
+                                        Arad.preferences.getString("memberId"),
+                                        secondKindId,
+                                        "0",
+                                        "0",
+                                        checkType2,
+                                        et_tittle.getText().toString().trim(),
+                                        et_content.getText().toString().trim(),
+                                        "0",
+                                        name,
+                                        adress,
+                                        tel,
+                                        locationLongitude,
+                                        locationLatitude,
+                                        tv_location_name,
+                                        imagesUrl1,
+                                        thumbImagesUrl1
+                                );
+                            }else {
+                                idao.requesPostEditor(
+                                        id,
+                                        secondKindId,
+                                        "0",
+                                        "0",
+                                        checkType2,
+                                        et_content.getText().toString().trim(),
+                                        et_content.getText().toString().trim(),
+                                        vcardDisplay,
+                                        name,
+                                        adress,
+                                        tel,
+                                        locationLongitude,
+                                        locationLatitude,
+                                        tv_location_name,
+                                        getDelImageId(delImages),  //删除图片的id的字符串
+                                        getImagesUrl(addImages),
+                                        getThumbImagesUrl(addImages));
+                            }
                         }
                 break;
             case R.id.tv_release:
@@ -674,6 +882,7 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
                 if(Arad.preferences.getBoolean("isCallingChecked")){
                     if(checkInput()){
                        if(spinner_third_kind.getVisibility()==View.VISIBLE){
+                           if(edit==null || edit.equals("")) {
                                idao.requesReleasePost(
                                        Arad.preferences.getString("memberId"),
                                        thirdKindId,
@@ -692,52 +901,152 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
                                        imagesUrl,
                                        thumbImagesUrl
                                );
+                           }else{
+                               idao.requesPostEditor(
+                                       id,
+                                       thirdKindId,
+                                       "0",
+                                       "1",
+                                       checkType3,
+                                       et_content.getText().toString().trim(),
+                                       et_content.getText().toString().trim(),
+                                       vcardDisplay,
+                                       name,
+                                       adress,
+                                       tel,
+                                       locationLongitude,
+                                       locationLatitude,
+                                       tv_location_name,
+                                       getDelImageId(delImages),  //删除图片的id的字符串
+                                       getImagesUrl(addImages),
+                                       getThumbImagesUrl(addImages));
+                           }
                        }else {
-
-                           idao.requesReleasePost(
-                                   Arad.preferences.getString("memberId"),
-                                   secondKindId,
-                                   "0",
-                                   "1",
-                                   checkType2,
-                                   et_tittle.getText().toString().trim(),
-                                   et_content.getText().toString().trim(),
-                                   "0",
-                                   name,
-                                   adress,
-                                   tel,
-                                   locationLongitude,
-                                   locationLatitude,
-                                   tv_location_name,
-                                   imagesUrl,
-                                   thumbImagesUrl
-                           );
-
+                           if(edit==null || edit.equals("")) {
+                               idao.requesReleasePost(
+                                       Arad.preferences.getString("memberId"),
+                                       secondKindId,
+                                       "0",
+                                       "1",
+                                       checkType2,
+                                       et_tittle.getText().toString().trim(),
+                                       et_content.getText().toString().trim(),
+                                       "0",
+                                       name,
+                                       adress,
+                                       tel,
+                                       locationLongitude,
+                                       locationLatitude,
+                                       tv_location_name,
+                                       imagesUrl,
+                                       thumbImagesUrl
+                               );
+                           }else{
+                               idao.requesPostEditor(
+                                       id,
+                                       secondKindId,
+                                       "0",
+                                       "1",
+                                       checkType2,
+                                       et_content.getText().toString().trim(),
+                                       et_content.getText().toString().trim(),
+                                       vcardDisplay,
+                                       name,
+                                       adress,
+                                       tel,
+                                       locationLongitude,
+                                       locationLatitude,
+                                       tv_location_name,
+                                       getDelImageId(delImages),  //删除图片的id的字符串
+                                       getImagesUrl(addImages),
+                                       getThumbImagesUrl(addImages));
+                           }
                        }
-
-
-
                     }
 
                 }else{
 
-                    idao.requesReleasePost(
-                            Arad.preferences.getString("memberId"),
-                            thirdKindId,
-                            "0",
-                            "1",
-                            checkType2,
-                            et_tittle.getText().toString().trim(),
-                            et_content.getText().toString().trim(),
-                            "0",
-                            name,
-                            adress,
-                            tel,
-                            locationLongitude,
-                            locationLatitude,
-                            tv_location_name,
-                            imagesUrl,
-                            thumbImagesUrl);
+                    if(spinner_third_kind.getVisibility()==View.VISIBLE){
+                        if(edit==null || edit.equals("")) {
+                            idao.requesReleasePost(
+                                    Arad.preferences.getString("memberId"),
+                                    thirdKindId,
+                                    "0",
+                                    "1",
+                                    checkType3,
+                                    et_tittle.getText().toString().trim(),
+                                    et_content.getText().toString().trim(),
+                                    "0",
+                                    name,
+                                    adress,
+                                    tel,
+                                    locationLongitude,
+                                    locationLatitude,
+                                    tv_location_name,
+                                    imagesUrl,
+                                    thumbImagesUrl
+                            );
+                        }else{
+                            idao.requesPostEditor(
+                                    id,
+                                    thirdKindId,
+                                    "0",
+                                    "1",
+                                    checkType3,
+                                    et_content.getText().toString().trim(),
+                                    et_content.getText().toString().trim(),
+                                    vcardDisplay,
+                                    name,
+                                    adress,
+                                    tel,
+                                    locationLongitude,
+                                    locationLatitude,
+                                    tv_location_name,
+                                    getDelImageId(delImages),  //删除图片的id的字符串
+                                    getImagesUrl(addImages),
+                                    getThumbImagesUrl(addImages));
+                        }
+                    }else {
+                        if(edit==null || edit.equals("")) {
+                            idao.requesReleasePost(
+                                    Arad.preferences.getString("memberId"),
+                                    secondKindId,
+                                    "0",
+                                    "1",
+                                    checkType2,
+                                    et_tittle.getText().toString().trim(),
+                                    et_content.getText().toString().trim(),
+                                    "0",
+                                    name,
+                                    adress,
+                                    tel,
+                                    locationLongitude,
+                                    locationLatitude,
+                                    tv_location_name,
+                                    imagesUrl,
+                                    thumbImagesUrl
+                            );
+                        }else{
+                            idao.requesPostEditor(
+                                    id,
+                                    secondKindId,
+                                    "0",
+                                    "1",
+                                    checkType2,
+                                    et_content.getText().toString().trim(),
+                                    et_content.getText().toString().trim(),
+                                    vcardDisplay,
+                                    name,
+                                    adress,
+                                    tel,
+                                    locationLongitude,
+                                    locationLatitude,
+                                    tv_location_name,
+                                    getDelImageId(delImages),  //删除图片的id的字符串
+                                    getImagesUrl(addImages),
+                                    getThumbImagesUrl(addImages));
+                        }
+                    }
                 }
 
 
@@ -749,6 +1058,7 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
                 break;
             case R.id.tv_location:
                 intent=new Intent(this,LocationActivity.class);
+                intent.putExtra("tv_location_name",tv_location_name);
                 startActivityForResult(intent, 101);
                 AnimUtil.intentSlidIn(this);
                 break;
@@ -841,10 +1151,12 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
 
                 //setBitmapImg();
                 break;
+            case R.id.tougao:
+                kdao.ueryDictionary("POST_PROTOCOL"); //投稿协议
+                break;
         }
 
     }
-
 
     private void getImageToView1(String path) {
         Bitmap bitmap ;
@@ -929,9 +1241,9 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
 
         ViewGroup.LayoutParams params = imageView.getLayoutParams();
         int w= (AndroidUtil.getDeviceWidth(this)-20)/4;
-        android.util.Log.d("demo", "width : " + w);
+        Log.d("demo", "width : " + w);
         params.height=w;
-        android.util.Log.d("demo", "height : " + params.height);
+        Log.d("demo", "height : " + params.height);
         imageView.setLayoutParams(params);
 
     }

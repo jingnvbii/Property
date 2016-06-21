@@ -33,7 +33,7 @@ public class RimShopListAdapter extends BaseAdapter {
     }
 
     public void setRimServiceCompanies(List<RimServiceCompany> rimServiceCompanies) {
-        this.rimServiceCompanies.addAll(rimServiceCompanies);
+        this.rimServiceCompanies = rimServiceCompanies;
         notifyDataSetChanged();
     }
 
@@ -74,7 +74,7 @@ public class RimShopListAdapter extends BaseAdapter {
         holder.tv_name.setText(rimServiceCompanies.get(position).getName());
         holder.tv_address.setText(rimServiceCompanies.get(position).getAddress());
         holder.tv_number.setText(rimServiceCompanies.get(position).getTelephone());
-        holder.tv_total.setText(rimServiceCompanies.get(position).getCallTimes());}
+        holder.tv_take_phone.setText("已拨打"+rimServiceCompanies.get(position).getCallTimes()+"次");}
         return convertView;
     }
 
@@ -85,8 +85,8 @@ public class RimShopListAdapter extends BaseAdapter {
         TextView tv_address;
         @InjectView(R.id.tv_number)
         TextView tv_number;
-        @InjectView(R.id.tv_total)
-        TextView tv_total;
+        @InjectView(R.id.tv_take_phone)
+        TextView tv_take_phone;
         @InjectView(R.id.iv_phone)
         ImageView iv_phone;
         @InjectView(R.id.iv_address)

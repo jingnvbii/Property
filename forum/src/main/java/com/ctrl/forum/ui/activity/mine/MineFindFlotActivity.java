@@ -28,6 +28,7 @@ public class MineFindFlotActivity extends ToolBarActivity implements View.OnClic
     private MinePlotiAdapter minePlotiAdapter;
     private PlotDao plotDao;
     private String communityName;
+    private String goodId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,7 +102,7 @@ public class MineFindFlotActivity extends ToolBarActivity implements View.OnClic
         }
         if (requestCode==1){
             MessageUtils.showShortToast(this, "加入小区成功!");
-            Arad.preferences.getString("communityName");
+            Arad.preferences.putString("communityId", goodId);
             Arad.preferences.putString("communityName", communityName);
             Arad.preferences.flush();
             this.finish();
@@ -121,7 +122,7 @@ public class MineFindFlotActivity extends ToolBarActivity implements View.OnClic
             case R.id.tv_join:
                 int position = (int) id;
                 if (communities!=null){
-                    String goodId = communities.get(position).getId();
+                    goodId = communities.get(position).getId();
                     communityName = communities.get(position).getCommunityName();
                     plotDao.joinCel(Arad.preferences.getString("memberId"),goodId);
                 }
