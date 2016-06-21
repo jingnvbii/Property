@@ -87,10 +87,10 @@ public class LocationActivity extends AppToolBarActivity implements View.OnClick
         // 隐藏输入法
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
-        String locationLongitude = getIntent().getStringExtra("locationLongitude"); //经度
-        String locationLatitude = getIntent().getStringExtra("locationLatitude");  //纬度
         String locationName = getIntent().getStringExtra("tv_location_name");
-        mPoiInfoListStr.add(locationName);
+        if(locationName!=null) {
+            mPoiInfoListStr.add(locationName);
+        }
         adapter2 = new ArrayAdapter<String>(LocationActivity.this, android.R.layout.simple_list_item_1, mPoiInfoListStr);
         adapter2.notifyDataSetChanged();
         lv_locate.setAdapter(adapter2);

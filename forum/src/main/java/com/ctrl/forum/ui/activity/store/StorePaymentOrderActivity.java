@@ -1,6 +1,5 @@
 package com.ctrl.forum.ui.activity.store;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
@@ -9,9 +8,13 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.beanu.arad.utils.AnimUtil;
+import com.beanu.arad.utils.MessageUtils;
 import com.ctrl.forum.R;
 import com.ctrl.forum.base.AppToolBarActivity;
+import com.ctrl.forum.base.Constant;
+import com.ctrl.forum.weixin.WeixinPayUtil;
+import com.ctrl.forum.wxapi.WXPayEntryActivity;
+import com.ctrl.forum.zhifubao.AliplyPayUtil;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -39,6 +42,8 @@ public class StorePaymentOrderActivity extends AppToolBarActivity implements Vie
     CheckBox checkbox_payment_order_weixin;
     @InjectView(R.id.checkbox_payment_order_zhifubao)//支付宝单选按钮
     CheckBox checkbox_payment_order_zhifubao;
+    private String orderNum;
+    private String productsTotal;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,9 +57,10 @@ public class StorePaymentOrderActivity extends AppToolBarActivity implements Vie
     }
 
     private void initData() {
-        String productsTotal = getIntent().getStringExtra("productsTotal");
+        productsTotal = getIntent().getStringExtra("productsTotal");
+        orderNum=getIntent().getStringExtra("orderNum");
         String youHuiPrice = "0.0";
-        tv_payment_order_id.setText(getIntent().getStringExtra("orderNum"));
+        tv_payment_order_id.setText(orderNum);
         tv_payment_order_total_price.setText(productsTotal+"元");
         tv_payment_order_youhui_price.setText(youHuiPrice+"元");
         tv_payment_order_residue_price.setText((Double.parseDouble(productsTotal)-Double.parseDouble(youHuiPrice))+"元");
@@ -72,9 +78,44 @@ public class StorePaymentOrderActivity extends AppToolBarActivity implements Vie
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.tv_payment_sucess:
-                Intent intent=new Intent(this,StorePaymentSucessActivity.class);
-                startActivity(intent);
-                AnimUtil.intentSlidIn(this);
+                if(checkbox_payment_order_zhifubao.isChecked()){//支付宝支付
+                    AliplyPayUtil aliplyPayUtil = new AliplyPayUtil(StorePaymentOrderActivity.this, new AliplyPayUtil.PayStateListener() {
+                        @Override
+                        public void doAfterAliplyPay(boolean isSuccess) {
+                            if (isSuccess) {
+                                MessageUtils.showShortToast(StorePaymentOrderActivity.this, "支付成功");
+                                finish();
+                            } else {
+                                MessageUtils.showShortToast(StorePaymentOrderActivity.this,"支付失败");
+                                finish();
+                            }
+                        }
+                    });
+                    /***   此处金额 写了0.01元  实际情况具体问题具体分析   ***/
+                    aliplyPayUtil.pay(orderNum, Constant.ALIPLY_URL, "烟台项目商品", "烟台项目商城商品", Double.parseDouble(productsTotal));
+
+                }
+                if(checkbox_payment_order_weixin.isChecked()){//支付宝支付
+                    WeixinPayUtil weixinPayUtil = new WeixinPayUtil(this);
+                    WXPayEntryActivity.setPayStateListener(new WXPayEntryActivity.PayStateListener() {
+                        @Override
+                        public void doAfterWeixinPay(int payStatus) {
+
+                            if (payStatus == Constant.PAY_STATUS_SUCCESS) {
+                                MessageUtils.showLongToast(StorePaymentOrderActivity.this, "支付成功");
+                                finish();
+                            } else if (payStatus == Constant.PAY_STATUS_FAILED) {
+                                MessageUtils.showLongToast(StorePaymentOrderActivity.this, "支付失败");
+                                finish();
+                            } else if (payStatus == Constant.PAY_STATUS_CANCLE) {
+                                MessageUtils.showLongToast(StorePaymentOrderActivity.this, "支付被取消");
+                                finish();
+                            }
+                        }
+                    });
+                    //(int)Double.parseDouble(totalPrice)*100
+                    weixinPayUtil.pay(orderNum, Constant.NOTICE_URL,"烟台项目商城商品", (int)Double.parseDouble(productsTotal));
+                }
                 break;
             case R.id.rl_weixin:
                 checkbox_payment_order_weixin.setChecked(true);

@@ -36,7 +36,7 @@
         android:id="@+id/lv_store_home"
         android:layout_width="match_parent"
         android:scrollbars="none"
-        android:fastScrollEnabled="true"
+        android:scrollbarStyle="outsideOverlay"
         android:layout_height="match_parent"/>
      </LinearLayout>
 </LinearLayout>

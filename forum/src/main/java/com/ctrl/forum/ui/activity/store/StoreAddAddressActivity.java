@@ -104,7 +104,7 @@ public class StoreAddAddressActivity extends AppToolBarActivity implements View.
         super.onRequestSuccess(requestCode);
         showProgress(false);
         if(requestCode== 1){
-            MessageUtils.showShortToast(this,"添加收货地址成功");
+           // MessageUtils.showShortToast(this,"添加收货地址成功");
             finish();
         }
     }

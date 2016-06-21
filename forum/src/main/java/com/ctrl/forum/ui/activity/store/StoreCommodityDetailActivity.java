@@ -24,6 +24,7 @@ import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.beanu.arad.Arad;
 import com.beanu.arad.utils.AnimUtil;
@@ -35,6 +36,7 @@ import com.ctrl.forum.cart.datasave.GoodsBean;
 import com.ctrl.forum.cart.datasave.GoodsDataBaseInterface;
 import com.ctrl.forum.cart.datasave.OperateGoodsDataBase;
 import com.ctrl.forum.cart.datasave.OperateGoodsDataBaseStatic;
+import com.ctrl.forum.customview.ShareDialog;
 import com.ctrl.forum.dao.CollectDao;
 import com.ctrl.forum.dao.MallDao;
 import com.ctrl.forum.entity.Image2;
@@ -43,16 +45,27 @@ import com.ctrl.forum.ui.adapter.CartPopupWindowListViewAdapter;
 import com.ctrl.forum.ui.adapter.CommdityImageViewPagerAdapter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import cn.sharesdk.framework.Platform;
+import cn.sharesdk.framework.PlatformActionListener;
+import cn.sharesdk.framework.ShareSDK;
+import cn.sharesdk.sina.weibo.SinaWeibo;
+import cn.sharesdk.system.email.Email;
+import cn.sharesdk.system.text.ShortMessage;
+import cn.sharesdk.tencent.qq.QQ;
+import cn.sharesdk.tencent.weibo.TencentWeibo;
+import cn.sharesdk.wechat.friends.Wechat;
+import cn.sharesdk.wechat.moments.WechatMoments;
 
 /*
 * 商城商品详情 activity
 * */
 
-public class StoreCommodityDetailActivity extends AppToolBarActivity implements View.OnClickListener {
+public class StoreCommodityDetailActivity extends AppToolBarActivity implements View.OnClickListener ,PlatformActionListener{
     @InjectView(R.id.viewPager_commdity)//图片viewpager
             ViewPager viewPager_commdity;
 
@@ -119,7 +132,7 @@ public class StoreCommodityDetailActivity extends AppToolBarActivity implements 
     private LayoutInflater inflater;
     private int count = 0;
 
-    private Handler handler = new Handler(new Handler.Callback() {
+    private Handler  handler = new Handler(new Handler.Callback() {
         @Override
         public boolean handleMessage(Message msg) {
             switch (msg.what) {
@@ -145,6 +158,8 @@ public class StoreCommodityDetailActivity extends AppToolBarActivity implements 
     private StoreCommodityDetailActivity mContext;
     private int SELECTPOSITION = 0;
     private Button m_list_submit_popup;
+    private PopupWindow popupWindow_share;
+    private ShareDialog shareDialog;
 
 
     @Override
@@ -152,6 +167,7 @@ public class StoreCommodityDetailActivity extends AppToolBarActivity implements 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_store_commodity_detail);
         ButterKnife.inject(this);
+        ShareSDK.initSDK(this);
         mContext = this;
         // 隐藏输入法
         // getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
@@ -165,18 +181,39 @@ public class StoreCommodityDetailActivity extends AppToolBarActivity implements 
         mdao.requestProduct(getIntent().getStringExtra("id"), Arad.preferences.getString("memberId"), "0");
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ShareSDK.stopSDK();
+    }
 
     @Override
     public void onRequestSuccess(int requestCode) {
         super.onRequestSuccess(requestCode);
         showProgress(false);
         if (requestCode == 666) {
-            MessageUtils.showShortToast(this, "商品藏成功");
-           /*  if(company.getCollectState().equals("0")){
-             }
-             if(company.getCollectState().equals("1")){
-                 MessageUtils.showShortToast(this,"取消店铺收藏成功");
-             }*/
+           // MessageUtils.showShortToast(this, "商品藏成功");
+            if (count % 2 == 0) {//奇数次点击
+                if (product.getCollectState().equals("0")) {
+                    iv_zan.setImageResource(R.mipmap.shoucang_white);
+                }
+                if (product.getCollectState().equals("1")) {
+                    iv_zan.setImageResource(R.mipmap.zan_white);
+                }
+            }
+            if (count % 2 == 1) {//偶数次点击
+
+                if (product.getCollectState().equals("0")) {
+                    iv_zan.setImageResource(R.mipmap.zan_white);
+                }
+
+                if (product.getCollectState().equals("1")) {
+                    iv_zan.setImageResource(R.mipmap.shoucang_white);
+
+                }
+            }
+            count++;
+
         }
         if (requestCode == 4) {
           //  MessageUtils.showShortToast(this, "获取商品成功");
@@ -195,6 +232,15 @@ public class StoreCommodityDetailActivity extends AppToolBarActivity implements 
             }else {
                 tv_product_number.setText("销量 ： " + product.getSalesVolume());
             }
+
+            if(product.getCollectState().equals("0")){
+                iv_zan.setImageResource(R.mipmap.zan_white);
+            }
+            if(product.getCollectState().equals("1")){
+                iv_zan.setImageResource(R.mipmap.shoucang_white);
+            }
+
+
             //图片数量初始值
             tv_image_number.setText(1 + "/" + listProductImg.size());
             for (int i = 0; i < listProductImg.size(); i++) {
@@ -598,9 +644,134 @@ public class StoreCommodityDetailActivity extends AppToolBarActivity implements 
                     }
 
                 }
-                count++;
+
                 break;
             case R.id.iv_share:
+              //  showSharePopuwindow(iv_share);
+                shareDialog = new ShareDialog(this);
+                shareDialog.setCancelButtonOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        shareDialog.dismiss();
+                    }
+                });
+                shareDialog.setQQButtonOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Platform.ShareParams sp = new Platform.ShareParams();
+                        sp.setTitle("烟台项目");
+                        sp.setText("欢迎加入");
+
+                        sp.setImageUrl(getIntent().getStringExtra("qrImgUrl"));//网络图片rul
+                        sp.setTitleUrl(getIntent().getStringExtra("qrImgUrl"));  //网友点进链接后，可以看到分享的详情
+                        //3、非常重要：获取平台对象
+                        Platform qq = ShareSDK.getPlatform(QQ.NAME);
+                        qq.setPlatformActionListener(StoreCommodityDetailActivity.this); // 设置分享事件回调
+                        // 执行分享
+                        qq.share(sp);
+                    }
+
+                });
+
+                shareDialog.setWeixinButtonOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Platform.ShareParams sp = new Platform.ShareParams();
+                        sp.setShareType(Platform.SHARE_WEBPAGE);//非常重要：一定要设置分享属性
+                        sp.setTitle("烟台项目");  //分享标题
+                        sp.setText("欢迎加入");   //分享文本
+                        sp.setImageUrl(getIntent().getStringExtra("qrImgUrl"));//网络图片rul
+                        sp.setUrl(getIntent().getStringExtra("qrImgUrl"));   //网友点进链接后，可以看到分享的详情
+
+                        //3、非常重要：获取平台对象
+                        Platform wechat = ShareSDK.getPlatform(Wechat.NAME);
+                        wechat.setPlatformActionListener(StoreCommodityDetailActivity.this); // 设置分享事件回调
+                        // 执行分享
+                        wechat.share(sp);
+                    }
+                });
+                shareDialog.setSinaWeiBoButtonOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //2、设置分享内容
+                        Platform.ShareParams sp = new Platform.ShareParams();
+                        sp.setText("我是新浪微博分享文本，啦啦啦~http://uestcbmi.com/"); //分享文本
+                        sp.setImageUrl("http://7sby7r.com1.z0.glb.clouddn.com/CYSJ_02.jpg");//网络图片rul
+                        //3、非常重要：获取平台对象
+                        Platform sinaWeibo = ShareSDK.getPlatform(SinaWeibo.NAME);
+                        sinaWeibo.setPlatformActionListener(StoreCommodityDetailActivity.this); // 设置分享事件回调
+                        // 执行分享
+                        sinaWeibo.share(sp);
+                    }
+                });
+
+                shareDialog.setPengYouQuanButtonOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //2、设置分享内容
+                        Platform.ShareParams sp = new Platform.ShareParams();
+                        sp.setShareType(Platform.SHARE_WEBPAGE); //非常重要：一定要设置分享属性
+                        sp.setTitle("我是朋友圈分享标题");  //分享标题
+                        sp.setText("我是朋友圈分享文本，啦啦啦~http://uestcbmi.com/");   //分享文本
+                        sp.setImageUrl("http://7sby7r.com1.z0.glb.clouddn.com/CYSJ_02.jpg");//网络图片rul
+                        sp.setUrl("http://sharesdk.cn");   //网友点进链接后，可以看到分享的详情
+                        //3、非常重要：获取平台对象
+                        Platform wechatMoments = ShareSDK.getPlatform(WechatMoments.NAME);
+                        wechatMoments.setPlatformActionListener(StoreCommodityDetailActivity.this); // 设置分享事件回调
+                        // 执行分享
+                        wechatMoments.share(sp);
+                    }
+                });
+                shareDialog.setTecentWeiBoButtonOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //2、设置分享内容
+                        Platform.ShareParams sp = new Platform.ShareParams();
+                        sp.setTitle("我是腾讯微博分享标题");  //分享标题
+                        sp.setText("我是腾讯微博分享文本，啦啦啦~http://uestcbmi.com/");   //分享文本
+                        sp.setImageUrl("http://7sby7r.com1.z0.glb.clouddn.com/CYSJ_02.jpg");//网络图片rul
+                        sp.setUrl("http://sharesdk.cn");   //网友点进链接后，可以看到分享的详情
+                        //3、非常重要：获取平台对象
+                        Platform tecentWeibo = ShareSDK.getPlatform(TencentWeibo.NAME);
+                        tecentWeibo.setPlatformActionListener(StoreCommodityDetailActivity.this); // 设置分享事件回调
+                        // 执行分享
+                        tecentWeibo.share(sp);
+                    }
+                });
+
+                shareDialog.setEmailButtonOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //2、设置分享内容
+                        Platform.ShareParams sp = new Platform.ShareParams();
+                        sp.setTitle("我是邮件分享标题");  //分享标题
+                        sp.setText("我是邮件分享文本，啦啦啦~http://uestcbmi.com/");   //分享文本
+                        sp.setImageUrl("http://7sby7r.com1.z0.glb.clouddn.com/CYSJ_02.jpg");//网络图片rul
+                        sp.setUrl("http://sharesdk.cn");   //网友点进链接后，可以看到分享的详情
+                        //3、非常重要：获取平台对象
+                        Platform emailName = ShareSDK.getPlatform(Email.NAME);
+                        emailName.setPlatformActionListener(StoreCommodityDetailActivity.this); // 设置分享事件回调
+                        // 执行分享
+                        emailName.share(sp);
+                    }
+                });
+                shareDialog.setDuanXinButtonOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //2、设置分享内容
+                        Platform.ShareParams sp = new Platform.ShareParams();
+                        sp.setTitle("我是短信分享标题");  //分享标题
+                        sp.setText("我是短信分享文本，啦啦啦~http://uestcbmi.com/");   //分享文本
+                        sp.setImageUrl("http://7sby7r.com1.z0.glb.clouddn.com/CYSJ_02.jpg");//网络图片rul
+                        sp.setUrl("http://sharesdk.cn");   //网友点进链接后，可以看到分享的详情
+                        //3、非常重要：获取平台对象
+                        Platform shortMessage = ShareSDK.getPlatform(ShortMessage.NAME);
+                        shortMessage.setPlatformActionListener(StoreCommodityDetailActivity.this); // 设置分享事件回调
+                        // 执行分享
+                        shortMessage.share(sp);
+                    }
+                });
+
                 break;
             case R.id.m_list_car_lay:
                 showCartPopupWindow(v);
@@ -657,6 +828,62 @@ public class StoreCommodityDetailActivity extends AppToolBarActivity implements 
         }
     }
 
+    private void showSharePopuwindow(View v) {
+        View contentView = LayoutInflater.from(this).inflate(R.layout.share_dialog, null);
+
+        popupWindow_share = new PopupWindow(contentView,
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, true);
+        // 设置SelectPicPopupWindow的View
+        popupWindow_share.setContentView(contentView);
+        // 设置SelectPicPopupWindow弹出窗体的宽
+        popupWindow_share.setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
+        // 设置SelectPicPopupWindow弹出窗体的高
+        popupWindow_share.setHeight(ViewGroup.LayoutParams.MATCH_PARENT);
+        // 设置SelectPicPopupWindow弹出窗体可点击
+        popupWindow_share.setFocusable(true);
+        // 设置SelectPicPopupWindow弹出窗体动画效果
+        popupWindow_share.setAnimationStyle(R.style.AnimBottom);
+        // 实例化一个ColorDrawable颜色为半透明
+        ColorDrawable dw = new ColorDrawable(0x90000000);
+        // 设置SelectPicPopupWindow弹出窗体的背景
+        // 如果不设置PopupWindow的背景，无论是点击外部区域还是Back键都无法dismiss弹框
+        // 我觉得这里是API的一个bug
+        popupWindow_share.setBackgroundDrawable(dw);
+
+        contentView.setFocusable(true);
+        contentView.setFocusableInTouchMode(true);
+        popupWindow_share.setTouchable(true);
+         /*
+        * 设置popupwindow 点击自身消失
+        * */
+        contentView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (popupWindow_share.isShowing()) {
+                    popupWindow_share.dismiss();
+                }
+            }
+        });
+
+        popupWindow_share.setOutsideTouchable(true);
+
+        popupWindow_share.setTouchInterceptor(new View.OnTouchListener() {
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+
+                Log.i("mengdd", "onTouch : ");
+
+                return false;
+                // 这里如果返回true的话，touch事件将被拦截
+                // 拦截后 PopupWindow的onTouchEvent不被调用，这样点击外部区域无法dismiss
+            }
+        });
+        // 设置好参数之后再show
+        popupWindow_share.showAtLocation(v, Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
+    }
+
+
 
     /**
      * 动画结束后，更新所有数量和所有价格
@@ -667,6 +894,84 @@ public class StoreCommodityDetailActivity extends AppToolBarActivity implements 
             setAll();
         }
     }
+
+    @Override
+    public void onComplete(Platform platform, int i, HashMap<String, Object> hashMap) {
+        if (platform.getName().equals(QQ.NAME)) {// 判断成功的平台是不是QQ
+            mhandler.sendEmptyMessage(1);
+        } else if (platform.getName().equals(Wechat.NAME)) {//判断成功的平台是不是微信
+            mhandler.sendEmptyMessage(2);
+        }else if(platform.getName().equals(SinaWeibo.NAME)){//判断成功的平台是不是新浪微博
+            mhandler.sendEmptyMessage(3);
+        }else if(platform.getName().equals(WechatMoments.NAME)){//判断成功平台是不是微信朋友圈
+            mhandler.sendEmptyMessage(4);
+        }else if(platform.getName().equals(TencentWeibo.NAME)){//判断成功平台是不是腾讯微博
+            mhandler.sendEmptyMessage(5);
+        }else if(platform.getName().equals(Email.NAME)){//判断成功平台是不是邮件
+            mhandler.sendEmptyMessage(6);
+        }else if(platform.getName().equals(ShortMessage.NAME)){//判断成功平台是不是短信
+            mhandler.sendEmptyMessage(7);
+        }else {
+            //
+        }
+
+    }
+
+    @Override
+    public void onError(Platform platform, int i, Throwable throwable) {
+        throwable.printStackTrace();
+        Message msg = new Message();
+        msg.what = 8;
+        msg.obj = throwable.getMessage();
+        handler.sendMessage(msg);
+
+    }
+
+    @Override
+    public void onCancel(Platform platform, int i) {
+        handler.sendEmptyMessage(9);
+    }
+
+    Handler mhandler = new Handler() {
+
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case 1:
+                    //  Toast.makeText(getApplicationContext(), "QQ分享成功", Toast.LENGTH_LONG).show();
+                    break;
+
+                case 2:
+                    //Toast.makeText(getApplicationContext(), "微信分享成功", Toast.LENGTH_LONG).show();
+                    break;
+                case 3:
+                    //Toast.makeText(getApplicationContext(), "微信分享成功", Toast.LENGTH_LONG).show();
+                    break;
+                case 4:
+                    //Toast.makeText(getApplicationContext(), "微信分享成功", Toast.LENGTH_LONG).show();
+                    break;
+                case 5:
+                    //Toast.makeText(getApplicationContext(), "微信分享成功", Toast.LENGTH_LONG).show();
+                    break;
+                case 6:
+                    //Toast.makeText(getApplicationContext(), "微信分享成功", Toast.LENGTH_LONG).show();
+                    break;
+                case 7:
+                    //Toast.makeText(getApplicationContext(), "微信分享成功", Toast.LENGTH_LONG).show();
+                    break;
+                case 8:
+                    Toast.makeText(getApplicationContext(), "分享失败啊", Toast.LENGTH_LONG).show();
+                    break;
+                case 9:
+                    Toast.makeText(getApplicationContext(), "已取消", Toast.LENGTH_LONG).show();
+                    break;
+
+                default:
+                    break;
+            }
+        }
+
+    };
 
 
 }

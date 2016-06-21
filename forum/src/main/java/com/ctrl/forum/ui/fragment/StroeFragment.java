@@ -255,8 +255,22 @@ public class StroeFragment extends ToolBarFragment implements View.OnClickListen
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        mdao.requestInitMallRecommendCompany(latitude, longitude,
-                                String.valueOf(Constant.PAGE_SIZE), String.valueOf(PAGE_NUM));
+                        if(latitude_now!=null&&longitude_now!=null){
+                            mdao.requestInitMallRecommendCompany(latitude_now, longitude_now,
+                                    String.valueOf(Constant.PAGE_SIZE), String.valueOf(PAGE_NUM));
+                        }else if(latitude_address!=null&&longitude_address!=null){
+                            mdao.requestInitMallRecommendCompany(latitude_address, longitude_address,
+                                    String.valueOf(Constant.PAGE_SIZE), String.valueOf(PAGE_NUM));
+                        }else if(latitude_map!=null&&longitude_map!=null){
+                            mdao.requestInitMallRecommendCompany(latitude_map, longitude_map,
+                                    String.valueOf(Constant.PAGE_SIZE), String.valueOf(PAGE_NUM));
+                        }else if(latitude_search!=null&&longitude_search!=null){
+                            mdao.requestInitMallRecommendCompany(latitude_search, longitude_search,
+                                    String.valueOf(Constant.PAGE_SIZE), String.valueOf(PAGE_NUM));
+                        }else {
+                            mdao.requestInitMallRecommendCompany(latitude, longitude,
+                                    String.valueOf(Constant.PAGE_SIZE), String.valueOf(PAGE_NUM));
+                        }
                     }
                 }, 500);
 
@@ -270,8 +284,22 @@ public class StroeFragment extends ToolBarFragment implements View.OnClickListen
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        mdao.requestInitMallRecommendCompany(latitude, longitude,
-                                String.valueOf(Constant.PAGE_SIZE), String.valueOf(PAGE_NUM));
+                        if(latitude_now!=null&&longitude_now!=null){
+                            mdao.requestInitMallRecommendCompany(latitude_now, longitude_now,
+                                    String.valueOf(Constant.PAGE_SIZE), String.valueOf(PAGE_NUM));
+                        }else if(latitude_address!=null&&longitude_address!=null){
+                            mdao.requestInitMallRecommendCompany(latitude_address, longitude_address,
+                                    String.valueOf(Constant.PAGE_SIZE), String.valueOf(PAGE_NUM));
+                        }else if(latitude_map!=null&&longitude_map!=null){
+                            mdao.requestInitMallRecommendCompany(latitude_map, longitude_map,
+                                    String.valueOf(Constant.PAGE_SIZE), String.valueOf(PAGE_NUM));
+                        }else if(latitude_search!=null&&longitude_search!=null){
+                            mdao.requestInitMallRecommendCompany(latitude_search, longitude_search,
+                                    String.valueOf(Constant.PAGE_SIZE), String.valueOf(PAGE_NUM));
+                        }else {
+                            mdao.requestInitMallRecommendCompany(latitude, longitude,
+                                    String.valueOf(Constant.PAGE_SIZE), String.valueOf(PAGE_NUM));
+                        }
                     }
                 }, 500);
             }
@@ -419,14 +447,49 @@ public class StroeFragment extends ToolBarFragment implements View.OnClickListen
                                         int arg2, long arg3) {
                     // TODO Auto-generated method stub
                   //  MessageUtils.showShortToast(getActivity(),"fdfsdfsd");
-                    if (latitude != null && longitude != null) {
+                    if(latitude_now!=null&&longitude_now!=null){
+                        Intent intent = new Intent(getActivity(), StoreScreenActivity.class);
+                        intent.putExtra("channelId", listMallKind.get(arg2).getId());
+                        intent.putExtra("latitude", latitude_now);
+                        intent.putExtra("longitude", longitude_now);
+                        intent.putExtra("address", address_now);
+                        getActivity().startActivity(intent);
+                        AnimUtil.intentSlidIn(getActivity());
+                    }else if(latitude_address!=null&&longitude_address!=null){
+                        Intent intent = new Intent(getActivity(), StoreScreenActivity.class);
+                        intent.putExtra("channelId", listMallKind.get(arg2).getId());
+                        intent.putExtra("latitude", latitude_address);
+                        intent.putExtra("longitude", longitude_address);
+                        intent.putExtra("address", address_address);
+                        getActivity().startActivity(intent);
+                        AnimUtil.intentSlidIn(getActivity());
+                    }else if(latitude_map!=null&&longitude_map!=null){
+                        Intent intent = new Intent(getActivity(), StoreScreenActivity.class);
+                        intent.putExtra("channelId", listMallKind.get(arg2).getId());
+                        intent.putExtra("latitude", latitude_map);
+                        intent.putExtra("longitude", longitude_map);
+                        intent.putExtra("address", address_map);
+                        getActivity().startActivity(intent);
+                        AnimUtil.intentSlidIn(getActivity());
+                    }else if(latitude_search!=null&&longitude_search!=null){
+                        Intent intent = new Intent(getActivity(), StoreScreenActivity.class);
+                        intent.putExtra("channelId", listMallKind.get(arg2).getId());
+                        intent.putExtra("latitude", latitude_search);
+                        intent.putExtra("longitude", longitude_search);
+                        intent.putExtra("address", address_search);
+                        getActivity().startActivity(intent);
+                        AnimUtil.intentSlidIn(getActivity());
+                    }else {
                         Intent intent = new Intent(getActivity(), StoreScreenActivity.class);
                         intent.putExtra("channelId", listMallKind.get(arg2).getId());
                         intent.putExtra("latitude", latitude);
                         intent.putExtra("longitude", longitude);
+                        intent.putExtra("address", tv_toolbar.getText().toString().trim());
                         getActivity().startActivity(intent);
                         AnimUtil.intentSlidIn(getActivity());
                     }
+
+
 
                 }
             });
@@ -527,6 +590,7 @@ public class StroeFragment extends ToolBarFragment implements View.OnClickListen
     }
 
     private void initView() {
+        PAGE_NUM = 1;
         tv_toolbar.setOnClickListener(this);
         AbsListView.LayoutParams layoutParams = new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, AbsListView.LayoutParams.WRAP_CONTENT);
         View headview = getActivity().getLayoutInflater().inflate(R.layout.fragment_store_home_header, ll_linear_layout, false);
@@ -594,24 +658,32 @@ public class StroeFragment extends ToolBarFragment implements View.OnClickListen
             longitude_now = data.getStringExtra("longitude");
             address_now = data.getStringExtra("address");
             tv_toolbar.setText(address_now);
+            mdao.requestInitMallRecommendCompany(latitude_now, longitude_now,
+                    String.valueOf(Constant.PAGE_SIZE), String.valueOf(PAGE_NUM));
         }
         if (requestCode == 555 && resultCode == 557) {
             latitude_address = data.getStringExtra("latitude");
             longitude_address = data.getStringExtra("longitude");
             address_address = data.getStringExtra("address");
             tv_toolbar.setText(address_address);
+            mdao.requestInitMallRecommendCompany(latitude_address, longitude_address,
+                    String.valueOf(Constant.PAGE_SIZE), String.valueOf(PAGE_NUM));
         }
         if (requestCode == 555 && resultCode == 666) {
             latitude_map = data.getStringExtra("latitude");
             longitude_map = data.getStringExtra("longitude");
             address_map = data.getStringExtra("address");
             tv_toolbar.setText(address_map);
+            mdao.requestInitMallRecommendCompany(latitude_map, longitude_map,
+                    String.valueOf(Constant.PAGE_SIZE), String.valueOf(PAGE_NUM));
         }
         if (requestCode == 555 && resultCode == 888) {
             latitude_search = data.getStringExtra("latitude");
             longitude_search = data.getStringExtra("longitude");
             address_search = data.getStringExtra("address");
             tv_toolbar.setText(address_search);
+            mdao.requestInitMallRecommendCompany(latitude_search, longitude_search,
+                    String.valueOf(Constant.PAGE_SIZE), String.valueOf(PAGE_NUM));
         }
 
     }
@@ -625,6 +697,7 @@ public class StroeFragment extends ToolBarFragment implements View.OnClickListen
                 intent=new Intent(getActivity(),StoreScreenActivity.class);
                 intent.putExtra("latitude", latitude);
                 intent.putExtra("longitude", longitude);
+                intent.putExtra("address", tv_toolbar.getText().toString().trim());
                 intent.setFlags(303);
                 startActivity(intent);
                 AnimUtil.intentSlidIn(getActivity());
@@ -643,19 +716,19 @@ public class StroeFragment extends ToolBarFragment implements View.OnClickListen
                 switch (type) {
                     case "0"://跳商家
                         intent = new Intent(getActivity(), StoreShopListVerticalStyleActivity.class);
-                        intent.putExtra("targerId", listMallRecommend.get(0).getTargetId());
+                        intent.putExtra("id", listMallRecommend.get(0).getTargetId());
                         getActivity().startActivity(intent);
                         AnimUtil.intentSlidIn(getActivity());
                         break;
                     case "1"://跳商品详情
                         intent = new Intent(getActivity(), StoreCommodityDetailActivity.class);
-                        intent.putExtra("targerId", listMallRecommend.get(0).getTargetId());
+                        intent.putExtra("id", listMallRecommend.get(0).getTargetId());
                         getActivity().startActivity(intent);
                         AnimUtil.intentSlidIn(getActivity());
                         break;
                     case "2"://跳帖子详情
                         intent = new Intent(getActivity(), InvitationDetailActivity.class);
-                        intent.putExtra("targerId", listMallRecommend.get(0).getTargetId());
+                        intent.putExtra("id", listMallRecommend.get(0).getTargetId());
                         getActivity().startActivity(intent);
                         AnimUtil.intentSlidIn(getActivity());
                         break;
@@ -673,19 +746,19 @@ public class StroeFragment extends ToolBarFragment implements View.OnClickListen
                 switch (type) {
                     case "0"://跳商家
                         intent = new Intent(getActivity(), StoreShopListVerticalStyleActivity.class);
-                        intent.putExtra("targerId", listMallRecommend.get(1).getTargetId());
+                        intent.putExtra("id", listMallRecommend.get(1).getTargetId());
                         getActivity().startActivity(intent);
                         AnimUtil.intentSlidIn(getActivity());
                         break;
                     case "1"://跳商品详情
                         intent = new Intent(getActivity(), StoreCommodityDetailActivity.class);
-                        intent.putExtra("targerId", listMallRecommend.get(1).getTargetId());
+                        intent.putExtra("id", listMallRecommend.get(1).getTargetId());
                         getActivity().startActivity(intent);
                         AnimUtil.intentSlidIn(getActivity());
                         break;
                     case "2"://跳帖子详情
                         intent = new Intent(getActivity(), InvitationDetailActivity.class);
-                        intent.putExtra("targerId", listMallRecommend.get(1).getTargetId());
+                        intent.putExtra("id", listMallRecommend.get(1).getTargetId());
                         getActivity().startActivity(intent);
                         AnimUtil.intentSlidIn(getActivity());
                         break;
@@ -704,19 +777,19 @@ public class StroeFragment extends ToolBarFragment implements View.OnClickListen
                 switch (type) {
                     case "0"://跳商家
                         intent = new Intent(getActivity(), StoreShopListVerticalStyleActivity.class);
-                        intent.putExtra("targerId", listMallRecommend.get(2).getTargetId());
+                        intent.putExtra("id", listMallRecommend.get(2).getTargetId());
                         getActivity().startActivity(intent);
                         AnimUtil.intentSlidIn(getActivity());
                         break;
                     case "1"://跳商品详情
                         intent = new Intent(getActivity(), StoreCommodityDetailActivity.class);
-                        intent.putExtra("targerId", listMallRecommend.get(2).getTargetId());
+                        intent.putExtra("id", listMallRecommend.get(2).getTargetId());
                         getActivity().startActivity(intent);
                         AnimUtil.intentSlidIn(getActivity());
                         break;
                     case "2"://跳帖子详情
                         intent = new Intent(getActivity(), InvitationDetailActivity.class);
-                        intent.putExtra("targerId", listMallRecommend.get(2).getTargetId());
+                        intent.putExtra("id", listMallRecommend.get(2).getTargetId());
                         getActivity().startActivity(intent);
                         AnimUtil.intentSlidIn(getActivity());
                         break;
@@ -735,19 +808,19 @@ public class StroeFragment extends ToolBarFragment implements View.OnClickListen
                 switch (type) {
                     case "0"://跳商家
                         intent = new Intent(getActivity(), StoreShopListVerticalStyleActivity.class);
-                        intent.putExtra("targerId", listMallRecommend.get(3).getTargetId());
+                        intent.putExtra("id", listMallRecommend.get(3).getTargetId());
                         getActivity().startActivity(intent);
                         AnimUtil.intentSlidIn(getActivity());
                         break;
                     case "1"://跳商品详情
                         intent = new Intent(getActivity(), StoreCommodityDetailActivity.class);
-                        intent.putExtra("targerId", listMallRecommend.get(3).getTargetId());
+                        intent.putExtra("id", listMallRecommend.get(3).getTargetId());
                         getActivity().startActivity(intent);
                         AnimUtil.intentSlidIn(getActivity());
                         break;
                     case "2"://跳帖子详情
                         intent = new Intent(getActivity(), InvitationDetailActivity.class);
-                        intent.putExtra("targerId", listMallRecommend.get(3).getTargetId());
+                        intent.putExtra("id", listMallRecommend.get(3).getTargetId());
                         getActivity().startActivity(intent);
                         AnimUtil.intentSlidIn(getActivity());
                         break;

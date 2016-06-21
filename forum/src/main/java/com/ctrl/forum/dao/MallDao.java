@@ -223,18 +223,20 @@ public class MallDao extends IDao {
         map.put("pageNum",pageNum);
         map.put("pageSize",pageSize);
         map.put("memberId",memberId);
-        postRequest(Constant.RAW_URL + url, mapToRP(map),8);
+        postRequest(Constant.RAW_URL + url, mapToRP(map), 8);
     }
     /**
      * 获取店铺商品分类以及分类下的商品列表接口
      * @param companyId //商家id
+     * @param type //商家id
      *
      * */
-    public void requestProductCategroy(String companyId
+    public void requestProductCategroy(String companyId,String type
                              ){
         String url="productCategory/getProductCategory";
         Map<String,String> map = new HashMap<String,String>();
         map.put("companyId",companyId);
+        map.put("type",type);
         postRequest(Constant.RAW_URL + url, mapToRP(map),9);
     }
     /**
@@ -276,15 +278,25 @@ public class MallDao extends IDao {
         }
         if(requestCode == 002){
             Log.d("demo", "dao中结果集(店铺详情返回): " + result);
-           listQualification = JsonUtil.node2pojoList(result.findValue("qualification"), Qualification2.class);
+            if(!result.findValue("qualification").equals("\"\"")) {
+                listQualification = JsonUtil.node2pojoList(result.findValue("qualification"), Qualification2.class);
+            }
          //   listCompanyUnion = JsonUtil.node2pojoList(result.findValue("tCompanyUnion"), CompanyUnion.class);
-           listShopReply = JsonUtil.node2pojoList(result.findValue("tOrderEvaluationlist"), ShopReply.class);
-           listCashCoupons = JsonUtil.node2pojoList(result.findValue("tCashCouponslist"), CashCoupons.class);
+            if(!result.findValue("tOrderEvaluationlist").equals("\"\"")) {
+                listShopReply = JsonUtil.node2pojoList(result.findValue("tOrderEvaluationlist"), ShopReply.class);
+            }
+
+
+            if(JsonUtil.node2json(result.findValue("tCashCouponslist")).equals("\"\"")){}else {
+                listCashCoupons = JsonUtil.node2pojoList(result.findValue("tCashCouponslist"), CashCoupons.class);
+            }
             company=JsonUtil.node2pojo(result.findValue("company"), Company.class);
             remark=result.findValue("remark").asText();
-            List<CompanyUnion> data = JsonUtil.node2pojo(result.findValue("tCompanyUnion"), new TypeReference<List<CompanyUnion>>() {
-            });
-            listCompanyUnion.addAll(data);
+            if(JsonUtil.node2json(result.findValue("tCompanyUnion")).equals("\"\"")) {}else{
+                List<CompanyUnion> data = JsonUtil.node2pojo(result.findValue("tCompanyUnion"), new TypeReference<List<CompanyUnion>>() {
+                });
+                listCompanyUnion.addAll(data);
+            }
         }
         if(requestCode == 3){
             Log.d("demo", "dao中结果集(店铺评价列表返回): " + result);

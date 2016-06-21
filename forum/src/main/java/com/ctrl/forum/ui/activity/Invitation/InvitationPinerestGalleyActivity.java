@@ -20,11 +20,13 @@ import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.beanu.arad.Arad;
 import com.beanu.arad.utils.AndroidUtil;
 import com.ctrl.forum.R;
 import com.ctrl.forum.base.AppToolBarActivity;
+import com.ctrl.forum.customview.ShareDialog;
 import com.ctrl.forum.dao.InvitationDao;
 import com.ctrl.forum.entity.MemberInfo;
 import com.ctrl.forum.entity.Post2;
@@ -33,10 +35,21 @@ import com.ctrl.forum.photo.zoom.PhotoView;
 import com.ctrl.forum.photo.zoom.ViewPagerFixed;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import cn.sharesdk.framework.Platform;
+import cn.sharesdk.framework.PlatformActionListener;
+import cn.sharesdk.framework.ShareSDK;
+import cn.sharesdk.sina.weibo.SinaWeibo;
+import cn.sharesdk.system.email.Email;
+import cn.sharesdk.system.text.ShortMessage;
+import cn.sharesdk.tencent.qq.QQ;
+import cn.sharesdk.tencent.weibo.TencentWeibo;
+import cn.sharesdk.wechat.friends.Wechat;
+import cn.sharesdk.wechat.moments.WechatMoments;
 
 
 /**
@@ -46,7 +59,7 @@ import butterknife.InjectView;
  * @version 2014年10月18日  下午11:47:53
  * @QQ:595163260
  */
-public class InvitationPinerestGalleyActivity extends AppToolBarActivity implements View.OnClickListener {
+public class InvitationPinerestGalleyActivity extends AppToolBarActivity implements View.OnClickListener ,PlatformActionListener{
     @InjectView(R.id.tv_image_remark)//照片备注
     TextView tv_image_remark;
     @InjectView(R.id.tv_image_tel)//电话连接
@@ -55,6 +68,9 @@ public class InvitationPinerestGalleyActivity extends AppToolBarActivity impleme
     TextView tv_pinerest_gallery_zan_num;
     @InjectView(R.id.iv_gallery_back)//返回按钮
     ImageView iv_gallery_back;
+    @InjectView(R.id.iv_zan)//点赞图片
+    ImageView iv_zan;
+
 
     @InjectView(R.id.rl_pinerest_gallery_zan)//点赞布局
     RelativeLayout rl_pinerest_gallery_zan;
@@ -79,6 +95,7 @@ public class InvitationPinerestGalleyActivity extends AppToolBarActivity impleme
     private MyPageAdapter adapter;
     private PopupWindow popupWindow;
     private TextView tv_titile;
+    private int count;
 
     Handler myHandler = new Handler() {
         public void handleMessage(Message msg) {
@@ -94,6 +111,8 @@ public class InvitationPinerestGalleyActivity extends AppToolBarActivity impleme
     };
     private List<PostImage> listPostImage;
     private PopupWindow popupWindow_share;
+    private int praiseNum;
+    private ShareDialog shareDialog;
 
 
     @Override
@@ -114,6 +133,8 @@ public class InvitationPinerestGalleyActivity extends AppToolBarActivity impleme
     }
 
     private void initView() {
+        ShareSDK.initSDK(this);
+        count=0;
         tv_image_tel.setOnClickListener(this);
         tv_titile = (TextView) findViewById(R.id.tv_titile);
         iv_gallery_back.setOnClickListener(this);
@@ -128,10 +149,53 @@ public class InvitationPinerestGalleyActivity extends AppToolBarActivity impleme
 
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ShareSDK.stopSDK();
+    }
 
     @Override
     public void onRequestSuccess(int requestCode) {
         super.onRequestSuccess(requestCode);
+        if (requestCode == 14) {
+            setResult(203);
+            if (count % 2 == 0) {//奇数次点击
+                if (post.getZambiastate().equals("0")) {
+                    //  MessageUtils.showShortToast(this, "取消点赞成功");
+                    praiseNum=post.getPraiseNum()+1;
+                    iv_zan.setImageResource(R.mipmap.shoucang_white);
+                    tv_pinerest_gallery_zan_num.setText(praiseNum + "");
+
+
+                }
+                if (post.getZambiastate().equals("1")) {
+                    //MessageUtils.showShortToast(this, "点赞成功");
+                    iv_zan.setImageResource(R.mipmap.zan_white);
+                    praiseNum=post.getPraiseNum()-1;
+                    tv_pinerest_gallery_zan_num.setText(praiseNum+"");
+
+                }
+            }
+            if (count % 2 == 1) {//偶数次点击
+                if (post.getZambiastate().equals("0")) {
+                    iv_zan.setImageResource(R.mipmap.zan_white);
+                    //  MessageUtils.showShortToast(this, "点赞成功");
+                    praiseNum=post.getPraiseNum();
+                    tv_pinerest_gallery_zan_num.setText(praiseNum+"");
+
+                }
+                if (post.getZambiastate().equals("1")) {
+                    //  MessageUtils.showShortToast(this, "取消点赞成功");
+                    iv_zan.setImageResource(R.mipmap.shoucang_white);
+
+                    praiseNum=post.getPraiseNum();
+                    tv_pinerest_gallery_zan_num.setText(praiseNum+"");
+                }
+            }
+            count++;
+        }
+
         if (requestCode == 3) {
             post = idao.getPost2();
             listPostImage=idao.getListPostImage();
@@ -148,10 +212,18 @@ public class InvitationPinerestGalleyActivity extends AppToolBarActivity impleme
                 listViews.add(view);
               //  listViews2.add(view2);
             }
+
+            if(post.getZambiastate().equals("0")){
+                iv_zan.setImageResource(R.mipmap.zan_white);
+            }
+            if(post.getZambiastate().equals("1")){
+                iv_zan.setImageResource(R.mipmap.shoucang_white);
+            }
             tv_titile.setText(1 + "/" + listViews.size());
             adapter = new MyPageAdapter(listViews);
             pager.setAdapter(adapter);
-            tv_pinerest_gallery_zan_num.setText(post.getPraiseNum()+"");
+            praiseNum=post.getPraiseNum();
+            tv_pinerest_gallery_zan_num.setText(praiseNum+"");
         }
     }
 
@@ -193,10 +265,149 @@ public class InvitationPinerestGalleyActivity extends AppToolBarActivity impleme
                 showPupupWindow();
                 break;
             case R.id.rl_pinerest_gallery_zan:
-              // idao.requesZambia();
+                if (count % 2 == 0) {//奇数次点击
+                    if (post.getZambiastate().equals("0")) {
+                        idao.requesZambia("add", post.getId(), Arad.preferences.getString("memberId"), "", "");
+                    }
+                    if (post.getZambiastate().equals("1")) {
+                        idao.requesZambia("reduce", post.getId(), Arad.preferences.getString("memberId"), "", "");
+                    }
+                }
+                if (count % 2 == 1) {//偶数次点击
+                    if (post.getZambiastate().equals("0")) {
+                        idao.requesZambia("reduce", post.getId(), Arad.preferences.getString("memberId"), "", "");
+                    }
+                    if (post.getZambiastate().equals("1")) {
+                        idao.requesZambia("add", post.getId(), Arad.preferences.getString("memberId"), "", "");
+                    }
+                }
+
                 break;
             case R.id.iv_pinerest_gallery_share:
-                showSharePopuwindow(iv_pinerest_gallery_share);
+              //  showSharePopuwindow(iv_pinerest_gallery_share);
+                shareDialog = new ShareDialog(this);
+                shareDialog.setCancelButtonOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        shareDialog.dismiss();
+                    }
+                });
+                shareDialog.setQQButtonOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Platform.ShareParams sp = new Platform.ShareParams();
+                        sp.setTitle("烟台项目");
+                        sp.setText("欢迎加入");
+
+                        sp.setImageUrl(getIntent().getStringExtra("qrImgUrl"));//网络图片rul
+                        sp.setTitleUrl(getIntent().getStringExtra("qrImgUrl"));  //网友点进链接后，可以看到分享的详情
+                        //3、非常重要：获取平台对象
+                        Platform qq = ShareSDK.getPlatform(QQ.NAME);
+                        qq.setPlatformActionListener(InvitationPinerestGalleyActivity.this); // 设置分享事件回调
+                        // 执行分享
+                        qq.share(sp);
+                    }
+
+                });
+
+                shareDialog.setWeixinButtonOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Platform.ShareParams sp = new Platform.ShareParams();
+                        sp.setShareType(Platform.SHARE_WEBPAGE);//非常重要：一定要设置分享属性
+                        sp.setTitle("烟台项目");  //分享标题
+                        sp.setText("欢迎加入");   //分享文本
+                        sp.setImageUrl(getIntent().getStringExtra("qrImgUrl"));//网络图片rul
+                        sp.setUrl(getIntent().getStringExtra("qrImgUrl"));   //网友点进链接后，可以看到分享的详情
+
+                        //3、非常重要：获取平台对象
+                        Platform wechat = ShareSDK.getPlatform(Wechat.NAME);
+                        wechat.setPlatformActionListener(InvitationPinerestGalleyActivity.this); // 设置分享事件回调
+                        // 执行分享
+                        wechat.share(sp);
+                    }
+                });
+                shareDialog.setSinaWeiBoButtonOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //2、设置分享内容
+                        Platform.ShareParams sp = new Platform.ShareParams();
+                        sp.setText("我是新浪微博分享文本，啦啦啦~http://uestcbmi.com/"); //分享文本
+                        sp.setImageUrl("http://7sby7r.com1.z0.glb.clouddn.com/CYSJ_02.jpg");//网络图片rul
+                        //3、非常重要：获取平台对象
+                        Platform sinaWeibo = ShareSDK.getPlatform(SinaWeibo.NAME);
+                        sinaWeibo.setPlatformActionListener(InvitationPinerestGalleyActivity.this); // 设置分享事件回调
+                        // 执行分享
+                        sinaWeibo.share(sp);
+                    }
+                });
+
+                shareDialog.setPengYouQuanButtonOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //2、设置分享内容
+                        Platform.ShareParams sp = new Platform.ShareParams();
+                        sp.setShareType(Platform.SHARE_WEBPAGE); //非常重要：一定要设置分享属性
+                        sp.setTitle("我是朋友圈分享标题");  //分享标题
+                        sp.setText("我是朋友圈分享文本，啦啦啦~http://uestcbmi.com/");   //分享文本
+                        sp.setImageUrl("http://7sby7r.com1.z0.glb.clouddn.com/CYSJ_02.jpg");//网络图片rul
+                        sp.setUrl("http://sharesdk.cn");   //网友点进链接后，可以看到分享的详情
+                        //3、非常重要：获取平台对象
+                        Platform wechatMoments = ShareSDK.getPlatform(WechatMoments.NAME);
+                        wechatMoments.setPlatformActionListener(InvitationPinerestGalleyActivity.this); // 设置分享事件回调
+                        // 执行分享
+                        wechatMoments.share(sp);
+                    }
+                });
+                shareDialog.setTecentWeiBoButtonOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //2、设置分享内容
+                        Platform.ShareParams sp = new Platform.ShareParams();
+                        sp.setTitle("我是腾讯微博分享标题");  //分享标题
+                        sp.setText("我是腾讯微博分享文本，啦啦啦~http://uestcbmi.com/");   //分享文本
+                        sp.setImageUrl("http://7sby7r.com1.z0.glb.clouddn.com/CYSJ_02.jpg");//网络图片rul
+                        sp.setUrl("http://sharesdk.cn");   //网友点进链接后，可以看到分享的详情
+                        //3、非常重要：获取平台对象
+                        Platform tecentWeibo = ShareSDK.getPlatform(TencentWeibo.NAME);
+                        tecentWeibo.setPlatformActionListener(InvitationPinerestGalleyActivity.this); // 设置分享事件回调
+                        // 执行分享
+                        tecentWeibo.share(sp);
+                    }
+                });
+
+                shareDialog.setEmailButtonOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //2、设置分享内容
+                        Platform.ShareParams sp = new Platform.ShareParams();
+                        sp.setTitle("我是邮件分享标题");  //分享标题
+                        sp.setText("我是邮件分享文本，啦啦啦~http://uestcbmi.com/");   //分享文本
+                        sp.setImageUrl("http://7sby7r.com1.z0.glb.clouddn.com/CYSJ_02.jpg");//网络图片rul
+                        sp.setUrl("http://sharesdk.cn");   //网友点进链接后，可以看到分享的详情
+                        //3、非常重要：获取平台对象
+                        Platform emailName = ShareSDK.getPlatform(Email.NAME);
+                        emailName.setPlatformActionListener(InvitationPinerestGalleyActivity.this); // 设置分享事件回调
+                        // 执行分享
+                        emailName.share(sp);
+                    }
+                });
+                shareDialog.setDuanXinButtonOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //2、设置分享内容
+                        Platform.ShareParams sp = new Platform.ShareParams();
+                        sp.setTitle("我是短信分享标题");  //分享标题
+                        sp.setText("我是短信分享文本，啦啦啦~http://uestcbmi.com/");   //分享文本
+                        sp.setImageUrl("http://7sby7r.com1.z0.glb.clouddn.com/CYSJ_02.jpg");//网络图片rul
+                        sp.setUrl("http://sharesdk.cn");   //网友点进链接后，可以看到分享的详情
+                        //3、非常重要：获取平台对象
+                        Platform shortMessage = ShareSDK.getPlatform(ShortMessage.NAME);
+                        shortMessage.setPlatformActionListener(InvitationPinerestGalleyActivity.this); // 设置分享事件回调
+                        // 执行分享
+                        shortMessage.share(sp);
+                    }
+                });
                 break;
             case R.id.iv_pinerest_gallery_pinglun:
                 Intent intent=new Intent(InvitationPinerestGalleyActivity.this,InvitationCommentDetaioActivity.class);
@@ -388,6 +599,84 @@ public class InvitationPinerestGalleyActivity extends AppToolBarActivity impleme
         }
 
     }
+
+    @Override
+    public void onComplete(Platform platform, int i, HashMap<String, Object> hashMap) {
+        if (platform.getName().equals(QQ.NAME)) {// 判断成功的平台是不是QQ
+            handler.sendEmptyMessage(1);
+        } else if (platform.getName().equals(Wechat.NAME)) {//判断成功的平台是不是微信
+            handler.sendEmptyMessage(2);
+        }else if(platform.getName().equals(SinaWeibo.NAME)){//判断成功的平台是不是新浪微博
+            handler.sendEmptyMessage(3);
+        }else if(platform.getName().equals(WechatMoments.NAME)){//判断成功平台是不是微信朋友圈
+            handler.sendEmptyMessage(4);
+        }else if(platform.getName().equals(TencentWeibo.NAME)){//判断成功平台是不是腾讯微博
+            handler.sendEmptyMessage(5);
+        }else if(platform.getName().equals(Email.NAME)){//判断成功平台是不是邮件
+            handler.sendEmptyMessage(6);
+        }else if(platform.getName().equals(ShortMessage.NAME)){//判断成功平台是不是短信
+            handler.sendEmptyMessage(7);
+        }else {
+            //
+        }
+
+    }
+
+    @Override
+    public void onError(Platform platform, int i, Throwable throwable) {
+        throwable.printStackTrace();
+        Message msg = new Message();
+        msg.what = 8;
+        msg.obj = throwable.getMessage();
+        handler.sendMessage(msg);
+
+    }
+
+    @Override
+    public void onCancel(Platform platform, int i) {
+        handler.sendEmptyMessage(9);
+    }
+
+    Handler handler = new Handler() {
+
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case 1:
+                    //  Toast.makeText(getApplicationContext(), "QQ分享成功", Toast.LENGTH_LONG).show();
+                    break;
+
+                case 2:
+                    //Toast.makeText(getApplicationContext(), "微信分享成功", Toast.LENGTH_LONG).show();
+                    break;
+                case 3:
+                    //Toast.makeText(getApplicationContext(), "微信分享成功", Toast.LENGTH_LONG).show();
+                    break;
+                case 4:
+                    //Toast.makeText(getApplicationContext(), "微信分享成功", Toast.LENGTH_LONG).show();
+                    break;
+                case 5:
+                    //Toast.makeText(getApplicationContext(), "微信分享成功", Toast.LENGTH_LONG).show();
+                    break;
+                case 6:
+                    //Toast.makeText(getApplicationContext(), "微信分享成功", Toast.LENGTH_LONG).show();
+                    break;
+                case 7:
+                    //Toast.makeText(getApplicationContext(), "微信分享成功", Toast.LENGTH_LONG).show();
+                    break;
+                case 8:
+                    Toast.makeText(getApplicationContext(), "分享失败啊", Toast.LENGTH_LONG).show();
+                    break;
+                case 9:
+                    Toast.makeText(getApplicationContext(), "已取消", Toast.LENGTH_LONG).show();
+                    break;
+
+                default:
+                    break;
+            }
+        }
+
+    };
 
 
 }

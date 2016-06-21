@@ -14,7 +14,6 @@
         android:layout_height="50dp"
         android:scaleType="fitXY"
         android:adjustViewBounds="true"
-        android:src="@mipmap/baby_large"
         android:layout_alignBottom="@+id/tv_reply_address"
         android:layout_alignParentTop="true" />
     <TextView
@@ -25,7 +24,6 @@
         android:layout_toRightOf="@id/iv_reply_photo"
         android:layout_marginLeft="10dp"
         android:textSize="16sp"
-        android:text="发帖人"
         android:textColor="@color/text_black"/>
     <ImageView
         android:id="@+id/iv_reply_level"
@@ -44,12 +42,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/text_gray"
-        android:text="2013-5-6"/>
+        />
     <TextView
         android:id="@+id/tv_comment_detail_floor"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="1楼"
         android:layout_alignParentRight="true"
         />
     <TextView
@@ -83,7 +80,6 @@
             android:layout_width="0dp"
             android:layout_weight="1"
             android:scaleType="fitXY"
-            android:src="@mipmap/fanbingbing"
             android:layout_height="wrap_content" />
         <ImageView
             android:id="@+id/iv_reply_invitation_image2"
@@ -159,7 +155,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:text="5楼"/>
+            />
 
       <!--  <RelativeLayout
             android:id="@+id/rl_reply_pinglun_voice"

@@ -143,7 +143,7 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_invitation_release);
         // 隐藏输入法
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+       getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         ButterKnife.inject(this);
        Init();
        initView();
@@ -431,7 +431,7 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
         }
 
         if(requestCode==12){
-            MessageUtils.showShortToast(this, "获取二级分类成功");
+          //  MessageUtils.showShortToast(this, "获取二级分类成功");
             if(listItemCategroy!=null){
                 listItemCategroy.clear();
             }
@@ -468,7 +468,7 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
             if(listItemCategroy3!=null){
                 listItemCategroy3.clear();
             }
-            MessageUtils.showShortToast(this,"获取三级分类成功");
+          //  MessageUtils.showShortToast(this,"获取三级分类成功");
             spinner_third_kind.setVisibility(View.VISIBLE);
             listItemCategroy3=idao.getListCategroyItem();
             for(int i=0;i<listItemCategroy3.size();i++){

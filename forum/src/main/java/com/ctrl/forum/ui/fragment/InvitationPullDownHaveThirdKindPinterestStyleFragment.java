@@ -1,11 +1,11 @@
 package com.ctrl.forum.ui.fragment;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,6 +33,7 @@ import com.ctrl.forum.ui.activity.Invitation.InvitationPullDownActivity;
 import com.ctrl.forum.ui.activity.Invitation.InvitationSearchActivity;
 import com.ctrl.forum.ui.adapter.InvitationListViewPinterestStyleAdapter;
 import com.ctrl.forum.ui.adapter.InvitationPullDownGridViewAdapter;
+import com.ctrl.forum.ui.adapter.JasonViewPagerAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,6 +46,7 @@ import butterknife.InjectView;
  * Created by Administrator on 2015/11/30.
  */
 public class InvitationPullDownHaveThirdKindPinterestStyleFragment extends ToolBarFragment implements XListView.IXListViewListener {
+    private static Context mContext;
     @InjectView(R.id.xlv_pinerest_style)
     XListView xlv_pinerest_style;
     private GridView gridView1;
@@ -78,9 +80,10 @@ public class InvitationPullDownHaveThirdKindPinterestStyleFragment extends ToolB
     private List<Banner> listBanner;
 
 
-    public static InvitationPullDownHaveThirdKindPinterestStyleFragment newInstance(String id,String thirdKindId) {
+    public static InvitationPullDownHaveThirdKindPinterestStyleFragment newInstance(Context context,String id,String thirdKindId) {
         InvitationPullDownHaveThirdKindPinterestStyleFragment fragment = new InvitationPullDownHaveThirdKindPinterestStyleFragment();
         fragment.id = id;
+        mContext=context;
         fragment.thirdKindId = thirdKindId;
         return fragment;
     }
@@ -101,7 +104,6 @@ public class InvitationPullDownHaveThirdKindPinterestStyleFragment extends ToolB
         super.setUserVisibleHint(isVisibleToUser);
         if(!InvitationPullDownActivity.isFromSelcet){
             thirdKindId=null;
-            Log.i("tag", "dsfsdfsdf1122");
         }
         if (isVisibleToUser&&bol==1 ) {
            if(listCategroy3!=null)listCategroy3.clear();
@@ -137,7 +139,7 @@ public class InvitationPullDownHaveThirdKindPinterestStyleFragment extends ToolB
                 int nowPos = position - xlv_pinerest_style.getHeaderViewsCount();
                 Intent intent = new Intent(getActivity(), InvitationPinerestGalleyActivity.class);
                 intent.putExtra("id", listPost.get(nowPos).getId());
-                startActivity(intent);
+                startActivityForResult(intent,202);
                 AnimUtil.intentSlidIn(getActivity());
             }
         });
@@ -151,6 +153,8 @@ public class InvitationPullDownHaveThirdKindPinterestStyleFragment extends ToolB
         return view;
     }
 
+
+
     private void initData() {
         gridView1 = (GridView) headview.findViewById(R.id.gridView_pull_down);
         //   horizontalScrollView = (HorizontalScrollView) headview.findViewById(R.id.scrollView);
@@ -161,6 +165,9 @@ public class InvitationPullDownHaveThirdKindPinterestStyleFragment extends ToolB
         gridView1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if(listPost!=null){
+                    listPost.clear();
+                }
                 bol = 1;
                 idao.requestPostListByCategory(Arad.preferences.getString("memberId"), listCategroy3.get(position).getId(), "0", "","", PAGE_NUM, Constant.PAGE_SIZE);
             }
@@ -175,7 +182,6 @@ public class InvitationPullDownHaveThirdKindPinterestStyleFragment extends ToolB
         xlv_pinerest_style.stopRefresh();
         if(requestCode==19){
             listBanner=idao.getListBanner();
-
             //设置轮播图
             setLoopView();
         }
@@ -232,6 +238,11 @@ public class InvitationPullDownHaveThirdKindPinterestStyleFragment extends ToolB
         if(requestCode==1112&&resultCode==2222){
             String keyword = data.getStringExtra("keyword");
             idao.requestPostListByCategory(Arad.preferences.getString("memberId"), listCategroy3.get(Position).getId(), "0", keyword,"", PAGE_NUM, Constant.PAGE_SIZE);
+        }
+        if(requestCode==202&&resultCode==203){
+            InvitationPullDownActivity activity=(InvitationPullDownActivity)mContext;
+            JasonViewPagerAdapter adapter1 = activity.getAdapter();
+            adapter1.reLoad();
         }
     }
 

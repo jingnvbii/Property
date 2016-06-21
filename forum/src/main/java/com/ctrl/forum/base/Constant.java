@@ -41,17 +41,17 @@ public class Constant {
     /*商户收款的支付宝账号 例: wushidadao77@163.com*/
     public static final String SELLER = "116677067@qq.com";//
     /*商户私钥 例: MIICdwIBADANBgkqhkiG9w0BAQEFAASCAmEwggJdAgEAAoGBAJ+Q9tJIfK5PvZtC6eGgucND3cOEBbc6wUJVrsgEPKiYJmMFJFe0fya1hvPragz4scRw+ozi45e4eeWnpMUJmXg4pYyZcpozom1nsGlp293DE29nqJvXTv0qEzNqZcQgSCkoZzVBTnaREw6o2XBXKyVt11B4DrYWTBqFDWyhzlkHAgMBAAECgYEAiHreklgLxLBRtdYS47isitamfM+Ub/diS5Gr8Eqnc3DIDJPeVOH+i6Ziaoll6PhiXGph81UxY5kXMhYk+Z9PUsnOq6piLR6jajs7/PQbeUOrK/27lzKx97f2/zVacFadkx33P/ReXNe6sCY7xvVr8AiDL2Qyh0TiNhmfzx39CDECQQDThTngCjCVEO1AjCX9keA3E3isAaZeDGWXfkdO4JIsOnCyRh/V1QiUvCwbpgdvdxf+N9RsQxC2faR/p9/7UDffAkEAwR7kOzuq/dGTTb65xTSY314O3qe3oaK+G9euWzQPavj+DybxhClqc1HNcYoHteM47Mry1vOmeRY+iug4UESj2QJATGyDd7ZWzVU7U6oPg+m0CFJJtGQ4Nxzli/H9U7uCNOa8lz0M/ZamLg87JJY9c4GlMp37a05j+Hu29sSyAbx/IwJAfGKMN8aHrLGmgcWdW3I0IHIxe6FkufvbHI2/ZEjUwV6cLGA14JzYTmxauY1gx/sQ+BsDbAVErOrx34AQfUqoiQJBANNb9XhPjFNYsjMlqlV2ccYURzQNQkqSZZF2WuudoglxtgiK0w+RbdZcB8cRi/EkuNT6CODb3chlJCNpTpn/CXQ=*/
-    public static final String RSA_PRIVATE = "\"MIICdgIBADANBgkqhkiG9w0BAQEFAASCAmAwggJcAgEAAoGBAN1XbSroRZbYHoIcMjZdF0h34hPuW291S70DvcpdZRkk2a0TI1tsAFhasQmptaKtDGKjB6g9utaEjV8F/5FBVyEAcoctAYWtoe7OcXkK5zKh9IQdBjY8K1rhILnxo3HTwt4HWJb3vZOiV5Q5O+MjOMcOgfC9ULmg+LfXEprvjdZzAgMBAAECgYEAyYiJBcBnXGl7ncw+i/FG+dzuJGerKVkLlRaLAG75VmOPL191mhBEYC5zc/DqSSx3UnhOyIksTZZzgknb4U41HU2XiiaVI59KjnbXKMSJ8xhXDAKNbTSQO+kEEmpWcnyoMnkQZlMmvwaTnvZ0d2B9TqVnERObyVD/F0zflkrpgcECQQD3PYRHrbNYmeTYYy3nRlLKuOnsyT5M5uMNooyYYlU1/dZHVikbmsq9kMl5KUJPKfGVagg9aw2VfUqVSyeYcra/AkEA5S8BmYP25jeDsQvtUvrL/lCw5uwkyJlF6wmBaFFKYxqHCoIJfX3Cn9lEaL7cLq3zFJO+pp/pJmNVCy3ikFHhTQJAFI531iHaHI7HGTq90VHmhlZzlK1y0aAM1tBiEjVy0kdlro66YkIvgy1rovhMPBrHrF2hi8G/4mMFdX5HL4SyLwJAaHruesLbawaB5dOvJLYrC0xT6WJcPosJgeX6dckhZV6xk4vGscwETwUol6vzCuDIQWg9cQ7TpmmAWrFXaT26vQJAQ3ljwrpXRTRGrzndHwjfEtLdi6vVeUaSglt+td4sbID19KvUMkaMfwxBrYyD5+gNfY/Eny/Vt7ANwKAFtLpkuA==";
+    public static final String RSA_PRIVATE = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDJkXa4ZVXLbMsylHp9Yh4yyCBoYk5k7uLornae75g9EnNUvBv7aoY5OTjJ19YcdiRCmH5a1C+bFjMhtc+xU6cew/EEjNFQk9fJFzbMRMNeia+Pf9MzMqqrbZmFzIFa28xc3EX/rnl3LZ8Gb5Wlq9dbYa8pY+7f76BCY3jeDLQaDQIDAQAB==";
 
     /**
-     * 微信相关 支付信息的配置 - Eric -
+     * 微信相关 支付信息的配置 - jason -
      */
     /*微信分配的公众账号ID 例: wx6848dc314d5a2b80*/
-    public static final String APP_ID = "wxae1e8e0c9c574912";
+    public static final String APP_ID = "wx8a6851c750ade83f";
     /*微信支付分配的商户号 例: 1232506602*/
-    public static final String MCH_ID = "1298087001";
+    public static final String MCH_ID = "1250570901";
     /*API密钥，在商户平台设置 例: q1w2e3r4t5y6u7i8o9p0asdfghjklzxc*/
-    public static final String API_KEY = "e7d814bbbf364f8ab06431d8efda5928";
+    public static final String API_KEY = "aceee308c567dda43d86e4c3ba613911";
     //异步通知地址
     public static final  String NOTICE_URL="http://121.42.159.145:8088/pm/wxOrderNotify.do";
  //   public static final String NOTICE_URL_PROPERTY = "http://121.42.159.145:8088/pm/wxPaymentNotify.do";

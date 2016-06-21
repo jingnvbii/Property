@@ -131,6 +131,7 @@
         android:id="@+id/m_list_bt"
         android:layout_width="match_parent"
         android:background="@color/white"
+        android:visibility="gone"
         android:layout_alignParentBottom="true"
         android:layout_height="50dp">
 

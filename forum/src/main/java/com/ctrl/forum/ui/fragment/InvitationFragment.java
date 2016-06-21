@@ -270,11 +270,11 @@ public class InvitationFragment extends ToolBarFragment implements View.OnClickL
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
                 listPost.clear();
                 PAGE_NUM = 1;
-              //  showProgress(true);
+                //  showProgress(true);
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        idao.requestPostListByCategory(Arad.preferences.getString("memberId"), "", "0", "", "",PAGE_NUM, Constant.PAGE_SIZE);
+                        idao.requestPostListByCategory(Arad.preferences.getString("memberId"), "", "0", "", "", PAGE_NUM, Constant.PAGE_SIZE);
                     }
                 }, 500);
             }
@@ -282,11 +282,11 @@ public class InvitationFragment extends ToolBarFragment implements View.OnClickL
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
                 PAGE_NUM += 1;
-              //  showProgress(true);
+                //  showProgress(true);
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        idao.requestPostListByCategory(Arad.preferences.getString("memberId"), "", "0", "", "",PAGE_NUM, Constant.PAGE_SIZE);
+                        idao.requestPostListByCategory(Arad.preferences.getString("memberId"), "", "0", "", "", PAGE_NUM, Constant.PAGE_SIZE);
                     }
                 }, 500);
             }
@@ -294,13 +294,13 @@ public class InvitationFragment extends ToolBarFragment implements View.OnClickL
         lv01.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                  Intent intent=null;
+                Intent intent = null;
                 //  Log.i("tag", "positionlist---" + String.valueOf(position - lv01.getHeaderViewsCount()));
                 //  String type = listPost.get(position +lv01.getHeaderViewsCount()).getSourceType();
                 String type = listPost.get(position - lv01.getHeaderViewsCount()).getSourceType();
                 switch (type) {
                     case "0"://平台
-                         intent = new Intent(getActivity(), InvitationDetailFromPlatformActivity.class);
+                        intent = new Intent(getActivity(), InvitationDetailFromPlatformActivity.class);
                         intent.putExtra("id", listPost.get(position - lv01.getHeaderViewsCount()).getId());
                         startActivity(intent);
                         AnimUtil.intentSlidIn(getActivity());
@@ -309,7 +309,7 @@ public class InvitationFragment extends ToolBarFragment implements View.OnClickL
                     case "1"://app
                         intent = new Intent(getActivity(), InvitationPinterestDetailActivity.class);
                         intent.putExtra("id", listPost.get(position - lv01.getHeaderViewsCount()).getId());
-                        startActivity(intent);
+                        startActivityForResult(intent, 666);
                         AnimUtil.intentSlidIn(getActivity());
                         break;
                 }
@@ -317,6 +317,16 @@ public class InvitationFragment extends ToolBarFragment implements View.OnClickL
 
             }
         });
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode==666&&resultCode==667){
+            listPost.clear();
+            PAGE_NUM=1;
+            idao.requestPostListByCategory(Arad.preferences.getString("memberId"), "", "0", "", "",PAGE_NUM, Constant.PAGE_SIZE);
+        }
     }
 
     @Override
@@ -484,19 +494,19 @@ public class InvitationFragment extends ToolBarFragment implements View.OnClickL
                 switch (type){
                     case "0"://跳商家
                         intent=new Intent(getActivity(), StoreShopListVerticalStyleActivity.class);
-                        intent.putExtra("targerId",listRecommend.get(0).getTargetId());
+                        intent.putExtra("id",listRecommend.get(0).getTargetId());
                         getActivity().startActivity(intent);
                         AnimUtil.intentSlidIn(getActivity());
                         break;
                     case "1"://跳商品详情
                         intent=new Intent(getActivity(), StoreCommodityDetailActivity.class);
-                        intent.putExtra("targerId",listRecommend.get(0).getTargetId());
+                        intent.putExtra("id",listRecommend.get(0).getTargetId());
                         getActivity().startActivity(intent);
                         AnimUtil.intentSlidIn(getActivity());
                         break;
                     case "2"://跳帖子详情
                         intent=new Intent(getActivity(), InvitationDetailActivity.class);
-                        intent.putExtra("targerId",listRecommend.get(0).getTargetId());
+                        intent.putExtra("id",listRecommend.get(0).getTargetId());
                         getActivity().startActivity(intent);
                         AnimUtil.intentSlidIn(getActivity());
                         break;
@@ -514,19 +524,19 @@ public class InvitationFragment extends ToolBarFragment implements View.OnClickL
                 switch (type){
                     case "0"://跳商家
                         intent=new Intent(getActivity(), StoreShopListVerticalStyleActivity.class);
-                        intent.putExtra("targerId",listRecommend.get(1).getTargetId());
+                        intent.putExtra("id",listRecommend.get(1).getTargetId());
                         getActivity().startActivity(intent);
                         AnimUtil.intentSlidIn(getActivity());
                         break;
                     case "1"://跳商品详情
                         intent=new Intent(getActivity(), StoreCommodityDetailActivity.class);
-                        intent.putExtra("targerId",listRecommend.get(1).getTargetId());
+                        intent.putExtra("id",listRecommend.get(1).getTargetId());
                         getActivity().startActivity(intent);
                         AnimUtil.intentSlidIn(getActivity());
                         break;
                     case "2"://跳帖子详情
                         intent=new Intent(getActivity(), InvitationDetailActivity.class);
-                        intent.putExtra("targerId",listRecommend.get(1).getTargetId());
+                        intent.putExtra("id",listRecommend.get(1).getTargetId());
                         getActivity().startActivity(intent);
                         AnimUtil.intentSlidIn(getActivity());
                         break;
@@ -545,19 +555,19 @@ public class InvitationFragment extends ToolBarFragment implements View.OnClickL
                 switch (type){
                     case "0"://跳商家
                         intent=new Intent(getActivity(), StoreShopListVerticalStyleActivity.class);
-                        intent.putExtra("targerId",listRecommend.get(2).getTargetId());
+                        intent.putExtra("id",listRecommend.get(2).getTargetId());
                         getActivity().startActivity(intent);
                         AnimUtil.intentSlidIn(getActivity());
                         break;
                     case "1"://跳商品详情
                         intent=new Intent(getActivity(), StoreCommodityDetailActivity.class);
-                        intent.putExtra("targerId",listRecommend.get(2).getTargetId());
+                        intent.putExtra("id",listRecommend.get(2).getTargetId());
                         getActivity().startActivity(intent);
                         AnimUtil.intentSlidIn(getActivity());
                         break;
                     case "2"://跳帖子详情
                         intent=new Intent(getActivity(), InvitationDetailActivity.class);
-                        intent.putExtra("targerId",listRecommend.get(2).getTargetId());
+                        intent.putExtra("id",listRecommend.get(2).getTargetId());
                         getActivity().startActivity(intent);
                         AnimUtil.intentSlidIn(getActivity());
                         break;
@@ -576,19 +586,19 @@ public class InvitationFragment extends ToolBarFragment implements View.OnClickL
                 switch (type){
                     case "0"://跳商家
                         intent=new Intent(getActivity(), StoreShopListVerticalStyleActivity.class);
-                        intent.putExtra("targerId",listRecommend.get(3).getTargetId());
+                        intent.putExtra("id",listRecommend.get(3).getTargetId());
                         getActivity().startActivity(intent);
                         AnimUtil.intentSlidIn(getActivity());
                         break;
                     case "1"://跳商品详情
                         intent=new Intent(getActivity(), StoreCommodityDetailActivity.class);
-                        intent.putExtra("targerId",listRecommend.get(3).getTargetId());
+                        intent.putExtra("id",listRecommend.get(3).getTargetId());
                         getActivity().startActivity(intent);
                         AnimUtil.intentSlidIn(getActivity());
                         break;
                     case "2"://跳帖子详情
                         intent=new Intent(getActivity(), InvitationDetailActivity.class);
-                        intent.putExtra("targerId",listRecommend.get(3).getTargetId());
+                        intent.putExtra("id",listRecommend.get(3).getTargetId());
                         getActivity().startActivity(intent);
                         AnimUtil.intentSlidIn(getActivity());
                         break;

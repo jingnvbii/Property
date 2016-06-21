@@ -12,6 +12,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.EditText;
@@ -128,13 +129,15 @@ public class FaceSotreRelativeLayout extends RelativeLayout implements
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.btn_face:
-			//隐藏表情选择框
+			InputMethodManager m=(InputMethodManager)context.getSystemService(Context.INPUT_METHOD_SERVICE);
+			m.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
 			ll_add.setVisibility(GONE);
 			if (view.getVisibility() == View.VISIBLE) {
 				view.setVisibility(View.GONE);
 			} else {
 				view.setVisibility(View.VISIBLE);
 			}
+
 			break;
 		case R.id.et_sendmessage:
 			// 隐藏表情选择框
@@ -201,6 +204,7 @@ public class FaceSotreRelativeLayout extends RelativeLayout implements
 		tv_photo_graph=(TextView)findViewById(R.id.tv_photo_graph);
 		tv_photo_album.setOnClickListener(this);
 		tv_photo_graph.setOnClickListener(this);
+
 	}
 
 	/**

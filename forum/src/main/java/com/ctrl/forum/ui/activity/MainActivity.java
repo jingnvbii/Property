@@ -45,38 +45,38 @@ public class MainActivity extends AppToolBarActivity implements View.OnClickList
         public void handleMessage(Message msg) {
             if (msg.what == 2) {
                 if (rb1.isChecked()) {
-                    drawable.setBounds(0, 0, 40, 40);
+                    drawable.setBounds(0, 0, 50, 50);
                     rb1.setCompoundDrawables(null, listDrawable.get(0), null, null);
                 } else {
-                    drawable2.setBounds(0, 0, 40, 40);
+                    drawable2.setBounds(0, 0, 50, 50);
                     rb1.setCompoundDrawables(null, listDrawable2.get(0), null, null);
                 }
                 if (rb2.isChecked()) {
-                    drawable.setBounds(0, 0, 40, 40);
+                    drawable.setBounds(0, 0, 50, 50);
                     rb2.setCompoundDrawables(null, listDrawable.get(1), null, null);
                 } else {
-                    drawable2.setBounds(0, 0, 40, 40);
+                    drawable2.setBounds(0, 0, 50, 50);
                     rb2.setCompoundDrawables(null, listDrawable2.get(1), null, null);
                 }
                 if (rb3.isChecked()) {
-                    drawable.setBounds(0, 0, 40, 40);
+                    drawable.setBounds(0, 0, 50,50);
                     rb3.setCompoundDrawables(null, listDrawable.get(2), null, null);
                 } else {
-                    drawable2.setBounds(0, 0, 40, 40);
+                    drawable2.setBounds(0, 0, 50, 50);
                     rb3.setCompoundDrawables(null, listDrawable2.get(2), null, null);
                 }
                 if (rb4.isChecked()) {
-                    drawable.setBounds(0, 0, 40, 40);
+                    drawable.setBounds(0, 0, 50, 50);
                     rb4.setCompoundDrawables(null, listDrawable.get(3), null, null);
                 } else {
-                    drawable2.setBounds(0, 0, 40, 40);
+                    drawable2.setBounds(0, 0, 50, 50);
                     rb4.setCompoundDrawables(null, listDrawable2.get(3), null, null);
                 }
                 if (rb5.isChecked()) {
-                    drawable.setBounds(0, 0, 40, 40);
+                    drawable.setBounds(0, 0, 50, 50);
                     rb5.setCompoundDrawables(null, listDrawable.get(4), null, null);
                 } else {
-                    drawable2.setBounds(0, 0, 40, 40);
+                    drawable2.setBounds(0, 0, 50, 50);
                     rb5.setCompoundDrawables(null, listDrawable2.get(4), null, null);
                 }
             }
@@ -92,50 +92,50 @@ public class MainActivity extends AppToolBarActivity implements View.OnClickList
                                 setDefaultFragment();
                                 rb1.setText(listNavigation.get(0).getKindName());
                                 if (rb1.isChecked()) {
-                                    drawable.setBounds(0, 0, 40, 40);
+                                    drawable.setBounds(0, 0, 50, 50);
                                     rb1.setCompoundDrawables(null, drawable, null, null);
                                 } else {
-                                    drawable2.setBounds(0, 0, 40, 40);
+                                    drawable2.setBounds(0, 0, 50, 50);
                                     rb1.setCompoundDrawables(null, listDrawable2.get(0), null, null);
                                 }
                                 break;
                             case 1:
                                 rb2.setText(listNavigation.get(1).getKindName());
                                 if (rb2.isChecked()) {
-                                    drawable.setBounds(0, 0, 40, 40);
+                                    drawable.setBounds(0, 0, 50, 50);
                                     rb2.setCompoundDrawables(null, drawable, null, null);
                                 } else {
-                                    drawable2.setBounds(0, 0, 40, 40);
+                                    drawable2.setBounds(0, 0, 50, 50);
                                     rb2.setCompoundDrawables(null, listDrawable2.get(1), null, null);
                                 }
                                 break;
                             case 2:
                                 rb3.setText(listNavigation.get(2).getKindName());
                                 if (rb3.isChecked()) {
-                                    drawable.setBounds(0, 0, 40, 40);
+                                    drawable.setBounds(0, 0, 50, 50);
                                     rb3.setCompoundDrawables(null, drawable, null, null);
                                 } else {
-                                    drawable2.setBounds(0, 0, 40, 40);
+                                    drawable2.setBounds(0, 0, 50, 50);
                                     rb3.setCompoundDrawables(null, listDrawable2.get(2), null, null);
                                 }
                                 break;
                             case 3:
                                 rb4.setText(listNavigation.get(3).getKindName());
                                 if (rb4.isChecked()) {
-                                    drawable.setBounds(0, 0, 40, 40);
+                                    drawable.setBounds(0, 0, 50, 50);
                                     rb4.setCompoundDrawables(null, drawable, null, null);
                                 } else {
-                                    drawable2.setBounds(0, 0, 40, 40);
+                                    drawable2.setBounds(0, 0, 50, 50);
                                     rb4.setCompoundDrawables(null, listDrawable2.get(3), null, null);
                                 }
                                 break;
                             case 4:
                                 rb5.setText(listNavigation.get(4).getKindName());
                                 if (rb5.isChecked()) {
-                                    drawable.setBounds(0, 0, 40, 40);
+                                    drawable.setBounds(0, 0, 50, 50);
                                     rb5.setCompoundDrawables(null, drawable, null, null);
                                 } else {
-                                    drawable2.setBounds(0, 0, 40, 40);
+                                    drawable2.setBounds(0, 0, 50, 50);
                                     rb5.setCompoundDrawables(null, listDrawable2.get(4), null, null);
                                 }
                                 break;
@@ -582,38 +582,38 @@ public class MainActivity extends AppToolBarActivity implements View.OnClickList
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         if (rb1.isChecked()) {
-            listDrawable.get(0).setBounds(0, 0, 40, 40);
+            listDrawable.get(0).setBounds(0, 0, 50, 50);
             rb1.setCompoundDrawables(null, listDrawable.get(0), null, null);
         } else {
-            drawable2.setBounds(0, 0, 40, 40);
+            drawable2.setBounds(0, 0, 50, 50);
             rb1.setCompoundDrawables(null, listDrawable2.get(0), null, null);
         }
         if (rb2.isChecked()) {
-            listDrawable.get(1).setBounds(0, 0, 40, 40);
+            listDrawable.get(1).setBounds(0, 0, 50, 50);
             rb2.setCompoundDrawables(null, listDrawable.get(1), null, null);
         } else {
-            drawable2.setBounds(0, 0, 40, 40);
+            drawable2.setBounds(0, 0, 50, 50);
             rb2.setCompoundDrawables(null, listDrawable2.get(1), null, null);
         }
         if (rb3.isChecked()) {
-            listDrawable.get(2).setBounds(0, 0, 40, 40);
+            listDrawable.get(2).setBounds(0, 0, 50, 50);
             rb3.setCompoundDrawables(null, listDrawable.get(2), null, null);
         } else {
-            drawable2.setBounds(0, 0, 40, 40);
+            drawable2.setBounds(0, 0, 50,50);
             rb3.setCompoundDrawables(null, listDrawable2.get(2), null, null);
         }
         if (rb4.isChecked()) {
-            listDrawable.get(3).setBounds(0, 0, 40, 40);
+            listDrawable.get(3).setBounds(0, 0, 50, 50);
             rb4.setCompoundDrawables(null, listDrawable.get(3), null, null);
         } else {
-            drawable2.setBounds(0, 0, 40, 40);
+            drawable2.setBounds(0, 0, 50, 50);
             rb4.setCompoundDrawables(null, listDrawable2.get(3), null, null);
         }
         if (rb5.isChecked()) {
-            listDrawable.get(4).setBounds(0, 0, 40, 40);
+            listDrawable.get(4).setBounds(0, 0, 50, 50);
             rb5.setCompoundDrawables(null, listDrawable.get(4), null, null);
         } else {
-            drawable2.setBounds(0, 0, 40, 40);
+            drawable2.setBounds(0, 0, 50, 50);
             rb5.setCompoundDrawables(null, listDrawable2.get(4), null, null);
         }
 

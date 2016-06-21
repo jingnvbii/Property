@@ -78,7 +78,7 @@ public class RegisterActivity extends AppToolBarActivity implements View.OnClick
 
         if (requestCode == 1) {
             code = rdao.getCode();
-            MessageUtils.showShortToast(this, "获取短信验证码成功" + code);
+          //  MessageUtils.showShortToast(this, "获取短信验证码成功" + code);
         }
 
         if (requestCode == 66) {

@@ -54,7 +54,7 @@ public class SearchDao extends IDao {
         map.put("searchType",searchType);
         map.put("pageNum",pageNum);
         map.put("pageSize",pageSize);
-        postRequest(Constant.RAW_URL + url, mapToRP(map), 0);
+        postRequest(Constant.RAW_URL + url, mapToRP(map),999);
     }
     /**
      * 清空我的搜索历史记录

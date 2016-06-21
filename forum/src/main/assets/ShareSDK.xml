@@ -52,7 +52,7 @@
     -->
 
     <ShareSDK
-        AppKey = "e6c53cb80b80"/> <!-- 修改成你在sharesdk后台注册的应用的appkey"-->
+        AppKey = "140fa3c650824"/> <!-- 修改成你在sharesdk后台注册的应用的appkey"-->
 
     <!-- ShareByAppClient标识是否使用微博客户端分享，默认是false -->
     <SinaWeibo
@@ -61,8 +61,8 @@
         AppKey="568898243"
         AppSecret="38a4f8204cc784f81f9f0daaf31e02e3"
         RedirectUrl="http://www.sharesdk.cn"
-        ShareByAppClient="false"
-        Enable="false" />
+        ShareByAppClient="true"
+        Enable="true" />
 
     <TencentWeibo
         Id="2"
@@ -70,7 +70,7 @@
         AppKey="801307650"
         AppSecret="ae36f4ee3946e1cbb98d6965b0b2ff5c"
         RedirectUri="http://sharesdk.cn"
-        Enable="false" />
+        Enable="true" />
 
     <!-- ShareByAppClient标识是否使用微博客户端分享，默认是false -->
     <QZone
@@ -98,7 +98,7 @@
         SortId="4"
         AppId="wx8de9e9b10245f47f"
         AppSecret="778cf943761d8db392f2bf3fa61389f5"
-        BypassApproval="true"
+        BypassApproval="false"
         Enable="true" />
 
     <WechatMoments
@@ -106,8 +106,8 @@
         SortId="5"
         AppId="wx4868b35061f87885"
         AppSecret="64020361b8ec4c99936c0e3999a9f249"
-        BypassApproval="true"
-        Enable="false" />
+        BypassApproval="false"
+        Enable="true" />
 
     <WechatFavorite
         Id="6"
@@ -159,12 +159,12 @@
     <Email
         Id="12"
         SortId="12"
-        Enable="false" />
+        Enable="true" />
 
     <ShortMessage
         Id="13"
         SortId="13"
-        Enable="false" />
+        Enable="true" />
 
     <SohuMicroBlog
         Id="14"

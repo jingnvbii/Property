@@ -17,6 +17,7 @@ import com.beanu.arad.utils.MessageUtils;
 import com.ctrl.forum.R;
 import com.ctrl.forum.base.AppToolBarActivity;
 import com.ctrl.forum.dao.SearchDao;
+import com.ctrl.forum.entity.HotSearch;
 import com.ctrl.forum.entity.SearchHistory;
 import com.ctrl.forum.ui.adapter.InvitationSearchGridViewAdapter;
 
@@ -44,7 +45,7 @@ public class InvitationSearchActivity extends AppToolBarActivity implements View
     TextView tv_delete_invitation_history;
     private SearchDao sdao;
     private List<SearchHistory> listHistorySearch;
-    private List<SearchHistory> listHotSearch;
+    private List<HotSearch> listHotSearch;
     private InvitationSearchGridViewAdapter mInvitationSearchGridViewAdapter;
     private ArrayAdapter mListHistorySearchAdapter;
 
@@ -95,7 +96,7 @@ public class InvitationSearchActivity extends AppToolBarActivity implements View
         }
         if(requestCode==999){
             listHistorySearch=sdao.getListSearchHistory();
-            listHotSearch=sdao.getHotSearch();
+            listHotSearch=sdao.getListHotSearch();
 
             ArrayList<String> listHistorySearchStr = new ArrayList<>();
             for(int i=0;i<listHistorySearch.size();i++){

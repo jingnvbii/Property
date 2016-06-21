@@ -68,6 +68,12 @@ public class StoreEditAddressActivity extends AppToolBarActivity implements View
         et_edit_name.setText(address.getReceiveName());
         et_edit_door_number.setText(address.getAddressDetail());
         et_edit_phoneNumber.setText(address.getMobile());
+        province=address.getProvince();
+        city=address.getCity();
+        area=address.getArea();
+        latitude=address.getLatitude();
+        longitude=address.getLongitude();
+        addressBase=address.getAddressBase();
     }
 
     private void initView() {
@@ -79,10 +85,11 @@ public class StoreEditAddressActivity extends AppToolBarActivity implements View
     public void onRequestSuccess(int requestCode) {
         super.onRequestSuccess(requestCode);
         if(requestCode==2){
-            MessageUtils.showShortToast(this,"更改收货地址成功");
+          // MessageUtils.showShortToast(this,"更改收货地址成功");
+            finish();
         }
         if(requestCode==3){
-            MessageUtils.showShortToast(this,"删除收货地址成功");
+          //  MessageUtils.showShortToast(this,"删除收货地址成功");
             finish();
         }
     }

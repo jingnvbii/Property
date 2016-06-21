@@ -134,7 +134,7 @@ public class MineShopManagerActivity extends ToolBarActivity implements Compound
     private void initData() {
         sdao = new MineStoreDao(this);
         mallDao = new MallDao(this);
-        mallDao.requestProductCategroy(Arad.preferences.getString("companyId"));
+        mallDao.requestProductCategroy(Arad.preferences.getString("companyId"),"");
     }
 
     @Override
