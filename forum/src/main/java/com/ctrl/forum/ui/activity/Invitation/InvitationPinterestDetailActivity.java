@@ -212,7 +212,7 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_invitation_pinterest_detail);
         ButterKnife.inject(this);
-        // 隐藏输入法
+        // 隐藏输入法1
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         AbsListView.LayoutParams layoutParams = new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, AbsListView.LayoutParams.WRAP_CONTENT);
         headview = getLayoutInflater().inflate(R.layout.fragment_invitation_pinterest_detail, lv_reply_detail, false);
