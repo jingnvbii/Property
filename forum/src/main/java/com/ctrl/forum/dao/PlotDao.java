@@ -175,7 +175,8 @@ public class PlotDao extends IDao {
         }
         if (requestCode==5){
             Log.d("demo", "dao中结果集(小区周边服务分类列表):" + result);
-            rimServiceCompanies = JsonUtil.node2pojoList(result.findValue("aroundServiceCompany"),RimServiceCompany.class);
+            List<RimServiceCompany> list = JsonUtil.node2pojoList(result.findValue("aroundServiceCompany"),RimServiceCompany.class);
+            rimServiceCompanies.addAll(list);
         }
         if (requestCode==6){
             List<Post> data = JsonUtil.node2pojo(result.findValue("postList"), new TypeReference<List<Post>>() {

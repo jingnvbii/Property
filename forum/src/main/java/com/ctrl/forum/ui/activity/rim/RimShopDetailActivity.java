@@ -9,6 +9,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
@@ -18,10 +19,15 @@ import com.beanu.arad.Arad;
 import com.beanu.arad.widget.SlidingUpPanelLayout;
 import com.ctrl.forum.R;
 import com.ctrl.forum.base.AppToolBarActivity;
+import com.ctrl.forum.dao.InvitationDao;
 import com.ctrl.forum.dao.RimDao;
+import com.ctrl.forum.entity.Banner;
 import com.ctrl.forum.entity.Data;
+import com.ctrl.forum.entity.RimImage;
 import com.ctrl.forum.entity.RimSeverCompanyDetail;
+import com.ctrl.forum.loopview.HomeAutoSwitchPicHolder;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -51,6 +57,8 @@ public class RimShopDetailActivity extends AppToolBarActivity implements View.On
     TextView tv_phone;  //电话
     @InjectView(R.id.iv_map)
     ImageView iv_map;
+    @InjectView(R.id.iv_shop_pic)
+    FrameLayout iv_shop_pic;
 
     private View view;
     private PopupWindow popupWindow;
@@ -58,9 +66,16 @@ public class RimShopDetailActivity extends AppToolBarActivity implements View.On
     private Data data;
     private RimDao rimDao;
     private List<RimSeverCompanyDetail> rimSeverCompanyDetails;
-    private String collecttionState;
+    static String collecttionState;
     private String rimServiceCompaniesId,name,address,telephone,callTimes;
     private Intent intent;
+
+    private HomeAutoSwitchPicHolder mAutoSwitchPicHolder;
+
+    private ArrayList<String> mData;
+    private List<Banner> listBanner = new ArrayList<>();
+    private List<RimImage> rimImage;
+    private InvitationDao idao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +91,29 @@ public class RimShopDetailActivity extends AppToolBarActivity implements View.On
         rimDao = new RimDao(this);
         rimDao.getAroundServiceCompany(rimServiceCompaniesId, Arad.preferences.getString("memberId"));
 
+    }
+
+    /**
+     * 轮播图
+     */
+    private void setLoopView() {
+        // 1.创建轮播的holder
+        mAutoSwitchPicHolder = new HomeAutoSwitchPicHolder(this);
+        // 2.得到轮播图的视图view
+        View autoPlayPicView = mAutoSwitchPicHolder.getRootView();
+        // 把轮播图的视图添加到主界面中
+        iv_shop_pic.addView(autoPlayPicView);
+        //4. 为轮播图设置数据
+        mAutoSwitchPicHolder.setData(getData());
+        mAutoSwitchPicHolder.setData(listBanner);
+    }
+
+    public List<String> getData() {
+        mData = new ArrayList<String>();
+        for(int i=0;i<rimImage.size();i++){
+            mData.add(rimImage.get(i).getImg());
+        }
+        return mData;
     }
 
     //初始化弹窗
@@ -105,16 +143,6 @@ public class RimShopDetailActivity extends AppToolBarActivity implements View.On
         tv_pl.setOnClickListener(this);
         tv_collect.setOnClickListener(this);
         iv_map.setOnClickListener(this);
-
-        //为控件赋值(未进行网络请求)
-        name = intent.getStringExtra("name");
-        address = intent.getStringExtra("address");
-        telephone = intent.getStringExtra("telephone");
-        callTimes = intent.getStringExtra("callTimes");
-        tv_name.setText(name);
-        tv_detail_address.setText(address);
-        tv_phone.setText(intent.getStringExtra(telephone));
-        callTimes = intent.getStringExtra("callTimes");
     }
 
     @Override
@@ -166,16 +194,6 @@ public class RimShopDetailActivity extends AppToolBarActivity implements View.On
                 popupWindow.dismiss();
                 break;
             case R.id.iv_map://地图详情
-                intent1 = new Intent(this,RimMapDetailActivity.class);
-                if (rimSeverCompanyDetails!=null){
-                    intent1.putExtra("name", name);
-                    intent1.putExtra("rimServiceCompaniesId",rimServiceCompaniesId);
-                    intent1.putExtra("address",address);
-                    intent1.putExtra("telephone",telephone);
-                    intent1.putExtra("callTimes",callTimes);
-                    intent1.putExtra("latitude",rimSeverCompanyDetails.get(0).getLatitude());
-                    intent1.putExtra("longitude",rimSeverCompanyDetails.get(0).getLongitude());}
-                    startActivity(intent1);
                 this.finish();
                 break;
         }
@@ -187,8 +205,8 @@ public class RimShopDetailActivity extends AppToolBarActivity implements View.On
         if (requestCode==5){
             rimSeverCompanyDetails = rimDao.getRimSeverCompanyDetails();
             data = rimDao.getData();
-            Log.e("rimSeverCompanyDetails",rimSeverCompanyDetails.toString());
             if (rimSeverCompanyDetails!=null){
+                Log.e("rimSeverCompanyDetails",rimSeverCompanyDetails.toString());
                 name = rimSeverCompanyDetails.get(0).getName();
                 address = rimSeverCompanyDetails.get(0).getAddress();
                 telephone = rimSeverCompanyDetails.get(0).getTelephone();
@@ -196,24 +214,40 @@ public class RimShopDetailActivity extends AppToolBarActivity implements View.On
                 tv_name.setText(name);
                 tv_detail_address.setText(address);
                 tv_phone.setText(telephone);
+                tv_detail.setText(rimSeverCompanyDetails.get(0).getDetailInfo());
+
+                //图片轮播图设置数据
+                //listBanner = rimSeverCompanyDetails.get(0).getImgList();
+                rimImage = rimSeverCompanyDetails.get(0).getImgList();
+                if (rimImage!=null && rimImage.size()!=0) {
+                    for (int i = 0; i < rimImage.size(); i++) {
+                        Banner banner = new Banner();
+                        banner.setId(rimImage.get(i).getId());
+                        banner.setImgUrl(rimImage.get(i).getImg());
+                        banner.setTargetId(rimImage.get(i).getTargetId());
+                        //banner.setType(rimImage.get(i).getType());
+                        listBanner.add(banner);
+                    }
+                    setLoopView();
+                }else{
+                    ImageView iv = new ImageView(this);
+                    iv.setScaleType(ImageView.ScaleType.FIT_XY);
+                    if (rimSeverCompanyDetails.get(0).getImg()!=null && !rimSeverCompanyDetails.get(0).getImg().equals(""))
+                    Arad.imageLoader.load(rimSeverCompanyDetails.get(0).getImg()).into(iv);
+                    iv_shop_pic.addView(iv);
+                }
 
                 bo_hao.setText(rimSeverCompanyDetails.get(0).getTelephone());
                 collecttionState = rimSeverCompanyDetails.get(0).getCollecttionState();
                 collect(collecttionState);
             }
             if (data!=null){
-                tv_pl.setText("("+data.getEvaluationCount()+")");
+                tv_pl.setText("(" + data.getEvaluationCount() + ")");
             }
         }
-       /* if (requestCode==6){
-            MessageUtils.showShortToast(getApplicationContext(),"收藏成功!");
-                tv_collect.setText("取消收藏");
-                collecttionState = "1";
-        }*/
         if (requestCode==7){
-            //MessageUtils.showShortToast(getApplicationContext(),"取消收藏成功!");
+            rimSeverCompanyDetails.clear();
             rimDao.getAroundServiceCompany(rimServiceCompaniesId, Arad.preferences.getString("memberId"));
-           // collect(collecttionState);
         }
     }
 
@@ -229,4 +263,12 @@ public class RimShopDetailActivity extends AppToolBarActivity implements View.On
         }
     }
 
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        if (rimSeverCompanyDetails!=null){
+            rimSeverCompanyDetails.clear();
+        }
+        rimDao.getAroundServiceCompany(rimServiceCompaniesId, Arad.preferences.getString("memberId"));
+    }
 }

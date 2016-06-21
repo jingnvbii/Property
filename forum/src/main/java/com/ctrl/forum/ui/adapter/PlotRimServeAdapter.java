@@ -1,6 +1,7 @@
 package com.ctrl.forum.ui.adapter;
 
 import android.content.Context;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -31,7 +32,7 @@ public class PlotRimServeAdapter extends BaseAdapter {
     }
 
     public void setRimServiceCompanies(List<RimServiceCompany> rimServiceCompanies) {
-        this.rimServiceCompanies.addAll(rimServiceCompanies);
+        this.rimServiceCompanies= rimServiceCompanies;
         notifyDataSetChanged();
     }
 
@@ -46,10 +47,14 @@ public class PlotRimServeAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder holder;
+        ViewHolder holder = null;
         if(convertView==null){
-             holder=new ViewHolder(convertView);
+            convertView= LayoutInflater.from(context).inflate(R.layout.item_rim_shop,parent,false);
+            holder=new ViewHolder(convertView);
             holder.iv_phone.setOnClickListener(onButton);
+            holder.iv_address.setVisibility(View.GONE);
+            holder.tv_number.setTextColor(context.getResources().getColor(R.color.rim_gray));
+            holder.tv_take_phone.setTextColor(context.getResources().getColor(R.color.red_bg));
             convertView.setTag(holder);
         }else {
             holder=(ViewHolder)convertView.getTag();
@@ -59,7 +64,7 @@ public class PlotRimServeAdapter extends BaseAdapter {
             holder.tv_name.setText(rimServiceCompanies.get(position).getName());
             holder.tv_address.setText(rimServiceCompanies.get(position).getAddress());
             holder.tv_number.setText(rimServiceCompanies.get(position).getTelephone());
-            holder.tv_total.setText(rimServiceCompanies.get(position).getCallTimes());
+            holder.tv_take_phone.setText("已拨打"+rimServiceCompanies.get(position).getCallTimes()+"次");
         }
 
          holder.iv_phone.setTag(position);
@@ -68,15 +73,17 @@ public class PlotRimServeAdapter extends BaseAdapter {
 
     class ViewHolder{
         @InjectView(R.id.tv_name)
-                TextView  tv_name;
+        TextView tv_name;
         @InjectView(R.id.tv_address)
-        TextView  tv_address;
+        TextView tv_address;
         @InjectView(R.id.tv_number)
-        TextView  tv_number;
-        @InjectView(R.id.tv_total)
-        TextView  tv_total;
+        TextView tv_number;
+        @InjectView(R.id.tv_take_phone)
+        TextView tv_take_phone;
         @InjectView(R.id.iv_phone)
-        ImageView  iv_phone;
+        ImageView iv_phone;
+        @InjectView(R.id.iv_address)
+        ImageView iv_address;
         ViewHolder(View view) {
             ButterKnife.inject(this, view);
         }

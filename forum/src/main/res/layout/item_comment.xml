@@ -4,8 +4,8 @@
 
 
     <com.ctrl.forum.customview.MineHeadView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:id="@+id/iconfont_head"
         android:src="@mipmap/iconfont_head"
         android:layout_alignParentTop="true"
@@ -24,8 +24,8 @@
         android:layout_alignTop="@+id/iconfont_head"
         android:layout_toRightOf="@+id/iconfont_head"
         android:layout_toEndOf="@+id/iconfont_head"
-        android:layout_marginLeft="21dp"
-        android:layout_marginStart="21dp" />
+        android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp" />
 
     <ImageView
         android:layout_width="wrap_content"
@@ -33,6 +33,7 @@
         android:id="@+id/grad"
         android:src="@mipmap/vip_icon2"
         android:layout_marginLeft="@dimen/margin_left_and_right"
+        android:layout_marginBottom="3dp"
         android:layout_alignBottom="@+id/comment_vip_name"
         android:layout_toRightOf="@+id/comment_vip_name"
         android:layout_toEndOf="@+id/comment_vip_name" />
@@ -49,63 +50,72 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
 
-    <TextView
+    <LinearLayout
+        android:id="@+id/ll_replay"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/comment_reply"
-        android:id="@+id/textView43"
-        android:textColor="@color/text_black1"
-        android:textSize="@dimen/text_size_basic"
-        android:layout_marginTop="5dp"
         android:layout_below="@+id/comment_vip_name"
         android:layout_alignLeft="@+id/comment_vip_name"
-        android:layout_alignStart="@+id/comment_vip_name" />
+        android:layout_alignStart="@+id/comment_vip_name"
+        android:layout_marginTop="3dp"
+        android:layout_marginBottom="2dp">
+        <TextView
+            android:gravity="center_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/comment_reply"
+            android:id="@+id/textView43"
+            android:textColor="@color/text_black1"
+            android:textSize="@dimen/text_size_basic"
+            />
+        <TextView
+            android:gravity="center_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="飘雪许："
+            android:id="@+id/tv_vip_name"
+            android:textColor="@color/text_black1"
+            android:textSize="@dimen/text_size_basic"
+            android:layout_marginLeft="5dp" />
+        <TextView
+            android:gravity="center_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/reply_content"
+            android:textColor="@color/text_black1"
+            android:textSize="@dimen/text_size_basic"
+            android:id="@+id/tv_comment" />
+    </LinearLayout>
 
-    <TextView
+
+    <LinearLayout
+        android:id="@+id/ll_me"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/comment_vip_name"
-        android:id="@+id/tv_vip_name"
-        android:textColor="@color/text_black1"
-        android:textSize="@dimen/text_size_basic"
-        android:layout_marginLeft="5dp"
-        android:layout_alignBottom="@+id/textView43"
-        android:layout_toRightOf="@+id/textView43"
-        android:layout_toEndOf="@+id/textView43" />
+        android:layout_below="@+id/ll_replay"
+        android:layout_alignLeft="@+id/ll_replay"
+        android:layout_marginBottom="2dp"
+        >
+        <TextView
+            android:gravity="center_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/reply_my_comment"
+            android:textColor="@color/text_newpwd"
+            android:textSize="@dimen/text_size_basic"
+            android:id="@+id/tv_reply_name"
+            android:layout_marginBottom="5dp"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/reply_content"
-        android:textColor="@color/text_black1"
-        android:textSize="@dimen/text_size_basic"
-        android:id="@+id/tv_comment"
-        android:layout_alignBottom="@+id/tv_vip_name"
-        android:layout_toRightOf="@+id/tv_vip_name"
-        android:layout_toEndOf="@+id/tv_vip_name" />
+        <TextView
+            android:gravity="center_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textColor="@color/text_newpwd"
+            android:textSize="@dimen/text_size_basic"
+            android:id="@+id/tv_reply_content"
+            />
+    </LinearLayout>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/reply_my_comment"
-        android:textColor="@color/text_newpwd"
-        android:textSize="@dimen/text_size_basic"
-        android:id="@+id/tv_reply_name"
-        android:layout_below="@+id/textView43"
-        android:layout_alignLeft="@+id/textView43"
-        android:layout_alignStart="@+id/textView43"
-        android:layout_marginBottom="5dp"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/reply_gao_xiao"
-        android:textColor="@color/text_newpwd"
-        android:textSize="@dimen/text_size_basic"
-        android:id="@+id/tv_reply_content"
-        android:layout_alignBottom="@+id/tv_reply_name"
-        android:layout_toRightOf="@+id/tv_reply_name"
-        android:layout_toEndOf="@+id/tv_reply_name"
-        />
 
 </RelativeLayout>

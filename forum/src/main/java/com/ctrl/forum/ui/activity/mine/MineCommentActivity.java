@@ -26,6 +26,8 @@ public class MineCommentActivity extends AppToolBarActivity {
     private PullToRefreshListView lv_comment;
     private int PAGE_NUM=1;
     private ReplyCommentDao replyCommentDao;
+    private String id;
+    static String title;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +64,14 @@ public class MineCommentActivity extends AppToolBarActivity {
 
     private void initData() {
         replyCommentDao = new ReplyCommentDao(this);
-        replyCommentDao.obtainMyReply(Arad.preferences.getString("memberId"), PAGE_NUM, Constant.PAGE_SIZE);
+        id = getIntent().getStringExtra("id");
+        if (id==null || id.equals("")){
+            replyCommentDao.obtainMyReply(Arad.preferences.getString("memberId"), PAGE_NUM, Constant.PAGE_SIZE);
+            title = getResources().getString(R.string.my_comment);
+        }else{
+            replyCommentDao.obtainMyReply(id, PAGE_NUM, Constant.PAGE_SIZE);
+            title = "他的评论";
+        }
     }
 
     @Override
@@ -78,7 +87,7 @@ public class MineCommentActivity extends AppToolBarActivity {
     }
 
     @Override
-    public String setupToolBarTitle() {return getResources().getString(R.string.my_comment);}
+    public String setupToolBarTitle() {return title;}
 
     @Override
     public void onRequestSuccess(int requestCode) {

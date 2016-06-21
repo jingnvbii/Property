@@ -13,7 +13,16 @@ import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.baidu.mapapi.map.BaiduMap;
+import com.baidu.mapapi.map.BitmapDescriptor;
+import com.baidu.mapapi.map.BitmapDescriptorFactory;
+import com.baidu.mapapi.map.MapStatusUpdate;
+import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
+import com.baidu.mapapi.map.Marker;
+import com.baidu.mapapi.map.MarkerOptions;
+import com.baidu.mapapi.model.LatLng;
+import com.baidu.mapapi.model.LatLngBounds;
 import com.beanu.arad.Arad;
 import com.beanu.arad.base.ToolBarActivity;
 import com.beanu.arad.widget.SlidingUpPanelLayout;
@@ -44,12 +53,20 @@ public class RimMapDetailActivity extends ToolBarActivity implements View.OnClic
     ImageView iv_phone;
 
     private Intent intent;
-    private String name,address,telephone,callTimes,latitude,longitude,rimServiceCompaniesId;
+    private String name,address,telephone,rimServiceCompaniesId;
+    private String latitude;
+    private String longitude;
+    private int callTimes;
     private View view;
     private PopupWindow popupWindow;
     private TextView bo_hao,call_up,cancel;
     private RimDao rimDao;
+    private BitmapDescriptor bdA = BitmapDescriptorFactory.fromResource(R.drawable.ic_location_chatbox);
 
+    /**
+     * MapView 是地图主控件
+     */
+    private BaiduMap mBaiduMap;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,6 +76,39 @@ public class RimMapDetailActivity extends ToolBarActivity implements View.OnClic
         initData();
         initView();
         initPop();
+
+        initMap();
+    }
+
+    private void initMap() {
+        mBaiduMap = iv_map.getMap();
+        MapStatusUpdate msu = MapStatusUpdateFactory.zoomTo(14.0f);
+        mBaiduMap.setMapStatus(msu);
+
+        //MapStatusUpdate u4 = MapStatusUpdateFactory.newLatLng(GEO_SHENGDONG);
+        //MapStatusUpdate u41 = MapStatusUpdateFactory.zoomBy(14);
+        // mBaiduMap.setMapStatus(u4);
+        // mBaiduMap.setMapStatus(u41);
+
+        initOverlay();
+    }
+
+    private void initOverlay() {
+        Double la = getIntent().getDoubleExtra("latitude",36);
+        Double lo = getIntent().getDoubleExtra("longitude", 117);
+
+        Marker mMarker = null;
+        MarkerOptions ooA = new MarkerOptions().position(new LatLng(la,lo)).icon(bdA).zIndex(9).draggable(false);
+        //掉下动画
+        ooA.animateType(MarkerOptions.MarkerAnimateType.drop);
+        mMarker = (Marker) (mBaiduMap.addOverlay(ooA));
+        mBaiduMap.addOverlay(ooA);
+
+        LatLngBounds.Builder builder = new LatLngBounds.Builder();
+        builder.include(mMarker.getPosition());
+        mBaiduMap.setMapStatus(MapStatusUpdateFactory
+                .newLatLngBounds(builder.build()));
+
     }
 
     private void initView() {
@@ -72,7 +122,7 @@ public class RimMapDetailActivity extends ToolBarActivity implements View.OnClic
         tv_name.setText(name);
         tv_address.setText(address);
         tv_number.setText(telephone);
-        tv_total.setText(callTimes);
+        tv_total.setText(callTimes+"");
     }
 
     private void initData() {
@@ -80,9 +130,7 @@ public class RimMapDetailActivity extends ToolBarActivity implements View.OnClic
         name = intent.getStringExtra("name");
         address = intent.getStringExtra("address");
         telephone = intent.getStringExtra("telephone");
-        callTimes = intent.getStringExtra("callTimes");
-        latitude = Arad.preferences.getString("latitude");
-        longitude = Arad.preferences.getString("longitude");
+        callTimes = Integer.parseInt(intent.getStringExtra("callTimes"));
         rimServiceCompaniesId = intent.getStringExtra("rimServiceCompaniesId");
     }
 
@@ -113,12 +161,7 @@ public class RimMapDetailActivity extends ToolBarActivity implements View.OnClic
             case R.id.rl_item:
                 Intent intent = new Intent(this,RimShopDetailActivity.class);
                 intent.putExtra("rimServiceCompaniesId",rimServiceCompaniesId);
-                intent.putExtra("name",name);
-                intent.putExtra("address",address);
-                intent.putExtra("telephone",telephone);
-                intent.putExtra("callTimes", callTimes);
                 startActivity(intent);
-                this.finish();
                 break;
             case R.id.iv_phone:
                 bo_hao.setText(telephone);
@@ -139,4 +182,11 @@ public class RimMapDetailActivity extends ToolBarActivity implements View.OnClic
         }
     }
 
+    @Override
+    public void onRequestSuccess(int requestCode) {
+        super.onRequestSuccess(requestCode);
+        if (requestCode==9){
+            tv_total.setText(""+callTimes++);
+        }
+    }
 }

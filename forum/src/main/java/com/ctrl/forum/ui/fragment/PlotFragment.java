@@ -44,7 +44,7 @@ public class PlotFragment extends ToolBarFragment implements View.OnClickListene
     @InjectView(R.id.lv_content)
     PullToRefreshListView lv_content;
     @InjectView(R.id.tv_plot_name)
-    TextView tv_plot_name; //小区名
+    TextView tv_plot_name; //小区名2
     @InjectView(R.id.rim_post)
     TextView rim_post; //发帖
     @InjectView(R.id.rim_serve)
@@ -246,7 +246,12 @@ public class PlotFragment extends ToolBarFragment implements View.OnClickListene
     @Override
     public void onResume() {
         super.onResume();
+        if (posts!=null){
+            posts.clear();
+        }
         tv_plot_name.setText(Arad.preferences.getString("communityName"));
-        plotDao.queryCommunityPostList(Arad.preferences.getString("memberId"), communityId, PAGE_NUM + "", Constant.PAGE_SIZE + "");
+        plotDao.queryCommunityPostList(Arad.preferences.getString("memberId"),
+                                       Arad.preferences.getString("communityId"),
+                                       PAGE_NUM + "", Constant.PAGE_SIZE + "");
     }
 }

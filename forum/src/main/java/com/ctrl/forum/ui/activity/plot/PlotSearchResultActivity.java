@@ -125,6 +125,7 @@ public class PlotSearchResultActivity extends AppToolBarActivity implements View
     private void initView() {
         activity = this;
 
+        tv_plot_name.setText(Arad.preferences.getString("communityName"));
         iv_back.setOnClickListener(this);
         tv_plot_name.setOnClickListener(this);
         rim_post.setOnClickListener(this);

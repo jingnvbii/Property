@@ -11,6 +11,7 @@ import com.ctrl.forum.entity.Data;
 import com.ctrl.forum.entity.RimServeCategory;
 import com.ctrl.forum.entity.RimServiceCompany;
 import com.ctrl.forum.entity.RimSeverCompanyDetail;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 
 import java.io.IOException;
@@ -227,17 +228,18 @@ public class RimDao extends IDao {
         }
         if (requestCode==2){
             Log.d("demo", "dao中结果集(获取周边商家评论列表): " + result);
-            List<CompanyEvaluation> list = JsonUtil.node2pojoList(result.findValue("companyEvaluationList"), CompanyEvaluation.class);
-            Log.e("list===============",list.toString());
+            List<CompanyEvaluation> list = JsonUtil.node2pojo(result.findValue("companyEvaluationList"), new TypeReference<List<CompanyEvaluation>>(){});
             evaluations.addAll(list);
         }
         if (requestCode==4){
-            rimServiceCompanies = JsonUtil.node2pojoList(result.findValue("aroundServiceCompany"), RimServiceCompany.class);
+            List<RimServiceCompany> list = JsonUtil.node2pojoList(result.findValue("aroundServiceCompany"), RimServiceCompany.class);
+            rimServiceCompanies.addAll(list);
         }
         if (requestCode==5){
             Log.d("demo", "dao中结果集(获取周边商家详情): " + result);
-            rimSeverCompanyDetails = JsonUtil.node2pojoList(result.findValue("aroundServiceCompany"), RimSeverCompanyDetail.class);
             data = JsonUtil.node2pojo(result.findValue("data"), Data.class);
+            List<RimSeverCompanyDetail> list =JsonUtil.node2pojo(result.findValue("aroundServiceCompany"), new TypeReference<List<RimSeverCompanyDetail>>(){});
+            rimSeverCompanyDetails.addAll(list);
         }
         if (requestCode==8){
             rimServiceCompanies = JsonUtil.node2pojoList(result.findValue("aroundServiceCollectionList"), RimServiceCompany.class);

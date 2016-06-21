@@ -7,12 +7,14 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.beanu.arad.Arad;
 import com.ctrl.forum.R;
 import com.ctrl.forum.base.SetMemberLevel;
 import com.ctrl.forum.entity.CompanyEvaluation;
+import com.ctrl.forum.ui.activity.rim.RimStoreCommentActivity;
 import com.ctrl.forum.utils.DateUtil;
 
 import java.util.ArrayList;
@@ -120,11 +122,20 @@ public class RimCommentListAdapter extends BaseAdapter {
         // 设置数据
         switch (type) {
             case 0:
-                CompanyEvaluation companyEvaluation =list.get(position);
+                final CompanyEvaluation companyEvaluation =list.get(position);
                 viewHolder2.tv_data.setText(DateUtil.getStringByFormat(companyEvaluation.getCreateTime(),"yyyy-MM-dd"));
                 viewHolder2.tv_name.setText(companyEvaluation.getMemberName());
-                Arad.imageLoader.load(companyEvaluation.getImgUrl()).into(viewHolder2.iv_head);
-                SetMemberLevel.setLevelImage(context,viewHolder2.iv_grade,companyEvaluation.getMemberLevel());
+                Arad.imageLoader.load(companyEvaluation.getImgUrl()).placeholder(R.mipmap.default_error).into(viewHolder2.iv_head);
+                SetMemberLevel.setLevelImage(context, viewHolder2.iv_grade, companyEvaluation.getMemberLevel());
+
+                viewHolder2.rl_reply_voice.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        RimStoreCommentActivity activity = (RimStoreCommentActivity)context;
+                        activity.playSound(v, companyEvaluation.getSoundUrl());
+                    }
+                });
+
                 break;
             case 1:
                 CompanyEvaluation companyEvaluation1 = list.get(position);
@@ -190,7 +201,10 @@ public class RimCommentListAdapter extends BaseAdapter {
         @InjectView(R.id.iv_grade)
           ImageView iv_grade; //等级
         @InjectView(R.id.tv_data)
-        TextView tv_data;//时间
+       TextView tv_data;//时间
+       @InjectView(R.id.rl_reply_voice)
+       RelativeLayout rl_reply_voice;//语音
+
         ViewHolder2(View view) {ButterKnife.inject(this, view);}
     }
     //直接文字回复

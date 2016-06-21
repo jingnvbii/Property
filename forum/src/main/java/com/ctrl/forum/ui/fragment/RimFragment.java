@@ -93,7 +93,6 @@ public class  RimFragment extends ToolBarFragment implements View.OnClickListene
     public void onRequestSuccess(int requestCode) {
         super.onRequestSuccess(requestCode);
         if (requestCode==1){
-            MessageUtils.showShortToast(getActivity(),"获取成功");
             category = rdao.getRimServeCategory();
             if (category!=null){
                 rimListViewAdapter.setData(category);

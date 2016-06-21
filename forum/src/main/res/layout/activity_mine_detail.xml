@@ -15,9 +15,9 @@
         android:layout_height="60dp"
         android:background="@color/white">
         <com.ctrl.forum.customview.MineHeadView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/imageView5"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:id="@+id/iv_head"
             android:src="@mipmap/iconfont_head"
             android:layout_marginLeft="@dimen/margin_left_and_right"
             android:layout_centerVertical="true"
@@ -33,8 +33,8 @@
             android:textColor="@color/text_black1"
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/margin_left_and_right"
-            android:layout_toRightOf="@+id/imageView5"
-            android:layout_toEndOf="@+id/imageView5" />
+            android:layout_toRightOf="@+id/iv_head"
+            android:layout_toEndOf="@+id/iv_head" />
 
         <ImageView
             android:layout_width="wrap_content"
@@ -63,13 +63,13 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="75dp"
+        android:layout_height="77dp"
         android:background="@color/white">
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/imageView6"
+        <com.ctrl.forum.customview.MineHeadView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:id="@+id/shop_head"
             android:src="@mipmap/shop_head"
             android:layout_centerVertical="true"
             android:layout_alignParentLeft="true"
@@ -81,40 +81,39 @@
             android:layout_height="wrap_content"
             android:text="@string/juan"
             android:textSize="@dimen/text_size_small"
-            android:id="@+id/textView18"
+            android:id="@+id/tv_juan"
             android:textColor="@color/text_red"
             android:layout_marginTop="@dimen/margin_left_and_right"
             android:background="@drawable/rectangle"
-            android:layout_marginLeft="@dimen/margin_left_and_right"
+            android:layout_marginLeft="5dp"
             android:layout_alignParentTop="true"
-            android:layout_toRightOf="@+id/imageView6"
-            android:layout_toEndOf="@+id/imageView6" />
+            android:layout_toRightOf="@+id/shop_head"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/hui"
             android:textSize="@dimen/text_size_small"
-            android:id="@+id/textView19"
+            android:id="@+id/tv_hui"
             android:textColor="@color/text_red"
             android:layout_marginTop="@dimen/margin_left_and_right"
             android:background="@drawable/rectangle"
             android:layout_marginLeft="5dp"
-            android:layout_alignBottom="@+id/textView18"
-            android:layout_toRightOf="@+id/textView18"
-            android:layout_toEndOf="@+id/textView18" />
+            android:layout_alignBottom="@+id/tv_juan"
+            android:layout_toRightOf="@+id/tv_juan"
+            android:layout_toEndOf="@+id/tv_juan" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/men_cloth"
             android:textSize="@dimen/text_size_medium"
-            android:id="@+id/textView17"
+            android:id="@+id/shop_name"
             android:layout_marginLeft="@dimen/margin_left_and_right"
             android:textColor="@color/text_black1"
-            android:layout_alignBottom="@+id/textView19"
-            android:layout_toRightOf="@+id/textView19"
-            android:layout_toEndOf="@+id/textView19" />
+            android:layout_alignBottom="@+id/tv_hui"
+            android:layout_toRightOf="@+id/tv_hui"
+            android:layout_toEndOf="@+id/tv_hui" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -122,11 +121,11 @@
             android:text="@string/men_cloth"
             android:textSize="@dimen/text_size_basic"
             android:textColor="@color/text_newpwd"
-            android:id="@+id/textView20"
-            android:layout_below="@+id/textView18"
+            android:id="@+id/shop_detail"
+            android:layout_below="@+id/tv_juan"
             android:layout_marginTop="3dp"
-            android:layout_alignLeft="@+id/textView18"
-            android:layout_alignStart="@+id/textView18" />
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@+id/shop_head"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -134,11 +133,11 @@
             android:text="@string/start_time"
             android:id="@+id/textView21"
             android:textSize="@dimen/text_size_basic"
+            android:layout_marginBottom="2dp"
             android:textColor="@color/text_newpwd"
-            android:layout_below="@+id/textView20"
-            android:layout_marginTop="3dp"
-            android:layout_alignLeft="@+id/textView20"
-            android:layout_alignStart="@+id/textView20" />
+            android:layout_below="@+id/shop_detail"
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@+id/shop_head" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -147,7 +146,8 @@
             android:textColor="@color/text_newpwd"
             android:textSize="@dimen/text_size_basic"
             android:id="@+id/tv_time"
-            android:layout_alignBottom="@+id/textView21"
+            android:layout_marginBottom="2dp"
+            android:layout_below="@+id/shop_detail"
             android:layout_toRightOf="@+id/textView21"
             android:layout_toEndOf="@+id/textView21" />
 
@@ -156,7 +156,6 @@
             android:layout_height="wrap_content"
             android:id="@+id/iv_phone"
             android:src="@mipmap/iconfont_dianhua2"
-            android:layout_above="@+id/tv_time"
             android:layout_marginRight="@dimen/margin_left_and_right"
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
@@ -317,7 +316,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/ta_post"
+            android:text="他的发文"
             android:textColor="@color/text_black1"
             android:textSize="@dimen/text_size_basic"
             android:layout_centerVertical="true"
@@ -340,20 +339,6 @@
             android:layout_height="1dp"
             android:textColor="@color/line_gray" />
     </RelativeLayout>
-
-    <TextView
-        android:id="@+id/tv_message"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/send_message"
-        android:textColor="@color/text_white"
-        android:background="@drawable/btn_red_selector"
-        android:gravity="center"
-        android:padding="10dp"
-        android:textSize="@dimen/text_size_medium"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp"
-        android:layout_marginTop="20dp"/>
 
     <TextView
         android:id="@+id/tv_blacklist"

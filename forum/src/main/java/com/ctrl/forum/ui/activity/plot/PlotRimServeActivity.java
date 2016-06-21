@@ -48,6 +48,7 @@ public class PlotRimServeActivity extends AppToolBarActivity implements View.OnC
     private int PAGE_NUM=1;
     private PlotRimServeAdapter plotRimServeAdapter;
     private String CompantyCategyId;
+    static int position;
 
     //弹窗
     private View view;
@@ -71,8 +72,6 @@ public class PlotRimServeActivity extends AppToolBarActivity implements View.OnC
                 if (rimServiceCompanies != null) {
                     rimServiceCompanies.clear();
                     PAGE_NUM = 1;
-                    plotRimServeAdapter = new PlotRimServeAdapter(getApplicationContext());
-                    lv_content.setAdapter(plotRimServeAdapter);
                 }
                 plotDao.getAroundServiceCompanyList(PAGE_NUM + "", Constant.PAGE_SIZE + "",
                         Arad.preferences.getString("memberId"), CompantyCategyId,
@@ -98,25 +97,18 @@ public class PlotRimServeActivity extends AppToolBarActivity implements View.OnC
 
     //初始化分类列表
     private void initView() {
-        int count = ll_category.getChildCount();
-       for (int i=0;i<count;i++){
-           TextView v = (TextView) ll_category.getChildAt(i);
-           v.setText(category2s.get(i).getName());
-           final int finalI = i;
-           v.setOnClickListener(new View.OnClickListener() {
-               @Override
-               public void onClick(View v) {
-                   TextView tv =(TextView)v;
-                   tv.setTextColor(getResources().getColor(R.color.red_bg));
-                   CompantyCategyId = category2s.get(finalI).getId();
-                   plotDao.getAroundServiceCompanyList(PAGE_NUM + "", Constant.PAGE_SIZE + "",
-                           Arad.preferences.getString("memberId"), CompantyCategyId,
-                           Arad.preferences.getString("latitude"), Arad.preferences.getString("longitude"));
-               }
-           });
-       }
+        if (category2s.size()<4 || category2s.size()==4) {
+            for (int i = 0; i < category2s.size(); i++) {
+                TextView v = (TextView) ll_category.getChildAt(i);
+                v.setText(category2s.get(i).getName());
+                v.setOnClickListener(this);
+            }
+        }
+        TextView v = (TextView)ll_category.getChildAt(0);
+        v.setTextColor(getResources().getColor(R.color.red_bg));
+        CompantyCategyId = category2s.get(0).getId();
         plotDao.getAroundServiceCompanyList(PAGE_NUM + "", Constant.PAGE_SIZE + "",
-                Arad.preferences.getString("memberId"), category2s.get(0).getId(),
+                Arad.preferences.getString("memberId"), CompantyCategyId,
                 Arad.preferences.getString("latitude"), Arad.preferences.getString("longitude"));
     }
 
@@ -124,10 +116,9 @@ public class PlotRimServeActivity extends AppToolBarActivity implements View.OnC
         plotDao = new PlotDao(this);
         rimDao = new RimDao(this);
         plotDao.getPostCategory(Arad.preferences.getString("communityId"), "2");
-
     }
 
-    //初始化弹窗1
+    //初始化弹窗
     private void initPop() {
         view = LayoutInflater.from(this).inflate(R.layout.call_phone,null);
         popupWindow = new PopupWindow(view, SlidingUpPanelLayout.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
@@ -168,13 +159,21 @@ public class PlotRimServeActivity extends AppToolBarActivity implements View.OnC
         if (requestCode==4){
             category2s = plotDao.getCategory2();
             if (category2s!=null){
-               //initView();
+               initView();
             }
         }
         if (requestCode==5){
             rimServiceCompanies = plotDao.getRimServiceCompanies();
             if (rimServiceCompanies!=null){
                 plotRimServeAdapter.setRimServiceCompanies(rimServiceCompanies);
+            }
+        }
+        if (requestCode==9){
+            plotDao.getAroundServiceCompanyList(PAGE_NUM + "", Constant.PAGE_SIZE + "",
+                    Arad.preferences.getString("memberId"), CompantyCategyId,
+                    Arad.preferences.getString("latitude"), Arad.preferences.getString("longitude"));
+            if (rimServiceCompanies!=null){
+                rimServiceCompanies.clear();
             }
         }
     }
@@ -187,11 +186,11 @@ public class PlotRimServeActivity extends AppToolBarActivity implements View.OnC
 
     @Override
     public void onClick(View v) {
+
         Object id = v.getTag();
-        int position = 0;
         switch (v.getId()){
             case R.id.iv_phone:
-                 position = (int)id;
+                position = (int)id;
                 bo_hao.setText(rimServiceCompanies.get(position).getTelephone());
                 if (!bo_hao.getText().equals("")){
                     popupWindow.showAtLocation(this.view, Gravity.BOTTOM, 0, 0);  //在底部
@@ -201,14 +200,31 @@ public class PlotRimServeActivity extends AppToolBarActivity implements View.OnC
             case R.id.call_up: //打电话
                 if (!bo_hao.getText().equals("")){
                     startActivity(new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + bo_hao.getText())));
-                    rimDao.addCallHistory(rimServiceCompanies.get(position).getAroundServiceId(), bo_hao.getText().toString(), Arad.preferences.getString("memberId"));
+                            rimDao.addCallHistory(rimServiceCompanies.get(position).getId(),
+                            bo_hao.getText().toString(),
+                            Arad.preferences.getString("memberId"));
                     popupWindow.dismiss();}
                 break;
             case R.id.cancel: //取消
                 popupWindow.dismiss();
                 break;
             default:
+                for (int i = 0; i < ll_category.getChildCount(); i++) {
+                    ((TextView) ll_category.getChildAt(i)).setTextColor(getResources().getColor(R.color.text_black1));
+                }
+
+                CompantyCategyId = category2s.get(ll_category.indexOfChild(v)).getId();
+                if (rimServiceCompanies!=null){
+                    rimServiceCompanies.clear();
+                }
+                plotDao.getAroundServiceCompanyList(PAGE_NUM + "", Constant.PAGE_SIZE + "",
+                        Arad.preferences.getString("memberId"), CompantyCategyId,
+                        Arad.preferences.getString("latitude"), Arad.preferences.getString("longitude"));
+                ((TextView) v).setTextColor(getResources().getColor(R.color.red_bg));
                 break;
         }
+
+
     }
+
 }

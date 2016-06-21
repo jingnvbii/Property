@@ -43,7 +43,8 @@ public class InvitationDao extends IDao {
     private MemberInfo userInfo;
 
 
-
+    private List<CategoryItem> list2s = new ArrayList<>();
+    private List<CategoryItem> list3 = new ArrayList<>();
     private List<Banner> listBanner = new ArrayList<>();//帖子首页轮播图列表
     private List<PostKind> listPostKind= new ArrayList<>();//帖子首页频道列表
     private List<Recommend> listRecommend = new ArrayList<>();//帖子首页推荐列表
@@ -191,7 +192,8 @@ public class InvitationDao extends IDao {
                                      String locationLatitude,
                                      String locationName,
                                      String delPostPicStr,
-                                     String UploadPostPicStr
+                                     String UploadPostPicStr,
+                                     String thumbImgPostPicStr
     ){
         Map<String,String> map = new HashMap<String,String>();
         String url = "post/editorPost";
@@ -211,7 +213,7 @@ public class InvitationDao extends IDao {
         map.put("locationName",locationName);
         map.put("delPostPicStr",delPostPicStr);
         map.put("UploadPostPicStr",UploadPostPicStr);
-
+        map.put("thumbImgPostPicStr",thumbImgPostPicStr);
         postRequest(Constant.RAW_URL+url, mapToRP(map),6);
     }
 
@@ -234,6 +236,7 @@ public class InvitationDao extends IDao {
      * @param locationName //位置名称
      * @param delPostPicStr //要删除的图片该参数里面放的是要删除图片的id(多张图片id之间用逗号分隔)
      * @param UploadPostPicStr //要上传的图片该参数里面放的是要上传图片的 url :(多个图片 url之间用逗号分隔)
+     * @param thumbImgPostPicStr //帖子缩略图片串:(url之间用逗号分隔)
      * */
     public void requesPostEditor(String id,
                                  String categoryId,
@@ -250,7 +253,8 @@ public class InvitationDao extends IDao {
                                  String locationLatitude,
                                  String locationName,
                                  String delPostPicStr,
-                                 String UploadPostPicStr
+                                 String UploadPostPicStr,
+                                 String thumbImgPostPicStr
     ){
         Map<String,String> map = new HashMap<String,String>();
         map.put(Constant.METHOD,"post/editorPost");//方法名称
@@ -270,6 +274,7 @@ public class InvitationDao extends IDao {
         map.put("locationName",locationName);
         map.put("delPostPicStr",delPostPicStr);
         map.put("UploadPostPicStr",UploadPostPicStr);
+        map.put("thumbImgPostPicStr",thumbImgPostPicStr);
 
         postRequest(Constant.RAW_URL, mapToRP(map),6);
     }
@@ -278,7 +283,6 @@ public class InvitationDao extends IDao {
      * 发布帖子
      * @param reporterId //发帖人id（会员id)
      * @param categoryId //分类id
-     * @param communityId //分类id
      * @param categoryType //分类类型（0：广场帖子、1：小区帖子）
      * @param publishState //发布状态（0：存为草稿、1：已发布）
      * @param checkType //审核类型（0：无需审核、1：需审核)   (当分类id修改后, 该参数必须传 )
@@ -673,6 +677,9 @@ public class InvitationDao extends IDao {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+
+            list3 = JsonUtil.node2pojoList(result.findValue("list3"), CategoryItem.class);
+            list2s = JsonUtil.node2pojoList(result.findValue("list2"), CategoryItem.class);
             userInfo=JsonUtil.node2pojo(result.findValue("user"), MemberInfo.class);
             List<Post> data = JsonUtil.node2pojo(result.findValue("relatedMap"), new TypeReference<List<Post>>() {
             });
@@ -783,5 +790,13 @@ public class InvitationDao extends IDao {
 
     public List<Post> getMinePost() {
         return minePost;
+    }
+
+    public List<CategoryItem> getList3() {
+        return list3;
+    }
+
+    public List<CategoryItem> getList2s() {
+        return list2s;
     }
 }

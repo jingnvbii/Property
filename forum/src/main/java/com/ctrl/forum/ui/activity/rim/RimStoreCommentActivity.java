@@ -2,7 +2,6 @@ package com.ctrl.forum.ui.activity.rim;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -13,13 +12,11 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -35,14 +32,11 @@ import com.ctrl.forum.R;
 import com.ctrl.forum.base.Constant;
 import com.ctrl.forum.customview.AudioRecordButton;
 import com.ctrl.forum.dao.ImageDao;
-import com.ctrl.forum.dao.InvitationDao;
 import com.ctrl.forum.dao.RimDao;
 import com.ctrl.forum.dao.SoundDao;
 import com.ctrl.forum.entity.CompanyEvaluation;
 import com.ctrl.forum.entity.Image;
-import com.ctrl.forum.entity.PostReply2;
 import com.ctrl.forum.manager.MediaManager;
-import com.ctrl.forum.ui.adapter.InvitationCommentDetailAdapter;
 import com.ctrl.forum.ui.adapter.RimCommentListAdapter;
 import com.ctrl.forum.utils.Base64Util;
 import com.ctrl.forum.utils.Utils;
@@ -85,8 +79,6 @@ public class RimStoreCommentActivity extends ToolBarActivity implements View.OnC
             ImageView iv02;
     @InjectView(R.id.iv03)//图片3
             ImageView iv03;
-    @InjectView(R.id.vp_contains)//回复
-            ViewPager vp_contains;
     @InjectView(R.id.lv_content)//回复
     com.handmark.pulltorefresh.library.PullToRefreshListView lv_content;
 
@@ -98,18 +90,10 @@ public class RimStoreCommentActivity extends ToolBarActivity implements View.OnC
     private List<ImageView> listImg = new ArrayList<>();
     private String[] items = new String[]{"本地图片", "拍照"};
 
-    private InvitationDao idao;
-    private List<PostReply2> listPostReply;
-    private InvitationCommentDetailAdapter mInvitationCommentDetailAdapter;
     private ImageDao Idao;
-    private boolean isFromPinglun;
-    private String id;
-    private String reportid;
-    private int mPosition;
     private SoundDao sdao;
     private String soundUrl;
     private View viewanim;
-
 
     private RimDao rimDao;
     private RimCommentListAdapter rimCommentListAdapter;
@@ -117,10 +101,6 @@ public class RimStoreCommentActivity extends ToolBarActivity implements View.OnC
     private String rimServiceCompaniesId;
     private List<CompanyEvaluation> companyEvaluationList;
     private int PAGE_NUM=1;
-    private CompanyEvaluation companyEvaluation;
-    private int type; //0-三张图片,1-一张图片,2-语音,3-纯文字
-
-    private List<CompanyEvaluation> evaluations; //周边店铺评论列表
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -139,9 +119,9 @@ public class RimStoreCommentActivity extends ToolBarActivity implements View.OnC
         lv_content.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
-                if (companyEvaluationList!=null){
+                if (companyEvaluationList != null) {
                     companyEvaluationList.clear();
-                    PAGE_NUM=1;
+                    PAGE_NUM = 1;
                 }
                 rimDao.getcollectAroundCompany(rimServiceCompaniesId, PAGE_NUM + "", Constant.PAGE_SIZE + "");
             }
@@ -244,16 +224,6 @@ public class RimStoreCommentActivity extends ToolBarActivity implements View.OnC
             }
 
         }
-        if (requestCode == 15) {
-            isFromPinglun = false;
-            MessageUtils.showShortToast(this, "回复成功");
-            reset();
-            if (listPostReply != null) {
-                listPostReply.clear();
-            }
-            PAGE_NUM = 1;
-            idao.requesPostReplyList(id, "1", String.valueOf(PAGE_NUM), String.valueOf(Constant.PAGE_SIZE));
-        }
 
         if(requestCode==889){
             MessageUtils.showShortToast(this, "语音上传成功");
@@ -261,14 +231,14 @@ public class RimStoreCommentActivity extends ToolBarActivity implements View.OnC
             // replyAdapter.setSoundrUrl(soundUrl);
             Log.i("tag", "soundUrl---" + soundUrl);
             if (soundUrl != null) {
-                if (!isFromPinglun) {//无评论
-                    idao.requestReplyPost(id, reportid,"", Arad.preferences.getString("memberId"), "2", "", soundUrl, "", "", "", "");
-                }else{//有评论
-                    idao.requestReplyPost(id,reportid, listPostReply.get(mPosition).getId(), Arad.preferences.getString("memberId"), "2","" ,soundUrl,listPostReply.get(mPosition).getMemberId(), "", "", "");
-                }
-
-
+                rimDao.evaluateAroundCompany(Arad.preferences.getString("memberId"),
+                        rimServiceCompaniesId,
+                        "2",
+                        "",
+                        soundUrl,
+                        "","");
             }
+
         }
 
         if (requestCode == 888) {
@@ -310,13 +280,22 @@ public class RimStoreCommentActivity extends ToolBarActivity implements View.OnC
             });
 
         }
+
+        if (requestCode==6){
+            reset();
+            // 隐藏输入法
+            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+            if (companyEvaluationList!=null) {
+                companyEvaluationList.clear();
+            }
+            rimDao.getcollectAroundCompany(rimServiceCompaniesId, PAGE_NUM + "", Constant.PAGE_SIZE + "");
+        }
     }
 
     /*
    * 输入框复位
    * */
     private void reset() {
-        isFromPinglun = false;
         et_sendmessage.setText("");
         if(!et_sendmessage.isEnabled()){
             et_sendmessage.setEnabled(true);
@@ -566,52 +545,25 @@ public class RimStoreCommentActivity extends ToolBarActivity implements View.OnC
     }
 
     private void reply() {
-        if(isFromPinglun){
-
             if(et_sendmessage.getText().toString().equals("")&&mImageList.size()>0){
-
-                idao.requestReplyPost(id,reportid, listPostReply.get(mPosition).getId(),
-                        Arad.preferences.getString("memberId"), "1", et_sendmessage.getText().toString().trim(), "",
-                        listPostReply.get(mPosition).getMemberId(), listPostReply.get(mPosition).getMemberFloor(),setURL(),
-                        setThunbUrl());
-
-            }else if(!TextUtils.isEmpty(et_sendmessage.getText().toString().trim())&&mImageList.size()==0){
-
-                idao.requestReplyPost(id, reportid, listPostReply.get(mPosition).getId(),
-                        Arad.preferences.getString("memberId"), "0", et_sendmessage.getText().toString().trim(), "",
-                        listPostReply.get(mPosition).getMemberId(), listPostReply.get(mPosition).getMemberFloor(),"",
-                        "");
-
-            }else {
-                MessageUtils.showShortToast(this,"回复内容为空");
-            }
-
-
-
-        }else {
-            if(et_sendmessage.getText().toString().equals("")&&mImageList.size()>0){
-
-                idao.requestReplyPost(id, reportid, "", Arad.preferences.getString("memberId"), "1",
-                        et_sendmessage.getText().toString().trim(), "", "", "",
+                rimDao.evaluateAroundCompany(Arad.preferences.getString("memberId"),
+                        rimServiceCompaniesId,
+                        "1",
+                        "",
+                        "",
                         setURL(),setThunbUrl());
 
             }else if(!TextUtils.isEmpty(et_sendmessage.getText().toString().trim())&&mImageList.size()==0){
-
-                idao.requestReplyPost(id ,reportid, "", Arad.preferences.getString("memberId"), "0",
-                        et_sendmessage.getText().toString().trim(), "", "", "",
-                        "","");
+                rimDao.evaluateAroundCompany(Arad.preferences.getString("memberId"),
+                        rimServiceCompaniesId,
+                        "0",
+                        et_sendmessage.getText().toString().trim(),
+                        "",
+                        "", "");
             }else {
                 MessageUtils.showShortToast(this,"回复内容为空");
             }
 
-        }
-    }
-
-    public void replyPinglun(int position){
-        InputMethodManager m=(InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        m.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
-        mPosition=position;
-        isFromPinglun=true;
     }
 
     private String setThunbUrl() {
@@ -645,6 +597,7 @@ public class RimStoreCommentActivity extends ToolBarActivity implements View.OnC
     @Override
     public void onRequestFaild(String errorNo, String errorMessage) {
         super.onRequestFaild(errorNo, errorMessage);
+        lv_content.onRefreshComplete();
     }
 
     @Override
@@ -652,9 +605,18 @@ public class RimStoreCommentActivity extends ToolBarActivity implements View.OnC
       switch (v.getId()){
           case R.id.iv_input_add:
               changeTextAndImage();
+              if (ll_facechoose.getVisibility()==View.VISIBLE){
+                  ll_facechoose.setVisibility(View.GONE);
+              }
               break;
           case R.id.iv_input_yuyin:
               changeTextAndVoice();
+              if(ll_bottom_edit.getVisibility()==View.VISIBLE){
+                  ll_bottom_edit.setVisibility(View.GONE);
+              }
+              if (ll_facechoose.getVisibility()==View.VISIBLE){
+                  ll_facechoose.setVisibility(View.GONE);
+              }
               break;
           case R.id.btn_send:
               reply();

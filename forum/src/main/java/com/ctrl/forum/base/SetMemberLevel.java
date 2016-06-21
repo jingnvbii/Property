@@ -14,7 +14,7 @@ public class SetMemberLevel {
     public static void setLevelImage(Context context,ImageView iv_grade,String memberLevel) {
         if (memberLevel != null) {
             if (memberLevel.equals("")) {
-                iv_grade.setImageBitmap(BitmapFactory.decodeResource(context.getResources(), R.mipmap.vip_icon_un));
+                iv_grade.setImageBitmap(BitmapFactory.decodeResource(context.getResources(), R.mipmap.vip_icon));
             } else {
                 int grade = Integer.parseInt(memberLevel);
                 switch (grade) {
@@ -33,7 +33,7 @@ public class SetMemberLevel {
                 }
             }
         }else{
-            iv_grade.setImageBitmap(BitmapFactory.decodeResource(context.getResources(), R.mipmap.vip_icon_un));
+            iv_grade.setImageBitmap(BitmapFactory.decodeResource(context.getResources(), R.mipmap.vip_icon));
         }
     }
 }
