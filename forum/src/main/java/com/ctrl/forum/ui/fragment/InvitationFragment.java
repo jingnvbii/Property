@@ -199,7 +199,7 @@ public class InvitationFragment extends ToolBarFragment implements View.OnClickL
         View view = inflater.inflate(R.layout.fragment_invitation, container, false);
         ButterKnife.inject(this, view);
         lv_invitation_fragment_home=(PullToRefreshListView)view.findViewById(R.id.lv_invitation_fragment_home);
-       // scrollView.setHorizontalScrollBarEnabled(false);// 隐藏滚动条
+       // scrollView.setHorizontalScrollBarEnabled(false);// 隐藏滚动条11
         initView();
         getScreenDen();
         //公告轮播控件初始化
