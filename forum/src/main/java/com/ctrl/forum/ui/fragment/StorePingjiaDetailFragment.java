@@ -69,8 +69,15 @@ public class StorePingjiaDetailFragment extends ToolBarFragment {
     }
 
     @Override
+    public void onRequestFaild(String errorNo, String errorMessage) {
+        super.onRequestFaild(errorNo, errorMessage);
+        lv_pingjia_detail.onRefreshComplete();
+    }
+
+    @Override
     public void onRequestSuccess(int requestCode) {
         super.onRequestSuccess(requestCode);
+        lv_pingjia_detail.onRefreshComplete();
         if (requestCode == 3) {
             bol = 0;
             allEvaluationlist = mdao.getListAllEvaluation();

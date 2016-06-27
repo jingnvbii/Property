@@ -61,7 +61,9 @@ public class StoreXianjinQuanListViewAdapter extends BaseAdapter{
         }
         CashCoupons mCashCoupons=kindList.get(position);
         holder.tv_name.setText(mCashCoupons.getName());
-        holder.tv_use_time.setText("使用期限 ："+ TimeUtils.date(Long.parseLong(mCashCoupons.getValidityStartTime()))+"-"+TimeUtils.date(Long.parseLong(mCashCoupons.getValidityEndTime())));
+        holder.tv_xianjinquan_money.setText("￥"+mCashCoupons.getAmount()+"元");
+        holder.tv_xianjinquan_remark.setText(mCashCoupons.getRemark());
+        holder.tv_use_time.setText("使用期限:"+ TimeUtils.formatPhotoDate(Long.parseLong(mCashCoupons.getValidityStartTime()))+" —— "+TimeUtils.formatPhotoDate(Long.parseLong(mCashCoupons.getValidityEndTime())));
         return convertView;
     }
 
@@ -70,6 +72,10 @@ public class StoreXianjinQuanListViewAdapter extends BaseAdapter{
                 TextView tv_name;
         @InjectView(R.id.tv_use_time)//标题
                 TextView tv_use_time;
+        @InjectView(R.id.tv_xianjinquan_remark)//现金券说明
+                TextView tv_xianjinquan_remark;
+        @InjectView(R.id.tv_xianjinquan_money)//现金券金额
+                TextView tv_xianjinquan_money;
         ViewHolder(View view) {
             ButterKnife.inject(this, view);
         }

@@ -163,6 +163,7 @@ public class StoreSearchCommodityActivity extends AppToolBarActivity implements 
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(StoreSearchCommodityActivity.this, StoreCommodityDetailActivity.class);
                 intent.putExtra("id", listProduct.get(position).getId());
+                intent.putExtra("name", listProduct.get(position).getName());
                 //  startActivityForResult(intent, 500);
                 startActivity(intent);
                 AnimUtil.intentSlidIn(StoreSearchCommodityActivity.this);

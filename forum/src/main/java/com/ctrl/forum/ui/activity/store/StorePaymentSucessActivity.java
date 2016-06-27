@@ -9,6 +9,11 @@ import android.widget.TextView;
 import com.beanu.arad.utils.AnimUtil;
 import com.ctrl.forum.R;
 import com.ctrl.forum.base.AppToolBarActivity;
+import com.ctrl.forum.dao.OrderDao;
+import com.ctrl.forum.entity.OrderItem;
+import com.ctrl.forum.entity.OrderState;
+
+import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -20,6 +25,21 @@ import butterknife.InjectView;
 public class StorePaymentSucessActivity extends AppToolBarActivity implements View.OnClickListener{
     @InjectView(R.id.tv_payment_sucess_ok)//完成
     TextView tv_payment_sucess_ok;
+    @InjectView(R.id.tv_money)//支付订单金额
+    TextView tv_money;
+    @InjectView(R.id.tv_comodity_name)//商品名称
+    TextView tv_comodity_name;
+    @InjectView(R.id.tv_comodity_time)//交易时间
+    TextView tv_comodity_time;
+    @InjectView(R.id.tv_payment_way)//支付方式
+    TextView tv_payment_way;
+    @InjectView(R.id.tv_payment_id)//交易单号
+    TextView tv_payment_id;
+
+
+    private OrderDao odao;
+    private List<OrderItem> listOrderItem;
+    private List<OrderState> listOrderState;
 
 
     @Override
@@ -30,14 +50,22 @@ public class StorePaymentSucessActivity extends AppToolBarActivity implements Vi
         // 隐藏输入法
        // getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         initView();
+        initData();
+    }
+
+    private void initData() {
+        odao=new OrderDao(this);
+      //  odao.requesOrderDetail(getIntent().getStringExtra("orderId"));
     }
 
     private void initView() {
         tv_payment_sucess_ok.setOnClickListener(this);
-
     }
 
-
+    @Override
+    public void onRequestSuccess(int requestCode) {
+        super.onRequestSuccess(requestCode);
+    }
 
     @Override
     public void onClick(View v) {

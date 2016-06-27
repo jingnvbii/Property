@@ -49,7 +49,7 @@ public class MineYouJuanActivity extends AppToolBarActivity {
     private List<Fragment> fragments;
     private CouponsDao cdao;
     private String wei,yi,past;
-    private String amount = "";
+    private String amount = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

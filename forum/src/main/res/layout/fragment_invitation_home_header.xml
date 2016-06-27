@@ -75,7 +75,7 @@
             android:layout_height="match_parent"
             android:background="@color/line_gray" />
 
-        <TextView
+      <!--  <TextView
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="5dp"
             android:layout_width="wrap_content"
@@ -83,7 +83,7 @@
             android:text="最新"
             android:gravity="center"
             android:background="@drawable/blue_border"
-            />
+            />-->
 
         <TextView
             android:id="@+id/tv_change"

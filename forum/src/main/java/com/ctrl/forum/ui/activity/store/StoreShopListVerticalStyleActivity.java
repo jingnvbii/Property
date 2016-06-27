@@ -9,6 +9,8 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -19,6 +21,7 @@ import android.view.WindowManager;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.PopupWindow;
@@ -84,6 +87,11 @@ public class StoreShopListVerticalStyleActivity extends AppToolBarActivity imple
     @InjectView(R.id.rl_store_information)//公告布局
     RelativeLayout rl_store_information;
 
+    @InjectView(R.id.et_vertical_style_search)//搜索栏
+    EditText et_vertical_style_search;
+    @InjectView(R.id.tv_vertical_style_search)//搜索
+    TextView tv_vertical_style_search;
+
 
     /**
      * 商品总价
@@ -116,6 +124,7 @@ public class StoreShopListVerticalStyleActivity extends AppToolBarActivity imple
     private TitleAdapter titleAdapter;
 
     public static int SELECTPOSITION = 0;//一级列表下标值
+    public static int FIRSTPOSITION = 0;//一级列表下标值
     Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -163,6 +172,8 @@ public class StoreShopListVerticalStyleActivity extends AppToolBarActivity imple
     }
 
     private void initView() {
+        tv_vertical_style_search.setOnClickListener(this);
+        et_vertical_style_search.addTextChangedListener(watcher);
         mGoodsDataBaseInterface = OperateGoodsDataBase.getInstance();
         //清空数据库缓存
         mGoodsDataBaseInterface.deleteAll(mContext);
@@ -183,12 +194,64 @@ public class StoreShopListVerticalStyleActivity extends AppToolBarActivity imple
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(StoreShopListVerticalStyleActivity.this, StoreCommodityDetailActivity.class);
                 intent.putExtra("id", foodList.get(position).getId());
+                intent.putExtra("name", foodList.get(position).getName());
+                intent.putExtra("categroyName", getCategroyName(foodList.get(position).getId()));
                 startActivityForResult(intent, 500);
                 AnimUtil.intentSlidIn(StoreShopListVerticalStyleActivity.this);
             }
         });
 
     }
+
+    private String getCategroyName(String id) {
+        String name=null;
+        for(int i=0;i<listProductCategroy.size();i++){
+            for(int j=0;j<listProductCategroy.get(i).getProductList().size();j++){
+                if(id.equals(listProductCategroy.get(i).getProductList().get(j).getId())){
+                    name=listProductCategroy.get(i).getName();
+                }
+            }
+        }
+        return name;
+    }
+
+
+    private TextWatcher watcher = new TextWatcher() {
+        //文字变化时
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            // TODO Auto-generated method stub
+            if(s.length()==0){
+                tv_vertical_style_search.setVisibility(View.GONE);
+            }else {
+                tv_vertical_style_search.setVisibility(View.VISIBLE);
+            }
+
+
+        }
+        //文字变化前
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count,
+                                      int after) {
+            // TODO Auto-generated method stub
+            if(s.length()==0){
+                tv_vertical_style_search.setVisibility(View.GONE);
+            }else {
+                tv_vertical_style_search.setVisibility(View.VISIBLE);
+            }
+
+        }
+
+        //文字变化后
+        @Override
+        public void afterTextChanged(Editable s) {
+            // TODO Auto-generated method stub
+            if (s.length() == 0&&tv_vertical_style_search.getVisibility()==View.VISIBLE) {
+                tv_vertical_style_search.setVisibility(View.GONE);
+            }
+        }
+    };
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -202,12 +265,13 @@ public class StoreShopListVerticalStyleActivity extends AppToolBarActivity imple
     public void initFoodData() {
         mdao = new MallDao(this);
         showProgress(true);
-        mdao.requestProductCategroy(getIntent().getStringExtra("id"),"1");
+        mdao.requestProductCategroy(getIntent().getStringExtra("id"), "1");
         mdao.requestCompanysDetails(Arad.preferences.getString("memberId"), getIntent().getStringExtra("id"));
 
         foodList = new ArrayList<FoodModel>();
         foodTypeList = new ArrayList<FoodTypeModel>();
         foodTpyePositionList = new ArrayList<Integer>();
+
     }
 
     @Override
@@ -228,7 +292,11 @@ public class StoreShopListVerticalStyleActivity extends AppToolBarActivity imple
             tv_store_information.requestFocus();
             Arad.imageLoader.load(company.getImg()).placeholder(R.mipmap.default_error).into(iv_style_img);
             tv_shop_name.setText(company.getName());
-            tv_time.setText("营业时间："+ company.getWorkStartTime()+"-"+company.getWorkEndTime());
+            if(getIntent().getStringExtra("startTime")!=null&&getIntent().getStringExtra("endTime")!=null) {
+                tv_time.setText("营业时间 " + getIntent().getStringExtra("startTime") + "-" + getIntent().getStringExtra("endTime"));
+            }else {
+                tv_time.setVisibility(View.GONE);
+            }
             if(company.getEvaluatLevel()!=null) {
                 ratingBar.setRating(Float.parseFloat(company.getEvaluatLevel()) / 2);
             }else {
@@ -322,6 +390,10 @@ public class StoreShopListVerticalStyleActivity extends AppToolBarActivity imple
                 public void onItemJiaClick(FoodAdapter.ViewHolder holder) {
                     String nums = holder.item_menu_content_number.getText().toString().trim();
                     if (nums.isEmpty() || nums.equals("0")) {
+                        if(foodList.get(holder.getPosition()).getStock().equals("0")){
+                            MessageUtils.showShortToast(StoreShopListVerticalStyleActivity.this,"库存不足");
+                            return;
+                        }
                         holder.item_menu_content_jian.setVisibility(View.VISIBLE);
                       //  Log.i("tag", "foodList-id--" + foodList.get(holder.getPosition()).getId());
                     //    Log.i("tag", "price---" + foodList.get(holder.getPosition()).getSellingPrice());
@@ -382,6 +454,14 @@ public class StoreShopListVerticalStyleActivity extends AppToolBarActivity imple
     public void onClick(View v) {
         Intent intent=null;
         switch (v.getId()){
+            case R.id.tv_horzital_style_search:
+                 intent=new Intent(this,StoreSearchCommodityActivity.class);
+                intent.putExtra("keyword", et_vertical_style_search.getText().toString().trim());
+                intent.putExtra("companyId", getIntent().getStringExtra("id"));
+                intent.addFlags(11);
+                startActivity(intent);
+                AnimUtil.intentSlidIn(this);
+                break;
             case R.id.m_list_submit_popup:
                 intent=new Intent(StoreShopListVerticalStyleActivity.this,StoreOrderDetailActivity.class);
                 intent.putExtra("companyId",getIntent().getStringExtra("id"));

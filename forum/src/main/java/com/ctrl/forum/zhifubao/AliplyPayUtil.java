@@ -48,6 +48,7 @@ public class AliplyPayUtil {
             switch (msg.what) {
                 case SDK_PAY_FLAG: {
                     Result resultObj = new Result((String) msg.obj);
+                    Log.i("tag","result==="+resultObj.result);
                     String resultStatus = resultObj.resultStatus;
                     //String memo = resultObj.memo;
                     //Log.d("demo","memo: " + memo);

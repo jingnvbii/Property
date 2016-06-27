@@ -147,7 +147,6 @@ public class InvitationFragment extends ToolBarFragment implements View.OnClickL
                         tv_change.startAnimation(set);
                         item += 1;
                     }
-                    break;
             }
         }
 
@@ -261,7 +260,7 @@ public class InvitationFragment extends ToolBarFragment implements View.OnClickL
 
     private void initData() {
         idao = new InvitationDao(this);
-        showProgress(true);
+      //  showProgress(true);
         idao.requestInitPostHomePage();
         idao.requestPostListByCategory(Arad.preferences.getString("memberId"), "", "0", "","", PAGE_NUM, Constant.PAGE_SIZE);
         lv_invitation_fragment_home.setMode(PullToRefreshBase.Mode.BOTH);
@@ -274,6 +273,7 @@ public class InvitationFragment extends ToolBarFragment implements View.OnClickL
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
+                        idao.requestInitPostHomePage();
                         idao.requestPostListByCategory(Arad.preferences.getString("memberId"), "", "0", "", "", PAGE_NUM, Constant.PAGE_SIZE);
                     }
                 }, 500);
@@ -286,6 +286,7 @@ public class InvitationFragment extends ToolBarFragment implements View.OnClickL
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
+                        idao.requestInitPostHomePage();
                         idao.requestPostListByCategory(Arad.preferences.getString("memberId"), "", "0", "", "", PAGE_NUM, Constant.PAGE_SIZE);
                     }
                 }, 500);

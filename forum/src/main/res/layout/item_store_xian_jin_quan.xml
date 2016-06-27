@@ -10,7 +10,6 @@
         android:layout_marginLeft="10dp"
         android:layout_marginTop="10dp"
         android:layout_height="wrap_content"
-        android:text="西门子柏海生专卖店"
         android:textColor="@color/text_gray"
         android:textSize="16sp"/>
     <TextView
@@ -18,8 +17,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
-        android:text="使用期限：2014.3.6-2.16.5.6"
         android:textColor="@color/text_gray"
+
         android:layout_below="@+id/tv_name"
         android:layout_marginBottom="10dp"
         android:layout_marginTop="15dp"
@@ -28,7 +27,6 @@
         android:id="@+id/tv_xianjinquan_money"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="$ 100"
         android:layout_marginTop="10dp"
         android:layout_alignParentRight="true"
         android:textColor="@color/text_white"
@@ -42,14 +40,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
-        android:text="限定商品"
         android:textColor="@color/text_white"
         android:textSize="12sp"/>
     <TextView
+        android:id="@+id/tv_xianjinquan_remark"
         android:layout_below="@+id/tv_xianjinquan_1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="满1200元使用"
         android:layout_marginRight="10dp"
         android:layout_alignParentRight="true"
         android:textColor="@color/text_white"

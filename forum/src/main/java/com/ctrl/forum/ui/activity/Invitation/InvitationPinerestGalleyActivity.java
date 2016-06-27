@@ -1,8 +1,10 @@
 package com.ctrl.forum.ui.activity.Invitation;
 
 import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -33,7 +35,13 @@ import com.ctrl.forum.entity.Post2;
 import com.ctrl.forum.entity.PostImage;
 import com.ctrl.forum.photo.zoom.PhotoView;
 import com.ctrl.forum.photo.zoom.ViewPagerFixed;
+import com.ctrl.forum.utils.BitmapUtils;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -104,6 +112,11 @@ public class InvitationPinerestGalleyActivity extends AppToolBarActivity impleme
                     int arg0 = (int) msg.obj;
                     tv_titile.setText((arg0 + 1) + "/" + listViews.size());
                  //   tv_image_remark.setText(post.getPostImgList().get(arg0).getRemark());
+                    break;
+
+                case 2:
+                    Bitmap bitmap = (Bitmap) msg.obj;
+                    BitmapUtils.saveImageToGallery(InvitationPinerestGalleyActivity.this,bitmap);
                     break;
             }
             super.handleMessage(msg);
@@ -412,6 +425,7 @@ public class InvitationPinerestGalleyActivity extends AppToolBarActivity impleme
             case R.id.iv_pinerest_gallery_pinglun:
                 Intent intent=new Intent(InvitationPinerestGalleyActivity.this,InvitationCommentDetaioActivity.class);
                 intent.putExtra("id",post.getId());
+                intent.putExtra("reportid",post.getReporterId());
                 startActivity(intent);
                 break;
             case R.id.iv_gallery_back:
@@ -575,7 +589,7 @@ public class InvitationPinerestGalleyActivity extends AppToolBarActivity impleme
                 listViews.get(arg1 % size).setOnLongClickListener(new View.OnLongClickListener() {
                     @Override
                     public boolean onLongClick(View v) {
-                        showDialog();
+                        showDialog(arg1);
                         return true;
                     }
                 });
@@ -586,12 +600,29 @@ public class InvitationPinerestGalleyActivity extends AppToolBarActivity impleme
             return listViews.get(arg1 % size);
         }
 
-        private void showDialog() {
+        private void showDialog(final int position) {
             AlertDialog.Builder builder = new AlertDialog.Builder(InvitationPinerestGalleyActivity.this);
             builder.setMessage("保存到本地");
-            builder.setPositiveButton("确定", null);
+            builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Bitmap mBitmap=  getHttpBitmap(listPostImage.get(position).getImg());
+                            Message message=myHandler.obtainMessage();
+                            message.obj=mBitmap;
+                            message.what=2;
+                            myHandler.sendMessage(message);
+
+                        }
+                    }).start();
+                }
+            });
             builder.show();
         }
+
+
 
 
         public boolean isViewFromObject(View arg0, Object arg1) {
@@ -599,6 +630,27 @@ public class InvitationPinerestGalleyActivity extends AppToolBarActivity impleme
         }
 
     }
+
+    public Bitmap getHttpBitmap(String url)
+    {
+        Bitmap bitmap = null;
+        try
+        {
+            URL pictureUrl = new URL(url);
+            HttpURLConnection con = (HttpURLConnection) pictureUrl.openConnection();
+            InputStream in = con.getInputStream();
+            bitmap = BitmapFactory.decodeStream(in);
+            in.close();
+        } catch (MalformedURLException e)
+        {
+            e.printStackTrace();
+        } catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+        return bitmap;
+    }
+
 
     @Override
     public void onComplete(Platform platform, int i, HashMap<String, Object> hashMap) {

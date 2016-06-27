@@ -118,7 +118,6 @@ public class InvitationDetailFromPlatAdapter extends BaseAdapter {
                 holder.tv_reply_content.setVisibility(View.VISIBLE);
                 SpannableString spannableString = FaceConversionUtil.getInstace().getExpressionString(mcontext, mPostReply2.getReplyContent());
                 holder.tv_reply_content.setText(spannableString);
-                holder.tv_reply_content.setText(mPostReply2.getReplyContent());
                 holder.tv_reply_name.setText(mPostReply2.getMemberName());
 
             } else if (mPostReply2.getContentType().equals("1")) {//回复图片
@@ -164,8 +163,8 @@ public class InvitationDetailFromPlatAdapter extends BaseAdapter {
                 SpannableString spannableString = FaceConversionUtil.getInstace().getExpressionString(mcontext, mPostReply2.getReplyContent());
                 holder.tv_reply_content.setText(spannableString);
                 holder.ll_reply_invitation_image.setVisibility(View.GONE);
-                holder.tv_reply_content.setText(mPostReply2.getReplyContent());
-                holder.tv_pinglun_content.setText(mPostReply2.getPreContent());
+                SpannableString spannableString2 = FaceConversionUtil.getInstace().getExpressionString(mcontext, mPostReply2.getPreContent());
+                holder.tv_pinglun_content.setText(spannableString2);
                 holder.tv_reply_name.setText(mPostReply2.getMemberName());
                 holder.tv_pinglun_title.setText("引用  " + mPostReply2.getReceiverName() + "  的回复");
                 holder.tv_pinglun_floor.setText(mPostReply2.getReceiverFloor() + "楼");
@@ -176,7 +175,6 @@ public class InvitationDetailFromPlatAdapter extends BaseAdapter {
                 holder.ll_reply_invitation_image.setVisibility(View.GONE);
                 SpannableString spannableString = FaceConversionUtil.getInstace().getExpressionString(mcontext, mPostReply2.getReplyContent());
                 holder.tv_reply_content.setText(spannableString);
-                holder.tv_reply_content.setText(mPostReply2.getReplyContent());
                 holder.tv_reply_name.setText(mPostReply2.getMemberName());
                 holder.tv_pinglun_content.setText("[图片]");
                 holder.tv_pinglun_title.setText("引用  " + mPostReply2.getReceiverName() + "  的回复");
@@ -188,7 +186,6 @@ public class InvitationDetailFromPlatAdapter extends BaseAdapter {
                 holder.rl_pinglun.setVisibility(View.VISIBLE);
                 SpannableString spannableString = FaceConversionUtil.getInstace().getExpressionString(mcontext, mPostReply2.getReplyContent());
                 holder.tv_reply_content.setText(spannableString);
-                holder.tv_reply_content.setText(mPostReply2.getReplyContent());
                 holder.tv_reply_name.setText(mPostReply2.getMemberName());
                 holder.tv_pinglun_content.setText("[语音]");
                 holder.tv_pinglun_title.setText("引用  " + mPostReply2.getReceiverName() + "  的回复");
@@ -215,7 +212,8 @@ public class InvitationDetailFromPlatAdapter extends BaseAdapter {
 
                 holder.tv_pinglun_content.setText(mPostReply2.getReplyContent());
                 holder.tv_pinglun_title.setText("引用  " + mPostReply2.getReceiverName() + "  的回复");
-                holder.tv_pinglun_content.setText(mPostReply2.getPreContent());
+                SpannableString spannableString2 = FaceConversionUtil.getInstace().getExpressionString(mcontext, mPostReply2.getPreContent());
+                holder.tv_pinglun_content.setText(spannableString2);
                 holder.tv_pinglun_floor.setText(mPostReply2.getReceiverFloor() + "楼");
 
             } else if (mPostReply2.getContentType().equals("1") && mPostReply2.getPreContentType().equals("1")) {//评论图片  回复 图片
@@ -273,7 +271,8 @@ public class InvitationDetailFromPlatAdapter extends BaseAdapter {
                 holder.tv_pinglun_content.setText(mPostReply2.getPreContent());
                 holder.tv_pinglun_title.setText("引用  " + mPostReply2.getReceiverName() + "  的回复");
                 holder.tv_pinglun_floor.setText(mPostReply2.getReceiverFloor() + "楼");
-                holder.tv_pinglun_content.setText(mPostReply2.getPreContent());
+                SpannableString spannableString2 = FaceConversionUtil.getInstace().getExpressionString(mcontext, mPostReply2.getPreContent());
+                holder.tv_pinglun_content.setText(spannableString2);
 
             } else if (mPostReply2.getContentType().equals("2") && mPostReply2.getPreContentType().equals("1")) {//评论 语音  回复论 图片
                 holder.tv_reply_content.setVisibility(View.GONE);

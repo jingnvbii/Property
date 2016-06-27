@@ -47,6 +47,9 @@ import com.ctrl.forum.ui.adapter.CommdityImageViewPagerAdapter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -65,7 +68,7 @@ import cn.sharesdk.wechat.moments.WechatMoments;
 * 商城商品详情 activity
 * */
 
-public class StoreCommodityDetailActivity extends AppToolBarActivity implements View.OnClickListener ,PlatformActionListener{
+public class StoreCommodityDetailActivity extends AppToolBarActivity implements View.OnClickListener, PlatformActionListener {
     @InjectView(R.id.viewPager_commdity)//图片viewpager
             ViewPager viewPager_commdity;
 
@@ -85,6 +88,10 @@ public class StoreCommodityDetailActivity extends AppToolBarActivity implements 
     TextView tv_beizhu;
     @InjectView(R.id.tv_product_number)
     TextView tv_product_number;
+    @InjectView(R.id.tv_comdity_name)
+    TextView tv_comdity_name;
+    @InjectView(R.id.tv_categrou_name)
+    TextView tv_categrou_name;
 
     @InjectView(R.id.iv_back)//返回键
             ImageView iv_back;
@@ -132,13 +139,17 @@ public class StoreCommodityDetailActivity extends AppToolBarActivity implements 
     private LayoutInflater inflater;
     private int count = 0;
 
-    private Handler  handler = new Handler(new Handler.Callback() {
+    private Handler handler = new Handler(new Handler.Callback() {
         @Override
         public boolean handleMessage(Message msg) {
             switch (msg.what) {
                 case 1:
                     int position = (int) msg.obj + 1;
                     tv_image_number.setText(position + "/" + listProductImg.size());
+                    break;
+                case 2:
+                    //设置当前页面
+                    viewPager_commdity.setCurrentItem(currentItem);
                     break;
             }
 
@@ -160,6 +171,7 @@ public class StoreCommodityDetailActivity extends AppToolBarActivity implements 
     private Button m_list_submit_popup;
     private PopupWindow popupWindow_share;
     private ShareDialog shareDialog;
+    private int currentItem;
 
 
     @Override
@@ -176,6 +188,9 @@ public class StoreCommodityDetailActivity extends AppToolBarActivity implements 
     }
 
     private void initData() {
+        if (getIntent().getStringExtra("categroyName") != null) {
+            tv_categrou_name.setText(getIntent().getStringExtra("categroyName"));
+        }
         mdao = new MallDao(this);
         showProgress(true);
         mdao.requestProduct(getIntent().getStringExtra("id"), Arad.preferences.getString("memberId"), "0");
@@ -192,7 +207,7 @@ public class StoreCommodityDetailActivity extends AppToolBarActivity implements 
         super.onRequestSuccess(requestCode);
         showProgress(false);
         if (requestCode == 666) {
-           // MessageUtils.showShortToast(this, "商品藏成功");
+            // MessageUtils.showShortToast(this, "商品藏成功");
             if (count % 2 == 0) {//奇数次点击
                 if (product.getCollectState().equals("0")) {
                     iv_zan.setImageResource(R.mipmap.shoucang_white);
@@ -216,7 +231,7 @@ public class StoreCommodityDetailActivity extends AppToolBarActivity implements 
 
         }
         if (requestCode == 4) {
-          //  MessageUtils.showShortToast(this, "获取商品成功");
+            //  MessageUtils.showShortToast(this, "获取商品成功");
             product = mdao.getProduct2();
             listProductImg = mdao.getListProductImg();
             tv_commdity_name.setText(product.getName());
@@ -227,16 +242,16 @@ public class StoreCommodityDetailActivity extends AppToolBarActivity implements 
             if (product.getDeliveryType().equals("1")) {
                 tv_beizhu.setText("第三方配送");
             }
-            if(product.getSalesVolume()==null||product.getSalesVolume().equals("")){
-                tv_product_number.setText("销量 ：0 " );
-            }else {
+            if (product.getSalesVolume() == null || product.getSalesVolume().equals("")) {
+                tv_product_number.setText("销量 ：0 ");
+            } else {
                 tv_product_number.setText("销量 ： " + product.getSalesVolume());
             }
 
-            if(product.getCollectState().equals("0")){
+            if (product.getCollectState().equals("0")) {
                 iv_zan.setImageResource(R.mipmap.zan_white);
             }
-            if(product.getCollectState().equals("1")){
+            if (product.getCollectState().equals("1")) {
                 iv_zan.setImageResource(R.mipmap.shoucang_white);
             }
 
@@ -310,6 +325,7 @@ public class StoreCommodityDetailActivity extends AppToolBarActivity implements 
     }
 
     private void initView() {
+        tv_comdity_name.setText(getIntent().getStringExtra("name"));
         mGoodsDataBaseInterface = OperateGoodsDataBase.getInstance();
         m_list_car_lay.setOnClickListener(this);
         iv_back.setOnClickListener(this);
@@ -344,6 +360,7 @@ public class StoreCommodityDetailActivity extends AppToolBarActivity implements 
             public void onPageSelected(int position) {
                 Message message = handler.obtainMessage();
                 message.obj = position;
+                currentItem = position;
                 message.what = 1;
                 handler.sendMessage(message);
             }
@@ -423,8 +440,8 @@ public class StoreCommodityDetailActivity extends AppToolBarActivity implements 
         mCartPopupWindowListViewAdapter.setList(listGoodsBean);
         lv_cart_popup.setAdapter(mCartPopupWindowListViewAdapter);
 
-        for(int i=0;i<listGoodsBean.size();i++){
-            if(listGoodsBean.get(i).getGoodsnum().equals("0")){
+        for (int i = 0; i < listGoodsBean.size(); i++) {
+            if (listGoodsBean.get(i).getGoodsnum().equals("0")) {
                 listGoodsBean.remove(i);
                 mCartPopupWindowListViewAdapter.setList(listGoodsBean);
             }
@@ -490,7 +507,7 @@ public class StoreCommodityDetailActivity extends AppToolBarActivity implements 
                     mCartPopupWindowListViewAdapter.setList(listGoodsBean);
                 }
                 setPupupAll();
-              //  setAll();
+                //  setAll();
 
             }
         });
@@ -590,11 +607,11 @@ public class StoreCommodityDetailActivity extends AppToolBarActivity implements 
                 }
                 break;
             case R.id.m_list_submit_popup:
-                    Intent intent = new Intent(this, StoreOrderDetailActivity.class);
-                    intent.putExtra("companyId", getIntent().getStringExtra("id"));
-                    startActivity(intent);
-                    AnimUtil.intentSlidIn(this);
-                    popupWindow.dismiss();
+                Intent intent = new Intent(this, StoreOrderDetailActivity.class);
+                intent.putExtra("companyId", getIntent().getStringExtra("id"));
+                startActivity(intent);
+                AnimUtil.intentSlidIn(this);
+                popupWindow.dismiss();
                 break;
             case R.id.iv_back:
                 setResult(112);
@@ -647,7 +664,7 @@ public class StoreCommodityDetailActivity extends AppToolBarActivity implements 
 
                 break;
             case R.id.iv_share:
-              //  showSharePopuwindow(iv_share);
+                //  showSharePopuwindow(iv_share);
                 shareDialog = new ShareDialog(this);
                 shareDialog.setCancelButtonOnClickListener(new View.OnClickListener() {
                     @Override
@@ -810,7 +827,7 @@ public class StoreCommodityDetailActivity extends AppToolBarActivity implements 
                 break;
             case R.id.iv_commodity_detail_add://加号
                 String nums2 = tv_commodity_detail_num.getText().toString().trim();
-                if(product.getStock()!=null) {
+                if (product.getStock() != null) {
                     if ((Integer.parseInt(nums2) + 1) > Integer.parseInt(product.getStock())) {
                         MessageUtils.showShortToast(StoreCommodityDetailActivity.this, "库存不足");
                         return;
@@ -884,7 +901,6 @@ public class StoreCommodityDetailActivity extends AppToolBarActivity implements 
     }
 
 
-
     /**
      * 动画结束后，更新所有数量和所有价格
      */
@@ -901,17 +917,17 @@ public class StoreCommodityDetailActivity extends AppToolBarActivity implements 
             mhandler.sendEmptyMessage(1);
         } else if (platform.getName().equals(Wechat.NAME)) {//判断成功的平台是不是微信
             mhandler.sendEmptyMessage(2);
-        }else if(platform.getName().equals(SinaWeibo.NAME)){//判断成功的平台是不是新浪微博
+        } else if (platform.getName().equals(SinaWeibo.NAME)) {//判断成功的平台是不是新浪微博
             mhandler.sendEmptyMessage(3);
-        }else if(platform.getName().equals(WechatMoments.NAME)){//判断成功平台是不是微信朋友圈
+        } else if (platform.getName().equals(WechatMoments.NAME)) {//判断成功平台是不是微信朋友圈
             mhandler.sendEmptyMessage(4);
-        }else if(platform.getName().equals(TencentWeibo.NAME)){//判断成功平台是不是腾讯微博
+        } else if (platform.getName().equals(TencentWeibo.NAME)) {//判断成功平台是不是腾讯微博
             mhandler.sendEmptyMessage(5);
-        }else if(platform.getName().equals(Email.NAME)){//判断成功平台是不是邮件
+        } else if (platform.getName().equals(Email.NAME)) {//判断成功平台是不是邮件
             mhandler.sendEmptyMessage(6);
-        }else if(platform.getName().equals(ShortMessage.NAME)){//判断成功平台是不是短信
+        } else if (platform.getName().equals(ShortMessage.NAME)) {//判断成功平台是不是短信
             mhandler.sendEmptyMessage(7);
-        }else {
+        } else {
             //
         }
 
@@ -923,13 +939,13 @@ public class StoreCommodityDetailActivity extends AppToolBarActivity implements 
         Message msg = new Message();
         msg.what = 8;
         msg.obj = throwable.getMessage();
-        handler.sendMessage(msg);
+        mhandler.sendMessage(msg);
 
     }
 
     @Override
     public void onCancel(Platform platform, int i) {
-        handler.sendEmptyMessage(9);
+        mhandler.sendEmptyMessage(9);
     }
 
     Handler mhandler = new Handler() {
@@ -972,6 +988,49 @@ public class StoreCommodityDetailActivity extends AppToolBarActivity implements 
         }
 
     };
+
+    private ScheduledExecutorService scheduledExecutorService;
+    @Override
+    protected void onStart() {
+        // TODO Auto-generated method stub
+        super.onStart();
+
+        scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
+
+        //每隔2秒钟切换一张图片
+        scheduledExecutorService.scheduleWithFixedDelay(new ViewPagerTask(), 5, 5, TimeUnit.SECONDS);
+    }
+
+    //切换图片
+    private class ViewPagerTask implements Runnable {
+
+        @Override
+        public void run() {
+            // TODO Auto-generated method stub
+            currentItem = (currentItem + 1) % listProductImg.size();
+            //更新界面
+                        handler.sendEmptyMessage(2);
+          //  handler.obtainMessage().sendToTarget();
+        }
+
+    }
+
+  /*  private Handler handler = new Handler() {
+
+        @Override
+        public void handleMessage(Message msg) {
+            // TODO Auto-generated method stub
+            //设置当前页面
+            viewPager_commdity.setCurrentItem(currentItem);
+        }
+
+    };*/
+
+    @Override
+    protected void onStop() {
+        // TODO Auto-generated method stub
+        super.onStop();
+    }
 
 
 }

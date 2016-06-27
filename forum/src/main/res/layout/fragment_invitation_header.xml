@@ -44,7 +44,6 @@
 
     <FrameLayout
         android:id="@+id/framelayout"
-        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="100dp">
     </FrameLayout>
@@ -84,7 +83,6 @@
         android:background="@color/line_gray" />
     <LinearLayout
         android:id="@+id/ll"
-        android:visibility="gone"
         android:layout_width="wrap_content"
         android:layout_centerInParent="true"
         android:layout_marginTop="10dp"

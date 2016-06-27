@@ -6,23 +6,32 @@
     android:layout_height="match_parent">
 
     <TextView
+        android:id="@+id/tv_yellow"
+        android:layout_width="6dp"
+        android:layout_height="6dp"
+        android:layout_marginRight="5dp"
+        android:layout_centerVertical="true"
+        android:background="#ffbb5a"/>
+
+    <TextView
         android:id="@+id/tv_item_order_detail_name"
-        android:text="宫保鸡丁"
         android:layout_width="wrap_content"
+        android:layout_toRightOf="@+id/tv_yellow"
+        android:layout_centerVertical="true"
         android:layout_height="wrap_content"
         />
     <TextView
         android:id="@+id/tv_item_order_detail_num"
-        android:text="*3"
-        android:layout_centerHorizontal="true"
         android:layout_width="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
         android:layout_height="wrap_content"
         />
     <TextView
         android:id="@+id/tv_item_order_detail_price"
-        android:text="$15"
         android:layout_alignParentRight="true"
         android:layout_width="wrap_content"
+        android:layout_centerVertical="true"
         android:layout_height="wrap_content"
         />
 

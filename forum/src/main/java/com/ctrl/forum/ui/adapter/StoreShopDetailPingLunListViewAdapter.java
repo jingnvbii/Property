@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.RatingBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.ctrl.forum.R;
@@ -64,8 +65,14 @@ public class StoreShopDetailPingLunListViewAdapter extends BaseAdapter{
         holder.tv_ping_name.setText(mShopReply.getReportName());
         holder.id_pingjia_content.setText(mShopReply.getContent());
         holder.ratingBar_pinglun.setNumStars(Integer.parseInt(mShopReply.getLevel()));
-        holder.tv_pinlun_time.setText(TimeUtils.dateTime(mShopReply.getCreateTime()));
-        holder.tv_huifu_content.setText(mShopReply.getKfReplay());
+        holder.tv_pinlun_time.setText(TimeUtils.date(Long.parseLong(mShopReply.getCreateTime())));
+        if(mShopReply.getKfReplay()!=null) {
+            holder.rl_kf.setVisibility(View.VISIBLE);
+            holder.tv_huifu_content.setText(mShopReply.getKfReplay());
+        }else {
+            holder.rl_kf.setVisibility(View.GONE);
+        }
+        holder.ratingBar_pinglun.setNumStars(5);
         if(mShopReply.getLevel()!=null){
             holder.ratingBar_pinglun.setRating(Float.parseFloat(mShopReply.getLevel())/2);
         }
@@ -86,6 +93,8 @@ public class StoreShopDetailPingLunListViewAdapter extends BaseAdapter{
                 TextView tv_huifu_time;
         @InjectView(R.id.ratingBar_pinglun)//评价等级
                 RatingBar ratingBar_pinglun;
+        @InjectView(R.id.rl_kf)//客服回复布局
+        RelativeLayout rl_kf;
         ViewHolder(View view) {
             ButterKnife.inject(this, view);
         }

@@ -338,6 +338,10 @@ public class InvitationDetailFromPlatformActivity extends AppToolBarActivity imp
     @Override
     public void onRequestSuccess(int requestCode) {
         super.onRequestSuccess(requestCode);
+        if(requestCode==16){
+            MessageUtils.showShortToast(this, "帖子收藏成功");
+            popupWindow.dismiss();
+        }
         if (requestCode == 888) {
             showProgress(false);
          //   MessageUtils.showShortToast(this, "图片上传成功");
@@ -465,12 +469,12 @@ public class InvitationDetailFromPlatformActivity extends AppToolBarActivity imp
           //  MessageUtils.showShortToast(this, "获取帖子详情成功ghfgh");
             post = idao.getPost2();
             user = idao.getUser();
+            tv_name.setText(post.getContactName());
+            tv_address.setText(post.getContactAddress());
+            tv_tel.setText(post.getContactPhone());
+            tv_introduction.setText(post.getTitle());
             if (user != null) {
                 Arad.imageLoader.load(user.getImgUrl()).placeholder(R.mipmap.round_img).into(title_image);
-                tv_name.setText(user.getNickName());
-                tv_address.setText(idao.getUser().getAddress());
-                tv_tel.setText(idao.getUser().getMobile());
-
                 String levlel = idao.getUser().getMemberLevel();
                 if (levlel != null) {
                     switch (levlel) {
@@ -609,7 +613,8 @@ public class InvitationDetailFromPlatformActivity extends AppToolBarActivity imp
                 startActivity(intent);
                 AnimUtil.intentSlidIn(this);
                 break;
-            case R.id.tv_zhikanlouzhu://只看楼主
+            case R.id.tv_zhikanlouzhu://收藏
+                idao.requestCollectPost(Arad.preferences.getString("memberId"),getIntent().getStringExtra("id"),"1");
                 break;
             case R.id.tv_daoxu://倒叙查看
                 if (listPostReply2 != null) {

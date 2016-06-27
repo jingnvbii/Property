@@ -154,6 +154,10 @@ public class StoreEditAddressActivity extends AppToolBarActivity implements View
             MessageUtils.showShortToast(this,"基本地址为空");
             return false;
         }
+        if(et_edit_phoneNumber.getText().toString().trim().length()!=11){
+            MessageUtils.showShortToast(this,"手机号格式不正确");
+            return false;
+        }
         return true;
     }
 

@@ -53,21 +53,41 @@
            />
    </RelativeLayout>
 
-    <EditText
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="请输入要搜索的内容"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:drawableLeft="@mipmap/search_style1_gray"
-        android:drawablePadding="5dp"
-        android:paddingLeft="10dp"
-        android:layout_marginTop="5dp"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
-        android:textSize="14sp"
-        android:background="@drawable/edit_white_shap"
-        />
+        android:layout_height="wrap_content">
+        <EditText
+            android:id="@+id/et_vertical_style_search"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:hint="请输入要搜索的内容"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:drawableLeft="@mipmap/search_style1_gray"
+            android:drawablePadding="5dp"
+            android:paddingLeft="10dp"
+            android:layout_marginTop="5dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:textSize="14sp"
+            android:background="@drawable/edit_white_shap"
+            />
+
+        <TextView
+            android:id="@+id/tv_vertical_style_search"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginTop="5dp"
+            android:visibility="gone"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:paddingRight="10dp"
+            android:layout_marginRight="10dp"
+            android:text="搜索"/>
+    </LinearLayout>
     
     <RelativeLayout
         android:padding="10dp"

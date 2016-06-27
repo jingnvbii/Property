@@ -198,7 +198,7 @@ public class StroeFragment extends ToolBarFragment implements View.OnClickListen
                 }
                 //获取反向地理编码结果
                 Log.i("tag", "地理位置--" + result.getAddress());
-                //         tv_toolbar.setText(result.getAddress());
+                tv_toolbar.setText(result.getAddress());
                 latitude1 = result.getLocation().latitude;
                 longitude1 = result.getLocation().longitude;
 
@@ -255,6 +255,7 @@ public class StroeFragment extends ToolBarFragment implements View.OnClickListen
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
+                        mdao.requestInitMall();
                         if(latitude_now!=null&&longitude_now!=null){
                             mdao.requestInitMallRecommendCompany(latitude_now, longitude_now,
                                     String.valueOf(Constant.PAGE_SIZE), String.valueOf(PAGE_NUM));
@@ -284,6 +285,7 @@ public class StroeFragment extends ToolBarFragment implements View.OnClickListen
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
+                        mdao.requestInitMall();
                         if(latitude_now!=null&&longitude_now!=null){
                             mdao.requestInitMallRecommendCompany(latitude_now, longitude_now,
                                     String.valueOf(Constant.PAGE_SIZE), String.valueOf(PAGE_NUM));
@@ -421,6 +423,7 @@ public class StroeFragment extends ToolBarFragment implements View.OnClickListen
             viewpagerAdapter = new MyViewPagerAdapter(getActivity(), map);
             myViewPager.setAdapter(viewpagerAdapter);
             myViewPager.setOnPageChangeListener(new MyListener());
+
         }
 
         if (requestCode == 1) {
@@ -445,12 +448,14 @@ public class StroeFragment extends ToolBarFragment implements View.OnClickListen
                                         int arg2, long arg3) {
                     // TODO Auto-generated method stub
                   //  MessageUtils.showShortToast(getActivity(),"fdfsdfsd");
+                    Log.i("tag","name222=="+listMallKind.get(arg2).getKindName());
                     if(latitude_now!=null&&longitude_now!=null){
                         Intent intent = new Intent(getActivity(), StoreScreenActivity.class);
                         intent.putExtra("channelId", listMallKind.get(arg2).getId());
                         intent.putExtra("latitude", latitude_now);
                         intent.putExtra("longitude", longitude_now);
                         intent.putExtra("address", address_now);
+                        intent.putExtra("name",  listMallKind.get(arg2).getKindName());
                         getActivity().startActivity(intent);
                         AnimUtil.intentSlidIn(getActivity());
                     }else if(latitude_address!=null&&longitude_address!=null){
@@ -459,6 +464,7 @@ public class StroeFragment extends ToolBarFragment implements View.OnClickListen
                         intent.putExtra("latitude", latitude_address);
                         intent.putExtra("longitude", longitude_address);
                         intent.putExtra("address", address_address);
+                        intent.putExtra("name",  listMallKind.get(arg2).getKindName());
                         getActivity().startActivity(intent);
                         AnimUtil.intentSlidIn(getActivity());
                     }else if(latitude_map!=null&&longitude_map!=null){
@@ -467,6 +473,7 @@ public class StroeFragment extends ToolBarFragment implements View.OnClickListen
                         intent.putExtra("latitude", latitude_map);
                         intent.putExtra("longitude", longitude_map);
                         intent.putExtra("address", address_map);
+                        intent.putExtra("name",  listMallKind.get(arg2).getKindName());
                         getActivity().startActivity(intent);
                         AnimUtil.intentSlidIn(getActivity());
                     }else if(latitude_search!=null&&longitude_search!=null){
@@ -475,6 +482,7 @@ public class StroeFragment extends ToolBarFragment implements View.OnClickListen
                         intent.putExtra("latitude", latitude_search);
                         intent.putExtra("longitude", longitude_search);
                         intent.putExtra("address", address_search);
+                        intent.putExtra("name",  listMallKind.get(arg2).getKindName());
                         getActivity().startActivity(intent);
                         AnimUtil.intentSlidIn(getActivity());
                     }else {
@@ -483,6 +491,7 @@ public class StroeFragment extends ToolBarFragment implements View.OnClickListen
                         intent.putExtra("latitude", latitude);
                         intent.putExtra("longitude", longitude);
                         intent.putExtra("address", tv_toolbar.getText().toString().trim());
+                        intent.putExtra("name",  listMallKind.get(arg2).getKindName());
                         getActivity().startActivity(intent);
                         AnimUtil.intentSlidIn(getActivity());
                     }
@@ -566,10 +575,12 @@ public class StroeFragment extends ToolBarFragment implements View.OnClickListen
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if(latitude!=null&&longitude!=null) {
+
                     Intent intent = new Intent(getActivity(), StoreScreenActivity.class);
                     intent.putExtra("channelId", listMallKind.get(position).getId());
                     intent.putExtra("latitude", latitude);
                     intent.putExtra("longitude", longitude);
+                    intent.putExtra("name", listMallKind.get(position).getKindName());
                     getActivity().startActivity(intent);
                     AnimUtil.intentSlidIn(getActivity());
                 }

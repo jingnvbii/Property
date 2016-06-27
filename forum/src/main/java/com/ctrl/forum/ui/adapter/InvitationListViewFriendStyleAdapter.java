@@ -3,6 +3,8 @@ package com.ctrl.forum.ui.adapter;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Bundle;
+import android.text.SpannableString;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -16,16 +18,18 @@ import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.beanu.arad.Arad;
 import com.beanu.arad.utils.AnimUtil;
 import com.ctrl.forum.R;
 import com.ctrl.forum.customview.GridViewForScrollView;
+import com.ctrl.forum.customview.ImageZoomActivity;
 import com.ctrl.forum.customview.ListViewForScrollView;
+import com.ctrl.forum.customview.RoundImageView;
 import com.ctrl.forum.customview.ShareDialog;
 import com.ctrl.forum.entity.Post;
 import com.ctrl.forum.entity.PostImage;
+import com.ctrl.forum.face.FaceConversionUtil;
 import com.ctrl.forum.ui.activity.Invitation.InvitationCommentDetaioActivity;
 import com.ctrl.forum.ui.activity.Invitation.InvitationPullDownActivity;
 import com.ctrl.forum.utils.SysUtils;
@@ -64,6 +68,7 @@ public class InvitationListViewFriendStyleAdapter extends BaseAdapter {
     private PopupWindow popupWindow_share;
     private ShareDialog shareDialog;
     private InvitationPullDownActivity activity;
+    private OnItemClickListener mOnItemClickListener;
 
 
     public InvitationListViewFriendStyleAdapter(Activity context) {
@@ -74,6 +79,15 @@ public class InvitationListViewFriendStyleAdapter extends BaseAdapter {
     public void setList(List<Post> list) {
         this.mPostList = list;
         notifyDataSetChanged();
+    }
+
+    //定义接口
+    public interface OnItemClickListener{
+        void onItemZanClick(ViewHolder v);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener){
+        this.mOnItemClickListener = listener ;
     }
 
 
@@ -144,7 +158,8 @@ public class InvitationListViewFriendStyleAdapter extends BaseAdapter {
                 List<String> listStr = new ArrayList<>();
                 for (int i = 0; i < post.getPostReplyList().size(); i++) {
                     if (post.getPostReplyList().get(i).getContentType().equals("0")) {
-                        listStr.add(post.getPostReplyList().get(i).getMemberName()+":   " + post.getPostReplyList().get(i).getReplyContent());
+                        SpannableString spannableString2 = FaceConversionUtil.getInstace().getExpressionString(mcontext, post.getPostReplyList().get(i).getReplyContent());
+                        listStr.add(post.getPostReplyList().get(i).getMemberName()+":   " + spannableString2);
                     }
                     if (post.getPostReplyList().get(i).getContentType().equals("1")) {
                         listStr.add(post.getPostReplyList().get(i).getMemberName()+":   " + "    [图片]");
@@ -161,7 +176,8 @@ public class InvitationListViewFriendStyleAdapter extends BaseAdapter {
                 List<String> listStr = new ArrayList<>();
                 for (int i = 0; i < 3; i++) {
                     if (post.getPostReplyList().get(i).getContentType().equals("0")) {
-                        listStr.add(post.getPostReplyList().get(i).getMemberName() +":   "+ post.getPostReplyList().get(i).getReplyContent());
+                        SpannableString spannableString2 = FaceConversionUtil.getInstace().getExpressionString(mcontext, post.getPostReplyList().get(i).getReplyContent());
+                        listStr.add(post.getPostReplyList().get(i).getMemberName()+":   " + spannableString2);
                     }
                     if (post.getPostReplyList().get(i).getContentType().equals("1")) {
                         listStr.add(post.getPostReplyList().get(i).getMemberName()+":   " + "    [图片]");
@@ -344,9 +360,31 @@ public class InvitationListViewFriendStyleAdapter extends BaseAdapter {
             }
         });
 
+        if(post.getZambiastate()!=null) {
 
-        
+            if (post.getZambiastate().equals("0")) {
+                holder.iv_friend_style_zan_num.setImageResource(R.mipmap.zan_blue);
+            }
+            if (post.getZambiastate().equals("1")) {
+                holder.iv_friend_style_zan_num.setImageResource(R.mipmap.zan_blue_shixin);
+            }
+        }
+        holder.setPosition(position);
+        setOnListtener(holder);
         return convertView;
+    }
+
+    //触发
+    protected void setOnListtener(final ViewHolder holder){
+        if(mOnItemClickListener != null){
+
+            holder.rl_friend_style_zan.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mOnItemClickListener.onItemZanClick(holder);
+                }
+            });
+        }
     }
 
     private void showShareDialog(View v) {
@@ -473,9 +511,9 @@ public class InvitationListViewFriendStyleAdapter extends BaseAdapter {
 
     }
 
-    static class ViewHolder {
+  public   static class ViewHolder {
         @InjectView(R.id.iv_friend_style_title_photo)//头像
-                ImageView iv_friend_style_title_photo;
+                RoundImageView iv_friend_style_title_photo;
         @InjectView(R.id.tv_friend_style_name)//发帖人
                 TextView tv_friend_style_name;
         @InjectView(R.id.tv_friend_style_time)//时间
@@ -492,8 +530,8 @@ public class InvitationListViewFriendStyleAdapter extends BaseAdapter {
                 TextView tv_friend_style_shengyu_pinglun;
         @InjectView(R.id.iv_friend_style_levlel)//用户等级
                 ImageView iv_friend_style_levlel;
-      //  @InjectView(R.id.rl_friend_style_zan)//点赞
-               // RelativeLayout rl_friend_style_zan;
+       @InjectView(R.id.rl_friend_style_zan)//点赞
+             public    RelativeLayout rl_friend_style_zan;
         @InjectView(R.id.rl_friend_style_pinglun)//评论
                 RelativeLayout rl_friend_style_pinglun;
         @InjectView(R.id.rl_friend_style_share)//分享
@@ -506,6 +544,16 @@ public class InvitationListViewFriendStyleAdapter extends BaseAdapter {
                 RelativeLayout rl4;
         @InjectView(R.id.gv_images)//图片网格容器
         GridViewForScrollView gv_images;
+        @InjectView(R.id.iv_friend_style_zan_num)//点赞
+            public  ImageView iv_friend_style_zan_num;
+        private int position;
+
+        public void setPosition(int position){
+            this.position=position;
+        }
+        public int getPosition(){
+            return position;
+        }
 
         ViewHolder(View view) {
             ButterKnife.inject(this, view);
@@ -531,6 +579,11 @@ public class InvitationListViewFriendStyleAdapter extends BaseAdapter {
                 newGridView.setNumColumns(3);
                 break;
         }
+
+        final ArrayList<String>imageUrl=new ArrayList<>();
+        for(int i=0;i<imgList.size();i++){
+            imageUrl.add(imgList.get(i).getImg());
+        }
         RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(w, RelativeLayout.LayoutParams.WRAP_CONTENT);
         newGridView.setLayoutParams(lp);
         friendInfoImgsAdapter = new FriendGridAdapter(mcontext, imgList);
@@ -538,7 +591,13 @@ public class InvitationListViewFriendStyleAdapter extends BaseAdapter {
         newGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-                Toast.makeText(mcontext, "点击了第" + (arg2 + 1) + "张图片", Toast.LENGTH_LONG).show();
+                Intent intent=new Intent(mcontext, ImageZoomActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("imageList",imageUrl);
+                bundle.putInt("position",arg2);
+                intent.putExtras(bundle);
+                mcontext.startActivity(intent);
+                AnimUtil.intentSlidIn(mcontext);
             }
         });
     }

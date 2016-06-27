@@ -29,6 +29,25 @@ public class Post {
     private List<PostImage> postImgList;//图片列表
     private List<PostReply> postReplyList;//回复列表
 
+    private String zambiastate;//是否被当前用户点赞
+    private String collectstate;//是否被当前用户收藏
+
+    public String getZambiastate() {
+        return zambiastate;
+    }
+
+    public void setZambiastate(String zambiastate) {
+        this.zambiastate = zambiastate;
+    }
+
+    public String getCollectstate() {
+        return collectstate;
+    }
+
+    public void setCollectstate(String collectstate) {
+        this.collectstate = collectstate;
+    }
+
     public int getShareNum() {
         return shareNum;
     }

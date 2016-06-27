@@ -109,6 +109,7 @@ public class InvitationPullDownActivity extends AppToolBarActivity implements Vi
     private int mChildrenPosition;
 
     public static boolean isFromSelcet=false;
+    public static boolean isFromSearch=false;
     private String keyword;
 
     @Override
@@ -206,7 +207,7 @@ public class InvitationPullDownActivity extends AppToolBarActivity implements Vi
             myRadioGroup.addView(view);
             styleType = listCategory.get(i).getStyleType();
             if (styleType.equals("3")) {
-                invitationPullDownHaveThirdKindPinterestStyleFragment = InvitationPullDownHaveThirdKindPinterestStyleFragment.newInstance(InvitationPullDownActivity.this,listCategory.get(i).getId(),null);
+                invitationPullDownHaveThirdKindPinterestStyleFragment = InvitationPullDownHaveThirdKindPinterestStyleFragment.newInstance(InvitationPullDownActivity.this,listCategory.get(i).getId(),null,null);
                 fragments.add(invitationPullDownHaveThirdKindPinterestStyleFragment);
             } else {
                invitationPullDownHaveThirdKindFragment = InvitationPullDownHaveThirdKindFragment.newInstance(listCategory.get(i).getId(), listCategory.get(i).getStyleType(),null,null);
@@ -242,7 +243,7 @@ public class InvitationPullDownActivity extends AppToolBarActivity implements Vi
                     for (int i = 0; i < listCategory.size(); i++) {
                         styleType = listCategory.get(i).getStyleType();
                         if (styleType.equals("3")) {
-                            list.add(InvitationPullDownHaveThirdKindPinterestStyleFragment.newInstance(InvitationPullDownActivity.this, listCategory.get(i).getId(), thirdKindId));
+                            list.add(InvitationPullDownHaveThirdKindPinterestStyleFragment.newInstance(InvitationPullDownActivity.this, listCategory.get(i).getId(), thirdKindId,keyword1));
                         } else {
                             list.add(InvitationPullDownHaveThirdKindFragment.newInstance(listCategory.get(i).getId(), listCategory.get(i).getStyleType(), thirdKindId, keyword1));
                         }
@@ -251,7 +252,7 @@ public class InvitationPullDownActivity extends AppToolBarActivity implements Vi
                     for (int i = 0; i < listCategory2.size(); i++) {
                         styleType = listCategory2.get(i).getStyleType();
                         if (styleType.equals("3")) {
-                            list.add(InvitationPullDownHaveThirdKindPinterestStyleFragment.newInstance(InvitationPullDownActivity.this, listCategory2.get(i).getId(), thirdKindId));
+                            list.add(InvitationPullDownHaveThirdKindPinterestStyleFragment.newInstance(InvitationPullDownActivity.this, listCategory2.get(i).getId(), thirdKindId,keyword1));
                         } else {
                             list.add(InvitationPullDownHaveThirdKindFragment.newInstance(listCategory2.get(i).getId(), listCategory2.get(i).getStyleType(), thirdKindId, keyword1));
                         }

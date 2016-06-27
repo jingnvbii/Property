@@ -122,6 +122,8 @@ public class StoreShopListHorzitalStyleFragment extends ToolBarFragment implemen
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getActivity(), StoreCommodityDetailActivity.class);
                 intent.putExtra("id", aroundCompanies.get(pos).getProductList().get(position).getId());
+                intent.putExtra("name", aroundCompanies.get(pos).getProductList().get(position).getName());
+                intent.putExtra("categroyName", aroundCompanies.get(pos).getName());
                 startActivityForResult(intent, 111);
                 AnimUtil.intentSlidIn(getActivity());
             }
@@ -132,6 +134,10 @@ public class StoreShopListHorzitalStyleFragment extends ToolBarFragment implemen
             public void onItemJiaClick(StoreShopListHorzitalStyleGridViewAdapter.ViewHolder holder) {
                 String nums = holder.tv_numbers.getText().toString().trim();
                 if (nums.isEmpty() || nums.equals("0")) {
+                    if (aroundCompanies.get(pos).getProductList().get(holder.getPosition()).getStock().equals("0")) {
+                        MessageUtils.showShortToast(getActivity(), "库存不足");
+                        return;
+                    }
                     holder.iv_subtract.setVisibility(View.VISIBLE);
                     holder.tv_numbers.setText(mGoodsDataBaseInterface.saveGoodsNumber(getActivity(), SELECTPOSITION,
                             aroundCompanies.get(pos).getProductList().get(holder.getPosition()).getId(), "1",
@@ -142,7 +148,7 @@ public class StoreShopListHorzitalStyleFragment extends ToolBarFragment implemen
                 }// 点击加号之前有数据的时候
                 else {
                     if (aroundCompanies.get(pos).getProductList().get(holder.getPosition()).getStock() != null) {
-                        if ((Integer.parseInt(nums) + 1) > Integer.parseInt(aroundCompanies.get(pos).getProductList().get(holder.getPosition()).getStock())) {
+                        if ((Integer.parseInt(nums)+1) > Integer.parseInt(aroundCompanies.get(pos).getProductList().get(holder.getPosition()).getStock())) {
                             MessageUtils.showShortToast(getActivity(), "库存不足");
                             return;
                         }

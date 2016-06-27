@@ -11,6 +11,15 @@ public class CashCoupons {
     private String remark;//现金券备注
     private String name;//现金券名称
     private String useType;//现金券使用类型
+    private String amount;//现金券使用金额
+
+    public String getAmount() {
+        return amount;
+    }
+
+    public void setAmount(String amount) {
+        this.amount = amount;
+    }
 
     public String getName() {
         return name;

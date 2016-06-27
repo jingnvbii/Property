@@ -50,6 +50,11 @@ public class StoreScreenActivity extends AppToolBarActivity implements View.OnCl
             RelativeLayout rl_all;
     @InjectView(R.id.rl_sort)//排序
             RelativeLayout rl_sort;
+    @InjectView(R.id.tv_all)
+    TextView tv_all;
+    @InjectView(R.id.tv_sort)
+    TextView tv_sort;
+
     private StoreFragmentAdapter listviewAdapter;
     private List<Merchant> list;
     private PopupWindow popupWindow;
@@ -69,6 +74,8 @@ public class StoreScreenActivity extends AppToolBarActivity implements View.OnCl
     private int bol = 1;
     private String companyKindId=null;
     private String address;
+    private String name;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,6 +97,12 @@ public class StoreScreenActivity extends AppToolBarActivity implements View.OnCl
         latitude = getIntent().getStringExtra("latitude");
         longitude = getIntent().getStringExtra("longitude");
         address = getIntent().getStringExtra("address");
+        name = getIntent().getStringExtra("name");
+        if(name!=null) {
+            tv_all.setText(name);
+        }else {
+            tv_all.setText("全部");
+        }
         if (getIntent().getFlags() == 303) {
             mdao.requestCompanyByKind("0", getIntent().getStringExtra("latitude"), getIntent().getStringExtra("longitude"), "", String.valueOf(PAGE_NEM), String.valueOf(Constant.PAGE_SIZE));
         } else {
@@ -118,7 +131,7 @@ public class StoreScreenActivity extends AppToolBarActivity implements View.OnCl
                     AnimUtil.intentSlidIn(StoreScreenActivity.this);
                 }
                 if (listMall.get(position - 1).getCompanyStyle().equals("1")) {
-                    Intent intent = new Intent(StoreScreenActivity.this, StoreShopListVerticalStyleActivity.class);
+                    Intent intent = new Intent(StoreScreenActivity.this, StoreShopListHorzitalStyleActivity.class);
                     intent.putExtra("id", listMall.get(position - 1).getId());
                     intent.putExtra("url", listMall.get(position - 1).getImg());
                     intent.putExtra("name", listMall.get(position - 1).getName());
@@ -204,12 +217,14 @@ public class StoreScreenActivity extends AppToolBarActivity implements View.OnCl
         if (requestCode == 777) {
             //  MessageUtils.showShortToast(this, "获取全部分类列表成功");
             listKind = kdao.getListKind();
+            Kind kind=new Kind();
+            kind.setKindName("全部");
+            kind.setId("");
+            listKind.add(0,kind);
             listKindStr = new ArrayList<String>();
             for (int i = 0; i < listKind.size(); i++) {
                 listKindStr.add(listKind.get(i).getKindName());
             }
-
-
         }
     }
 
@@ -243,11 +258,28 @@ public class StoreScreenActivity extends AppToolBarActivity implements View.OnCl
                     if (listMall != null) {
                         listMall.clear();
                     }
-                    companyKindId = listKind.get(position).getId();
-                    mdao.requestCompanyByKind("0", latitude, longitude, listKind.get(position).getId(), String.valueOf(PAGE_NEM), String.valueOf(Constant.PAGE_SIZE));
+                    tv_all.setText(listKindStr.get(position));
+                        companyKindId = listKind.get(position).getId();
+                        mdao.requestCompanyByKind("0", latitude, longitude, listKind.get(position).getId(), String.valueOf(PAGE_NEM), String.valueOf(Constant.PAGE_SIZE));
+
                 } else {
+
                     if (listMall != null) {
                         listMall.clear();
+                    }
+                    switch (position){
+                        case 0:
+                            tv_sort.setText("默认排序");
+                            break;
+                        case 1:
+                            tv_sort.setText("评价最高");
+                            break;
+                        case 2:
+                            tv_sort.setText("销量最高");
+                            break;
+                        case 3:
+                            tv_sort.setText("距离最近");
+                            break;
                     }
                     if (companyKindId==null&&channelId==null) {
                         switch (position) {

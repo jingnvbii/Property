@@ -78,13 +78,15 @@ public class InvitationPullDownHaveThirdKindPinterestStyleFragment extends ToolB
     private TextView tv_search;
     private boolean isFirst=true;
     private List<Banner> listBanner;
+    private String keyword;
 
 
-    public static InvitationPullDownHaveThirdKindPinterestStyleFragment newInstance(Context context,String id,String thirdKindId) {
+    public static InvitationPullDownHaveThirdKindPinterestStyleFragment newInstance(Context context,String id,String thirdKindId,String keyword) {
         InvitationPullDownHaveThirdKindPinterestStyleFragment fragment = new InvitationPullDownHaveThirdKindPinterestStyleFragment();
         fragment.id = id;
         mContext=context;
         fragment.thirdKindId = thirdKindId;
+        fragment.keyword = keyword;
         return fragment;
     }
 
@@ -105,14 +107,27 @@ public class InvitationPullDownHaveThirdKindPinterestStyleFragment extends ToolB
         if(!InvitationPullDownActivity.isFromSelcet){
             thirdKindId=null;
         }
+        if(!InvitationPullDownActivity.isFromSearch){
+            keyword=null;
+            thirdKindId=null;
+        }
         if (isVisibleToUser&&bol==1 ) {
+            idao.requestPostRotaingBanner("B_POST_MIDDLE");
            if(listCategroy3!=null)listCategroy3.clear();
-            if(thirdKindId==null) {
-                 idao.requesPostCategory(id, "2", "0");
-                idao.requestPostListByCategory(Arad.preferences.getString("memberId"), id, "0", "", "",PAGE_NUM, Constant.PAGE_SIZE);
-            }else {
-               idao.requesPostCategory(id, "2", "0");
+            if(keyword!=null){
+                if(listPost!=null){
+                    listPost.clear();
+                }
+                idao.requesPostCategory(id, "2", "0");
+                idao.requestPostListByCategory(Arad.preferences.getString("memberId"), thirdKindId, "0", keyword,"", PAGE_NUM, Constant.PAGE_SIZE);
+            }else if(thirdKindId==null) {
+                idao.requesPostCategory(id, "2", "0");
+                idao.requestPostListByCategory(Arad.preferences.getString("memberId"), id, "0", "","", PAGE_NUM, Constant.PAGE_SIZE);
+            }else if(thirdKindId!=null) {
+                idao.requesPostCategory(id, "2", "0");
                 idao.requestPostListByCategory(Arad.preferences.getString("memberId"), thirdKindId, "0", "","", PAGE_NUM, Constant.PAGE_SIZE);
+            }else {
+                //
             }
        }
 
@@ -169,7 +184,20 @@ public class InvitationPullDownHaveThirdKindPinterestStyleFragment extends ToolB
                     listPost.clear();
                 }
                 bol = 1;
-                idao.requestPostListByCategory(Arad.preferences.getString("memberId"), listCategroy3.get(position).getId(), "0", "","", PAGE_NUM, Constant.PAGE_SIZE);
+                Position = position;
+                thirdKindId=listCategroy3.get(position).getId();
+                idao.requestPostListByCategory(Arad.preferences.getString("memberId"), thirdKindId, "0", "","", PAGE_NUM, Constant.PAGE_SIZE);
+            }
+        });
+
+        tv_search.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                InvitationPullDownActivity.isFromSearch=true;
+                bol=1;
+                Intent intent = new Intent(getActivity(), InvitationSearchActivity.class);
+                startActivityForResult(intent, 1112);
+                AnimUtil.intentSlidIn(getActivity());
             }
         });
 
@@ -190,24 +218,26 @@ public class InvitationPullDownHaveThirdKindPinterestStyleFragment extends ToolB
             listPost = idao.getListPost();
             if(listCategroy3==null){
                 framelayout.setVisibility(View.VISIBLE);
-                ll.setVisibility(View.GONE);
+              //  ll.setVisibility(View.GONE);
                 // horizontalScrollView.setVisibility(View.VISIBLE);
                 gridView1.setVisibility(View.GONE);
-                idao.requestPostRotaingBanner("B_POST_MIDDLE");
+             //   idao.requestPostRotaingBanner("B_POST_MIDDLE");
             }else {
                 framelayout.setVisibility(View.GONE);
-                ll.setVisibility(View.VISIBLE);
+              //  ll.setVisibility(View.VISIBLE);
                 // horizontalScrollView.setVisibility(View.VISIBLE);
                 gridView1.setVisibility(View.VISIBLE);
             }
             mInvitationListViewPinterestStyleAdapter.setList(listPost);
             thirdKindId=null;
+            keyword=null;
             InvitationPullDownActivity.isFromSelcet=false;
+            InvitationPullDownActivity.isFromSearch=false;
         }
         if (requestCode == 2) {
             bol = 0;
             framelayout.setVisibility(View.GONE);
-            ll.setVisibility(View.VISIBLE);
+         //   ll.setVisibility(View.VISIBLE);
             // horizontalScrollView.setVisibility(View.VISIBLE);
             gridView1.setVisibility(View.VISIBLE);
             // horizontalScrollView.setVisibility(View.VISIBLE);
@@ -218,14 +248,7 @@ public class InvitationPullDownHaveThirdKindPinterestStyleFragment extends ToolB
             }
             isFirst=false;
 
-            tv_search.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent=new Intent(getActivity(), InvitationSearchActivity.class);
-                   startActivityForResult(intent,1112);
-                    AnimUtil.intentSlidIn(getActivity());
-                }
-            });
+
 
             thirdKindId=null;
             // setValue();
@@ -236,8 +259,10 @@ public class InvitationPullDownHaveThirdKindPinterestStyleFragment extends ToolB
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode==1112&&resultCode==2222){
-            String keyword = data.getStringExtra("keyword");
-            idao.requestPostListByCategory(Arad.preferences.getString("memberId"), listCategroy3.get(Position).getId(), "0", keyword,"", PAGE_NUM, Constant.PAGE_SIZE);
+            keyword = data.getStringExtra("keyword");
+            InvitationPullDownActivity activity = (InvitationPullDownActivity) getActivity();
+            activity.setKeyword(keyword);
+            activity.getAdapter().reLoad();
         }
         if(requestCode==202&&resultCode==203){
             InvitationPullDownActivity activity=(InvitationPullDownActivity)mContext;
@@ -326,10 +351,14 @@ public class InvitationPullDownHaveThirdKindPinterestStyleFragment extends ToolB
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                if (listCategroy3 != null) {
-                    idao.requestPostListByCategory(Arad.preferences.getString("memberId"), listCategroy3.get(Position).getId(), "0", "", "",PAGE_NUM, Constant.PAGE_SIZE);
+                if(listPost!=null){
+                    listPost.clear();
                 }
-                idao.requestPostListByCategory(Arad.preferences.getString("memberId"), id, "0", "", "",PAGE_NUM, Constant.PAGE_SIZE);
+                if (listCategroy3 != null) {
+                    idao.requestPostListByCategory(Arad.preferences.getString("memberId"),listCategroy3.get(Position).getId(), "0", "", "",PAGE_NUM, Constant.PAGE_SIZE);
+                }else {
+                    idao.requestPostListByCategory(Arad.preferences.getString("memberId"), id, "0", "", "", PAGE_NUM, Constant.PAGE_SIZE);
+                }
             }
         }, 500);
 
@@ -342,9 +371,10 @@ public class InvitationPullDownHaveThirdKindPinterestStyleFragment extends ToolB
             @Override
             public void run() {
                 if (listCategroy3 != null) {
-                    idao.requestPostListByCategory(Arad.preferences.getString("memberId"), listCategroy3.get(Position).getId(), "0", "", "",PAGE_NUM, Constant.PAGE_SIZE);
+                    idao.requestPostListByCategory(Arad.preferences.getString("memberId"),listCategroy3.get(Position).getId(), "0", "", "",PAGE_NUM, Constant.PAGE_SIZE);
+                }else {
+                    idao.requestPostListByCategory(Arad.preferences.getString("memberId"), id, "0", "", "", PAGE_NUM, Constant.PAGE_SIZE);
                 }
-                idao.requestPostListByCategory(Arad.preferences.getString("memberId"), id, "0", "", "",PAGE_NUM, Constant.PAGE_SIZE);
             }
         }, 500);
     }

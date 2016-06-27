@@ -10,7 +10,16 @@ public class CompanyUnion {
     private String id;//店铺id
     private String name;//店铺名称
     private String img;//店铺图片
+    private String unionId;//店铺id
     private List<Company>tCompanysLis;
+
+    public String getUnionId() {
+        return unionId;
+    }
+
+    public void setUnionId(String unionId) {
+        this.unionId = unionId;
+    }
 
     public List<Company> gettCompanysLis() {
         return tCompanysLis;

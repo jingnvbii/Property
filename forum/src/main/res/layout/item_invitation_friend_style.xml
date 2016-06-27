@@ -10,17 +10,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <ImageView
+        <com.ctrl.forum.customview.RoundImageView
             android:id="@+id/iv_friend_style_title_photo"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:src="@mipmap/baby_large"
             />
         <TextView
             android:id="@+id/tv_friend_style_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="发帖人"
             android:textColor="@color/text_black"
             android:layout_toRightOf="@+id/iv_friend_style_title_photo"
             android:layout_marginLeft="5dp"/>
@@ -28,7 +26,6 @@
             android:id="@+id/iv_friend_style_levlel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@mipmap/vip_icon3"
             android:layout_toRightOf="@+id/tv_friend_style_name"
             android:layout_marginLeft="5dp"
             />
@@ -38,7 +35,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
-            android:text="3月16日  历下去掉飞第三方"
             android:layout_toRightOf="@+id/iv_friend_style_title_photo"
             android:layout_below="@+id/tv_friend_style_name"
             android:layout_marginTop="@dimen/margin_left_and_right"/>
@@ -48,7 +44,6 @@
            android:id="@+id/tv_friend_style_content"
            android:layout_width="match_parent"
            android:layout_height="wrap_content"
-           android:text="dsfsdfsdfsdfsdfsdfsfsdfsdfsd"
            android:layout_marginLeft="@dimen/margin_left_and_right"
            android:layout_marginRight="@dimen/margin_left_and_right"
            android:layout_marginTop="@dimen/margin_left_and_right"
@@ -97,18 +92,28 @@
             android:layout_margin="5dp"
             android:layout_gravity="center"
             android:layout_height="match_parent">
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/iv_friend_style_zan_num"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:src="@mipmap/zan_blue"/>
+
+
         <TextView
             android:id="@+id/tv_friend_style_zan_num"
-            android:layout_toRightOf="@+id/iv_zan"
+            android:layout_toRightOf="@+id/iv_friend_style_zan_num"
             android:layout_marginLeft="5dp"
             android:layout_width="wrap_content"
-            android:drawableLeft="@mipmap/zan_friend"
-            android:drawablePadding="5dp"
-            android:layout_centerInParent="true"
             android:gravity="center"
-            android:layout_height="wrap_content"
-            android:text="喜欢"
+            android:layout_height="match_parent"
             />
+
+            </RelativeLayout>
         </RelativeLayout>
 
         <View
@@ -131,7 +136,6 @@
                 android:layout_centerInParent="true"
                 android:gravity="center"
                 android:layout_height="wrap_content"
-                android:text="评论"
                 />
         </RelativeLayout>
         <View
@@ -153,7 +157,6 @@
                 android:layout_centerInParent="true"
                 android:gravity="center"
                 android:layout_height="wrap_content"
-                android:text="分享"
                 />
         </RelativeLayout>
         <View
@@ -215,7 +218,7 @@
             android:layout_marginLeft="30dp"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
-            android:text="查看其他  3  条评论...."/>
+            />
     </LinearLayout>
 
 

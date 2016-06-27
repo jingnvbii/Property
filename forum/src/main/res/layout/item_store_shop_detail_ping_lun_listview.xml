@@ -11,7 +11,6 @@
         android:layout_marginLeft="10dp"
         android:layout_below="@+id/tv_time"
         android:isIndicator="true"
-        android:rating="4"
         android:layout_marginTop="5dp"
         android:layout_toRightOf="@+id/iv_style_img"
         />
@@ -21,7 +20,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
-        android:text="很好"
         android:layout_marginLeft="10dp"
         android:textColor="@color/text_black"/>
     <TextView
@@ -31,7 +29,6 @@
         android:layout_marginTop="5dp"
         android:layout_marginRight="10dp"
         android:layout_alignParentRight="true"
-        android:text="张某"
         android:textColor="@color/text_gray"/>
     <TextView
         android:id="@+id/tv_pinlun_time"
@@ -41,12 +38,12 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:layout_marginBottom="10dp"
-        android:text="2016.3.3 12：63:55"
         android:layout_marginRight="10dp"
         android:textColor="@color/text_gray"/>
 
 
     <RelativeLayout
+        android:id="@+id/rl_kf"
         android:layout_below="@+id/tv_pinlun_time"
         android:layout_width="match_parent"
         android:background="@color/main_bg"
@@ -57,14 +54,13 @@
             android:layout_width="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_height="wrap_content"
-            android:text="fsdfsdfsdfdsfdsfsdfsdfsdfsdfsdffdfsdf"/>
+            />
 
         <TextView
             android:id="@+id/tv_huifu_time"
             android:layout_below="@+id/tv_huifu_content"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="2016.3.3 12：63:55"
             android:layout_marginRight="10dp"
             android:layout_alignParentRight="true"
             android:layout_marginTop="10dp"

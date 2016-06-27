@@ -5,7 +5,6 @@ import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
 
-import com.baidu.mapapi.SDKInitializer;
 import com.beanu.arad.AradApplication;
 import com.beanu.arad.AradApplicationConfig;
 import com.beanu.arad.http.HttpConfig;
@@ -78,7 +77,7 @@ public class MyApplication extends AradApplication {
          */
         locationService = new LocationService(getApplicationContext());
         //百度地图初始化
-        SDKInitializer.initialize(getApplicationContext());
+     //   SDKInitializer.initialize(getApplicationContext());
         //SpeechUtility.createUtility(getApplicationContext(), SpeechConstant.APPID + Constant.XUNFEI_APPID); //科大讯飞
         //LocationUtil.getInstance().init(getApplicationContext());
         config.httpConfig = new HttpConfig("succeed");

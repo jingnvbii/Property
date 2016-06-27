@@ -76,7 +76,7 @@
              android:layout_height="match_parent"
              android:background="@color/line_gray" />
 
-         <TextView
+       <!--  <TextView
              android:layout_gravity="center_vertical"
              android:layout_marginLeft="2dp"
              android:layout_width="wrap_content"
@@ -85,7 +85,7 @@
              android:text="【每日特惠】"
              android:textColor="@color/text_red"
              android:gravity="center"
-             />
+             />-->
          <TextView
              android:id="@+id/tv_change"
              android:gravity="center_vertical"

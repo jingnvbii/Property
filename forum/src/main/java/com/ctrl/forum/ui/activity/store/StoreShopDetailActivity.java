@@ -134,7 +134,17 @@ public class StoreShopDetailActivity extends AppToolBarActivity implements View.
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(StoreShopDetailActivity.this, StorePingjiaDetailActivity.class);
-                intent.putExtra("id",company.getId());
+                intent.putExtra("id", company.getId());
+                startActivity(intent);
+                AnimUtil.intentSlidIn(StoreShopDetailActivity.this);
+            }
+        });
+
+        gridview_lianmeng.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(StoreShopDetailActivity.this, StoreShopListVerticalStyleActivity.class);
+                intent.putExtra("id", listCompanyUnion.get(position).getUnionId());
                 startActivity(intent);
                 AnimUtil.intentSlidIn(StoreShopDetailActivity.this);
             }

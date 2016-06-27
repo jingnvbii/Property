@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
@@ -48,8 +49,8 @@ import butterknife.InjectView;
 public class LocationActivity extends AppToolBarActivity implements View.OnClickListener {
     @InjectView(R.id.lv_locate)//下拉列表
             PullToRefreshListView lv_locate;
-    @InjectView(R.id.rl_loact_search)//不显示位置
-            RelativeLayout rl_loact_search;
+    @InjectView(R.id.rl_loacte)//不显示位置
+            RelativeLayout rl_loacte;
     @InjectView(R.id.et_search)//搜索
             EditText et_search;
 
@@ -86,15 +87,6 @@ public class LocationActivity extends AppToolBarActivity implements View.OnClick
         ButterKnife.inject(this);
         // 隐藏输入法
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
-
-        String locationName = getIntent().getStringExtra("tv_location_name");
-        if(locationName!=null) {
-            mPoiInfoListStr.add(locationName);
-        }
-        adapter2 = new ArrayAdapter<String>(LocationActivity.this, android.R.layout.simple_list_item_1, mPoiInfoListStr);
-        adapter2.notifyDataSetChanged();
-        lv_locate.setAdapter(adapter2);
-
         initView();
     }
 
@@ -103,7 +95,7 @@ public class LocationActivity extends AppToolBarActivity implements View.OnClick
      * 初始化组件
      */
     private void initView() {
-        rl_loact_search.setOnClickListener(this);
+        rl_loacte.setOnClickListener(this);
         et_search.addTextChangedListener(watcher);
         //第一步，创建POI检索实例
         mPoiSearch = PoiSearch.newInstance();
@@ -161,6 +153,8 @@ public class LocationActivity extends AppToolBarActivity implements View.OnClick
                     .pageCapacity(10))
             ;
 
+            Log.i("tag", "city---" + city);
+            Log.i("tag", "s---" + s.toString());
 
         }
         //文字变化前
@@ -252,28 +246,28 @@ public class LocationActivity extends AppToolBarActivity implements View.OnClick
                         finish();
                     }
                 });
-                    lv_locate.setMode(PullToRefreshBase.Mode.PULL_FROM_END);
-                    lv_locate.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
-                        @Override
-                        public void onRefresh(PullToRefreshBase<ListView> refreshView) {
-                            if (isRefresh) {
-                                PAGE_NUM += 1;
-                                //第四步，发起检索请求；
-                                mPoiSearch.searchNearby((new PoiNearbySearchOption())
-                                        .pageNum(PAGE_NUM)
-                                        .location(latLng)
-                                        .radius(500)
-                                        .keyword(et_s.toString())
-                                        .pageCapacity(10));
-                                isRefresh=false;
-                            }else {
-                                Message message = handler.obtainMessage();
-                                message.what=1;
-                                handler.sendMessage(message);
-                            }
+                lv_locate.setMode(PullToRefreshBase.Mode.PULL_FROM_END);
+                lv_locate.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
+                    @Override
+                    public void onRefresh(PullToRefreshBase<ListView> refreshView) {
+                        if (isRefresh) {
+                            PAGE_NUM += 1;
+                            //第四步，发起检索请求；
+                            mPoiSearch.searchNearby((new PoiNearbySearchOption())
+                                    .pageNum(PAGE_NUM)
+                                    .location(latLng)
+                                    .radius(500)
+                                    .keyword(et_s.toString())
+                                    .pageCapacity(10));
+                            isRefresh=false;
+                        }else {
+                            Message message = handler.obtainMessage();
+                            message.what=1;
+                            handler.sendMessage(message);
                         }
+                    }
 
-                    });
+                });
             }
         }
 
@@ -283,7 +277,7 @@ public class LocationActivity extends AppToolBarActivity implements View.OnClick
     @Override
     protected void onDestroy() {
         super.onDestroy();
-       // 第五步，释放POI检索实例；
+        // 第五步，释放POI检索实例；
         mPoiSearch.destroy();
     }
 
@@ -310,7 +304,7 @@ public class LocationActivity extends AppToolBarActivity implements View.OnClick
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.rl_loact_search:
+            case R.id.rl_loacte:
                 setResult(RESULT_CANCELED);
                 finish();
                 break;

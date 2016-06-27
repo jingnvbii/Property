@@ -1,6 +1,7 @@
 package com.ctrl.forum.ui.fragment;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -110,6 +111,7 @@ public class MineCouponFragment extends ToolBarFragment {
 
         Bundle bundle = this.getArguments();
         amount = bundle.getString("amount");
+        Log.i("tag", "amount222===" + amount);
         couponListAdapter.setAmount(amount);
     }
 

@@ -40,6 +40,7 @@ import com.ctrl.forum.dao.ImageDao;
 import com.ctrl.forum.dao.InvitationDao;
 import com.ctrl.forum.entity.CategoryItem;
 import com.ctrl.forum.entity.Image;
+import com.ctrl.forum.ui.activity.WebViewActivity;
 import com.ctrl.forum.utils.Utils;
 
 import java.io.ByteArrayOutputStream;
@@ -119,6 +120,9 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
     @InjectView(R.id.tv_release_save)//存草稿
     TextView tv_release_save;
 
+    @InjectView(R.id.tougao)//投稿协议
+    TextView tougao;
+
 
     /* 请求码*/
     private static final int IMAGE_REQUEST_CODE = 0;
@@ -168,6 +172,7 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
         tv_release_back.setOnClickListener(this);
         tv_release.setOnClickListener(this);
         tv_release_save.setOnClickListener(this);
+        tougao.setOnClickListener(this);
 
         //初始化控件宽高
         setImageViewWidth(iv01);
@@ -615,12 +620,18 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
     public void onClick(View v) {
        Intent intent=null;
         switch (v.getId()){
+            case R.id.tougao:
+                intent=new Intent(InvitationReleaseActivity.this, WebViewActivity.class);
+                intent.putExtra("title","投稿协议");
+                startActivity(intent);
+                AnimUtil.intentSlidIn(InvitationReleaseActivity.this);
+                 break;
             case R.id.tv_release_save:
                 isSave=true;
-                if(et_content.getText().toString().trim().length()<20){
+               /* if(et_content.getText().toString().trim().length()<20){
                     MessageUtils.showShortToast(this,"帖子内容少于20个字符");
                     return;
-                }
+                }*/
                 String imagesUrl1=getImagesUrl(mImageList);
                 String thumbImagesUrl1= getThumbImagesUrl(mImageList);
                         if(spinner_third_kind.getVisibility()==View.VISIBLE){
@@ -667,10 +678,10 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
             case R.id.tv_release:
               String imagesUrl=getImagesUrl(mImageList);
                String thumbImagesUrl= getThumbImagesUrl(mImageList);
-                if(et_content.getText().toString().trim().length()<20){
+               /* if(et_content.getText().toString().trim().length()<20){
                     MessageUtils.showShortToast(this,"帖子内容少于20个字符");
                     return;
-                }
+                }*/
                 if(Arad.preferences.getBoolean("isCallingChecked")){
                     if(checkInput()){
                        if(spinner_third_kind.getVisibility()==View.VISIBLE){

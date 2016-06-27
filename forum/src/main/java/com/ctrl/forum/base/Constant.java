@@ -14,7 +14,7 @@ public class Constant {
     //  public static final String RAW_URL = "http://192.168.1.36:8088/pm/api?";//李鑫测试地址
     //public static final String RAW_URL = "http://192.168.1.210:8088/pm/api?";//桑越测试地址
      public static final String RAW_URL = "http://115.28.243.3:8008/ctrl-api/";//新测试地址
-    //  public static final String RAW_URL = "http://192.168.0.38:8888/ctrl-api/";//李鑫测试地址
+      //public static final String RAW_URL = "http://192.168.0.54:8888/ctrl-api/";//李鑫测试地址
 
     /**
      * 请求dao时传递参数 - Eric -
@@ -35,25 +35,25 @@ public class Constant {
      * 支付宝相关 支付信息的配置 - Eric -
      */
     /*支付宝回调接口*/
-    public static final String ALIPLY_URL = RAW_URL + "/notify_url.jsp";
+    public static final String ALIPLY_URL = RAW_URL + "alipayOrderNotify.do";
     /*合作商户ID。用签约支付宝账号登录ms.alipay.com后，在账户信息页面获取。 例: 2088812260656255*/
     public static final String PARTNER = "2088511339941222";
     /*商户收款的支付宝账号 例: wushidadao77@163.com*/
     public static final String SELLER = "116677067@qq.com";//
     /*商户私钥 例: MIICdwIBADANBgkqhkiG9w0BAQEFAASCAmEwggJdAgEAAoGBAJ+Q9tJIfK5PvZtC6eGgucND3cOEBbc6wUJVrsgEPKiYJmMFJFe0fya1hvPragz4scRw+ozi45e4eeWnpMUJmXg4pYyZcpozom1nsGlp293DE29nqJvXTv0qEzNqZcQgSCkoZzVBTnaREw6o2XBXKyVt11B4DrYWTBqFDWyhzlkHAgMBAAECgYEAiHreklgLxLBRtdYS47isitamfM+Ub/diS5Gr8Eqnc3DIDJPeVOH+i6Ziaoll6PhiXGph81UxY5kXMhYk+Z9PUsnOq6piLR6jajs7/PQbeUOrK/27lzKx97f2/zVacFadkx33P/ReXNe6sCY7xvVr8AiDL2Qyh0TiNhmfzx39CDECQQDThTngCjCVEO1AjCX9keA3E3isAaZeDGWXfkdO4JIsOnCyRh/V1QiUvCwbpgdvdxf+N9RsQxC2faR/p9/7UDffAkEAwR7kOzuq/dGTTb65xTSY314O3qe3oaK+G9euWzQPavj+DybxhClqc1HNcYoHteM47Mry1vOmeRY+iug4UESj2QJATGyDd7ZWzVU7U6oPg+m0CFJJtGQ4Nxzli/H9U7uCNOa8lz0M/ZamLg87JJY9c4GlMp37a05j+Hu29sSyAbx/IwJAfGKMN8aHrLGmgcWdW3I0IHIxe6FkufvbHI2/ZEjUwV6cLGA14JzYTmxauY1gx/sQ+BsDbAVErOrx34AQfUqoiQJBANNb9XhPjFNYsjMlqlV2ccYURzQNQkqSZZF2WuudoglxtgiK0w+RbdZcB8cRi/EkuNT6CODb3chlJCNpTpn/CXQ=*/
-    public static final String RSA_PRIVATE = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDJkXa4ZVXLbMsylHp9Yh4yyCBoYk5k7uLornae75g9EnNUvBv7aoY5OTjJ19YcdiRCmH5a1C+bFjMhtc+xU6cew/EEjNFQk9fJFzbMRMNeia+Pf9MzMqqrbZmFzIFa28xc3EX/rnl3LZ8Gb5Wlq9dbYa8pY+7f76BCY3jeDLQaDQIDAQAB==";
+    public static final String RSA_PRIVATE = "MIICdwIBADANBgkqhkiG9w0BAQEFAASCAmEwggJdAgEAAoGBALze2z3NvRz+maQWA/VLYKGOii1+4GurmLHEzYfHPnxNgf6axcyTEduR1H/Hs0F1V0rZSv5LFC9JG+jYchPPcX+7stWpf+qgvjlnFjljm5hZPMQw8AKVoHXEkhgzWJWWURhAl3aNghHtJgaHzaNdTHx9qze1wkCazXSKdRhK0zG9AgMBAAECgYEAjHRqtIZoycQou9bHcMZygRKAfZ7qBAgjUKgbdIreVBBLyOyOhjkkwZWsYq4/B0Hc/cOkOoHY6+VBhSJZi5PsQZtlYjblIZEtMkAdDahRO7Iz1qy+fq+wJ4v0b8C3zDhTUfVjaNTuOSkqJo2N7mvUpJdRGkCRw9BHtRBflYACZ/0CQQDdSNXwA50TOImQPVWhSfYVssLE+eONFKY7AMTDdHvZCAuVCV6a6nYnx3GHnTOqhM/Gryq45uYj45hVrCZ18DPDAkEA2oA4RgI+ccoPDZFtmm+S9eFv5fmfXFfQKsh5smHAE1DysniNF1b2lnt9MR7jIe/ZqC3KaAxaiFV8YDXxmOwsfwJBANkYJAuc//VjelJwWhoqnasb/cmR/5ThtVQdpOy80uRR6EsHLjF95P2RxefuaknYkp+yKo/Mt+xt1X33rqP2TFECQHUKU5pkn1BSfMe2y6/67gyZSlg040ESpKYWJuH/bGSsaqRg4KrM4V9wHHpQYjgOg1eL16zuWRxINkxO+PACKj8CQCX2/SDsmijcEFwK7A6phyzpDopr1DNBOnHKBlxitYwpFBNvf7+SJ2WTWjcWZT/M1NHus+av/iUDE20VDSISMeY=";
 
     /**
      * 微信相关 支付信息的配置 - jason -
      */
     /*微信分配的公众账号ID 例: wx6848dc314d5a2b80*/
-    public static final String APP_ID = "wx8a6851c750ade83f";
+    public static final String APP_ID = "wx41f9f015ff34c9c3";
     /*微信支付分配的商户号 例: 1232506602*/
-    public static final String MCH_ID = "1250570901";
+    public static final String MCH_ID = "1356975302";
     /*API密钥，在商户平台设置 例: q1w2e3r4t5y6u7i8o9p0asdfghjklzxc*/
-    public static final String API_KEY = "aceee308c567dda43d86e4c3ba613911";
+    public static final String API_KEY = "ruyansimeng1313342630yiwenfengji";
     //异步通知地址
-    public static final  String NOTICE_URL="http://121.42.159.145:8088/pm/wxOrderNotify.do";
+    public static final  String NOTICE_URL=RAW_URL + "wxOrderNotify.do";
  //   public static final String NOTICE_URL_PROPERTY = "http://121.42.159.145:8088/pm/wxPaymentNotify.do";
     /*微信支付返回Code  固定值*/
     public static final int PAY_STATUS_SUCCESS = 0;//微信支付成功

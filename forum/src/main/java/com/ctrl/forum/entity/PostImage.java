@@ -1,10 +1,12 @@
 package com.ctrl.forum.entity;
 
+import java.io.Serializable;
+
 /**
  * 帖子图片实体
  * Created by Administrator on 2016/4/8.
  */
-public class PostImage {
+public class PostImage implements Serializable{
     private String id;//图片id
     private String img ;//原图url
     private String thumbImg ;//缩略图url

@@ -1,5 +1,6 @@
 package com.ctrl.forum.ui.activity.store;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
@@ -8,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.beanu.arad.utils.AnimUtil;
 import com.beanu.arad.utils.MessageUtils;
 import com.ctrl.forum.R;
 import com.ctrl.forum.base.AppToolBarActivity;
@@ -43,7 +45,9 @@ public class StorePaymentOrderActivity extends AppToolBarActivity implements Vie
     @InjectView(R.id.checkbox_payment_order_zhifubao)//支付宝单选按钮
     CheckBox checkbox_payment_order_zhifubao;
     private String orderNum;
-    private String productsTotal;
+    private double productsTotal;
+    private String orderId;
+    private String youHuiPrice;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,13 +61,19 @@ public class StorePaymentOrderActivity extends AppToolBarActivity implements Vie
     }
 
     private void initData() {
-        productsTotal = getIntent().getStringExtra("productsTotal");
+        productsTotal = getIntent().getDoubleExtra("productsTotal", 0.0);
         orderNum=getIntent().getStringExtra("orderNum");
-        String youHuiPrice = "0.0";
+        orderId=getIntent().getStringExtra("orderId");
+        youHuiPrice=getIntent().getStringExtra("redenvelope");
         tv_payment_order_id.setText(orderNum);
         tv_payment_order_total_price.setText(productsTotal+"元");
-        tv_payment_order_youhui_price.setText(youHuiPrice+"元");
-        tv_payment_order_residue_price.setText((Double.parseDouble(productsTotal)-Double.parseDouble(youHuiPrice))+"元");
+        if(youHuiPrice!=null) {
+            tv_payment_order_youhui_price.setText(youHuiPrice+"元");
+            tv_payment_order_residue_price.setText((productsTotal - Double.parseDouble(youHuiPrice)) + "元");
+        }else {
+            tv_payment_order_youhui_price.setText("0.0元");
+            tv_payment_order_residue_price.setText(productsTotal+"元");
+        }
     }
 
     private void initView() {
@@ -84,6 +94,10 @@ public class StorePaymentOrderActivity extends AppToolBarActivity implements Vie
                         public void doAfterAliplyPay(boolean isSuccess) {
                             if (isSuccess) {
                                 MessageUtils.showShortToast(StorePaymentOrderActivity.this, "支付成功");
+                                Intent intent = new Intent(StorePaymentOrderActivity.this, StorePaymentSucessActivity.class);
+                                intent.putExtra("orderId",orderId);
+                                startActivity(intent);
+                                AnimUtil.intentSlidIn(StorePaymentOrderActivity.this);
                                 finish();
                             } else {
                                 MessageUtils.showShortToast(StorePaymentOrderActivity.this,"支付失败");
@@ -92,7 +106,7 @@ public class StorePaymentOrderActivity extends AppToolBarActivity implements Vie
                         }
                     });
                     /***   此处金额 写了0.01元  实际情况具体问题具体分析   ***/
-                    aliplyPayUtil.pay(orderNum, Constant.ALIPLY_URL, "烟台项目商品", "烟台项目商城商品", Double.parseDouble(productsTotal));
+              aliplyPayUtil.pay(orderId, Constant.ALIPLY_URL, "烟台项目商品", "烟台项目商城商品",productsTotal);
 
                 }
                 if(checkbox_payment_order_weixin.isChecked()){//支付宝支付
@@ -114,7 +128,7 @@ public class StorePaymentOrderActivity extends AppToolBarActivity implements Vie
                         }
                     });
                     //(int)Double.parseDouble(totalPrice)*100
-                    weixinPayUtil.pay(orderNum, Constant.NOTICE_URL,"烟台项目商城商品", (int)Double.parseDouble(productsTotal));
+                    weixinPayUtil.pay(orderId, Constant.NOTICE_URL,"烟台项目商城商品", (int)productsTotal);
                 }
                 break;
             case R.id.rl_weixin:

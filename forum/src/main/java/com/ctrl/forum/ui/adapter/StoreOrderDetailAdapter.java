@@ -60,7 +60,7 @@ public class StoreOrderDetailAdapter extends BaseAdapter{
         }
         Product merchant=list.get(position);
         holder.tv_item_order_detail_name.setText(merchant.getName());
-        holder.tv_item_order_detail_num.setText("*  "+merchant.getNums());
+        holder.tv_item_order_detail_num.setText("x  "+merchant.getNums());
         holder.tv_item_order_detail_price.setText(merchant.getAmounts()+"元");
         return convertView;
     }

@@ -10,6 +10,7 @@ import android.widget.RelativeLayout;
 
 import com.beanu.arad.Arad;
 import com.beanu.arad.utils.AnimUtil;
+import com.beanu.arad.utils.MessageUtils;
 import com.ctrl.forum.R;
 import com.ctrl.forum.base.AppToolBarActivity;
 import com.ctrl.forum.dao.AddressDao;
@@ -83,7 +84,7 @@ public class StoreManageAddressActivity extends AppToolBarActivity implements Vi
                 adapter.setList(listAddress);
         }
         if (requestCode == 4) {
-         //   MessageUtils.showShortToast(this, "设置默认地址成功");
+            MessageUtils.showShortToast(this, "设置默认地址成功");
             adao.requestGetAddressList(Arad.preferences.getString("memberId"));
             intent.putExtra("province",adao.getListAddress().get(mposition).getProvince());
             intent.putExtra("city",adao.getListAddress().get(mposition).getCity());

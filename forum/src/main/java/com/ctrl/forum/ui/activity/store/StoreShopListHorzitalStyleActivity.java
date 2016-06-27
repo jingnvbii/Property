@@ -125,7 +125,11 @@ public class StoreShopListHorzitalStyleActivity extends AppToolBarActivity imple
 
         Arad.imageLoader.load(getIntent().getStringExtra("url")).placeholder(R.mipmap.default_error).into(iv_style_img);
         tv_shop_name.setText(getIntent().getStringExtra("name"));
-        tv_time.setText("营业时间 " + getIntent().getStringExtra("startTime") + "-" + getIntent().getStringExtra("endTime"));
+        if(getIntent().getStringExtra("startTime")!=null&&getIntent().getStringExtra("endTime")!=null) {
+            tv_time.setText("营业时间 " + getIntent().getStringExtra("startTime") + "-" + getIntent().getStringExtra("endTime"));
+        }else {
+            tv_time.setVisibility(View.GONE);
+        }
         if(getIntent().getStringExtra("levlel")!=null)
             ratingBar.setRating(Float.parseFloat(getIntent().getStringExtra("levlel")) / 2);
         mdao = new MallDao(this);
