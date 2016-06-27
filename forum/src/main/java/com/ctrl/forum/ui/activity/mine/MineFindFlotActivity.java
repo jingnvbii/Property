@@ -7,7 +7,6 @@ import android.widget.ListView;
 
 import com.beanu.arad.Arad;
 import com.beanu.arad.base.ToolBarActivity;
-import com.beanu.arad.utils.MessageUtils;
 import com.ctrl.forum.R;
 import com.ctrl.forum.base.Constant;
 import com.ctrl.forum.dao.PlotDao;
@@ -94,14 +93,12 @@ public class MineFindFlotActivity extends ToolBarActivity implements View.OnClic
         super.onRequestSuccess(requestCode);
         lv_content.onRefreshComplete();
         if (requestCode==0) {
-            MessageUtils.showShortToast(this, "获取小区列表成功!");
             communities = plotDao.getCommunities();
             if (communities != null) {
                 minePlotiAdapter.setMessages(communities);
             }
         }
         if (requestCode==1){
-            MessageUtils.showShortToast(this, "加入小区成功!");
             Arad.preferences.putString("communityId", goodId);
             Arad.preferences.putString("communityName", communityName);
             Arad.preferences.flush();

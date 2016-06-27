@@ -228,13 +228,15 @@ public class RimShopDetailActivity extends AppToolBarActivity implements View.On
                         //banner.setType(rimImage.get(i).getType());
                         listBanner.add(banner);
                     }
+                    iv_shop_pic.setVisibility(View.VISIBLE);
                     setLoopView();
-                }else{
-                    ImageView iv = new ImageView(this);
+                }else{  //轮播图没图片状态
+                   /* ImageView iv = new ImageView(this);
                     iv.setScaleType(ImageView.ScaleType.FIT_XY);
                     if (rimSeverCompanyDetails.get(0).getImg()!=null && !rimSeverCompanyDetails.get(0).getImg().equals(""))
                     Arad.imageLoader.load(rimSeverCompanyDetails.get(0).getImg()).into(iv);
-                    iv_shop_pic.addView(iv);
+                    iv_shop_pic.addView(iv);*/
+                    iv_shop_pic.setVisibility(View.GONE);
                 }
 
                 bo_hao.setText(rimSeverCompanyDetails.get(0).getTelephone());

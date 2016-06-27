@@ -13,6 +13,24 @@ public class MemeberOrder {
     private String companyId;//商家id
     private String evaluationState;//评价状态（0：未评价、1：已评价）
     private String state;//订单状态 1-订单被用户取消 2-订单被系统取消 3-未付款 4-商家未发货 5-用户未签收 6-用户已签收
+    private String couponMoney;//优惠劵金额
+    private String orderNum;//订单编号
+
+    public String getOrderNum() {
+        return orderNum;
+    }
+
+    public void setOrderNum(String orderNum) {
+        this.orderNum = orderNum;
+    }
+
+    public String getCouponMoney() {
+        return couponMoney;
+    }
+
+    public void setCouponMoney(String couponMoney) {
+        this.couponMoney = couponMoney;
+    }
 
     public String getCompanyId() {
         return companyId;

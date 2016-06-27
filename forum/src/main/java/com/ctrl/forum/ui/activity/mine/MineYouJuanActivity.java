@@ -10,7 +10,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.beanu.arad.Arad;
-import com.beanu.arad.utils.MessageUtils;
 import com.ctrl.forum.R;
 import com.ctrl.forum.base.AppToolBarActivity;
 import com.ctrl.forum.dao.CouponsDao;
@@ -81,15 +80,11 @@ public class MineYouJuanActivity extends AppToolBarActivity {
             public void onPageScrollStateChanged(int arg0) {
             }
         });
-
         amount = getIntent().getStringExtra("amount");
     }
     private void initData() {
         fragments = new ArrayList<>();
         couponFragment = MineCouponFragment.newInstance();
-        Bundle bundle  = new Bundle();
-        bundle.putString("amount",amount);
-        couponFragment.setArguments(bundle);
 
         couponUseFragment = MineCouponUseFragment.newInstance();
         couponPastFragment = MineCouponPastFragment.newInstance();
@@ -156,7 +151,6 @@ public class MineYouJuanActivity extends AppToolBarActivity {
             wei = count.getNotUsed();
             yi = count.getUsed();
             past = count.getExpired();
-            MessageUtils.showShortToast(this, past);
 
             tv_wei.setText("未使用("+wei+")");
             tv_yi.setText("已使用("+yi+")");

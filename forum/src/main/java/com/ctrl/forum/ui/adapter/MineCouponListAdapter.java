@@ -71,14 +71,14 @@ public class MineCouponListAdapter extends BaseAdapter{
 
         if (redenvelopes!=null && redenvelopes.get(position)!=null){
             //为控件赋值
-            holder.tv_money.setText(redenvelopes.get(position).getAmount());
+            holder.tv_money.setText("￥"+redenvelopes.get(position).getAmount());
             holder.tv_man.setText("全品类满"+redenvelopes.get(position).getLeastMoney()+"使用");
             holder.tv_time.setText(DateUtil.getStringByFormat(redenvelopes.get(position).getDeadlineTime(),"yyyy-mm-dd"));
             holder.tv_zhi.setText(redenvelopes.get(position).getUseRule());
         }
 
         if (!amount.equals("")) {
-            float amounts = Integer.parseInt(amount);
+            float amounts = Float.valueOf(amount);
             float leastMoney =Float.valueOf(redenvelopes.get(position).getLeastMoney());
             //float leastMoney = Integer.parseInt(redenvelopes.get(position).getLeastMoney());
             if (amounts>leastMoney | amounts==leastMoney) {

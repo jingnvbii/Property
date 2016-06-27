@@ -1,16 +1,20 @@
 package com.ctrl.forum.ui.fragment;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AbsListView;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.beanu.arad.Arad;
@@ -51,10 +55,11 @@ public class PlotFragment extends ToolBarFragment implements View.OnClickListene
     TextView rim_serve; //周边服务
     @InjectView(R.id.iv_back)
     ImageView iv_back;
-    @InjectView(R.id.rl_search)
-    RelativeLayout rl_search;
+    @InjectView(R.id.et_search)
+    EditText et_search;
 
     private PlotListViewFriendStyleAdapter invitationListViewFriendStyleAdapter;
+
     private List<Post> posts;
     private String communityId;
     private PlotDao plotDao;
@@ -83,7 +88,7 @@ public class PlotFragment extends ToolBarFragment implements View.OnClickListene
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(final LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_plot, container, false);
         ButterKnife.inject(this, view);
 
@@ -95,6 +100,29 @@ public class PlotFragment extends ToolBarFragment implements View.OnClickListene
         invitationListViewFriendStyleAdapter.setOnLove(this);
 
         initData();
+
+        //为输入框注册键盘监听事件
+        et_search.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_GO) {
+                    //隐藏软键盘
+                    InputMethodManager imm = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    if (imm.isActive()) {
+                        imm.hideSoftInputFromWindow(v.getApplicationWindowToken(), 0);
+                    }
+                    if (!et_search.getText().toString().equals("")) {
+                        Intent intent = new Intent(getActivity(), PlotSearchResultActivity.class);
+                        intent.putExtra("keyWord",et_search.getText().toString());
+                        et_search.setText("");
+                        startActivity(intent);
+                    }
+                    return true;
+                }
+                return false;
+            }
+        });
+
 
         lv_content.setMode(PullToRefreshBase.Mode.BOTH);
         lv_content.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
@@ -175,7 +203,6 @@ public class PlotFragment extends ToolBarFragment implements View.OnClickListene
         tv_plot_name.setOnClickListener(this);
         rim_post.setOnClickListener(this);
         rim_serve.setOnClickListener(this);
-        rl_search.setOnClickListener(this);
     }
 
     private void initData() {
@@ -226,10 +253,6 @@ public class PlotFragment extends ToolBarFragment implements View.OnClickListene
             case R.id.rim_serve:
                 startActivity(new Intent(getActivity(), PlotRimServeActivity.class));
                 break;
-            case R.id.rl_search:
-                Intent intent = new Intent(getActivity(), PlotSearchResultActivity.class);
-                startActivity(intent);
-                break;
             case R.id.rl_friend_style_zan:
                 int position = (int)id;
                 if (posts.get(position).getTitle()==null && posts.get(position).getTitle().equals("")){
@@ -248,6 +271,7 @@ public class PlotFragment extends ToolBarFragment implements View.OnClickListene
         super.onResume();
         if (posts!=null){
             posts.clear();
+            invitationListViewFriendStyleAdapter.setList(posts);
         }
         tv_plot_name.setText(Arad.preferences.getString("communityName"));
         plotDao.queryCommunityPostList(Arad.preferences.getString("memberId"),

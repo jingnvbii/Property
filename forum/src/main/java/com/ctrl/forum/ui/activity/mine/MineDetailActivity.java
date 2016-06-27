@@ -18,7 +18,6 @@ import com.ctrl.forum.dao.InvitationDao;
 import com.ctrl.forum.dao.MemberDao;
 import com.ctrl.forum.entity.CompanyInfo;
 import com.ctrl.forum.entity.MemberInfo;
-import com.ctrl.forum.utils.DateUtil;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -115,7 +114,11 @@ public class MineDetailActivity extends AppToolBarActivity implements View.OnCli
                startActivity(intent);
                break;
            case R.id.tv_blacklist:
-               idao.requeMemberBlackListAdd(Arad.preferences.getString("memberId"),id);
+               if (Arad.preferences.getString("memberId").equals(id)){
+                   MessageUtils.showShortToast(this,"自己不能对自己拉黑!");
+               }else{
+                   idao.requeMemberBlackListAdd(Arad.preferences.getString("memberId"),id);
+               }
                break;
            case R.id.iv_phone:
                if (tel!=null && !tel.equals("")){
@@ -144,17 +147,24 @@ public class MineDetailActivity extends AppToolBarActivity implements View.OnCli
         if (memberInfo!=null){
             tv_name.setText(memberInfo.getNickName());
             SetMemberLevel.setLevelImage(this, iv_grade, memberInfo.getMemberLevel());
+            shop_detail.setText(memberInfo.getCompanyKind());
             Arad.imageLoader.load(memberInfo.getImgUrl()).placeholder(getResources().getDrawable(R.mipmap.iconfont_head)).into(iv_head);
         }
         if (companyInfo!=null){
             Arad.imageLoader.load(companyInfo.getImg()).placeholder(getResources().getDrawable(R.mipmap.iconfont_head)).into(shop_head);
-            shop_name.setText(companyInfo.getCompanyName());
-            shop_detail.setText(companyInfo.getCompanyKind());
-            tv_time.setText(DateUtil.getStringByFormat(companyInfo.getCompanyStartTime(),"hh:mm")+"--"
-                    +DateUtil.getStringByFormat(companyInfo.getCompanyEndTime(),"hh:mm"));
-            if (companyInfo.getCouponEnable().equals("0")){tv_juan.setVisibility(View.GONE);}else {tv_juan.setVisibility(View.VISIBLE);}
+            shop_name.setText(companyInfo.getName());
+            tv_time.setText(companyInfo.getWorkStartTime()+"--"
+                    +companyInfo.getWorkEndTime());
+            if(companyInfo.getCouponEnable()!=null) {
+                if (companyInfo.getCouponEnable().equals("0")) {
+                    tv_juan.setVisibility(View.GONE);
+                } else {
+                    tv_juan.setVisibility(View.VISIBLE);
+                }
+            }
+            if(companyInfo.getPacketEnable()!=null) {
             if (companyInfo.getPacketEnable().equals("0")){tv_hui.setVisibility(View.GONE);}else {tv_hui.setVisibility(View.VISIBLE);}
-            tel = companyInfo.getMobile();
+            tel = companyInfo.getMobile();}
         }
     }
 }

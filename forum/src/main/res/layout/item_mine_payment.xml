@@ -127,17 +127,6 @@
         android:layout_below="@+id/textView25"
         android:layout_alignParentRight="true"
         android:orientation="horizontal">
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="35dp"
-            android:text="@string/buy_again"
-            android:background="@color/red_bg"
-            android:textColor="@color/text_white"
-            android:textSize="@dimen/text_size_basic"
-            android:id="@+id/bt_left"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
-            android:layout_marginRight="@dimen/text_size_basic"/>
 
     <Button
         android:layout_width="wrap_content"
@@ -149,7 +138,7 @@
         android:textSize="@dimen/text_size_basic"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
-        android:layout_marginRight="@dimen/margin_left_and_right"
+        android:layout_marginRight="16sp"
         />
     </LinearLayout>
 

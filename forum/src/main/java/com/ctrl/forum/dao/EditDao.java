@@ -32,24 +32,35 @@ public class EditDao extends IDao {
     private List<DraftsPostList> draftsPostLists = new ArrayList<>();//草稿箱
     private List<Plugin> pluginList = new ArrayList<>(); //用户插件
     private List<Drafts> draftsList = new ArrayList<>();
+    private String imageUrl = "";
 
     public EditDao(INetResult activity) {super(activity);}
 
+
     /**
-     * 修改个人信息
+     * 修改昵称
      * @param nickName 昵称
-     * @param remark 个人简介
-     * @param mobile 手机号
-     * @param memberId 会员id
+     * @param id 会员id
      */
-    public void requestChangeBasicInfo(String nickName,String remark,String mobile,String memberId){
+    public void requestChangeNickName(String nickName,String id){
         String url="member/modifyMyDate";
         Map<String,String> map = new HashMap<>();
         map.put("nickName",nickName);
-        map.put("remark",remark);
-        map.put("mobile",mobile);
-        map.put("memberId",memberId);
+        map.put("id",id);
         postRequest(Constant.RAW_URL + url, mapToRP(map), 0);
+    }
+
+    /**
+     * 修改个人签名
+     * @param remark 个人简介
+     * @param id 会员id
+     */
+    public void requestChangeRemark(String remark,String id){
+        String url="member/modifyMyDate";
+        Map<String,String> map = new HashMap<>();
+        map.put("remark",remark);
+        map.put("id",id);
+        postRequest(Constant.RAW_URL + url, mapToRP(map), 7);
     }
 
     /**
@@ -145,6 +156,9 @@ public class EditDao extends IDao {
             draftsPostLists = JsonUtil.node2pojoList(result.findValue("postList"), DraftsPostList.class);
             draftsList = JsonUtil.node2pojoList(result.findValue("draftsList"), Drafts.class);
         }
+        if (requestCode==5){
+            imageUrl = JsonUtil.node2json(result.findValue("imgUrl"));
+        }
         if(requestCode==6){
             pluginList = JsonUtil.node2pojoList(result.findValue("list"),Plugin.class);
         }
@@ -164,5 +178,8 @@ public class EditDao extends IDao {
     }
     public List<Drafts> getDraftsList() {
         return draftsList;
+    }
+    public String getImageUrl() {
+        return imageUrl;
     }
 }

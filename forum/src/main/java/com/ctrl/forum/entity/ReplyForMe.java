@@ -19,6 +19,15 @@ public class ReplyForMe {
     private String myReplyContent;//我的回复内容
     private String contentType; //评论内容类型（0：文字或者表情、1：图片、2：语音）
     private String myContentType; //回复内容类型（0：文字或者表情、1：图片、2：语音）
+    private String isReplied; //是否有回复（0：无、1：有）
+
+    public String getIsReplied() {
+        return isReplied;
+    }
+
+    public void setIsReplied(String isReplied) {
+        this.isReplied = isReplied;
+    }
 
     public String getReplyType() {
         return replyType;

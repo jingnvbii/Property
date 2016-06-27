@@ -1,99 +1,219 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.ctrl.forum">
+    package="com.ctrl.forum" >
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
-
     <uses-permission android:name="android.permission.CALL_PHONE" />
-
 
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
 
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"/>
 
-
-    <!--百度地图权限配置-->
+    <!-- 百度地图权限配置 -->
     <uses-permission android:name="com.android.launcher.permission.READ_SETTINGS" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
-    <!-- 这个权限用于进行网络定位-->
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-    <!-- 这个权限用于访问GPS定位-->
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <!-- 用于访问wifi网络信息，wifi信息会用于进行网络定位-->
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
-    <!-- 获取运营商信息，用于支持提供运营商信息相关的接口-->
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <!-- 这个权限用于获取wifi的获取权限，wifi信息会用来进行网络定位-->
-    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
-    <!-- 用于读取手机当前的状态-->
-    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
-    <!-- 写入扩展存储，向扩展卡写入数据，用于写入离线定位数据-->
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <!-- 访问网络，网络定位需要上网-->
-    <uses-permission android:name="android.permission.INTERNET" />
-    <!-- SD卡读取权限，用户写入离线定位数据-->
-    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"/>
-    <!--允许应用读取低级别的系统日志文件 -->
-    <uses-permission android:name="android.permission.READ_LOGS"/>
-
-
-    <!--ShareSDK权限配置-->
-    <uses-permission android:name="android.permission.GET_TASKS"/>
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
-    <uses-permission android:name="android.permission.MANAGE_ACCOUNTS"/>
-    <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
-
-
-    <!--录音权限-->
-    <uses-permission android:name="android.permission.RECORD_AUDIO" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-
-    <!--支付宝权限-->
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <!-- 这个权限用于进行网络定位 -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <!-- 这个权限用于访问GPS定位 -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <!-- 用于访问wifi网络信息，wifi信息会用于进行网络定位 -->
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <!-- 获取运营商信息，用于支持提供运营商信息相关的接口 -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <!-- 这个权限用于获取wifi的获取权限，wifi信息会用来进行网络定位 -->
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <!-- 用于读取手机当前的状态 -->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <!-- 写入扩展存储，向扩展卡写入数据，用于写入离线定位数据 -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <!-- 访问网络，网络定位需要上网 -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <!-- SD卡读取权限，用户写入离线定位数据 -->
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
+    <!-- 允许应用读取低级别的系统日志文件 -->
+    <uses-permission android:name="android.permission.READ_LOGS" />
+
+    <!-- ShareSDK权限配置 -->
+    <uses-permission android:name="android.permission.GET_TASKS" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+
+    <!-- JPush权限开始 -->
+
+
+    <!-- Required 自定义用来收发消息的相关权限 -->
+    <permission
+        android:name="${applicationId}.permission.JPUSH_MESSAGE"
+        android:protectionLevel="signature" />
+
+    <!-- Required 一些系统要求的权限，如访问网络等 -->
+    <uses-permission android:name="${applicationId}.permission.JPUSH_MESSAGE" />
+    <uses-permission android:name="android.permission.RECEIVE_USER_PRESENT" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 
-
-
-
+    <!-- JPush权限结束 -->
     <application
         android:name=".base.MyApplication"
         android:allowBackup="true"
-        android:icon="@mipmap/logo_large"
+        android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AradAppTheme">
+        android:theme="@style/AradAppTheme" >
+
+        <!-- JPush开始 -->
+        <!-- Required SDK核心功能 -->
+        <activity
+            android:name="cn.jpush.android.ui.PushActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:exported="false"
+            android:theme="@android:style/Theme.NoTitleBar" >
+            <intent-filter>
+                <action android:name="cn.jpush.android.ui.PushActivity" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="${applicationId}" />
+            </intent-filter>
+        </activity>
+
+        <!-- Required SDK核心功能 -->
+        <service
+            android:name="cn.jpush.android.service.DownloadService"
+            android:enabled="true"
+            android:exported="false" >
+        </service>
+
+        <!-- Required SDK 核心功能 -->
+        <!-- option since 2.0.5 可配置PushService，DaemonService,PushReceiver,AlarmReceiver的android:process参数 将JPush相关组件设置为一个独立进程 -->
+        <!-- 如：android:process=":remote" -->
+        <service
+            android:name="cn.jpush.android.service.PushService"
+            android:enabled="true"
+            android:exported="false" >
+            <intent-filter>
+                <action android:name="cn.jpush.android.intent.REGISTER" />
+                <action android:name="cn.jpush.android.intent.REPORT" />
+                <action android:name="cn.jpush.android.intent.PushService" />
+                <action android:name="cn.jpush.android.intent.PUSH_TIME" />
+            </intent-filter>
+        </service>
+
+        <!-- Required SDK 核心功能 since 1.8.0 -->
+        <service
+            android:name="cn.jpush.android.service.DaemonService"
+            android:enabled="true"
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="cn.jpush.android.intent.DaemonService" />
+
+                <category android:name="${applicationId}" />
+            </intent-filter>
+        </service>
+
+        <!-- Required SDK核心功能 -->
+        <receiver
+            android:name="cn.jpush.android.service.PushReceiver"
+            android:enabled="true"
+            android:exported="false" >
+            <intent-filter android:priority="1000" >
+                <action android:name="cn.jpush.android.intent.NOTIFICATION_RECEIVED_PROXY" /> <!-- Required 显示通知栏 -->
+                <category android:name="${applicationId}" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.USER_PRESENT" />
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            </intent-filter>
+            <!-- Optional -->
+            <intent-filter>
+                <action android:name="android.intent.action.PACKAGE_ADDED" />
+                <action android:name="android.intent.action.PACKAGE_REMOVED" />
+
+                <data android:scheme="package" />
+            </intent-filter>
+        </receiver>
+
+        <!-- Required SDK核心功能 -->
+        <receiver android:name="cn.jpush.android.service.AlarmReceiver" />
+
+        <!-- User defined. 用户自定义的广播接收器 -->
+        <receiver
+            android:name=".base.MyBroadcastReceiver"
+            android:enabled="true" >
+            <intent-filter>
+                <action android:name="cn.jpush.android.intent.REGISTRATION" /> <!-- Required 用户注册SDK的intent -->
+                <action android:name="cn.jpush.android.intent.MESSAGE_RECEIVED" /> <!-- Required 用户接收SDK消息的intent -->
+                <action android:name="cn.jpush.android.intent.NOTIFICATION_RECEIVED" /> <!-- Required 用户接收SDK通知栏信息的intent -->
+                <action android:name="cn.jpush.android.intent.NOTIFICATION_OPENED" /> <!-- Required 用户打开自定义通知栏的intent -->
+                <action android:name="cn.jpush.android.intent.ACTION_RICHPUSH_CALLBACK" /> <!-- Optional 用户接受Rich Push Javascript 回调函数的intent -->
+                <action android:name="cn.jpush.android.intent.CONNECTION" /> <!-- 接收网络变化 连接/断开 since 1.6.3 -->
+                <category android:name="${applicationId}" />
+            </intent-filter>
+        </receiver>
+
+        <!-- Required . Enable it you can get statistics data with channel -->
+        <meta-data
+            android:name="JPUSH_CHANNEL"
+            android:value="developer-default" />
+        <meta-data
+            android:name="JPUSH_APPKEY"
+            android:value="9fd538694f3a9a23519b00c8" /> <!-- </>值来自开发者平台取得的AppKey -->
 
 
-        <!--百度地图KEY-->
+        <!--
+            APP_KEY：d03bc09bfe8296920ba3e528
+            MASTER_SECRET：b9f031fcb6ae29bad6d91f30
+        -->
+
+
+        <!-- JPush结束 -->
+
+
+        <!-- 百度地图KEY -->
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
             android:value="cLdsvjVtjj2dO8fNZXPS2VKGkot67wTK" />
+
         <service
             android:name="com.baidu.location.f"
             android:enabled="true"
             android:process=":remote" >
         </service>
 
+        <!-- 录音权限 -->
+        <uses-permission android:name="android.permission.RECORD_AUDIO" />
+        <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+        <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
+        <!-- 支付宝权限 -->
+        <uses-permission android:name="android.permission.INTERNET" />
+        <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+        <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+        <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+        <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
         <activity
             android:name=".ui.activity.StartActivity"
-            android:label="@string/app_name">
+            android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -107,19 +227,16 @@
         <activity android:name=".photo.activity.ImageFile" />
         <activity android:name=".photo.activity.ShowAllPhoto" />
 
-
-
-        <!--帖子区-->
+        <!-- 帖子区 -->
         <activity android:name=".ui.activity.Invitation.AddContactPhoneActivity" />
         <activity android:name=".ui.activity.Invitation.LocationActivity" />
         <activity android:name=".ui.activity.Invitation.CallingCardActivity" />
-        <activity android:name=".ui.activity.Invitation.InvitationPinterestDetailActivity"
-            android:windowSoftInputMode="stateVisible|adjustResize"
-            />
-        <activity android:name=".ui.activity.Invitation.InvitationDetailFromPlatformActivity"
-            android:windowSoftInputMode="stateVisible|adjustResize"
-            />
-
+        <activity
+            android:name=".ui.activity.Invitation.InvitationPinterestDetailActivity"
+            android:windowSoftInputMode="stateVisible|adjustResize" />
+        <activity
+            android:name=".ui.activity.Invitation.InvitationDetailFromPlatformActivity"
+            android:windowSoftInputMode="stateVisible|adjustResize" />
         <activity android:name=".ui.activity.Invitation.InvitationDetailActivity" />
         <activity android:name=".ui.activity.Invitation.InvitationSearchActivity" />
         <activity android:name=".ui.activity.Invitation.InvitationPinerestGalleyActivity" />
@@ -131,8 +248,7 @@
             android:name=".ui.activity.Invitation.InvitationFriendStyleActivity"
             android:windowSoftInputMode="stateUnchanged|adjustPan" />
 
-
-        <!--商城区-->
+        <!-- 商城区 -->
         <activity android:name=".ui.activity.store.StoreLocateActivity" />
         <activity android:name=".ui.activity.store.StoreScreenActivity" />
         <activity android:name=".ui.activity.store.StoreSearchCommodityActivity" />
@@ -182,6 +298,10 @@
         <activity android:name=".ui.activity.mine.MineRemarkHistoryActivity" />
         <activity android:name=".ui.activity.mine.MineFindFlotActivity" />
         <activity android:name=".ui.activity.mine.MineShopManagerActivity" />
+        <activity android:name=".ui.activity.mine.MineQueryPostActivity" />
+        <activity android:name=".ui.activity.mine.MineDraftActivity" />
+        <activity android:name=".ui.activity.mine.MinePlotActivity" />
+        <activity android:name=".ui.activity.mine.MineMerchantCouponActivity" />
 
         <!-- 周边 -->
         <activity android:name=".ui.activity.rim.ItemRimActivity" />
@@ -189,43 +309,17 @@
         <activity android:name=".ui.activity.rim.RimMapDetailActivity" />
         <activity android:name=".ui.activity.rim.RimCollectServeActivity" />
         <activity android:name=".ui.activity.rim.RimShopDetailActivity" />
-        <activity
-            android:name=".ui.activity.rim.RimSearchActivity"
-            android:label="@string/title_activity_rim_search" >
-        </activity>
-        <activity
-            android:name=".ui.activity.rim.RimSearchReaultActivity"
-            android:label="@string/title_activity_rim_search_reault" >
-        </activity>
-        <activity
-            android:name=".ui.activity.mine.MineQueryPostActivity"
-            android:label="@string/title_activity_mine_query_post" >
-        </activity>
-        <activity
-            android:name=".ui.activity.mine.MineDraftActivity"
-            android:label="@string/title_activity_mine_draft" >
-        </activity>
-        <activity
-            android:name=".ui.activity.mine.MinePlotActivity"
-            android:label="@string/title_activity_mine_plot" >
-        </activity>
-        <activity
-            android:name=".ui.activity.mine.MineMerchantCouponActivity"
-            android:label="@string/title_activity_mine_merchant_coupon" >
-        </activity>
+        <activity android:name=".ui.activity.rim.RimSearchActivity" />
+        <activity android:name=".ui.activity.rim.RimSearchReaultActivity" />
+ >
+
         <!-- 小区 -->
         <activity android:name=".ui.activity.plot.PlotAddInvitationActivity" />
         <activity android:name=".ui.activity.plot.PlotRimServeActivity" />
-        <activity android:name=".ui.activity.plot.PlotSearchResultActivity"/>
-        <activity
-            android:name=".ui.activity.WebViewActivity"
-            android:label="@string/title_activity_mine_merchant_coupon" >
-        </activity>
-        <!--图片放大-->
-        <activity android:name=".customview.ImageZoomActivity"/>
+        <activity android:name=".ui.activity.plot.PlotSearchResultActivity" />
+        <activity android:name=".ui.activity.WebViewActivity" />
 
-
-        <!--支付宝支付  配置-->
+        <!-- 支付宝支付  配置 -->
         <activity
             android:name="com.alipay.sdk.app.H5PayActivity"
             android:configChanges="orientation|keyboardHidden|navigation"
@@ -239,41 +333,41 @@
             android:screenOrientation="behind" >
         </activity>
 
-
-        <!--微信支付  配置-->
-        <activity android:name="com.ctrl.forum.weixin.PayActivity">
+        <!-- 微信支付  配置 -->
+        <activity android:name=".weixin.PayActivity" >
             <intent-filter>
-                <action android:name="android.intent.action.VIEW"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-                <!--具体问题具体分析-->
-                <data android:scheme="wxd930ea5d5a258f4f"/>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <!-- 具体问题具体分析 -->
+                <data android:scheme="wxd930ea5d5a258f4f" />
             </intent-filter>
         </activity>
-
         <activity
-            android:name="com.ctrl.forum.wxapi.WXPayEntryActivity"
+            android:name=".wxapi.WXPayEntryActivity"
             android:exported="true"
-            android:launchMode="singleTop"/>
+            android:launchMode="singleTop" />
 
-        <receiver
-            android:name="com.ctrl.forum.weixin.util.AppRegister">
+        <receiver android:name=".weixin.util.AppRegister" >
             <intent-filter>
                 <action android:name="com.tencent.mm.plugin.openapi.Intent.ACTION_REFRESH_WXAPP" />
             </intent-filter>
         </receiver>
-        <!--微信支付  配置-->
+        <!-- 微信支付  配置 -->
 
 
-        <!--分享 -->
+        <!-- 分享 -->
         <activity
             android:name="com.mob.tools.MobUIShell"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
             android:windowSoftInputMode="stateHidden|adjustResize" >
             <intent-filter>
                 <data android:scheme="tencent1104646053" />
+
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.BROWSABLE" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
@@ -281,18 +375,34 @@
             <!-- 调用新浪原生SDK，需要注册的回调activity -->
             <intent-filter>
                 <action android:name="com.sina.weibo.sdk.action.ACTION_SDK_REQ_ACTIVITY" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
 
-        <!--微信分享回调-->
+        <!-- 微信分享回调 -->
         <activity
             android:name=".wxapi.WXEntryActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:exported="true"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
-
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <activity
+            android:name=".ui.activity.rim.NaviActivity"
+            android:label="@string/title_activity_navi" >
+        </activity>
+        <activity
+            android:name=".ui.activity.mine.MerchantOrderDetailActivity"
+            android:label="@string/title_activity_merchant_order_detail" >
+        </activity>
+        <activity
+            android:name=".ui.activity.mine.OrderPingjiaActivity"
+            android:label="@string/title_activity_order_pingjia" >
+        </activity>
+        <activity
+            android:name=".ui.activity.mine.MineIntegralStoreDetailActivity"
+            android:label="@string/title_activity_integral_store_detail" >
+        </activity>
     </application>
 
 </manifest>

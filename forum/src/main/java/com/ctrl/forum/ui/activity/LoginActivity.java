@@ -108,8 +108,6 @@ public class LoginActivity extends AppToolBarActivity implements View.OnClickLis
         mLocationClient.setLocOption(option);
     }
 
-
-
     public class MyLocationListener implements BDLocationListener {
         @Override
         public void onReceiveLocation(BDLocation location) {

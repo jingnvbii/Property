@@ -25,7 +25,6 @@ public class RemarkDao extends IDao {
     private List<IntegralProduct> integralProducts = new ArrayList<>(); //获取商品积分
     private List<ExchaneProduct> tRedeemHistory= new ArrayList<>();   //兑换商品积分历史记录
     private List<RedeemHistory> redeemHistories= new ArrayList<>(); //积分历史记录
-
     public RemarkDao(INetResult activity) {
         super(activity);
     }
@@ -63,7 +62,7 @@ public class RemarkDao extends IDao {
      * @param pageSize 第几页
      */
     public void convertRemarkHistory(String memberId,String pageNum,String pageSize){
-        String url="memberIntegral/exchangeIntegralProductHistory";
+        String url="MemberIntegral/exchangeIntegralProductHistory";
         Map<String,String> map = new HashMap<>();
         map.put("memberId",memberId);
         map.put("pageNum",pageNum);
@@ -90,18 +89,21 @@ public class RemarkDao extends IDao {
     public void onRequestSuccess(JsonNode result, int requestCode) throws IOException {
       if (requestCode==0){
           Log.d("demo","dao中结果集(获取积分商品): " + result);
-          integralProducts = JsonUtil.node2pojoList(result.findValue("integralProductList"),IntegralProduct.class);
+          List<IntegralProduct> list =  JsonUtil.node2pojoList(result.findValue("integralProductList"),IntegralProduct.class);
+          integralProducts.addAll(list);
       }
         if (requestCode==1){
             Log.d("demo","dao中结果集(兑换积分商品): " + result);
         }
         if (requestCode==2){
             Log.d("demo","dao中结果集(兑换积分商品历史记录): " + result);
-            tRedeemHistory = JsonUtil.node2pojoList(result.findValue("tRedeemHistoryList"),ExchaneProduct.class);
+            List<ExchaneProduct> list =JsonUtil.node2pojoList(result.findValue("tRedeemHistoryList"),ExchaneProduct.class);
+            tRedeemHistory.addAll(list);
         }
         if (requestCode==3){
             Log.d("demo","dao中结果集(积分历史记录): " + result);
-            redeemHistories = JsonUtil.node2pojoList(result.findValue("pointList"),RedeemHistory.class);
+            List<RedeemHistory> list = JsonUtil.node2pojoList(result.findValue("pointList"),RedeemHistory.class);
+            redeemHistories.addAll(list);
         }
     }
 

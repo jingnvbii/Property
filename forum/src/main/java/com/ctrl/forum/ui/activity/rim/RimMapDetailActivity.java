@@ -1,5 +1,7 @@
 package com.ctrl.forum.ui.activity.rim;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
@@ -23,6 +25,10 @@ import com.baidu.mapapi.map.Marker;
 import com.baidu.mapapi.map.MarkerOptions;
 import com.baidu.mapapi.model.LatLng;
 import com.baidu.mapapi.model.LatLngBounds;
+import com.baidu.mapapi.navi.BaiduMapAppNotSupportNaviException;
+import com.baidu.mapapi.navi.BaiduMapNavigation;
+import com.baidu.mapapi.navi.NaviParaOption;
+import com.baidu.mapapi.utils.OpenClientUtil;
 import com.beanu.arad.Arad;
 import com.beanu.arad.base.ToolBarActivity;
 import com.beanu.arad.widget.SlidingUpPanelLayout;
@@ -54,8 +60,6 @@ public class RimMapDetailActivity extends ToolBarActivity implements View.OnClic
 
     private Intent intent;
     private String name,address,telephone,rimServiceCompaniesId;
-    private String latitude;
-    private String longitude;
     private int callTimes;
     private View view;
     private PopupWindow popupWindow;
@@ -67,11 +71,26 @@ public class RimMapDetailActivity extends ToolBarActivity implements View.OnClic
      * MapView 是地图主控件
      */
     private BaiduMap mBaiduMap;
+    // 我的位置坐标
+    double mLat1;
+    double mLon1;
+    // 目标位置坐标
+    double mLat2;
+    double mLon2;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rim_map_detail);
         ButterKnife.inject(this);
+
+        if (Arad.preferences.getString("latitude")!=null && Arad.preferences.getString("longitude")!=null) {
+            mLat1 = Double.valueOf(Arad.preferences.getString("latitude"));
+            mLon1 = Double.valueOf(Arad.preferences.getString("lontitude"));
+        }
+
+        mLat2 = Double.valueOf(getIntent().getStringExtra("latitude"));
+        mLat2 = Double.valueOf(getIntent().getStringExtra("longitude"));
 
         initData();
         initView();
@@ -85,11 +104,6 @@ public class RimMapDetailActivity extends ToolBarActivity implements View.OnClic
         MapStatusUpdate msu = MapStatusUpdateFactory.zoomTo(14.0f);
         mBaiduMap.setMapStatus(msu);
 
-        //MapStatusUpdate u4 = MapStatusUpdateFactory.newLatLng(GEO_SHENGDONG);
-        //MapStatusUpdate u41 = MapStatusUpdateFactory.zoomBy(14);
-        // mBaiduMap.setMapStatus(u4);
-        // mBaiduMap.setMapStatus(u41);
-
         initOverlay();
     }
 
@@ -100,7 +114,7 @@ public class RimMapDetailActivity extends ToolBarActivity implements View.OnClic
         Marker mMarker = null;
         MarkerOptions ooA = new MarkerOptions().position(new LatLng(la,lo)).icon(bdA).zIndex(9).draggable(false);
         //掉下动画
-        ooA.animateType(MarkerOptions.MarkerAnimateType.drop);
+        ooA.animateType(MarkerOptions.MarkerAnimateType.grow);
         mMarker = (Marker) (mBaiduMap.addOverlay(ooA));
         mBaiduMap.addOverlay(ooA);
 
@@ -122,7 +136,7 @@ public class RimMapDetailActivity extends ToolBarActivity implements View.OnClic
         tv_name.setText(name);
         tv_address.setText(address);
         tv_number.setText(telephone);
-        tv_total.setText(callTimes+"");
+        tv_total.setText(callTimes + "");
     }
 
     private void initData() {
@@ -179,7 +193,56 @@ public class RimMapDetailActivity extends ToolBarActivity implements View.OnClic
             case R.id.cancel: //取消
                 popupWindow.dismiss();
                 break;
+            case R.id.tv_dh: //导航
+                startNavi();
+               /* Intent intent1 = new Intent(this,NaviActivity.class);
+                startActivity(intent1);*/
+                break;
         }
+    }
+
+    /**
+     * 启动百度地图导航(Native)
+     */
+    public void startNavi() {
+        LatLng pt1 = new LatLng(mLat1, mLon1);
+        LatLng pt2 = new LatLng(mLat2, mLon2);
+
+        // 构建 导航参数
+        NaviParaOption para = new NaviParaOption()
+                .startPoint(pt1).endPoint(pt2);
+        try {
+            BaiduMapNavigation.openBaiduMapNavi(para, this);
+        } catch (BaiduMapAppNotSupportNaviException e) {
+            e.printStackTrace();
+            showDialog();
+        }
+    }
+
+    /**
+     * 提示未安装百度地图app或app版本过低
+     */
+    public void showDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("您尚未安装百度地图app或app版本过低，点击确认安装？");
+        builder.setTitle("提示");
+        builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                OpenClientUtil.getLatestBaiduMapApp(RimMapDetailActivity.this);
+            }
+        });
+
+        builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        builder.create().show();
+
     }
 
     @Override

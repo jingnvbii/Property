@@ -5,10 +5,10 @@
     android:background="@color/white">
 
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="90dp"
+        android:layout_height="80dp"
         android:id="@+id/iv_pic"
-        android:src="@mipmap/shop_item"
+        android:src="@mipmap/image_default"
         android:layout_marginTop="@dimen/margin_left_and_right"
         android:layout_marginLeft="@dimen/margin_left_and_right"
         android:layout_marginRight="@dimen/margin_left_and_right"
@@ -21,9 +21,8 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_alignTop="@+id/iv_pic"
-        android:layout_marginTop="@dimen/margin_left_and_right"
-        android:layout_alignLeft="@+id/linearLayout2"
-        android:layout_alignStart="@+id/linearLayout2">
+        android:layout_marginTop="5dp"
+        android:layout_toRightOf="@+id/iv_pic">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -45,8 +44,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/name"
-        android:layout_centerHorizontal="true"
         android:orientation="horizontal"
+        android:layout_toRightOf="@+id/iv_pic"
         android:layout_marginTop="@dimen/margin_left_and_right"
         android:id="@+id/linearLayout2">
         <ImageView

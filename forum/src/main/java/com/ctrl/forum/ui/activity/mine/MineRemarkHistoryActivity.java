@@ -7,7 +7,6 @@ import android.widget.ListView;
 
 import com.beanu.arad.Arad;
 import com.beanu.arad.base.ToolBarActivity;
-import com.beanu.arad.utils.MessageUtils;
 import com.ctrl.forum.R;
 import com.ctrl.forum.base.Constant;
 import com.ctrl.forum.dao.RemarkDao;
@@ -35,6 +34,7 @@ public class MineRemarkHistoryActivity extends ToolBarActivity {
         initView();
         initData();
 
+        lv_content.setMode(PullToRefreshBase.Mode.BOTH);
         lv_content.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
@@ -91,7 +91,6 @@ public class MineRemarkHistoryActivity extends ToolBarActivity {
         super.onRequestSuccess(requestCode);
         lv_content.onRefreshComplete();
         if (requestCode==2){
-            MessageUtils.showShortToast(this,"获取兑换积分商品成功!");
             exchaneProducts = rdao.gettRedeemHistory();
             if (exchaneProducts!=null){
                 mineIntegralRemarkListAdapter.setExchaneProducts(exchaneProducts);
@@ -102,7 +101,6 @@ public class MineRemarkHistoryActivity extends ToolBarActivity {
     @Override
     public void onRequestFaild(String errorNo, String errorMessage) {
         super.onRequestFaild(errorNo, errorMessage);
-        MessageUtils.showShortToast(this, "获取兑换积分商品失败!");
         lv_content.onRefreshComplete();
     }
 }

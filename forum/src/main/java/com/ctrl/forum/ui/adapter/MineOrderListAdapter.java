@@ -1,7 +1,7 @@
 package com.ctrl.forum.ui.adapter;
 
 import android.content.Context;
-import android.util.Log;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +13,8 @@ import android.widget.TextView;
 import com.beanu.arad.Arad;
 import com.ctrl.forum.R;
 import com.ctrl.forum.entity.MemeberOrder;
+import com.ctrl.forum.ui.activity.mine.OrderPingjiaActivity;
+import com.ctrl.forum.ui.activity.store.StoreOrderDetailActivity;
 import com.ctrl.forum.utils.DateUtil;
 
 import java.util.ArrayList;
@@ -29,10 +31,9 @@ public class MineOrderListAdapter extends BaseAdapter{
     private List<MemeberOrder> orders;
     private Context context;
     private View.OnClickListener onDelete;
-    private View.OnClickListener onPay;
-    private View.OnClickListener onBuy;
-    private View.OnClickListener onPingJia;
     private View.OnClickListener onCancle;
+    private View.OnClickListener onGoods;
+    private int type;
 
     public MineOrderListAdapter(Context context) {
         this.context = context;
@@ -41,42 +42,19 @@ public class MineOrderListAdapter extends BaseAdapter{
 
     public void setOrders(List<MemeberOrder> orders) {
         this.orders = orders;
-        Log.e("setOrders===========","1234566");
         notifyDataSetChanged();
+    }
+
+    public void setOnGoods(View.OnClickListener onGoods) {
+        this.onGoods = onGoods;
     }
 
     public void setOnCancle(View.OnClickListener onCancle) {
         this.onCancle = onCancle;
     }
 
-    public void setOnBuy(View.OnClickListener onBuy) {
-        this.onBuy = onBuy;
-    }
-
     public void setOnDelete(View.OnClickListener onDelete) {
         this.onDelete = onDelete;
-    }
-
-    public void setOnPay(View.OnClickListener onPay) {
-        this.onPay = onPay;
-    }
-
-    public void setOnPingJia(View.OnClickListener onPingJia) {
-        this.onPingJia = onPingJia;
-    }
-
-    // 它的返回值是listview的item的种类的个数的和。
-    @Override
-    public int getViewTypeCount() {
-        // TODO Auto-generated method stub
-        return 6;
-    }
-
-    // 获取到具体的list的每一个成员的类型号
-    @Override
-    public int getItemViewType(int position) {
-        // TODO Auto-generated method stub
-        return position;
     }
 
     @Override
@@ -95,83 +73,90 @@ public class MineOrderListAdapter extends BaseAdapter{
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        Log.e("getView===========","1234566");
+    public View getView(final int position, View convertView, ViewGroup parent) {
         ViewHolder holder = null;
         String id = orders.get(position).getId();
         if(convertView==null){
-            String types =orders.get(position).getState();
-            switch (types){
-                case "6"://已签收
-                    convertView= LayoutInflater.from(context).inflate(R.layout.item_mine_payment,parent,false);
-                    holder=new ViewHolder(convertView);
-                    holder.bt_left = (Button) convertView.findViewById(R.id.bt_left);
-                    holder.bt_right = (Button) convertView.findViewById(R.id.bt_right);
-                    holder.iv_delete.setOnClickListener(onDelete);
-                    holder.iv_delete.setTag(id);
-                    holder.bt_left.setOnClickListener(onPingJia);
-                    holder.bt_left.setTag(id);
-                    holder.bt_right.setOnClickListener(onBuy);
-                    holder.bt_right.setTag(id);
-                    holder.bt_left.setVisibility(View.VISIBLE);
-                    holder.bt_right.setBackgroundColor(context.getResources().getColor(R.color.red_bg));
-                    convertView.setTag(holder);
-                    break;
-                case "3"://未付款
-                    convertView= LayoutInflater.from(context).inflate(R.layout.item_mine_nopayment,parent,false);
-                    holder=new ViewHolder(convertView);
-                    holder.payment = (Button) convertView.findViewById(R.id.payment);
-                    holder.cancle = (Button) convertView.findViewById(R.id.cancle);
-                    holder.cancle.setOnClickListener(onCancle);
-                    holder.payment.setOnClickListener(onPay);
-                    holder.iv_delete.setOnClickListener(onDelete);
-                    holder.cancle.setTag(id);
-                    holder.payment.setTag(id);
-                    holder.iv_delete.setTag(id);
-                    convertView.setTag(holder);
-                    break;
-                case "4": //未发货
-                    convertView= LayoutInflater.from(context).inflate(R.layout.item_mine_payment,parent,false);
-                    holder=new ViewHolder(convertView);
-                    holder.bt_left = (Button) convertView.findViewById(R.id.bt_left);
-                    holder.bt_right = (Button) convertView.findViewById(R.id.bt_right);
-                    holder.iv_delete.setOnClickListener(onDelete);
-                    holder.iv_delete.setTag(id);
-                    holder.bt_left.setVisibility(View.GONE);
-                    holder.bt_right.setBackgroundColor(context.getResources().getColor(R.color.gray));
-                    holder.bt_right.setText("未发货");
-                    convertView.setTag(holder);
-                    break;
-                case "5": //未签收
-                    convertView= LayoutInflater.from(context).inflate(R.layout.item_mine_payment,parent,false);
-                    holder=new ViewHolder(convertView);
-                    holder.bt_left = (Button) convertView.findViewById(R.id.bt_left);
-                    holder.bt_right = (Button) convertView.findViewById(R.id.bt_right);
-                    holder.iv_delete.setOnClickListener(onDelete);
-                    holder.iv_delete.setTag(id);
-                    holder.bt_left.setVisibility(View.GONE);
-                    holder.bt_right.setBackgroundColor(context.getResources().getColor(R.color.gray));
-                    holder.bt_right.setText("未签收");
-                    convertView.setTag(holder);
-                    break;
-                default:
-                    convertView= LayoutInflater.from(context).inflate(R.layout.item_mine_payment,parent,false);
-                    holder=new ViewHolder(convertView);
-                    holder.bt_left = (Button) convertView.findViewById(R.id.bt_left);
-                    holder.bt_right = (Button) convertView.findViewById(R.id.bt_right);
-                    holder.iv_delete.setOnClickListener(onDelete);
-                    holder.iv_delete.setTag(id);
-                    holder.bt_left.setVisibility(View.GONE);
-                    holder.bt_right.setBackgroundColor(context.getResources().getColor(R.color.gray));
-                    holder.bt_right.setText("已取消");
-                    convertView.setTag(holder);
-                    break;
-            }
-        }else {
+            convertView= LayoutInflater.from(context).inflate(R.layout.item_mine_nopayment,parent,false);
+            holder=new ViewHolder(convertView);
+            convertView.setTag(holder);
+        }
+        else {
             holder=(ViewHolder)convertView.getTag();
         }
 
         if (orders!=null && orders.get(position)!=null){
+            holder.iv_delete.setOnClickListener(onDelete);
+            holder.iv_delete.setTag(id);
+
+            type = Integer.valueOf(orders.get(position).getState());
+            switch (type){ //1-订单被用户取消 2-订单被系统取消 3-未付款 4-商家未发货 5-用户未签收 6-用户已签收
+                case 1: //1-订单被用户取消
+                    holder.bt_left.setVisibility(View.GONE);
+                    holder.bt_right.setText("订单被用户取消");
+                    holder.bt_right.setFocusable(false);
+                    break;
+                case 2: //2-订单被系统取消
+                    holder.bt_left.setVisibility(View.GONE);
+                    holder.bt_right.setText("订单被系统取消");
+                    holder.bt_right.setFocusable(false);
+                    break;
+                case 6://已签收
+                    holder.bt_left.setVisibility(View.GONE);
+                    String state = orders.get(position).getEvaluationState();
+                    if (state.equals("0")){
+                        holder.bt_right.setText("去评价");
+                        holder.bt_right.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                //跳转至评价订单界面
+                                Intent intent = new Intent(context, OrderPingjiaActivity.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                intent.putExtra("id",orders.get(position).getId());
+                                intent.putExtra("companyId",orders.get(position).getCompanyId());
+                                context.startActivity(intent);
+                            }
+                        });
+                    }else{
+                        holder.bt_right.setText("已评价");
+                        holder.bt_right.setFocusable(false);
+                    }
+                    convertView.setTag(holder);
+                    break;
+                case 3://未付款
+                    holder.bt_left.setVisibility(View.VISIBLE);
+                    holder.bt_left.setText("取消订单");
+                    holder.bt_right.setText("付款");
+                    holder.bt_left.setOnClickListener(onCancle);
+                    holder.bt_left.setTag(orders.get(position).getId());
+                    holder.bt_right.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(context, StoreOrderDetailActivity.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            intent.putExtra("orderId", orders.get(position).getId());
+                            intent.putExtra("productsTotal", orders.get(position).getTotalCost());
+                            intent.putExtra("orderNum", orders.get(position).getOrderNum());
+                            intent.putExtra("redenvelope", orders.get(position).getCouponMoney());
+                            context.startActivity(intent);
+                        }
+                    });
+                    break;
+                case 4: //未发货
+                    holder.bt_left.setVisibility(View.GONE);
+                    holder.bt_right.setText("待发货");
+                    holder.bt_right.setFocusable(false);
+                    break;
+                case 5: //未签收
+                    holder.bt_left.setVisibility(View.GONE);
+                    holder.bt_right.setText("待签收");
+                    holder.bt_right.setOnClickListener(onGoods);
+                    holder.bt_right.setTag(orders.get(position).getId());
+                    break;
+                default:
+                    break;
+            }
+
             holder.ctrl.setText(orders.get(position).getCompanyname());
             holder.tv_total.setText(orders.get(position).getTotalCost());
             String time = DateUtil.getStringByFormat(orders.get(position).getCreateTime(),"yyyy-MM-dd  hh:mm:ss");
@@ -183,11 +168,6 @@ public class MineOrderListAdapter extends BaseAdapter{
     }
 
     class ViewHolder{
-        Button payment; //付款
-        Button cancle;
-        Button bt_left;
-        Button bt_right;
-
         @InjectView(R.id.ctrl)//文字
                 TextView  ctrl;
         @InjectView(R.id.tv_total)//总价
@@ -200,6 +180,10 @@ public class MineOrderListAdapter extends BaseAdapter{
                 ImageView  iv_head;
         @InjectView(R.id.iv_delete)
         ImageView  iv_delete;
+        @InjectView(R.id.bt_left)
+        Button  bt_left;
+        @InjectView(R.id.bt_right)
+        Button  bt_right;
 
         ViewHolder(View view) {
             ButterKnife.inject(this, view);

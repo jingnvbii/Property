@@ -6,15 +6,23 @@ package com.ctrl.forum.entity;
  */
 public class RedeemHistory {
     private String point;//积分（+获得-扣除）
-    private String pointType;//类型（0：会员注册、1：商城消费、2：积分兑换...后续逐渐追加）
+    private String doType;//用户行为类型（1：商城消费、2：积分兑换、3：每日签到、4：连续签到30天、5：连续签到100天、6：连续签到200天、7：绑定手机号、8：完整填写个人资料、9：回别人帖、10：被管理员拉黑、11：被拉黑设备...后续逐渐追加）
     private String totalPoint;//剩余积分
-    private String createTime;//消耗时间
+    private long createTime;//消耗时间
 
-    public String getCreateTime() {
+    public String getDoType() {
+        return doType;
+    }
+
+    public void setDoType(String doType) {
+        this.doType = doType;
+    }
+
+    public long getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(String createTime) {
+    public void setCreateTime(long createTime) {
         this.createTime = createTime;
     }
 
@@ -26,13 +34,6 @@ public class RedeemHistory {
         this.point = point;
     }
 
-    public String getPointType() {
-        return pointType;
-    }
-
-    public void setPointType(String pointType) {
-        this.pointType = pointType;
-    }
 
     public String getTotalPoint() {
         return totalPoint;

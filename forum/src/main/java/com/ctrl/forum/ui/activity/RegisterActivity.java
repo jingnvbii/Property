@@ -13,9 +13,7 @@ import android.widget.TextView;
 import com.beanu.arad.utils.MessageUtils;
 import com.ctrl.forum.R;
 import com.ctrl.forum.base.AppToolBarActivity;
-import com.ctrl.forum.dao.KeyDao;
 import com.ctrl.forum.dao.RegisteDao;
-import com.ctrl.forum.entity.ItemValues;
 import com.ctrl.forum.utils.RegexpUtil;
 
 import butterknife.ButterKnife;
@@ -46,8 +44,6 @@ public class RegisterActivity extends AppToolBarActivity implements View.OnClick
     private RegisteDao rdao;
     private String code;
     private RegisterActivity activity;
-    private KeyDao kdao;
-    private ItemValues itemValues;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,8 +60,6 @@ public class RegisterActivity extends AppToolBarActivity implements View.OnClick
         tv_user_agreement.setOnClickListener(this);
         rdao = new RegisteDao(this);
         activity = new RegisterActivity();
-        kdao = new KeyDao(this);
-
     }
 
     @Override
@@ -79,14 +73,6 @@ public class RegisterActivity extends AppToolBarActivity implements View.OnClick
         if (requestCode == 1) {
             code = rdao.getCode();
           //  MessageUtils.showShortToast(this, "获取短信验证码成功" + code);
-        }
-
-        if (requestCode == 66) {
-            itemValues = kdao.getItemValues();
-            Intent intent = new Intent(this,WebViewActivity.class);
-            intent.putExtra("data",itemValues.getItemValue());
-            intent.putExtra("title","用户使用协议");
-            startActivity(intent);
         }
     }
 
@@ -129,7 +115,9 @@ public class RegisterActivity extends AppToolBarActivity implements View.OnClick
                     rdao.requestRegiste(et_username.getText().toString().trim(), et_pass_word.getText().toString().trim(), "");
                 }
             case R.id.tv_user_agreement:
-                kdao.ueryDictionary("APP_PROTOCOL"); //用户使用协议
+                Intent intent = new Intent(this,WebViewActivity.class);
+                intent.putExtra("title","用户使用协议");
+                startActivity(intent);
                 break;
         }
 

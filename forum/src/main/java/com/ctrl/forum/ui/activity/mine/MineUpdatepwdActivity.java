@@ -12,9 +12,7 @@ import android.widget.TextView;
 import com.beanu.arad.utils.MessageUtils;
 import com.ctrl.forum.R;
 import com.ctrl.forum.base.AppToolBarActivity;
-import com.ctrl.forum.dao.KeyDao;
 import com.ctrl.forum.dao.RegisteDao;
-import com.ctrl.forum.entity.ItemValues;
 import com.ctrl.forum.ui.activity.WebViewActivity;
 import com.ctrl.forum.utils.RegexpUtil;
 
@@ -32,8 +30,6 @@ public class MineUpdatepwdActivity extends AppToolBarActivity implements View.On
     private String code;
     private TextView xieyi;
 
-    private KeyDao kdao;
-    private ItemValues itemValues;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,7 +39,6 @@ public class MineUpdatepwdActivity extends AppToolBarActivity implements View.On
     }
 
     private void init() {
-        kdao = new KeyDao(this);
         activity = new MineUpdatepwdActivity();
         time = new TimeCount(60000, 1000);
         rdao = new RegisteDao(this);
@@ -99,13 +94,6 @@ public class MineUpdatepwdActivity extends AppToolBarActivity implements View.On
             code = rdao.getCode();
             MessageUtils.showShortToast(this, "获取短信验证码成功" + code);
         }
-        if (requestCode == 66) {
-            itemValues = kdao.getItemValues();
-            Intent intent = new Intent(this,WebViewActivity.class);
-            intent.putExtra("data",itemValues.getItemValue());
-            intent.putExtra("title","用户使用协议");
-            startActivity(intent);
-        }
     }
 
     @Override
@@ -135,7 +123,9 @@ public class MineUpdatepwdActivity extends AppToolBarActivity implements View.On
                 }
                 break;
             case R.id.xieyi:
-                kdao.ueryDictionary("APP_PROTOCOL"); //使用协议
+                Intent intent1 = new Intent(this,WebViewActivity.class);
+                intent1.putExtra("title", "使用协议");
+                startActivity(intent1);
                 break;
            default:
                break;

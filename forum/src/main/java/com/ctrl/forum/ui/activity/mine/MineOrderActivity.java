@@ -9,10 +9,13 @@ import com.beanu.arad.Arad;
 import com.beanu.arad.utils.MessageUtils;
 import com.ctrl.forum.R;
 import com.ctrl.forum.base.AppToolBarActivity;
+import com.ctrl.forum.base.Constant;
 import com.ctrl.forum.dao.MineStoreDao;
 import com.ctrl.forum.dao.OrderDao;
 import com.ctrl.forum.entity.MemeberOrder;
 import com.ctrl.forum.ui.adapter.MineOrderListAdapter;
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
 import java.util.List;
 
@@ -20,31 +23,53 @@ import java.util.List;
  * 我的订单
  */
 public class MineOrderActivity extends AppToolBarActivity implements View.OnClickListener{
-    private ListView lv_order;
+    private PullToRefreshListView lv_order;
     private List<MemeberOrder> orders;
     private MineOrderListAdapter orderListviewAdapter;
     private MineStoreDao orderDao;
     private OrderDao odao;
+    private int PAGE_NUM=1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mine_order);
-        lv_order = (ListView) findViewById(R.id.lv_order);
+        lv_order = (PullToRefreshListView) findViewById(R.id.lv_order);
 
         initData();
         orderListviewAdapter = new MineOrderListAdapter(getApplicationContext());
         lv_order.setAdapter(orderListviewAdapter);
-        orderListviewAdapter.setOnBuy(this);
+
+        lv_order.setMode(PullToRefreshBase.Mode.BOTH);
+        lv_order.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
+            @Override
+            public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
+                if (orders != null) {
+                    orders.clear();
+                }
+                PAGE_NUM = 1;
+                orderDao.getMemeberOrder(Arad.preferences.getString("memberId"), PAGE_NUM + "", Constant.PAGE_SIZE + "");
+            }
+
+            @Override
+            public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
+                if (orders != null) {
+                    PAGE_NUM += 1;
+                    orderDao.getMemeberOrder(Arad.preferences.getString("memberId"), PAGE_NUM + "", Constant.PAGE_SIZE + "");
+                } else {
+                    lv_order.onRefreshComplete();
+                }
+            }
+        });
+
         orderListviewAdapter.setOnDelete(this);
-        orderListviewAdapter.setOnPay(this);
-        orderListviewAdapter.setOnPingJia(this);
         orderListviewAdapter.setOnCancle(this);
+        orderListviewAdapter.setOnGoods(this);
     }
 
     private void initData() {
         orderDao = new MineStoreDao(this);
-        orderDao.getMemeberOrder(Arad.preferences.getString("memberId"));
+        orderDao.getMemeberOrder(Arad.preferences.getString("memberId"),PAGE_NUM+"", Constant.PAGE_SIZE+"");
 
         odao = new OrderDao(this);
     }
@@ -67,6 +92,7 @@ public class MineOrderActivity extends AppToolBarActivity implements View.OnClic
     @Override
     public void onRequestSuccess(int requestCode) {
         super.onRequestSuccess(requestCode);
+        lv_order.onRefreshComplete();
         if (requestCode==0){
             orders = orderDao.getMemeberOrders();
             if (orders!=null){
@@ -74,16 +100,22 @@ public class MineOrderActivity extends AppToolBarActivity implements View.OnClic
             }
         }
         if (requestCode==3){
-            orders.clear();
-            orderListviewAdapter = new MineOrderListAdapter(getApplicationContext());
-            lv_order.setAdapter(orderListviewAdapter);
-            orderDao.getMemeberOrder(Arad.preferences.getString("memberId"));
+            if (orders!=null) {
+                orders.clear();
+            }
+            PAGE_NUM=1;
+            orderDao.getMemeberOrder(Arad.preferences.getString("memberId"),PAGE_NUM+"", Constant.PAGE_SIZE+"");
         }
         if (requestCode==1){
-            orders.clear();
-            orderListviewAdapter = new MineOrderListAdapter(getApplicationContext());
-            lv_order.setAdapter(orderListviewAdapter);
-            orderDao.getMemeberOrder(Arad.preferences.getString("memberId"));
+            MessageUtils.showShortToast(this,"删除订单成功");
+            if (orders!=null) {
+                orders.clear();
+            }
+            PAGE_NUM=1;
+            orderDao.getMemeberOrder(Arad.preferences.getString("memberId"),PAGE_NUM+"", Constant.PAGE_SIZE+"");
+        }
+        if (requestCode==2){
+            MessageUtils.showShortToast(this,"签收成功");
         }
     }
 
@@ -92,25 +124,17 @@ public class MineOrderActivity extends AppToolBarActivity implements View.OnClic
         Object position = v.getTag();
         String id="";
         switch (v.getId()){
-            case R.id.payment:  //付款
-                id = (String)position;
-                MessageUtils.showShortToast(this,"付款");
-                break;
             case R.id.iv_delete:
                 id = (String)position;
                 odao.requestDeleteOrder(id);
                 break;
-            case R.id.bt_right: //再次购买
-                id = (String)position;
-                MessageUtils.showShortToast(this,"再次购买");
-                break;
-            case R.id.bt_left: //评价
-                id = (String)position;
-                MessageUtils.showShortToast(this,"评价");
-                break;
-            case R.id.cancle: //取消订单
+            case R.id.bt_left: //取消订单
                 id = (String)position;
                 odao.requestCancelOrder(id);
+                break;
+            case R.id.bt_right:
+                String signId = (String)position;
+                odao.requestSignOrder(signId);
                 break;
         }
     }
@@ -118,6 +142,16 @@ public class MineOrderActivity extends AppToolBarActivity implements View.OnClic
     @Override
     protected void onRestart() {
         super.onRestart();
-        orderDao.getMemeberOrder(Arad.preferences.getString("memberId"));
+        if (orders!=null){
+            orders.clear();
+        }
+        PAGE_NUM=1;
+        orderDao.getMemeberOrder(Arad.preferences.getString("memberId"),PAGE_NUM+"",Constant.PAGE_SIZE+"");
+    }
+
+    @Override
+    public void onRequestFaild(String errorNo, String errorMessage) {
+        super.onRequestFaild(errorNo, errorMessage);
+        lv_order.onRefreshComplete();
     }
 }

@@ -4,11 +4,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.beanu.arad.Arad;
 import com.beanu.arad.base.ToolBarActivity;
-import com.beanu.arad.utils.MessageUtils;
 import com.ctrl.forum.R;
 import com.ctrl.forum.base.Constant;
 import com.ctrl.forum.dao.RemarkDao;
@@ -36,6 +34,7 @@ public class MinePointHistoryActivity extends ToolBarActivity {
         initView();
         initData();
 
+        lv_content.setMode(PullToRefreshBase.Mode.BOTH);
         lv_content.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
@@ -86,9 +85,9 @@ public class MinePointHistoryActivity extends ToolBarActivity {
     @Override
     public String setupToolBarTitle() {return getResources().getString(R.string.point_history);}
 
-    @Override
+   /* @Override
     public boolean setupToolBarRightText(TextView mRightText) {
-        mRightText.setText(getResources().getString(R.string.clear_all));
+        mRightText.setText(getResources().getString(R.string.clear_all));//清空
         mRightText.setTextColor(getResources().getColor(R.color.text_white));
         mRightText.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -100,14 +99,13 @@ public class MinePointHistoryActivity extends ToolBarActivity {
             }
         });
         return true;
-    }
+    }*/
 
     @Override
     public void onRequestSuccess(int requestCode) {
         super.onRequestSuccess(requestCode);
         lv_content.onRefreshComplete();
         if (requestCode==3){
-            MessageUtils.showShortToast(this, "获取积分记录成功!");
             redeemHistories = rdao.getRedeemHistories();
             if (redeemHistories!=null){
                 mineIntegralPointListAdapter.setExchaneProducts(redeemHistories);
@@ -118,7 +116,6 @@ public class MinePointHistoryActivity extends ToolBarActivity {
     @Override
     public void onRequestFaild(String errorNo, String errorMessage) {
         super.onRequestFaild(errorNo, errorMessage);
-        MessageUtils.showShortToast(this, "获取积分记录失败!");
         lv_content.onRefreshComplete();
     }
 

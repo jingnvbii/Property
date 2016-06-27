@@ -5,7 +5,7 @@ package com.ctrl.forum.entity;
  * Created by Administrator on 2016/4/25.
  */
 public class OrderState {
-    private String createTime;//下单时间
+    private long createTime;//下单时间
     private String acceptTime;//商家接单时间
     private String sellCancelTime;//商家取消订单时间
     private String cancelTime;//买家取消订单时间
@@ -19,12 +19,57 @@ public class OrderState {
     private String contact;//如果快递显示单号为空，则显示商家显示联系电话
     private String companyname;//店铺名称
     private String orderNum;//订单编号
+    private String receiverName; //收件人
+    private String address; //送货地址
+    private String state; //状态
+    private String content; //评价内容
+    private String level; //评价等级
 
-    public String getCreateTime() {
+    public String getLevel() {
+        return level;
+    }
+
+    public void setLevel(String level) {
+        this.level = level;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getReceiverName() {
+        return receiverName;
+    }
+
+    public void setReceiverName(String receiverName) {
+        this.receiverName = receiverName;
+    }
+
+    public long getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(String createTime) {
+    public void setCreateTime(long createTime) {
         this.createTime = createTime;
     }
 

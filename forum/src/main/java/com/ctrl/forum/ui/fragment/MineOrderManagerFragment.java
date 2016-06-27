@@ -1,9 +1,12 @@
 package com.ctrl.forum.ui.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.beanu.arad.Arad;
@@ -14,13 +17,11 @@ import com.ctrl.forum.base.Constant;
 import com.ctrl.forum.dao.MineStoreDao;
 import com.ctrl.forum.dao.OrderDao;
 import com.ctrl.forum.entity.CompanyOrder;
-import com.ctrl.forum.entity.OrderItem;
-import com.ctrl.forum.entity.OrderState;
+import com.ctrl.forum.ui.activity.mine.MerchantOrderDetailActivity;
 import com.ctrl.forum.ui.adapter.MineOrderManagerAdapter;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -30,8 +31,6 @@ public class MineOrderManagerFragment extends ToolBarFragment implements View.On
     private PullToRefreshListView lv_content;
     private MineOrderManagerAdapter orderManagerAdapter;
     private List<CompanyOrder> companyOrders;
-    private List<OrderItem> orderItems;
-    private List<OrderState> orderStates;
     private MineStoreDao odao;
     public static int type = 0;
     private int PAGE_NUM =1;
@@ -49,7 +48,7 @@ public class MineOrderManagerFragment extends ToolBarFragment implements View.On
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(final LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view =inflater.inflate(R.layout.fragment_mine_list, container, false);
         lv_content = (PullToRefreshListView) view.findViewById(R.id.lv_content);
@@ -58,9 +57,8 @@ public class MineOrderManagerFragment extends ToolBarFragment implements View.On
 
         orderManagerAdapter = new MineOrderManagerAdapter(getActivity());
         lv_content.setAdapter(orderManagerAdapter);
-        orderManagerAdapter.setOnButton(this);
+        //orderManagerAdapter.setOnButton(this);
 
-        //initView();
         initData();
 
         lv_content.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
@@ -68,10 +66,9 @@ public class MineOrderManagerFragment extends ToolBarFragment implements View.On
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
                 if (companyOrders != null) {
                     companyOrders.clear();
-                    PAGE_NUM = 1;
-                    orderManagerAdapter = new MineOrderManagerAdapter(getActivity());
-                    lv_content.setAdapter(orderManagerAdapter);
                 }
+                PAGE_NUM = 1;
+                Log.e("typr===================", type + "");
                 odao.companyOrderList(Arad.preferences.getString("companyId"), type + "", Constant.PAGE_SIZE + "", PAGE_NUM + "");
             }
 
@@ -86,27 +83,23 @@ public class MineOrderManagerFragment extends ToolBarFragment implements View.On
             }
         });
 
+        lv_content.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(getActivity(), MerchantOrderDetailActivity.class);
+                intent.putExtra("id",companyOrders.get(position-1).getId());
+                intent.putExtra("deliveryNo",companyOrders.get(position-1).getDeliveryNo());
+                intent.putExtra("expressName",companyOrders.get(position-1).getExpressName());
+                startActivity(intent);
+            }
+        });
+
         return view;
-    }
-
-    private void initView() {
-        companyOrders = new ArrayList<>();
-        for (int i=0;i<8;i++){
-            CompanyOrder companyOrder = new CompanyOrder();
-            companyOrder.setAddress(i+"");
-            companyOrder.setId(i + "");
-            companyOrders.add(companyOrder);
-        }
-        orderManagerAdapter.setMessages(companyOrders);
-        orderManagerAdapter.setType(type);
-
-        orderDao = new OrderDao(this);
     }
 
     private void initData() {
         odao = new MineStoreDao(this);
-        odao.companyOrderList(Arad.preferences.getString("companyId"),type+"", Constant.PAGE_SIZE+"",PAGE_NUM+"");
-
+        odao.companyOrderList(Arad.preferences.getString("companyId"), type + "", Constant.PAGE_SIZE + "", PAGE_NUM + "");
         orderDao = new OrderDao(this);
     }
 
@@ -115,19 +108,17 @@ public class MineOrderManagerFragment extends ToolBarFragment implements View.On
         super.onRequestSuccess(requestCode);
         lv_content.onRefreshComplete();
         if (requestCode==1){
-            MessageUtils.showShortToast(getActivity(), "商家获取订单列表成功");
             companyOrders  = odao.getCompanyOrders();
             if (companyOrders!=null){
-               orderManagerAdapter.setMessages(companyOrders);
+               orderManagerAdapter.setCompanyOrders(companyOrders);
             }
         }
-        if (requestCode==6){
-            orderItems = orderDao.getListOrderItem();
-            orderStates = orderDao.getListOrderState();
-            if (orderItems!=null&&orderStates!=null){
-                orderManagerAdapter.setOrderItems(orderItems);
-                orderManagerAdapter.setOrderStates(orderStates);
+        if (requestCode==8){
+            MessageUtils.showShortToast(getActivity(),"发货成功");
+            if (companyOrders!=null){
+                companyOrders.clear();
             }
+            odao.companyOrderList(Arad.preferences.getString("companyId"), type + "", Constant.PAGE_SIZE + "", PAGE_NUM + "");
         }
     }
 
@@ -141,13 +132,16 @@ public class MineOrderManagerFragment extends ToolBarFragment implements View.On
     public void onClick(View v) {
         Object id = v.getTag();
         switch (v.getId()){
-            case R.id.bt_send:
-                String position = (String)id;
-                orderManagerAdapter.setGone(0);
-                orderDao.requesOrderDetail(position);
-                break;
+           /* case R.id.bt_send:
+                int position = (int)id;
+                odao.deliverGoods(companyOrders.get(position).getId(),Arad.preferences.getString("memberId"), companyOrders.get(position).getOrderNum());
+                break;*/
         }
     }
 
-
+    @Override
+    public void onStart() {
+        super.onStart();
+        PAGE_NUM=1;
+    }
 }

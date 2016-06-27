@@ -1,6 +1,7 @@
 package com.ctrl.forum.ui.adapter;
 
 import android.content.Context;
+import android.text.SpannableString;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import com.beanu.arad.Arad;
 import com.ctrl.forum.R;
 import com.ctrl.forum.base.SetMemberLevel;
 import com.ctrl.forum.entity.ReplyForMe;
+import com.ctrl.forum.face.FaceConversionUtil;
 import com.ctrl.forum.utils.DateUtil;
 
 import java.util.List;
@@ -28,8 +30,6 @@ public class MineMesCommentListAdapter extends BaseAdapter {
 
     private List<ReplyForMe> replyForMes;
     private Context context;
-    String myContentType = "";
-    String contentType= "";
 
     public MineMesCommentListAdapter(Context context) {this.context = context;}
 
@@ -66,51 +66,48 @@ public class MineMesCommentListAdapter extends BaseAdapter {
             holder.comment_vip_name.setText(replyForMes.get(position).getMemberName());
 
             String replyType = replyForMes.get(position).getReplyType();
+            String isReplied = replyForMes.get(position).getIsReplied();
+
             if (replyType.equals("0")) { //对帖子的评论
-                contentType = replyForMes.get(position).getContentType();
-                setType(contentType,holder.tv_comment,position,"0","t");
-                holder.ll_me.setVisibility(View.GONE);
-                holder.textView43.setVisibility(View.GONE);
-                holder.tv_vip_name.setVisibility(View.GONE);
+                holder.tv_reply_name.setText("回复我的帖子：");
             }else{ //对评论的回复
-                contentType = replyForMes.get(position).getContentType();
-                myContentType = replyForMes.get(position).getMyContentType();
-                setType(myContentType,holder.tv_reply_content,position,"1","p");
-                setType(contentType,holder.tv_comment,position,"0","p");
-                holder.textView43.setVisibility(View.VISIBLE);
-                holder.tv_vip_name.setVisibility(View.VISIBLE);
+                holder.tv_reply_name.setText("回复我的评论：");
+            }
+            setType(replyForMes.get(position).getContentType(),holder.tv_reply_content,position,"1");//ReplyContent
+
+            if (isReplied.equals("0")){
+                holder.ll_replay.setVisibility(View.GONE);
+            }else{
+                holder.ll_replay.setVisibility(View.VISIBLE);
                 holder.tv_vip_name.setText(replyForMes.get(position).getMemberName()+":");
-                holder.tv_reply_name.setVisibility(View.VISIBLE);
-                holder.tv_reply_content.setVisibility(View.VISIBLE);
+                setType(replyForMes.get(position).getContentType(),holder.tv_comment,position,"2"); //myReplyContent
             }
         }
 
         return convertView;
     }
 
-    public void setType(String type,TextView view,int position,String item,String tp){
+    public void setType(String type,TextView view,int position,String item){
         if (type!=null && !type.equals("")) {
             switch (type) {
                 case "0":
                     if (item.equals("1")){
-                        view.setText(replyForMes.get(position).getMyReplyContent());
+                        //view.setText(replyForMes.get(position).getReplyContent());
+                        SpannableString spannableString = FaceConversionUtil.getInstace().getExpressionString(context,
+                                replyForMes.get(position).getReplyContent());
+                        view.setText(spannableString);
                     }else{
-                        view.setText(replyForMes.get(position).getReplyContent());
+                        //view.setText(replyForMes.get(position).getMyReplyContent());
+                        SpannableString spannableString = FaceConversionUtil.getInstace().getExpressionString(context,
+                                replyForMes.get(position).getMyReplyContent());
+                        view.setText(spannableString);
                     }
                     break;
                 case "1":
-                    if (tp.equals("t")){
-                        view.setText("评论:"+"[图片]");
-                    }else {
-                        view.setText("[图片]");
-                    }
+                    view.setText("[图片]");
                     break;
                 case "2":
-                    if (tp.equals("t")){
-                        view.setText("评论:"+"[语音]");
-                    }else {
-                        view.setText("[语音]");
-                    }
+                    view.setText("[语音]");
                     break;
                 default:
                     break;
@@ -137,8 +134,8 @@ public class MineMesCommentListAdapter extends BaseAdapter {
         TextView textView43;
         @InjectView(R.id.tv_reply_content)
         TextView tv_reply_content;
-        @InjectView(R.id.ll_me)
-        LinearLayout ll_me;
+        @InjectView(R.id.ll_replay)
+        LinearLayout ll_replay;
         ViewHolder(View view) {
             ButterKnife.inject(this, view);
         }

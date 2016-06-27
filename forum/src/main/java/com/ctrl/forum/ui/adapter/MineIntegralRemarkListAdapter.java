@@ -8,8 +8,10 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.beanu.arad.Arad;
 import com.ctrl.forum.R;
 import com.ctrl.forum.entity.ExchaneProduct;
+import com.ctrl.forum.utils.DateUtil;
 
 import java.util.List;
 
@@ -59,11 +61,12 @@ public class MineIntegralRemarkListAdapter extends BaseAdapter{
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        if (exchaneProducts.size()>0){
+        if (exchaneProducts!=null && exchaneProducts.get(position)!=null){
             viewHolder.tv_name.setText(exchaneProducts.get(position).getProductName());
             viewHolder.tv_money.setText(exchaneProducts.get(position).getPoint());
-            viewHolder.tv_time.setText(exchaneProducts.get(position).getCreateTime());
-            //String id = exchaneProducts.get(position).getID();//根据兑换的商品的id,找到该id的图片url
+            viewHolder.tv_time.setText(DateUtil.getStringByFormat(exchaneProducts.get(position).getCreateTime(), "yyyy-MM-dd"));
+            Arad.imageLoader.load(exchaneProducts.get(position).getProductImg()).
+                    placeholder(context.getResources().getDrawable(R.mipmap.image_default)).into(viewHolder.iv_pic);
         }
 
         return convertView;

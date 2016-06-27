@@ -14,6 +14,8 @@ import com.ctrl.forum.service.LocationService;
 import java.util.LinkedList;
 import java.util.List;
 
+import cn.jpush.android.api.JPushInterface;
+
 
 /**
  * 实例化 Arad
@@ -71,6 +73,9 @@ public class MyApplication extends AradApplication {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        JPushInterface.setDebugMode(true);
+        JPushInterface.init(this);
 
         /***
          * 初始化定位sdk，建议在Application中创建

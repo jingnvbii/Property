@@ -33,6 +33,15 @@ public class MemberInfo {
     private String signState; //是否签到; 0:没签到   1:已签到
 
     private String memberName;//用户名称
+    private String companyKind;//店铺分类
+
+    public String getCompanyKind() {
+        return companyKind;
+    }
+
+    public void setCompanyKind(String companyKind) {
+        this.companyKind = companyKind;
+    }
 
     public String getMemberName() {
         return memberName;

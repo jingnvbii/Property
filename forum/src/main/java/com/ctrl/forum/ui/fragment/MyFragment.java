@@ -319,12 +319,30 @@ public class MyFragment extends ToolBarFragment implements View.OnClickListener{
             case R.id.iv_grid_item:
                 int position = (int)uriId;
                 String uri = plugins.get(position).getLinkUrl();
-                Intent intent = new Intent();
-                intent.setAction(Intent.ACTION_VIEW);//没有指明调用哪个浏览器
-                //intent.setData(Uri.parse("http://" + uri));   //网址不全
-                intent.setData(Uri.parse(uri));   //网址不对
-                //intent.setData(Uri.parse("http://www.baidu.com"));
-                startActivity(intent);
+                if (uri!=null && !uri.equals("")) {
+                    String url = "";
+                    if (uri.length() > 3) {
+                        url = uri.substring(0, 4);//截取字符串的前4位
+                    } else {
+                        url = uri;
+                    }
+                    if (url.equals("http")) {
+                        Intent intent = new Intent();
+                        intent.setAction(Intent.ACTION_VIEW);//没有指明调用哪个浏览器
+                        //intent.setData(Uri.parse("http://" + uri));   //网址不全
+                        intent.setData(Uri.parse(uri));   //网址不对
+                        //intent.setData(Uri.parse("http://www.baidu.com"));
+                        startActivity(intent);
+                    } else {
+                        MessageUtils.showShortToast(getActivity(), "网址格式不对");
+                        Intent intent = new Intent();
+                        intent.setAction(Intent.ACTION_VIEW);//没有指明调用哪个浏览器
+                        intent.setData(Uri.parse("http://" + uri));   //网址不全
+                        //intent.setData(Uri.parse(uri));   //网址不对
+                        //intent.setData(Uri.parse("http://www.baidu.com"));
+                        startActivity(intent);
+                    }
+                }
                 break;
             default:
                 break;
@@ -336,7 +354,9 @@ public class MyFragment extends ToolBarFragment implements View.OnClickListener{
         super.onResume();
         bt_integral.setText("积分:" + Arad.preferences.getString("point"));
         tv_nickName.setText("昵称:" + Arad.preferences.getString("nickName"));
-
+        String imgUrl = Arad.preferences.getString("imgUrl");
+        if (imgUrl!=null&&!imgUrl.equals(""))
+            Arad.imageLoader.load(imgUrl).placeholder(getResources().getDrawable(R.mipmap.iconfont_head)).into(iv_head);//设置头像
         editDao.getVipInfo(Arad.preferences.getString("memberId"));
     }
 
@@ -440,4 +460,5 @@ public class MyFragment extends ToolBarFragment implements View.OnClickListener{
         }
 
     }
+
 }

@@ -87,9 +87,11 @@ public class CompanyCollectFragmentAdapter extends BaseAdapter{
                 switch (state){
                     case "1":
                         holder.tv_yingyezhong.setText("营业中");
+                        holder.tv_yingyezhong.setBackgroundResource(R.mipmap.tv_blue_bg);
                         break;
                     case "0":
                         holder.tv_yingyezhong.setText("休息中");
+                        holder.tv_yingyezhong.setBackgroundResource(R.drawable.tv_gray_bg);
                         break;
                 }
             }

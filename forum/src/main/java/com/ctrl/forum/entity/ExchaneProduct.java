@@ -6,15 +6,24 @@ package com.ctrl.forum.entity;
  */
 public class ExchaneProduct {
     private String ID; //兑换ID
-    private String createTime; //兑换时间
+    private long createTime; //兑换时间
     private String  productName; //兑换商品名称
     private String point;//兑换时花费积分
+    private String productImg;
 
-    public String getCreateTime() {
+    public String getProductImg() {
+        return productImg;
+    }
+
+    public void setProductImg(String productImg) {
+        this.productImg = productImg;
+    }
+
+    public long getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(String createTime) {
+    public void setCreateTime(long createTime) {
         this.createTime = createTime;
     }
 

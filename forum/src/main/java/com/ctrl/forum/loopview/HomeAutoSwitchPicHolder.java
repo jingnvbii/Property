@@ -181,46 +181,47 @@ public class HomeAutoSwitchPicHolder extends BaseHolder<List<String>>
           // ImageLoader.getInstance().displayImage(mPictures.get(position),iv);
             container.addView(iv, 0);
 
-            iv.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                  //  MessageUtils.showShortToast(mContext,"dfsdf"+mPosition);
-                    String type = listBanner.get(mPosition).getType();
-                    Intent intent=null;
-                    switch (type){
-                        case "0"://跳商家
-                           intent=new Intent(mContext, StoreShopListVerticalStyleActivity.class);
-                            intent.putExtra("id",listBanner.get(mPosition).getTargetId());
-                            mContext.startActivity(intent);
-                            AnimUtil.intentSlidIn((Activity)mContext);
-                            break;
-                        case "1"://跳商品详情
-                            intent=new Intent(mContext, StoreCommodityDetailActivity.class);
-                            intent.putExtra("id",listBanner.get(mPosition).getTargetId());
-                            mContext.startActivity(intent);
-                            AnimUtil.intentSlidIn((Activity)mContext);
-                            break;
-                        case "2"://跳帖子详情
-                            intent=new Intent(mContext, InvitationDetailActivity.class);
-                            intent.putExtra("id",listBanner.get(mPosition).getTargetId());
-                            mContext.startActivity(intent);
-                            AnimUtil.intentSlidIn((Activity)mContext);
-                            break;
-                        case "3"://外部链接
-                            if(listBanner.get(mPosition).getTargetUrl().length()>0) {
-                                Uri uri = Uri.parse(listBanner.get(mPosition).getTargetUrl());
+
+            if (listBanner.get(mPosition).getType()!=null) {
+                iv.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //  MessageUtils.showShortToast(mContext,"dfsdf"+mPosition);
+                        String type = listBanner.get(mPosition).getType();
+                        Intent intent = null;
+                        switch (type) {
+                            case "0"://跳商家
+                                intent = new Intent(mContext, StoreShopListVerticalStyleActivity.class);
+                                intent.putExtra("id", listBanner.get(mPosition).getTargetId());
+                                mContext.startActivity(intent);
+                                AnimUtil.intentSlidIn((Activity) mContext);
+                                break;
+                            case "1"://跳商品详情
+                                intent = new Intent(mContext, StoreCommodityDetailActivity.class);
+                                intent.putExtra("id", listBanner.get(mPosition).getTargetId());
+                                mContext.startActivity(intent);
+                                AnimUtil.intentSlidIn((Activity) mContext);
+                                break;
+                            case "2"://跳帖子详情
+                                intent = new Intent(mContext, InvitationDetailActivity.class);
+                                intent.putExtra("id", listBanner.get(mPosition).getTargetId());
+                                mContext.startActivity(intent);
+                                AnimUtil.intentSlidIn((Activity) mContext);
+                                break;
+                            case "3"://外部链接
+                                if (listBanner.get(mPosition).getTargetUrl().length() > 0) {
+                                    Uri uri = Uri.parse(listBanner.get(mPosition).getTargetUrl());
                                     intent = new Intent(Intent.ACTION_VIEW, uri);
                                     mContext.startActivity(intent);
                                     AnimUtil.intentSlidIn((Activity) mContext);
-                            }
-                            break;
+                                }
+                                break;
+                        }
+
+
                     }
-
-
-
-                }
-            });
-
+                });
+            }
 
             return iv;
         }
