@@ -35,6 +35,7 @@ public class MineSignActivity extends AppToolBarActivity {
     private void init() {
         tv_sign = (TextView) findViewById(R.id.tv_sign);
         et_sign = (EditText) findViewById(R.id.et_sign);
+        et_sign.setText(Arad.preferences.getString("remark"));
         et_sign.addTextChangedListener(mTextWatcher);
         edao = new EditDao(this);
         id = Arad.preferences.getString("memberId");
@@ -77,7 +78,7 @@ public class MineSignActivity extends AppToolBarActivity {
             public void onClick(View v) {
                 if (TextUtils.isEmpty(et_sign.getText().toString().trim())){
                     MessageUtils.showShortToast(getApplicationContext(),"签名内容不能为空!");
-                }else{edao.requestChangeBasicInfo("",et_sign.getText().toString().trim(),"",id);}
+                }else{edao.requestChangeRemark(et_sign.getText().toString().trim(), id);}
             }
         });
         return true;
@@ -86,8 +87,10 @@ public class MineSignActivity extends AppToolBarActivity {
     @Override
     public void onRequestSuccess(int requestCode) {
         super.onRequestSuccess(requestCode);
-        if (requestCode==0){
+        if (requestCode==7){
             MessageUtils.showShortToast(this,"修改签名成功");
+            Arad.preferences.putString("remark", et_sign.getText().toString().trim());
+            Arad.preferences.flush();
             this.finish();
         }
     }

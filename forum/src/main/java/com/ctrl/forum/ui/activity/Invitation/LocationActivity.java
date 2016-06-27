@@ -90,10 +90,10 @@ public class LocationActivity extends AppToolBarActivity implements View.OnClick
         String locationName = getIntent().getStringExtra("tv_location_name");
         if(locationName!=null) {
             mPoiInfoListStr.add(locationName);
+            adapter2 = new ArrayAdapter<String>(LocationActivity.this, android.R.layout.simple_list_item_1, mPoiInfoListStr);
+            adapter2.notifyDataSetChanged();
+            lv_locate.setAdapter(adapter2);
         }
-        adapter2 = new ArrayAdapter<String>(LocationActivity.this, android.R.layout.simple_list_item_1, mPoiInfoListStr);
-        adapter2.notifyDataSetChanged();
-        lv_locate.setAdapter(adapter2);
 
         initView();
     }

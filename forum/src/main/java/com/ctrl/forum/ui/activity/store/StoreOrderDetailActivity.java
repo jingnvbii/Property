@@ -217,6 +217,7 @@ public class StoreOrderDetailActivity extends AppToolBarActivity implements View
         switch (v.getId()) {
             case R.id.rl_order_detail_youhuiquan:
                 intent=new Intent(this, MineYouJuanActivity.class);
+                intent.putExtra("amount",productsTotal);
                 startActivityForResult(intent,660);
                 AnimUtil.intentSlidIn(this);
                 break;

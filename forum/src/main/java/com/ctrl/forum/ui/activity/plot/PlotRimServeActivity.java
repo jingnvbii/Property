@@ -7,7 +7,7 @@ import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.WindowManager;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -15,7 +15,6 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.beanu.arad.Arad;
-import com.beanu.arad.widget.SlidingUpPanelLayout;
 import com.ctrl.forum.R;
 import com.ctrl.forum.base.AppToolBarActivity;
 import com.ctrl.forum.base.Constant;
@@ -60,7 +59,6 @@ public class PlotRimServeActivity extends AppToolBarActivity implements View.OnC
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_plot_rim_serve);
         ButterKnife.inject(this);
-
         plotRimServeAdapter = new PlotRimServeAdapter(this);
         lv_content.setAdapter(plotRimServeAdapter);
         plotRimServeAdapter.setOnButton(this);
@@ -93,16 +91,21 @@ public class PlotRimServeActivity extends AppToolBarActivity implements View.OnC
 
         initData();
         initPop();
+
     }
 
     //初始化分类列表
     private void initView() {
-        if (category2s.size()<4 || category2s.size()==4) {
-            for (int i = 0; i < category2s.size(); i++) {
-                TextView v = (TextView) ll_category.getChildAt(i);
-                v.setText(category2s.get(i).getName());
-                v.setOnClickListener(this);
-            }
+        for (int i = 0; i < category2s.size(); i++) {
+            TextView v = new TextView(this);
+            //TextView v = (TextView) ll_category.getChildAt(i);
+            v.setTextColor(getResources().getColor(R.color.text_black));
+            v.setText(category2s.get(i).getName());
+            v.setTextSize(getResources().getDimension(R.dimen.text_size_num));
+            v.setPadding(30, 30, 30, 30);
+            //v.setWidth(1);
+            v.setOnClickListener(this);
+            ll_category.addView(v);
         }
         TextView v = (TextView)ll_category.getChildAt(0);
         v.setTextColor(getResources().getColor(R.color.red_bg));
@@ -121,7 +124,7 @@ public class PlotRimServeActivity extends AppToolBarActivity implements View.OnC
     //初始化弹窗
     private void initPop() {
         view = LayoutInflater.from(this).inflate(R.layout.call_phone,null);
-        popupWindow = new PopupWindow(view, SlidingUpPanelLayout.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
+        popupWindow = new PopupWindow(view, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT,true);
         popupWindow.setFocusable(true);
         ColorDrawable colorDrawable = new ColorDrawable(getResources().getColor(R.color.pop_bg));
         colorDrawable.setAlpha(40);
@@ -217,6 +220,7 @@ public class PlotRimServeActivity extends AppToolBarActivity implements View.OnC
                 if (rimServiceCompanies!=null){
                     rimServiceCompanies.clear();
                 }
+                PAGE_NUM=1;
                 plotDao.getAroundServiceCompanyList(PAGE_NUM + "", Constant.PAGE_SIZE + "",
                         Arad.preferences.getString("memberId"), CompantyCategyId,
                         Arad.preferences.getString("latitude"), Arad.preferences.getString("longitude"));

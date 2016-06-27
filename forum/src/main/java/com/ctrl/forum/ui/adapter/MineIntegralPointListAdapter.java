@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.ctrl.forum.R;
 import com.ctrl.forum.entity.RedeemHistory;
+import com.ctrl.forum.utils.DateUtil;
 
 import java.util.List;
 
@@ -58,12 +59,49 @@ public class MineIntegralPointListAdapter extends BaseAdapter{
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        if (redeemHistories.size()>0){
-            String type = redeemHistories.get(position).getPointType(); //类型（0：会员注册、1：商城消费、2：积分兑换...后续逐渐追加
-            String time = redeemHistories.get(position).getCreateTime();
-
+        if (redeemHistories!=null && redeemHistories.get(position)!=null){
+            viewHolder.tv_day.setText(DateUtil.getStringByFormat(redeemHistories.get(position).getCreateTime(), "yyyy-MM-dd   hh:mm:ss"));
             viewHolder.tv_fen.setText(redeemHistories.get(position).getPoint());
-            //String id = exchaneProducts.get(position).getID();//根据兑换的商品的id,找到该id的图片url
+
+            String doType  = redeemHistories.get(position).getDoType();
+            switch (doType){
+                case "1":
+                    viewHolder.tv_content.setText("商城消费");
+                    break;
+                case "2":
+                    viewHolder.tv_content.setText("积分兑换");
+                    break;
+                case "3":
+                    viewHolder.tv_content.setText("每日签到");
+                    break;
+                case "4":
+                    viewHolder.tv_content.setText("连续签到30天");
+                    break;
+                case "5":
+                    viewHolder.tv_content.setText("连续签到100天");
+                    break;
+                case "6":
+                    viewHolder.tv_content.setText("连续签到200天");
+                    break;
+                case "7":
+                    viewHolder.tv_content.setText("绑定手机号");
+                    break;
+                case "8":
+                    viewHolder.tv_content.setText("完整填写个人资料");
+                    break;
+                case "9":
+                    viewHolder.tv_content.setText("回别人帖");
+                    break;
+                case "10":
+                    viewHolder.tv_content.setText("被管理员拉黑");
+                    break;
+                case "11":
+                    viewHolder.tv_content.setText("被拉黑设备");
+                    break;
+                default:
+                    viewHolder.tv_content.setText("其它");
+                    break;
+            }
         }
 
         return convertView;

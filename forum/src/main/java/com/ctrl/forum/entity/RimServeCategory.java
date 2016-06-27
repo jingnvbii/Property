@@ -9,7 +9,7 @@ import java.util.List;
 public class RimServeCategory {
     private String id;//分类id
     private String name; //分类名称
-    private String category_icon; //分类图标
+    private String categoryIcon; //分类图标
     private List<RimServeCategorySecond> aroundservicecategorylist; //二级分类的列表集合
 
     public List<RimServeCategorySecond> getAroundservicecategorylist() {
@@ -20,12 +20,12 @@ public class RimServeCategory {
         this.aroundservicecategorylist = aroundservicecategorylist;
     }
 
-    public String getCategory_icon() {
-        return category_icon;
+    public String getCategoryIcon() {
+        return categoryIcon;
     }
 
-    public void setCategory_icon(String category_icon) {
-        this.category_icon = category_icon;
+    public void setCategoryIcon(String categoryIcon) {
+        this.categoryIcon = categoryIcon;
     }
 
     public String getId() {

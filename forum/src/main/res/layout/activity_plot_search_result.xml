@@ -8,35 +8,10 @@
         android:background="#dc3d3c"
         android:layout_height="@dimen/toolbar_height"
         android:id="@+id/relativeLayout4">
-
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="周边服务"
-            android:id="@+id/rim_serve"
-            android:textColor="@color/white"
-            android:textSize="14sp"
-            android:layout_marginRight="10dp"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="发帖"
-            android:id="@+id/rim_post"
-            android:layout_centerVertical="true"
-            android:textColor="@color/white"
-            android:textSize="14sp"
-            android:layout_marginRight="10dp"
-            android:layout_toLeftOf="@+id/rim_serve"
-            android:layout_toStartOf="@+id/rim_serve" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="某某小区"
-            android:drawableRight="@mipmap/iconfont_refresh"
+            android:text="小区帖子"
             android:drawablePadding="5dp"
             android:textSize="19sp"
             android:id="@+id/tv_plot_name"
@@ -48,31 +23,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/iv_back"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"
             android:src="@mipmap/white_arrow_left_none"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="10dp"/>
+            android:layout_centerVertical="true" />
 
     </RelativeLayout>
-
-    <EditText
-        android:id="@+id/et_search"
-        android:layout_width="match_parent"
-        android:layout_height="35dp"
-        android:background="@drawable/bt_gray_stroke"
-        android:textSize="@dimen/text_size_basic"
-        android:gravity="center_vertical"
-        android:paddingLeft="5dp"
-        android:textColorHint="@color/text_newpwd"
-        android:singleLine="true"
-        android:imeOptions="actionGo"
-        android:layout_marginBottom="@dimen/margin_left_and_right"
-        android:layout_marginTop="@dimen/margin_left_and_right"
-        android:layout_marginRight="@dimen/margin_left_and_right"
-        android:layout_marginLeft="@dimen/margin_left_and_right"
-        >
-        <requestFocus/>
-    </EditText>
 
     <com.handmark.pulltorefresh.library.PullToRefreshListView
         android:layout_width="match_parent"

@@ -6,14 +6,29 @@ package com.ctrl.forum.entity;
  */
 public class CompanyInfo {
     private String companyId; //店铺id
-    private String companyName; //店铺名称
-    private long companyStartTime; //店铺营业时间
-    private long companyEndTime; //店铺结业时间
+    private String name; //店铺名称
+    private String workStartTime; //店铺营业时间
+    private String workEndTime; //店铺结业时间
     private String packetEnable; //是否使用优惠券（0-否 1-是）
     private String couponEnable; //是否使用现金券（0-否 1-是）
     private String mobile; //店铺电话
-    private String companyKind; //店铺分类
     private String img;
+
+    public String getWorkEndTime() {
+        return workEndTime;
+    }
+
+    public void setWorkEndTime(String workEndTime) {
+        this.workEndTime = workEndTime;
+    }
+
+    public String getWorkStartTime() {
+        return workStartTime;
+    }
+
+    public void setWorkStartTime(String workStartTime) {
+        this.workStartTime = workStartTime;
+    }
 
     public String getImg() {
         return img;
@@ -23,13 +38,6 @@ public class CompanyInfo {
         this.img = img;
     }
 
-    public long getCompanyEndTime() {
-        return companyEndTime;
-    }
-
-    public void setCompanyEndTime(long companyEndTime) {
-        this.companyEndTime = companyEndTime;
-    }
 
     public String getCompanyId() {
         return companyId;
@@ -37,14 +45,6 @@ public class CompanyInfo {
 
     public void setCompanyId(String companyId) {
         this.companyId = companyId;
-    }
-
-    public String getCompanyKind() {
-        return companyKind;
-    }
-
-    public void setCompanyKind(String companyKind) {
-        this.companyKind = companyKind;
     }
 
     public String getMobile() {
@@ -55,21 +55,14 @@ public class CompanyInfo {
         this.mobile = mobile;
     }
 
-    public String getCompanyName() {
-        return companyName;
+    public String getName() {
+        return name;
     }
 
-    public void setCompanyName(String companyName) {
-        this.companyName = companyName;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public long getCompanyStartTime() {
-        return companyStartTime;
-    }
-
-    public void setCompanyStartTime(long companyStartTime) {
-        this.companyStartTime = companyStartTime;
-    }
 
     public String getCouponEnable() {
         return couponEnable;

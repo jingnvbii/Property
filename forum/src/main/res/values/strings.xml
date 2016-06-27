@@ -517,5 +517,9 @@
     <string name="auth_cancel">授权操作已取消</string>
     <string name="auth_error">授权操作遇到错误，请阅读Logcat输出</string>
     <string name="auth_complete">授权成功，正在跳转登录操作…</string>
+    <string name="title_activity_navi">NaviActivity</string>
+    <string name="title_activity_merchant_order_detail">MerchantOrderDetailActivity</string>
+    <string name="title_activity_order_pingjia">OrderPingjiaActivity</string>
+    <string name="title_activity_integral_store_detail">IntegralStoreDetailActivity</string>
 
 </resources>

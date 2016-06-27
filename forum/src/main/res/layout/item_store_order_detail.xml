@@ -13,14 +13,14 @@
         />
     <TextView
         android:id="@+id/tv_item_order_detail_num"
-        android:text="*3"
+        android:text="x3"
         android:layout_centerHorizontal="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         />
     <TextView
         android:id="@+id/tv_item_order_detail_price"
-        android:text="$15"
+        android:text="￥15"
         android:layout_alignParentRight="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

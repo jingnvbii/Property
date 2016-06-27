@@ -6,14 +6,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.ctrl.forum.R;
 import com.ctrl.forum.entity.CompanyOrder;
-import com.ctrl.forum.entity.OrderItem;
-import com.ctrl.forum.entity.OrderState;
+import com.ctrl.forum.utils.DateUtil;
 
 import java.util.List;
 
@@ -26,35 +23,14 @@ import butterknife.InjectView;
  */
 public class MineOrderManagerAdapter extends BaseAdapter {
     private List<CompanyOrder> companyOrders;
-    private List<OrderItem> orderItems;
-    private List<OrderState> orderStates;
     private Context context;
     private View.OnClickListener onButton;
-    private int type;
-    private int gone; //0位显示,1为隐藏
 
     public MineOrderManagerAdapter(Context context) {this.context = context;}
 
-    public void setMessages(List<CompanyOrder> companyOrders) {
+    public void setCompanyOrders(List<CompanyOrder> companyOrders) {
         this.companyOrders = companyOrders;
         notifyDataSetChanged();
-    }
-
-    public void setOrderItems(List<OrderItem> orderItems) {
-        this.orderItems = orderItems;
-    }
-
-    public void setOrderStates(List<OrderState> orderStates) {
-        this.orderStates = orderStates;
-    }
-
-    public void setGone(int gone) {
-        this.gone = gone;
-        notifyDataSetChanged();
-    }
-
-    public void setType(int type) {
-        this.type = type;
     }
 
     public void setOnButton(View.OnClickListener onButton) {
@@ -62,7 +38,9 @@ public class MineOrderManagerAdapter extends BaseAdapter {
     }
 
     @Override
-    public int getCount() {return companyOrders!=null?companyOrders.size():0;}
+    public int getCount() {
+        return companyOrders!=null?companyOrders.size():0;
+    }
 
     @Override
     public Object getItem(int position) {return companyOrders.get(position);}
@@ -76,7 +54,10 @@ public class MineOrderManagerAdapter extends BaseAdapter {
         if(convertView==null){
             convertView= LayoutInflater.from(context).inflate(R.layout.item_mine_order,parent,false);
             holder=new ViewHolder(convertView);
-            holder.detail.setVisibility(View.GONE);
+
+            holder.bt_send.setOnClickListener(onButton);
+            holder.bt_send.setTag(position);
+
             convertView.setTag(holder);
         }else {
             holder=(ViewHolder)convertView.getTag();
@@ -85,77 +66,49 @@ public class MineOrderManagerAdapter extends BaseAdapter {
         if (companyOrders!=null){
             final CompanyOrder companyOrder = companyOrders.get(position);
             holder.tv_number.setText(companyOrder.getOrderNum());
-            holder.tv_order_time.setText(companyOrder.getCreateTime());//时间需改格式,评分条未传值,评价内容随评分条改变
+            holder.tv_order_time.setText(DateUtil.getStringByFormat(companyOrder.getCreateTime(), "yyyy-MM-dd   hh:mm:ss"));//时间需改格式,评分条未传值,评价内容随评分条改变
             holder.tv_order_name.setText(companyOrder.getReceiverName());
             holder.tv_order_phone.setText(companyOrder.getReceiverMobile());
             holder.tv_order_address.setText(companyOrder.getAddress());
-            holder.bt_send.setOnClickListener(onButton);
-            holder.bt_send.setTag(companyOrder.getId());
-        }
 
-        if (gone==0){
-            holder.rl_bt.setVisibility(View.GONE);
-            holder.detail.setVisibility(View.VISIBLE);
-        }else{
-            holder.rl_bt.setVisibility(View.VISIBLE);
-            holder.detail.setVisibility(View.GONE);
-        }
-
-        switch (type){
-            case 0:
-                holder.tv_state.setText("已付款");
-                holder.bt_send.setText("发货");
-                holder.rl_bt.setVisibility(View.VISIBLE);
-
-                if(companyOrders!=null && companyOrders.get(position).getState()!=null) {
-                    CompanyOrder companyOrder = companyOrders.get(position);
-                    //订单状态
-                    String state = companyOrder.getState();
-                    switch (state) {
-                        case "1":
-                            holder.tv_state.setText("订单被用户取消");
-                            holder.bt_send.setVisibility(View.GONE);
-                            break;
-                        case "2":
-                            holder.tv_state.setText("订单被系统取消");
-                            holder.bt_send.setVisibility(View.GONE);
-                            break;
-                        case "3":
-                            holder.tv_state.setText("未付款");
-                            holder.bt_send.setVisibility(View.GONE);
-                            break;
-                        case "4":
-                            holder.tv_state.setText("已付款");
-                            holder.bt_send.setText("发货");
-                            holder.bt_send.setVisibility(View.VISIBLE);
-                            break;
-                        case "5":
-                            holder.tv_state.setText("待收货");
-                            holder.bt_send.setVisibility(View.GONE);
-                            break;
-                        case "6":
-                            holder.tv_state.setText("已评价");
-                            holder.bt_send.setVisibility(View.GONE);
-                            break;
+            String type = companyOrders.get(position).getState();
+            switch (type){
+                case "1": //1-订单被用户取消
+                    holder.tv_state.setText("订单被用户取消");
+                    holder.bt_send.setVisibility(View.GONE);
+                    break;
+                case "2":
+                    holder.tv_state.setText("订单被系统取消");
+                    holder.bt_send.setVisibility(View.GONE);
+                    break;
+                case "3":
+                    holder.tv_state.setText("未付款");
+                    holder.bt_send.setVisibility(View.GONE);
+                    break;
+                case "4":
+                    holder.tv_state.setText("已付款");
+                    holder.bt_send.setVisibility(View.VISIBLE);
+                    holder.bt_send.setText("发货");
+                    holder.bt_send.setOnClickListener(onButton);
+                    holder.bt_send.setTag(position);
+                    break;
+                case "5":
+                    holder.tv_state.setText("待签收");
+                    holder.bt_send.setVisibility(View.GONE);
+                    break;
+                case "6":
+                    String evaluationState = companyOrders.get(position).getEvaluationState();
+                    if (evaluationState.equals("0")){
+                        holder.tv_state.setText("未评价");
+                    }else{
+                        holder.tv_state.setText("已评价");
                     }
-                }
-                break;
-            case 1:
-                holder.tv_state.setText("已付款");
-                holder.bt_send.setText("发货");
-                holder.bt_send.setVisibility(View.VISIBLE);
-                holder.rl_bt.setVisibility(View.VISIBLE);
-                break;
-            case 2:
-                holder.tv_state.setText("待收货");
-                holder.bt_send.setVisibility(View.GONE);
-                break;
-            case 3:
-                holder.tv_state.setText("已评价");
-                holder.bt_send.setVisibility(View.GONE);
-                break;
+                    holder.bt_send.setVisibility(View.GONE);
+                    break;
+                default:
+                    break;
+            }
         }
-
         return convertView;
     }
 
@@ -173,11 +126,7 @@ public class MineOrderManagerAdapter extends BaseAdapter {
         @InjectView(R.id.tv_order_address)
         TextView tv_order_address;
         @InjectView(R.id.bt_send)
-                Button bt_send;
-        @InjectView(R.id.rl_bt)
-        RelativeLayout rl_bt;
-        @InjectView(R.id.detail)
-        LinearLayout detail;
+        Button bt_send;
 
         ViewHolder(View view) {
             ButterKnife.inject(this, view);

@@ -40,10 +40,12 @@ public class MineStoreDao extends IDao {
      * 获取会员订单列表接口
      * @param memberId  会员id
      */
-    public void getMemeberOrder(String memberId){
+    public void getMemeberOrder(String memberId,String pageNum,String pageSize){
        String url = "member/getMemeberOrderList";
         Map<String,String> map = new HashMap<>();
         map.put("memberId",memberId);
+        map.put("pageNum",pageNum);
+        map.put("pageSize",pageSize);
         postRequest(Constant.RAW_URL + url, mapToRP(map), 0);
     }
 
@@ -138,15 +140,32 @@ public class MineStoreDao extends IDao {
         postRequest(Constant.RAW_URL+url,mapToRP(map),7);
     }
 
+    /**
+     * 商家发货
+     * @param id 订单主键id
+     * @param memberId 会员id
+     * @param orderNum 订单编号
+     */
+    public void deliverGoods(String id,String memberId,String orderNum){
+        String url = "order/deliverGoods";
+        Map<String,String> map = new HashMap<>();
+        map.put("id",id);
+        map.put("memberId",memberId);
+        map.put("orderNum",orderNum);
+        postRequest(Constant.RAW_URL+url,mapToRP(map),8);
+    }
+
     @Override
     public void onRequestSuccess(JsonNode result, int requestCode) throws IOException {
       if (requestCode==0){
           Log.d("demo", "dao中结果集(获取我的订单列表): " + result);
-          memeberOrders = JsonUtil.node2pojoList(result.findValue("list"), MemeberOrder.class);
+          List<MemeberOrder> list = JsonUtil.node2pojoList(result.findValue("list"), MemeberOrder.class);
+          memeberOrders.addAll(list);
       }
         if (requestCode==1){
             Log.d("demo", "dao中结果集(商家获取订单列表): " + result);
-            companyOrders = JsonUtil.node2pojoList(result.findValue("orderList"), CompanyOrder.class);
+            List<CompanyOrder> list = JsonUtil.node2pojoList(result.findValue("orderList"), CompanyOrder.class);
+            companyOrders.addAll(list);
         }
         if (requestCode==2){
 

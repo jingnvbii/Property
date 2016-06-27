@@ -2,17 +2,26 @@ package com.ctrl.forum.ui.activity.mine;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 
+import com.beanu.arad.Arad;
+import com.beanu.arad.utils.MessageUtils;
 import com.ctrl.forum.R;
 import com.ctrl.forum.base.AppToolBarActivity;
-import com.ctrl.forum.ui.fragment.MineOrderManagerFragment;
+import com.ctrl.forum.base.Constant;
+import com.ctrl.forum.dao.MineStoreDao;
+import com.ctrl.forum.entity.CompanyOrder;
+import com.ctrl.forum.ui.adapter.MineOrderManagerAdapter;
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.PullToRefreshListView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -23,8 +32,8 @@ import butterknife.InjectView;
 public class MineOrderManageActivity extends AppToolBarActivity implements View.OnClickListener{
     @InjectView(R.id.ll_text)
     LinearLayout ll_text;
-    @InjectView(R.id.fl_content)
-    ViewPager fl_content;
+    @InjectView(R.id.lv_content)
+    PullToRefreshListView lv_content;
     @InjectView(R.id.lines)
     LinearLayout lines;
     @InjectView(R.id.tv_xian)
@@ -32,8 +41,11 @@ public class MineOrderManageActivity extends AppToolBarActivity implements View.
     @InjectView(R.id.tv_shop_manager)
     TextView tv_shop_manager;
 
-    private FragmentPagerAdapter fragmentPagerAdapter;
-    private MineOrderManagerFragment shopManagerFragment;
+    private MineOrderManagerAdapter orderManagerAdapter;
+    private List<CompanyOrder> companyOrders = new ArrayList<>();
+    private MineStoreDao odao;
+    public static int type = 0;
+    private int PAGE_NUM =1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,35 +54,51 @@ public class MineOrderManageActivity extends AppToolBarActivity implements View.
         ButterKnife.inject(this);
 
         initView();
-        initCtrl();
 
-        fl_content.setAdapter(fragmentPagerAdapter);
+        orderManagerAdapter = new MineOrderManagerAdapter(this);
+        lv_content.setAdapter(orderManagerAdapter);
+        orderManagerAdapter.setOnButton(this);
 
-        fl_content.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        initData();
+
+        lv_content.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
             @Override
-            public void onPageSelected(int arg0) {
-                for (int i = 0; i < ll_text.getChildCount(); i++) {
-                    ((TextView) ll_text.getChildAt(i))
-                            .setTextColor(getResources().getColor(R.color.text_black1));
-                    lines.getChildAt(i).setBackgroundColor(getResources().getColor(R.color.line_gray));
+            public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
+                if (companyOrders != null) {
+                    companyOrders.clear();
                 }
-                ((TextView) ll_text.getChildAt(arg0))
-                        .setTextColor(getResources().getColor(R.color.red_bg));
-                lines.getChildAt(arg0).setBackgroundColor(getResources().getColor(R.color.red_bg));
+                PAGE_NUM = 1;
+                odao.companyOrderList(Arad.preferences.getString("companyId"), type + "", Constant.PAGE_SIZE + "", PAGE_NUM + "");
             }
 
             @Override
-            public void onPageScrolled(int arg0, float arg1, int arg2) {
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int arg0) {
+            public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
+                if (companyOrders != null) {
+                    PAGE_NUM += 1;
+                    odao.companyOrderList(Arad.preferences.getString("companyId"), type + "", Constant.PAGE_SIZE + "", PAGE_NUM + "");
+                } else {
+                    lv_content.onRefreshComplete();
+                }
             }
         });
 
-        ((TextView) ll_text.getChildAt(0))
-                .setTextColor(getResources().getColor(R.color.red_bg));
-        lines.getChildAt(0).setBackgroundColor(getResources().getColor(R.color.red_bg));
+        lv_content.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(getApplicationContext(), MerchantOrderDetailActivity.class);
+                intent.putExtra("id", companyOrders.get(position - 1).getId());
+                intent.putExtra("deliveryNo", companyOrders.get(position - 1).getDeliveryNo());
+                intent.putExtra("expressName", companyOrders.get(position - 1).getExpressName());
+                intent.putExtra("receiverMobile", companyOrders.get(position - 1).getReceiverMobile());
+                intent.putExtra("evaluationState", companyOrders.get(position - 1).getEvaluationState());
+                startActivity(intent);
+            }
+        });
+    }
+
+    private void initData() {
+        odao = new MineStoreDao(this);
+        odao.companyOrderList(Arad.preferences.getString("companyId"), type + "", Constant.PAGE_SIZE + "", PAGE_NUM + "");
     }
 
     private void initView() {
@@ -83,39 +111,12 @@ public class MineOrderManageActivity extends AppToolBarActivity implements View.
         tv_shop_manager.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {//店铺管理
-                startActivity(new Intent(getApplicationContext(),MineShopManagerActivity.class));
+                startActivity(new Intent(getApplicationContext(), MineShopManagerActivity.class));
             }
         });
-    }
-
-    private void initCtrl() {
-        fragmentPagerAdapter = new FragmentPagerAdapter(getSupportFragmentManager()) {
-            @Override
-            public Fragment getItem(int position) {
-                shopManagerFragment = MineOrderManagerFragment.newInstance();
-                Bundle bundle = new Bundle();
-                bundle.putInt("position",position);
-                shopManagerFragment.setArguments(bundle);
-                return shopManagerFragment;
-            }
-
-            @Override
-            public int getCount() {
-                return ll_text.getChildCount();
-            }
-        };
-    }
-
-    public void onClick(View v) {
-        for (int i = 0; i < ll_text.getChildCount(); i++) {
-            ((TextView) ll_text.getChildAt(i)).setTextColor(getResources().getColor(R.color.text_black1));
-            lines.getChildAt(i).setBackgroundColor(getResources().getColor(R.color.line_gray));
-        }
-
-        ((TextView) v).setTextColor(getResources().getColor(R.color.red_bg));
-        (lines.getChildAt(ll_text.indexOfChild(v))).setBackgroundColor(getResources().getColor(R.color.red_bg));
-
-        fl_content.setCurrentItem(ll_text.indexOfChild(v));
+        ((TextView) ll_text.getChildAt(0))
+                .setTextColor(getResources().getColor(R.color.red_bg));
+        lines.getChildAt(0).setBackgroundColor(getResources().getColor(R.color.red_bg));
     }
 
     @Override
@@ -132,5 +133,59 @@ public class MineOrderManageActivity extends AppToolBarActivity implements View.
 
     @Override
     public String setupToolBarTitle() {return "订单管理";}
+
+    public void onClick(View v) {
+        Object id = v.getTag();
+        switch (v.getId()){
+            case R.id.bt_send://发货
+                int position = (int)id;
+                odao.deliverGoods(companyOrders.get(position).getId(),Arad.preferences.getString("memberId"), companyOrders.get(position).getOrderNum());
+                break;
+            default:
+        for (int i = 0; i < ll_text.getChildCount(); i++) {
+            ((TextView) ll_text.getChildAt(i)).setTextColor(getResources().getColor(R.color.text_black1));
+            lines.getChildAt(i).setBackgroundColor(getResources().getColor(R.color.line_gray));
+        }
+        ((TextView) v).setTextColor(getResources().getColor(R.color.red_bg));
+        (lines.getChildAt(ll_text.indexOfChild(v))).setBackgroundColor(getResources().getColor(R.color.red_bg));
+        type = ll_text.indexOfChild(v);
+        if (companyOrders!=null){
+            companyOrders.clear();
+            orderManagerAdapter.setCompanyOrders(companyOrders);
+            lv_content.setAdapter(orderManagerAdapter);
+        }
+        PAGE_NUM=1;
+        odao.companyOrderList(Arad.preferences.getString("companyId"), type + "", Constant.PAGE_SIZE + "", PAGE_NUM + "");
+        break;
+        }
+
+    }
+
+    @Override
+    public void onRequestSuccess(int requestCode) {
+        super.onRequestSuccess(requestCode);
+        lv_content.onRefreshComplete();
+        if (requestCode==1){
+            companyOrders  = odao.getCompanyOrders();
+            if (companyOrders!=null){
+                orderManagerAdapter.setCompanyOrders(companyOrders);
+            }
+            orderManagerAdapter.notifyDataSetChanged();
+        }
+        if (requestCode==8){
+            MessageUtils.showShortToast(this, "发货成功");
+            if (companyOrders!=null){
+                companyOrders.clear();
+                PAGE_NUM=1;
+            }
+            odao.companyOrderList(Arad.preferences.getString("companyId"), type + "", Constant.PAGE_SIZE + "", PAGE_NUM + "");
+        }
+    }
+
+    @Override
+    public void onRequestFaild(String errorNo, String errorMessage) {
+        super.onRequestFaild(errorNo, errorMessage);
+        lv_content.onRefreshComplete();
+    }
 
 }

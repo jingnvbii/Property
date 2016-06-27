@@ -8,6 +8,8 @@ import com.beanu.arad.utils.AnimUtil;
 import com.ctrl.forum.R;
 import com.ctrl.forum.base.AppToolBarActivity;
 
+import cn.jpush.android.api.JPushInterface;
+
 /**
  * 开始页面 activity
  * Created by Eric on 2015/11/23.
@@ -32,7 +34,15 @@ public class StartActivity extends AppToolBarActivity {
         }
 
     }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        JPushInterface.onResume(this);
+    }
 
-
-
+    @Override
+    protected void onPause() {
+        super.onPause();
+        JPushInterface.onPause(this);
+    }
 }

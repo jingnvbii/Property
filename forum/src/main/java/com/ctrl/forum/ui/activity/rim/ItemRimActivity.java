@@ -22,7 +22,6 @@ import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.map.Marker;
 import com.baidu.mapapi.map.MarkerOptions;
-import com.baidu.mapapi.map.Overlay;
 import com.baidu.mapapi.model.LatLng;
 import com.baidu.mapapi.model.LatLngBounds;
 import com.beanu.arad.Arad;
@@ -61,7 +60,7 @@ public class ItemRimActivity extends ToolBarActivity implements View.OnClickList
     private PopupWindow popupWindow;
     private TextView bo_hao,call_up,cancel;
     static int position;
-    private static final LatLng GEO_SHENGDONG = new LatLng(36, 117);
+
     /**
      * MapView 是地图主控件
      */
@@ -119,8 +118,8 @@ public class ItemRimActivity extends ToolBarActivity implements View.OnClickList
                     intent.putExtra("address", rimServiceCompanies.get(position - 1).getAddress());
                     intent.putExtra("telephone", rimServiceCompanies.get(position - 1).getTelephone());
                     intent.putExtra("callTimes", rimServiceCompanies.get(position - 1).getCallTimes());
-                    intent.putExtra("latitude",rimServiceCompanies.get(position-1).getLatitude());
-                    intent.putExtra("longitude",rimServiceCompanies.get(position-1).getLongitude());
+                    intent.putExtra("latitude", rimServiceCompanies.get(position - 1).getLatitude().toString());
+                    intent.putExtra("longitude", rimServiceCompanies.get(position - 1).getLongitude().toString());
                     startActivity(intent);
                 }
             }
@@ -142,25 +141,23 @@ public class ItemRimActivity extends ToolBarActivity implements View.OnClickList
     }
 
     private void initOverlay() {
-
+        LatLngBounds.Builder builder = new LatLngBounds.Builder();
         Marker mMarker = null;
         for(int i=0;i<rimServiceCompanies.size();i++){
 
             Double latitude = rimServiceCompanies.get(i).getLatitude();
             Double longitude = rimServiceCompanies.get(i).getLongitude();
             MarkerOptions ooA = new MarkerOptions().position(new LatLng(latitude, longitude)).icon(bdA).zIndex(9).draggable(false);
-            //掉下动画
-            ooA.animateType(MarkerOptions.MarkerAnimateType.drop);
+            //生长动画
+            ooA.animateType(MarkerOptions.MarkerAnimateType.grow);
             mMarker = (Marker) (mBaiduMap.addOverlay(ooA));
             mBaiduMap.addOverlay(ooA);
-        }
 
-        Overlay overlay;
-        LatLngBounds.Builder builder = new LatLngBounds.Builder();
-        builder.include(mMarker.getPosition());
+            LatLng l1 = mMarker.getPosition();
+            builder.include(l1);
+        }
         mBaiduMap.setMapStatus(MapStatusUpdateFactory
                 .newLatLngBounds(builder.build()));
-
     }
 
 

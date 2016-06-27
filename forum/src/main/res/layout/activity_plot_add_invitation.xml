@@ -135,8 +135,7 @@
                         android:layout_marginRight="@dimen/margin_left_and_right"
                         android:layout_marginLeft="5dp"
                         android:gravity="top"
-                        android:textSize="@dimen/text_size_small"
-                        android:hint="请输入您要发布的文字(不得少于20个字符)"/>
+                        android:textSize="@dimen/text_size_small" />
 
                 </LinearLayout>
                 <!-- 网格显示图片 行列间距5dp 每列宽度90dp -->

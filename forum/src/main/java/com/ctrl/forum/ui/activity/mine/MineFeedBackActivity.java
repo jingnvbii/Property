@@ -74,7 +74,7 @@ public class MineFeedBackActivity extends AppToolBarActivity {
 
     @Override
     public boolean setupToolBarRightText(TextView mRightText) {
-        mRightText.setText(getResources().getString(R.string.send));
+        mRightText.setText("发送");
         mRightText.setTextColor(Color.WHITE);
         mRightText.setOnClickListener(new View.OnClickListener() {
             @Override

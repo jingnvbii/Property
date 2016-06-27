@@ -5,13 +5,13 @@ package com.ctrl.forum.entity;
  * Created by Administrator on 2016/5/16.
  */
 public class CompanyOrder {
-    private String createTime; //下单时间
-    private String acceptTime; //商家接单时间
-    private String sellCancelTime; //商家取消订单时间
-    private String cancelTime; //买家取消订单时间
-    private String arriveTime; //送达时间
-    private String signTime; //签收时间
-    private String payTime; //支付时间
+    private long createTime; //下单时间
+    private long acceptTime; //商家接单时间
+    private long sellCancelTime; //商家取消订单时间
+    private long cancelTime; //买家取消订单时间
+    private long arriveTime; //送达时间
+    private long signTime; //签收时间
+    private long payTime; //支付时间
     private String contact; //如果快递显示单号，商家显示手机号
     private String companyname; //店铺名称
     private String orderNum; //订单编号
@@ -21,6 +21,33 @@ public class CompanyOrder {
     private String state; //状态state 1-订单被用户取消 2-订单被系统取消 3-未付款 4-商家未发货 5-用户未签收 6-用户已签收
     private String receiverMobile; //收件人电话
     private String id; //订单id
+    private String evaluationState;//String	评价状态（0：未评价、1：已评价）
+    private String deliveryNo;//快递单号
+    private String expressName;//快递公司名称
+
+    public String getDeliveryNo() {
+        return deliveryNo;
+    }
+
+    public void setDeliveryNo(String deliveryNo) {
+        this.deliveryNo = deliveryNo;
+    }
+
+    public String getEvaluationState() {
+        return evaluationState;
+    }
+
+    public void setEvaluationState(String evaluationState) {
+        this.evaluationState = evaluationState;
+    }
+
+    public String getExpressName() {
+        return expressName;
+    }
+
+    public void setExpressName(String expressName) {
+        this.expressName = expressName;
+    }
 
     public String getId() {
         return id;
@@ -38,11 +65,11 @@ public class CompanyOrder {
         this.receiverMobile = receiverMobile;
     }
 
-    public String getAcceptTime() {
+    public long getAcceptTime() {
         return acceptTime;
     }
 
-    public void setAcceptTime(String acceptTime) {
+    public void setAcceptTime(long acceptTime) {
         this.acceptTime = acceptTime;
     }
 
@@ -54,19 +81,19 @@ public class CompanyOrder {
         this.address = address;
     }
 
-    public String getArriveTime() {
+    public long getArriveTime() {
         return arriveTime;
     }
 
-    public void setArriveTime(String arriveTime) {
+    public void setArriveTime(long arriveTime) {
         this.arriveTime = arriveTime;
     }
 
-    public String getCancelTime() {
+    public long getCancelTime() {
         return cancelTime;
     }
 
-    public void setCancelTime(String cancelTime) {
+    public void setCancelTime(long cancelTime) {
         this.cancelTime = cancelTime;
     }
 
@@ -86,11 +113,11 @@ public class CompanyOrder {
         this.contact = contact;
     }
 
-    public String getCreateTime() {
+    public long getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(String createTime) {
+    public void setCreateTime(long createTime) {
         this.createTime = createTime;
     }
 
@@ -110,11 +137,11 @@ public class CompanyOrder {
         this.payMode = payMode;
     }
 
-    public String getPayTime() {
+    public long getPayTime() {
         return payTime;
     }
 
-    public void setPayTime(String payTime) {
+    public void setPayTime(long payTime) {
         this.payTime = payTime;
     }
 
@@ -126,19 +153,19 @@ public class CompanyOrder {
         this.receiverName = receiverName;
     }
 
-    public String getSellCancelTime() {
+    public long getSellCancelTime() {
         return sellCancelTime;
     }
 
-    public void setSellCancelTime(String sellCancelTime) {
+    public void setSellCancelTime(long sellCancelTime) {
         this.sellCancelTime = sellCancelTime;
     }
 
-    public String getSignTime() {
+    public long getSignTime() {
         return signTime;
     }
 
-    public void setSignTime(String signTime) {
+    public void setSignTime(long signTime) {
         this.signTime = signTime;
     }
 

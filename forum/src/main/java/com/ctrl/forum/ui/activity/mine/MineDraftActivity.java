@@ -7,6 +7,7 @@ import android.widget.ListView;
 
 import com.beanu.arad.Arad;
 import com.beanu.arad.base.ToolBarActivity;
+import com.beanu.arad.utils.MessageUtils;
 import com.ctrl.forum.R;
 import com.ctrl.forum.base.ListItemTypeInterf;
 import com.ctrl.forum.dao.EditDao;
@@ -74,6 +75,9 @@ public class MineDraftActivity extends ToolBarActivity implements View.OnClickLi
                 }
                 mineDraftsListAdapter.setList(datas);
             }
+        }
+        if (requestCode==8){
+            MessageUtils.showShortToast(this, "帖子删除成功");
         }
     }
 

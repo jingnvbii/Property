@@ -29,7 +29,9 @@ public class CommdityImageViewPagerAdapter extends PagerAdapter {
        View view=views.get(position);
         ImageView imageView=(ImageView)view.findViewById(R.id.icon);
         imageView.setScaleType(ImageView.ScaleType.FIT_XY);
-        Arad.imageLoader.load(listImage.get(position).getImg()).placeholder(R.mipmap.default_error).into(imageView);
+        if (listImage.get(position).getImg()!=null && !listImage.get(position).getImg().equals("")) {
+            Arad.imageLoader.load(listImage.get(position).getImg()).placeholder(R.mipmap.default_error).into(imageView);
+        }
         container.addView(view);
         return views.get(position);
     }

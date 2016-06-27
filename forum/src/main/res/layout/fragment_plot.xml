@@ -67,26 +67,29 @@
         android:layout_marginRight="@dimen/margin_left_and_right"
         android:layout_marginLeft="@dimen/margin_left_and_right">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/search"
-            android:textSize="@dimen/text_size_basic"
-            android:gravity="center"
-            android:textColor="@color/text_newpwd"
-            android:layout_centerInParent="true"
-            android:id="@+id/et_search"
-            android:layout_gravity="center_horizontal"/>
-
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@mipmap/gray_search"
-            android:layout_marginRight="3dp"
-            android:layout_centerVertical="true"
+            android:layout_gravity="center_vertical"
             android:layout_toLeftOf="@+id/et_search"
-            android:layout_toStartOf="@+id/et_search" />
+            android:layout_centerVertical="true"
+            />
+
+        <EditText
+            android:background="@null"
+            android:paddingLeft="3dp"
+            android:id="@+id/et_search"
+            android:textColorHint="@color/text_newpwd"
+            android:hint="@string/search"
+            android:layout_centerInParent="true"
+            android:textSize="16sp"
+            android:singleLine="true"
+            android:imeOptions="actionGo"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"/>
     </RelativeLayout>
+
 
     <com.handmark.pulltorefresh.library.PullToRefreshListView
         android:id="@+id/lv_content"

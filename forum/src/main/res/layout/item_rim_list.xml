@@ -13,11 +13,11 @@
         android:background="@color/white">
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             android:id="@+id/iv_pic"
             android:src="@mipmap/hot"
-            android:layout_marginTop="@dimen/margin_left_and_right"
+            android:layout_marginTop="7dp"
             android:layout_marginLeft="@dimen/margin_left_and_right"
             android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
@@ -31,6 +31,7 @@
             android:textColor="@color/rim_text"
             android:textSize="@dimen/text_size_basic"
             android:layout_marginTop="@dimen/margin_left_and_right"
+            android:layout_marginLeft="3dp"
             android:layout_toRightOf="@+id/iv_pic"
             android:layout_toEndOf="@+id/iv_pic" />
 

@@ -125,12 +125,12 @@
             android:layout_gravity="center"
             android:gravity="center" />
     </LinearLayout>
-    <android.support.v4.view.ViewPager
-        android:id="@+id/fl_content"
+    <com.handmark.pulltorefresh.library.PullToRefreshListView
+        android:id="@+id/lv_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/lines"
         >
-    </android.support.v4.view.ViewPager>
+    </com.handmark.pulltorefresh.library.PullToRefreshListView>
 
 </RelativeLayout>

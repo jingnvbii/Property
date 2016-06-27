@@ -63,7 +63,7 @@ public class MineCouponXianListAdapter extends BaseAdapter{
 
         if (messages!=null && messages.get(position)!=null){
              holder.tv_name.setText(messages.get(position).getName());
-             holder.tv_money.setText(messages.get(position).getAmount());
+             holder.tv_money.setText("￥"+messages.get(position).getAmount());
              holder.time_limit.setText(DateUtil.getStringByFormat(messages.get(position).getValidityStartTime(), "yyyy.MM.dd") + "-" +
                      DateUtil.getStringByFormat(messages.get(position).getValidityEndTime(), "yyyy.MM.dd"));
              holder.tv_limit_goods.setText(messages.get(position).getRemark());

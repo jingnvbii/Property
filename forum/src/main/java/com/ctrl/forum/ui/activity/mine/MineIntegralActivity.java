@@ -10,13 +10,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.beanu.arad.Arad;
-import com.beanu.arad.utils.MessageUtils;
 import com.ctrl.forum.R;
 import com.ctrl.forum.base.AppToolBarActivity;
 import com.ctrl.forum.base.Constant;
 import com.ctrl.forum.dao.RemarkDao;
 import com.ctrl.forum.entity.IntegralProduct;
-import com.ctrl.forum.entity.RedeemHistory;
 import com.ctrl.forum.ui.adapter.MineIntegralGridAdapter;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshGridView;
@@ -25,6 +23,7 @@ import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+
 /**
  * 积分商城
  */
@@ -41,7 +40,6 @@ public class MineIntegralActivity extends AppToolBarActivity implements View.OnC
     private PullToRefreshGridView pullToRefreshGridView;
     private MineIntegralGridAdapter mineIntegralGridAdapter;
     private List<IntegralProduct> integralProducts;
-    private List<RedeemHistory> redeemHistories;
     private RemarkDao rdao;
     private int PAGE_NUM = 1;
 
@@ -58,7 +56,9 @@ public class MineIntegralActivity extends AppToolBarActivity implements View.OnC
         pullToRefreshGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                rdao.convertRemarkGoods(Arad.preferences.getString("memberId"), integralProducts.get(position).getId());
+                Intent intent = new Intent(getApplicationContext(),MineIntegralStoreDetailActivity.class);
+                intent.putExtra("integralProductsId",integralProducts.get(position).getId());
+                startActivity(intent);
             }
         });
 
@@ -127,23 +127,16 @@ public class MineIntegralActivity extends AppToolBarActivity implements View.OnC
         super.onRequestSuccess(requestCode);
         pullToRefreshGridView.onRefreshComplete();
         if (requestCode==0){
-            MessageUtils.showShortToast(this,"获取积分商品成功");
             integralProducts = rdao.getIntegralProducts();
             if (integralProducts!=null){
                 mineIntegralGridAdapter.setData(integralProducts);
             }
-          //  pullToRefreshGridView.onRefreshComplete();
-        }
-        if (requestCode==1){
-            MessageUtils.showShortToast(this, "兑换积分商品成功");
-            rdao.getRemarkGoods(PAGE_NUM + "", Constant.PAGE_SIZE + "");
         }
     }
 
     @Override
     public void onRequestFaild(String errorNo, String errorMessage) {
         super.onRequestFaild(errorNo, errorMessage);
-        MessageUtils.showShortToast(this, "获取失败");
         pullToRefreshGridView.onRefreshComplete();
     }
 

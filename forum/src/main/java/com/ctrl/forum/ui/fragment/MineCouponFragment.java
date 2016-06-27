@@ -1,5 +1,7 @@
 package com.ctrl.forum.ui.fragment;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -52,7 +54,7 @@ public class MineCouponFragment extends ToolBarFragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(final LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         final View v = inflater.inflate(R.layout.fragment_mine_list, container, false);
         lv_content = (PullToRefreshListView) v.findViewById(R.id.lv_content);
@@ -89,6 +91,10 @@ public class MineCouponFragment extends ToolBarFragment {
                     Float amounts = Float.valueOf(amount);
                     Float leastMoney = Float.valueOf(redenvelopeList.get(position-1).getLeastMoney());
                     if (amounts>leastMoney | amounts == leastMoney){
+                        Intent intent=new Intent();
+                        intent.putExtra("amount",redenvelopeList.get(position-1).getAmount());
+                        intent.putExtra("id",redenvelopeList.get(position-1).getId());
+                        getActivity().setResult(Activity.RESULT_OK,intent);
                         getActivity().finish();
                     }else{
                          MessageUtils.showShortToast(getActivity(),"您的金额不满"+leastMoney+"元，该劵不可使用！");
@@ -108,8 +114,7 @@ public class MineCouponFragment extends ToolBarFragment {
         cdao = new CouponsDao(this);
         cdao.getMemberRedenvelope("1", "0", Arad.preferences.getString("memberId"), PAGE_NUM + "", Constant.PAGE_SIZE + "");
 
-        Bundle bundle = this.getArguments();
-        amount = bundle.getString("amount");
+        amount = getActivity().getIntent().getStringExtra("amount");
         couponListAdapter.setAmount(amount);
     }
 

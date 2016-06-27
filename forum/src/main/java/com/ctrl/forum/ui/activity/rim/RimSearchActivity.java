@@ -29,6 +29,9 @@ import java.util.List;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
+/**
+ * 周边搜索
+ */
 public class RimSearchActivity extends ToolBarActivity implements View.OnClickListener{
     @InjectView(R.id.ed_search)
     EditText ed_search;
@@ -93,14 +96,6 @@ public class RimSearchActivity extends ToolBarActivity implements View.OnClickLi
     //初始化数据
     private void initData() {
         searchDao = new SearchDao(this);
-       /* hotSearch = new ArrayList<>();
-        for (int i = 0;i<25;i++){
-            SearchHistory search = new SearchHistory();
-            search.setKeyword("搜索关键词");
-            hotSearch.add(search);
-        }
-        //rimSearchHistoryAdapter.setData(searchHistory);
-        initChildViews();*/
 
         memberId = Arad.preferences.getString("memberId");
         searchDao.getSearchHistoryList(memberId, "3", PAGE_NUM + "", Constant.PAGE_SIZE + "");
@@ -161,10 +156,14 @@ public class RimSearchActivity extends ToolBarActivity implements View.OnClickLi
         super.onRequestSuccess(requestCode);
         if (requestCode==0){
             searchHistory = searchDao.getSearchHistory();
-            hotSearch = searchDao.getHotSearch();
-            if (searchHistory!=null){
-               rimSearchHistoryAdapter.setData(searchHistory);
+            if (hotSearch!=null){
+                hotSearch.clear();
+                flowlayout.removeAllViews();
             }
+            if (searchHistory!=null){
+                rimSearchHistoryAdapter.setData(searchHistory);
+            }
+            hotSearch = searchDao.getHotSearch();
             if (hotSearch!=null){
                 initChildViews();
             }

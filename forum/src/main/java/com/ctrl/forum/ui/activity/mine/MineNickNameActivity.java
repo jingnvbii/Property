@@ -16,6 +16,9 @@ import com.ctrl.forum.R;
 import com.ctrl.forum.base.AppToolBarActivity;
 import com.ctrl.forum.dao.EditDao;
 
+/**
+ * 修改昵称
+ */
 public class MineNickNameActivity extends AppToolBarActivity {
     private EditText et_nickname;
     private TextView tv_ni;
@@ -33,7 +36,7 @@ public class MineNickNameActivity extends AppToolBarActivity {
         et_nickname = (EditText) findViewById(R.id.et_nickname);
         tv_ni = (TextView) findViewById(R.id.tv_ni);
         et_nickname.setText(Arad.preferences.getString("nickName"));
-        tv_ni.setText( et_nickname.length()+"/11");
+        tv_ni.setText("昵称"+et_nickname.length()+"/11");
 
         edao = new EditDao(this);
         id =  Arad.preferences.getString("memberId");
@@ -92,7 +95,7 @@ public class MineNickNameActivity extends AppToolBarActivity {
             @Override
             public void onClick(View v) {
                if (checkInput()){
-                   edao.requestChangeBasicInfo(et_nickname.getText().toString().trim(),"","",id);
+                   edao.requestChangeNickName(et_nickname.getText().toString().trim(),id);
                }
             }
         });
@@ -104,6 +107,8 @@ public class MineNickNameActivity extends AppToolBarActivity {
         super.onRequestSuccess(requestCode);
         if (requestCode == 0){
             MessageUtils.showShortToast(this,"修改昵称成功");
+            Arad.preferences.putString("nickName", et_nickname.getText().toString().trim());
+            Arad.preferences.flush();
             finish();
         }
     }

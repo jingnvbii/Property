@@ -36,8 +36,9 @@ public class OrderDao extends IDao {
     private List<Redenvelope>listRedenvelope=new ArrayList<>();//我的优惠券列表
     private List<Address>listAddress=new ArrayList<>();//收货地址列表
     private String productsTotal;//商品总价
-    private String orderId;//订单id
-    private String orderNum;//订单总价
+    private String orderId = "";//订单id
+    private String orderNum = "";//订单总价
+    private OrderState orderState = new OrderState();
 
 
     public OrderDao(INetResult activity){
@@ -164,7 +165,7 @@ public class OrderDao extends IDao {
         String url="order/getOrderState";
         Map<String,String> map = new HashMap<String,String>();
         map.put("id",id);
-        postRequest(Constant.RAW_URL+url, mapToRP(map),6);
+        postRequest(Constant.RAW_URL+url, mapToRP(map),66);
     }
 
 
@@ -213,18 +214,21 @@ public class OrderDao extends IDao {
     public void onRequestSuccess(JsonNode result, int requestCode) throws IOException {
         if(requestCode==0001){
             Log.d("demo","dao中结果集(生成订单返回): " + result);
-            orderId=result.findValue("orderId").asText();
-            orderNum=result.findValue("orderNum").asText();
+            if (result.findValue("orderId")!=null && result.findValue("orderNum")!=null) {
+                orderId = result.findValue("orderId").asText();
+                orderNum = result.findValue("orderNum").asText();
+            }
         }
         if(requestCode == 5){
             Log.d("demo","dao中结果集(订单评价列表返回): " + result);
             listOrderEvaluation = JsonUtil.node2pojoList(result.findValue("orderEvaluationList"), OrderEvaluation.class);
         }
 
-        if(requestCode == 6){
+        if(requestCode == 66){
             Log.d("demo","dao中结果集(订单详情返回): " + result);
             listOrderItem = JsonUtil.node2pojoList(result.findValue("tOrderItem"), OrderItem.class);
-            listOrderState = JsonUtil.node2pojoList(result.findValue("orderstate"), OrderState.class);
+            //listOrderState = JsonUtil.node2pojoList(result.findValue("orderstate"), OrderState.class);
+            orderState = JsonUtil.node2pojo(result.findValue("orderstate"), OrderState.class);
         }
         if(requestCode == 8){
             Log.d("demo","dao中结果集(购物车下单前结算信息返回): " + result);
@@ -255,6 +259,10 @@ public class OrderDao extends IDao {
     }
     public String getProductsTotal() {
         return productsTotal;
+    }
+
+    public OrderState getOrderState() {
+        return orderState;
     }
 
     public String getOrderId() {

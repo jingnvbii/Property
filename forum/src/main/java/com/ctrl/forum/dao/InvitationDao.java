@@ -298,9 +298,8 @@ public class InvitationDao extends IDao {
      * @param postImgStr //帖子图片串:(跟帖子图片一一对应,之间用逗号分隔)
      * @param thumbImgPostPicStr //帖子缩略图片串:(url之间用逗号分隔)
      * */
-    public void requesReleasePost(String reporterId,
+    public void requesInvitationPost(String reporterId,
                                  String categoryId,
-                                  String communityId,
                                  String categoryType,
                                  String publishState,
                                  String checkType,
@@ -320,7 +319,6 @@ public class InvitationDao extends IDao {
         Map<String,String> map = new HashMap<String,String>();
         map.put("reporterId",reporterId);
         map.put("categoryId",categoryId);
-        map.put("communityId",communityId);
         map.put("categoryType",categoryType);
         map.put("publishState",publishState);
         map.put("checkType",checkType);
