@@ -3,6 +3,8 @@ package com.ctrl.forum.ui.adapter;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Bundle;
+import android.text.SpannableString;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -16,20 +18,23 @@ import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.beanu.arad.Arad;
 import com.beanu.arad.utils.AnimUtil;
 import com.ctrl.forum.R;
 import com.ctrl.forum.base.SetMemberLevel;
 import com.ctrl.forum.customview.GridViewForScrollView;
+import com.ctrl.forum.customview.ImageZoomActivity;
 import com.ctrl.forum.customview.ListViewForScrollView;
+import com.ctrl.forum.customview.RoundImageView;
+import com.ctrl.forum.customview.ShareDialog;
 import com.ctrl.forum.entity.Post;
 import com.ctrl.forum.entity.PostImage;
+import com.ctrl.forum.face.FaceConversionUtil;
 import com.ctrl.forum.ui.activity.Invitation.InvitationCommentDetaioActivity;
 import com.ctrl.forum.ui.activity.Invitation.InvitationPullDownActivity;
-import com.ctrl.forum.utils.DateUtil;
 import com.ctrl.forum.utils.SysUtils;
+import com.ctrl.forum.utils.TimeUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,6 +51,7 @@ public class PlotListViewFriendStyleAdapter extends BaseAdapter {
     private List<Post> mPostList;
     private List<PostImage> mPostImageList;
     private LayoutInflater inflter;
+    private View.OnClickListener onShare;
 
     private int wh;
 
@@ -53,11 +59,23 @@ public class PlotListViewFriendStyleAdapter extends BaseAdapter {
     private FriendGridAdapter friendInfoImgsAdapter;
     private PopupWindow popupWindow;
     private PopupWindow popupWindow_share;
-    private View.OnClickListener onLove;
+    private ShareDialog shareDialog;
+    private InvitationPullDownActivity activity;
+    private OnItemClickListener mOnItemClickListener;
+    private View.OnClickListener onMoreDialog;
+
 
     public PlotListViewFriendStyleAdapter(Activity context) {
         this.mcontext = context;
         this.wh = (SysUtils.getScreenWidth(mcontext)- SysUtils.Dp2Px(mcontext, 99)) / 3;
+    }
+
+    public void setOnMoreDialog(View.OnClickListener onMoreDialog) {
+        this.onMoreDialog = onMoreDialog;
+    }
+
+    public void setOnShare(View.OnClickListener onShare) {
+        this.onShare = onShare;
     }
 
     public void setList(List<Post> list) {
@@ -65,9 +83,15 @@ public class PlotListViewFriendStyleAdapter extends BaseAdapter {
         notifyDataSetChanged();
     }
 
-    public void setOnLove(View.OnClickListener onLove) {
-        this.onLove = onLove;
+    //定义接口
+    public interface OnItemClickListener{
+        void onItemZanClick(ViewHolder v);
     }
+
+    public void setOnItemClickListener(OnItemClickListener listener){
+        this.mOnItemClickListener = listener ;
+    }
+
 
     @Override
     public int getCount() {
@@ -94,38 +118,30 @@ public class PlotListViewFriendStyleAdapter extends BaseAdapter {
             inflter = LayoutInflater.from(mcontext);
             convertView = inflter.inflate(R.layout.item_invitation_friend_style, parent, false);
             holder = new ViewHolder(convertView);
-            holder.rl_friend_style_zan.setOnClickListener(onLove);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-
-        holder.rl_friend_style_zan.setTag(position);
-
         final Post post = mPostList.get(position);
         holder.tv_friend_style_content.setText(post.getTitle());
         holder.tv_friend_style_name.setText(post.getMemberName());
 
-        String locationName = "";
-        if (post.getLocationName()==null){
-            locationName="";
-        }else {
-            locationName = post.getLocationName();
+        if (post.getPublishTime()!=null&& !post.getPublishTime().equals("")) {
+            holder.tv_friend_style_time.setText(TimeUtils.date(Long.parseLong(post.getPublishTime())) + "   " + post.getLocationName());
         }
-        holder.tv_friend_style_time.setText(DateUtil.getStringByFormat(post.getPublishTime(),"yyyy-MM-dd  hh:mm:ss")+"   "+locationName);
+
         holder.tv_friend_style_zan_num.setText(post.getPraiseNum()+"");
         holder.tv_friend_style_pinglun_num.setText(post.getCommentNum()+"");
         holder.tv_friend_style_share_num.setText(post.getShareNum() + "");
-
         SetMemberLevel.setLevelImage(mcontext,holder.iv_friend_style_levlel,post.getMemberLevel());
-
         Arad.imageLoader.load(post.getImgUrl()).placeholder(R.mipmap.default_error).into(holder.iv_friend_style_title_photo);
         if(post.getPostReplyList()!=null) {
             if (post.getPostReplyList().size() <= 3) {
                 List<String> listStr = new ArrayList<>();
                 for (int i = 0; i < post.getPostReplyList().size(); i++) {
                     if (post.getPostReplyList().get(i).getContentType().equals("0")) {
-                        listStr.add(post.getPostReplyList().get(i).getMemberName()+":   " + post.getPostReplyList().get(i).getReplyContent());
+                        SpannableString spannableString2 = FaceConversionUtil.getInstace().getExpressionString(mcontext, post.getPostReplyList().get(i).getReplyContent());
+                        listStr.add(post.getPostReplyList().get(i).getMemberName()+":   " + spannableString2);
                     }
                     if (post.getPostReplyList().get(i).getContentType().equals("1")) {
                         listStr.add(post.getPostReplyList().get(i).getMemberName()+":   " + "    [图片]");
@@ -136,13 +152,14 @@ public class PlotListViewFriendStyleAdapter extends BaseAdapter {
                 }
                 ArrayAdapter<String> adapter = new ArrayAdapter<>(mcontext, R.layout.spinner_layout, listStr);
                 holder.lv_friend_style_reply.setAdapter(adapter);
-               // holder.tv_friend_style_shengyu_pinglun.setVisibility(View.GONE);
+                // holder.tv_friend_style_shengyu_pinglun.setVisibility(View.GONE);
                 holder.tv_friend_style_shengyu_pinglun.setText("查看其他更多评论...");
             } else {
                 List<String> listStr = new ArrayList<>();
                 for (int i = 0; i < 3; i++) {
                     if (post.getPostReplyList().get(i).getContentType().equals("0")) {
-                        listStr.add(post.getPostReplyList().get(i).getMemberName() +":   "+ post.getPostReplyList().get(i).getReplyContent());
+                        SpannableString spannableString2 = FaceConversionUtil.getInstace().getExpressionString(mcontext, post.getPostReplyList().get(i).getReplyContent());
+                        listStr.add(post.getPostReplyList().get(i).getMemberName()+":   " + spannableString2);
                     }
                     if (post.getPostReplyList().get(i).getContentType().equals("1")) {
                         listStr.add(post.getPostReplyList().get(i).getMemberName()+":   " + "    [图片]");
@@ -165,20 +182,12 @@ public class PlotListViewFriendStyleAdapter extends BaseAdapter {
         } else {
             holder.rl4.setVisibility(View.GONE);
         }
-        
-        holder.rl_friend_style_more.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showMoreDialog(v,position,post);
-            }
-        });
 
-        holder.rl_friend_style_share.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showShareDialog(v);
-            }
-        });
+        holder.rl_friend_style_more.setOnClickListener(onMoreDialog);
+        holder.rl_friend_style_more.setTag(position);
+
+        holder.rl_friend_style_share.setOnClickListener(onShare);
+
         holder.rl_friend_style_pinglun.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -200,9 +209,31 @@ public class PlotListViewFriendStyleAdapter extends BaseAdapter {
             }
         });
 
+        if(post.getZambiastate()!=null) {
 
-        
+            if (post.getZambiastate().equals("0")) {
+                holder.iv_friend_style_zan_num.setImageResource(R.mipmap.zan_blue);
+            }
+            if (post.getZambiastate().equals("1")) {
+                holder.iv_friend_style_zan_num.setImageResource(R.mipmap.zan_blue_shixin);
+            }
+        }
+        holder.setPosition(position);
+        setOnListtener(holder);
         return convertView;
+    }
+
+    //触发
+    protected void setOnListtener(final ViewHolder holder){
+        if(mOnItemClickListener != null){
+
+            holder.rl_friend_style_zan.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mOnItemClickListener.onItemZanClick(holder);
+                }
+            });
+        }
     }
 
     private void showShareDialog(View v) {
@@ -260,78 +291,9 @@ public class PlotListViewFriendStyleAdapter extends BaseAdapter {
         popupWindow_share.showAtLocation(v, Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
     }
 
-    private void showMoreDialog(View v,int position, final Post post) {
-
-        View contentView = LayoutInflater.from(mcontext).inflate(R.layout.popupwindow_friend_style_more, null);
-        final TextView tv_friend_style_jubao = (TextView)contentView.findViewById(R.id.tv_friend_style_jubao);//举报
-        TextView tv_friend_style_pinbi_zuozhe = (TextView)contentView.findViewById(R.id.tv_friend_style_pinbi_zuozhe);//屏蔽作者
-        TextView tv_friend_style_cancel = (TextView)contentView.findViewById(R.id.tv_friend_style_cancel);//取消
-        tv_friend_style_pinbi_zuozhe.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                InvitationPullDownActivity activity=(InvitationPullDownActivity)mcontext;
-                activity.requeMemberBlackListAdd(post.getReporterId(), popupWindow);
-
-            }
-        });
-        tv_friend_style_jubao.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                InvitationPullDownActivity activity=(InvitationPullDownActivity)mcontext;
-                activity.requestJuBao(post.getId(),post.getReporterId(),popupWindow);
-            }
-        });
-
-        popupWindow = new PopupWindow(contentView,
-                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, true);
-        // 设置SelectPicPopupWindow弹出窗体可点击
-        popupWindow.setFocusable(true);
-        // 设置SelectPicPopupWindow弹出窗体动画效果
-        popupWindow.setAnimationStyle(R.style.AnimBottom);
-        // 实例化一个ColorDrawable颜色为半透明
-        ColorDrawable dw = new ColorDrawable(0x00000000);
-        // 设置SelectPicPopupWindow弹出窗体的背景
-        // 如果不设置PopupWindow的背景，无论是点击外部区域还是Back键都无法dismiss弹框
-        // 我觉得这里是API的一个bug
-        popupWindow.setBackgroundDrawable(dw);
-
-        contentView.setFocusable(true);
-        contentView.setFocusableInTouchMode(true);
-        popupWindow.setTouchable(true);
-         /*
-        * 设置popupwindow 点击自身消失
-        * */
-        contentView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (popupWindow.isShowing()) {
-                    popupWindow.dismiss();
-                }
-            }
-        });
-
-        popupWindow.setOutsideTouchable(true);
-
-        popupWindow.setTouchInterceptor(new View.OnTouchListener() {
-
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-
-                Log.i("mengdd", "onTouch : ");
-
-                return false;
-                // 这里如果返回true的话，touch事件将被拦截
-                // 拦截后 PopupWindow的onTouchEvent不被调用，这样点击外部区域无法dismiss
-            }
-        });
-        // 设置好参数之后再show
-        popupWindow.showAtLocation(mcontext.findViewById(R.id.framelayout), Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
-
-    }
-
-    static class ViewHolder {
+    public   static class ViewHolder {
         @InjectView(R.id.iv_friend_style_title_photo)//头像
-                ImageView iv_friend_style_title_photo;
+                RoundImageView iv_friend_style_title_photo;
         @InjectView(R.id.tv_friend_style_name)//发帖人
                 TextView tv_friend_style_name;
         @InjectView(R.id.tv_friend_style_time)//时间
@@ -349,7 +311,7 @@ public class PlotListViewFriendStyleAdapter extends BaseAdapter {
         @InjectView(R.id.iv_friend_style_levlel)//用户等级
                 ImageView iv_friend_style_levlel;
         @InjectView(R.id.rl_friend_style_zan)//点赞
-                RelativeLayout rl_friend_style_zan;
+        public    RelativeLayout rl_friend_style_zan;
         @InjectView(R.id.rl_friend_style_pinglun)//评论
                 RelativeLayout rl_friend_style_pinglun;
         @InjectView(R.id.rl_friend_style_share)//分享
@@ -361,7 +323,17 @@ public class PlotListViewFriendStyleAdapter extends BaseAdapter {
         @InjectView(R.id.rl4)//图片布局
                 RelativeLayout rl4;
         @InjectView(R.id.gv_images)//图片网格容器
-        GridViewForScrollView gv_images;
+                GridViewForScrollView gv_images;
+        @InjectView(R.id.iv_friend_style_zan_num)//点赞
+        public  ImageView iv_friend_style_zan_num;
+        private int position;
+
+        public void setPosition(int position){
+            this.position=position;
+        }
+        public int getPosition(){
+            return position;
+        }
 
         ViewHolder(View view) {
             ButterKnife.inject(this, view);
@@ -387,6 +359,11 @@ public class PlotListViewFriendStyleAdapter extends BaseAdapter {
                 newGridView.setNumColumns(3);
                 break;
         }
+
+        final ArrayList<String>imageUrl=new ArrayList<>();
+        for(int i=0;i<imgList.size();i++){
+            imageUrl.add(imgList.get(i).getImg());
+        }
         RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(w, RelativeLayout.LayoutParams.WRAP_CONTENT);
         newGridView.setLayoutParams(lp);
         friendInfoImgsAdapter = new FriendGridAdapter(mcontext, imgList);
@@ -394,7 +371,13 @@ public class PlotListViewFriendStyleAdapter extends BaseAdapter {
         newGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-                Toast.makeText(mcontext, "点击了第" + (arg2 + 1) + "张图片", Toast.LENGTH_LONG).show();
+                Intent intent=new Intent(mcontext, ImageZoomActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("imageList",imageUrl);
+                bundle.putInt("position",arg2);
+                intent.putExtras(bundle);
+                mcontext.startActivity(intent);
+                AnimUtil.intentSlidIn(mcontext);
             }
         });
     }

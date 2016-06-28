@@ -55,10 +55,11 @@
         />
 
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="120dp"
+        android:layout_height="110dp"
+        android:scaleType="fitXY"
         android:id="@+id/iv_head"
-        android:src="@mipmap/shop_head"
+        android:src="@mipmap/image_default"
         android:layout_below="@+id/relativeLayout"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
@@ -123,6 +124,7 @@
         android:layout_alignStart="@+id/tv_content" />
 
     <Button
+        android:focusable="false"
         android:layout_width="wrap_content"
         android:layout_height="35dp"
         android:text="@string/payment"
@@ -137,6 +139,7 @@
         android:layout_marginBottom="10dp"
         android:layout_marginRight="@dimen/text_size_basic"/>
     <Button
+        android:focusable="false"
         android:layout_width="wrap_content"
         android:layout_height="35dp"
         android:text="取消订单"

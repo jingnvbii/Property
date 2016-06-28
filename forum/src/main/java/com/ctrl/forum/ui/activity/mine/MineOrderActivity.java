@@ -1,7 +1,9 @@
 package com.ctrl.forum.ui.activity.mine;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 
@@ -13,6 +15,7 @@ import com.ctrl.forum.base.Constant;
 import com.ctrl.forum.dao.MineStoreDao;
 import com.ctrl.forum.dao.OrderDao;
 import com.ctrl.forum.entity.MemeberOrder;
+import com.ctrl.forum.ui.activity.store.StoreOrderStatusActivity;
 import com.ctrl.forum.ui.adapter.MineOrderListAdapter;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
@@ -59,6 +62,15 @@ public class MineOrderActivity extends AppToolBarActivity implements View.OnClic
                 } else {
                     lv_order.onRefreshComplete();
                 }
+            }
+        });
+
+        lv_order.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(getApplicationContext(), StoreOrderStatusActivity.class);
+                intent.putExtra("id",orders.get(position-1).getId());
+                startActivity(intent);
             }
         });
 

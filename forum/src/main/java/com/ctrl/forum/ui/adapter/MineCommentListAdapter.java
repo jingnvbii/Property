@@ -1,6 +1,7 @@
 package com.ctrl.forum.ui.adapter;
 
 import android.content.Context;
+import android.text.SpannableString;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +10,7 @@ import android.widget.TextView;
 
 import com.ctrl.forum.R;
 import com.ctrl.forum.entity.ObtainMyReply;
+import com.ctrl.forum.face.FaceConversionUtil;
 import com.ctrl.forum.utils.DateUtil;
 
 import java.util.ArrayList;
@@ -61,7 +63,10 @@ public class MineCommentListAdapter extends BaseAdapter {
             String contentType = obtainMyReplies.get(position).getContentType();
             switch (contentType){
                 case "0"://文字或表情
-                    holder.tv_comment.setText(obtainMyReplies.get(position).getReplyContent());
+                    //holder.tv_comment.setText(obtainMyReplies.get(position).getReplyContent());
+                    SpannableString spannableString = FaceConversionUtil.getInstace().getExpressionString(context,
+                            obtainMyReplies.get(position).getReplyContent());
+                    holder.tv_comment.setText(spannableString);
                     break;
                 case "1"://图片
                     holder.tv_comment.setText("[图片]");

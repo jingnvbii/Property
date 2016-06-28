@@ -2,6 +2,7 @@ package com.ctrl.forum.ui.activity.mine;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -27,6 +28,7 @@ import com.ctrl.forum.dao.EditDao;
 import com.ctrl.forum.entity.MemberInfo;
 import com.ctrl.forum.ui.activity.LoginActivity;
 import com.ctrl.forum.utils.DataCleanUtils;
+import com.ctrl.forum.utils.Utils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -137,7 +139,7 @@ public class MineEditActivity extends AppToolBarActivity implements View.OnClick
     private void initPop() {
         view = LayoutInflater.from(this).inflate(R.layout.update_head,null);
         popupWindow = new PopupWindow(view,
-                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT,true);
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, true);
         popupWindow.setFocusable(true);
         ColorDrawable colorDrawable = new ColorDrawable(getResources().getColor(R.color.pop_bg));
         colorDrawable.setAlpha(40);
@@ -186,7 +188,7 @@ public class MineEditActivity extends AppToolBarActivity implements View.OnClick
         switch (id){
             //修改头像
             case R.id.update_head:
-                popupWindow.showAtLocation(this.view, Gravity.BOTTOM, 0, 0);  //弹出
+                popupWindow.showAtLocation(this.view,Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);  //弹出
                 popupWindow.update();
                 break;
             case R.id.rl_ni://昵称
@@ -246,9 +248,12 @@ public class MineEditActivity extends AppToolBarActivity implements View.OnClick
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case LOOK_ALBUM_INTENT://相册
-                    if (data != null) {
+                    Uri uri = data.getData();
+                    String thePath = Utils.getInstance().getPath(this, uri);
+                    getImageToView1(thePath);
+                   /* if (data != null) {
                         startPhotoZoom(data.getData());
-                    }
+                    }*/
                     break;
                 case LOOK_CAMERA_INTENT://相机
                     startPhotoZoom(Uri.fromFile(file));
@@ -301,11 +306,36 @@ public class MineEditActivity extends AppToolBarActivity implements View.OnClick
         //-----------------------------------------------------------
         //调用接口上传服务器。。。encodeToString是String形式
 
-         edao.modifyImgUrl(Arad.preferences.getString("memberId"),encodeToString);
+         edao.modifyImgUrl(Arad.preferences.getString("memberId"), encodeToString);
 
         try {
             baos.close();
         } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void getImageToView1(String path) {
+        Bitmap bitmap ;
+        try{
+            bitmap = BitmapFactory.decodeFile(path);
+            iv_head.setImageBitmap(bitmap);
+
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 50, out);
+            out.flush();
+            out.close();
+            byte[] buffer = out.toByteArray();
+            byte[] encode = Base64.encode(buffer, Base64.DEFAULT);
+
+            String photo = new String(encode);
+            if (photo != null){
+                // Log.d("demo","上传方法2");
+                /**调用后台方法  将图片上传**/
+                //  String imgData = photo;
+                edao.modifyImgUrl(Arad.preferences.getString("memberId"), encodeToString);
+            }
+        } catch (Exception e){
             e.printStackTrace();
         }
     }

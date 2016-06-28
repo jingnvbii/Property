@@ -14,7 +14,7 @@ import com.beanu.arad.Arad;
 import com.ctrl.forum.R;
 import com.ctrl.forum.entity.MemeberOrder;
 import com.ctrl.forum.ui.activity.mine.OrderPingjiaActivity;
-import com.ctrl.forum.ui.activity.store.StoreOrderDetailActivity;
+import com.ctrl.forum.ui.activity.store.StorePaymentOrderActivity;
 import com.ctrl.forum.utils.DateUtil;
 
 import java.util.ArrayList;
@@ -132,10 +132,10 @@ public class MineOrderListAdapter extends BaseAdapter{
                     holder.bt_right.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Intent intent = new Intent(context, StoreOrderDetailActivity.class);
+                            Intent intent = new Intent(context, StorePaymentOrderActivity.class);
                             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             intent.putExtra("orderId", orders.get(position).getId());
-                            intent.putExtra("productsTotal", orders.get(position).getTotalCost());
+                            intent.putExtra("productsTotal", Double.valueOf(orders.get(position).getTotalCost()));
                             intent.putExtra("orderNum", orders.get(position).getOrderNum());
                             intent.putExtra("redenvelope", orders.get(position).getCouponMoney());
                             context.startActivity(intent);
