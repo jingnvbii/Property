@@ -131,7 +131,7 @@ public class StoreShopListHorzitalStyleActivity extends AppToolBarActivity imple
             tv_time.setVisibility(View.GONE);
         }
         if(getIntent().getStringExtra("levlel")!=null)
-            ratingBar.setRating(Float.parseFloat(getIntent().getStringExtra("levlel")) / 2);
+            ratingBar.setRating(Float.parseFloat(getIntent().getStringExtra("levlel")) );
         mdao = new MallDao(this);
         showProgress(true);
         mdao.requestProductCategroy(getIntent().getStringExtra("id"),"1");

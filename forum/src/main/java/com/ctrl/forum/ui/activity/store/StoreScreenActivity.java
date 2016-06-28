@@ -75,6 +75,7 @@ public class StoreScreenActivity extends AppToolBarActivity implements View.OnCl
     private String companyKindId=null;
     private String address;
     private String name;
+    private int mPosition=-1;
 
 
     @Override
@@ -153,11 +154,69 @@ public class StoreScreenActivity extends AppToolBarActivity implements View.OnCl
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        if(getIntent().getFlags()==303){
+                     /*   if(getIntent().getFlags()==303){
                             mdao.requestCompanyByKind("0", latitude, longitude, companyKindId, String.valueOf(PAGE_NEM), String.valueOf(Constant.PAGE_SIZE));
                         }else {
                             mdao.requestCompanyByKind("0", latitude, longitude, channelId, String.valueOf(PAGE_NEM), String.valueOf(Constant.PAGE_SIZE));
+                        }*/
+                        if (companyKindId==null&&channelId==null) {
+                            switch (mPosition) {
+                                case 0:
+                                    mdao.requestCompanyByKind("0", latitude, longitude, "", String.valueOf(PAGE_NEM), String.valueOf(Constant.PAGE_SIZE));
+                                    break;
+                                case 1:
+                                    mdao.requestCompanyByKind("1", latitude, longitude, "", String.valueOf(PAGE_NEM), String.valueOf(Constant.PAGE_SIZE));
+                                    break;
+                                case 2:
+                                    mdao.requestCompanyByKind("2", latitude, longitude, "", String.valueOf(PAGE_NEM), String.valueOf(Constant.PAGE_SIZE));
+                                    break;
+                                case 3:
+                                    mdao.requestCompanyByKind("3", latitude, longitude, "", String.valueOf(PAGE_NEM), String.valueOf(Constant.PAGE_SIZE));
+                                    break;
+                                case -1:
+                                    mdao.requestCompanyByKind("0", latitude, longitude, "", String.valueOf(PAGE_NEM), String.valueOf(Constant.PAGE_SIZE));
+                                    break;
+                            }
+                        } else if(channelId!=null&&companyKindId==null){
+                            switch (mPosition) {
+                                case 0:
+                                    mdao.requestCompanyByKind("0", latitude, longitude, channelId, String.valueOf(PAGE_NEM), String.valueOf(Constant.PAGE_SIZE));
+                                    break;
+                                case 1:
+                                    mdao.requestCompanyByKind("1", latitude, longitude, channelId, String.valueOf(PAGE_NEM), String.valueOf(Constant.PAGE_SIZE));
+                                    break;
+                                case 2:
+                                    mdao.requestCompanyByKind("2", latitude, longitude, channelId, String.valueOf(PAGE_NEM), String.valueOf(Constant.PAGE_SIZE));
+                                    break;
+                                case 3:
+                                    mdao.requestCompanyByKind("3", latitude, longitude, channelId, String.valueOf(PAGE_NEM), String.valueOf(Constant.PAGE_SIZE));
+                                    break;
+                                case -1:
+                                    mdao.requestCompanyByKind("0", latitude, longitude, channelId, String.valueOf(PAGE_NEM), String.valueOf(Constant.PAGE_SIZE));
+                                    break;
+                            }
+
+
+                        }else {
+                            switch (mPosition) {
+                                case 0:
+                                    mdao.requestCompanyByKind("0", latitude, longitude, companyKindId, String.valueOf(PAGE_NEM), String.valueOf(Constant.PAGE_SIZE));
+                                    break;
+                                case 1:
+                                    mdao.requestCompanyByKind("1", latitude, longitude, companyKindId, String.valueOf(PAGE_NEM), String.valueOf(Constant.PAGE_SIZE));
+                                    break;
+                                case 2:
+                                    mdao.requestCompanyByKind("2", latitude, longitude, companyKindId, String.valueOf(PAGE_NEM), String.valueOf(Constant.PAGE_SIZE));
+                                    break;
+                                case 3:
+                                    mdao.requestCompanyByKind("3", latitude, longitude, companyKindId, String.valueOf(PAGE_NEM), String.valueOf(Constant.PAGE_SIZE));
+                                    break;
+                                case -1:
+                                    mdao.requestCompanyByKind("0", latitude, longitude, companyKindId, String.valueOf(PAGE_NEM), String.valueOf(Constant.PAGE_SIZE));
+                                    break;
+                            }
                         }
+
                     }
                 }, 500);
             }
@@ -169,10 +228,67 @@ public class StoreScreenActivity extends AppToolBarActivity implements View.OnCl
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        if(getIntent().getFlags()==303){
+                       /* if(getIntent().getFlags()==303){
                             mdao.requestCompanyByKind("0", latitude, longitude, companyKindId, String.valueOf(PAGE_NEM), String.valueOf(Constant.PAGE_SIZE));
                         }else {
                             mdao.requestCompanyByKind("0", latitude, longitude, channelId, String.valueOf(PAGE_NEM), String.valueOf(Constant.PAGE_SIZE));
+                        }*/
+                        if (companyKindId==null&&channelId==null) {
+                            switch (mPosition) {
+                                case 0:
+                                    mdao.requestCompanyByKind("0", latitude, longitude, "", String.valueOf(PAGE_NEM), String.valueOf(Constant.PAGE_SIZE));
+                                    break;
+                                case 1:
+                                    mdao.requestCompanyByKind("1", latitude, longitude, "", String.valueOf(PAGE_NEM), String.valueOf(Constant.PAGE_SIZE));
+                                    break;
+                                case 2:
+                                    mdao.requestCompanyByKind("2", latitude, longitude, "", String.valueOf(PAGE_NEM), String.valueOf(Constant.PAGE_SIZE));
+                                    break;
+                                case 3:
+                                    mdao.requestCompanyByKind("3", latitude, longitude, "", String.valueOf(PAGE_NEM), String.valueOf(Constant.PAGE_SIZE));
+                                    break;
+                                case -1:
+                                    mdao.requestCompanyByKind("0", latitude, longitude, "", String.valueOf(PAGE_NEM), String.valueOf(Constant.PAGE_SIZE));
+                                    break;
+                            }
+                        } else if(channelId!=null&&companyKindId==null){
+                            switch (mPosition) {
+                                case 0:
+                                    mdao.requestCompanyByKind("0", latitude, longitude, channelId, String.valueOf(PAGE_NEM), String.valueOf(Constant.PAGE_SIZE));
+                                    break;
+                                case 1:
+                                    mdao.requestCompanyByKind("1", latitude, longitude, channelId, String.valueOf(PAGE_NEM), String.valueOf(Constant.PAGE_SIZE));
+                                    break;
+                                case 2:
+                                    mdao.requestCompanyByKind("2", latitude, longitude, channelId, String.valueOf(PAGE_NEM), String.valueOf(Constant.PAGE_SIZE));
+                                    break;
+                                case 3:
+                                    mdao.requestCompanyByKind("3", latitude, longitude, channelId, String.valueOf(PAGE_NEM), String.valueOf(Constant.PAGE_SIZE));
+                                    break;
+                                case -1:
+                                    mdao.requestCompanyByKind("0", latitude, longitude, channelId, String.valueOf(PAGE_NEM), String.valueOf(Constant.PAGE_SIZE));
+                                    break;
+                            }
+
+
+                        }else {
+                            switch (mPosition) {
+                                case 0:
+                                    mdao.requestCompanyByKind("0", latitude, longitude, companyKindId, String.valueOf(PAGE_NEM), String.valueOf(Constant.PAGE_SIZE));
+                                    break;
+                                case 1:
+                                    mdao.requestCompanyByKind("1", latitude, longitude, companyKindId, String.valueOf(PAGE_NEM), String.valueOf(Constant.PAGE_SIZE));
+                                    break;
+                                case 2:
+                                    mdao.requestCompanyByKind("2", latitude, longitude, companyKindId, String.valueOf(PAGE_NEM), String.valueOf(Constant.PAGE_SIZE));
+                                    break;
+                                case 3:
+                                    mdao.requestCompanyByKind("3", latitude, longitude, companyKindId, String.valueOf(PAGE_NEM), String.valueOf(Constant.PAGE_SIZE));
+                                    break;
+                                case -1:
+                                    mdao.requestCompanyByKind("0", latitude, longitude, companyKindId, String.valueOf(PAGE_NEM), String.valueOf(Constant.PAGE_SIZE));
+                                    break;
+                            }
                         }
                     }
                 }, 500);
@@ -258,12 +374,12 @@ public class StoreScreenActivity extends AppToolBarActivity implements View.OnCl
                     if (listMall != null) {
                         listMall.clear();
                     }
-                    tv_all.setText(listKindStr.get(position));
+                        tv_all.setText(listKindStr.get(position));
                         companyKindId = listKind.get(position).getId();
                         mdao.requestCompanyByKind("0", latitude, longitude, listKind.get(position).getId(), String.valueOf(PAGE_NEM), String.valueOf(Constant.PAGE_SIZE));
 
                 } else {
-
+                    mPosition=position;
                     if (listMall != null) {
                         listMall.clear();
                     }

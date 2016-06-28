@@ -42,7 +42,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:layout_centerVertical="true"
-                    android:text="发帖人"
                     android:textColor="@color/text_black"/>
 
 
@@ -52,7 +51,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:src="@mipmap/vip_icon3"
                     android:layout_marginLeft="5dp"
                     />
 
@@ -62,7 +60,6 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:text="发布时间：2016-2-9"
                     android:textColor="@color/text_gray"
                     android:layout_marginRight="@dimen/margin_left_and_right"
                     />
@@ -85,7 +82,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="10dp"
                     android:textColor="@color/text_gray"
-                    android:text="fdfsdfsdfs"/>
+                    />
                 <TextView
                     android:id="@+id/tv_delete"
                     android:layout_width="wrap_content"
@@ -130,7 +127,7 @@
             android:layout_weight="1"
             android:textColor="@color/text_black"
             android:padding="10dp"
-            android:text="哈雷哈雷"/>
+            />
 
         <ImageView
             android:layout_width="wrap_content"

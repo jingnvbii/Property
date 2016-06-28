@@ -298,7 +298,7 @@ public class StoreShopListVerticalStyleActivity extends AppToolBarActivity imple
                 tv_time.setVisibility(View.GONE);
             }
             if(company.getEvaluatLevel()!=null) {
-                ratingBar.setRating(Float.parseFloat(company.getEvaluatLevel()) / 2);
+                ratingBar.setRating(Float.parseFloat(company.getEvaluatLevel()) );
             }else {
                 ratingBar.setRating(Float.parseFloat("0"));
             }
