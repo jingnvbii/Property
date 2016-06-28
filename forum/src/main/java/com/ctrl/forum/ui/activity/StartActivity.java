@@ -12,6 +12,7 @@ import com.ctrl.forum.base.AppToolBarActivity;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import cn.jpush.android.api.JPushInterface;
 
 /**
  * 开始页面 activity
@@ -42,6 +43,15 @@ public class StartActivity extends AppToolBarActivity {
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        JPushInterface.onResume(this);
+    }
 
-
+    @Override
+    protected void onPause() {
+        super.onPause();
+        JPushInterface.onPause(this);
+    }
 }

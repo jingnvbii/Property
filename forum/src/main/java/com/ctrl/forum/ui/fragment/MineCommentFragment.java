@@ -1,9 +1,11 @@
 package com.ctrl.forum.ui.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.beanu.arad.Arad;
@@ -12,6 +14,7 @@ import com.ctrl.forum.R;
 import com.ctrl.forum.base.Constant;
 import com.ctrl.forum.dao.ReplyCommentDao;
 import com.ctrl.forum.entity.ReplyForMe;
+import com.ctrl.forum.ui.activity.Invitation.InvitationDetailFromPlatformActivity;
 import com.ctrl.forum.ui.adapter.MineMesCommentListAdapter;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
@@ -67,6 +70,15 @@ public class MineCommentFragment extends ToolBarFragment {
             public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
                 PAGE_NUM += 1;
                 rcdao.obtainReply(Arad.preferences.getString("memberId"),PAGE_NUM, Constant.PAGE_SIZE);
+            }
+        });
+
+        lv_content.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(getActivity(), InvitationDetailFromPlatformActivity.class);
+                intent.putExtra("id", replyForMes.get(position-1).getPostId());
+                startActivity(intent);
             }
         });
 

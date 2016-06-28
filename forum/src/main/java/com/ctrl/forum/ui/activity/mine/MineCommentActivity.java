@@ -1,7 +1,9 @@
 package com.ctrl.forum.ui.activity.mine;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 
@@ -11,6 +13,7 @@ import com.ctrl.forum.base.AppToolBarActivity;
 import com.ctrl.forum.base.Constant;
 import com.ctrl.forum.dao.ReplyCommentDao;
 import com.ctrl.forum.entity.ObtainMyReply;
+import com.ctrl.forum.ui.activity.Invitation.InvitationDetailFromPlatformActivity;
 import com.ctrl.forum.ui.adapter.MineCommentListAdapter;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
@@ -58,6 +61,14 @@ public class MineCommentActivity extends AppToolBarActivity {
                 } else {
                     lv_comment.onRefreshComplete();
                 }
+            }
+        });
+        lv_comment.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(getApplicationContext(), InvitationDetailFromPlatformActivity.class);
+                intent.putExtra("id", comments.get(position-1).getPostId());
+                startActivity(intent);
             }
         });
     }

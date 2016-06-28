@@ -68,7 +68,9 @@ public class MineMemberGridAdapter extends BaseAdapter {
         holder.iv_grid_item.setTag(position);
 
         if (data!=null && data.get(position)!=null){
-            Arad.imageLoader.load(data.get(position).getIconUrl()).placeholder(context.getResources().getDrawable(R.drawable.ic_launcher)).into(holder.iv_grid_item);
+            if (data.get(position).getIconUrl()!=null && !data.get(position).getIconUrl().equals("")) {
+                Arad.imageLoader.load(data.get(position).getIconUrl()).placeholder(context.getResources().getDrawable(R.drawable.ic_launcher)).into(holder.iv_grid_item);
+            }
             holder.tv_grid_item.setText(data.get(position).getName());
         }
 

@@ -87,10 +87,10 @@
             android:src="@mipmap/iconfont_head"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="@dimen/margin_left_and_right"
-            imagecontrol:border_outside_color="@color/blue"
-            imagecontrol:border_thickness="1dp"
-            />
+            android:layout_marginTop="@dimen/margin_left_and_right"  />
+           <!-- imagecontrol:border_outside_color="@color/blue"
+            imagecontrol:border_thickness="1dp"-->
+
 
         <TextView
             android:layout_width="wrap_content"

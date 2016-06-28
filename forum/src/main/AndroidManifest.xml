@@ -318,6 +318,8 @@
         <activity android:name=".ui.activity.plot.PlotRimServeActivity" />
         <activity android:name=".ui.activity.plot.PlotSearchResultActivity" />
         <activity android:name=".ui.activity.WebViewActivity" />
+        <activity android:name=".customview.ImageZoomActivity"/>
+
 
         <!-- 支付宝支付  配置 -->
         <activity
