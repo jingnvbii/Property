@@ -354,10 +354,11 @@ public class MyFragment extends ToolBarFragment implements View.OnClickListener{
         super.onResume();
         bt_integral.setText("积分:" + Arad.preferences.getString("point"));
         tv_nickName.setText("昵称:" + Arad.preferences.getString("nickName"));
-        String imgUrl = Arad.preferences.getString("imgUrl");
-        if (imgUrl!=null&&!imgUrl.equals(""))
-            Arad.imageLoader.load(imgUrl).placeholder(getResources().getDrawable(R.mipmap.iconfont_head)).into(iv_head);//设置头像
         editDao.getVipInfo(Arad.preferences.getString("memberId"));
+        String imgUrl = Arad.preferences.getString("imgUrl");
+        if (imgUrl!=null&&!imgUrl.equals("")) {
+            Arad.imageLoader.load(imgUrl).placeholder(getResources().getDrawable(R.mipmap.iconfont_head)).into(iv_head);//设置头像
+        }
     }
 
     @Override

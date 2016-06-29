@@ -2,20 +2,24 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:background="@color/white"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:descendantFocusability="blocksDescendants"  >
 
 
     <RelativeLayout
+        android:focusable="false"
         android:layout_margin="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <com.ctrl.forum.customview.RoundImageView
+            android:focusable="false"
             android:id="@+id/iv_friend_style_title_photo"
             android:layout_width="40dp"
             android:layout_height="40dp"
             />
         <TextView
+            android:focusable="false"
             android:id="@+id/tv_friend_style_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -23,6 +27,7 @@
             android:layout_toRightOf="@+id/iv_friend_style_title_photo"
             android:layout_marginLeft="5dp"/>
         <ImageView
+            android:focusable="false"
             android:id="@+id/iv_friend_style_levlel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -31,6 +36,7 @@
             />
 
         <TextView
+            android:focusable="false"
             android:id="@+id/tv_friend_style_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -41,6 +47,7 @@
     </RelativeLayout>
 
        <TextView
+           android:focusable="false"
            android:id="@+id/tv_friend_style_content"
            android:layout_width="match_parent"
            android:layout_height="wrap_content"
@@ -49,6 +56,7 @@
            android:layout_marginTop="@dimen/margin_left_and_right"
            android:textColor="@color/text_black"/>
     <RelativeLayout
+        android:focusable="false"
         android:id="@+id/rl4"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -58,6 +66,7 @@
         android:visibility="gone" >
 
         <com.ctrl.forum.customview.GridViewForScrollView
+            android:focusable="false"
             android:id="@+id/gv_images"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -70,6 +79,7 @@
     </RelativeLayout>
 
     <View
+        android:focusable="false"
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:layout_marginTop="10dp"
@@ -77,15 +87,18 @@
 
 
     <LinearLayout
+        android:focusable="false"
         android:layout_width="match_parent"
         android:background="@color/main_bg"
         android:layout_height="35dp">
         <View
+            android:focusable="false"
             android:layout_width="1px"
             android:layout_height="match_parent"
             android:background="@color/line_gray" />
 
         <RelativeLayout
+            android:focusable="false"
             android:id="@+id/rl_friend_style_zan"
             android:layout_width="0dp"
             android:layout_weight="1"
@@ -93,11 +106,13 @@
             android:layout_gravity="center"
             android:layout_height="match_parent">
             <RelativeLayout
+                android:focusable="false"
                 android:layout_width="wrap_content"
                 android:layout_centerInParent="true"
                 android:layout_height="match_parent">
 
             <ImageView
+                android:focusable="false"
                 android:id="@+id/iv_friend_style_zan_num"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
@@ -105,6 +120,7 @@
 
 
         <TextView
+            android:focusable="false"
             android:id="@+id/tv_friend_style_zan_num"
             android:layout_toRightOf="@+id/iv_friend_style_zan_num"
             android:layout_marginLeft="5dp"
@@ -122,11 +138,13 @@
             android:background="@color/line_gray" />
 
         <RelativeLayout
+            android:focusable="false"
             android:id="@+id/rl_friend_style_pinglun"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="match_parent">
             <TextView
+                android:focusable="false"
                 android:id="@+id/tv_friend_style_pinglun_num"
                 android:layout_toRightOf="@+id/iv_zan"
                 android:layout_marginLeft="5dp"
@@ -143,11 +161,13 @@
             android:layout_height="match_parent"
             android:background="@color/line_gray" />
         <RelativeLayout
+            android:focusable="false"
             android:id="@+id/rl_friend_style_share"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="match_parent">
             <TextView
+                android:focusable="false"
                 android:id="@+id/tv_friend_style_share_num"
                 android:layout_toRightOf="@+id/iv_zan"
                 android:layout_marginLeft="5dp"
@@ -164,12 +184,14 @@
             android:layout_height="match_parent"
             android:background="@color/line_gray" />
         <RelativeLayout
+            android:focusable="false"
             android:id="@+id/rl_friend_style_more"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_marginRight="10dp"
             android:layout_height="match_parent">
             <TextView
+                android:focusable="false"
                 android:layout_toRightOf="@+id/iv_zan"
                 android:layout_marginLeft="5dp"
                 android:layout_width="wrap_content"
@@ -193,6 +215,7 @@
         android:background="@color/line_gray" />
 
     <TextView
+        android:focusable="false"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="评论:"
@@ -202,6 +225,7 @@
         android:drawableLeft="@mipmap/pinglun_friend"/>
 
     <com.ctrl.forum.customview.ListViewForScrollView
+        android:focusable="false"
         android:id="@+id/lv_friend_style_reply"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
@@ -212,6 +236,7 @@
         android:layout_height="wrap_content">
 
         <TextView
+            android:focusable="false"
             android:id="@+id/tv_friend_style_shengyu_pinglun"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

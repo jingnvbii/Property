@@ -92,6 +92,7 @@
 
 
     <com.handmark.pulltorefresh.library.PullToRefreshListView
+        android:descendantFocusability="blocksDescendants"
         android:id="@+id/lv_content"
         android:scrollbars="none"
         android:fastScrollEnabled="true"

@@ -76,10 +76,10 @@ public class MineUpdatepwdActivity extends AppToolBarActivity implements View.On
 
     public Boolean checkAll(){
         if (TextUtils.isEmpty(et_phone.getText().toString().trim())){
-            MessageUtils.showShortToast(this, "手机号不能为空" + code);
+            MessageUtils.showShortToast(this, "请填写正确的手机号码");
             return false;}
         if (TextUtils.isEmpty(et_test.getText().toString().trim())){
-            MessageUtils.showShortToast(this, "验证码不能为空" + code);
+            MessageUtils.showShortToast(this, "验证码不能为空");
             return false;}
         if (!et_test.getText().toString().trim().equals(code)) {
             MessageUtils.showShortToast(this, "验证码错误");
@@ -91,8 +91,8 @@ public class MineUpdatepwdActivity extends AppToolBarActivity implements View.On
     public void onRequestSuccess(int requestCode) {
         super.onRequestSuccess(requestCode);
         if (requestCode == 1) {
-            code = rdao.getCode();
-            MessageUtils.showShortToast(this, "获取短信验证码成功" + code);
+            code = rdao.getCode(); //code为获取到的手机验证码
+            MessageUtils.showShortToast(this, "获取短信验证码成功");
         }
     }
 

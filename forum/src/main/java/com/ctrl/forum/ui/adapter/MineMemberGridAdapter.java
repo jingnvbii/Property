@@ -69,7 +69,7 @@ public class MineMemberGridAdapter extends BaseAdapter {
 
         if (data!=null && data.get(position)!=null){
             if (data.get(position).getIconUrl()!=null && !data.get(position).getIconUrl().equals("")) {
-                Arad.imageLoader.load(data.get(position).getIconUrl()).placeholder(context.getResources().getDrawable(R.drawable.ic_launcher)).into(holder.iv_grid_item);
+                Arad.imageLoader.load(data.get(position).getIconUrl()).placeholder(context.getResources().getDrawable(R.mipmap.image_default)).into(holder.iv_grid_item);
             }
             holder.tv_grid_item.setText(data.get(position).getName());
         }
@@ -86,4 +86,6 @@ public class MineMemberGridAdapter extends BaseAdapter {
             ButterKnife.inject(this, view);
         }
     }
+
+
 }

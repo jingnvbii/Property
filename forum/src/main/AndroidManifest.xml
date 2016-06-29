@@ -175,7 +175,6 @@
             android:name="JPUSH_APPKEY"
             android:value="9fd538694f3a9a23519b00c8" /> <!-- </>值来自开发者平台取得的AppKey -->
 
-
         <!--
             APP_KEY：d03bc09bfe8296920ba3e528
             MASTER_SECRET：b9f031fcb6ae29bad6d91f30
@@ -406,6 +405,7 @@
             android:name=".ui.activity.mine.MineIntegralStoreDetailActivity"
             android:label="@string/title_activity_integral_store_detail" >
         </activity>
+        <activity android:name=".customview.ClipActivity"/>
     </application>
 
 </manifest>
