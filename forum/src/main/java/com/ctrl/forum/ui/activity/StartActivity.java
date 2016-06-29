@@ -35,6 +35,8 @@ public class StartActivity extends AppToolBarActivity {
 
         public void run() {
             SDKInitializer.initialize(getApplicationContext());
+            JPushInterface.setDebugMode(true);
+            JPushInterface.init(getApplicationContext());
             Intent intent = new Intent(StartActivity.this, LoginActivity.class);
             startActivity(intent);
             AnimUtil.intentSlidIn(StartActivity.this);
@@ -44,14 +46,14 @@ public class StartActivity extends AppToolBarActivity {
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        JPushInterface.onResume(this);
-    }
-
-    @Override
     protected void onPause() {
         super.onPause();
         JPushInterface.onPause(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        JPushInterface.onResume(this);
     }
 }

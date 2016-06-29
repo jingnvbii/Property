@@ -26,7 +26,7 @@ import butterknife.InjectView;
 * */
 
 public class StorePaymentOrderActivity extends AppToolBarActivity implements View.OnClickListener{
-    @InjectView(R.id.tv_payment_sucess)//确认支付
+    @InjectView(R.id.tv_payment_sucess)//确认支付11
     TextView tv_payment_sucess;
     @InjectView(R.id.tv_payment_order_id)//订单id
     TextView tv_payment_order_id;

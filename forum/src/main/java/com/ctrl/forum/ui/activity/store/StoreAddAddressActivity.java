@@ -132,7 +132,7 @@ public class StoreAddAddressActivity extends AppToolBarActivity implements View.
             MessageUtils.showShortToast(this,"基本地址为空");
             return false;
         }
-        if(et_add_adress_detail.getText().toString().trim().length()!=11){
+        if(et_add_adress_tel.getText().toString().trim().length()!=11){
             MessageUtils.showShortToast(this,"手机号格式不正确");
             return false;
         }
@@ -142,7 +142,7 @@ public class StoreAddAddressActivity extends AppToolBarActivity implements View.
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode==200&&resultCode==201){
+        if(requestCode==200&&resultCode==RESULT_OK){
             province=data.getStringExtra("province");
             city=data.getStringExtra("city");
             area=data.getStringExtra("area");

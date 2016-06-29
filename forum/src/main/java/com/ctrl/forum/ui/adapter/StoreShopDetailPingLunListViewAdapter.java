@@ -74,7 +74,7 @@ public class StoreShopDetailPingLunListViewAdapter extends BaseAdapter{
         }
         holder.ratingBar_pinglun.setNumStars(5);
         if(mShopReply.getLevel()!=null){
-            holder.ratingBar_pinglun.setRating(Float.parseFloat(mShopReply.getLevel())/2);
+            holder.ratingBar_pinglun.setRating(Float.parseFloat(mShopReply.getLevel()));
         }
 
         return convertView;

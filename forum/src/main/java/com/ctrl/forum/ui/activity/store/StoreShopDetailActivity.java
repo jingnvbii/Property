@@ -196,7 +196,7 @@ public class StoreShopDetailActivity extends AppToolBarActivity implements View.
             tv_shop_name.setText(company.getName());
             tv_time.setText("营业时间  " + company.getWorkStartTime() + "-" + company.getWorkEndTime());
             if(company.getEvaluatLevel()!=null) {
-                ratingBar.setRating(Float.parseFloat(company.getEvaluatLevel())/2);
+                ratingBar.setRating(Float.parseFloat(company.getEvaluatLevel()));
             }else {
                 ratingBar.setRating(Float.parseFloat("0"));
 

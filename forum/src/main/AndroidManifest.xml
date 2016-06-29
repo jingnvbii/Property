@@ -74,7 +74,7 @@
     <application
         android:name=".base.MyApplication"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/logo_large"
         android:label="@string/app_name"
         android:theme="@style/AradAppTheme" >
 
@@ -237,6 +237,7 @@
             android:name=".ui.activity.Invitation.InvitationDetailFromPlatformActivity"
             android:windowSoftInputMode="stateVisible|adjustResize" />
         <activity android:name=".ui.activity.Invitation.InvitationDetailActivity" />
+        <activity android:name=".customview.ImageZoomActivity" />
         <activity android:name=".ui.activity.Invitation.InvitationSearchActivity" />
         <activity android:name=".ui.activity.Invitation.InvitationPinerestGalleyActivity" />
         <activity android:name=".ui.activity.Invitation.InvitationCommentDetaioActivity" />
