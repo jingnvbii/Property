@@ -1,5 +1,7 @@
 package com.ctrl.forum.ui.activity.store;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -9,11 +11,17 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 
+import com.beanu.arad.utils.AndroidUtil;
 import com.ctrl.forum.R;
 import com.ctrl.forum.base.AppToolBarActivity;
+import com.ctrl.forum.dao.OrderDao;
+import com.ctrl.forum.entity.OrderItem;
+import com.ctrl.forum.entity.OrderState;
 import com.ctrl.forum.ui.adapter.ViewPagerAdapter;
 import com.ctrl.forum.ui.fragment.StoreOrderDetailFragment;
 import com.ctrl.forum.ui.fragment.StoreOrderStatusFragment;
+
+import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -46,6 +54,9 @@ public class StoreOrderStatusActivity extends AppToolBarActivity implements View
 
     private SparseArray<Fragment>fragments=new SparseArray<>();
     private ViewPagerAdapter mViewPagerAdapter;
+    private OrderDao odao;
+    private OrderState orderState;
+    private List<OrderItem> listOrderItem;
 
 
     @Override
@@ -55,7 +66,13 @@ public class StoreOrderStatusActivity extends AppToolBarActivity implements View
         ButterKnife.inject(this);
         // 隐藏输入法
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+        initData();
         initView();
+    }
+
+    private void initData() {
+        odao=new OrderDao(this);
+        odao.requesOrderDetail(getIntent().getStringExtra("id"));
     }
 
     private void initView() {
@@ -66,15 +83,7 @@ public class StoreOrderStatusActivity extends AppToolBarActivity implements View
         rb2.setOnClickListener(this);
         rb1.setChecked(true);
 
-        StoreOrderStatusFragment mStoreOrderStatusFragment=StoreOrderStatusFragment.newInstance();
-        StoreOrderDetailFragment mStoreOrderDetailFragment= StoreOrderDetailFragment.newInstance();
 
-        fragments.put(0,mStoreOrderStatusFragment);
-        fragments.put(1,mStoreOrderDetailFragment);
-
-        mViewPagerAdapter=new ViewPagerAdapter(getSupportFragmentManager(),fragments);
-        viewPager_order_status.setAdapter(mViewPagerAdapter);
-        viewPager_order_status.setCurrentItem(0);
         viewPager_order_status.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -83,7 +92,7 @@ public class StoreOrderStatusActivity extends AppToolBarActivity implements View
 
             @Override
             public void onPageSelected(int position) {
-                switch (position){
+                switch (position) {
                     case 0:
                         rb1.setChecked(true);
                         view01.setVisibility(View.VISIBLE);
@@ -109,6 +118,23 @@ public class StoreOrderStatusActivity extends AppToolBarActivity implements View
         });
     }
 
+    @Override
+    public void onRequestSuccess(int requestCode) {
+        super.onRequestSuccess(requestCode);
+        if(requestCode==66){
+            orderState=odao.getOrderState();
+            listOrderItem=odao.getListOrderItem();
+            StoreOrderStatusFragment mStoreOrderStatusFragment=StoreOrderStatusFragment.newInstance(orderState);
+            StoreOrderDetailFragment mStoreOrderDetailFragment= StoreOrderDetailFragment.newInstance(listOrderItem,orderState);
+
+            fragments.put(0,mStoreOrderStatusFragment);
+            fragments.put(1, mStoreOrderDetailFragment);
+
+            mViewPagerAdapter=new ViewPagerAdapter(getSupportFragmentManager(),fragments);
+            viewPager_order_status.setAdapter(mViewPagerAdapter);
+            viewPager_order_status.setCurrentItem(0);
+        }
+    }
 
     @Override
     public void onClick(View v) {
@@ -119,16 +145,31 @@ public class StoreOrderStatusActivity extends AppToolBarActivity implements View
             case R.id.rb1:
                 view01.setVisibility(View.VISIBLE);
                 view02.setVisibility(View.INVISIBLE);
+                viewPager_order_status.setCurrentItem(0);
                 break;
             case R.id.rb2:
                 view01.setVisibility(View.INVISIBLE);
                 view02.setVisibility(View.VISIBLE);
+                viewPager_order_status.setCurrentItem(1);
                 break;
-
-
+            case R.id.iv_order_status_tel:
+                showTelDialog();
+                break;
         }
 
+    }
 
+    private void showTelDialog() {
+        new AlertDialog.Builder(this).
+                setTitle("商家电话")
+                .setMessage(orderState.getCompanyPhone())
+                .setPositiveButton("拨打", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        AndroidUtil.dial(StoreOrderStatusActivity.this,orderState.getCompanyPhone());
+                    }
+                })
+                .setNegativeButton("取消", null).show();
     }
 
 

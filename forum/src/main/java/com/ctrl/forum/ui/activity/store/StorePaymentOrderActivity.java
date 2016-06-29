@@ -2,6 +2,7 @@ package com.ctrl.forum.ui.activity.store;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.CheckBox;
@@ -94,11 +95,16 @@ public class StorePaymentOrderActivity extends AppToolBarActivity implements Vie
                         public void doAfterAliplyPay(boolean isSuccess) {
                             if (isSuccess) {
                                 MessageUtils.showShortToast(StorePaymentOrderActivity.this, "支付成功");
-                                Intent intent = new Intent(StorePaymentOrderActivity.this, StorePaymentSucessActivity.class);
-                                intent.putExtra("orderId",orderId);
-                                startActivity(intent);
-                                AnimUtil.intentSlidIn(StorePaymentOrderActivity.this);
-                                finish();
+                                new Handler().postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Intent intent = new Intent(StorePaymentOrderActivity.this, StoreOrderStatusActivity.class);
+                                        intent.putExtra("id", orderId);
+                                        startActivity(intent);
+                                        AnimUtil.intentSlidIn(StorePaymentOrderActivity.this);
+                                        finish();
+                                    }
+                                }, 2000);
                             } else {
                                 MessageUtils.showShortToast(StorePaymentOrderActivity.this,"支付失败");
                                 finish();
@@ -117,7 +123,17 @@ public class StorePaymentOrderActivity extends AppToolBarActivity implements Vie
 
                             if (payStatus == Constant.PAY_STATUS_SUCCESS) {
                                 MessageUtils.showLongToast(StorePaymentOrderActivity.this, "支付成功");
-                                finish();
+                                new Handler().postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Intent intent = new Intent(StorePaymentOrderActivity.this, StoreOrderStatusActivity.class);
+                                        intent.putExtra("id", orderId);
+                                        startActivity(intent);
+                                        AnimUtil.intentSlidIn(StorePaymentOrderActivity.this);
+                                        finish();
+                                    }
+                                },2000);
+
                             } else if (payStatus == Constant.PAY_STATUS_FAILED) {
                                 MessageUtils.showLongToast(StorePaymentOrderActivity.this, "支付失败");
                                 finish();

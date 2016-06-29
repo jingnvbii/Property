@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginLeft="10dp"
+        android:layout_height="match_parent">
+
+        <View
+            android:id="@+id/view_line_top"
+            android:layout_width="2px"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_marginBottom="5dp"
+            android:layout_gravity="center_horizontal"
+            android:background="@color/line_gray"></View>
+        <ImageView
+            android:id="@+id/iv_status_img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:src="@mipmap/weifukuan_red"
+            />
+        <View
+            android:id="@+id/view_line_bottom"
+            android:layout_width="2px"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_marginTop="5dp"
+            android:layout_gravity="center_horizontal"
+            android:background="@color/line_gray"></View>
+    </LinearLayout>
+     <LinearLayout
+         android:layout_width="match_parent"
+         android:layout_height="match_parent"
+         android:layout_margin="10dp"
+         android:orientation="vertical"
+         android:background="@mipmap/status_bg">
+
+         <TextView
+             android:id="@+id/tv_status_name"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:text="订单提交成功"
+             android:textSize="14sp"
+             android:layout_margin="10dp"
+             android:textColor="@color/text_black"
+             />
+         <TextView
+             android:id="@+id/tv_status_content"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:text="121321"
+             android:layout_marginLeft="10dp"
+             android:textSize="12sp"
+             android:textColor="@color/text_gray"
+             />
+     </LinearLayout>
+
+</LinearLayout>

@@ -66,7 +66,7 @@ public class StoreFragmentAdapter extends BaseAdapter{
         holder.tv_name.setText(mall.getName());
         BigDecimal b   =   new   BigDecimal(Double.parseDouble(mall.getDis())/1000.0);
         double   f1   =   b.setScale(2,   BigDecimal.ROUND_HALF_UP).doubleValue();
-        holder.tv_distance.setText(f1 + " 千米");
+        holder.tv_distance.setText(f1 + " km");
         if(mall.getState().equals("0")){
             holder.tv_yingyezhong.setText("休息中");
             holder.tv_yingyezhong.setBackgroundResource(R.drawable.tv_gray_bg);

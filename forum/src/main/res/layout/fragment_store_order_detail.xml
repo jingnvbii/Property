@@ -2,6 +2,21 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:fillViewport="true"
+        android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_height="match_parent">
+
+     <LinearLayout
+         android:layout_width="match_parent"
+         android:layout_height="0dp"
+         android:orientation="vertical"
+         android:layout_weight="1">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -16,9 +31,9 @@
             android:src="@mipmap/shangcheng_red"/>
 
         <TextView
+            android:id="@+id/tv_shop_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="小贝日用百货便利店"
             android:layout_gravity="center_vertical"
             android:textColor="@color/text_black"
             android:layout_marginLeft="10dp"
@@ -30,13 +45,13 @@
         android:layout_height="1px"
         android:background="@color/line_gray"></View>
 
-    <ListView
+    <com.ctrl.forum.customview.ListViewForScrollView
         android:id="@+id/lv_order_detail_fragment"
         android:layout_width="match_parent"
         android:background="@color/white"
-        android:layout_height="0dp"
-        android:layout_weight="1">
-    </ListView>
+        android:layout_height="wrap_content"
+        >
+    </com.ctrl.forum.customview.ListViewForScrollView>
 
     <View
         android:layout_width="match_parent"
@@ -47,6 +62,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="10dp"
+        android:visibility="gone"
         android:background="@color/white">
 
         <TextView
@@ -57,10 +73,10 @@
             android:textColor="@color/text_black"
             />
         <TextView
+            android:id="@+id/tv_peisong_money"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:text="$5"
             android:layout_gravity="center_vertical"
             android:textColor="@color/text_black"
             />
@@ -84,10 +100,10 @@
             android:textColor="@color/text_red"
             />
         <TextView
+            android:id="@+id/tv_youhuiquan_money"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:text="$5"
             android:layout_gravity="center_vertical"
             android:textColor="@color/text_red"
             />
@@ -111,10 +127,10 @@
             android:textColor="@color/text_black"
             />
         <TextView
+            android:id="@+id/tv_total_money"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:text="$5"
             android:layout_gravity="center_vertical"
             android:textColor="@color/text_black"
             />
@@ -161,59 +177,61 @@
         >
 
       <TextView
+          android:id="@+id/tv_order_num"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:text="订单号：15345645646"
           android:paddingLeft="10dp"
           android:layout_marginTop="10dp"
           android:paddingTop="5dp"
           android:paddingBottom="5dp"
           android:textColor="@color/text_black"/>
       <TextView
+          android:id="@+id/tv_order_time"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:text="订单号：15345645646"
           android:paddingLeft="10dp"
           android:paddingTop="5dp"
           android:paddingBottom="5dp"
           android:textColor="@color/text_black"/>
       <TextView
+          android:id="@+id/tv_maijia_name"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:text="订单号：15345645646"
           android:paddingLeft="10dp"
           android:paddingTop="5dp"
           android:paddingBottom="5dp"
           android:textColor="@color/text_black"/>
       <TextView
+          android:id="@+id/tv_order_address"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:text="订单号：15345645646"
           android:paddingLeft="10dp"
           android:paddingTop="5dp"
           android:paddingBottom="5dp"
           android:textColor="@color/text_black"/>
       <TextView
+          android:id="@+id/tv_payment"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:text="订单号：15345645646"
           android:paddingLeft="10dp"
           android:paddingTop="5dp"
           android:paddingBottom="5dp"
           android:layout_marginBottom="10dp"
           android:textColor="@color/text_black"/>
-
     </LinearLayout>
-
-
-
-    <TextView
+     </LinearLayout>
+        <TextView
+        android:id="@+id/tv_once_more"
         android:layout_width="match_parent"
         android:layout_height="45dp"
         android:text="再来一单"
+        android:layout_alignParentBottom="true"
         android:textSize="18sp"
         android:textColor="@color/text_white"
         android:gravity="center"
         android:background="#cb1e1e"
         />
+    </LinearLayout>
+    </ScrollView>
+
 </LinearLayout>

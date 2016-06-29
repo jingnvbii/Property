@@ -42,6 +42,7 @@ import com.ctrl.forum.entity.Image;
 import com.ctrl.forum.entity.List2;
 import com.ctrl.forum.entity.Post2;
 import com.ctrl.forum.entity.PostImage;
+import com.ctrl.forum.ui.activity.WebViewActivity;
 import com.ctrl.forum.utils.Utils;
 
 import java.io.ByteArrayOutputStream;
@@ -122,6 +123,8 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
     TextView tv_release_back;
     @InjectView(R.id.tv_release_save)//存草稿
     TextView tv_release_save;
+    @InjectView(R.id.tougao)//存草稿
+    TextView tougao;
 
 
     /* 请求码*/
@@ -192,6 +195,7 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
         tv_release_back.setOnClickListener(this);
         tv_release.setOnClickListener(this);
         tv_release_save.setOnClickListener(this);
+        tougao.setOnClickListener(this);
 
         //初始化控件宽高
         setImageViewWidth(iv01);
@@ -711,6 +715,12 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
     public void onClick(View v) {
        Intent intent=null;
         switch (v.getId()){
+            case R.id.tougao:
+                intent=new Intent(InvitationReleaseActivity.this, WebViewActivity.class);
+                intent.putExtra("title","投稿协议");
+                startActivity(intent);
+                AnimUtil.intentSlidIn(InvitationReleaseActivity.this);
+                break;
             case R.id.tv_release_save: //存草稿
                 //遍历比价两个集合，若是有相同的，则为删除的图片的url,不同的，增加的集合里面是新增加的图片的url,删除的集合里是删除的图片的url
                 for (int i=0;i<addImages.size();i++){

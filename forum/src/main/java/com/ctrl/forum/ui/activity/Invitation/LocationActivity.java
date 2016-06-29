@@ -6,7 +6,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
@@ -153,8 +152,6 @@ public class LocationActivity extends AppToolBarActivity implements View.OnClick
                     .pageCapacity(10))
             ;
 
-            Log.i("tag", "city---" + city);
-            Log.i("tag", "s---" + s.toString());
 
         }
         //文字变化前

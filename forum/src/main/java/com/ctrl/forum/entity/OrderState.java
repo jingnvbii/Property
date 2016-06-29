@@ -5,6 +5,8 @@ package com.ctrl.forum.entity;
  * Created by Administrator on 2016/4/25.
  */
 public class OrderState {
+    private String id;
+    private String companyId;
     private long createTime;//下单时间
     private String acceptTime;//商家接单时间
     private String sellCancelTime;//商家取消订单时间
@@ -15,7 +17,7 @@ public class OrderState {
     private Double couponMoney;//优惠券金额
     private Double totalCost;//总价（已减去优惠金额）
     private Double deliveryNo;//快递单号
-    private Double companyPhone;//商家联系电话
+    private String companyPhone;//商家联系电话
     private String contact;//如果快递显示单号为空，则显示商家显示联系电话
     private String companyname;//店铺名称
     private String orderNum;//订单编号
@@ -24,6 +26,49 @@ public class OrderState {
     private String state; //状态
     private String content; //评价内容
     private String level; //评价等级
+    private String reportName; //用户名称
+    private String evaluationState; //支付方式
+    private String payMode; //支付方式
+
+    public String getEvaluationState() {
+        return evaluationState;
+    }
+
+    public void setEvaluationState(String evaluationState) {
+        this.evaluationState = evaluationState;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getCompanyId() {
+        return companyId;
+    }
+
+    public void setCompanyId(String companyId) {
+        this.companyId = companyId;
+    }
+
+    public String getPayMode() {
+        return payMode;
+    }
+
+    public void setPayMode(String payMode) {
+        this.payMode = payMode;
+    }
+
+    public String getReportName() {
+        return reportName;
+    }
+
+    public void setReportName(String reportName) {
+        this.reportName = reportName;
+    }
 
     public String getLevel() {
         return level;
@@ -145,11 +190,11 @@ public class OrderState {
         this.deliveryNo = deliveryNo;
     }
 
-    public Double getCompanyPhone() {
+    public String getCompanyPhone() {
         return companyPhone;
     }
 
-    public void setCompanyPhone(Double companyPhone) {
+    public void setCompanyPhone(String companyPhone) {
         this.companyPhone = companyPhone;
     }
 
