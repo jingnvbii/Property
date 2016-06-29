@@ -28,9 +28,18 @@ public class Post {
     private String contactAddress;//联系地址
     private List<PostImage> postImgList;//图片列表
     private List<PostReply> postReplyList;//回复列表
+    private String content;//帖子标题
 
     private String zambiastate;//是否被当前用户点赞
     private String collectstate;//是否被当前用户收藏
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
 
     public String getZambiastate() {
         return zambiastate;

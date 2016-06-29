@@ -712,7 +712,8 @@ public class InvitationDao extends IDao {
         }
         if (requestCode == 18){
             Log.d("demo","dao中结果集(获取我发布的帖子接口): " + result);
-            minePost = JsonUtil.node2pojoList(result.findValue("postList"),Post.class);
+            List<Post> list = JsonUtil.node2pojoList(result.findValue("postList"),Post.class);
+            minePost.addAll(list);
         }
 
         if (requestCode == 19){

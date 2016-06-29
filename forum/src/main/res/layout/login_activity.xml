@@ -54,9 +54,12 @@
         android:paddingLeft="@dimen/margin_left_and_right"
         android:textColor="@color/text_gray"
         android:textSize="@dimen/text_size_basic"
-        android:text="15688885075"
+        android:text="13046024996"
         android:gravity="center_vertical"
         />
+
+    <!--android:text="15688885075"-->
+
     <View
         android:layout_width="fill_parent"
         android:layout_height="1px"

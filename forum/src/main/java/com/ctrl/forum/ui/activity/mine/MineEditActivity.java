@@ -10,7 +10,6 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.text.format.DateFormat;
 import android.util.Base64;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,8 +20,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.beanu.arad.Arad;
+import com.beanu.arad.utils.MessageUtils;
 import com.ctrl.forum.R;
 import com.ctrl.forum.base.AppToolBarActivity;
+import com.ctrl.forum.customview.ClipActivity;
 import com.ctrl.forum.customview.MineHeadView;
 import com.ctrl.forum.dao.EditDao;
 import com.ctrl.forum.entity.MemberInfo;
@@ -32,6 +33,8 @@ import com.ctrl.forum.utils.Utils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.Locale;
@@ -86,6 +89,12 @@ public class MineEditActivity extends AppToolBarActivity implements View.OnClick
     private ImageView sv_loans_certificate;//上传头像
     private ImageView image1;//加号
     private Bitmap bitmap;
+    private String path;//图片全路径
+    public static final int IMAGE_COMPLETE = 2; // 结果
+    public static final int CROPREQCODE = 3; // 截取
+    private String photoSavePath;//保存路径
+    private String photoSaveName;//图pian名
+    private String temppath;
 
     private File file = new File(Environment.getExternalStorageDirectory(), getPhotoFileName());
 
@@ -124,14 +133,19 @@ public class MineEditActivity extends AppToolBarActivity implements View.OnClick
     public void onRequestSuccess(int requestCode) {
         super.onRequestSuccess(requestCode);
         if (requestCode==1){
-            String url = edao.getImageUrl();
+            MemberInfo memberInfo = edao.getMemberInfo();
+            String url = memberInfo.getImgUrl();
             if (url!=null && url.equals("")){
-                Arad.preferences.putString("imgUrl",url);
+                Arad.preferences.putString("imgUrl", url);
                 Arad.preferences.flush();
-                String imgUrl = Arad.preferences.getString("imgUrl");
-                if (imgUrl!=null&&!imgUrl.equals(""))
-                    Arad.imageLoader.load(imgUrl).placeholder(getResources().getDrawable(R.mipmap.iconfont_head)).into(iv_head);//设置头像
+                Arad.imageLoader.load(url).placeholder(getResources().getDrawable(R.mipmap.image_default)).into(iv_head);//设置头像
             }
+        }
+        if (requestCode==5){
+            MessageUtils.showShortToast(getApplicationContext(), "修改头像成功");
+            String url = edao.getImageUrl();
+            Arad.imageLoader.load(url).placeholder(getResources().getDrawable(R.mipmap.image_default)).into(iv_head);//设置头像
+           //edao.getVipInfo(Arad.preferences.getString("memberId"));
         }
     }
 
@@ -164,6 +178,9 @@ public class MineEditActivity extends AppToolBarActivity implements View.OnClick
         rl_xiaoqu.setOnClickListener(this);
         rl_pwd.setOnClickListener(this);
         tv_tuichu.setOnClickListener(this);
+
+        photoSavePath=Environment.getExternalStorageDirectory()+"/ClipHeadPhoto/cache/";
+        photoSaveName =System.currentTimeMillis()+ ".png";
     }
 
     @Override
@@ -209,9 +226,18 @@ public class MineEditActivity extends AppToolBarActivity implements View.OnClick
                 startActivity(intent);
                 break;
             case R.id.take_picture: //拍照片
-                intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+               /* intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(file));
-                startActivityForResult(intent, LOOK_CAMERA_INTENT);
+                startActivityForResult(intent, LOOK_CAMERA_INTENT);*/
+
+                photoSaveName =String.valueOf(System.currentTimeMillis()) + ".png";
+                Uri imageUri = null;
+                Intent openCameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                imageUri = Uri.fromFile(new File(photoSavePath,photoSaveName));
+                openCameraIntent.putExtra(MediaStore.Images.Media.ORIENTATION, 0);
+                openCameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+                startActivityForResult(openCameraIntent, LOOK_CAMERA_INTENT);
+
                 //关闭弹窗
                 popupWindow.dismiss();
                 break;
@@ -256,16 +282,36 @@ public class MineEditActivity extends AppToolBarActivity implements View.OnClick
                     }*/
                     break;
                 case LOOK_CAMERA_INTENT://相机
-                    startPhotoZoom(Uri.fromFile(file));
+                    //startPhotoZoom(Uri.fromFile(file));
+                    path=photoSavePath+photoSaveName;
+                    uri = Uri.fromFile(new File(path));
+                    Intent intent2=new Intent(MineEditActivity.this, ClipActivity.class);
+                    intent2.putExtra("path", path);
+                    startActivityForResult(intent2, IMAGE_COMPLETE);
                     break;
-                case CROP_PHOTO_INTENT: // 图片缩放完成后
-                    if (null != data) {
-                        Log.e("", "-------------------" + data);
-                        setPicToView(data);
-                    }
+                case IMAGE_COMPLETE:
+                    temppath = data.getStringExtra("path");
+                    iv_head.setImageBitmap(getLoacalBitmap(temppath));
+                    getImageToView1(temppath);
+                    break;
+                default:
                     break;
             }
 
+        }
+    }
+
+    /**
+     * @param url
+     * @return
+     */
+    public static Bitmap getLoacalBitmap(String url) {
+        try {
+            FileInputStream fis = new FileInputStream(url);
+            return BitmapFactory.decodeStream(fis);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            return null;
         }
     }
 
@@ -276,14 +322,14 @@ public class MineEditActivity extends AppToolBarActivity implements View.OnClick
         // TODO Auto-generated method stub
         Intent intent = new Intent("com.android.camera.action.CROP");
         intent.setDataAndType(uri, "image/*");
-        intent.putExtra("crop", true);
+       /* intent.putExtra("crop", true);
         // 剪切比例
         intent.putExtra("aspectX", 1);
         intent.putExtra("aspectY", 1);
         int size = 360;
         // 输出大小
         intent.putExtra("outputX", size);
-        intent.putExtra("outputY", size);
+        intent.putExtra("outputY", size);*/
         intent.putExtra("return-data", true);
         startActivityForResult(intent, CROP_PHOTO_INTENT);
     }
@@ -333,7 +379,7 @@ public class MineEditActivity extends AppToolBarActivity implements View.OnClick
                 // Log.d("demo","上传方法2");
                 /**调用后台方法  将图片上传**/
                 //  String imgData = photo;
-                edao.modifyImgUrl(Arad.preferences.getString("memberId"), encodeToString);
+                edao.modifyImgUrl(Arad.preferences.getString("memberId"), photo);
             }
         } catch (Exception e){
             e.printStackTrace();

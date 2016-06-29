@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -38,6 +39,7 @@ import com.ctrl.forum.entity.Banner;
 import com.ctrl.forum.entity.Post;
 import com.ctrl.forum.entity.PostImage;
 import com.ctrl.forum.loopview.HomeAutoSwitchPicHolder;
+import com.ctrl.forum.ui.activity.Invitation.InvitationDetailFromPlatformActivity;
 import com.ctrl.forum.ui.activity.MainActivity;
 import com.ctrl.forum.ui.activity.mine.MineFindFlotActivity;
 import com.ctrl.forum.ui.activity.plot.PlotAddInvitationActivity;
@@ -133,7 +135,7 @@ public class PlotFragment extends ToolBarFragment implements View.OnClickListene
         initView();
         invitationListViewFriendStyleAdapter = new PlotListViewFriendStyleAdapter(getActivity());
         lv_content.setAdapter(invitationListViewFriendStyleAdapter);
-        //invitationListViewFriendStyleAdapter.setOnLove(this);
+        invitationListViewFriendStyleAdapter.setOnLove(this);
 
         invitationListViewFriendStyleAdapter.setOnShare(this);
         invitationListViewFriendStyleAdapter.setOnMoreDialog(this);
@@ -152,7 +154,7 @@ public class PlotFragment extends ToolBarFragment implements View.OnClickListene
                     }
                     if (!et_search.getText().toString().equals("")) {
                         Intent intent = new Intent(getActivity(), PlotSearchResultActivity.class);
-                        intent.putExtra("keyWord",et_search.getText().toString());
+                        intent.putExtra("keyWord", et_search.getText().toString());
                         et_search.setText("");
                         startActivity(intent);
                     }
@@ -184,6 +186,24 @@ public class PlotFragment extends ToolBarFragment implements View.OnClickListene
                 }
             }
         });
+
+        lv_content.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(getActivity(), InvitationDetailFromPlatformActivity.class);
+                intent.putExtra("id", posts.get(position - 2).getId());
+                startActivity(intent);
+            }
+        });
+
+       /* invitationListViewFriendStyleAdapter.setOnItemClickListener(new PlotListViewFriendStyleAdapter.OnItemClickListener() {
+            @Override
+            public void onItemZanClick(PlotListViewFriendStyleAdapter.ViewHolder v) {
+                Intent intent = new Intent(getActivity(), InvitationDetailFromPlatformActivity.class);
+                intent.putExtra("id", posts.get(position - 2).getId());
+                startActivity(intent);
+            }
+        });*/
 
         //listview增加头部布局
         AbsListView.LayoutParams layoutParams = new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, AbsListView.LayoutParams.WRAP_CONTENT);
@@ -436,14 +456,34 @@ public class PlotFragment extends ToolBarFragment implements View.OnClickListene
                 startActivity(new Intent(getActivity(), PlotRimServeActivity.class));
                 break;
             case R.id.rl_friend_style_zan:
-                int position = (int)id;
-                if (posts.get(position).getTitle()==null && posts.get(position).getTitle().equals("")){
-                    //标题为空时,传内容
-                    //idao.requesZambia("add",posts.get(position).getId(),Arad.preferences.getString("memberId"),posts.get(position).getTitle(),"");
-
-                }else {
+                int position  = (int)id;
+                /*String state =posts.get(position).getZambiastate();
+                if (state.equals("0")){//点赞
+                    if (posts.get(position).getTitle().equals("")) {//标题为空时,传内容
+                        idao.requesZambia("add", posts.get(position).getId(),
+                                Arad.preferences.getString("memberId"),
+                                "",
+                                posts.get(position).getTitle());
+                    }else{
+                        idao.requesZambia("add", posts.get(position).getId(),
+                                Arad.preferences.getString("memberId"),
+                                posts.get(position).getTitle(),
+                                "");
+                    }
+                }else {//取消点赞
                     idao.requesZambia("add",posts.get(position).getId(),Arad.preferences.getString("memberId"),posts.get(position).getTitle(),"");
-                }
+                    if (posts.get(position).getTitle().equals("")) {//标题为空时,传内容
+                        idao.requesZambia("reduce", posts.get(position).getId(),
+                                Arad.preferences.getString("memberId"),
+                                posts.get(position).getTitle(),
+                                "");
+                    }else{
+                        idao.requesZambia("reduce", posts.get(position).getId(),
+                                Arad.preferences.getString("memberId"),
+                                posts.get(position).getTitle(),
+                                "");
+                    }
+                }*/
                 break;
             case R.id.rl_friend_style_share:
                 //showShareDialog(this.getView());
@@ -461,13 +501,14 @@ public class PlotFragment extends ToolBarFragment implements View.OnClickListene
         super.onResume();
         if (posts!=null){
             posts.clear();
-            invitationListViewFriendStyleAdapter.setList(posts);
         }
         tv_plot_name.setText(Arad.preferences.getString("communityName"));
         plotDao.queryCommunityPostList(Arad.preferences.getString("memberId"),
                                        Arad.preferences.getString("communityId"),
                                        PAGE_NUM + "", Constant.PAGE_SIZE + "");
     }
+
+
 
     public void clickShare(){
         shareDialog = new ShareDialog(getActivity());

@@ -509,18 +509,20 @@ public class InvitationDetailFromPlatformActivity extends AppToolBarActivity imp
             if(post.getZambiastate().equals("1")){
                 iv_zan.setImageResource(R.mipmap.zan_blue_shixin);
             }
-            tv_release_time.setText(TimeUtils.date(Long.parseLong(post.getPublishTime())));
+
+            if (post.getPublishTime()!=null && !post.getPublishTime().equals("")) {
+                tv_release_time.setText(TimeUtils.date(Long.parseLong(post.getPublishTime())));
+            }
+
             tv_introduction.setText(post.getBlurbs());
             listRelateMap = idao.getListRelateMap();
             mInvitationListViewAdapter.setList(listRelateMap);
-
 
             //加载富文本
             loadRichText();
             //显示地图
             showMap();
         }
-
 
     }
 
