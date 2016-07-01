@@ -423,7 +423,6 @@ public class MineEditActivity extends AppToolBarActivity implements View.OnClick
 
             String photo = new String(encode);
             if (photo != null){
-                // Log.d("demo","上传方法2");
                 /**调用后台方法  将图片上传**/
                 //  String imgData = photo;
                 edao.modifyImgUrl(Arad.preferences.getString("memberId"), photo);
