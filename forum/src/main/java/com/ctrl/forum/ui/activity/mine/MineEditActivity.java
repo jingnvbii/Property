@@ -306,6 +306,7 @@ public class MineEditActivity extends AppToolBarActivity implements View.OnClick
                    /* if (data==null) {
                         return;
                     }
+
                     uri = data.getData();
                     String[] proj = { MediaStore.Images.Media.DATA };
                     Cursor cursor = managedQuery(uri, proj, null, null,null);
@@ -328,7 +329,6 @@ public class MineEditActivity extends AppToolBarActivity implements View.OnClick
                     break;
                 case IMAGE_COMPLETE:
                     temppath = data.getStringExtra("path");
-                    Log.e("temppath=======================", temppath);
                    /* Bitmap bitmap = data.getExtras().getParcelable("bitmap");
                     iv_head.setImageBitmap(bitmap);*/
                     getImageToView1(temppath);
@@ -426,6 +426,8 @@ public class MineEditActivity extends AppToolBarActivity implements View.OnClick
                 /**调用后台方法  将图片上传**/
                 //  String imgData = photo;
                 edao.modifyImgUrl(Arad.preferences.getString("memberId"), photo);
+
+
             }
         } catch (Exception e){
             e.printStackTrace();
