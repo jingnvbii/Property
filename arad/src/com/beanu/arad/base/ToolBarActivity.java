@@ -27,6 +27,8 @@ public class ToolBarActivity extends BaseActivity implements ISetupToolBar {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+       /* View rootView = getWindow().getDecorView();
+        rootView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);*/
     }
 
     @Override
@@ -57,7 +59,6 @@ public class ToolBarActivity extends BaseActivity implements ISetupToolBar {
         super.onStart();
         if (mTitle != null && setupToolBarTitle() != null)
             mTitle.setText(setupToolBarTitle());
-
 
         if (mLeftButton != null) {
             if (setupToolBarLeftButton(mLeftButton)) {

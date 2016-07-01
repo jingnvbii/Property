@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-
+    android:layout_width="match_parent" android:layout_height="match_parent"
     >
 
     <LinearLayout
@@ -17,12 +15,11 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
-        android:text="@string/take_picture"
+        android:padding="10dp"
+        android:text="@string/bo_hao"
         android:textSize="16sp"
         android:textColor="@color/text_black1"
-        android:id="@+id/take_picture"
+        android:id="@+id/bo_hao"
         android:layout_gravity="center"
         android:gravity="center"
         />
@@ -38,12 +35,11 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
-        android:text="@string/choose_phone"
+        android:padding="10dp"
+        android:text="@string/call_up"
         android:textSize="16sp"
         android:textColor="@color/text_black1"
-        android:id="@+id/choose_phone"
+        android:id="@+id/call_up"
         android:layout_gravity="center"
         android:gravity="center"
         />
@@ -59,8 +55,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
+        android:padding="10dp"
         android:text="@string/camera_cancel"
         android:textSize="16sp"
         android:textColor="@color/text_newpwd"

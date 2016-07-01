@@ -88,6 +88,7 @@
             android:imeOptions="actionGo"
             android:layout_width="wrap_content"
             android:layout_height="35dp"/>
+
     </RelativeLayout>
 
 
@@ -95,6 +96,7 @@
         android:descendantFocusability="blocksDescendants"
         android:id="@+id/lv_content"
         android:scrollbars="none"
+        android:scrollbarStyle="outsideOverlay"
         android:fastScrollEnabled="true"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>

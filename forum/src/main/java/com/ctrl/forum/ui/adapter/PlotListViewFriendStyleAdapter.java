@@ -52,7 +52,6 @@ public class PlotListViewFriendStyleAdapter extends BaseAdapter {
     private View.OnClickListener onLove;
     private ImageView zanView;
 
-
     public PlotListViewFriendStyleAdapter(Activity context) {
         this.mcontext = context;
         this.wh = (SysUtils.getScreenWidth(mcontext)- SysUtils.Dp2Px(mcontext, 99)) / 3;
@@ -99,7 +98,6 @@ public class PlotListViewFriendStyleAdapter extends BaseAdapter {
         return position;
     }
 
-
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
         ViewHolder holder = null;
@@ -124,7 +122,7 @@ public class PlotListViewFriendStyleAdapter extends BaseAdapter {
         holder.tv_friend_style_name.setText(post.getMemberName());
 
         if (post.getPublishTime()!=null&& !post.getPublishTime().equals("")) {
-            if (post.getLocationName()!=null && post.getLocationName().equals("")) {
+            if (post.getLocationName()!=null && !post.getLocationName().equals("")) {
                 holder.tv_friend_style_time.setText(TimeUtils.date(Long.parseLong(post.getPublishTime())) + "   " + post.getLocationName());
             }else {
                 holder.tv_friend_style_time.setText(TimeUtils.date(Long.parseLong(post.getPublishTime())));
@@ -219,8 +217,8 @@ public class PlotListViewFriendStyleAdapter extends BaseAdapter {
             }
         });
 
-        holder.rl_friend_style_zan.setOnClickListener(onLove);
-        holder.rl_friend_style_zan.setTag(position);
+        //holder.rl_friend_style_zan.setOnClickListener(onLove);
+       // holder.rl_friend_style_zan.setTag(position);
 
         if(post.getPraiseState()!=null) {
             if (post.getPraiseState().equals("0")) {
@@ -230,6 +228,7 @@ public class PlotListViewFriendStyleAdapter extends BaseAdapter {
                 holder.iv_friend_style_zan_num.setImageResource(R.mipmap.zan_blue_shixin);
             }
         }
+
         holder.setPosition(position);
        setOnListtener(holder);
 
@@ -247,16 +246,18 @@ public class PlotListViewFriendStyleAdapter extends BaseAdapter {
         return convertView;
     }
 
+
     //触发
     protected void setOnListtener(final ViewHolder holder){
         if(mOnItemClickListener != null){
 
-           /* holder.rl_friend_style_zan.setOnClickListener(new View.OnClickListener() {
+            holder.rl_friend_style_zan.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     mOnItemClickListener.onItemZanClick(holder);
+
                 }
-            });*/
+            });
         }
     }
 
@@ -270,7 +271,7 @@ public class PlotListViewFriendStyleAdapter extends BaseAdapter {
         @InjectView(R.id.tv_friend_style_content)//内容
                 TextView tv_friend_style_content;
         @InjectView(R.id.tv_friend_style_zan_num)//喜欢数量
-                TextView tv_friend_style_zan_num;
+           public  TextView tv_friend_style_zan_num;
         @InjectView(R.id.tv_friend_style_pinglun_num)//评论数量
                 TextView tv_friend_style_pinglun_num;
         @InjectView(R.id.tv_friend_style_share_num)//分享数量

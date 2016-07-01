@@ -10,10 +10,10 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.text.format.DateFormat;
 import android.util.Base64;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
@@ -23,7 +23,6 @@ import com.beanu.arad.Arad;
 import com.beanu.arad.utils.MessageUtils;
 import com.ctrl.forum.R;
 import com.ctrl.forum.base.AppToolBarActivity;
-import com.ctrl.forum.customview.ClipActivity;
 import com.ctrl.forum.customview.MineHeadView;
 import com.ctrl.forum.dao.EditDao;
 import com.ctrl.forum.entity.MemberInfo;
@@ -92,11 +91,16 @@ public class MineEditActivity extends AppToolBarActivity implements View.OnClick
     private String path;//图片全路径
     public static final int IMAGE_COMPLETE = 2; // 结果
     public static final int CROPREQCODE = 3; // 截取
+    public static final int PHOTOZOOM = 0; // 相册/拍照
+    public static final int PHOTOTAKE = 1; // 相册/拍照
     private String photoSavePath;//保存路径
     private String photoSaveName;//图pian名
+    private LayoutInflater layoutInflater;
     private String temppath;
 
     private File file = new File(Environment.getExternalStorageDirectory(), getPhotoFileName());
+   // private Context context;
+    private String httpImageUri;
 
     // 使用系统当前日期加以调整作为照片的名称
     /*@SuppressLint("SimpleDateFormat")*/
@@ -110,6 +114,7 @@ public class MineEditActivity extends AppToolBarActivity implements View.OnClick
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit);
         ButterKnife.inject(this);
+
         init();
         initPop();
         putData();
@@ -138,22 +143,31 @@ public class MineEditActivity extends AppToolBarActivity implements View.OnClick
             if (url!=null && url.equals("")){
                 Arad.preferences.putString("imgUrl", url);
                 Arad.preferences.flush();
-                Arad.imageLoader.load(url).placeholder(getResources().getDrawable(R.mipmap.image_default)).into(iv_head);//设置头像
+                Arad.imageLoader.load(Arad.preferences.getString("imgUrl")).
+                        placeholder(getResources().getDrawable(R.mipmap.image_default)).into(iv_head);//设置头像
             }
         }
         if (requestCode==5){
             MessageUtils.showShortToast(getApplicationContext(), "修改头像成功");
-            String url = edao.getImageUrl();
-            Arad.imageLoader.load(url).placeholder(getResources().getDrawable(R.mipmap.image_default)).into(iv_head);//设置头像
-           //edao.getVipInfo(Arad.preferences.getString("memberId"));
+            String loadImageUrl = edao.getImageUrl();
+            Log.e("url===================", loadImageUrl);
+
+            Arad.preferences.putString("imgUrl", loadImageUrl);
+            Arad.preferences.flush();
+            putData();
+
+            /*Arad.imageLoader.load(loadImageUrl).resize(100,100).
+                    placeholder(this.getResources().getDrawable(R.mipmap.image_default)).into(iv_head);//设置头像*/
+           // edao.getVipInfo(Arad.preferences.getString("memberId"));
         }
     }
 
     //弹窗
     private void initPop() {
-        view = LayoutInflater.from(this).inflate(R.layout.update_head,null);
+        view = LayoutInflater.from(this).inflate(R.layout.update_head, null);
         popupWindow = new PopupWindow(view,
-                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, true);
+                getResources().getDisplayMetrics().widthPixels,
+                getResources().getDisplayMetrics().heightPixels);
         popupWindow.setFocusable(true);
         ColorDrawable colorDrawable = new ColorDrawable(getResources().getColor(R.color.pop_bg));
         colorDrawable.setAlpha(40);
@@ -205,7 +219,7 @@ public class MineEditActivity extends AppToolBarActivity implements View.OnClick
         switch (id){
             //修改头像
             case R.id.update_head:
-                popupWindow.showAtLocation(this.view,Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);  //弹出
+                popupWindow.showAtLocation(this.view,Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 120);  //弹出
                 popupWindow.update();
                 break;
             case R.id.rl_ni://昵称
@@ -236,28 +250,36 @@ public class MineEditActivity extends AppToolBarActivity implements View.OnClick
                 imageUri = Uri.fromFile(new File(photoSavePath,photoSaveName));
                 openCameraIntent.putExtra(MediaStore.Images.Media.ORIENTATION, 0);
                 openCameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
-                startActivityForResult(openCameraIntent, LOOK_CAMERA_INTENT);
+                startActivityForResult(openCameraIntent, PHOTOTAKE);
 
                 //关闭弹窗
                 popupWindow.dismiss();
                 break;
             case R.id.choose_phone: //选择照片
-                Intent intent1;
+               /* Intent intent1;
                 intent1 = new Intent(Intent.ACTION_GET_CONTENT, null);
                 intent1.addCategory(Intent.CATEGORY_OPENABLE);
-                intent1.setType("image*//*");
-                intent1.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
-                startActivityForResult(intent1,LOOK_ALBUM_INTENT);
+                intent1.setType("image*//**//*");
+                intent1.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image*//*");
+                startActivityForResult(intent1,LOOK_ALBUM_INTENT);*/
+
+                Intent openAlbumIntent = new Intent(Intent.ACTION_GET_CONTENT);
+                openAlbumIntent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
+                startActivityForResult(openAlbumIntent, PHOTOZOOM);
                 //关闭弹窗
                 popupWindow.dismiss();
                 break;
             case R.id.cancel: //取消
                 popupWindow.dismiss();
                 break;
-            case R.id.tv_tuichu:
+            case R.id.tv_tuichu://退出登陆
+
+                Arad.preferences.clear();
+                Arad.preferences.flush();
                 DataCleanUtils.clearAllCache(this.getApplicationContext());
-                this.finish();
                 startActivity(new Intent(this, LoginActivity.class));
+                //((MainActivity)context).finish();
+                this.finish();
                 break;
         }
     }
@@ -270,35 +292,57 @@ public class MineEditActivity extends AppToolBarActivity implements View.OnClick
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+
         if (resultCode == RESULT_OK) {
+            Uri uri = null;
             switch (requestCode) {
-                case LOOK_ALBUM_INTENT://相册
-                    Uri uri = data.getData();
-                    String thePath = Utils.getInstance().getPath(this, uri);
+                case PHOTOZOOM://相册
+                    String thePath = Utils.getInstance().getPath(this, data.getData());
                     getImageToView1(thePath);
                    /* if (data != null) {
-                        startPhotoZoom(data.getData());
+                        startPhotoZoom(data.getData());w
                     }*/
+
+                   /* if (data==null) {
+                        return;
+                    }
+                    uri = data.getData();
+                    String[] proj = { MediaStore.Images.Media.DATA };
+                    Cursor cursor = managedQuery(uri, proj, null, null,null);
+                    int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+                    cursor.moveToFirst();
+                    path = cursor.getString(column_index);// 图片在的路径
+                    Intent intent3=new Intent(this, ClipActivity.class);
+                    intent3.putExtra("path", path);
+                    startActivityForResult(intent3, IMAGE_COMPLETE);*/
+
                     break;
-                case LOOK_CAMERA_INTENT://相机
+                case PHOTOTAKE://相机
                     //startPhotoZoom(Uri.fromFile(file));
                     path=photoSavePath+photoSaveName;
-                    uri = Uri.fromFile(new File(path));
+                    /*uri = Uri.fromFile(new File(path));
                     Intent intent2=new Intent(MineEditActivity.this, ClipActivity.class);
                     intent2.putExtra("path", path);
-                    startActivityForResult(intent2, IMAGE_COMPLETE);
+                    startActivityForResult(intent2, IMAGE_COMPLETE);*/
+                    getImageToView1(path);
                     break;
                 case IMAGE_COMPLETE:
                     temppath = data.getStringExtra("path");
-                    iv_head.setImageBitmap(getLoacalBitmap(temppath));
+                    Log.e("temppath=======================", temppath);
+                   /* Bitmap bitmap = data.getExtras().getParcelable("bitmap");
+                    iv_head.setImageBitmap(bitmap);*/
                     getImageToView1(temppath);
+
+                    iv_head.setImageBitmap(getLoacalBitmap(temppath));
                     break;
                 default:
                     break;
             }
 
+        }else {
+            return;
         }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     /**
@@ -365,6 +409,9 @@ public class MineEditActivity extends AppToolBarActivity implements View.OnClick
         Bitmap bitmap ;
         try{
             bitmap = BitmapFactory.decodeFile(path);
+
+            Log.e("bitmapPath==================",path);
+            Log.e("bitmap==================",bitmap.toString());
             iv_head.setImageBitmap(bitmap);
 
             ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -376,7 +423,6 @@ public class MineEditActivity extends AppToolBarActivity implements View.OnClick
 
             String photo = new String(encode);
             if (photo != null){
-                // Log.d("demo","上传方法2");
                 /**调用后台方法  将图片上传**/
                 //  String imgData = photo;
                 edao.modifyImgUrl(Arad.preferences.getString("memberId"), photo);

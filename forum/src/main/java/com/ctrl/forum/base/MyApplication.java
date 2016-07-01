@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
 
+import com.baidu.mapapi.SDKInitializer;
 import com.beanu.arad.AradApplication;
 import com.beanu.arad.AradApplicationConfig;
 import com.beanu.arad.http.HttpConfig;
@@ -14,6 +15,8 @@ import com.ctrl.forum.service.LocationService;
 import java.util.LinkedList;
 import java.util.List;
 
+import cn.jpush.android.api.JPushInterface;
+
 
 /**
  * 实例化 Arad
@@ -21,7 +24,6 @@ import java.util.List;
  */
 public class MyApplication extends AradApplication {
     //public LocationClient mLocationClient = null;
-
 
     //运用list来保存们每一个activity是关键
     private List<Activity> mList = new LinkedList<Activity>();
@@ -72,15 +74,15 @@ public class MyApplication extends AradApplication {
     public void onCreate() {
         super.onCreate();
 
-      /*  JPushInterface.setDebugMode(true);
+        JPushInterface.setDebugMode(true);
         JPushInterface.init(this);
-*/
+
         /***
          * 初始化定位sdk，建议在Application中创建
          */
         locationService = new LocationService(getApplicationContext());
         //百度地图初始化
-      //  SDKInitializer.initialize(getApplicationContext());
+        SDKInitializer.initialize(getApplicationContext());
         //SpeechUtility.createUtility(getApplicationContext(), SpeechConstant.APPID + Constant.XUNFEI_APPID); //科大讯飞
         //LocationUtil.getInstance().init(getApplicationContext());
         config.httpConfig = new HttpConfig("succeed");

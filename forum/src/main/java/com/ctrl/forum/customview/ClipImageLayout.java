@@ -28,7 +28,6 @@ public class ClipImageLayout extends RelativeLayout
 		
 		this.addView(mZoomImageView, lp);
 		this.addView(mClipImageView, lp);
-
 		
 		// 计算padding的px
 		mHorizontalPadding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, mHorizontalPadding, getResources().getDisplayMetrics());

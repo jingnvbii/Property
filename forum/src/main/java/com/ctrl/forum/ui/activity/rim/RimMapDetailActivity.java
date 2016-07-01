@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
@@ -18,11 +17,13 @@ import android.widget.TextView;
 import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.BitmapDescriptor;
 import com.baidu.mapapi.map.BitmapDescriptorFactory;
+import com.baidu.mapapi.map.MapStatus;
 import com.baidu.mapapi.map.MapStatusUpdate;
 import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.map.Marker;
 import com.baidu.mapapi.map.MarkerOptions;
+import com.baidu.mapapi.map.OverlayOptions;
 import com.baidu.mapapi.model.LatLng;
 import com.baidu.mapapi.model.LatLngBounds;
 import com.baidu.mapapi.navi.BaiduMapAppNotSupportNaviException;
@@ -31,7 +32,6 @@ import com.baidu.mapapi.navi.NaviParaOption;
 import com.baidu.mapapi.utils.OpenClientUtil;
 import com.beanu.arad.Arad;
 import com.beanu.arad.base.ToolBarActivity;
-import com.beanu.arad.widget.SlidingUpPanelLayout;
 import com.ctrl.forum.R;
 import com.ctrl.forum.dao.RimDao;
 
@@ -90,7 +90,7 @@ public class RimMapDetailActivity extends ToolBarActivity implements View.OnClic
         }
 
         mLat2 = Double.valueOf(getIntent().getStringExtra("latitude"));
-        mLat2 = Double.valueOf(getIntent().getStringExtra("longitude"));
+        mLon2 = Double.valueOf(getIntent().getStringExtra("longitude"));
 
         initData();
         initView();
@@ -101,15 +101,36 @@ public class RimMapDetailActivity extends ToolBarActivity implements View.OnClic
 
     private void initMap() {
         mBaiduMap = iv_map.getMap();
-        MapStatusUpdate msu = MapStatusUpdateFactory.zoomTo(14.0f);
-        mBaiduMap.setMapStatus(msu);
+        /*MapStatusUpdate msu = MapStatusUpdateFactory.zoomTo(18);
+        mBaiduMap.setMapStatus(msu);*/
 
-        initOverlay();
+        LatLng cenpt = new LatLng(mLat2,mLon2);
+        //定义地图状态
+        MapStatus mMapStatus = new MapStatus.Builder()
+                .target(cenpt)
+                .zoom(18)
+                .build();
+        //定义MapStatusUpdate对象，以便描述地图状态将要发生的变化
+        MapStatusUpdate mMapStatusUpdate = MapStatusUpdateFactory.newMapStatus(mMapStatus);
+        //改变地图状态
+        mBaiduMap.setMapStatus(mMapStatusUpdate);
+        //构建Marker图标
+        BitmapDescriptor bitmap = BitmapDescriptorFactory
+                .fromResource(R.drawable.ic_location_chatbox);
+        //构建MarkerOption，用于在地图上添加Marker
+        OverlayOptions option = new MarkerOptions()
+                .position(cenpt)
+                .icon(bitmap);
+        //在地图上添加Marker，并显示
+        mBaiduMap.addOverlay(option);
+
+        //initOverlay();
     }
 
     private void initOverlay() {
-        Double la = getIntent().getDoubleExtra("latitude",36);
-        Double lo = getIntent().getDoubleExtra("longitude", 117);
+
+        Double la =Double.valueOf(getIntent().getStringExtra("latitude"));
+        Double lo = Double.valueOf(getIntent().getStringExtra("longitude"));
 
         Marker mMarker = null;
         MarkerOptions ooA = new MarkerOptions().position(new LatLng(la,lo)).icon(bdA).zIndex(9).draggable(false);
@@ -151,7 +172,8 @@ public class RimMapDetailActivity extends ToolBarActivity implements View.OnClic
     //初始化弹窗
     private void initPop() {
         view = LayoutInflater.from(this).inflate(R.layout.call_phone,null);
-        popupWindow = new PopupWindow(view, SlidingUpPanelLayout.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
+        popupWindow = new PopupWindow(view, getResources().getDisplayMetrics().widthPixels,
+                getResources().getDisplayMetrics().heightPixels);
         popupWindow.setFocusable(true);
         ColorDrawable colorDrawable = new ColorDrawable(getResources().getColor(R.color.pop_bg));
         colorDrawable.setAlpha(40);
@@ -180,7 +202,7 @@ public class RimMapDetailActivity extends ToolBarActivity implements View.OnClic
             case R.id.iv_phone:
                 bo_hao.setText(telephone);
                 if (!bo_hao.getText().equals("")){
-                    popupWindow.showAtLocation(this.view, Gravity.BOTTOM, 0, 0);  //在底部
+                    popupWindow.showAtLocation(this.view, Gravity.BOTTOM, 0, 120);  //在底部
                     popupWindow.update();
                 }
                 break;
@@ -251,5 +273,11 @@ public class RimMapDetailActivity extends ToolBarActivity implements View.OnClic
         if (requestCode==9){
             tv_total.setText(""+callTimes++);
         }
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        initPop();
     }
 }

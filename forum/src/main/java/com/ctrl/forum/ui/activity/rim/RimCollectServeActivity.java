@@ -4,11 +4,9 @@ import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -17,7 +15,6 @@ import android.widget.TextView;
 
 import com.beanu.arad.Arad;
 import com.beanu.arad.base.ToolBarActivity;
-import com.beanu.arad.widget.SlidingUpPanelLayout;
 import com.ctrl.forum.R;
 import com.ctrl.forum.base.Constant;
 import com.ctrl.forum.dao.RimDao;
@@ -44,7 +41,7 @@ public class RimCollectServeActivity extends ToolBarActivity implements View.OnC
     private List<RimServiceCompany> rimServiceCompanies;
     private RimDao rimDao;
     private int PAGE_NUM=1;
-    private View view;
+    private View contentView;
     private PopupWindow popupWindow;
     private TextView bo_hao,call_up,cancel;
 
@@ -96,6 +93,8 @@ public class RimCollectServeActivity extends ToolBarActivity implements View.OnC
                     intent.putExtra("address", rimServiceCompanies.get(position - 1).getAddress());
                     intent.putExtra("telephone", rimServiceCompanies.get(position - 1).getTelephone());
                     intent.putExtra("callTimes", rimServiceCompanies.get(position - 1).getCallTimes());
+                    intent.putExtra("latitude", rimServiceCompanies.get(position - 1).getLatitude()+"");
+                    intent.putExtra("longitude", rimServiceCompanies.get(position - 1).getLongitude()+"");
                     startActivity(intent);
                 }
             }
@@ -105,17 +104,18 @@ public class RimCollectServeActivity extends ToolBarActivity implements View.OnC
 
     //初始化弹窗
     private void initPop() {
-        view = LayoutInflater.from(this).inflate(R.layout.call_phone,null);
-        popupWindow = new PopupWindow(view, SlidingUpPanelLayout.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
+        contentView = LayoutInflater.from(this).inflate(R.layout.call_phone,null);
+        popupWindow = new PopupWindow(contentView,getResources().getDisplayMetrics().widthPixels,
+                getResources().getDisplayMetrics().heightPixels);
         popupWindow.setFocusable(true);
         ColorDrawable colorDrawable = new ColorDrawable(getResources().getColor(R.color.pop_bg));
         colorDrawable.setAlpha(40);
         popupWindow.setBackgroundDrawable(colorDrawable);
         popupWindow.setOutsideTouchable(true);
 
-        bo_hao = (TextView) view.findViewById(R.id.bo_hao);
-        call_up = (TextView) view.findViewById(R.id.call_up);
-        cancel = (TextView) view.findViewById(R.id.cancel);
+        bo_hao = (TextView) contentView.findViewById(R.id.bo_hao);
+        call_up = (TextView) contentView.findViewById(R.id.call_up);
+        cancel = (TextView) contentView.findViewById(R.id.cancel);
 
         bo_hao.setOnClickListener(this);
         call_up.setOnClickListener(this);
@@ -124,8 +124,7 @@ public class RimCollectServeActivity extends ToolBarActivity implements View.OnC
 
     private void initData() {
         rimDao = new RimDao(this);
-        rimDao.getAroundServiceCollectionList(Arad.preferences.getString("memberId"),PAGE_NUM+"", Constant.PAGE_SIZE+"");
-        Log.e("rimServiceCompanies=================", "initData=================");
+        rimDao.getAroundServiceCollectionList(Arad.preferences.getString("memberId"), PAGE_NUM + "", Constant.PAGE_SIZE + "");
     }
 
     @Override
@@ -137,10 +136,11 @@ public class RimCollectServeActivity extends ToolBarActivity implements View.OnC
                 this.finish();
                 break;
             case R.id.iv_phone:
+                initPop();
                 position = (int)id;
                 bo_hao.setText(rimServiceCompanies.get(position).getTelephone());
                 if (!bo_hao.getText().equals("")){
-                    popupWindow.showAtLocation(this.view, Gravity.BOTTOM, 0, 0);  //在底部
+                    popupWindow.showAtLocation(this.contentView, Gravity.BOTTOM, 0, 120);  //在底部
                     popupWindow.update();
                 }
                 break;
@@ -177,7 +177,6 @@ public class RimCollectServeActivity extends ToolBarActivity implements View.OnC
     @Override
     protected void onRestart() {
         super.onRestart();
-        initPop();
         if (rimServiceCompanies != null) {
             rimServiceCompanies.clear();
             PAGE_NUM = 1;

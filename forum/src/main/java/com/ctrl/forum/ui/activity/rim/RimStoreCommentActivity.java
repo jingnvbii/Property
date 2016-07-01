@@ -285,6 +285,7 @@ public class RimStoreCommentActivity extends ToolBarActivity implements View.OnC
             reset();
             // 隐藏输入法
             getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+            MessageUtils.showShortToast(this,"评论成功,已提交审核,请等待...");
             if (companyEvaluationList!=null) {
                 companyEvaluationList.clear();
             }

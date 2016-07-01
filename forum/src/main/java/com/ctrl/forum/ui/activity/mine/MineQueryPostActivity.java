@@ -20,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.beanu.arad.Arad;
+import com.beanu.arad.utils.MessageUtils;
 import com.ctrl.forum.R;
 import com.ctrl.forum.base.AppToolBarActivity;
 import com.ctrl.forum.base.Constant;
@@ -34,6 +35,7 @@ import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -59,7 +61,6 @@ public class MineQueryPostActivity extends AppToolBarActivity implements View.On
     private int PAGE_NUM =1;
     //private MineQueryPostAdapter mineQueryPostAdapter;
     private InvitationDao invitationDao;
-    private Activity activity;
     private String ids = "";
     static String title;
     private PlotListViewFriendStyleAdapter adapter;
@@ -69,6 +70,9 @@ public class MineQueryPostActivity extends AppToolBarActivity implements View.On
     private PopupWindow popupWindow_share;
     private ShareDialog shareDialog;
     private InvitationDao idao;
+    private Map<Integer,Boolean> isAdd = new HashMap<>();
+    private Map<Integer,Integer> text = new HashMap<>();
+    private Activity activity;
     private PopupWindow mPopupWindow;
 
     @Override
@@ -129,6 +133,46 @@ public class MineQueryPostActivity extends AppToolBarActivity implements View.On
                 Intent intent = new Intent(MineQueryPostActivity.this, InvitationDetailFromPlatformActivity.class);
                 intent.putExtra("id", posts.get(position - 1).getId());
                 startActivity(intent);
+            }
+        });
+
+        adapter.setOnItemClickListener(new PlotListViewFriendStyleAdapter.OnItemClickListener() {
+            @Override
+            public void onItemZanClick(PlotListViewFriendStyleAdapter.ViewHolder v) {
+                int position = v.getPosition();
+                int tex = posts.get(position).getPraiseNum();
+
+                if (isAdd.get(position)==null) {
+                    if (posts.get(position).getPraiseState().equals("0")) {
+                        isAdd.put(position, true);
+                    } else {
+                        isAdd.put(position, false);
+                    }
+                }
+
+                if (text.get(position)==null){
+                    text.put(position,tex);
+                }
+
+                if (posts.get(position).getPraiseState()!=null) {
+                    if (isAdd.get(position)) {
+                        idao.requesZambia("add", posts.get(position).getId(),Arad.preferences.getString("memberId")
+                                ,posts.get(position).getTitle(),posts.get(position).getContent());
+                        v.tv_friend_style_zan_num.setText((text.get(position) + 1) + "");
+                        text.put(position,text.get(position) + 1);
+                        v.iv_friend_style_zan_num.setImageResource(R.mipmap.zan_blue_shixin);
+                        MessageUtils.showShortToast(getApplicationContext(), "点赞成功");
+                        isAdd.put(position,false);
+                    } else {
+                        idao.requesZambia("reduce", posts.get(position).getId(), Arad.preferences.getString("memberId")
+                                , posts.get(position).getTitle(), posts.get(position).getContent());
+                        MessageUtils.showShortToast(getApplicationContext(), "取消点赞");
+                        v.tv_friend_style_zan_num.setText((text.get(position) - 1) + "");
+                        text.put(position, text.get(position)-1);
+                        v.iv_friend_style_zan_num.setImageResource(R.mipmap.zan_blue);
+                        isAdd.put(position,true);
+                    }
+                }
             }
         });
     }

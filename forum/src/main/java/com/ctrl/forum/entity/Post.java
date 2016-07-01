@@ -30,7 +30,9 @@ public class Post {
     private List<PostReply> postReplyList;//回复列表
     private String content;//帖子标题
 
-    private String praiseState;//是否被当前用户点赞
+    private String praiseState; //点赞的状态
+
+    private String zambiastate;//是否被当前用户点赞
     private String collectstate;//是否被当前用户收藏
 
     public String getPraiseState() {
@@ -49,6 +51,13 @@ public class Post {
         this.content = content;
     }
 
+    public String getZambiastate() {
+        return zambiastate;
+    }
+
+    public void setZambiastate(String zambiastate) {
+        this.zambiastate = zambiastate;
+    }
 
     public String getCollectstate() {
         return collectstate;

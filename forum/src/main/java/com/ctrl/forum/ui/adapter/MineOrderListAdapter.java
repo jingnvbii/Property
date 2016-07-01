@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.beanu.arad.Arad;
+import com.beanu.arad.utils.MessageUtils;
 import com.ctrl.forum.R;
 import com.ctrl.forum.entity.MemeberOrder;
 import com.ctrl.forum.ui.activity.mine.OrderPingjiaActivity;
@@ -86,23 +87,42 @@ public class MineOrderListAdapter extends BaseAdapter{
         }
 
         if (orders!=null && orders.get(position)!=null){
-            holder.iv_delete.setOnClickListener(onDelete);
-            holder.iv_delete.setTag(id);
-
             type = Integer.valueOf(orders.get(position).getState());
             switch (type){ //1-订单被用户取消 2-订单被系统取消 3-未付款 4-商家未发货 5-用户未签收 6-用户已签收
                 case 1: //1-订单被用户取消
                     holder.bt_left.setVisibility(View.GONE);
-                    holder.bt_right.setText("订单被用户取消");
-                    holder.bt_right.setFocusable(false);
+                    holder.bt_right.setText("已取消");
+                    holder.bt_right.setBackgroundColor(context.getResources().getColor(R.color.gray_store));
+                    holder.bt_right.setTextColor(context.getResources().getColor(R.color.text_black1));
+                    holder.bt_right.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                        }
+                    });
+                    holder.iv_delete.setOnClickListener(onDelete);
+                    holder.iv_delete.setTag(id);
                     break;
                 case 2: //2-订单被系统取消
                     holder.bt_left.setVisibility(View.GONE);
-                    holder.bt_right.setText("订单被系统取消");
-                    holder.bt_right.setFocusable(false);
+                    holder.bt_right.setText("已取消");
+                    holder.bt_right.setBackgroundColor(context.getResources().getColor(R.color.gray_store));
+                    holder.bt_right.setTextColor(context.getResources().getColor(R.color.text_black1));
+                    holder.bt_right.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                        }
+                    });
+                    holder.iv_delete.setOnClickListener(onDelete);
+                    holder.iv_delete.setTag(id);
                     break;
                 case 6://已签收
                     holder.bt_left.setVisibility(View.GONE);
+                    holder.iv_delete.setOnClickListener(onDelete);
+                    holder.iv_delete.setTag(id);
+                    holder.bt_right.setBackgroundColor(context.getResources().getColor(R.color.red_bg));
+                    holder.bt_right.setTextColor(context.getResources().getColor(R.color.white));
                     String state = orders.get(position).getEvaluationState();
                     if (state.equals("0")){
                         holder.bt_right.setText("去评价");
@@ -118,15 +138,28 @@ public class MineOrderListAdapter extends BaseAdapter{
                             }
                         });
                     }else{
-                        holder.bt_right.setText("已评价");
-                        holder.bt_right.setFocusable(false);
+                        holder.bt_right.setText("已完成");
+                        holder.bt_right.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+
+                            }
+                        });
                     }
                     convertView.setTag(holder);
                     break;
                 case 3://未付款
+                    holder.iv_delete.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            MessageUtils.showShortToast(context,"订单未完成,不可删除");
+                        }
+                    });
+                    holder.bt_right.setBackgroundColor(context.getResources().getColor(R.color.red_bg));
+                    holder.bt_right.setTextColor(context.getResources().getColor(R.color.white));
                     holder.bt_left.setVisibility(View.VISIBLE);
                     holder.bt_left.setText("取消订单");
-                    holder.bt_right.setText("付款");
+                    holder.bt_right.setText("去支付");
                     holder.bt_left.setOnClickListener(onCancle);
                     holder.bt_left.setTag(orders.get(position).getId());
                     holder.bt_right.setOnClickListener(new View.OnClickListener() {
@@ -143,13 +176,34 @@ public class MineOrderListAdapter extends BaseAdapter{
                     });
                     break;
                 case 4: //未发货
+                    holder.bt_right.setBackgroundColor(context.getResources().getColor(R.color.red_bg));
+                    holder.bt_right.setTextColor(context.getResources().getColor(R.color.white));
+                    holder.iv_delete.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            MessageUtils.showShortToast(context, "订单未完成,不可删除");
+                        }
+                    });
                     holder.bt_left.setVisibility(View.GONE);
                     holder.bt_right.setText("待发货");
-                    holder.bt_right.setFocusable(false);
+                    holder.bt_right.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                        }
+                    });
                     break;
                 case 5: //未签收
+                    holder.bt_right.setBackgroundColor(context.getResources().getColor(R.color.red_bg));
+                    holder.bt_right.setTextColor(context.getResources().getColor(R.color.white));
+                    holder.iv_delete.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            MessageUtils.showShortToast(context,"订单未完成,不可删除");
+                        }
+                    });
                     holder.bt_left.setVisibility(View.GONE);
-                    holder.bt_right.setText("待签收");
+                    holder.bt_right.setText("确认收货");
                     holder.bt_right.setOnClickListener(onGoods);
                     holder.bt_right.setTag(orders.get(position).getId());
                     break;
