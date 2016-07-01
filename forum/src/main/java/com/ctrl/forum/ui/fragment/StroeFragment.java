@@ -662,6 +662,7 @@ public class StroeFragment extends ToolBarFragment implements View.OnClickListen
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        PAGE_NUM=1;
         if (requestCode == 555 && resultCode == 556) {
             latitude_now = data.getStringExtra("latitude");
             longitude_now = data.getStringExtra("longitude");
@@ -691,6 +692,7 @@ public class StroeFragment extends ToolBarFragment implements View.OnClickListen
             longitude_search = data.getStringExtra("longitude");
             address_search = data.getStringExtra("address");
             tv_toolbar.setText(address_search);
+
             mdao.requestInitMallRecommendCompany(latitude_search, longitude_search,
                     String.valueOf(Constant.PAGE_SIZE), String.valueOf(PAGE_NUM));
         }

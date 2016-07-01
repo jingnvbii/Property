@@ -15,7 +15,6 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.baidu.location.BDLocation;
@@ -31,8 +30,8 @@ import com.baidu.mapapi.search.geocode.OnGetGeoCoderResultListener;
 import com.baidu.mapapi.search.geocode.ReverseGeoCodeOption;
 import com.baidu.mapapi.search.geocode.ReverseGeoCodeResult;
 import com.baidu.mapapi.search.poi.OnGetPoiSearchResultListener;
+import com.baidu.mapapi.search.poi.PoiCitySearchOption;
 import com.baidu.mapapi.search.poi.PoiDetailResult;
-import com.baidu.mapapi.search.poi.PoiNearbySearchOption;
 import com.baidu.mapapi.search.poi.PoiResult;
 import com.baidu.mapapi.search.poi.PoiSearch;
 import com.beanu.arad.Arad;
@@ -75,7 +74,7 @@ public class StoreLocateActivity extends AppToolBarActivity implements View.OnCl
     @InjectView(R.id.et_locate_search)//搜索输入
             EditText et_locate_search;
     @InjectView(R.id.lv_search_address)//搜索地址列表
-            ListView lv_search_address;
+            ListViewForScrollView lv_search_address;
     @InjectView(R.id.ll_store_locate)//整体布局
             LinearLayout ll_store_locate;
     private AddressDao adao;
@@ -113,6 +112,7 @@ public class StoreLocateActivity extends AppToolBarActivity implements View.OnCl
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         initView();
         initLocation();
+        mLocationClient.start();
         initPoiSearch();
         initData();
     }
@@ -142,6 +142,8 @@ public class StoreLocateActivity extends AppToolBarActivity implements View.OnCl
         // 第三步，设置POI检索监听者；
         mPoiSearch.setOnGetPoiSearchResultListener(poiListener);
     }
+
+
 
 
     private void initView() {
@@ -192,8 +194,9 @@ public class StoreLocateActivity extends AppToolBarActivity implements View.OnCl
                         poiInfoList.get(position).location.latitude + "", poiInfoList.get(position).location.longitude + "");
                 intent=new Intent();
                 intent.putExtra("address",poiInfoList.get(position).address);
-                intent.putExtra("latitude",poiInfoList.get(position).location.latitude);
-                intent.putExtra("longitude",poiInfoList.get(position).location.longitude);
+                intent.putExtra("latitude",poiInfoList.get(position).location.latitude+"");
+                intent.putExtra("longitude",poiInfoList.get(position).location.longitude+"");
+
                 setResult(888,intent);
                 finish();
             }
@@ -210,7 +213,7 @@ public class StoreLocateActivity extends AppToolBarActivity implements View.OnCl
         option.setLocationMode(LocationClientOption.LocationMode.Hight_Accuracy
         );//可选，默认高精度，设置定位模式，高精度，低功耗，仅设备
         option.setCoorType("bd09ll");//可选，默认gcj02，设置返回的定位结果坐标系
-        int span = 1000;
+        int span = 0;
         option.setScanSpan(span);//可选，默认0，即仅定位一次，设置发起定位请求的间隔需要大于等于1000ms才是有效的
         option.setIsNeedAddress(true);//可选，设置是否需要地址信息，默认不需要
         option.setOpenGps(true);//可选，默认false,设置是否使用gps
@@ -232,8 +235,9 @@ public class StoreLocateActivity extends AppToolBarActivity implements View.OnCl
         @Override
         public void onReceiveLocation(BDLocation location) {
             latlng = new LatLng(location.getLatitude(), location.getLongitude());
-            //发起反地理编码检索
-            mGeoCoder.reverseGeoCode((new ReverseGeoCodeOption()).location(latlng));
+            city=location.getCity();
+                //发起反地理编码检索
+                mGeoCoder.reverseGeoCode((new ReverseGeoCodeOption()).location(latlng));
         }
     }
 
@@ -250,11 +254,12 @@ public class StoreLocateActivity extends AppToolBarActivity implements View.OnCl
             else {
                 showProgress(false);
                 // 当前位置信息
-                tv_locate_now.setText(result.getAddress());
+
+                address=result.getAddress();
                 latitude = String.valueOf(result.getLocation().latitude);
                 longitude = String.valueOf(result.getLocation().longitude);
 
-                intent.putExtra("latitude", latitude);
+              /*  intent.putExtra("latitude", latitude);
                 intent.putExtra("longitude", longitude);
                 intent.putExtra("address", result.getAddress());
                 setResult(556, intent);
@@ -263,7 +268,7 @@ public class StoreLocateActivity extends AppToolBarActivity implements View.OnCl
                     public void run() {
                         finish();
                     }
-                }, 500);
+                }, 500);*/
 
 
             }
@@ -295,13 +300,21 @@ public class StoreLocateActivity extends AppToolBarActivity implements View.OnCl
             ll_store_locate.setVisibility(View.GONE);
             lv_search_address.setVisibility(View.VISIBLE);
             //第四步，发起检索请求；
-            mPoiSearch.searchNearby((new PoiNearbySearchOption())
+          /*  mPoiSearch.searchNearby((new PoiNearbySearchOption())
                     .pageNum(PAGE_NUM)
                     .location(new LatLng(latitude1,longitude1))
                     .radius(500)
                     .keyword(s.toString())
                     .pageCapacity(10))
-            ;
+            ;*/
+            if(city!=null&&!s.toString().equals("")) {
+                mPoiSearch.searchInCity((new PoiCitySearchOption())
+                        .city(city)
+                        .keyword(s.toString())
+                        .pageCapacity(2000)
+                        .pageNum(0))
+                ;
+            }
         }
         //文字变化前
 
@@ -376,8 +389,17 @@ public class StoreLocateActivity extends AppToolBarActivity implements View.OnCl
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_locate_now:
-                showProgress(true);
-                mLocationClient.start();
+                intent.putExtra("latitude", latitude);
+                intent.putExtra("longitude", longitude);
+                intent.putExtra("address", address);
+                tv_locate_now.setText(address);
+                setResult(556, intent);
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        finish();
+                    }
+                }, 500);
                 break;
             case R.id.tv_delete_store_history:
                 sdao.requestDeleteSearchHistory(Arad.preferences.getString("memberId"), "5");
