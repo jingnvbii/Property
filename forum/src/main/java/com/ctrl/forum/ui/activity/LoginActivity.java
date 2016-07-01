@@ -73,6 +73,7 @@ public class LoginActivity extends AppToolBarActivity implements View.OnClickLis
         ButterKnife.inject(this);
         ShareSDK.initSDK(this);
         initView();
+        Arad.preferences.clear();
 
         mLocationClient = new LocationClient(getApplicationContext());     //声明LocationClient类
         mLocationClient.registerLocationListener(myListener);    //注册监听函数1

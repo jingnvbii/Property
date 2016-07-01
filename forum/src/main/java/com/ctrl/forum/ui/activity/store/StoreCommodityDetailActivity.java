@@ -188,9 +188,9 @@ public class StoreCommodityDetailActivity extends AppToolBarActivity implements 
     }
 
     private void initData() {
-        if (getIntent().getStringExtra("categroyName") != null) {
+       /* if (getIntent().getStringExtra("categroyName") != null) {
             tv_categrou_name.setText(getIntent().getStringExtra("categroyName"));
-        }
+        }*/
         mdao = new MallDao(this);
         showProgress(true);
         mdao.requestProduct(getIntent().getStringExtra("id"), Arad.preferences.getString("memberId"), "0");
@@ -236,6 +236,7 @@ public class StoreCommodityDetailActivity extends AppToolBarActivity implements 
             listProductImg = mdao.getListProductImg();
             tv_commdity_name.setText(product.getName());
             tv_commdity_price.setText("￥" + product.getSellingPrice());
+            tv_categrou_name.setText(product.getCategoryName());
             if (product.getDeliveryType().equals("0")) {
                 tv_beizhu.setText("自己配送");
             }

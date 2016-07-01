@@ -457,11 +457,7 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
             if (user != null) {
                 Arad.imageLoader.load(user.getImgUrl()).placeholder(R.mipmap.round_img).into(title_image);
                 Arad.imageLoader.load(user.getImgUrl()).placeholder(R.mipmap.round_img).into(title_image_2);
-
-
-
             }
-
             tv_name.setText(post.getContactName());
             tv_address.setText(post.getContactAddress());
             tv_tel.setText(post.getContactPhone());

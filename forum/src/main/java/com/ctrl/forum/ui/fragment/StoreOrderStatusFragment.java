@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.beanu.arad.base.ToolBarFragment;
 import com.beanu.arad.utils.AnimUtil;
+import com.beanu.arad.utils.MessageUtils;
 import com.ctrl.forum.R;
 import com.ctrl.forum.dao.OrderDao;
 import com.ctrl.forum.entity.OrderState;
@@ -114,7 +115,7 @@ public class StoreOrderStatusFragment extends ToolBarFragment implements View.On
             orderStatus.setDrawable(getResources().getDrawable(R.mipmap.weifukuan_gray));
             if(String.valueOf(orderState.getCreateTime())!=null)
                 orderStatus.setTime(TimeUtils.timeFormat(orderState.getCreateTime(), "yyyy-MM-dd HH:mm:ss"));
-            orderStatus2.setStatus("商家已接单");
+            orderStatus2.setStatus("商家已接单,等待商品出库");
             orderStatus2.setDrawable(getResources().getDrawable(R.mipmap.yijiedan_red));
             if(orderState.getAcceptTime()!=null)
                 orderStatus2.setTime(TimeUtils.timeFormat(Long.parseLong(orderState.getAcceptTime()), "yyyy-MM-dd HH:mm:ss"));
@@ -130,12 +131,12 @@ public class StoreOrderStatusFragment extends ToolBarFragment implements View.On
             orderStatus.setDrawable(getResources().getDrawable(R.mipmap.weifukuan_gray));
             if(String.valueOf(orderState.getCreateTime())!=null)
                 orderStatus.setTime(TimeUtils.timeFormat(orderState.getCreateTime(), "yyyy-MM-dd HH:mm:ss"));
-            orderStatus2.setStatus("商家已接单");
+            orderStatus2.setStatus("商家已接单,等待商品出库");
             orderStatus2.setDrawable(getResources().getDrawable(R.mipmap.yijiedan_gray));
             if(orderState.getAcceptTime()!=null)
                 orderStatus2.setTime(TimeUtils.timeFormat(Long.parseLong(orderState.getAcceptTime()), "yyyy-MM-dd HH:mm:ss"));
-            orderStatus3.setStatus("配送中");
-            orderStatus3.setDrawable(getResources().getDrawable(R.mipmap.yijiedan_red));
+            orderStatus3.setStatus("货已发出，"+orderState.getExpressName()+","+"单号 "+orderState.getDeliveryNo());
+            orderStatus3.setDrawable(getResources().getDrawable(R.mipmap.peisongzhong_red));
             orderStatus3.setTime(orderState.getCompanyPhone());
             list.add(orderStatus);
             list.add(orderStatus2);
@@ -151,14 +152,15 @@ public class StoreOrderStatusFragment extends ToolBarFragment implements View.On
             orderStatus.setDrawable(getResources().getDrawable(R.mipmap.weifukuan_gray));
             if(String.valueOf(orderState.getCreateTime())!=null)
                 orderStatus.setTime(TimeUtils.timeFormat(orderState.getCreateTime(), "yyyy-MM-dd HH:mm:ss"));
-            orderStatus2.setStatus("商家已接单");
+            orderStatus2.setStatus("商家已接单,等待商品出库");
             orderStatus2.setDrawable(getResources().getDrawable(R.mipmap.yijiedan_gray));
             if(orderState.getAcceptTime()!=null)
                 orderStatus2.setTime(TimeUtils.timeFormat(Long.parseLong(orderState.getAcceptTime()), "yyyy-MM-dd HH:mm:ss"));
-            orderStatus3.setStatus("配送中");
-            orderStatus3.setDrawable(getResources().getDrawable(R.mipmap.yijiedan_gray));
-            orderStatus3.setTime(orderState.getCompanyPhone());
-            orderStatus4.setStatus("已确认收货");
+            orderStatus3.setStatus("货已发出，" + orderState.getExpressName() + "," + "单号 " + orderState.getDeliveryNo());
+            orderStatus3.setDrawable(getResources().getDrawable(R.mipmap.peisongzhong_gray));
+            if(orderState.getShipTime()!=null)
+                orderStatus3.setTime(TimeUtils.timeFormat(Long.parseLong(orderState.getShipTime()), "yyyy-MM-dd HH:mm:ss"));
+            orderStatus4.setStatus("货品已接收");
             if(orderState.getSignTime()!=null)
                 orderStatus4.setTime(TimeUtils.timeFormat(Long.parseLong(orderState.getSignTime()), "yyyy-MM-dd HH:mm:ss"));
             orderStatus4.setDrawable(getResources().getDrawable(R.mipmap.yishouhuo_red));
@@ -167,6 +169,40 @@ public class StoreOrderStatusFragment extends ToolBarFragment implements View.On
             list.add(orderStatus2);
             list.add(orderStatus3);
             list.add(orderStatus4);
+        }
+        if(orderState.getState().equals("6")&&orderState.getEvaluationState().equals("1")){
+            iv_hongbao.setVisibility(View.VISIBLE);
+            OrderStatus2 orderStatus=new OrderStatus2();
+            OrderStatus2 orderStatus2=new OrderStatus2();
+            OrderStatus2 orderStatus3=new OrderStatus2();
+            OrderStatus2 orderStatus4=new OrderStatus2();
+            OrderStatus2 orderStatus5=new OrderStatus2();
+            orderStatus.setStatus("订单提交成功，等待商家接单");
+            orderStatus.setDrawable(getResources().getDrawable(R.mipmap.weifukuan_gray));
+            if(String.valueOf(orderState.getCreateTime())!=null)
+                orderStatus.setTime(TimeUtils.timeFormat(orderState.getCreateTime(), "yyyy-MM-dd HH:mm:ss"));
+            orderStatus2.setStatus("商家已接单,等待商品出库");
+            orderStatus2.setDrawable(getResources().getDrawable(R.mipmap.yijiedan_gray));
+            if(orderState.getAcceptTime()!=null)
+                orderStatus2.setTime(TimeUtils.timeFormat(Long.parseLong(orderState.getAcceptTime()), "yyyy-MM-dd HH:mm:ss"));
+            orderStatus3.setStatus("货已发出，" + orderState.getExpressName() + "," + "单号 " + orderState.getDeliveryNo());
+            orderStatus3.setDrawable(getResources().getDrawable(R.mipmap.peisongzhong_gray));
+            if(orderState.getShipTime()!=null)
+            orderStatus3.setTime(TimeUtils.timeFormat(Long.parseLong(orderState.getShipTime()), "yyyy-MM-dd HH:mm:ss"));
+            orderStatus4.setStatus("货品已接收");
+            if(orderState.getSignTime()!=null)
+                orderStatus4.setTime(TimeUtils.timeFormat(Long.parseLong(orderState.getSignTime()), "yyyy-MM-dd HH:mm:ss"));
+            orderStatus4.setDrawable(getResources().getDrawable(R.mipmap.yishouhuo_gray));
+            orderStatus5.setStatus("已评价");
+            if(orderState.getEvaluationTime()!=null)
+                orderStatus5.setTime(TimeUtils.timeFormat(Long.parseLong(orderState.getEvaluationTime()), "yyyy-MM-dd HH:mm:ss"));
+            orderStatus5.setDrawable(getResources().getDrawable(R.mipmap.yipingjia));
+
+            list.add(orderStatus);
+            list.add(orderStatus2);
+            list.add(orderStatus3);
+            list.add(orderStatus4);
+            list.add(orderStatus5);
         }
         mStoreOrderDetailStatusAdapter.setList(list);
     }
@@ -191,7 +227,7 @@ public class StoreOrderStatusFragment extends ToolBarFragment implements View.On
                 orderStatus.setStatus("订单被用户取消");
                 orderStatus.setDrawable(getResources().getDrawable(R.mipmap.weifukuan_red));
                 if(orderState.getSellCancelTime()!=null)
-                orderStatus.setTime(TimeUtils.timeFormat(Long.parseLong(orderState.getSellCancelTime()), "yyyy-MM-dd HH:mm:ss"));
+                    orderStatus.setTime(TimeUtils.timeFormat(Long.parseLong(orderState.getSellCancelTime()), "yyyy-MM-dd HH:mm:ss"));
                 list.add(orderStatus);
             }
             if(orderState.getState().equals("2")){
@@ -218,10 +254,10 @@ public class StoreOrderStatusFragment extends ToolBarFragment implements View.On
                 orderStatus.setDrawable(getResources().getDrawable(R.mipmap.weifukuan_gray));
                 if(String.valueOf(orderState.getCreateTime())!=null)
                     orderStatus.setTime(TimeUtils.timeFormat(orderState.getCreateTime(), "yyyy-MM-dd HH:mm:ss"));
-                orderStatus2.setStatus("商家已接单");
+                orderStatus2.setStatus("商家已接单,等待商品出库");
                 orderStatus2.setDrawable(getResources().getDrawable(R.mipmap.yijiedan_red));
                 if(orderState.getAcceptTime()!=null)
-                orderStatus2.setTime(TimeUtils.timeFormat(Long.parseLong(orderState.getAcceptTime()), "yyyy-MM-dd HH:mm:ss"));
+                    orderStatus2.setTime(TimeUtils.timeFormat(Long.parseLong(orderState.getAcceptTime()), "yyyy-MM-dd HH:mm:ss"));
                 list.add(orderStatus);
                 list.add(orderStatus2);
             }
@@ -234,12 +270,12 @@ public class StoreOrderStatusFragment extends ToolBarFragment implements View.On
                 orderStatus.setDrawable(getResources().getDrawable(R.mipmap.weifukuan_gray));
                 if(String.valueOf(orderState.getCreateTime())!=null)
                     orderStatus.setTime(TimeUtils.timeFormat(orderState.getCreateTime(), "yyyy-MM-dd HH:mm:ss"));
-                orderStatus2.setStatus("商家已接单");
+                orderStatus2.setStatus("商家已接单,等待商品出库");
                 orderStatus2.setDrawable(getResources().getDrawable(R.mipmap.yijiedan_gray));
                 if(orderState.getAcceptTime()!=null)
-                orderStatus2.setTime(TimeUtils.timeFormat(Long.parseLong(orderState.getAcceptTime()), "yyyy-MM-dd HH:mm:ss"));
-                orderStatus3.setStatus("配送中");
-                orderStatus3.setDrawable(getResources().getDrawable(R.mipmap.yijiedan_red));
+                    orderStatus2.setTime(TimeUtils.timeFormat(Long.parseLong(orderState.getAcceptTime()), "yyyy-MM-dd HH:mm:ss"));
+                orderStatus3.setStatus("货已发出，"+orderState.getExpressName()+","+"单号 "+orderState.getDeliveryNo());
+                orderStatus3.setDrawable(getResources().getDrawable(R.mipmap.peisongzhong_red));
                 orderStatus3.setTime(orderState.getCompanyPhone());
                 list.add(orderStatus);
                 list.add(orderStatus2);
@@ -255,22 +291,57 @@ public class StoreOrderStatusFragment extends ToolBarFragment implements View.On
                 orderStatus.setDrawable(getResources().getDrawable(R.mipmap.weifukuan_gray));
                 if(String.valueOf(orderState.getCreateTime())!=null)
                     orderStatus.setTime(TimeUtils.timeFormat(orderState.getCreateTime(), "yyyy-MM-dd HH:mm:ss"));
-                orderStatus2.setStatus("商家已接单");
+                orderStatus2.setStatus("商家已接单,等待商品出库");
                 orderStatus2.setDrawable(getResources().getDrawable(R.mipmap.yijiedan_gray));
                 if(orderState.getAcceptTime()!=null)
-                orderStatus2.setTime(TimeUtils.timeFormat(Long.parseLong(orderState.getAcceptTime()), "yyyy-MM-dd HH:mm:ss"));
-                orderStatus3.setStatus("配送中");
-                orderStatus3.setDrawable(getResources().getDrawable(R.mipmap.yijiedan_gray));
-                orderStatus3.setTime(orderState.getCompanyPhone());
-                orderStatus4.setStatus("已确认收货");
+                    orderStatus2.setTime(TimeUtils.timeFormat(Long.parseLong(orderState.getAcceptTime()), "yyyy-MM-dd HH:mm:ss"));
+                orderStatus3.setStatus("货已发出，" + orderState.getExpressName() + "," + "单号 " + orderState.getDeliveryNo());
+                orderStatus3.setDrawable(getResources().getDrawable(R.mipmap.peisongzhong_gray));
+                if(orderState.getShipTime()!=null)
+                    orderStatus3.setTime(TimeUtils.timeFormat(Long.parseLong(orderState.getShipTime()), "yyyy-MM-dd HH:mm:ss"));
+                orderStatus4.setStatus("货品已接收");
                 if(orderState.getSignTime()!=null)
-                orderStatus4.setTime(TimeUtils.timeFormat(Long.parseLong(orderState.getSignTime()), "yyyy-MM-dd HH:mm:ss"));
+                    orderStatus4.setTime(TimeUtils.timeFormat(Long.parseLong(orderState.getSignTime()), "yyyy-MM-dd HH:mm:ss"));
                 orderStatus4.setDrawable(getResources().getDrawable(R.mipmap.yishouhuo_red));
 
                 list.add(orderStatus);
                 list.add(orderStatus2);
                 list.add(orderStatus3);
                 list.add(orderStatus4);
+            }
+            if(orderState.getState().equals("6")&&orderState.getEvaluationState().equals("1")){
+                iv_hongbao.setVisibility(View.VISIBLE);
+                OrderStatus2 orderStatus=new OrderStatus2();
+                OrderStatus2 orderStatus2=new OrderStatus2();
+                OrderStatus2 orderStatus3=new OrderStatus2();
+                OrderStatus2 orderStatus4=new OrderStatus2();
+                OrderStatus2 orderStatus5=new OrderStatus2();
+                orderStatus.setStatus("订单提交成功，等待商家接单");
+                orderStatus.setDrawable(getResources().getDrawable(R.mipmap.weifukuan_gray));
+                if(String.valueOf(orderState.getCreateTime())!=null)
+                    orderStatus.setTime(TimeUtils.timeFormat(orderState.getCreateTime(), "yyyy-MM-dd HH:mm:ss"));
+                orderStatus2.setStatus("商家已接单,等待商品出库");
+                orderStatus2.setDrawable(getResources().getDrawable(R.mipmap.yijiedan_gray));
+                if(orderState.getAcceptTime()!=null)
+                    orderStatus2.setTime(TimeUtils.timeFormat(Long.parseLong(orderState.getAcceptTime()), "yyyy-MM-dd HH:mm:ss"));
+                orderStatus3.setStatus("货已发出，" + orderState.getExpressName() + "," + "单号 " + orderState.getDeliveryNo());
+                orderStatus3.setDrawable(getResources().getDrawable(R.mipmap.peisongzhong_gray));
+                if(orderState.getShipTime()!=null)
+                    orderStatus3.setTime(TimeUtils.timeFormat(Long.parseLong(orderState.getShipTime()), "yyyy-MM-dd HH:mm:ss"));
+                orderStatus4.setStatus("货品已接收");
+                if(orderState.getSignTime()!=null)
+                    orderStatus4.setTime(TimeUtils.timeFormat(Long.parseLong(orderState.getSignTime()), "yyyy-MM-dd HH:mm:ss"));
+                orderStatus4.setDrawable(getResources().getDrawable(R.mipmap.yishouhuo_gray));
+                orderStatus5.setStatus("已评价");
+                if(orderState.getSignTime()!=null)
+                    // orderStatus5.setTime(TimeUtils.timeFormat(Long.parseLong(orderState.getSignTime()), "yyyy-MM-dd HH:mm:ss"));
+                    orderStatus5.setDrawable(getResources().getDrawable(R.mipmap.yipingjia));
+
+                list.add(orderStatus);
+                list.add(orderStatus2);
+                list.add(orderStatus3);
+                list.add(orderStatus4);
+                list.add(orderStatus5);
             }
             mStoreOrderDetailStatusAdapter.setList(list);
         }
@@ -287,11 +358,19 @@ public class StoreOrderStatusFragment extends ToolBarFragment implements View.On
         Intent intent=null;
         switch (v.getId()){
             case R.id.tv_dianping_go:
-                intent=new Intent(getActivity(), OrderPingjiaActivity.class);
-                intent.putExtra("id",orderState.getId());
-                intent.putExtra("companyId",orderState.getCompanyId());
-                startActivity(intent);
-                AnimUtil.intentSlidIn(getActivity());
+                if(orderState.getEvaluationState().equals("0")&&orderState.getState().equals("6")) {
+                    intent = new Intent(getActivity(), OrderPingjiaActivity.class);
+                    intent.putExtra("id", orderState.getId());
+                    intent.putExtra("companyId", orderState.getCompanyId());
+                    startActivity(intent);
+                    AnimUtil.intentSlidIn(getActivity());
+                }else if(!orderState.getState().equals("6")){
+                    MessageUtils.showShortToast(getActivity(),"该订单未完成，不能评价");
+                }else if(orderState.getEvaluationState().equals("1")){
+                    MessageUtils.showShortToast(getActivity(),"该订单已评价");
+                }else {
+                    //
+                }
                 break;
             case R.id.tv_once_more:
                 intent=new Intent(getActivity(), StoreShopListVerticalStyleActivity.class);

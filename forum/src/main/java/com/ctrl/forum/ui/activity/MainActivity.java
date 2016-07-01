@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.RadioButton;
 
+import com.beanu.arad.Arad;
 import com.ctrl.forum.R;
 import com.ctrl.forum.base.AppToolBarActivity;
 import com.ctrl.forum.entity.NavigationBar;
@@ -295,6 +296,9 @@ public class MainActivity extends AppToolBarActivity implements View.OnClickList
                         // 如果ContactsFragment不为空，则直接将它显示出来
                         transaction.show(storeFragment);
                     }
+                }
+                if(Arad.preferences.getString("memberId")==null){
+
                 }
                 if (listNavigation.get(0).getCommentCode().equals("2")) {
                     if (plotFragment == null) {
@@ -603,6 +607,7 @@ public class MainActivity extends AppToolBarActivity implements View.OnClickList
             rb3.setCompoundDrawables(null, listDrawable2.get(2), null, null);
         }
         if (rb4.isChecked()) {
+            if(listDrawable.get(3)!=null)
             listDrawable.get(3).setBounds(0, 0, 50, 50);
             rb4.setCompoundDrawables(null, listDrawable.get(3), null, null);
         } else {

@@ -144,7 +144,7 @@ public class RimListViewAdapter extends BaseAdapter{
                                 placeholder(context.getResources().getDrawable(R.mipmap.hot)).
                                 into(holder3.iv_pic);
                     }
-                holder3.tv_title.setText(data.get(position - 2).getName());
+                    holder3.tv_title.setText(data.get(position - 2).getName());
                 holder3.gv_hot.setAdapter(rimGridViewAdapter);
                     grid = data.get(position - 2).getAroundservicecategorylist();
                    if (grid!=null){

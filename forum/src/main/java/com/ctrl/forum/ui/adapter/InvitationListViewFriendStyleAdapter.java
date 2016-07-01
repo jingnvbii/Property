@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.text.SpannableString;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -12,7 +11,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
@@ -29,7 +27,6 @@ import com.ctrl.forum.customview.RoundImageView;
 import com.ctrl.forum.customview.ShareDialog;
 import com.ctrl.forum.entity.Post;
 import com.ctrl.forum.entity.PostImage;
-import com.ctrl.forum.face.FaceConversionUtil;
 import com.ctrl.forum.ui.activity.Invitation.InvitationCommentDetaioActivity;
 import com.ctrl.forum.ui.activity.Invitation.InvitationPullDownActivity;
 import com.ctrl.forum.utils.SysUtils;
@@ -155,7 +152,7 @@ public class InvitationListViewFriendStyleAdapter extends BaseAdapter {
         Arad.imageLoader.load(post.getImgUrl()).placeholder(R.mipmap.default_error).into(holder.iv_friend_style_title_photo);
         if(post.getPostReplyList()!=null) {
             if (post.getPostReplyList().size() <= 3) {
-                List<String> listStr = new ArrayList<>();
+               /* List<String> listStr = new ArrayList<>();
                 for (int i = 0; i < post.getPostReplyList().size(); i++) {
                     if (post.getPostReplyList().get(i).getContentType().equals("0")) {
                         SpannableString spannableString2 = FaceConversionUtil.getInstace().getExpressionString(mcontext, post.getPostReplyList().get(i).getReplyContent());
@@ -167,13 +164,15 @@ public class InvitationListViewFriendStyleAdapter extends BaseAdapter {
                     if (post.getPostReplyList().get(i).getContentType().equals("2")) {
                         listStr.add(post.getPostReplyList().get(i).getMemberName()+":   " + "    [语音]");
                     }
-                }
-                ArrayAdapter<String> adapter = new ArrayAdapter<>(mcontext, R.layout.spinner_layout, listStr);
+                }*/
+                FriendStyleRelpyAdapter adapter = new FriendStyleRelpyAdapter(mcontext);
+                adapter.setList(post.getPostReplyList());
+               // ArrayAdapter<String> adapter = new ArrayAdapter<>(mcontext, R.layout.spinner_layout, listStr);
                 holder.lv_friend_style_reply.setAdapter(adapter);
                // holder.tv_friend_style_shengyu_pinglun.setVisibility(View.GONE);
                 holder.tv_friend_style_shengyu_pinglun.setText("查看其他更多评论...");
             } else {
-                List<String> listStr = new ArrayList<>();
+              /*  List<String> listStr = new ArrayList<>();
                 for (int i = 0; i < 3; i++) {
                     if (post.getPostReplyList().get(i).getContentType().equals("0")) {
                         SpannableString spannableString2 = FaceConversionUtil.getInstace().getExpressionString(mcontext, post.getPostReplyList().get(i).getReplyContent());
@@ -185,8 +184,9 @@ public class InvitationListViewFriendStyleAdapter extends BaseAdapter {
                     if (post.getPostReplyList().get(i).getContentType().equals("2")) {
                         listStr.add(post.getPostReplyList().get(i).getMemberName()+":   " + "    [语音]");
                     }
-                }
-                ArrayAdapter<String> adapter = new ArrayAdapter<>(mcontext,  R.layout.spinner_layout, listStr);
+                }*/
+                FriendStyleRelpyAdapter adapter = new FriendStyleRelpyAdapter(mcontext);
+                adapter.setList(post.getPostReplyList());
                 holder.lv_friend_style_reply.setAdapter(adapter);
                 holder.tv_friend_style_shengyu_pinglun.setVisibility(View.VISIBLE);
                 holder.tv_friend_style_shengyu_pinglun.setText("查看其他   " + (post.getPostReplyList().size() - 3) + "    评论");
@@ -360,12 +360,12 @@ public class InvitationListViewFriendStyleAdapter extends BaseAdapter {
             }
         });
 
-        if(post.getZambiastate()!=null) {
+        if(post.getPraiseState()!=null) {
 
-            if (post.getZambiastate().equals("0")) {
+            if (post.getPraiseState().equals("0")) {
                 holder.iv_friend_style_zan_num.setImageResource(R.mipmap.zan_blue);
             }
-            if (post.getZambiastate().equals("1")) {
+            if (post.getPraiseState().equals("1")) {
                 holder.iv_friend_style_zan_num.setImageResource(R.mipmap.zan_blue_shixin);
             }
         }
@@ -521,7 +521,7 @@ public class InvitationListViewFriendStyleAdapter extends BaseAdapter {
         @InjectView(R.id.tv_friend_style_content)//内容
                 TextView tv_friend_style_content;
         @InjectView(R.id.tv_friend_style_zan_num)//喜欢数量
-                TextView tv_friend_style_zan_num;
+            public     TextView tv_friend_style_zan_num;
         @InjectView(R.id.tv_friend_style_pinglun_num)//评论数量
                 TextView tv_friend_style_pinglun_num;
         @InjectView(R.id.tv_friend_style_share_num)//分享数量

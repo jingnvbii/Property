@@ -16,7 +16,7 @@ public class OrderState {
     private String payTime;//支付时间
     private Double couponMoney;//优惠券金额
     private Double totalCost;//总价（已减去优惠金额）
-    private Double deliveryNo;//快递单号
+    private String deliveryNo;//快递单号
     private String companyPhone;//商家联系电话
     private String contact;//如果快递显示单号为空，则显示商家显示联系电话
     private String companyname;//店铺名称
@@ -29,6 +29,41 @@ public class OrderState {
     private String reportName; //用户名称
     private String evaluationState; //支付方式
     private String payMode; //支付方式
+    private String expressName; //快递公司名称
+    private String shipTime; //配送时间
+    private String evaluationTime  ; //评价时间
+
+    public String getEvaluationTime() {
+        return evaluationTime;
+    }
+
+    public void setEvaluationTime(String evaluationTime) {
+        this.evaluationTime = evaluationTime;
+    }
+
+    public String getShipTime() {
+        return shipTime;
+    }
+
+    public void setShipTime(String shipTime) {
+        this.shipTime = shipTime;
+    }
+
+    public String getDeliveryNo() {
+        return deliveryNo;
+    }
+
+    public void setDeliveryNo(String deliveryNo) {
+        this.deliveryNo = deliveryNo;
+    }
+
+    public String getExpressName() {
+        return expressName;
+    }
+
+    public void setExpressName(String expressName) {
+        this.expressName = expressName;
+    }
 
     public String getEvaluationState() {
         return evaluationState;
@@ -182,13 +217,6 @@ public class OrderState {
         this.totalCost = totalCost;
     }
 
-    public Double getDeliveryNo() {
-        return deliveryNo;
-    }
-
-    public void setDeliveryNo(Double deliveryNo) {
-        this.deliveryNo = deliveryNo;
-    }
 
     public String getCompanyPhone() {
         return companyPhone;

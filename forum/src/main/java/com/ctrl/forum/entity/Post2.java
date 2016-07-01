@@ -37,7 +37,7 @@ public class Post2 {
     private String collectstate;//是否被当前用户收藏
 
     private List<PostImage> postImgList;//图片列表
-    private List<PostReply> postReplyList;//回复列表
+    private List<PostReply2> postReplyList;//回复列表
 
 
     public String getCategoryTree() {
@@ -64,11 +64,11 @@ public class Post2 {
         this.zambiastate = zambiastate;
     }
 
-    public List<PostReply> getPostReplyList() {
+    public List<PostReply2> getPostReplyList() {
         return postReplyList;
     }
 
-    public void setPostReplyList(List<PostReply> postReplyList) {
+    public void setPostReplyList(List<PostReply2> postReplyList) {
         this.postReplyList = postReplyList;
     }
 
