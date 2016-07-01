@@ -60,7 +60,7 @@ public class StartActivity extends AppToolBarActivity {
             JPushInterface.setDebugMode(true);
             JPushInterface.init(getApplicationContext());
           /*  Intent intent = new Intent(StartActivity.this, LoginActivity.class);
-            startActivity(intent);
+            startActivity(intent);11
             AnimUtil.intentSlidIn(StartActivity.this);
             finish();*/
             Intent intent02=new Intent(StartActivity.this,MainActivity.class);
