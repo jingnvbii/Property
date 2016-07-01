@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.widget.ImageView;
 
-import com.baidu.mapapi.SDKInitializer;
 import com.beanu.arad.utils.AnimUtil;
 import com.ctrl.forum.R;
 import com.ctrl.forum.base.AppToolBarActivity;
@@ -29,12 +28,14 @@ public class StartActivity extends AppToolBarActivity {
         ButterKnife.inject(this);
         Handler x = new Handler();
         x.postDelayed(new splashhandler(), 2000);
+
+        JPushInterface.setDebugMode(true);
+        JPushInterface.init(this);
     }
 
     class splashhandler implements Runnable{
-
         public void run() {
-            SDKInitializer.initialize(getApplicationContext());
+           // SDKInitializer.initialize(getApplicationContext());
             JPushInterface.setDebugMode(true);
             JPushInterface.init(getApplicationContext());
             Intent intent = new Intent(StartActivity.this, LoginActivity.class);
@@ -42,7 +43,6 @@ public class StartActivity extends AppToolBarActivity {
             AnimUtil.intentSlidIn(StartActivity.this);
             finish();
         }
-
     }
 
     @Override

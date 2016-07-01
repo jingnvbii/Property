@@ -4,6 +4,7 @@ import android.app.Notification;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
@@ -48,6 +49,10 @@ public class MineSettingActivity extends AppToolBarActivity implements View.OnCl
     RelativeLayout  feedback;   //意见反馈
     @InjectView(R.id.iv_clear)
     TextView iv_clear;
+    @InjectView(R.id.button)
+    Button button;
+    @InjectView(R.id.on)
+    Button on;
 
     MyBroadcastReceiver receiver;
 
@@ -74,7 +79,6 @@ public class MineSettingActivity extends AppToolBarActivity implements View.OnCl
         init();
 
         receiver = new MyBroadcastReceiver();
-        //registerMessageReceiver();
 
         setJPush();
     }

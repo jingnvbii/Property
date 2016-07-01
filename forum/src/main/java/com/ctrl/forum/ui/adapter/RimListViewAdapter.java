@@ -139,8 +139,10 @@ public class RimListViewAdapter extends BaseAdapter{
                 break;
             case 2:
                 if (data!=null){
-                    if (data.get(position-2).getCategoryIcon()!=null) {
-                        Arad.imageLoader.load(data.get(position - 2).getCategoryIcon()).into(holder3.iv_pic);
+                    if (data.get(position-2).getCategoryIcon()!=null && !data.get(position-2).getCategoryIcon().equals("")) {
+                        Arad.imageLoader.load(data.get(position - 2).getCategoryIcon()).
+                                placeholder(context.getResources().getDrawable(R.mipmap.hot)).
+                                into(holder3.iv_pic);
                     }
                 holder3.tv_title.setText(data.get(position - 2).getName());
                 holder3.gv_hot.setAdapter(rimGridViewAdapter);

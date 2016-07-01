@@ -478,22 +478,6 @@ public class InvitationDao extends IDao {
 
         postRequest(Constant.RAW_URL+url, mapToRP(map),13);
     }
-    /**
-     *设置点赞/取消点赞
-     * @param zambiaType //add是点赞reduce是取消赞
-     * @param id //帖子id
-     * @param zambiaID//当前操作用户id
-     * */
-    public void requesZambia(String zambiaType,String id,String zambiaID){
-        String url="post/Zambia";
-        Map<String,String> map = new HashMap<String,String>();
-        map.put("zambiaType",zambiaType);
-        map.put("id",id);
-        map.put("zambiaID",zambiaID
-        );
-
-        postRequest(Constant.RAW_URL+url, mapToRP(map),14);
-    }
 
     /**
      *设置点赞/取消点赞

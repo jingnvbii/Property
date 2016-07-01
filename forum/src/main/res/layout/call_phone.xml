@@ -15,7 +15,8 @@
         android:layout_marginRight="10dp">
     <TextView
         android:layout_width="wrap_content"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
         android:text="@string/bo_hao"
         android:textSize="26sp"
         android:textColor="@color/text_black1"
@@ -34,7 +35,8 @@
 
     <TextView
         android:layout_width="wrap_content"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
         android:text="@string/call_up"
         android:textSize="26sp"
         android:textColor="@color/text_black1"
@@ -53,7 +55,8 @@
 
     <TextView
         android:layout_width="wrap_content"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
         android:text="@string/camera_cancel"
         android:textSize="26sp"
         android:textColor="@color/text_newpwd"

@@ -37,15 +37,12 @@ import com.ctrl.forum.dao.InvitationDao;
 import com.ctrl.forum.dao.PlotDao;
 import com.ctrl.forum.entity.Banner;
 import com.ctrl.forum.entity.Post;
-import com.ctrl.forum.entity.PostImage;
 import com.ctrl.forum.loopview.HomeAutoSwitchPicHolder;
-import com.ctrl.forum.ui.activity.Invitation.InvitationDetailFromPlatformActivity;
-import com.ctrl.forum.ui.activity.MainActivity;
+import com.ctrl.forum.ui.activity.Invitation.InvitationDetailActivity;
 import com.ctrl.forum.ui.activity.mine.MineFindFlotActivity;
 import com.ctrl.forum.ui.activity.plot.PlotAddInvitationActivity;
 import com.ctrl.forum.ui.activity.plot.PlotRimServeActivity;
 import com.ctrl.forum.ui.activity.plot.PlotSearchResultActivity;
-import com.ctrl.forum.ui.adapter.FriendGridAdapter;
 import com.ctrl.forum.ui.adapter.PlotListViewFriendStyleAdapter;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
@@ -53,6 +50,7 @@ import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -102,13 +100,11 @@ public class PlotFragment extends ToolBarFragment implements View.OnClickListene
 
 
     //123
-    private List<PostImage> imageList;
-    private FriendGridAdapter friendInfoImgsAdapter;
     private PopupWindow popupWindow;
     private PopupWindow popupWindow_share;
     private ShareDialog shareDialog;
-    private MainActivity activity;
-    private View.OnClickListener onShare;
+    private Map<Integer,Boolean> isAdd = new HashMap<>();
+    private Map<Integer,Integer> text = new HashMap<>();
 
     public static PlotFragment newInstance() {
         PlotFragment fragment = new PlotFragment();
@@ -126,7 +122,7 @@ public class PlotFragment extends ToolBarFragment implements View.OnClickListene
     }
 
     @Override
-    public View onCreateView(final LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(final LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_plot, container, false);
         ButterKnife.inject(this, view);
 
@@ -187,23 +183,56 @@ public class PlotFragment extends ToolBarFragment implements View.OnClickListene
             }
         });
 
+        //跳转界面
         lv_content.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(getActivity(), InvitationDetailFromPlatformActivity.class);
+                Intent intent = new Intent(getActivity(), InvitationDetailActivity.class);
                 intent.putExtra("id", posts.get(position - 2).getId());
                 startActivity(intent);
             }
         });
 
-       /* invitationListViewFriendStyleAdapter.setOnItemClickListener(new PlotListViewFriendStyleAdapter.OnItemClickListener() {
+
+        invitationListViewFriendStyleAdapter.setOnItemClickListener(new PlotListViewFriendStyleAdapter.OnItemClickListener() {
             @Override
             public void onItemZanClick(PlotListViewFriendStyleAdapter.ViewHolder v) {
-                Intent intent = new Intent(getActivity(), InvitationDetailFromPlatformActivity.class);
-                intent.putExtra("id", posts.get(position - 2).getId());
-                startActivity(intent);
+                int position = v.getPosition();
+                int tex = posts.get(position).getPraiseNum();
+
+                if (isAdd.get(position)==null) {
+                    if (posts.get(position).getPraiseState().equals("0")) {
+                        isAdd.put(position, true);
+                    } else {
+                        isAdd.put(position, false);
+                    }
+                }
+
+                if (text.get(position)==null){
+                    text.put(position,tex);
+                }
+
+                if (posts.get(position).getPraiseState()!=null) {
+                    if (isAdd.get(position)) {
+                        idao.requesZambia("add", posts.get(position).getId(),Arad.preferences.getString("memberId")
+                        ,posts.get(position).getTitle(),posts.get(position).getContent());
+                        v.tv_friend_style_zan_num.setText((text.get(position) + 1) + "");
+                        text.put(position,text.get(position) + 1);
+                        v.iv_friend_style_zan_num.setImageResource(R.mipmap.zan_blue_shixin);
+                        MessageUtils.showShortToast(getActivity(), "点赞成功");
+                        isAdd.put(position,false);
+                    } else {
+                        idao.requesZambia("reduce", posts.get(position).getId(), Arad.preferences.getString("memberId")
+                                , posts.get(position).getTitle(), posts.get(position).getContent());
+                        MessageUtils.showShortToast(getActivity(), "取消点赞");
+                        v.tv_friend_style_zan_num.setText((text.get(position) - 1) + "");
+                        text.put(position, text.get(position)-1);
+                        v.iv_friend_style_zan_num.setImageResource(R.mipmap.zan_blue);
+                        isAdd.put(position,true);
+                    }
+                }
             }
-        });*/
+        });
 
         //listview增加头部布局
         AbsListView.LayoutParams layoutParams = new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, AbsListView.LayoutParams.WRAP_CONTENT);
@@ -415,6 +444,7 @@ public class PlotFragment extends ToolBarFragment implements View.OnClickListene
         lv_content.onRefreshComplete();
         if (requestCode==6){
             posts = plotDao.getPlotPost();
+            Log.e("posts=============",posts.toString());
             if (posts!=null){
                 invitationListViewFriendStyleAdapter.setList(posts);
             }
@@ -507,8 +537,6 @@ public class PlotFragment extends ToolBarFragment implements View.OnClickListene
                                        Arad.preferences.getString("communityId"),
                                        PAGE_NUM + "", Constant.PAGE_SIZE + "");
     }
-
-
 
     public void clickShare(){
         shareDialog = new ShareDialog(getActivity());

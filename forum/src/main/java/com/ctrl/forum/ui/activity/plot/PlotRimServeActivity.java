@@ -73,7 +73,7 @@ public class PlotRimServeActivity extends AppToolBarActivity implements View.OnC
                 }
                 plotDao.getAroundServiceCompanyList(PAGE_NUM + "", Constant.PAGE_SIZE + "",
                         Arad.preferences.getString("memberId"), CompantyCategyId,
-                        Arad.preferences.getString("latitude"), Arad.preferences.getString("longitude"));
+                        Arad.preferences.getString("latitude"), Arad.preferences.getString("lontitude"));
             }
 
             @Override

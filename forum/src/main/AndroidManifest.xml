@@ -71,6 +71,15 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 
     <!-- JPush权限结束 -->
+
+
+    <supports-screens android:resizeable="true"
+    android:smallScreens="true"
+    android:normalScreens="true"
+    android:largeScreens="true"
+    android:xlargeScreens="true"
+    android:anyDensity="true" />
+
     <application
         android:name=".base.MyApplication"
         android:allowBackup="true"
@@ -173,13 +182,16 @@
             android:value="developer-default" />
         <meta-data
             android:name="JPUSH_APPKEY"
-            android:value="9fd538694f3a9a23519b00c8" /> <!-- </>值来自开发者平台取得的AppKey -->
+            android:value="d03bc09bfe8296920ba3e528" /> <!-- </>值来自开发者平台取得的AppKey -->
 
         <!--
             APP_KEY：d03bc09bfe8296920ba3e528
             MASTER_SECRET：b9f031fcb6ae29bad6d91f30
         -->
 
+        <!--
+            APP_KEY：9fd538694f3a9a23519b00c8 自己的
+        -->
 
         <!-- JPush结束 -->
 
@@ -318,7 +330,6 @@
         <activity android:name=".ui.activity.plot.PlotRimServeActivity" />
         <activity android:name=".ui.activity.plot.PlotSearchResultActivity" />
         <activity android:name=".ui.activity.WebViewActivity" />
-        <activity android:name=".customview.ImageZoomActivity"/>
 
 
         <!-- 支付宝支付  配置 -->

@@ -4,9 +4,10 @@
     android:layout_height="match_parent">
 
     <ImageView
+        android:paddingTop="5dp"
         android:id="@+id/iv_grid_item"
         android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_height="55dp"
         android:scaleType="fitXY"
         android:layout_gravity="center"
         android:src="@mipmap/ic_launcher"/>

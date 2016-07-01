@@ -27,6 +27,7 @@ android {
     sourceSets {
         main {
             jniLibs.srcDir 'libs'
+            res.srcDirs = ['src/main/res', 'src/main/res/layout_hdpi']
         }
 
         instrumentTest.setRoot('tests')
@@ -62,7 +63,5 @@ dependencies {
     compile files('libs/libammsdk.jar')
     compile files('libs/alipaySdk-20160516.jar')
     //   compile files('libs/BaiduNaviSDK_3.1.0.jar')
-    compile files('libs/jpush-android-2.0.5.jar')
-    compile files('libs/jpush-android-2.1.5.jar')
     compile files('libs/jpush-android-2.1.7.jar')
 }

@@ -17,7 +17,6 @@ import com.baidu.mapapi.SDKInitializer;
 import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.BitmapDescriptor;
 import com.baidu.mapapi.map.BitmapDescriptorFactory;
-import com.baidu.mapapi.map.MapStatusUpdate;
 import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.map.Marker;
@@ -26,6 +25,7 @@ import com.baidu.mapapi.model.LatLng;
 import com.baidu.mapapi.model.LatLngBounds;
 import com.beanu.arad.Arad;
 import com.beanu.arad.base.ToolBarActivity;
+import com.beanu.arad.utils.MessageUtils;
 import com.ctrl.forum.R;
 import com.ctrl.forum.base.Constant;
 import com.ctrl.forum.dao.RimDao;
@@ -128,8 +128,9 @@ public class ItemRimActivity extends ToolBarActivity implements View.OnClickList
 
     private void initMap() {
         mBaiduMap = mMapView.getMap();
-        MapStatusUpdate msu = MapStatusUpdateFactory.zoomTo(14.0f);
-        mBaiduMap.setMapStatus(msu);
+        MessageUtils.showShortToast(this,"mMapView.getMap()");
+       /* MapStatusUpdate msu = MapStatusUpdateFactory.zoomTo(14.0f);
+        mBaiduMap.setMapStatus(msu);*/
 
         //MapStatusUpdate u4 = MapStatusUpdateFactory.newLatLng(GEO_SHENGDONG);
         //MapStatusUpdate u41 = MapStatusUpdateFactory.zoomBy(14);
@@ -140,6 +141,7 @@ public class ItemRimActivity extends ToolBarActivity implements View.OnClickList
     }
 
     private void initOverlay() {
+        MessageUtils.showShortToast(this,"123");
         LatLngBounds.Builder builder = new LatLngBounds.Builder();
         Marker mMarker = null;
         for(int i=0;i<rimServiceCompanies.size();i++){
@@ -148,12 +150,14 @@ public class ItemRimActivity extends ToolBarActivity implements View.OnClickList
             Double longitude = rimServiceCompanies.get(i).getLongitude();
             MarkerOptions ooA = new MarkerOptions().position(new LatLng(latitude, longitude)).icon(bdA).zIndex(9).draggable(false);
             //生长动画
-            ooA.animateType(MarkerOptions.MarkerAnimateType.grow);
+            //ooA.animateType(MarkerOptions.MarkerAnimateType.grow);
             mMarker = (Marker) (mBaiduMap.addOverlay(ooA));
-            mBaiduMap.addOverlay(ooA);
-
             LatLng l1 = mMarker.getPosition();
             builder.include(l1);
+
+            MessageUtils.showShortToast(this, "builder.include(l1)");
+
+            mBaiduMap.addOverlay(ooA);
         }
         mBaiduMap.setMapStatus(MapStatusUpdateFactory
                 .newLatLngBounds(builder.build()));
@@ -268,6 +272,7 @@ public class ItemRimActivity extends ToolBarActivity implements View.OnClickList
     @Override
     protected void onRestart() {
         super.onRestart();
+
         if (rimServiceCompanies!=null){
             rimServiceCompanies.clear();
         }

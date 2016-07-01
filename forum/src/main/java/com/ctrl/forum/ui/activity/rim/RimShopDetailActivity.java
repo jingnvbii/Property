@@ -4,11 +4,9 @@ import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
@@ -16,7 +14,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.beanu.arad.Arad;
-import com.beanu.arad.widget.SlidingUpPanelLayout;
+import com.beanu.arad.utils.MessageUtils;
 import com.ctrl.forum.R;
 import com.ctrl.forum.base.AppToolBarActivity;
 import com.ctrl.forum.dao.InvitationDao;
@@ -76,6 +74,7 @@ public class RimShopDetailActivity extends AppToolBarActivity implements View.On
     private List<Banner> listBanner = new ArrayList<>();
     private List<RimImage> rimImage;
     private InvitationDao idao;
+    private Boolean isCollect = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,7 +118,8 @@ public class RimShopDetailActivity extends AppToolBarActivity implements View.On
     //初始化弹窗
     private void initPop() {
         view = LayoutInflater.from(this).inflate(R.layout.call_phone,null);
-        popupWindow = new PopupWindow(view, SlidingUpPanelLayout.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
+        popupWindow = new PopupWindow(view, getResources().getDisplayMetrics().widthPixels,
+                getResources().getDisplayMetrics().heightPixels);
         popupWindow.setFocusable(true);
         ColorDrawable colorDrawable = new ColorDrawable(getResources().getColor(R.color.pop_bg));
         colorDrawable.setAlpha(40);
@@ -168,7 +168,7 @@ public class RimShopDetailActivity extends AppToolBarActivity implements View.On
                 break;
             case R.id.iv_phone://电话
                 if (!bo_hao.getText().equals("")){
-                    popupWindow.showAtLocation(this.view, Gravity.BOTTOM, 0, 0);  //在底部
+                    popupWindow.showAtLocation(this.view, Gravity.BOTTOM, 0, 120);  //在底部
                     popupWindow.update();
                 }
                 break;
@@ -206,7 +206,6 @@ public class RimShopDetailActivity extends AppToolBarActivity implements View.On
             rimSeverCompanyDetails = rimDao.getRimSeverCompanyDetails();
             data = rimDao.getData();
             if (rimSeverCompanyDetails!=null){
-                Log.e("rimSeverCompanyDetails",rimSeverCompanyDetails.toString());
                 name = rimSeverCompanyDetails.get(0).getName();
                 address = rimSeverCompanyDetails.get(0).getAddress();
                 telephone = rimSeverCompanyDetails.get(0).getTelephone();
@@ -248,6 +247,7 @@ public class RimShopDetailActivity extends AppToolBarActivity implements View.On
             }
         }
         if (requestCode==7){
+            isCollect = true;
             rimSeverCompanyDetails.clear();
             rimDao.getAroundServiceCompany(rimServiceCompaniesId, Arad.preferences.getString("memberId"));
         }
@@ -257,9 +257,15 @@ public class RimShopDetailActivity extends AppToolBarActivity implements View.On
     public void collect(String collecttionState){
         switch (collecttionState){
             case "0":
+                if (isCollect) {
+                    MessageUtils.showShortToast(getApplicationContext(), "取消收藏成功");
+                }
                 tv_collect.setText("收藏");
                 break;
             default:
+                if(isCollect) {
+                    MessageUtils.showShortToast(getApplicationContext(), "收藏成功");
+                }
                 tv_collect.setText("取消收藏");
                 break;
         }
@@ -270,6 +276,7 @@ public class RimShopDetailActivity extends AppToolBarActivity implements View.On
         super.onRestart();
         if (rimSeverCompanyDetails!=null){
             rimSeverCompanyDetails.clear();
+            isCollect = false;
         }
         rimDao.getAroundServiceCompany(rimServiceCompaniesId, Arad.preferences.getString("memberId"));
     }
