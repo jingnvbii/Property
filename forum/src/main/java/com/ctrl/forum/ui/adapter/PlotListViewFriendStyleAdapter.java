@@ -222,11 +222,11 @@ public class PlotListViewFriendStyleAdapter extends BaseAdapter {
         holder.rl_friend_style_zan.setOnClickListener(onLove);
         holder.rl_friend_style_zan.setTag(position);
 
-        if(post.getZambiastate()!=null) {
-            if (post.getZambiastate().equals("0")) {
+        if(post.getPraiseState()!=null) {
+            if (post.getPraiseState().equals("0")) {
                 holder.iv_friend_style_zan_num.setImageResource(R.mipmap.zan_blue);
             }
-            if (post.getZambiastate().equals("1")) {
+            if (post.getPraiseState().equals("1")) {
                 holder.iv_friend_style_zan_num.setImageResource(R.mipmap.zan_blue_shixin);
             }
         }

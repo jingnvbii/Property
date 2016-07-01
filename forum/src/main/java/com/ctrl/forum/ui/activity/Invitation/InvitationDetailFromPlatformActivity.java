@@ -509,12 +509,9 @@ public class InvitationDetailFromPlatformActivity extends AppToolBarActivity imp
             if(post.getZambiastate().equals("1")){
                 iv_zan.setImageResource(R.mipmap.zan_blue_shixin);
             }
-
             if (post.getPublishTime()!=null && !post.getPublishTime().equals("")) {
-                tv_release_time.setText(TimeUtils.date(Long.parseLong(post.getPublishTime())));
+                tv_release_time.setText("发布时间："+TimeUtils.date(Long.parseLong(post.getPublishTime())));
             }
-
-            tv_release_time.setText("发布时间："+TimeUtils.date(Long.parseLong(post.getPublishTime())));
             tv_introduction.setText(post.getBlurbs());
             listRelateMap = idao.getListRelateMap();
             mInvitationListViewAdapter.setList(listRelateMap);

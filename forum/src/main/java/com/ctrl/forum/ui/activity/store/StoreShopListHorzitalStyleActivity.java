@@ -284,7 +284,7 @@ public class StoreShopListHorzitalStyleActivity extends AppToolBarActivity imple
             //  MessageUtils.showShortToast(this, "获取店铺详情成功");
             showProgress(false);
             company = mdao.getCompany();
-            tv_horzital_style_information.setText(company.getInformation());
+            tv_horzital_style_information.setText(company.getNotice());
             tv_horzital_style_information.requestFocus();
         }
 

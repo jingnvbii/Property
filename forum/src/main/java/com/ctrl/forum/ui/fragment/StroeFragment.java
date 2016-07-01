@@ -226,6 +226,7 @@ public class StroeFragment extends ToolBarFragment implements View.OnClickListen
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
+        PAGE_NUM=1;
         if (isVisibleToUser && longitude != null && latitude != null) {
           /*  mdao.requestInitMallRecommendCompany(latitude, longitude,
                     String.valueOf(Constant.PAGE_SIZE), String.valueOf(PAGE_NUM));*/

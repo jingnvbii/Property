@@ -86,6 +86,14 @@ public class LoginDao extends IDao {
         map.put("password",password);
         postRequest(Constant.RAW_URL+url, mapToRP(map), 1);
     }
+    /**
+     * 获取导航栏
+     * */
+    public void requestQueryNavigationBar(){
+        String url="kind/queryNavigationBar";
+        Map<String,String> map = new HashMap<>();
+        postRequest(Constant.RAW_URL+url, mapToRP(map), 2);
+    }
 
     @Override
     public void onRequestSuccess(JsonNode result, int requestCode) throws IOException {
@@ -99,6 +107,10 @@ public class LoginDao extends IDao {
             Log.d("demo","dao中结果集(修改密码): " + result);
             //memberInfo = JsonUtil.node2pojo(result.findValue("memberInfo"), MemberInfo.class);
             //listReceiveAddress = JsonUtil.node2pojoList(result.findValue("receiveAddressList"), ReceiveAddress.class);
+        }
+        if(requestCode == 2){
+            Log.d("demo","dao中结果集(修改密码): " + result);
+            listNavigationBar = JsonUtil.node2pojoList(result.findValue("navigationBar"), NavigationBar.class);
         }
     }
 

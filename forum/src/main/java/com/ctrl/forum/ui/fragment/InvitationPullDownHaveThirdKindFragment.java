@@ -20,6 +20,7 @@ import android.widget.TextView;
 import com.beanu.arad.Arad;
 import com.beanu.arad.base.ToolBarFragment;
 import com.beanu.arad.utils.AnimUtil;
+import com.beanu.arad.utils.MessageUtils;
 import com.ctrl.forum.R;
 import com.ctrl.forum.base.Constant;
 import com.ctrl.forum.dao.InvitationDao;
@@ -30,6 +31,7 @@ import com.ctrl.forum.entity.Merchant;
 import com.ctrl.forum.entity.Post;
 import com.ctrl.forum.entity.ThirdKind;
 import com.ctrl.forum.loopview.HomeAutoSwitchPicHolder;
+import com.ctrl.forum.ui.activity.Invitation.InvitationDetailActivity;
 import com.ctrl.forum.ui.activity.Invitation.InvitationDetailFromPlatformActivity;
 import com.ctrl.forum.ui.activity.Invitation.InvitationPinterestDetailActivity;
 import com.ctrl.forum.ui.activity.Invitation.InvitationPullDownActivity;
@@ -43,7 +45,9 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -94,7 +98,11 @@ public class InvitationPullDownHaveThirdKindFragment extends ToolBarFragment {
     private int newPosition;
     private List<Banner> listBanner;
     private String keyword;
-    private int count=0;
+    private int mMotionY;
+
+    private Map<Integer,Boolean> isAdd = new HashMap<>();
+    private Map<Integer,Integer> text = new HashMap<>();
+
 
 
     public static InvitationPullDownHaveThirdKindFragment newInstance(String channelId,String styleType,String thirdKindId,String keyword) {
@@ -110,7 +118,6 @@ public class InvitationPullDownHaveThirdKindFragment extends ToolBarFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         bol=1;
-        count=0;
         idao = new InvitationDao(this);
         invitationListViewAdapter = new InvitationListViewAdapter(getActivity());
         mInvitationListViewBlockStyleAdapter = new InvitationListViewBlockStyleAdapter(getActivity());
@@ -120,19 +127,47 @@ public class InvitationPullDownHaveThirdKindFragment extends ToolBarFragment {
         mInvitationListViewFriendStyleAdapter.setOnItemClickListener(new InvitationListViewFriendStyleAdapter.OnItemClickListener() {
             @Override
             public void onItemZanClick(InvitationListViewFriendStyleAdapter.ViewHolder holder) {
-                if(listPost.get(holder.getPosition()).getZambiastate()!=null) {
-                    if (listPost.get(holder.getPosition()).getZambiastate().equals("0")) {
-                        idao.requesZambia("add", listPost.get(holder.getPosition()).getId(), Arad.preferences.getString("memberId"), "", "");
-                    }
-                    if (listPost.get(holder.getPosition()).getZambiastate().equals("1")) {
-                        idao.requesZambia("reduce", listPost.get(holder.getPosition()).getId(), Arad.preferences.getString("memberId"), "", "");
+                int position = holder.getPosition();
+                int tex = listPost.get(position).getPraiseNum();
+
+                if (isAdd.get(position)==null) {
+                    if (listPost.get(position).getPraiseState().equals("0")) {
+                        isAdd.put(position, true);
+                    } else {
+                        isAdd.put(position, false);
                     }
                 }
-            }
+
+                if (text.get(position)==null){
+                    text.put(position,tex);
+                }
+
+                if (listPost.get(position).getPraiseState()!=null) {
+                    if (isAdd.get(position)) {
+                        idao.requesZambia("add", listPost.get(position).getId(),Arad.preferences.getString("memberId")
+                                ,listPost.get(position).getTitle(),listPost.get(position).getContent());
+                        holder.tv_friend_style_zan_num.setText((text.get(position) + 1) + "");
+                        text.put(position,text.get(position) + 1);
+                        holder.iv_friend_style_zan_num.setImageResource(R.mipmap.zan_blue_shixin);
+                        MessageUtils.showShortToast(getActivity(), "点赞成功");
+                        isAdd.put(position,false);
+                    } else {
+                        idao.requesZambia("reduce", listPost.get(position).getId(), Arad.preferences.getString("memberId")
+                                , listPost.get(position).getTitle(), listPost.get(position).getContent());
+                        MessageUtils.showShortToast(getActivity(), "取消点赞");
+                        holder.tv_friend_style_zan_num.setText((text.get(position) - 1) + "");
+                        text.put(position, text.get(position)-1);
+                        holder.iv_friend_style_zan_num.setImageResource(R.mipmap.zan_blue);
+                        isAdd.put(position,true);
+                    }
+                    }
+                    }
+
+
         });
+        }
 
 
-    }
 
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
@@ -180,6 +215,35 @@ public class InvitationPullDownHaveThirdKindFragment extends ToolBarFragment {
         getScreenDen();
         lv.addHeaderView(headview);
         lv.setFocusable(false);
+      /*  lv.setOnTouchListener(new View.OnTouchListener() {
+            public boolean onTouch(View v, MotionEvent event) {
+                // 记录点击时 y 的坐标
+                int y = (int) event.getY();
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        // 第一次点击是 ACTION_DOWN 事件，把值保存起来
+                        mMotionY = y;
+                        break;
+                    case MotionEvent.ACTION_MOVE:
+                        // 当你滑动屏幕时是 ACTION_MOVE 事件，在这里做逻辑处理
+                        // （y - mMotionY） 的正负就代表了 向上和向下
+                        if ((y - mMotionY) >4) {
+                            if (ll.getVisibility() == View.GONE) {
+                                ll.setVisibility(View.VISIBLE);
+                            }
+                        } else if((y - mMotionY) <-4){
+                            if (ll.getVisibility() == View.VISIBLE) {
+                                ll.setVisibility(View.GONE);
+                            }
+                        }else {
+
+                        }
+                        mMotionY = y;
+                        break;
+                }
+                return false;
+            }
+        });*/
 
         lv_invitation_pull_down_have_third_kind.setMode(PullToRefreshBase.Mode.BOTH);
         lv_invitation_pull_down_have_third_kind.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
@@ -229,20 +293,29 @@ public class InvitationPullDownHaveThirdKindFragment extends ToolBarFragment {
                 newPosition = position - lv.getHeaderViewsCount();
                 Intent intent = null;
                 String type = listPost.get(newPosition).getSourceType();
-                switch (type) {
-                    case "0"://平台
-                        intent = new Intent(getActivity(), InvitationDetailFromPlatformActivity.class);
-                        intent.putExtra("id", listPost.get(newPosition).getId());
-                        startActivity(intent);
-                        AnimUtil.intentSlidIn(getActivity());
+                if(styleType.equals("4")){
+                    intent = new Intent(getActivity(), InvitationDetailActivity.class);
+                    intent.putExtra("id", listPost.get(newPosition).getId());
+                    intent.putExtra("reportid", listPost.get(newPosition).getReporterId());
+                    startActivity(intent);
+                    AnimUtil.intentSlidIn(getActivity());
+                }else {
 
-                        break;
-                    case "1"://app
-                        intent = new Intent(getActivity(), InvitationPinterestDetailActivity.class);
-                        intent.putExtra("id", listPost.get(newPosition).getId());
-                        startActivity(intent);
-                        AnimUtil.intentSlidIn(getActivity());
-                        break;
+                    switch (type) {
+                        case "0"://平台
+                            intent = new Intent(getActivity(), InvitationDetailFromPlatformActivity.class);
+                            intent.putExtra("id", listPost.get(newPosition).getId());
+                            startActivity(intent);
+                            AnimUtil.intentSlidIn(getActivity());
+
+                            break;
+                        case "1"://app
+                            intent = new Intent(getActivity(), InvitationPinterestDetailActivity.class);
+                            intent.putExtra("id", listPost.get(newPosition).getId());
+                            startActivity(intent);
+                            AnimUtil.intentSlidIn(getActivity());
+                            break;
+                    }
                 }
 
             }
@@ -337,36 +410,6 @@ public class InvitationPullDownHaveThirdKindFragment extends ToolBarFragment {
         super.onRequestSuccess(requestCode);
         lv_invitation_pull_down_have_third_kind.onRefreshComplete();
         showProgress(false);
-        if (requestCode == 14) {
-            InvitationPullDownActivity activity = (InvitationPullDownActivity) getActivity();
-            activity.getAdapter().reLoad();
-           /* if (count % 2 == 0) {//奇数次点击
-                if (listPost.get(holder.getPosition()).getZambiastate().equals("0")) {
-                    //  MessageUtils.showShortToast(this, "取消点赞成功");
-                    iv_zan.setImageResource(R.mipmap.zan_blue);
-
-
-                }
-                if (listPost.get(holder.getPosition()).getZambiastate().equals("1")) {
-                    //MessageUtils.showShortToast(this, "点赞成功");
-                    iv_zan.setImageResource(R.mipmap.zan_blue_shixin);
-
-                }
-            }
-            if (count % 2 == 1) {//偶数次点击
-                if (listPost.get(holder.getPosition()).getZambiastate().equals("0")) {
-                    //  MessageUtils.showShortToast(this, "点赞成功");
-                    iv_zan.setImageResource(R.mipmap.zan_blue_shixin);
-
-
-                }
-                if (listPost.get(holder.getPosition()).getZambiastate().equals("1")) {
-                    //  MessageUtils.showShortToast(this, "取消点赞成功");
-                    iv_zan.setImageResource(R.mipmap.zan_blue);
-                }
-            }
-            count++;*/
-        }
 
         if(requestCode==19){
             listBanner=idao.getListBanner();
