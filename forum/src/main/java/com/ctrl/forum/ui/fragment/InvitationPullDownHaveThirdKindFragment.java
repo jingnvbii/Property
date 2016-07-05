@@ -218,7 +218,7 @@ public class InvitationPullDownHaveThirdKindFragment extends ToolBarFragment {
         lv.setFocusable(false);
       /*  lv.setOnTouchListener(new View.OnTouchListener() {
             public boolean onTouch(View v, MotionEvent event) {
-                // 记录点击时 y 的坐标
+                // 记录点击时 y 的坐标11
                 int y = (int) event.getY();
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
