@@ -1,19 +1,23 @@
 package com.ctrl.forum.ui.activity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.RadioButton;
 
 import com.beanu.arad.Arad;
 import com.ctrl.forum.R;
-import com.ctrl.forum.base.AppToolBarActivity;
+import com.ctrl.forum.base.MyApplication;
 import com.ctrl.forum.entity.NavigationBar;
 import com.ctrl.forum.ui.fragment.InvitationFragment;
 import com.ctrl.forum.ui.fragment.MyFragment;
@@ -24,7 +28,7 @@ import com.ctrl.forum.utils.BitmapUtils;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppToolBarActivity implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
+public class MainActivity extends FragmentActivity implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
     private RadioButton rb1;//帖子按钮
     private RadioButton rb2;//商城按钮
     private RadioButton rb3;//小区按钮
@@ -159,6 +163,7 @@ public class MainActivity extends AppToolBarActivity implements View.OnClickList
         setContentView(R.layout.activity_main);
         initView();
         initData();
+        MyApplication.getInstance().addActivity(this);
     }
 
     private void initData() {
@@ -623,4 +628,49 @@ public class MainActivity extends AppToolBarActivity implements View.OnClickList
         }
 
     }
+
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK )
+        {
+            // 创建退出对话框
+            AlertDialog isExit = new AlertDialog.Builder(this).create();
+            // 设置对话框标题
+            isExit.setTitle("系统提示");
+            // 设置对话框消息
+            isExit.setMessage("确定要退出吗");
+            // 添加选择按钮并注册监听
+            isExit.setButton(AlertDialog.BUTTON_POSITIVE,"确定", listener);
+            isExit.setButton(AlertDialog.BUTTON_NEGATIVE, "取消", listener);
+            // 显示对话框
+            isExit.show();
+
+        }
+
+        return false;
+
+    }
+
+    /**监听对话框里面的button点击事件*/
+    DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener()
+    {
+        public void onClick(DialogInterface dialog, int which)
+        {
+            switch (which)
+            {
+                case AlertDialog.BUTTON_POSITIVE:// "确认"按钮退出程序
+                   /* Arad.preferences.clear();
+                    Arad.preferences.flush();*/
+                    MyApplication.getInstance().exit();
+                    finish();
+                    break;
+                case AlertDialog.BUTTON_NEGATIVE:// "取消"第二个按钮取消对话框
+                    break;
+                default:
+                    break;
+            }
+        }
+    };
+
 }

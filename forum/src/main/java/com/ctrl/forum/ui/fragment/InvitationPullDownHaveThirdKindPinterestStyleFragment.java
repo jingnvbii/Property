@@ -31,6 +31,7 @@ import com.ctrl.forum.loopview.HomeAutoSwitchPicHolder;
 import com.ctrl.forum.ui.activity.Invitation.InvitationPinerestGalleyActivity;
 import com.ctrl.forum.ui.activity.Invitation.InvitationPullDownActivity;
 import com.ctrl.forum.ui.activity.Invitation.InvitationSearchActivity;
+import com.ctrl.forum.ui.activity.LoginActivity;
 import com.ctrl.forum.ui.adapter.InvitationListViewPinterestStyleAdapter;
 import com.ctrl.forum.ui.adapter.InvitationPullDownGridViewAdapter;
 import com.ctrl.forum.ui.adapter.JasonViewPagerAdapter;
@@ -109,11 +110,11 @@ public class InvitationPullDownHaveThirdKindPinterestStyleFragment extends ToolB
         }
         if(!InvitationPullDownActivity.isFromSearch){
             keyword=null;
-            thirdKindId=null;
+            //thirdKindId=null;
         }
         if (isVisibleToUser&&bol==1 ) {
             idao.requestPostRotaingBanner("B_POST_MIDDLE");
-           if(listCategroy3!=null)listCategroy3.clear();
+            if(listCategroy3!=null)listCategroy3.clear();
             if(keyword!=null){
                 if(listPost!=null){
                     listPost.clear();
@@ -121,6 +122,7 @@ public class InvitationPullDownHaveThirdKindPinterestStyleFragment extends ToolB
                 idao.requesPostCategory(id, "2", "0");
                 idao.requestPostListByCategory(Arad.preferences.getString("memberId"), thirdKindId, "0", keyword,"", PAGE_NUM, Constant.PAGE_SIZE);
             }else if(thirdKindId==null) {
+
                 idao.requesPostCategory(id, "2", "0");
                 idao.requestPostListByCategory(Arad.preferences.getString("memberId"), id, "0", "","", PAGE_NUM, Constant.PAGE_SIZE);
             }else if(thirdKindId!=null) {
@@ -129,7 +131,7 @@ public class InvitationPullDownHaveThirdKindPinterestStyleFragment extends ToolB
             }else {
                 //
             }
-       }
+        }
 
     }
 
@@ -180,21 +182,26 @@ public class InvitationPullDownHaveThirdKindPinterestStyleFragment extends ToolB
         gridView1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if(listPost!=null){
+                if (listPost != null) {
                     listPost.clear();
                 }
                 bol = 1;
                 Position = position;
-                thirdKindId=listCategroy3.get(position).getId();
-                idao.requestPostListByCategory(Arad.preferences.getString("memberId"), thirdKindId, "0", "","", PAGE_NUM, Constant.PAGE_SIZE);
+                thirdKindId = listCategroy3.get(position).getId();
+                idao.requestPostListByCategory(Arad.preferences.getString("memberId"), thirdKindId, "0", "", "", PAGE_NUM, Constant.PAGE_SIZE);
             }
         });
 
         tv_search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                InvitationPullDownActivity.isFromSearch=true;
-                bol=1;
+                if (Arad.preferences.getString("memberId") == null || Arad.preferences.getString("memberId").equals("")) {
+                    startActivity(new Intent(getActivity(), LoginActivity.class));
+                    AnimUtil.intentSlidOut(getActivity());
+                    return;
+                }
+                InvitationPullDownActivity.isFromSearch = true;
+                bol = 1;
                 Intent intent = new Intent(getActivity(), InvitationSearchActivity.class);
                 startActivityForResult(intent, 1112);
                 AnimUtil.intentSlidIn(getActivity());
@@ -211,7 +218,9 @@ public class InvitationPullDownHaveThirdKindPinterestStyleFragment extends ToolB
         if(requestCode==19){
             listBanner=idao.getListBanner();
             //设置轮播图
-            setLoopView();
+            if(listBanner!=null&&framelayout.getVisibility()==View.VISIBLE) {
+                setLoopView();
+            }
         }
         if (requestCode == 1) {
             bol = 0;
@@ -229,8 +238,6 @@ public class InvitationPullDownHaveThirdKindPinterestStyleFragment extends ToolB
                 gridView1.setVisibility(View.VISIBLE);
             }
             mInvitationListViewPinterestStyleAdapter.setList(listPost);
-            thirdKindId=null;
-            keyword=null;
             InvitationPullDownActivity.isFromSelcet=false;
             InvitationPullDownActivity.isFromSearch=false;
         }
@@ -243,14 +250,6 @@ public class InvitationPullDownHaveThirdKindPinterestStyleFragment extends ToolB
             // horizontalScrollView.setVisibility(View.VISIBLE);
             listCategroy3 = idao.getListCategory();
             adapter.setList(listCategroy3);
-            if(isFirst) {
-              //  idao.requestPostListByCategory(Arad.preferences.getString("memberId"), listCategroy3.get(0).getId(), "0", "", PAGE_NUM, Constant.PAGE_SIZE);
-            }
-            isFirst=false;
-
-
-
-            thirdKindId=null;
             // setValue();
         }
     }
@@ -277,7 +276,7 @@ public class InvitationPullDownHaveThirdKindPinterestStyleFragment extends ToolB
     private void setLoopView() {
 
         // 1.创建轮播的holder
-        mAutoSwitchPicHolder = new HomeAutoSwitchPicHolder(getActivity());
+            mAutoSwitchPicHolder = new HomeAutoSwitchPicHolder(getActivity());
         // 2.得到轮播图的视图view
         View autoPlayPicView = mAutoSwitchPicHolder.getRootView();
         // 把轮播图的视图添加到主界面中
@@ -346,6 +345,7 @@ public class InvitationPullDownHaveThirdKindPinterestStyleFragment extends ToolB
 
     @Override
     public void onRefresh() {
+        ll.setVisibility(View.VISIBLE);
         listPost.clear();
         PAGE_NUM = 1;
         new Handler().postDelayed(new Runnable() {
@@ -354,7 +354,10 @@ public class InvitationPullDownHaveThirdKindPinterestStyleFragment extends ToolB
                 if(listPost!=null){
                     listPost.clear();
                 }
-                if (listCategroy3 != null) {
+                if(thirdKindId!=null){
+                    idao.requestPostListByCategory(Arad.preferences.getString("memberId"),thirdKindId, "0", "", "",PAGE_NUM, Constant.PAGE_SIZE);
+                }
+                else if (listCategroy3 != null) {
                     idao.requestPostListByCategory(Arad.preferences.getString("memberId"),listCategroy3.get(Position).getId(), "0", "", "",PAGE_NUM, Constant.PAGE_SIZE);
                 }else {
                     idao.requestPostListByCategory(Arad.preferences.getString("memberId"), id, "0", "", "", PAGE_NUM, Constant.PAGE_SIZE);
@@ -366,10 +369,17 @@ public class InvitationPullDownHaveThirdKindPinterestStyleFragment extends ToolB
 
     @Override
     public void onLoadMore() {
+        ll.setVisibility(View.VISIBLE);
         PAGE_NUM += 1;
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
+                if(listPost!=null){
+                    listPost.clear();
+                }
+                if(thirdKindId!=null){
+                    idao.requestPostListByCategory(Arad.preferences.getString("memberId"),thirdKindId, "0", "", "",PAGE_NUM, Constant.PAGE_SIZE);
+                }
                 if (listCategroy3 != null) {
                     idao.requestPostListByCategory(Arad.preferences.getString("memberId"),listCategroy3.get(Position).getId(), "0", "", "",PAGE_NUM, Constant.PAGE_SIZE);
                 }else {

@@ -87,6 +87,7 @@
         android:layout_centerInParent="true"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
+        android:visibility="gone"
         android:layout_gravity="center_horizontal"
         android:background="@drawable/white_border"
         android:layout_height="wrap_content">

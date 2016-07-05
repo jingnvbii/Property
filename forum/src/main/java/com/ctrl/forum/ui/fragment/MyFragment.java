@@ -32,6 +32,7 @@ import com.ctrl.forum.dao.EditDao;
 import com.ctrl.forum.dao.MemberDao;
 import com.ctrl.forum.entity.MemberInfo;
 import com.ctrl.forum.entity.Plugin;
+import com.ctrl.forum.ui.activity.LoginActivity;
 import com.ctrl.forum.ui.activity.mine.MineAssessActivity;
 import com.ctrl.forum.ui.activity.mine.MineBlacklistActivity;
 import com.ctrl.forum.ui.activity.mine.MineCollectActivity;
@@ -267,7 +268,13 @@ public class MyFragment extends ToolBarFragment implements View.OnClickListener{
         //设置
         if (view == iv_set) {startActivity(new Intent(getActivity(), MineSettingActivity.class));}
         //消息
-        if (view == iv_message) {startActivity(new Intent(getActivity(), MineMessageActivity.class));}
+        if (view == iv_message) {
+            if(Arad.preferences.getString("memberId")!=null&&!Arad.preferences.getString("memberId").equals("")){
+            startActivity(new Intent(getActivity(), MineMessageActivity.class));
+            }else {
+           startActivity(new Intent(getActivity(), LoginActivity.class));
+            }
+            }
         //抢红包
         //if (view==iv_message){intent = new Intent(getActivity(), RedPacketActivity.class);startActivity(intent);}
         //我的店铺

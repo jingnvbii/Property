@@ -44,6 +44,7 @@ import com.ctrl.forum.dao.AddressDao;
 import com.ctrl.forum.dao.SearchDao;
 import com.ctrl.forum.entity.Address;
 import com.ctrl.forum.entity.SearchHistory;
+import com.ctrl.forum.ui.adapter.StoreSearchAddressAdapter;
 import com.ctrl.forum.ui.adapter.StoreSearchAddressListAdapter;
 
 import java.util.ArrayList;
@@ -102,6 +103,7 @@ public class StoreLocateActivity extends AppToolBarActivity implements View.OnCl
     private StoreSearchAddressListAdapter adapter;
     private double latitude1;
     private double longitude1;
+    private StoreSearchAddressAdapter mStoreSearchAddressAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -190,8 +192,8 @@ public class StoreLocateActivity extends AppToolBarActivity implements View.OnCl
         lv_search_address.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                sdao.requestAddLoactionSearch(Arad.preferences.getString("memberId"), et_locate_search.getText().toString().trim(),
-                        poiInfoList.get(position).location.latitude + "", poiInfoList.get(position).location.longitude + "");
+               /* sdao.requestAddLoactionSearch(Arad.preferences.getString("memberId"), et_locate_search.getText().toString().trim(),
+                        poiInfoList.get(position).location.latitude + "", poiInfoList.get(position).location.longitude + "");*/
                 intent=new Intent();
                 intent.putExtra("address",poiInfoList.get(position).address);
                 intent.putExtra("latitude",poiInfoList.get(position).location.latitude+"");
@@ -352,12 +354,9 @@ public class StoreLocateActivity extends AppToolBarActivity implements View.OnCl
                 tv_locate_address.setVisibility(View.GONE);
                 lv_locate_address.setVisibility(View.VISIBLE);
             }
-            listAddressStr = new ArrayList<String>();
-            for (int i = 0; i < listAddress.size(); i++) {
-                listAddressStr.add(listAddress.get(i).getAddressBase() + listAddress.get(i).getAddressDetail());
-            }
-            ArrayAdapter adapter = new ArrayAdapter(this, R.layout.spinner_layout, listAddressStr);
-            lv_locate_address.setAdapter(adapter);
+            mStoreSearchAddressAdapter=new StoreSearchAddressAdapter(this);
+            mStoreSearchAddressAdapter.setList(listAddress);
+            lv_locate_address.setAdapter(mStoreSearchAddressAdapter);
         }
         if (requestCode == 999) {
           //  MessageUtils.showShortToast(this, "获取搜索历史记录列表成功");
@@ -407,9 +406,20 @@ public class StoreLocateActivity extends AppToolBarActivity implements View.OnCl
             case R.id.tv_seach:
                 if (TextUtils.isEmpty(et_locate_search.getText().toString().trim())) {
                     MessageUtils.showShortToast(this, "搜索关键字为空");
-
                 } else {
-                    sdao.requestSearchHistory(Arad.preferences.getString("memberId"), et_locate_search.getText().toString().trim(), latitude, longitude);
+                    if(poiInfoList!=null){
+                        poiInfoList.clear();
+                        adapter.notifyDataSetChanged();
+                    }
+                    if(city!=null&&!et_locate_search.getText().toString().equals("")) {
+                        mPoiSearch.searchInCity((new PoiCitySearchOption())
+                                .city(city)
+                                .keyword(et_locate_search.getText().toString())
+                                .pageCapacity(200)
+                                .pageNum(0))
+                        ;
+                    }
+                    sdao.requestAddLoactionSearch(Arad.preferences.getString("memberId"), et_locate_search.getText().toString(), latitude, longitude);
                 }
                 break;
         }

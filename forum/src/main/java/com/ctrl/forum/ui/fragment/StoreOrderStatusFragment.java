@@ -142,7 +142,7 @@ public class StoreOrderStatusFragment extends ToolBarFragment implements View.On
             list.add(orderStatus2);
             list.add(orderStatus3);
         }
-        if(orderState.getState().equals("6")){
+        if(orderState.getState().equals("6")&&orderState.getEvaluationState().equals("0")){
             iv_hongbao.setVisibility(View.VISIBLE);
             OrderStatus2 orderStatus=new OrderStatus2();
             OrderStatus2 orderStatus2=new OrderStatus2();
@@ -201,6 +201,7 @@ public class StoreOrderStatusFragment extends ToolBarFragment implements View.On
             list.add(orderStatus);
             list.add(orderStatus2);
             list.add(orderStatus3);
+
             list.add(orderStatus4);
             list.add(orderStatus5);
         }

@@ -2,6 +2,7 @@ package com.ctrl.forum.ui.activity.Invitation;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -17,6 +18,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -110,6 +112,8 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
      LinearLayout ll_image_second;
     @InjectView(R.id.ll_image_third)//图片布局3
      LinearLayout ll_image_third;
+    @InjectView(R.id.ll_gen)//图片布局3
+     LinearLayout ll_gen;
 
     @InjectView(R.id.tv_release)//发布
     TextView tv_release;
@@ -196,6 +200,8 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
         tv_release.setOnClickListener(this);
         tv_release_save.setOnClickListener(this);
         tougao.setOnClickListener(this);
+        ll_gen.setOnClickListener(this);
+
 
         //初始化控件宽高
         setImageViewWidth(iv01);
@@ -715,6 +721,17 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
     public void onClick(View v) {
        Intent intent=null;
         switch (v.getId()){
+            case R.id.ll_gen:
+                InputMethodManager imm=(InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                boolean isOpen=imm.isActive();
+                //isOpen若返回true，则表示输入法打开
+                if(isOpen){
+                    imm.hideSoftInputFromWindow(InvitationReleaseActivity.this.getCurrentFocus().getWindowToken()
+                            ,InputMethodManager.HIDE_NOT_ALWAYS);
+                    //接受软键盘输入的编辑文本或其它视图
+                  //  imm.showSoftInput(et_content,InputMethodManager.SHOW_FORCED);
+                }
+                break;
             case R.id.tougao:
                 intent=new Intent(InvitationReleaseActivity.this, WebViewActivity.class);
                 intent.putExtra("title","投稿协议");

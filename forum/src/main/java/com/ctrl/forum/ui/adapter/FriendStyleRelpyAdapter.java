@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.ctrl.forum.R;
@@ -62,8 +63,17 @@ public class FriendStyleRelpyAdapter extends BaseAdapter{
         }
         PostReply merchant=list.get(position);
         holder.tv_reply_name.setText(merchant.getMemberName()+":");
-        SpannableString spannableString2 = FaceConversionUtil.getInstace().getExpressionString(mcontext, merchant.getReplyContent());
-        holder.tv_reply_content.setText(spannableString2);
+        if(merchant.getContentType().equals("0")) {
+            SpannableString spannableString2 = FaceConversionUtil.getInstace().getExpressionString(mcontext, merchant.getReplyContent());
+            holder.tv_reply_content.setText(spannableString2);
+        }
+
+        if (merchant.getContentType().equals("1")) {
+           holder.tv_reply_content.setText(" [图片]");
+        }
+        if (merchant.getContentType().equals("2")) {
+           holder.rl_reply_voice.setVisibility(View.VISIBLE);
+        }
         return convertView;
     }
 
@@ -74,6 +84,8 @@ public class FriendStyleRelpyAdapter extends BaseAdapter{
                 TextView  tv_reply_name;
         @InjectView(R.id.tv_reply_content)//文字
                 TextView  tv_reply_content;
+        @InjectView(R.id.rl_reply_voice)
+        RelativeLayout rl_reply_voice;
         ViewHolder(View view) {
             ButterKnife.inject(this, view);
         }

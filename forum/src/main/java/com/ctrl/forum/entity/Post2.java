@@ -35,10 +35,18 @@ public class Post2 {
     private String vcardDisplay;//是否显示名片
     private String zambiastate;//是否被当前用户点赞
     private String collectstate;//是否被当前用户收藏
+    private String linkUrl;//网址链接
 
     private List<PostImage> postImgList;//图片列表
     private List<PostReply2> postReplyList;//回复列表
 
+    public String getLinkUrl() {
+        return linkUrl;
+    }
+
+    public void setLinkUrl(String linkUrl) {
+        this.linkUrl = linkUrl;
+    }
 
     public String getCategoryTree() {
         return categoryTree;

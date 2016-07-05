@@ -41,6 +41,7 @@ import com.ctrl.forum.dao.CollectDao;
 import com.ctrl.forum.dao.MallDao;
 import com.ctrl.forum.entity.Image2;
 import com.ctrl.forum.entity.Product2;
+import com.ctrl.forum.ui.activity.LoginActivity;
 import com.ctrl.forum.ui.adapter.CartPopupWindowListViewAdapter;
 import com.ctrl.forum.ui.adapter.CommdityImageViewPagerAdapter;
 
@@ -493,22 +494,29 @@ public class StoreCommodityDetailActivity extends AppToolBarActivity implements 
 
                 ) + "");
 
-                tv_commodity_detail_num.setText(mGoodsDataBaseInterface.saveGoodsNumber(mContext, SELECTPOSITION,
-                        product.getId(),
-                        String.valueOf(Integer.parseInt(nums) - 1),
-                        Float.parseFloat(product.getSellingPrice()),
-                        product.getName(),
-                        product.getStock()
+                if(listGoodsBean.get(v.getPosition()).getGoodsid().equals(product.getId())) {
+                    tv_commodity_detail_num.setText(mGoodsDataBaseInterface.saveGoodsNumber(mContext, SELECTPOSITION,
+                            product.getId(),
+                            String.valueOf(Integer.parseInt(nums) - 1),
+                            Float.parseFloat(product.getSellingPrice()),
+                            product.getName(),
+                            product.getStock()
 
-                ) + "");
+                    ) + "");
+                    if(tv_commodity_detail_num.getText().toString().equals("0")){
+                        rl_commodity_detail_add_cart.setVisibility(View.GONE);
+                        tv_add_cart.setVisibility(View.VISIBLE);
+                    }
+                }
                 nums = v.tv_popup_lv_number.getText().toString().trim();
                 // 减完之后  数据为0
                 if (nums.equals("0")) {
-                    listGoodsBean.remove(v.getPosition());
+                    OperateGoodsDataBaseStatic.DeleteSecondGoodsNumber(mContext,SELECTPOSITION,listGoodsBean.get(v.getPosition()).getGoodsid());
+                    listGoodsBean=OperateGoodsDataBaseStatic.getSecondGoodsTypeList(mContext);
                     mCartPopupWindowListViewAdapter.setList(listGoodsBean);
                 }
                 setPupupAll();
-                //  setAll();
+                setAll();
 
             }
         });
@@ -598,18 +606,26 @@ public class StoreCommodityDetailActivity extends AppToolBarActivity implements 
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.m_list_submit:
+                if(Arad.preferences.getString("memberId")==null||Arad.preferences.getString("memberId").equals("")){
+                    startActivity(new Intent(StoreCommodityDetailActivity.this, LoginActivity.class));
+                    return;
+                }
                 if (m_list_num.getText().toString().equals("0")) {
                     MessageUtils.showShortToast(this, "购物车还是空的！");
                 } else {
                     Intent intent = new Intent(this, StoreOrderDetailActivity.class);
-                    intent.putExtra("companyId", getIntent().getStringExtra("id"));
+                    intent.putExtra("companyId", product.getCompanyId());
                     startActivity(intent);
                     AnimUtil.intentSlidIn(this);
                 }
                 break;
             case R.id.m_list_submit_popup:
+                if(Arad.preferences.getString("memberId")==null||Arad.preferences.getString("memberId").equals("")){
+                    startActivity(new Intent(StoreCommodityDetailActivity.this, LoginActivity.class));
+                    return;
+                }
                 Intent intent = new Intent(this, StoreOrderDetailActivity.class);
-                intent.putExtra("companyId", getIntent().getStringExtra("id"));
+                intent.putExtra("companyId", product.getCompanyId());
                 startActivity(intent);
                 AnimUtil.intentSlidIn(this);
                 popupWindow.dismiss();
@@ -619,6 +635,10 @@ public class StoreCommodityDetailActivity extends AppToolBarActivity implements 
                 onBackPressed();
                 break;
             case R.id.iv_zan://收藏
+                if(Arad.preferences.getString("memberId")==null||Arad.preferences.getString("memberId").equals("")){
+                    startActivity(new Intent(StoreCommodityDetailActivity.this, LoginActivity.class));
+                    return;
+                }
                 CollectDao cdao = new CollectDao(StoreCommodityDetailActivity.this);
                 if (count % 2 == 0) {//奇数次点击
                     if (product.getCollectState().equals("0")) {
@@ -665,6 +685,10 @@ public class StoreCommodityDetailActivity extends AppToolBarActivity implements 
 
                 break;
             case R.id.iv_share:
+                if(Arad.preferences.getString("memberId")==null||Arad.preferences.getString("memberId").equals("")){
+                    startActivity(new Intent(StoreCommodityDetailActivity.this, LoginActivity.class));
+                    return;
+                }
                 //  showSharePopuwindow(iv_share);
                 shareDialog = new ShareDialog(this);
                 shareDialog.setCancelButtonOnClickListener(new View.OnClickListener() {

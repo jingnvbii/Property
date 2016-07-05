@@ -16,6 +16,7 @@ import com.ctrl.forum.R;
 import com.ctrl.forum.entity.PostReply2;
 import com.ctrl.forum.face.FaceConversionUtil;
 import com.ctrl.forum.ui.activity.Invitation.InvitationDetailActivity;
+import com.ctrl.forum.ui.activity.LoginActivity;
 import com.ctrl.forum.ui.activity.mine.MineDetailActivity;
 import com.ctrl.forum.utils.TimeUtils;
 
@@ -104,6 +105,11 @@ public class FriendDetailReplyAdapter extends BaseAdapter{
         holder.iv_reply_photo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(Arad.preferences.getString("memberId")==null||Arad.preferences.getString("memberId").equals("")){
+                    mcontext.startActivity(new Intent(mcontext, LoginActivity.class));
+                    AnimUtil.intentSlidOut((InvitationDetailActivity)mcontext);
+                    return;
+                }
                 Intent intent = new Intent(mcontext, MineDetailActivity.class);
                 intent.putExtra("id", merchant.getMemberId());
                 mcontext.startActivity(intent);

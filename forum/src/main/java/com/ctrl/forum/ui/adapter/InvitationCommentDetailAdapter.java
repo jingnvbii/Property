@@ -84,6 +84,9 @@ public class InvitationCommentDetailAdapter extends BaseAdapter {
         holder.tv_comment_detail_floor.setText(mPostReply2.getMemberFloor() + " 楼");
         if(mPostReply2.getMemberLevel()!=null){
             switch (mPostReply2.getMemberLevel()){
+                case "0":
+                    holder.iv_reply_level.setImageResource(R.mipmap.vip_icon);
+                    break;
                 case "1":
                     holder.iv_reply_level.setImageResource(R.mipmap.vip_icon1);
                     break;
@@ -106,6 +109,8 @@ public class InvitationCommentDetailAdapter extends BaseAdapter {
                     holder.iv_reply_level.setImageResource(R.mipmap.vip_icon7);
                     break;
             }
+        }else {
+            holder.iv_reply_level.setImageResource(R.mipmap.vip_icon);
         }
         Arad.imageLoader.load(mPostReply2.getImgUrl()).placeholder(R.mipmap.baby_large).resize(50,50)
                 .centerCrop().into(holder.iv_reply_photo);

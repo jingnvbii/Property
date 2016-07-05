@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.beanu.arad.Arad;
 import com.ctrl.forum.R;
 import com.ctrl.forum.entity.MallKind;
+import com.ctrl.forum.ui.fragment.StroeFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +26,7 @@ import java.util.List;
  * 
  */
 public class App2Adapter extends BaseAdapter implements OnItemClickListener {
+	private StroeFragment fragment;
 	private List<MallKind> mList;// 定义一个list对象
 	private Context mContext;// 上下文
 	public static final int APP_PAGE_SIZE = 10;// 每一页装载数据的大小
@@ -50,13 +52,14 @@ public class App2Adapter extends BaseAdapter implements OnItemClickListener {
 	 * @param page
 	 *            当前页
 	 */
-	public App2Adapter(Context context, List<MallKind> list, int page) {
+	public App2Adapter(Context context, List<MallKind> list, int page,StroeFragment fragment) {
 		mContext = context;
 		pm = context.getPackageManager();
 		this.page = page;
 		mList = new ArrayList<MallKind>();
+		this.fragment=fragment;
 		// 根据当前页计算装载的应用，每页只装载16个
-		int i = page * APP_PAGE_SIZE;// 当前页的其实位置
+		int i = page * APP_PAGE_SIZE;// 当前页的起始位置
 		int iEnd = i + APP_PAGE_SIZE;// 所有数据的结束位置
 		while ((i < list.size()) && (i < iEnd)) {
 			mList.add(list.get(i));
@@ -92,7 +95,7 @@ public class App2Adapter extends BaseAdapter implements OnItemClickListener {
 		if(appInfo.getKindIcon()!=null&&!appInfo.getKindIcon().equals("")) {
 			Arad.imageLoader.load(appInfo.getKindIcon()).placeholder(R.mipmap.default_error).into(appicon);
 		}else {
-			appicon.setImageResource(R.mipmap.ic_launcher);
+			appicon.setImageResource(R.mipmap.default_error);
 		}
 		appname.setText(appInfo.getKindName());
 		return convertView;
@@ -105,8 +108,8 @@ public class App2Adapter extends BaseAdapter implements OnItemClickListener {
 
 		for (int i = 0; i < APP_PAGE_SIZE; i++) {
 			if (i == arg2) {
-
-
+				fragment.setGridViewItemClick(arg2,mList.get(arg2).getId(),mList.get(arg2).getKindName());
+				//MessageUtils.showShortToast(mContext,"fsdfds");
 			} else {
 				/*arg0.getChildAt(i).setBackgroundColor(Color.argb(0, 0, 0, 0));*/
 

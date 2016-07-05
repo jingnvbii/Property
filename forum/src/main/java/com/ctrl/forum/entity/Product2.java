@@ -18,6 +18,15 @@ public class Product2 {
     private String collectState;//收藏（0-未收藏，1-收藏）
     private String categoryName;//分类
     private String listImgUrl;//图片地址
+    private String companyId;//店铺id
+
+    public String getCompanyId() {
+        return companyId;
+    }
+
+    public void setCompanyId(String companyId) {
+        this.companyId = companyId;
+    }
 
     public String getListImgUrl() {
         return listImgUrl;

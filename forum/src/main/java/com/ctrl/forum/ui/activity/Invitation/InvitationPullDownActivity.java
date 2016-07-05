@@ -38,6 +38,7 @@ import com.ctrl.forum.entity.Category;
 import com.ctrl.forum.entity.Invitation_listview;
 import com.ctrl.forum.entity.Post;
 import com.ctrl.forum.entity.ThirdKind;
+import com.ctrl.forum.ui.activity.LoginActivity;
 import com.ctrl.forum.ui.adapter.ExpandableListViewAllCategroyAdapter;
 import com.ctrl.forum.ui.adapter.JasonViewPagerAdapter;
 import com.ctrl.forum.ui.fragment.InvitationPullDownHaveThirdKindFragment;
@@ -128,7 +129,7 @@ public class InvitationPullDownActivity extends AppToolBarActivity implements Vi
         idao = new InvitationDao(this);
         idao.requesPostCategory(channelId, "1", "0");
         iv_pull_down.setOnClickListener(this);
-     //   viewpager_invitation_pull_down.setScrollble(false);//禁止viewpager滚动
+        viewpager_invitation_pull_down.setScrollble(false);//禁止viewpager滚动
 
     }
 
@@ -243,7 +244,7 @@ public class InvitationPullDownActivity extends AppToolBarActivity implements Vi
                     for (int i = 0; i < listCategory.size(); i++) {
                         styleType = listCategory.get(i).getStyleType();
                         if (styleType.equals("3")) {
-                            list.add(InvitationPullDownHaveThirdKindPinterestStyleFragment.newInstance(InvitationPullDownActivity.this, listCategory.get(i).getId(), thirdKindId,keyword1));
+                            list.add(InvitationPullDownHaveThirdKindPinterestStyleFragment.newInstance(InvitationPullDownActivity.this, listCategory.get(i).getId(), thirdKindId, keyword1));
                         } else {
                             list.add(InvitationPullDownHaveThirdKindFragment.newInstance(listCategory.get(i).getId(), listCategory.get(i).getStyleType(), thirdKindId, keyword1));
                         }
@@ -251,8 +252,9 @@ public class InvitationPullDownActivity extends AppToolBarActivity implements Vi
                 } else {
                     for (int i = 0; i < listCategory2.size(); i++) {
                         styleType = listCategory2.get(i).getStyleType();
+
                         if (styleType.equals("3")) {
-                            list.add(InvitationPullDownHaveThirdKindPinterestStyleFragment.newInstance(InvitationPullDownActivity.this, listCategory2.get(i).getId(), thirdKindId,keyword1));
+                            list.add(InvitationPullDownHaveThirdKindPinterestStyleFragment.newInstance(InvitationPullDownActivity.this, listCategory2.get(i).getId(), thirdKindId, keyword1));
                         } else {
                             list.add(InvitationPullDownHaveThirdKindFragment.newInstance(listCategory2.get(i).getId(), listCategory2.get(i).getStyleType(), thirdKindId, keyword1));
                         }
@@ -324,6 +326,7 @@ public class InvitationPullDownActivity extends AppToolBarActivity implements Vi
         mGroupPostion=groupPosition;
         mChildrenPosition=position;
         thirdKindId = thirdId;
+
         viewpager_invitation_pull_down.setCurrentItem(groupPosition);
         viewPagerAdapter.reLoad();
         popupWindow.dismiss();
@@ -335,6 +338,10 @@ public class InvitationPullDownActivity extends AppToolBarActivity implements Vi
         rightButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(Arad.preferences.getString("memberId")==null||Arad.preferences.getString("memberId").equals("")){
+                    startActivity(new Intent(InvitationPullDownActivity.this, LoginActivity.class));
+                    return;
+                }
                 if(Arad.preferences.getString("isShielded").equals("1")){
                     MessageUtils.showShortToast(InvitationPullDownActivity.this,"您已经被屏蔽，不能发帖");
                 }

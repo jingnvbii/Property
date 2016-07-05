@@ -124,14 +124,7 @@ public class StoreShopListHorzitalStyleActivity extends AppToolBarActivity imple
         mGoodsDataBaseInterface.deleteAll(mContext);
 
         Arad.imageLoader.load(getIntent().getStringExtra("url")).placeholder(R.mipmap.default_error).into(iv_style_img);
-        tv_shop_name.setText(getIntent().getStringExtra("name"));
-        if(getIntent().getStringExtra("startTime")!=null&&getIntent().getStringExtra("endTime")!=null) {
-            tv_time.setText("营业时间 " + getIntent().getStringExtra("startTime") + "-" + getIntent().getStringExtra("endTime"));
-        }else {
-            tv_time.setVisibility(View.GONE);
-        }
-        if(getIntent().getStringExtra("levlel")!=null)
-            ratingBar.setRating(Float.parseFloat(getIntent().getStringExtra("levlel")) );
+
         mdao = new MallDao(this);
         showProgress(true);
         mdao.requestProductCategroy(getIntent().getStringExtra("id"),"1");
@@ -286,6 +279,17 @@ public class StoreShopListHorzitalStyleActivity extends AppToolBarActivity imple
             company = mdao.getCompany();
             tv_horzital_style_information.setText(company.getNotice());
             tv_horzital_style_information.requestFocus();
+            tv_shop_name.setText(company.getName());
+            if(company.getWorkStartTime()!=null&&company.getWorkEndTime()!=null) {
+                tv_time.setText("营业时间 " + company.getWorkStartTime()+ "-" + company.getWorkEndTime());
+            }else {
+                tv_time.setVisibility(View.GONE);
+            }
+            if(company.getEvaluatLevel()!=null) {
+                ratingBar.setRating(Float.parseFloat(company.getEvaluatLevel()) );
+            }else {
+                ratingBar.setRating(Float.parseFloat("0"));
+            }
         }
 
        if(requestCode==9){

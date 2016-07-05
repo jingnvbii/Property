@@ -56,6 +56,7 @@ import com.ctrl.forum.entity.NoticeImage;
 import com.ctrl.forum.loopview.HomeAutoSwitchPicHolder;
 import com.ctrl.forum.service.LocationService;
 import com.ctrl.forum.ui.activity.Invitation.InvitationDetailActivity;
+import com.ctrl.forum.ui.activity.LoginActivity;
 import com.ctrl.forum.ui.activity.store.StoreCommodityDetailActivity;
 import com.ctrl.forum.ui.activity.store.StoreLocateActivity;
 import com.ctrl.forum.ui.activity.store.StoreScreenActivity;
@@ -131,9 +132,13 @@ public class StroeFragment extends ToolBarFragment implements View.OnClickListen
     private ViewPager myViewPager;
     private static final float APP_PAGE_SIZE = 10.0f;
     private MyViewPagerAdapter viewpagerAdapter;
-    LayoutInflater inflater;
+   // LayoutInflater inflater;
     private PageControl pageControl;
-    private LinearLayout viewGroup;
+    private ViewGroup viewGroup;
+    private LinearLayout ll_notice;
+    private LinearLayout ll_tuijian;
+    private int bol=0;
+    private int PageCount;
 
 
     public static StroeFragment newInstance() {
@@ -174,6 +179,7 @@ public class StroeFragment extends ToolBarFragment implements View.OnClickListen
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        bol=0;
         mdao = new MallDao(this);
         showProgress(true);
         mdao.requestInitMall();
@@ -226,13 +232,9 @@ public class StroeFragment extends ToolBarFragment implements View.OnClickListen
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
-        PAGE_NUM=1;
-        if (isVisibleToUser && longitude != null && latitude != null) {
-          /*  mdao.requestInitMallRecommendCompany(latitude, longitude,
-                    String.valueOf(Constant.PAGE_SIZE), String.valueOf(PAGE_NUM));*/
+        if(isVisibleToUser) {
+            PAGE_NUM = 0;
         }
-
-
     }
 
 
@@ -247,19 +249,24 @@ public class StroeFragment extends ToolBarFragment implements View.OnClickListen
         //公告轮播控件初始化
         initNoticeView();
         initData();
-
+        pageControl = new PageControl(getActivity(),(LinearLayout)viewGroup, 5);
         return view;
     }
 
     private void initData() {
         tv_toolbar.requestFocus();//跑马灯获取焦点
+
         lv_store_home.setMode(PullToRefreshBase.Mode.BOTH);
         lv_store_home.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
                 if (listMall != null)
                     listMall.clear();
-                PAGE_NUM = 1;
+               if(PAGE_NUM==0){
+                   PAGE_NUM=1;
+               }else {
+                   PAGE_NUM=1;
+               }
                 // showProgress(true);
                 new Handler().postDelayed(new Runnable() {
                     @Override
@@ -384,10 +391,8 @@ public class StroeFragment extends ToolBarFragment implements View.OnClickListen
                     Arad.preferences.putString("longitude", longitude);
                 }
                 Arad.preferences.flush();
-
                 mdao.requestInitMallRecommendCompany(latitude, longitude,
                         String.valueOf(Constant.PAGE_SIZE), String.valueOf(PAGE_NUM));
-
                 LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
                 mSearch.reverseGeoCode(new ReverseGeoCodeOption().location(latLng));
             }
@@ -407,6 +412,7 @@ public class StroeFragment extends ToolBarFragment implements View.OnClickListen
     public void onRequestSuccess(int requestCode) {
         super.onRequestSuccess(requestCode);
         lv_store_home.onRefreshComplete();
+        bol=1;
         showProgress(false);
         if (requestCode == 0) {
             listBanner = mdao.getListMallBanner();
@@ -436,88 +442,152 @@ public class StroeFragment extends ToolBarFragment implements View.OnClickListen
         }
     }
 
+
+    public void  setGridViewItemClick(int arg2,String kindId,String kindName){
+        for (int i = 0; i < (int)APP_PAGE_SIZE; i++) {
+            if (i == arg2) {
+                if(latitude_now!=null&&longitude_now!=null){
+                    Intent intent = new Intent(getActivity(), StoreScreenActivity.class);
+                    intent.putExtra("channelId",kindId);
+                    intent.putExtra("latitude", latitude_now);
+                    intent.putExtra("longitude", longitude_now);
+                    intent.putExtra("address", address_now);
+                    intent.putExtra("name", kindName);
+                    getActivity().startActivity(intent);
+                    AnimUtil.intentSlidIn(getActivity());
+                }else if(latitude_address!=null&&longitude_address!=null){
+                    Intent intent = new Intent(getActivity(), StoreScreenActivity.class);
+                    intent.putExtra("channelId", kindId);
+                    intent.putExtra("latitude", latitude_address);
+                    intent.putExtra("longitude", longitude_address);
+                    intent.putExtra("address", address_address);
+                    intent.putExtra("name", kindName);
+                    getActivity().startActivity(intent);
+                    AnimUtil.intentSlidIn(getActivity());
+                }else if(latitude_map!=null&&longitude_map!=null){
+                    Intent intent = new Intent(getActivity(), StoreScreenActivity.class);
+                    intent.putExtra("channelId", kindId);
+                    intent.putExtra("latitude", latitude_map);
+                    intent.putExtra("longitude", longitude_map);
+                    intent.putExtra("address", address_map);
+                    intent.putExtra("name", kindName);
+                    getActivity().startActivity(intent);
+                    AnimUtil.intentSlidIn(getActivity());
+                }else if(latitude_search!=null&&longitude_search!=null){
+                    Intent intent = new Intent(getActivity(), StoreScreenActivity.class);
+                    intent.putExtra("channelId",kindId);
+                    intent.putExtra("latitude", latitude_search);
+                    intent.putExtra("longitude", longitude_search);
+                    intent.putExtra("address", address_search);
+                    intent.putExtra("name",  kindName);
+                    getActivity().startActivity(intent);
+                    AnimUtil.intentSlidIn(getActivity());
+                }else {
+                    Intent intent = new Intent(getActivity(), StoreScreenActivity.class);
+                    intent.putExtra("channelId", kindId);
+                    intent.putExtra("latitude", latitude);
+                    intent.putExtra("longitude", longitude);
+                    intent.putExtra("address", tv_toolbar.getText().toString().trim());
+                    intent.putExtra("name",  kindName);
+                    getActivity().startActivity(intent);
+                    AnimUtil.intentSlidIn(getActivity());
+                }
+
+            } else {
+//
+            }
+        }
+    }
+
     private void initViewPager() {
-        final int PageCount = (int) Math.ceil(listMallKind.size() / APP_PAGE_SIZE);
+        PageCount = (int) Math.ceil(listMallKind.size() / APP_PAGE_SIZE);
         map = new HashMap<Integer, GridView>();
         for (int i = 0; i < PageCount; i++) {
             GridView appPage = new GridView(getActivity());
-            final App2Adapter adapter =new App2Adapter(getActivity(), listMallKind, i);
-            appPage.setAdapter(adapter);
+            final App2Adapter app2adapter =new App2Adapter(getActivity(), listMallKind, i,this);
+            appPage.setAdapter(app2adapter);
             appPage.setNumColumns(5);
-			appPage.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+		/*	appPage.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> arg0, View arg1,
                                         int arg2, long arg3) {
                     // TODO Auto-generated method stub
-                  //  MessageUtils.showShortToast(getActivity(),"fdfsdfsd");
-                    Log.i("tag","name222=="+listMallKind.get(arg2).getKindName());
-                    if(latitude_now!=null&&longitude_now!=null){
-                        Intent intent = new Intent(getActivity(), StoreScreenActivity.class);
-                        intent.putExtra("channelId", listMallKind.get(arg2).getId());
-                        intent.putExtra("latitude", latitude_now);
-                        intent.putExtra("longitude", longitude_now);
-                        intent.putExtra("address", address_now);
-                        intent.putExtra("name",  listMallKind.get(arg2).getKindName());
-                        getActivity().startActivity(intent);
-                        AnimUtil.intentSlidIn(getActivity());
-                    }else if(latitude_address!=null&&longitude_address!=null){
-                        Intent intent = new Intent(getActivity(), StoreScreenActivity.class);
-                        intent.putExtra("channelId", listMallKind.get(arg2).getId());
-                        intent.putExtra("latitude", latitude_address);
-                        intent.putExtra("longitude", longitude_address);
-                        intent.putExtra("address", address_address);
-                        intent.putExtra("name",  listMallKind.get(arg2).getKindName());
-                        getActivity().startActivity(intent);
-                        AnimUtil.intentSlidIn(getActivity());
-                    }else if(latitude_map!=null&&longitude_map!=null){
-                        Intent intent = new Intent(getActivity(), StoreScreenActivity.class);
-                        intent.putExtra("channelId", listMallKind.get(arg2).getId());
-                        intent.putExtra("latitude", latitude_map);
-                        intent.putExtra("longitude", longitude_map);
-                        intent.putExtra("address", address_map);
-                        intent.putExtra("name",  listMallKind.get(arg2).getKindName());
-                        getActivity().startActivity(intent);
-                        AnimUtil.intentSlidIn(getActivity());
-                    }else if(latitude_search!=null&&longitude_search!=null){
-                        Intent intent = new Intent(getActivity(), StoreScreenActivity.class);
-                        intent.putExtra("channelId", listMallKind.get(arg2).getId());
-                        intent.putExtra("latitude", latitude_search);
-                        intent.putExtra("longitude", longitude_search);
-                        intent.putExtra("address", address_search);
-                        intent.putExtra("name",  listMallKind.get(arg2).getKindName());
-                        getActivity().startActivity(intent);
-                        AnimUtil.intentSlidIn(getActivity());
-                    }else {
-                        Intent intent = new Intent(getActivity(), StoreScreenActivity.class);
-                        intent.putExtra("channelId", listMallKind.get(arg2).getId());
-                        intent.putExtra("latitude", latitude);
-                        intent.putExtra("longitude", longitude);
-                        intent.putExtra("address", tv_toolbar.getText().toString().trim());
-                        intent.putExtra("name",  listMallKind.get(arg2).getKindName());
-                        getActivity().startActivity(intent);
-                        AnimUtil.intentSlidIn(getActivity());
-                    }
+                    //  MessageUtils.showShortToast(getActivity(),"fdfsdfsd");
+                 *//*   int index = app2adapter.getPage() * (int)APP_PAGE_SIZE + arg2;
 
+                    for (int i = 0; i < (int)APP_PAGE_SIZE; i++) {
+                        if (i == arg2) {
+                            if(latitude_now!=null&&longitude_now!=null){
+                                Intent intent = new Intent(getActivity(), StoreScreenActivity.class);
+                                intent.putExtra("channelId", listMallKind.get(arg2).getId());
+                                intent.putExtra("latitude", latitude_now);
+                                intent.putExtra("longitude", longitude_now);
+                                intent.putExtra("address", address_now);
+                                intent.putExtra("name",  listMallKind.get(arg2).getKindName());
+                                getActivity().startActivity(intent);
+                                AnimUtil.intentSlidIn(getActivity());
+                            }else if(latitude_address!=null&&longitude_address!=null){
+                                Intent intent = new Intent(getActivity(), StoreScreenActivity.class);
+                                intent.putExtra("channelId", listMallKind.get(arg2).getId());
+                                intent.putExtra("latitude", latitude_address);
+                                intent.putExtra("longitude", longitude_address);
+                                intent.putExtra("address", address_address);
+                                intent.putExtra("name",  listMallKind.get(arg2).getKindName());
+                                getActivity().startActivity(intent);
+                                AnimUtil.intentSlidIn(getActivity());
+                            }else if(latitude_map!=null&&longitude_map!=null){
+                                Intent intent = new Intent(getActivity(), StoreScreenActivity.class);
+                                intent.putExtra("channelId", listMallKind.get(arg2).getId());
+                                intent.putExtra("latitude", latitude_map);
+                                intent.putExtra("longitude", longitude_map);
+                                intent.putExtra("address", address_map);
+                                intent.putExtra("name",  listMallKind.get(arg2).getKindName());
+                                getActivity().startActivity(intent);
+                                AnimUtil.intentSlidIn(getActivity());
+                            }else if(latitude_search!=null&&longitude_search!=null){
+                                Intent intent = new Intent(getActivity(), StoreScreenActivity.class);
+                                intent.putExtra("channelId", listMallKind.get(arg2).getId());
+                                intent.putExtra("latitude", latitude_search);
+                                intent.putExtra("longitude", longitude_search);
+                                intent.putExtra("address", address_search);
+                                intent.putExtra("name",  listMallKind.get(arg2).getKindName());
+                                getActivity().startActivity(intent);
+                                AnimUtil.intentSlidIn(getActivity());
+                            }else {
+                                Intent intent = new Intent(getActivity(), StoreScreenActivity.class);
+                                intent.putExtra("channelId", listMallKind.get(arg2).getId());
+                                intent.putExtra("latitude", latitude);
+                                intent.putExtra("longitude", longitude);
+                                intent.putExtra("address", tv_toolbar.getText().toString().trim());
+                                intent.putExtra("name",  listMallKind.get(arg2).getKindName());
+                                getActivity().startActivity(intent);
+                                AnimUtil.intentSlidIn(getActivity());
+                            }
 
+                        } else {
+				*//**//*arg0.getChildAt(i).setBackgroundColor(Color.argb(0, 0, 0, 0));*//**//*
+
+                        }
+                        }*//*
 
                 }
-            });
-           // appPage.setOnItemClickListener(adapter);
+            });*/
+           appPage.setOnItemClickListener(app2adapter);
             map.put(i, appPage);
 
         }
 
-       /* ViewGroup main = (ViewGroup) inflater.inflate(R.layout.fragment_invitation_home_header,
-                null);
+    //    ViewGroup main = (ViewGroup) getActivity().getLayoutInflater().inflate(R.layout.fragment_store_home_header,
+        //        null);
         // group是R.layou.main中的负责包裹小圆点的LinearLayout.
-        ViewGroup group = (ViewGroup) main.findViewById(R.id.viewGroup);*/
-        pageControl = new PageControl(getActivity(), viewGroup, PageCount);
-        //  getActivity().setContentView(main);
+       // ViewGroup group = (ViewGroup)hefindViewById(R.id.viewGroup);
+    //    pageControl = new PageControl(getActivity(), viewGroup, PageCount);
+     //   getActivity().setContentView(main);
 
     }
 
     private void initNotice() {
-
+        ll_notice.setVisibility(View.VISIBLE);
         for (int i = 0; i < listMallNotice.size(); i++) {
             listNoticeString.add(listMallNotice.get(i).getContent());
         }
@@ -536,6 +606,7 @@ public class StroeFragment extends ToolBarFragment implements View.OnClickListen
     }
 
     private void initRecommend() {
+        ll_tuijian.setVisibility(View.VISIBLE);
         if (listMallRecommend.size() > 0) {
             Arad.imageLoader.load(listMallRecommend.get(0).getImgUrl()).placeholder(R.mipmap.fuzhuang).into(iv01_store_recomend);
             iv01_store_recomend.setOnClickListener(this);
@@ -610,13 +681,15 @@ public class StroeFragment extends ToolBarFragment implements View.OnClickListen
         tv_store_home_more = (TextView) headview.findViewById(R.id.tv_store_home_more);
         iv_notice_store_home = (ImageView) headview.findViewById(R.id.iv_notice_store_home);
         framelayout = (FrameLayout) headview.findViewById(R.id.framelayout_store_home);
+        ll_notice = (LinearLayout) headview.findViewById(R.id.ll_notice);
+        ll_tuijian = (LinearLayout) headview.findViewById(R.id.ll_tuijian);
         iv01_store_recomend = (ImageView) headview.findViewById(R.id.iv01_store_recomend);
         iv02_store_recomend = (ImageView) headview.findViewById(R.id.iv02_store_recomend);
         iv03_store_recomend = (ImageView) headview.findViewById(R.id.iv03_store_recomend);
         iv04_store_recomend = (ImageView) headview.findViewById(R.id.iv04_store_recomend);
 
         myViewPager=(ViewPager)headview.findViewById(R.id.myviewpager);
-        viewGroup=(LinearLayout)headview.findViewById(R.id.viewGroup);
+        viewGroup=(ViewGroup)headview.findViewById(R.id.viewGroup);
         tv_store_home_more.setOnClickListener(this);
         gridView1 = (GridViewForScrollView) headview.findViewById(R.id.gridView1_store_home);
         lv01.addHeaderView(headview);
@@ -628,6 +701,7 @@ public class StroeFragment extends ToolBarFragment implements View.OnClickListen
   * 轮播图
   * */
     private void setLoopView() {
+        framelayout.setVisibility(View.VISIBLE);
         // 1.创建轮播的holder  fdfdf
         mAutoSwitchPicHolder = new HomeAutoSwitchPicHolder(getActivity());
         // 2.得到轮播图的视图view
@@ -715,6 +789,12 @@ public class StroeFragment extends ToolBarFragment implements View.OnClickListen
                 AnimUtil.intentSlidIn(getActivity());
                 break;
             case R.id.tv_toolbar:
+                if(Arad.preferences.getString("memberId")==null||Arad.preferences.getString("memberId").equals("")){
+                    startActivity(new Intent(getActivity(), LoginActivity.class));
+                    AnimUtil.intentSlidOut(getActivity());
+                    getActivity().finish();
+                    return;
+                }
                 Intent intent_toolbar = new Intent(getActivity(), StoreLocateActivity.class);
                 intent_toolbar.putExtra("address", tv_toolbar.getText().toString().trim());
                 intent_toolbar.putExtra("latitude1", latitude1);

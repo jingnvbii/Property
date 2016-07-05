@@ -20,6 +20,7 @@ import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import com.beanu.arad.Arad;
 import com.beanu.arad.base.ToolBarFragment;
 import com.beanu.arad.utils.AnimUtil;
 import com.beanu.arad.utils.MessageUtils;
@@ -29,6 +30,7 @@ import com.ctrl.forum.cart.datasave.GoodsBean;
 import com.ctrl.forum.cart.datasave.OperateGoodsDataBase;
 import com.ctrl.forum.cart.datasave.OperateGoodsDataBaseStatic;
 import com.ctrl.forum.entity.ProductCategroy;
+import com.ctrl.forum.ui.activity.LoginActivity;
 import com.ctrl.forum.ui.activity.store.StoreCommodityDetailActivity;
 import com.ctrl.forum.ui.activity.store.StoreOrderDetailActivity;
 import com.ctrl.forum.ui.activity.store.StoreShopListHorzitalStyleActivity;
@@ -207,6 +209,10 @@ public class StoreShopListHorzitalStyleFragment extends ToolBarFragment implemen
             if (tvNum.getText().toString().equals("0")) {
                 MessageUtils.showShortToast(getActivity(), "购物车还是空的！");
             } else {
+                if(Arad.preferences.getString("memberId")==null||Arad.preferences.getString("memberId").equals("")){
+                    startActivity(new Intent(getActivity(), LoginActivity.class));
+                    return;
+                }
                 Intent intent = new Intent(getActivity(), StoreOrderDetailActivity.class);
                 intent.putExtra("companyId", getActivity().getIntent().getStringExtra("id"));
                 startActivity(intent);
@@ -215,6 +221,10 @@ public class StoreShopListHorzitalStyleFragment extends ToolBarFragment implemen
         }
 
         if(m_list_num_popup!=null&&m_list_submit_popup.getId()==v.getId()&&popupWindow.isShowing()){
+            if(Arad.preferences.getString("memberId")==null||Arad.preferences.getString("memberId").equals("")){
+                startActivity(new Intent(getActivity(), LoginActivity.class));
+                return;
+            }
             Intent intent = new Intent(getActivity(), StoreOrderDetailActivity.class);
             intent.putExtra("companyId", getActivity().getIntent().getStringExtra("id"));
             startActivity(intent);
@@ -342,21 +352,19 @@ public class StoreShopListHorzitalStyleFragment extends ToolBarFragment implemen
             public void onItemJianClick(CartPopupWindowListViewAdapter.ViewHolder v) {
                 String nums = v.tv_popup_lv_number.getText().toString().trim();
                 //   v.tv_popup_lv_number.setText(mGoodsDataBaseInterface.saveGoodsNumber(mContext, SELECTPOSITION,listGoodsBean.get(v.getPosition()).getGoodsid(), String.valueOf(Integer.parseInt(nums) - 1), listGoodsBean.get(v.getPosition()).getGoodsprice()) + "");
-                 v.tv_popup_lv_number.setText(mGoodsDataBaseInterface.saveGoodsNumber(getActivity(), SELECTPOSITION,
-                         listGoodsBean.get(v.getPosition()).getGoodsid(), String.valueOf(Integer.parseInt(nums) - 1),
+                v.tv_popup_lv_number.setText(mGoodsDataBaseInterface.saveGoodsNumber(getActivity(), SELECTPOSITION,
+                        listGoodsBean.get(v.getPosition()).getGoodsid(), String.valueOf(Integer.parseInt(nums) - 1),
                          listGoodsBean.get(v.getPosition()).getGoodsprice(),
                          listGoodsBean.get(v.getPosition()).getGoodsname(), listGoodsBean.get(v.getPosition()).getStock()) + "");
                 nums = v.tv_popup_lv_number.getText().toString().trim();
 
                 // 减完之后  数据为0
+
                 if (nums.equals("0")) {
-                   /* setPupupAll();
-                    setAll();
-                    activity.getAdapter().reLoad();*/
-                    listGoodsBean= OperateGoodsDataBaseStatic.getSecondGoodsTypeList(activity);
+                    OperateGoodsDataBaseStatic.DeleteSecondGoodsNumber(getActivity(),SELECTPOSITION,listGoodsBean.get(v.getPosition()).getGoodsid());
+                    listGoodsBean=OperateGoodsDataBaseStatic.getSecondGoodsTypeList(getActivity());
                     mCartPopupWindowListViewAdapter.setList(listGoodsBean);
                 }
-
                 setAll();
                 setPupupAll();
 

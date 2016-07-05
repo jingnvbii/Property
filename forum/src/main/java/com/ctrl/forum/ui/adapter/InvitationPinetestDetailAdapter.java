@@ -20,6 +20,7 @@ import com.ctrl.forum.customview.RoundImageView;
 import com.ctrl.forum.entity.PostReply2;
 import com.ctrl.forum.face.FaceConversionUtil;
 import com.ctrl.forum.ui.activity.Invitation.InvitationPinterestDetailActivity;
+import com.ctrl.forum.ui.activity.LoginActivity;
 import com.ctrl.forum.ui.activity.mine.MineDetailActivity;
 import com.ctrl.forum.utils.TimeUtils;
 
@@ -84,6 +85,9 @@ public class InvitationPinetestDetailAdapter extends BaseAdapter  {
         holder.tv_comment_detail_floor.setText(mPostReply2.getMemberFloor() + " 楼");
         if(mPostReply2.getMemberLevel()!=null){
             switch (mPostReply2.getMemberLevel()){
+                case "0":
+                    holder.iv_reply_level.setImageResource(R.mipmap.vip_icon);
+                    break;
                 case "1":
                     holder.iv_reply_level.setImageResource(R.mipmap.vip_icon1);
                     break;
@@ -106,6 +110,8 @@ public class InvitationPinetestDetailAdapter extends BaseAdapter  {
                     holder.iv_reply_level.setImageResource(R.mipmap.vip_icon7);
                     break;
             }
+        }else {
+            holder.iv_reply_level.setImageResource(R.mipmap.vip_icon);
         }
         Arad.imageLoader.load(mPostReply2.getImgUrl()).placeholder(R.mipmap.baby_large).resize(50,50)
                 .centerCrop().into(holder.iv_reply_photo);
@@ -331,6 +337,11 @@ public class InvitationPinetestDetailAdapter extends BaseAdapter  {
         holder.iv_reply_photo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(Arad.preferences.getString("memberId")==null||Arad.preferences.getString("memberId").equals("")){
+                    mcontext.startActivity(new Intent(mcontext, LoginActivity.class));
+                    AnimUtil.intentSlidOut((InvitationPinterestDetailActivity)mcontext);
+                    return;
+                }
                 Intent intent = new Intent(mcontext, MineDetailActivity.class);
                 intent.putExtra("id", mPostReply2.getMemberId());
                 mcontext.startActivity(intent);

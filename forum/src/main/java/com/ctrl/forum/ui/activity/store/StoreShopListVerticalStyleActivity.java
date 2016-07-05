@@ -45,6 +45,7 @@ import com.ctrl.forum.entity.Company;
 import com.ctrl.forum.entity.FoodModel;
 import com.ctrl.forum.entity.FoodTypeModel;
 import com.ctrl.forum.entity.ProductCategroy;
+import com.ctrl.forum.ui.activity.LoginActivity;
 import com.ctrl.forum.ui.adapter.CartPopupWindowListViewAdapter;
 import com.ctrl.forum.ui.adapter.FoodAdapter;
 import com.ctrl.forum.ui.adapter.TitleAdapter;
@@ -291,9 +292,15 @@ public class StoreShopListVerticalStyleActivity extends AppToolBarActivity imple
             tv_store_information.setText(company.getNotice());
             tv_store_information.requestFocus();
             Arad.imageLoader.load(company.getImg()).placeholder(R.mipmap.default_error).into(iv_style_img);
+            if(company.getEvaluatLevel()!=null) {
+                ratingBar.setRating(Float.parseFloat(company.getEvaluatLevel()) );
+            }else {
+                ratingBar.setRating(Float.parseFloat("0"));
+            }
+
             tv_shop_name.setText(company.getName());
-            if(getIntent().getStringExtra("startTime")!=null&&getIntent().getStringExtra("endTime")!=null) {
-                tv_time.setText("营业时间 " + getIntent().getStringExtra("startTime") + "-" + getIntent().getStringExtra("endTime"));
+            if(company.getWorkStartTime()!=null&&company.getWorkEndTime()!=null) {
+                tv_time.setText("营业时间 " + company.getWorkStartTime()+ "-" + company.getWorkEndTime());
             }else {
                 tv_time.setVisibility(View.GONE);
             }
@@ -454,8 +461,8 @@ public class StoreShopListVerticalStyleActivity extends AppToolBarActivity imple
     public void onClick(View v) {
         Intent intent=null;
         switch (v.getId()){
-            case R.id.tv_horzital_style_search:
-                 intent=new Intent(this,StoreSearchCommodityActivity.class);
+            case R.id.tv_vertical_style_search:
+                intent=new Intent(this,StoreSearchCommodityActivity.class);
                 intent.putExtra("keyword", et_vertical_style_search.getText().toString().trim());
                 intent.putExtra("companyId", getIntent().getStringExtra("id"));
                 intent.addFlags(11);
@@ -463,6 +470,10 @@ public class StoreShopListVerticalStyleActivity extends AppToolBarActivity imple
                 AnimUtil.intentSlidIn(this);
                 break;
             case R.id.m_list_submit_popup:
+                if(Arad.preferences.getString("memberId")==null||Arad.preferences.getString("memberId").equals("")){
+                    startActivity(new Intent(StoreShopListVerticalStyleActivity.this, LoginActivity.class));
+                    return;
+                }
                 intent=new Intent(StoreShopListVerticalStyleActivity.this,StoreOrderDetailActivity.class);
                 intent.putExtra("companyId",getIntent().getStringExtra("id"));
                 startActivity(intent);
@@ -481,6 +492,10 @@ public class StoreShopListVerticalStyleActivity extends AppToolBarActivity imple
                 }
                 break;
             case R.id.m_list_submit_vertical_style:
+                if(Arad.preferences.getString("memberId")==null||Arad.preferences.getString("memberId").equals("")){
+                    startActivity(new Intent(StoreShopListVerticalStyleActivity.this, LoginActivity.class));
+                    return;
+                }
                 if(mListAllNum.getText().toString().equals("0")) {
                     MessageUtils.showShortToast(StoreShopListVerticalStyleActivity.this,"购物车还是空的！");
                 }else {
@@ -619,7 +634,8 @@ public class StoreShopListVerticalStyleActivity extends AppToolBarActivity imple
 
                 // 减完之后  数据为0
                 if (nums.equals("0")) {
-                    listGoodsBean= OperateGoodsDataBaseStatic.getSecondGoodsTypeList(mContext);
+                    OperateGoodsDataBaseStatic.DeleteSecondGoodsNumber(mContext,SELECTPOSITION,listGoodsBean.get(v.getPosition()).getGoodsid());
+                    listGoodsBean=OperateGoodsDataBaseStatic.getSecondGoodsTypeList(mContext);
                     mCartPopupWindowListViewAdapter.setList(listGoodsBean);
                 }
                 setPupupAll();
