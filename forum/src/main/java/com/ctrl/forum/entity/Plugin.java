@@ -41,4 +41,14 @@ public class Plugin {
     public void setRemark(String remark) {
         this.remark = remark;
     }
+
+    @Override
+    public String toString() {
+        return "Plugin{" +
+                "iconUrl='" + iconUrl + '\'' +
+                ", name='" + name + '\'' +
+                ", linkUrl='" + linkUrl + '\'' +
+                ", remark='" + remark + '\'' +
+                '}';
+    }
 }

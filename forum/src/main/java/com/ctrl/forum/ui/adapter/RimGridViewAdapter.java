@@ -8,8 +8,10 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 
+import com.beanu.arad.Arad;
 import com.ctrl.forum.R;
 import com.ctrl.forum.entity.RimServeCategorySecond;
+import com.ctrl.forum.ui.activity.LoginActivity;
 import com.ctrl.forum.ui.activity.rim.ItemRimActivity;
 
 import java.util.List;
@@ -62,16 +64,21 @@ public class RimGridViewAdapter extends BaseAdapter{
         final String title = data.get(position).getName();
         final String id = data.get(position).getId();
         holder.bt_rim.setText(data.get(position).getName());
-        if (data.get(position).getId()!=null){
-            holder.bt_rim.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(context, ItemRimActivity.class);
-                    intent.putExtra("id", id);
-                    intent.putExtra("title", title);
-                    context.startActivity(intent);
-                }
-            });
+
+        if (Arad.preferences.getString("memberId")!=null) {
+            if (data.get(position).getId() != null) {
+                holder.bt_rim.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(context, ItemRimActivity.class);
+                        intent.putExtra("id", id);
+                        intent.putExtra("title", title);
+                        context.startActivity(intent);
+                    }
+                });
+            }
+        }else{
+           context.startActivity(new Intent(context, LoginActivity.class));
         }
 
         return convertView;

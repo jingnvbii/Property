@@ -17,7 +17,6 @@ import java.util.List;
 
 import cn.jpush.android.api.JPushInterface;
 
-
 /**
  * 实例化 Arad
  * Created by Eric on 2015/9/25.

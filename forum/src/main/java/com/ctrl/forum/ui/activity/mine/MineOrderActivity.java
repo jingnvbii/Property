@@ -127,7 +127,12 @@ public class MineOrderActivity extends AppToolBarActivity implements View.OnClic
             orderDao.getMemeberOrder(Arad.preferences.getString("memberId"),PAGE_NUM+"", Constant.PAGE_SIZE+"");
         }
         if (requestCode==2){
-            MessageUtils.showShortToast(this,"签收成功");
+            MessageUtils.showShortToast(this,"收货成功");
+            if (orders!=null) {
+                orders.clear();
+            }
+            PAGE_NUM=1;
+            orderDao.getMemeberOrder(Arad.preferences.getString("memberId"), PAGE_NUM + "", Constant.PAGE_SIZE + "");
         }
     }
 

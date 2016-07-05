@@ -177,6 +177,7 @@ public class RimCollectServeActivity extends ToolBarActivity implements View.OnC
     @Override
     protected void onRestart() {
         super.onRestart();
+        initPop();
         if (rimServiceCompanies != null) {
             rimServiceCompanies.clear();
             PAGE_NUM = 1;

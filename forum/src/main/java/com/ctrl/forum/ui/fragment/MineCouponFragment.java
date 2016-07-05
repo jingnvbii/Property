@@ -123,7 +123,6 @@ public class MineCouponFragment extends ToolBarFragment {
         super.onRequestSuccess(requestCode);
         lv_content.onRefreshComplete();
         if (requestCode==1){
-            MessageUtils.showShortToast(getActivity(), "获取优惠劵成功");
             redenvelopes = cdao.getRedenvelopes();
             if (redenvelopes!=null) {
                 couponListAdapter.setMessages(redenvelopes);
@@ -135,7 +134,6 @@ public class MineCouponFragment extends ToolBarFragment {
     @Override
     public void onRequestFaild(String errorNo, String errorMessage) {
         super.onRequestFaild(errorNo, errorMessage);
-        MessageUtils.showShortToast(getActivity(), "获取失败");
         lv_content.onRefreshComplete();
     }
 

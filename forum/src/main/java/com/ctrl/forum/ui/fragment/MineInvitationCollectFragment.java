@@ -10,12 +10,12 @@ import android.widget.ListView;
 
 import com.beanu.arad.Arad;
 import com.beanu.arad.base.ToolBarFragment;
-import com.beanu.arad.utils.MessageUtils;
 import com.ctrl.forum.R;
 import com.ctrl.forum.base.Constant;
 import com.ctrl.forum.dao.CollectDao;
 import com.ctrl.forum.entity.CollectionPost;
 import com.ctrl.forum.ui.activity.Invitation.InvitationDetailFromPlatformActivity;
+import com.ctrl.forum.ui.activity.Invitation.InvitationPinterestDetailActivity;
 import com.ctrl.forum.ui.adapter.MinePostCollectListAdapter;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
@@ -84,11 +84,19 @@ public class MineInvitationCollectFragment extends ToolBarFragment{
         lv_content.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                MessageUtils.showShortToast(getActivity(),position+"");
                 if (collectionPosts.get(position-1)!=null) {
-                    Intent intent = new Intent(getActivity(), InvitationDetailFromPlatformActivity.class);
-                    intent.putExtra("id", collectionPosts.get(position-1).getPostId());
-                    startActivity(intent);
+                    if (collectionPosts.get(position-1).getSourceType()!=null){
+                        String type = collectionPosts.get(position-1).getSourceType();
+                        if (type.equals("0")){
+                            Intent intent = new Intent(getActivity(), InvitationDetailFromPlatformActivity.class);
+                            intent.putExtra("id", collectionPosts.get(position-1).getPostId());
+                            startActivity(intent);
+                        }else{
+                            Intent intent = new Intent(getActivity(), InvitationPinterestDetailActivity.class);
+                            intent.putExtra("id", collectionPosts.get(position-1).getPostId());
+                            startActivity(intent);
+                        }
+                    }
                 }
             }
         });

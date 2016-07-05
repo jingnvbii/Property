@@ -25,6 +25,8 @@ import com.ctrl.forum.utils.BitmapUtils;
 import java.util.ArrayList;
 
 public class MainActivity extends AppToolBarActivity implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
+    public static Boolean isFrist = false;
+
     private RadioButton rb1;//帖子按钮
     private RadioButton rb2;//商城按钮
     private RadioButton rb3;//小区按钮
@@ -622,5 +624,23 @@ public class MainActivity extends AppToolBarActivity implements View.OnClickList
             rb5.setCompoundDrawables(null, listDrawable2.get(4), null, null);
         }
 
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        isFrist = true;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        isFrist = false;
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        isFrist = false;
     }
 }

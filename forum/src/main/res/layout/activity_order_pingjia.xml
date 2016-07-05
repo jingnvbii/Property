@@ -34,6 +34,7 @@
             android:layout_centerVertical="true"
             android:gravity="center_vertical"
             android:id="@+id/ratingBar"
+            android:rating="5"
             android:layout_marginLeft="10dp"
             android:layout_toRightOf="@+id/textView15"
             android:layout_toEndOf="@+id/textView15" />
@@ -43,6 +44,7 @@
             android:layout_height="wrap_content"
             android:textColor="#949494"
             android:textSize="18sp"
+            android:text="非常棒"
             android:layout_centerVertical="true"
             android:id="@+id/good"
             android:layout_alignParentRight="true"
@@ -73,7 +75,6 @@
             android:textColor="@color/text_black"
             android:background="@null"
             android:textSize="16sp"
-            android:hint="评论文字表述,不少于20字"
             android:id="@+id/et_content" />
     </RelativeLayout>
 

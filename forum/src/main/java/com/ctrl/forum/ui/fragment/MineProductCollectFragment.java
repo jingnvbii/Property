@@ -2,7 +2,6 @@ package com.ctrl.forum.ui.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +10,6 @@ import android.widget.ListView;
 
 import com.beanu.arad.Arad;
 import com.beanu.arad.base.ToolBarFragment;
-import com.beanu.arad.utils.MessageUtils;
 import com.ctrl.forum.R;
 import com.ctrl.forum.base.Constant;
 import com.ctrl.forum.dao.CollectDao;
@@ -108,10 +106,8 @@ public class MineProductCollectFragment extends ToolBarFragment{
         super.onRequestSuccess(requestCode);
         lv_content.onRefreshComplete();
         if(requestCode == 0){
-            MessageUtils.showShortToast(getActivity(), "获取我收藏的商品成功!");
             productCollects = cdao.getProductCollects();
             if (productCollects!=null){
-                Log.e("productCollects================", productCollects.toString());
                 productCollectFragmentAdapter.setList(productCollects);
             }
         }

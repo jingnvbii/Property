@@ -128,7 +128,7 @@ public class MineShopManagerActivity extends ToolBarActivity implements Compound
     private void initView() {
          right_listview = (MinePinnedHeaderListView) findViewById(R.id.lv_right);
          tv_line = (TextView) findViewById(R.id.tv_line);
-        left_listView = (ListView) findViewById(R.id.lv_left);
+         left_listView = (ListView) findViewById(R.id.lv_left);
     }
 
     private void initData() {
@@ -174,24 +174,31 @@ public class MineShopManagerActivity extends ToolBarActivity implements Compound
             }
         }
         if (requestCode==3){
-            MessageUtils.showShortToast(this,"商品操作成功");
+            if (type.equals("1")){
+                MessageUtils.showShortToast(this, "商品上架成功");
+                Arad.preferences.putBoolean(storeId,true);
+            }else{
+                MessageUtils.showShortToast(this, "商品下架成功");
+                Arad.preferences.putBoolean(storeId, false);
+            }
+            Arad.preferences.flush();
         }
     }
+
+    public static String type = "";
+    public static String storeId = "";
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         Object id = buttonView.getTag();
-        String storeId = id.toString();
+        storeId = id.toString();
         if (isChecked){
-            sdao.UpdateProduct(storeId,"1");
-            MessageUtils.showShortToast(this, "商品上架");
-            Arad.preferences.putBoolean(storeId,true);
+            sdao.UpdateProduct(storeId, "1");
+            type = "1";
         }else{
-            sdao.UpdateProduct(storeId,"0");
-            MessageUtils.showShortToast(this, "商品下架");
-            Arad.preferences.putBoolean(storeId, false);
+            sdao.UpdateProduct(storeId, "0");
+            type = "0";
         }
-        Arad.preferences.flush();
     }
 
 }

@@ -7,12 +7,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.TextView;
 
+import com.beanu.arad.Arad;
 import com.beanu.arad.base.ToolBarFragment;
 import com.beanu.arad.utils.MessageUtils;
 import com.ctrl.forum.R;
 import com.ctrl.forum.dao.RimDao;
 import com.ctrl.forum.entity.RimServeCategory;
+import com.ctrl.forum.ui.activity.LoginActivity;
 import com.ctrl.forum.ui.activity.rim.RimCollectServeActivity;
 import com.ctrl.forum.ui.activity.rim.RimSearchActivity;
 import com.ctrl.forum.ui.adapter.RimGridViewAdapter;
@@ -59,6 +62,10 @@ public class  RimFragment extends ToolBarFragment implements View.OnClickListene
         rimListViewAdapter.setOnCollect(this);
         rimListViewAdapter.setOnSearch(this);
 
+        View v = new TextView(getActivity());
+        v.setBackgroundColor(getResources().getColor(R.color.main_bg));
+        lv_content.addFooterView(v);
+
         return view;
     }
 
@@ -79,15 +86,21 @@ public class  RimFragment extends ToolBarFragment implements View.OnClickListene
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.rl_collect:
-                startActivity(new Intent(getActivity(),RimCollectServeActivity.class));
+                if (Arad.preferences.getString("memberId")==null){
+                    startActivity(new Intent(getActivity(), LoginActivity.class));
+                }else {
+                    startActivity(new Intent(getActivity(), RimCollectServeActivity.class));
+                }
                 break;
             case R.id.rl_search:
-                startActivity(new Intent(getActivity(),RimSearchActivity.class));
+                if (Arad.preferences.getString("memberId")==null){
+                    startActivity(new Intent(getActivity(), LoginActivity.class));
+                }else {
+                    startActivity(new Intent(getActivity(),RimSearchActivity.class));
+                }
                 break;
         }
     }
-
-
 
     @Override
     public void onRequestSuccess(int requestCode) {

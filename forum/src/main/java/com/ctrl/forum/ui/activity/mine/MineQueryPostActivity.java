@@ -28,7 +28,7 @@ import com.ctrl.forum.customview.ShareDialog;
 import com.ctrl.forum.customview.XListView;
 import com.ctrl.forum.dao.InvitationDao;
 import com.ctrl.forum.entity.Post;
-import com.ctrl.forum.ui.activity.Invitation.InvitationDetailFromPlatformActivity;
+import com.ctrl.forum.ui.activity.Invitation.InvitationDetailActivity;
 import com.ctrl.forum.ui.adapter.PlotListViewFriendStyleAdapter;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
@@ -130,7 +130,7 @@ public class MineQueryPostActivity extends AppToolBarActivity implements View.On
         lv_content.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(MineQueryPostActivity.this, InvitationDetailFromPlatformActivity.class);
+                Intent intent = new Intent(MineQueryPostActivity.this, InvitationDetailActivity.class);
                 intent.putExtra("id", posts.get(position - 1).getId());
                 startActivity(intent);
             }

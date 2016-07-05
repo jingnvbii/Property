@@ -8,6 +8,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -22,6 +23,7 @@ import com.ctrl.forum.dao.PlotDao;
 import com.ctrl.forum.dao.RimDao;
 import com.ctrl.forum.entity.Category2;
 import com.ctrl.forum.entity.RimServiceCompany;
+import com.ctrl.forum.ui.activity.rim.RimMapDetailActivity;
 import com.ctrl.forum.ui.adapter.PlotRimServeAdapter;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
@@ -82,7 +84,7 @@ public class PlotRimServeActivity extends AppToolBarActivity implements View.OnC
                     PAGE_NUM += 1;
                     plotDao.getAroundServiceCompanyList(PAGE_NUM + "", Constant.PAGE_SIZE + "",
                             Arad.preferences.getString("memberId"), CompantyCategyId,
-                            Arad.preferences.getString("latitude"), Arad.preferences.getString("longitude"));
+                            Arad.preferences.getString("latitude"), Arad.preferences.getString("lontitude"));
                 } else {
                     lv_content.onRefreshComplete();
                 }
@@ -91,6 +93,22 @@ public class PlotRimServeActivity extends AppToolBarActivity implements View.OnC
 
         initData();
         initPop();
+
+        lv_content.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String rimServiceCompaniesId = rimServiceCompanies.get(position - 1).getId();
+                Intent intent = new Intent(getApplicationContext(), RimMapDetailActivity.class);
+                intent.putExtra("rimServiceCompaniesId", rimServiceCompaniesId);
+                intent.putExtra("name", rimServiceCompanies.get(position - 1).getName());
+                intent.putExtra("address", rimServiceCompanies.get(position - 1).getAddress());
+                intent.putExtra("telephone", rimServiceCompanies.get(position - 1).getTelephone());
+                intent.putExtra("callTimes", rimServiceCompanies.get(position - 1).getCallTimes());
+                intent.putExtra("latitude", rimServiceCompanies.get(position - 1).getLatitude().toString());
+                intent.putExtra("longitude", rimServiceCompanies.get(position - 1).getLongitude().toString());
+                startActivity(intent);
+            }
+        });
 
     }
 
@@ -112,7 +130,7 @@ public class PlotRimServeActivity extends AppToolBarActivity implements View.OnC
         CompantyCategyId = category2s.get(0).getId();
         plotDao.getAroundServiceCompanyList(PAGE_NUM + "", Constant.PAGE_SIZE + "",
                 Arad.preferences.getString("memberId"), CompantyCategyId,
-                Arad.preferences.getString("latitude"), Arad.preferences.getString("longitude"));
+                Arad.preferences.getString("latitude"), Arad.preferences.getString("lontitude"));
     }
 
     private void initData() {
@@ -174,7 +192,7 @@ public class PlotRimServeActivity extends AppToolBarActivity implements View.OnC
         if (requestCode==9){
             plotDao.getAroundServiceCompanyList(PAGE_NUM + "", Constant.PAGE_SIZE + "",
                     Arad.preferences.getString("memberId"), CompantyCategyId,
-                    Arad.preferences.getString("latitude"), Arad.preferences.getString("longitude"));
+                    Arad.preferences.getString("latitude"), Arad.preferences.getString("lontitude"));
             if (rimServiceCompanies!=null){
                 rimServiceCompanies.clear();
             }
@@ -223,7 +241,7 @@ public class PlotRimServeActivity extends AppToolBarActivity implements View.OnC
                 PAGE_NUM=1;
                 plotDao.getAroundServiceCompanyList(PAGE_NUM + "", Constant.PAGE_SIZE + "",
                         Arad.preferences.getString("memberId"), CompantyCategyId,
-                        Arad.preferences.getString("latitude"), Arad.preferences.getString("longitude"));
+                        Arad.preferences.getString("latitude"), Arad.preferences.getString("lontitude"));
                 ((TextView) v).setTextColor(getResources().getColor(R.color.red_bg));
                 break;
         }

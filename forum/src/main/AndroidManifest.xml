@@ -48,9 +48,36 @@
     <uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
 
+    <!--百度导航权限开始-->
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
+    <uses-permission android:name="android.permission.BAIDU_LOCATION_SERVICE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCES_MOCK_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="com.android.launcher.permission.READ_SETTINGS" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_GPS" />
+    <!-- SDK1.5需要android.permission.GET_TASKS权限判断本程序是否为当前运行的应用? -->
+    <uses-permission android:name="android.permission.GET_TASKS" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.BROADCAST_STICKY" />
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+    <!-- 来电消音 -->
+    <uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <!-- 摄影机 -->
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <!--百度导航权限结束-->
+
+
     <!-- JPush权限开始 -->
-
-
     <!-- Required 自定义用来收发消息的相关权限 -->
     <permission
         android:name="${applicationId}.permission.JPUSH_MESSAGE"
@@ -72,13 +99,13 @@
 
     <!-- JPush权限结束 -->
 
-
-    <supports-screens android:resizeable="true"
-    android:smallScreens="true"
-    android:normalScreens="true"
-    android:largeScreens="true"
-    android:xlargeScreens="true"
-    android:anyDensity="true" />
+    <supports-screens
+        android:anyDensity="true"
+        android:largeScreens="true"
+        android:normalScreens="true"
+        android:resizeable="true"
+        android:smallScreens="true"
+        android:xlargeScreens="true" />
 
     <application
         android:name=".base.MyApplication"
@@ -182,24 +209,24 @@
             android:value="developer-default" />
         <meta-data
             android:name="JPUSH_APPKEY"
-            android:value="d03bc09bfe8296920ba3e528" /> <!-- </>值来自开发者平台取得的AppKey -->
+            android:value="9fd538694f3a9a23519b00c8" /> <!-- </>值来自开发者平台取得的AppKey -->
 
         <!--
             APP_KEY：d03bc09bfe8296920ba3e528
             MASTER_SECRET：b9f031fcb6ae29bad6d91f30
         -->
-
-        <!--
-            APP_KEY：9fd538694f3a9a23519b00c8 自己的
-        -->
+<!--             APP_KEY：9fd538694f3a9a23519b00c8 自己的 -->
 
         <!-- JPush结束 -->
 
-
         <!-- 百度地图KEY -->
+       <!-- <meta-data
+            android:name="com.baidu.lbsapi.API_KEY"
+            android:value="cLdsvjVtjj2dO8fNZXPS2VKGkot67wTK" />-->
+
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
-            android:value="cLdsvjVtjj2dO8fNZXPS2VKGkot67wTK" />
+            android:value="vrBNeC3LO4Ke7S5W581c0zbWXkdAZDqn" />
 
         <service
             android:name="com.baidu.location.f"
@@ -331,7 +358,6 @@
         <activity android:name=".ui.activity.plot.PlotSearchResultActivity" />
         <activity android:name=".ui.activity.WebViewActivity" />
 
-
         <!-- 支付宝支付  配置 -->
         <activity
             android:name="com.alipay.sdk.app.H5PayActivity"
@@ -401,10 +427,6 @@
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <activity
-            android:name=".ui.activity.rim.NaviActivity"
-            android:label="@string/title_activity_navi" >
-        </activity>
-        <activity
             android:name=".ui.activity.mine.MerchantOrderDetailActivity"
             android:label="@string/title_activity_merchant_order_detail" >
         </activity>
@@ -416,7 +438,11 @@
             android:name=".ui.activity.mine.MineIntegralStoreDetailActivity"
             android:label="@string/title_activity_integral_store_detail" >
         </activity>
-        <activity android:name=".customview.ClipActivity"/>
+        <activity android:name=".customview.ClipActivity" />
+        <activity
+            android:name=".ui.activity.rim.BNDemoGuideActivity"
+            android:label="@string/title_activity_dao_hang" >
+        </activity>
     </application>
 
 </manifest>

@@ -1,7 +1,6 @@
 package com.ctrl.forum.ui.adapter;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +11,7 @@ import android.widget.TextView;
 import com.beanu.arad.Arad;
 import com.ctrl.forum.R;
 import com.ctrl.forum.entity.Message;
-import com.ctrl.forum.utils.DateUtil;
+import com.ctrl.forum.utils.TimeUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,12 +30,10 @@ public class MineMessageListAdapter extends BaseAdapter{
     public MineMessageListAdapter(Context context) {
         this.context = context;
         this.messages = new ArrayList<>();
-        Log.e("MineMessageListAdapter","123456789");
     }
 
     public void setMessages(List<Message> messages) {
         this.messages.addAll(messages);
-        Log.e("setMessages", "123456789");
         notifyDataSetChanged();
     }
 
@@ -63,7 +60,9 @@ public class MineMessageListAdapter extends BaseAdapter{
        if (messages!=null && messages.get(position)!=null){
            Arad.imageLoader.load(messages.get(position).getImgUrl()).placeholder(context.getResources().getDrawable(R.mipmap.iconfont_head)).into(holder.iv_icon);
            holder.tv_content.setText(messages.get(position).getContent());
-           holder.tv_data.setText(DateUtil.getCurrentDate("yyyy-MM-dd"));
+
+           holder.tv_data.setText(TimeUtils.dateTime(messages.get(position).getCreateTime()));
+
            String state = messages.get(position).getReporterId();
            if (state.equals("admin")){
                holder.tv_name.setText("系统通知");

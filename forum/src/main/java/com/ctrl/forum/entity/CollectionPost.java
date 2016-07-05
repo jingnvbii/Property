@@ -10,6 +10,15 @@ public class CollectionPost {
     private String postCreateTime; //帖子创建时间
     private String postImgUrl; //帖子用户头像
     private String reportName; //发帖人昵称（没用用手机号）
+    private String sourceType;
+
+    public String getSourceType() {
+        return sourceType;
+    }
+
+    public void setSourceType(String sourceType) {
+        this.sourceType = sourceType;
+    }
 
     public String getPostCreateTime() {
         return postCreateTime;

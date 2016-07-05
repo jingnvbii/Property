@@ -216,7 +216,39 @@ public class InvitationDetailActivity extends AppToolBarActivity implements View
             if(listPostImage!=null)
             mFriendDetailImageAdapter.setList(listPostImage);
 
-            Arad.imageLoader.load(user.getImgUrl()).placeholder(R.mipmap.default_error).into(title_image);
+            if (user!=null) {
+                Log.e("user==============", user.toString());
+                if (user.getImgUrl() != null && !user.getImgUrl().equals("")) {
+                    Arad.imageLoader.load(user.getImgUrl()).placeholder(R.mipmap.default_error).into(title_image);
+                }
+                String levlel = idao.getUser().getMemberLevel();
+                if (levlel != null) {
+                    switch (levlel) {
+                        case "1":
+                            iv_detail_levlel.setImageResource(R.mipmap.vip_icon1);
+                            break;
+                        case "2":
+                            iv_detail_levlel.setImageResource(R.mipmap.vip_icon2);
+                            break;
+                        case "3":
+                            iv_detail_levlel.setImageResource(R.mipmap.vip_icon3);
+                            break;
+                        case "4":
+                            iv_detail_levlel.setImageResource(R.mipmap.vip_icon4);
+                            break;
+                        case "5":
+                            iv_detail_levlel.setImageResource(R.mipmap.vip_icon5);
+                            break;
+                        case "6":
+                            iv_detail_levlel.setImageResource(R.mipmap.vip_icon6);
+                            break;
+                        case "7":
+                            iv_detail_levlel.setImageResource(R.mipmap.vip_icon7);
+                            break;
+                    }
+                }
+            }
+
             tv_name.setText(post.getContactName());
 
             if(post.getZambiastate().equals("0")){
@@ -231,34 +263,9 @@ public class InvitationDetailActivity extends AppToolBarActivity implements View
             tv_detail_content.setText(post.getContent());
             tv_detail_tel.setText(post.getContactPhone());
             pariseNum=post.getPraiseNum();
-            tv_friend_style_zan_num.setText(pariseNum+"");
-            String levlel = idao.getUser().getMemberLevel();
-            if (levlel != null) {
-                switch (levlel) {
-                    case "1":
-                        iv_detail_levlel.setImageResource(R.mipmap.vip_icon1);
-                        break;
-                    case "2":
-                        iv_detail_levlel.setImageResource(R.mipmap.vip_icon2);
-                        break;
-                    case "3":
-                        iv_detail_levlel.setImageResource(R.mipmap.vip_icon3);
-                        break;
-                    case "4":
-                        iv_detail_levlel.setImageResource(R.mipmap.vip_icon4);
-                        break;
-                    case "5":
-                        iv_detail_levlel.setImageResource(R.mipmap.vip_icon5);
-                        break;
-                    case "6":
-                        iv_detail_levlel.setImageResource(R.mipmap.vip_icon6);
-                        break;
-                    case "7":
-                        iv_detail_levlel.setImageResource(R.mipmap.vip_icon7);
-                        break;
-                }
+            if (!(post.getPraiseNum()+"").equals("")) {
+                tv_friend_style_zan_num.setText(pariseNum + "");
             }
-
         }
     }
 

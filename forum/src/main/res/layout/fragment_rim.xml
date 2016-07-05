@@ -42,7 +42,6 @@
         android:id="@+id/lv_content"
         android:scrollbars="none"
         android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="30dp"
         />
 
 </RelativeLayout>

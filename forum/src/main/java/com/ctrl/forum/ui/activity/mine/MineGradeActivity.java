@@ -9,7 +9,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.beanu.arad.Arad;
-import com.beanu.arad.utils.MessageUtils;
 import com.ctrl.forum.R;
 import com.ctrl.forum.base.AppToolBarActivity;
 import com.ctrl.forum.base.SetMemberLevel;
@@ -126,7 +125,6 @@ public class MineGradeActivity extends AppToolBarActivity implements View.OnClic
     public void onRequestSuccess(int requestCode) {
         super.onRequestSuccess(requestCode);
         if (requestCode==1){
-            MessageUtils.showShortToast(this,"获取等级信息成功!");
             levelInfo = mdao.getLevelInfos();
             if (levelInfo!=null){
                 int nexeLevel  = levelInfo.getCurrentExp()+levelInfo.getNextLevelExp();

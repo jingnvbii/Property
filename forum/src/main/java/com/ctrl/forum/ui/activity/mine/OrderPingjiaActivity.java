@@ -33,7 +33,8 @@ public class OrderPingjiaActivity extends AppToolBarActivity {
     TextView tv_pingjia;
 
     private String id,companyId,content;
-    private Float level;
+    //private Float level;
+    private int level;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,12 +50,13 @@ public class OrderPingjiaActivity extends AppToolBarActivity {
         companyId = getIntent().getStringExtra("companyId");
 
         odao = new OrderDao(this);
+        level =(int)ratingBar.getRating();
 
         ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
             @Override
             public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
                 good.setText(SetMemberLevel.setLeveText(rating));
-                level = rating*2;
+                level = (int)rating;
             }
         });
 
@@ -62,14 +64,9 @@ public class OrderPingjiaActivity extends AppToolBarActivity {
             @Override
             public void onClick(View v) {
                 content = et_content.getText().toString();
-                if (content.length()> 19){
-                    odao.requestEvalutionOrder(Arad.preferences.getString("memberId"),id,level+"",content,companyId);
-                }else{
-                    MessageUtils.showShortToast(getApplicationContext(),"输入的内容不能少于20字!");
-                }
+                odao.requestEvalutionOrder(Arad.preferences.getString("memberId"), id, level+"", content, companyId);
             }
         });
-
     }
 
     @Override
@@ -77,6 +74,7 @@ public class OrderPingjiaActivity extends AppToolBarActivity {
         super.onRequestSuccess(requestCode);
         if (requestCode==7){
             MessageUtils.showShortToast(this,"评价成功");
+            this.finish();
         }
     }
 

@@ -9,8 +9,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.beanu.arad.Arad;
 import com.ctrl.forum.R;
 import com.ctrl.forum.base.AppToolBarActivity;
+import com.ctrl.forum.dao.ReplyCommentDao;
 import com.ctrl.forum.ui.fragment.MineCommentFragment;
 import com.ctrl.forum.ui.fragment.MineMessageFragment;
 
@@ -35,12 +37,16 @@ public class MineMessageActivity extends AppToolBarActivity implements View.OnCl
     private MineMessageFragment messageFragment; //全部
     private MineCommentFragment commentFragment; //我的评论
     private List<Fragment> fragments;
+    private ReplyCommentDao rdao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mine_notification);
         ButterKnife.inject(this);
+        rdao = new ReplyCommentDao(this);
+        rdao.modifyReadState(Arad.preferences.getString("memberId"));
+
         initData();
         initCtrl();
         fl_content.setAdapter(fragmentPagerAdapter);

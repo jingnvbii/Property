@@ -101,6 +101,17 @@ public class MyBroadcastReceiver extends BroadcastReceiver{
 
         // 设置在通知栏中点击后Notification自动消失
         notification.flags = Notification.FLAG_AUTO_CANCEL;
+        /**
+         * 1：用户下单支付成功<通知商家>：跳转到
+         * 2：商家发货<通知买家>
+         * 3：买家领取优惠券<通知买家>
+         * 4：商家赠送现金券给买家<通知买家>
+         * 5：会员发布帖子<通知会员>
+         * 6：已发布帖子需要审核<通知会员>
+         * 7：帖子被赞<通知发帖人>
+         * 8：帖子收到评论
+         * 9：帖子评论收到回复
+         */
         //设置点击后转跳的新activity
         Intent intent = new Intent(context, MineSettingActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP| Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -113,8 +124,8 @@ public class MyBroadcastReceiver extends BroadcastReceiver{
         //设置通知栏中显示的内容
         PendingIntent contentIntent = PendingIntent.getActivity(context,
                 R.string.app_name, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        notification.setLatestEventInfo(context, "Android专业开发群",
-                "QQ群号 164257885", contentIntent);
+        notification.setLatestEventInfo(context, title,
+                content, contentIntent);
     }
 
 }

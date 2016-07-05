@@ -81,7 +81,7 @@ public class MineShopManagerAdapter extends SectionedBaseAdapter {
         if (convertView==null){
             convertView= LayoutInflater.from(mContext).inflate(R.layout.item_mine_list_right,parent,false);
             holder = new ViewHolder(convertView);
-            holder.iv_checkBox.setOnCheckedChangeListener(onCheckBox);
+
             convertView.setTag(holder);
         }else{
             holder=(ViewHolder)convertView.getTag();
@@ -97,19 +97,22 @@ public class MineShopManagerAdapter extends SectionedBaseAdapter {
                 holder.tv_dan_price.setText(cProducts.get(position).getSellingPrice()+"元/份");
                 holder.tv_sale_num.setText(cProducts.get(position).getSalesVolume());
             }
-            String storeId = cProducts.get(position).getId();//商品的id
-            holder.iv_checkBox.setTag(storeId);
 
-            boolean isCheck = false;
+            storeId = cProducts.get(position).getId();//商品的id
             if (Arad.preferences.getBoolean(storeId)){
                 holder.iv_checkBox.setChecked(true);
             }else{
                 holder.iv_checkBox.setChecked(false);
             }
-
         }
+
+        holder.iv_checkBox.setOnCheckedChangeListener(onCheckBox);
+        holder.iv_checkBox.setTag(storeId);
+
         return convertView;
     }
+
+    public static String storeId = "";
 
     @Override
     public View getSectionHeaderView(int section, View convertView, ViewGroup parent) {

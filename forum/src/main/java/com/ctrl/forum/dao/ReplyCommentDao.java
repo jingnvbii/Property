@@ -108,12 +108,12 @@ public class ReplyCommentDao extends IDao{
 
     /**
      * 更改消息通知为已读
-     * @param id  消息的主键id
+     * @param receiverId  会员id
      */
-    public void modifyReadState(String id){
+    public void modifyReadState(String receiverId){
         String url="message/modifyReadState";
         Map<String,String> map = new HashMap<>();
-        map.put("id",id);
+        map.put("receiverId",receiverId);
         postRequest(Constant.RAW_URL + url, mapToRP(map), 5);
     }
 
