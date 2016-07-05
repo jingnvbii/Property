@@ -48,6 +48,7 @@ import com.baidu.mapapi.map.MarkerOptions;
 import com.baidu.mapapi.map.OverlayOptions;
 import com.baidu.mapapi.model.LatLng;
 import com.beanu.arad.Arad;
+import com.beanu.arad.utils.AndroidUtil;
 import com.beanu.arad.utils.AnimUtil;
 import com.beanu.arad.utils.MessageUtils;
 import com.ctrl.forum.R;
@@ -66,6 +67,7 @@ import com.ctrl.forum.entity.Post2;
 import com.ctrl.forum.entity.PostReply2;
 import com.ctrl.forum.face.FaceRelativeLayout;
 import com.ctrl.forum.manager.MediaManager;
+import com.ctrl.forum.ui.activity.LoginActivity;
 import com.ctrl.forum.ui.activity.mine.MineDetailActivity;
 import com.ctrl.forum.ui.adapter.InvitationDetailFromPlatAdapter;
 import com.ctrl.forum.ui.adapter.InvitationListViewAdapter;
@@ -217,6 +219,8 @@ public class InvitationDetailFromPlatformActivity extends AppToolBarActivity imp
     private String longitude;
     private String latutude;
     private int count;
+    private TextView tv_link_tel;
+    private TextView tv_link_url;
 
 
     @Override
@@ -267,6 +271,8 @@ public class InvitationDetailFromPlatformActivity extends AppToolBarActivity imp
         webview = (WebView) headview.findViewById(R.id.webView);//内容
         tv_tel = (TextView) headview.findViewById(R.id.tv_tel);//电话
         ll_tel = (LinearLayout) headview.findViewById(R.id.ll_tel);//拨打电话
+        tv_link_tel = (TextView) headview.findViewById(R.id.tv_link_tel);//电话连接
+        tv_link_url = (TextView) headview.findViewById(R.id.tv_link_url);//网址链接
 
         btn_yuyin.setAudioFinishRecorderListener(new AudioRecordButton.AudioFinishRecorderListener() {
             @Override
@@ -304,6 +310,9 @@ public class InvitationDetailFromPlatformActivity extends AppToolBarActivity imp
         iv_input_add.setOnClickListener(this);
         btn_send.setOnClickListener(this);
         title_image.setOnClickListener(this);
+        ll_tel.setOnClickListener(this);
+        tv_link_tel.setOnClickListener(this);
+        tv_link_url.setOnClickListener(this);
 
 
         mInvitationListViewAdapter = new InvitationListViewAdapter(this);
@@ -469,10 +478,34 @@ public class InvitationDetailFromPlatformActivity extends AppToolBarActivity imp
           //  MessageUtils.showShortToast(this, "获取帖子详情成功ghfgh");
             post = idao.getPost2();
             user = idao.getUser();
-            tv_name.setText(post.getContactName());
+            if(user!=null) {
+                if (user.getNickName() == null) {
+                    tv_name.setText(user.getUserName());
+                } else {
+                    tv_name.setText(user.getNickName());
+                }
+            }
             tv_address.setText(post.getContactAddress());
-            tv_tel.setText(post.getContactPhone());
             tv_introduction.setText(post.getTitle());
+
+            if(post.getContactPhone().equals("")||post.getContactPhone()==null){
+                ll_tel.setVisibility(View.GONE);
+                tv_link_tel.setVisibility(View.GONE);
+            }else {
+                ll_tel.setVisibility(View.VISIBLE);
+                tv_link_tel.setVisibility(View.VISIBLE);
+                tv_tel.setText(post.getContactPhone());
+
+            }
+
+            if(post.getLinkUrl()==null||post.getLinkUrl().equals("")){
+                tv_link_url.setVisibility(View.GONE);
+            }else {
+                tv_link_url.setVisibility(View.VISIBLE);
+            }
+
+
+
             if (user != null) {
                 Arad.imageLoader.load(user.getImgUrl()).placeholder(R.mipmap.round_img).into(title_image);
                 String levlel = idao.getUser().getMemberLevel();
@@ -500,8 +533,10 @@ public class InvitationDetailFromPlatformActivity extends AppToolBarActivity imp
                             iv_levlel.setImageResource(R.mipmap.vip_icon7);
                             break;
                     }
+                }else {
+                    iv_levlel.setImageResource(R.mipmap.vip_icon);
                 }
-            }
+                }
 
             if(post.getZambiastate().equals("0")){
                 iv_zan.setImageResource(R.mipmap.zan_blue);
@@ -607,13 +642,41 @@ public class InvitationDetailFromPlatformActivity extends AppToolBarActivity imp
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.tv_link_tel:
+                if(!tv_tel.getText().toString().equals("")){
+                    AndroidUtil.dial(InvitationDetailFromPlatformActivity.this,tv_tel.getText().toString().trim());
+                }
+                break;
+            case R.id.tv_link_url:
+                if(post.getLinkUrl()!=null||!post.getLinkUrl().equals("")) {
+                    Uri uri = Uri.parse(post.getLinkUrl());
+                   Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                    startActivity(intent);
+                    AnimUtil.intentSlidIn(this);
+                }
+                break;
+            case R.id.ll_tel:
+                if(!tv_tel.getText().toString().equals("")){
+                    AndroidUtil.dial(InvitationDetailFromPlatformActivity.this,tv_tel.getText().toString().trim());
+                }
+                break;
             case R.id.title_image:
+                if(Arad.preferences.getString("memberId")==null||Arad.preferences.getString("memberId").equals("")){
+                   startActivity(new Intent(InvitationDetailFromPlatformActivity.this, LoginActivity.class));
+                    AnimUtil.intentSlidOut(InvitationDetailFromPlatformActivity.this);
+                    return;
+                }
                 Intent intent = new Intent(this, MineDetailActivity.class);
                 intent.putExtra("id", user.getId());
                 startActivity(intent);
                 AnimUtil.intentSlidIn(this);
                 break;
             case R.id.tv_zhikanlouzhu://收藏
+                if(Arad.preferences.getString("memberId")==null||Arad.preferences.getString("memberId").equals("")){
+                    startActivity(new Intent(InvitationDetailFromPlatformActivity.this, LoginActivity.class));
+                    AnimUtil.intentSlidOut(InvitationDetailFromPlatformActivity.this);
+                    return;
+                }
                 idao.requestCollectPost(Arad.preferences.getString("memberId"),getIntent().getStringExtra("id"),"1");
                 break;
             case R.id.tv_daoxu://倒叙查看
@@ -623,16 +686,36 @@ public class InvitationDetailFromPlatformActivity extends AppToolBarActivity imp
                 idao.requesPostReplyList(getIntent().getStringExtra("id"), "0", String.valueOf(PAGE_NUM), String.valueOf(Constant.PAGE_SIZE));
                 break;
             case R.id.tv_pinbizuozhe://屏蔽作者
+                if(Arad.preferences.getString("memberId")==null||Arad.preferences.getString("memberId").equals("")){
+                    startActivity(new Intent(InvitationDetailFromPlatformActivity.this, LoginActivity.class));
+                    AnimUtil.intentSlidOut(InvitationDetailFromPlatformActivity.this);
+                    return;
+                }
                 idao.requeMemberBlackListAdd(Arad.preferences.getString("memberId"), user.getId());
                 break;
             case R.id.tv_jubao://举报
+                if(Arad.preferences.getString("memberId")==null||Arad.preferences.getString("memberId").equals("")){
+                    startActivity(new Intent(InvitationDetailFromPlatformActivity.this, LoginActivity.class));
+                    AnimUtil.intentSlidOut(InvitationDetailFromPlatformActivity.this);
+                    return;
+                }
                 idao.requePostReport(post.getId(), "", user.getId(), Arad.preferences.getString("memberId"));
                 break;
 
             case R.id.tv_delete:
+                if(Arad.preferences.getString("memberId")==null||Arad.preferences.getString("memberId").equals("")){
+                    startActivity(new Intent(InvitationDetailFromPlatformActivity.this, LoginActivity.class));
+                    AnimUtil.intentSlidOut(InvitationDetailFromPlatformActivity.this);
+                    return;
+                }
                 idao.requesDeltePost(getIntent().getStringExtra("id"));
                 break;
             case R.id.iv_share:
+                if(Arad.preferences.getString("memberId")==null||Arad.preferences.getString("memberId").equals("")){
+                    startActivity(new Intent(InvitationDetailFromPlatformActivity.this, LoginActivity.class));
+                    AnimUtil.intentSlidOut(InvitationDetailFromPlatformActivity.this);
+                    return;
+                }
              //   showSharePopuwindow(iv_share);
                 shareDialog = new ShareDialog(this);
                 shareDialog.setCancelButtonOnClickListener(new View.OnClickListener() {
@@ -759,6 +842,11 @@ public class InvitationDetailFromPlatformActivity extends AppToolBarActivity imp
                 });
                 break;
             case R.id.iv_zan:
+                if(Arad.preferences.getString("memberId")==null||Arad.preferences.getString("memberId").equals("")){
+                    startActivity(new Intent(InvitationDetailFromPlatformActivity.this, LoginActivity.class));
+                    AnimUtil.intentSlidOut(InvitationDetailFromPlatformActivity.this);
+                    return;
+                }
                 if (count % 2 == 0) {//奇数次点击
                     if (post.getZambiastate().equals("0")) {
                         idao.requesZambia("add", post.getId(), Arad.preferences.getString("memberId"), "", "");
@@ -781,6 +869,11 @@ public class InvitationDetailFromPlatformActivity extends AppToolBarActivity imp
                 reply();
                 break;
             case R.id.tv_pinglun:
+                if(Arad.preferences.getString("memberId")==null||Arad.preferences.getString("memberId").equals("")){
+                    startActivity(new Intent(InvitationDetailFromPlatformActivity.this, LoginActivity.class));
+                    AnimUtil.intentSlidOut(InvitationDetailFromPlatformActivity.this);
+                    return;
+                }
                 isFromPinglun=false;
                 if(Arad.preferences.getString("isShielded").equals("1")){
                     MessageUtils.showShortToast(InvitationDetailFromPlatformActivity.this,"您已经被屏蔽，不能发评论");

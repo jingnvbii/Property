@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.widget.ImageView;
 
-import com.baidu.mapapi.SDKInitializer;
 import com.beanu.arad.utils.AnimUtil;
 import com.ctrl.forum.R;
 import com.ctrl.forum.base.AppToolBarActivity;
@@ -55,9 +54,9 @@ public class StartActivity extends AppToolBarActivity {
     class splashhandler implements Runnable{
 
         public void run() {
-            SDKInitializer.initialize(getApplicationContext());
+          /*  SDKInitializer.initialize(getApplicationContext());
             JPushInterface.setDebugMode(true);
-            JPushInterface.init(getApplicationContext());
+            JPushInterface.init(getApplicationContext());*/
           /*  Intent intent = new Intent(StartActivity.this, LoginActivity.class);
             startActivity(intent);11
             AnimUtil.intentSlidIn(StartActivity.this);

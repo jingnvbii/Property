@@ -31,7 +31,6 @@ public class AddContactPhoneActivity extends AppToolBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_contact_phone);
         ButterKnife.inject(this);
-
         initView();
 
         // 隐藏输入法

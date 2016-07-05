@@ -26,6 +26,7 @@ import com.ctrl.forum.entity.Company;
 import com.ctrl.forum.entity.CompanyUnion;
 import com.ctrl.forum.entity.Qualification2;
 import com.ctrl.forum.entity.ShopReply;
+import com.ctrl.forum.ui.activity.LoginActivity;
 import com.ctrl.forum.ui.adapter.StoreLianMengGridViewAdapter;
 import com.ctrl.forum.ui.adapter.StoreShopDetailPingLunListViewAdapter;
 import com.ctrl.forum.ui.adapter.StoreXianjinQuanListViewAdapter;
@@ -289,12 +290,16 @@ public class StoreShopDetailActivity extends AppToolBarActivity implements View.
         mRightButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(Arad.preferences.getString("memberId")==null||Arad.preferences.getString("memberId").equals("")){
+                    startActivity(new Intent(StoreShopDetailActivity.this, LoginActivity.class));
+                    return;
+                }
                 CollectDao cdao = new CollectDao(StoreShopDetailActivity.this);
                 if (count % 2 == 0) {//奇数次点击
                     if (company.getCollectState().equals("0")) {
                         cdao.requestMemberCollect(Arad.preferences.getString("memberId"),
                                 "1",
-                                "",
+                                company.getId(),
                                 company.getId(),
                                 "0"
                         );
@@ -304,7 +309,7 @@ public class StoreShopDetailActivity extends AppToolBarActivity implements View.
                     if (company.getCollectState().equals("1")) {
                         cdao.requestMemberCollect(Arad.preferences.getString("memberId"),
                                 "1",
-                                "",
+                                company.getId(),
                                 company.getId(),
                                 "1"
                         );
@@ -315,7 +320,7 @@ public class StoreShopDetailActivity extends AppToolBarActivity implements View.
                     if (company.getCollectState().equals("0")) {
                         cdao.requestMemberCollect(Arad.preferences.getString("memberId"),
                                 "1",
-                                "",
+                                company.getId(),
                                 company.getId(),
                                 "1"
                         );
@@ -325,15 +330,13 @@ public class StoreShopDetailActivity extends AppToolBarActivity implements View.
                     if (company.getCollectState().equals("1")) {
                         cdao.requestMemberCollect(Arad.preferences.getString("memberId"),
                                 "1",
-                                "",
+                                company.getId(),
                                 company.getId(),
                                 "0"
                         );
                     }
 
                 }
-
-
 
             }
         });

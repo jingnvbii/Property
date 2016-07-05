@@ -227,7 +227,7 @@
     <com.ctrl.forum.customview.ListViewForScrollView
         android:focusable="false"
         android:id="@+id/lv_friend_style_reply"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content">
     </com.ctrl.forum.customview.ListViewForScrollView>
 

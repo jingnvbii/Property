@@ -29,6 +29,7 @@ import com.ctrl.forum.entity.Post;
 import com.ctrl.forum.entity.PostImage;
 import com.ctrl.forum.ui.activity.Invitation.InvitationCommentDetaioActivity;
 import com.ctrl.forum.ui.activity.Invitation.InvitationPullDownActivity;
+import com.ctrl.forum.ui.activity.LoginActivity;
 import com.ctrl.forum.utils.SysUtils;
 import com.ctrl.forum.utils.TimeUtils;
 
@@ -120,12 +121,16 @@ public class InvitationListViewFriendStyleAdapter extends BaseAdapter {
         final Post post = mPostList.get(position);
         holder.tv_friend_style_content.setText(post.getTitle());
         holder.tv_friend_style_name.setText(post.getMemberName());
-        holder.tv_friend_style_time.setText(TimeUtils.date(Long.parseLong(post.getPublishTime()))+"   "+post.getLocationName());
+      //  holder.tv_friend_style_time.setText(TimeUtils.date(Long.parseLong(post.getPublishTime()))+"   "+post.getLocationName());
+        holder.tv_friend_style_time.setText(TimeUtils.dates(Long.parseLong(post.getPublishTime()))+"   "+post.getLocationName());
         holder.tv_friend_style_zan_num.setText(post.getPraiseNum()+"");
         holder.tv_friend_style_pinglun_num.setText(post.getCommentNum()+"");
         holder.tv_friend_style_share_num.setText(post.getShareNum() + "");
         if(post.getMemberLevel()!=null){
             switch (post.getMemberLevel()){
+                case "0":
+                    holder.iv_friend_style_levlel.setImageResource(R.mipmap.vip_icon);
+                    break;
                 case "1":
                     holder.iv_friend_style_levlel.setImageResource(R.mipmap.vip_icon1);
                     break;
@@ -148,9 +153,26 @@ public class InvitationListViewFriendStyleAdapter extends BaseAdapter {
                     holder.iv_friend_style_levlel.setImageResource(R.mipmap.vip_icon7);
                     break;
             }
+        }else {
+            holder.iv_friend_style_levlel.setImageResource(R.mipmap.vip_icon);
         }
-        Arad.imageLoader.load(post.getImgUrl()).placeholder(R.mipmap.default_error).into(holder.iv_friend_style_title_photo);
+        Arad.imageLoader.load(post.getImgUrl()).placeholder(R.mipmap.default_error).resize(50,50).into(holder.iv_friend_style_title_photo);
         if(post.getPostReplyList()!=null) {
+            holder.lv_friend_style_reply.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    if(Arad.preferences.getString("memberId")==null||Arad.preferences.getString("memberId").equals("")){
+                        mcontext.startActivity(new Intent(mcontext, LoginActivity.class));
+                        AnimUtil.intentSlidOut((InvitationPullDownActivity)mcontext);
+                        return;
+                    }
+                    Intent intent=new Intent(mcontext, InvitationCommentDetaioActivity.class);
+                    intent.putExtra("id",post.getId());
+                    intent.putExtra("reportid",post.getReporterId());
+                    mcontext.startActivity(intent);
+                    AnimUtil.intentSlidIn(mcontext);
+                }
+            });
             if (post.getPostReplyList().size() <= 3) {
                /* List<String> listStr = new ArrayList<>();
                 for (int i = 0; i < post.getPostReplyList().size(); i++) {
@@ -212,6 +234,11 @@ public class InvitationListViewFriendStyleAdapter extends BaseAdapter {
         holder.rl_friend_style_share.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(Arad.preferences.getString("memberId")==null||Arad.preferences.getString("memberId").equals("")){
+                    mcontext.startActivity(new Intent(mcontext, LoginActivity.class));
+                    AnimUtil.intentSlidOut((InvitationPullDownActivity)mcontext);
+                    return;
+                }
              //   showShareDialog(v);
                 activity = (InvitationPullDownActivity) mcontext;
                 shareDialog = new ShareDialog(mcontext);
@@ -342,6 +369,11 @@ public class InvitationListViewFriendStyleAdapter extends BaseAdapter {
         holder.rl_friend_style_pinglun.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(Arad.preferences.getString("memberId")==null||Arad.preferences.getString("memberId").equals("")){
+                    mcontext.startActivity(new Intent(mcontext, LoginActivity.class));
+                    AnimUtil.intentSlidOut((InvitationPullDownActivity)mcontext);
+                    return;
+                }
                 Intent intent=new Intent(mcontext, InvitationCommentDetaioActivity.class);
                 intent.putExtra("id",post.getId());
                 intent.putExtra("reportid",post.getReporterId());
@@ -352,6 +384,11 @@ public class InvitationListViewFriendStyleAdapter extends BaseAdapter {
         holder.tv_friend_style_shengyu_pinglun.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(Arad.preferences.getString("memberId")==null||Arad.preferences.getString("memberId").equals("")){
+                    mcontext.startActivity(new Intent(mcontext, LoginActivity.class));
+                    AnimUtil.intentSlidOut((InvitationPullDownActivity)mcontext);
+                    return;
+                }
                 Intent intent=new Intent(mcontext, InvitationCommentDetaioActivity.class);
                 intent.putExtra("id",post.getId());
                 intent.putExtra("reportid",post.getReporterId());
@@ -451,6 +488,11 @@ public class InvitationListViewFriendStyleAdapter extends BaseAdapter {
         tv_friend_style_pinbi_zuozhe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(Arad.preferences.getString("memberId")==null||Arad.preferences.getString("memberId").equals("")){
+                    mcontext.startActivity(new Intent(mcontext, LoginActivity.class));
+                    AnimUtil.intentSlidOut((InvitationPullDownActivity)mcontext);
+                    return;
+                }
                 InvitationPullDownActivity activity=(InvitationPullDownActivity)mcontext;
                 activity.requeMemberBlackListAdd(post.getReporterId(), popupWindow);
 
@@ -459,6 +501,11 @@ public class InvitationListViewFriendStyleAdapter extends BaseAdapter {
         tv_friend_style_jubao.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(Arad.preferences.getString("memberId")==null||Arad.preferences.getString("memberId").equals("")){
+                    mcontext.startActivity(new Intent(mcontext, LoginActivity.class));
+                    AnimUtil.intentSlidOut((InvitationPullDownActivity)mcontext);
+                    return;
+                }
                 InvitationPullDownActivity activity=(InvitationPullDownActivity)mcontext;
                 activity.requestJuBao(post.getId(),post.getReporterId(),popupWindow);
             }

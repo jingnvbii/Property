@@ -62,7 +62,7 @@ public class FriendGridAdapter extends BaseAdapter {
 			holder= (Holder) view.getTag();
 		}
 
-		Arad.imageLoader.load(list.get(position).getImg()).placeholder(R.mipmap.default_error).into(holder.imageView);
+		Arad.imageLoader.load(list.get(position).getImg()).placeholder(R.mipmap.default_error).resize(150,150).into(holder.imageView);
 		AbsListView.LayoutParams param = new AbsListView.LayoutParams(wh,wh);
         view.setLayoutParams(param);
 		return view;

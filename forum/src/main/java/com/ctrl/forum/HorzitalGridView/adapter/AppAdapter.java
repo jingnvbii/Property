@@ -93,7 +93,7 @@ public class AppAdapter extends BaseAdapter implements OnItemClickListener {
 		if(appInfo.getCategoryIcon()!=null&&!appInfo.getCategoryIcon().equals("")) {
 			Arad.imageLoader.load(appInfo.getCategoryIcon()).placeholder(R.mipmap.default_error).into(appicon);
 		}else {
-			appicon.setImageResource(R.mipmap.ic_launcher);
+			appicon.setImageResource(R.mipmap.default_error);
 		}
 		appname.setText(appInfo.getName());
 		return convertView;
@@ -109,6 +109,7 @@ public class AppAdapter extends BaseAdapter implements OnItemClickListener {
 				Intent intent = new Intent(mContext, InvitationPullDownActivity.class);
 				intent.putExtra("channelId",mList.get(arg2).getId());
 				mContext.startActivity(intent);
+
 			/*	arg0.getChildAt(i).setBackgroundResource(
 						R.drawable.gift_selected);*/
 			} else {

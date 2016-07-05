@@ -7,6 +7,7 @@
     <FrameLayout
         android:id="@+id/framelayout"
         android:layout_width="wrap_content"
+        android:visibility="gone"
         android:layout_height="150dp">
     </FrameLayout>
 
@@ -57,8 +58,10 @@
         android:layout_height="1px"
         android:background="@color/line_gray" />
     <LinearLayout
+        android:id="@+id/ll_notice"
         android:layout_width="match_parent"
         android:orientation="horizontal"
+        android:visibility="gone"
         android:background="@color/white"
         android:layout_height="40dp">
 
@@ -97,9 +100,11 @@
         android:layout_height="1px"
         android:background="@color/line_gray" />
     <LinearLayout
+        android:id="@+id/ll_tuijian"
         android:layout_width="match_parent"
         android:background="@color/white"
         android:orientation="horizontal"
+        android:visibility="gone"
         android:layout_height="100dp">
         <LinearLayout
             android:layout_width="0dp"

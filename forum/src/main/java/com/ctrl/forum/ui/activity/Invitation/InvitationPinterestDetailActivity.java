@@ -2,6 +2,7 @@ package com.ctrl.forum.ui.activity.Invitation;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -24,6 +25,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AbsListView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -54,6 +56,7 @@ import com.ctrl.forum.entity.Post2;
 import com.ctrl.forum.entity.PostReply2;
 import com.ctrl.forum.face.FaceRelativeLayout;
 import com.ctrl.forum.manager.MediaManager;
+import com.ctrl.forum.ui.activity.LoginActivity;
 import com.ctrl.forum.ui.activity.mine.MineDetailActivity;
 import com.ctrl.forum.ui.adapter.InvitationPinetestDetailAdapter;
 import com.ctrl.forum.utils.Base64Util;
@@ -104,6 +107,8 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
 
     @InjectView(R.id.ll_pinglun)//评论布局
             LinearLayout ll_pinglun;
+    @InjectView(R.id.ll_main)//主布局
+            LinearLayout ll_main;
     /*  @InjectView(R.id.ll_edit)//底部编辑布局
               LinearLayout ll_edit;*/
     @InjectView(R.id.iv_input_yuyin)//语音按钮图片
@@ -312,6 +317,37 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
 
         lv_reply_detail.setAdapter(mInvitationCommentDetailAdapter);
 
+        ll_main.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                boolean isOpen = imm.isActive();
+                //isOpen若返回true，则表示输入法打开
+                if (isOpen) {
+                    imm.hideSoftInputFromWindow(InvitationPinterestDetailActivity.this.getCurrentFocus().getWindowToken()
+                            , InputMethodManager.HIDE_NOT_ALWAYS);
+                    //接受软键盘输入的编辑文本或其它视图
+                    //  imm.showSoftInput(et_content,InputMethodManager.SHOW_FORCED);
+                }
+            }
+        });
+
+
+        lv_reply_detail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                boolean isOpen = imm.isActive();
+                //isOpen若返回true，则表示输入法打开
+                if (isOpen) {
+                    imm.hideSoftInputFromWindow(InvitationPinterestDetailActivity.this.getCurrentFocus().getWindowToken()
+                            , InputMethodManager.HIDE_NOT_ALWAYS);
+                    //接受软键盘输入的编辑文本或其它视图
+                    //  imm.showSoftInput(et_content,InputMethodManager.SHOW_FORCED);
+                }
+            }
+        });
+
     }
 
 
@@ -458,16 +494,35 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
                 Arad.imageLoader.load(user.getImgUrl()).placeholder(R.mipmap.round_img).into(title_image);
                 Arad.imageLoader.load(user.getImgUrl()).placeholder(R.mipmap.round_img).into(title_image_2);
             }
-            tv_name.setText(post.getContactName());
+            if(user.getNickName()==null) {
+                tv_name.setText(user.getUserName());
+            }else {
+                tv_name.setText(user.getNickName());
+            }
             tv_address.setText(post.getContactAddress());
-            tv_tel.setText(post.getContactPhone());
+            if(post.getContactPhone().equals("")||post.getContactPhone()==null){
+                ll_tel.setVisibility(View.GONE);
+            }else {
+                ll_tel.setVisibility(View.VISIBLE);
+                tv_tel.setText(post.getContactPhone());
+
+            }
             tv_introduction.setText(post.getTitle());
-            tv_title2_name.setText(post.getContactName());
+            if(post.getContactName().equals("")||post.getContactName()==null) {
+                rl_detail_user.setVisibility(View.GONE);
+            }else {
+                rl_detail_user.setVisibility(View.VISIBLE);
+                tv_title2_name.setText(post.getContactName());
+
+            }
 
 
             String levlel = idao.getUser().getMemberLevel();
             if (levlel != null) {
                 switch (levlel) {
+                    case "0":
+                        iv_levlel.setImageResource(R.mipmap.vip_icon);
+                        break;
                     case "1":
                         iv_levlel.setImageResource(R.mipmap.vip_icon1);
                         break;
@@ -490,6 +545,8 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
                         iv_levlel.setImageResource(R.mipmap.vip_icon7);
                         break;
                 }
+            }else {
+                iv_levlel.setImageResource(R.mipmap.vip_icon);
             }
             if(post.getZambiastate().equals("0")){
                 iv_zan.setImageResource(R.mipmap.zan_blue);
@@ -606,12 +663,22 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
         Intent intent=null;
         switch (v.getId()) {
             case R.id.title_image:
+                if(Arad.preferences.getString("memberId")==null||Arad.preferences.getString("memberId").equals("")){
+                    startActivity(new Intent(InvitationPinterestDetailActivity.this, LoginActivity.class));
+                    AnimUtil.intentSlidOut(InvitationPinterestDetailActivity.this);
+                    return;
+                }
                 intent = new Intent(this, MineDetailActivity.class);
                 intent.putExtra("id", user.getId());
                 startActivity(intent);
                 AnimUtil.intentSlidIn(this);
                 break;
             case R.id.rl_detail_user:
+                if(Arad.preferences.getString("memberId")==null||Arad.preferences.getString("memberId").equals("")){
+                    startActivity(new Intent(InvitationPinterestDetailActivity.this, LoginActivity.class));
+                    AnimUtil.intentSlidOut(InvitationPinterestDetailActivity.this);
+                    return;
+                }
                 intent = new Intent(this, MineDetailActivity.class);
                 intent.putExtra("id", user.getId());
                 startActivity(intent);
@@ -622,6 +689,11 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
                     AndroidUtil.dial(this, user.getMobile());
                 break;
             case R.id.tv_zhikanlouzhu://收藏
+                if(Arad.preferences.getString("memberId")==null||Arad.preferences.getString("memberId").equals("")){
+                    startActivity(new Intent(InvitationPinterestDetailActivity.this, LoginActivity.class));
+                    AnimUtil.intentSlidOut(InvitationPinterestDetailActivity.this);
+                    return;
+                }
                 idao.requestCollectPost(Arad.preferences.getString("memberId"),getIntent().getStringExtra("id"),"1");
                 break;
             case R.id.tv_daoxu://倒叙查看
@@ -631,16 +703,36 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
                 idao.requesPostReplyList(getIntent().getStringExtra("id"), "0", String.valueOf(PAGE_NUM), String.valueOf(Constant.PAGE_SIZE));
                 break;
             case R.id.tv_pinbizuozhe://屏蔽作者
+                if(Arad.preferences.getString("memberId")==null||Arad.preferences.getString("memberId").equals("")){
+                    startActivity(new Intent(InvitationPinterestDetailActivity.this, LoginActivity.class));
+                    AnimUtil.intentSlidOut(InvitationPinterestDetailActivity.this);
+                    return;
+                }
                 idao.requeMemberBlackListAdd(Arad.preferences.getString("memberId"), user.getId());
                 break;
             case R.id.tv_jubao://举报
+                if(Arad.preferences.getString("memberId")==null||Arad.preferences.getString("memberId").equals("")){
+                    startActivity(new Intent(InvitationPinterestDetailActivity.this, LoginActivity.class));
+                    AnimUtil.intentSlidOut(InvitationPinterestDetailActivity.this);
+                    return;
+                }
                 idao.requePostReport(post.getId(), "", user.getId(), Arad.preferences.getString("memberId"));
                 break;
 
             case R.id.tv_delete:
+                if(Arad.preferences.getString("memberId")==null||Arad.preferences.getString("memberId").equals("")){
+                    startActivity(new Intent(InvitationPinterestDetailActivity.this, LoginActivity.class));
+                    AnimUtil.intentSlidOut(InvitationPinterestDetailActivity.this);
+                    return;
+                }
                 idao.requesDeltePost(getIntent().getStringExtra("id"));
                 break;
             case R.id.iv_share:
+                if(Arad.preferences.getString("memberId")==null||Arad.preferences.getString("memberId").equals("")){
+                    startActivity(new Intent(InvitationPinterestDetailActivity.this, LoginActivity.class));
+                    AnimUtil.intentSlidOut(InvitationPinterestDetailActivity.this);
+                    return;
+                }
                // showSharePopuwindow(iv_share);
                 shareDialog = new ShareDialog(this);
                 shareDialog.setCancelButtonOnClickListener(new View.OnClickListener() {
@@ -767,6 +859,11 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
                 });
                 break;
             case R.id.iv_zan:
+                if(Arad.preferences.getString("memberId")==null||Arad.preferences.getString("memberId").equals("")){
+                    startActivity(new Intent(InvitationPinterestDetailActivity.this, LoginActivity.class));
+                    AnimUtil.intentSlidOut(InvitationPinterestDetailActivity.this);
+                    return;
+                }
                 if (count % 2 == 0) {//奇数次点击
                     if (post.getZambiastate().equals("0")) {
                         idao.requesZambia("add", post.getId(), Arad.preferences.getString("memberId"), "", "");
@@ -788,6 +885,11 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
                 reply();
                 break;
             case R.id.tv_pinglun:
+                if(Arad.preferences.getString("memberId")==null||Arad.preferences.getString("memberId").equals("")){
+                    startActivity(new Intent(InvitationPinterestDetailActivity.this, LoginActivity.class));
+                    AnimUtil.intentSlidOut(InvitationPinterestDetailActivity.this);
+                    return;
+                }
                 isFromPinglun = false;
                 if(Arad.preferences.getString("isShielded").equals("1")){
                     MessageUtils.showShortToast(InvitationPinterestDetailActivity.this,"您已经被屏蔽，不能发评论");

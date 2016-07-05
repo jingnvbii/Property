@@ -155,7 +155,7 @@ public class InvitationListViewAdapter extends BaseAdapter{
                 Arad.imageLoader.load(post.getImgUrl()).placeholder(R.mipmap.baby_large).resize(50,50)
                         .centerCrop().into(holder2.imageView2);
                 if(post.getPostImgList()!=null) {
-                    Arad.imageLoader.load(post.getPostImgList().get(0).getImg()).placeholder(R.mipmap.default_error).into(holder2.iv_title_photo1);
+                    Arad.imageLoader.load(post.getPostImgList().get(0).getImg()).placeholder(R.mipmap.default_error).resize(150,150).into(holder2.iv_title_photo1);
                 }
                 break;
             case 3:
@@ -167,9 +167,9 @@ public class InvitationListViewAdapter extends BaseAdapter{
                 Arad.imageLoader.load(post.getImgUrl()).placeholder(R.mipmap.baby_large).resize(50,50)
                         .centerCrop().into(holder3.imageView3);
                 if(post.getPostImgList()!=null) {
-                    Arad.imageLoader.load(post.getPostImgList().get(0).getImg()).placeholder(R.mipmap.default_error).into(holder3.iv_image3_01);
-                    Arad.imageLoader.load(post.getPostImgList().get(1).getImg()).placeholder(R.mipmap.default_error).into(holder3.iv_image3_02);
-                    Arad.imageLoader.load(post.getPostImgList().get(2).getImg()).placeholder(R.mipmap.default_error).into(holder3.iv_image3_03);
+                    Arad.imageLoader.load(post.getPostImgList().get(0).getImg()).placeholder(R.mipmap.default_error).resize(150,150).into(holder3.iv_image3_01);
+                    Arad.imageLoader.load(post.getPostImgList().get(1).getImg()).placeholder(R.mipmap.default_error).resize(150,150).into(holder3.iv_image3_02);
+                    Arad.imageLoader.load(post.getPostImgList().get(2).getImg()).placeholder(R.mipmap.default_error).resize(150,150).into(holder3.iv_image3_03);
                 }
 
                 break;

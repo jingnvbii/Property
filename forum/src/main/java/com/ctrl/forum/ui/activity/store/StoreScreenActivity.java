@@ -20,6 +20,7 @@ import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.beanu.arad.Arad;
 import com.beanu.arad.utils.AnimUtil;
 import com.ctrl.forum.R;
 import com.ctrl.forum.base.AppToolBarActivity;
@@ -29,6 +30,7 @@ import com.ctrl.forum.dao.MallDao;
 import com.ctrl.forum.entity.Kind;
 import com.ctrl.forum.entity.Mall;
 import com.ctrl.forum.entity.Merchant;
+import com.ctrl.forum.ui.activity.LoginActivity;
 import com.ctrl.forum.ui.adapter.StoreFragmentAdapter;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
@@ -549,6 +551,10 @@ public class StoreScreenActivity extends AppToolBarActivity implements View.OnCl
         rightButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(Arad.preferences.getString("memberId")==null||Arad.preferences.getString("memberId").equals("")){
+                    startActivity(new Intent(StoreScreenActivity.this, LoginActivity.class));
+                    return;
+                }
                 Intent intent = new Intent(StoreScreenActivity.this, StoreSearchActivity.class);
                 startActivity(intent);
                 AnimUtil.intentSlidIn(StoreScreenActivity.this);

@@ -26,6 +26,7 @@ import android.widget.Toast;
 
 import com.beanu.arad.Arad;
 import com.beanu.arad.utils.AndroidUtil;
+import com.beanu.arad.utils.AnimUtil;
 import com.ctrl.forum.R;
 import com.ctrl.forum.base.AppToolBarActivity;
 import com.ctrl.forum.customview.ShareDialog;
@@ -35,6 +36,7 @@ import com.ctrl.forum.entity.Post2;
 import com.ctrl.forum.entity.PostImage;
 import com.ctrl.forum.photo.zoom.PhotoView;
 import com.ctrl.forum.photo.zoom.ViewPagerFixed;
+import com.ctrl.forum.ui.activity.LoginActivity;
 import com.ctrl.forum.utils.BitmapUtils;
 
 import java.io.IOException;
@@ -278,6 +280,11 @@ public class InvitationPinerestGalleyActivity extends AppToolBarActivity impleme
                 showPupupWindow();
                 break;
             case R.id.rl_pinerest_gallery_zan:
+                if(Arad.preferences.getString("memberId")==null||Arad.preferences.getString("memberId").equals("")){
+                    startActivity(new Intent(InvitationPinerestGalleyActivity.this, LoginActivity.class));
+                    AnimUtil.intentSlidOut(InvitationPinerestGalleyActivity.this);
+                    return;
+                }
                 if (count % 2 == 0) {//奇数次点击
                     if (post.getZambiastate().equals("0")) {
                         idao.requesZambia("add", post.getId(), Arad.preferences.getString("memberId"), "", "");
@@ -297,6 +304,11 @@ public class InvitationPinerestGalleyActivity extends AppToolBarActivity impleme
 
                 break;
             case R.id.iv_pinerest_gallery_share:
+                if(Arad.preferences.getString("memberId")==null||Arad.preferences.getString("memberId").equals("")){
+                    startActivity(new Intent(InvitationPinerestGalleyActivity.this, LoginActivity.class));
+                    AnimUtil.intentSlidOut(InvitationPinerestGalleyActivity.this);
+                    return;
+                }
               //  showSharePopuwindow(iv_pinerest_gallery_share);
                 shareDialog = new ShareDialog(this);
                 shareDialog.setCancelButtonOnClickListener(new View.OnClickListener() {
@@ -423,6 +435,11 @@ public class InvitationPinerestGalleyActivity extends AppToolBarActivity impleme
                 });
                 break;
             case R.id.iv_pinerest_gallery_pinglun:
+                if(Arad.preferences.getString("memberId")==null||Arad.preferences.getString("memberId").equals("")){
+                    startActivity(new Intent(InvitationPinerestGalleyActivity.this, LoginActivity.class));
+                    AnimUtil.intentSlidOut(InvitationPinerestGalleyActivity.this);
+                    return;
+                }
                 Intent intent=new Intent(InvitationPinerestGalleyActivity.this,InvitationCommentDetaioActivity.class);
                 intent.putExtra("id",post.getId());
                 intent.putExtra("reportid",post.getReporterId());

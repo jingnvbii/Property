@@ -145,6 +145,11 @@ public class OperateGoodsDataBaseStatic{
                 return null;
             }else{
                 Log.e("TAG" , "根据第一级的下标 得到第二级商品类型总数成功：" + list.size());
+              /*  for(int i=0;i<list.size();i++){
+                    if(list.get(i).getGoodsnum().equals("0")){
+                        list.remove(i);
+                    }
+                }*/
                 return list;
             }
         } catch (DbException e) {

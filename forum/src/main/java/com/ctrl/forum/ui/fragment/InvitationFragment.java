@@ -164,6 +164,8 @@ public class InvitationFragment extends ToolBarFragment implements View.OnClickL
 
     private Map<Integer, GridView> map;
     private LinearLayout viewGroup;
+    private LinearLayout ll_tuijian;
+    private LinearLayout ll_notice;
 
 
     public static InvitationFragment newInstance() {
@@ -224,6 +226,8 @@ public class InvitationFragment extends ToolBarFragment implements View.OnClickL
         tv_change=(TextView)headview.findViewById(R.id.tv_change);
         iv_invitation_notice_image=(ImageView)headview.findViewById(R.id.iv_invitation_notice_image);
         framelayout=(FrameLayout)headview.findViewById(R.id.framelayout);
+        ll_tuijian=(LinearLayout)headview.findViewById(R.id.ll_tuijian);
+        ll_notice=(LinearLayout)headview.findViewById(R.id.ll_notice);
         iv_recommend_1=(ImageView)headview.findViewById(R.id.iv_recommend_1);
         iv_recommend_2=(ImageView)headview.findViewById(R.id.iv_recommend_2);
         iv_recommend_3=(ImageView)headview.findViewById(R.id.iv_recommend_3);
@@ -239,6 +243,7 @@ public class InvitationFragment extends ToolBarFragment implements View.OnClickL
  * 轮播图
  * */
     private void setLoopView() {
+        framelayout.setVisibility(View.VISIBLE);
         // 1.创建轮播的holder
         mAutoSwitchPicHolder = new HomeAutoSwitchPicHolder(getActivity());
         // 2.得到轮播图的视图view
@@ -404,6 +409,7 @@ public class InvitationFragment extends ToolBarFragment implements View.OnClickL
     }
 
     private void initNotice() {
+        ll_notice.setVisibility(View.VISIBLE);
          Arad.imageLoader.load(idao.getListNoticeImage().get(0).getImgUrl()).placeholder(R.mipmap.jinrigonggao).into(iv_invitation_notice_image);
         for (int i = 0; i < listNotice.size(); i++) {
             listNoticeString.add(listNotice.get(i).getContent());
@@ -423,6 +429,7 @@ public class InvitationFragment extends ToolBarFragment implements View.OnClickL
     }
 
     private void initRecommend() {
+        ll_tuijian.setVisibility(View.VISIBLE);
         if (listRecommend.size() > 0) {
             Arad.imageLoader.load(listRecommend.get(0).getImgUrl()).placeholder(R.mipmap.fuzhuang).into(iv_recommend_1);
             iv_recommend_1.setOnClickListener(this);

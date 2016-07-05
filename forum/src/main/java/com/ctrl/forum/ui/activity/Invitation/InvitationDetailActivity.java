@@ -31,6 +31,7 @@ import com.ctrl.forum.entity.MemberInfo;
 import com.ctrl.forum.entity.Post2;
 import com.ctrl.forum.entity.PostImage;
 import com.ctrl.forum.entity.PostReply2;
+import com.ctrl.forum.ui.activity.LoginActivity;
 import com.ctrl.forum.ui.activity.mine.MineDetailActivity;
 import com.ctrl.forum.ui.adapter.FriendDetailImageAdapter;
 import com.ctrl.forum.ui.adapter.FriendDetailReplyAdapter;
@@ -126,6 +127,11 @@ public class InvitationDetailActivity extends AppToolBarActivity implements View
         lv_detail_reply.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if(Arad.preferences.getString("memberId")==null||Arad.preferences.getString("memberId").equals("")){
+                    startActivity(new Intent(InvitationDetailActivity.this, LoginActivity.class));
+                    AnimUtil.intentSlidOut(InvitationDetailActivity.this);
+                    return;
+                }
                 Intent intent = new Intent(InvitationDetailActivity.this, InvitationCommentDetaioActivity.class);
                 intent.putExtra("id", getIntent().getStringExtra("id"));
                 intent.putExtra("reportid", getIntent().getStringExtra("reportid"));
@@ -202,12 +208,12 @@ public class InvitationDetailActivity extends AppToolBarActivity implements View
                 }
             }
             listPostReply2=new ArrayList<>();
-            if(listPostReply2.size()>3){
+            if(idao.getListPostReply2().size()>3){
                 for(int i=0;i<3;i++){
                     listPostReply2.add(idao.getListPostReply2().get(i));
                 }
             }
-            mFriendDetailReplyAdapter.setList(idao.getListPostReply2());
+            mFriendDetailReplyAdapter.setList(listPostReply2);
         }
         if(requestCode==3){
             post = idao.getPost2();
@@ -216,40 +222,12 @@ public class InvitationDetailActivity extends AppToolBarActivity implements View
             if(listPostImage!=null)
             mFriendDetailImageAdapter.setList(listPostImage);
 
-            if (user!=null) {
-                Log.e("user==============", user.toString());
-                if (user.getImgUrl() != null && !user.getImgUrl().equals("")) {
-                    Arad.imageLoader.load(user.getImgUrl()).placeholder(R.mipmap.default_error).into(title_image);
-                }
-                String levlel = idao.getUser().getMemberLevel();
-                if (levlel != null) {
-                    switch (levlel) {
-                        case "1":
-                            iv_detail_levlel.setImageResource(R.mipmap.vip_icon1);
-                            break;
-                        case "2":
-                            iv_detail_levlel.setImageResource(R.mipmap.vip_icon2);
-                            break;
-                        case "3":
-                            iv_detail_levlel.setImageResource(R.mipmap.vip_icon3);
-                            break;
-                        case "4":
-                            iv_detail_levlel.setImageResource(R.mipmap.vip_icon4);
-                            break;
-                        case "5":
-                            iv_detail_levlel.setImageResource(R.mipmap.vip_icon5);
-                            break;
-                        case "6":
-                            iv_detail_levlel.setImageResource(R.mipmap.vip_icon6);
-                            break;
-                        case "7":
-                            iv_detail_levlel.setImageResource(R.mipmap.vip_icon7);
-                            break;
-                    }
-                }
+            Arad.imageLoader.load(user.getImgUrl()).placeholder(R.mipmap.default_error).into(title_image);
+            if(user.getNickName()==null) {
+                tv_name.setText(user.getUserName());
+            }else {
+                tv_name.setText(user.getNickName());
             }
-
-            tv_name.setText(post.getContactName());
 
             if(post.getZambiastate().equals("0")){
                 iv_friend_style_zan_num.setImageResource(R.mipmap.zan_blue);
@@ -262,10 +240,49 @@ public class InvitationDetailActivity extends AppToolBarActivity implements View
             tv_detail_title.setText(post.getTitle());
             tv_detail_content.setText(post.getContent());
             tv_detail_tel.setText(post.getContactPhone());
-            pariseNum=post.getPraiseNum();
-            if (!(post.getPraiseNum()+"").equals("")) {
-                tv_friend_style_zan_num.setText(pariseNum + "");
+
+            if(post.getContactPhone().equals("")||post.getContactPhone()==null){
+                ll_tel.setVisibility(View.GONE);
+            }else {
+                ll_tel.setVisibility(View.VISIBLE);
+                tv_detail_tel.setText(post.getContactPhone());
+
             }
+
+            pariseNum=post.getPraiseNum();
+            tv_friend_style_zan_num.setText(pariseNum+"");
+            String levlel = idao.getUser().getMemberLevel();
+            if (levlel != null) {
+                switch (levlel) {
+                    case "0":
+                        iv_detail_levlel.setImageResource(R.mipmap.vip_icon);
+                        break;
+                    case "1":
+                        iv_detail_levlel.setImageResource(R.mipmap.vip_icon1);
+                        break;
+                    case "2":
+                        iv_detail_levlel.setImageResource(R.mipmap.vip_icon2);
+                        break;
+                    case "3":
+                        iv_detail_levlel.setImageResource(R.mipmap.vip_icon3);
+                        break;
+                    case "4":
+                        iv_detail_levlel.setImageResource(R.mipmap.vip_icon4);
+                        break;
+                    case "5":
+                        iv_detail_levlel.setImageResource(R.mipmap.vip_icon5);
+                        break;
+                    case "6":
+                        iv_detail_levlel.setImageResource(R.mipmap.vip_icon6);
+                        break;
+                    case "7":
+                        iv_detail_levlel.setImageResource(R.mipmap.vip_icon7);
+                        break;
+                }
+            }else {
+                iv_detail_levlel.setImageResource(R.mipmap.vip_icon);
+            }
+
         }
     }
 
@@ -379,12 +396,22 @@ public class InvitationDetailActivity extends AppToolBarActivity implements View
                 }
                 break;
             case R.id.rl_user:
+                if(Arad.preferences.getString("memberId")==null||Arad.preferences.getString("memberId").equals("")){
+                    startActivity(new Intent(InvitationDetailActivity.this, LoginActivity.class));
+                    AnimUtil.intentSlidOut(InvitationDetailActivity.this);
+                    return;
+                }
                 intent = new Intent(this, MineDetailActivity.class);
                 intent.putExtra("id", user.getId());
                 startActivity(intent);
                 AnimUtil.intentSlidIn(this);
                 break;
             case R.id.tv_zhikanlouzhu://收藏
+                if(Arad.preferences.getString("memberId")==null||Arad.preferences.getString("memberId").equals("")){
+                    startActivity(new Intent(InvitationDetailActivity.this, LoginActivity.class));
+                    AnimUtil.intentSlidOut(InvitationDetailActivity.this);
+                    return;
+                }
                 idao.requestCollectPost(Arad.preferences.getString("memberId"),getIntent().getStringExtra("id"),"1");
                 break;
             case R.id.tv_daoxu://倒叙查看
@@ -394,12 +421,27 @@ public class InvitationDetailActivity extends AppToolBarActivity implements View
                 idao.requesPostReplyList(getIntent().getStringExtra("id"), "0", String.valueOf(PAGE_NUM), String.valueOf(Constant.PAGE_SIZE));
                 break;
             case R.id.tv_pinbizuozhe://屏蔽作者
+                if(Arad.preferences.getString("memberId")==null||Arad.preferences.getString("memberId").equals("")){
+                    startActivity(new Intent(InvitationDetailActivity.this, LoginActivity.class));
+                    AnimUtil.intentSlidOut(InvitationDetailActivity.this);
+                    return;
+                }
                 idao.requeMemberBlackListAdd(Arad.preferences.getString("memberId"), user.getId());
                 break;
             case R.id.tv_jubao://举报
+                if(Arad.preferences.getString("memberId")==null||Arad.preferences.getString("memberId").equals("")){
+                    startActivity(new Intent(InvitationDetailActivity.this, LoginActivity.class));
+                    AnimUtil.intentSlidOut(InvitationDetailActivity.this);
+                    return;
+                }
                 idao.requePostReport(post.getId(), "", user.getId(), Arad.preferences.getString("memberId"));
                 break;
             case R.id.rl_friend_style_zan:
+                if(Arad.preferences.getString("memberId")==null||Arad.preferences.getString("memberId").equals("")){
+                    startActivity(new Intent(InvitationDetailActivity.this, LoginActivity.class));
+                    AnimUtil.intentSlidOut(InvitationDetailActivity.this);
+                    return;
+                }
                 if (count % 2 == 0) {//奇数次点击
                     if (post.getZambiastate().equals("0")) {
                         idao.requesZambia("add", post.getId(), Arad.preferences.getString("memberId"), "", "");
@@ -419,6 +461,11 @@ public class InvitationDetailActivity extends AppToolBarActivity implements View
                 }
                 break;
             case R.id.rl_friend_style_pinglun:
+                if(Arad.preferences.getString("memberId")==null||Arad.preferences.getString("memberId").equals("")){
+                    startActivity(new Intent(InvitationDetailActivity.this, LoginActivity.class));
+                    AnimUtil.intentSlidOut(InvitationDetailActivity.this);
+                    return;
+                }
                 intent=new Intent(InvitationDetailActivity.this,InvitationCommentDetaioActivity.class);
                 intent.putExtra("id",getIntent().getStringExtra("id"));
                 intent.putExtra("reportid",getIntent().getStringExtra("reportid"));
@@ -426,6 +473,11 @@ public class InvitationDetailActivity extends AppToolBarActivity implements View
                 AnimUtil.intentSlidIn(InvitationDetailActivity.this);
                 break;
             case R.id.rl_friend_style_share:
+                if(Arad.preferences.getString("memberId")==null||Arad.preferences.getString("memberId").equals("")){
+                    startActivity(new Intent(InvitationDetailActivity.this, LoginActivity.class));
+                    AnimUtil.intentSlidOut(InvitationDetailActivity.this);
+                    return;
+                }
                 break;
             case R.id.rl_friend_style_more:
                 showButoomMoreDialog();
@@ -448,6 +500,11 @@ public class InvitationDetailActivity extends AppToolBarActivity implements View
         tv_friend_style_pinbi_zuozhe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(Arad.preferences.getString("memberId")==null||Arad.preferences.getString("memberId").equals("")){
+                    startActivity(new Intent(InvitationDetailActivity.this, LoginActivity.class));
+                    AnimUtil.intentSlidOut(InvitationDetailActivity.this);
+                    return;
+                }
                 idao.requeMemberBlackListAdd(Arad.preferences.getString("memberId"), user.getId());
 
             }
@@ -455,6 +512,11 @@ public class InvitationDetailActivity extends AppToolBarActivity implements View
         tv_friend_style_jubao.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(Arad.preferences.getString("memberId")==null||Arad.preferences.getString("memberId").equals("")){
+                    startActivity(new Intent(InvitationDetailActivity.this, LoginActivity.class));
+                    AnimUtil.intentSlidOut(InvitationDetailActivity.this);
+                    return;
+                }
                 idao.requePostReport(post.getId(), "", user.getId(), Arad.preferences.getString("memberId"));
             }
         });

@@ -14,7 +14,8 @@
             android:id="@+id/iv_back"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_marginLeft="@dimen/margin_left_and_right"
+            android:paddingRight="10dp"
+            android:paddingLeft="@dimen/margin_left_and_right"
             android:src="@mipmap/white_arrow_left_none"/>
         <TextView
             android:layout_width="wrap_content"
@@ -24,7 +25,6 @@
             android:textColor="@color/text_white"
             android:textSize="@dimen/text_size_more"
             android:gravity="center"
-            android:layout_marginLeft="@dimen/margin_left_and_right"
             />
         <TextView
             android:id="@+id/tv_register"
@@ -54,7 +54,6 @@
         android:paddingLeft="@dimen/margin_left_and_right"
         android:textColor="@color/text_gray"
         android:textSize="@dimen/text_size_basic"
-        android:text="15688885075"
         android:gravity="center_vertical"
         />
 
@@ -70,7 +69,6 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/text_height"
         android:hint="@string/pass_word_hint"
-        android:text="123456"
         android:inputType="numberPassword"
         android:background="@null"
         android:paddingLeft="@dimen/margin_left_and_right"

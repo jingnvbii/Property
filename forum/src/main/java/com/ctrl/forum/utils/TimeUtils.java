@@ -76,4 +76,14 @@ public class TimeUtils {
         calendar.setTimeInMillis(ltiem);
         return formatter.format(calendar.getTime());
     }
+    /*
+    * 毫秒转日期
+    * */
+
+    public static String dates(Long ltiem){
+        DateFormat formatter = new SimpleDateFormat("M"+"月"+"d"+"日");
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(ltiem);
+        return formatter.format(calendar.getTime());
+    }
 }

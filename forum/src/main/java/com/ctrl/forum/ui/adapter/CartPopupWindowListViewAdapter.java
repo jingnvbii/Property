@@ -96,6 +96,12 @@ public class CartPopupWindowListViewAdapter extends BaseAdapter {
             holder.tv_popup_lv_number.setText(mGoodsBean.getGoodsnum());
             holder.tv_popup_lv_name.setText(mGoodsBean.getGoodsname());
         }
+     /*   holder.tv_popup_lv_number.setText("" + mGoodsDataBaseInterface.getSecondGoodsNumber(mcontext, StoreShopListVerticalStyleActivity.SELECTPOSITION, list.get(position).getGoodsid()));
+        holder.tv_popup_lv_number.setVisibility(View.VISIBLE);
+        holder.iv_popup_lv_subtract.setVisibility(View.VISIBLE);
+        holder.tv_popup_lv_price.setText(mGoodsBean.getGoodsprice() + "");
+        holder.tv_popup_lv_number.setText(mGoodsBean.getGoodsnum());
+        holder.tv_popup_lv_name.setText(mGoodsBean.getGoodsname());*/
         setOnListtener(holder);
         return convertView;
     }
@@ -136,7 +142,7 @@ public class CartPopupWindowListViewAdapter extends BaseAdapter {
         @InjectView(R.id.tv_popup_lv_number)//数量
         public TextView tv_popup_lv_number;
         @InjectView(R.id.rl_all)//根布局
-                RelativeLayout rl_all;
+           public      RelativeLayout rl_all;
         private int position;
 
         public void setPosition(int position) {
