@@ -160,7 +160,7 @@ public class PlotFragment extends ToolBarFragment implements View.OnClickListene
                         imm.hideSoftInputFromWindow(v.getApplicationWindowToken(), 0);
                     }
                     if (!et_search.getText().toString().equals("")) {
-                        if (Arad.preferences.getString("memberId")==null){
+                        if (Arad.preferences.getString("memberId").equals("")){
                             startActivity(new Intent(getActivity(), LoginActivity.class));
                         }else {
                             Intent intent = new Intent(getActivity(), PlotSearchResultActivity.class);

@@ -181,7 +181,6 @@ public class HomeAutoSwitchPicHolder extends BaseHolder<List<String>>
           // ImageLoader.getInstance().displayImage(mPictures.get(position),iv);
             container.addView(iv, 0);
 
-
             if (listBanner.get(mPosition).getType()!=null) {
                 iv.setOnClickListener(new View.OnClickListener() {
                     @Override
