@@ -14,6 +14,7 @@ import com.ctrl.forum.base.Constant;
 import com.ctrl.forum.dao.ReplyCommentDao;
 import com.ctrl.forum.entity.ObtainMyReply;
 import com.ctrl.forum.ui.activity.Invitation.InvitationDetailFromPlatformActivity;
+import com.ctrl.forum.ui.activity.Invitation.InvitationPinterestDetailActivity;
 import com.ctrl.forum.ui.adapter.MineCommentListAdapter;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
@@ -66,9 +67,18 @@ public class MineCommentActivity extends AppToolBarActivity {
         lv_comment.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(getApplicationContext(), InvitationDetailFromPlatformActivity.class);
-                intent.putExtra("id", comments.get(position-1).getPostId());
-                startActivity(intent);
+                if (comments.get(position-1).getSourceType()!=null){
+                    String type = comments.get(position-1).getSourceType();
+                    if (type.equals("0")){
+                        Intent intent = new Intent(getApplicationContext(), InvitationDetailFromPlatformActivity.class);
+                        intent.putExtra("id", comments.get(position-1).getPostId());
+                        startActivity(intent);
+                    }else{
+                        Intent intent = new Intent(getApplicationContext(), InvitationPinterestDetailActivity.class);
+                        intent.putExtra("id", comments.get(position-1).getPostId());
+                        startActivity(intent);
+                    }
+                }
             }
         });
     }

@@ -116,9 +116,10 @@ public class MyFragment extends ToolBarFragment implements View.OnClickListener{
     private List<Plugin> pluginList; //用户插件
     private MyPagerAdapter pagerAdapter;
     private List<Plugin> plugins = new ArrayList<>();
-    private int len;  //viewPager的页数
+    private int lens;  //viewPager的页数
     private NoScrollGridView gridView;
     private MineMemberGridAdapter gridListAdapter;
+    int len;
 
     private View[] views;
 
@@ -204,54 +205,40 @@ public class MyFragment extends ToolBarFragment implements View.OnClickListener{
         bt_sign.setOnClickListener(this);
     }
 
-    //用户插件
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-    public void setPlugins(){
-        pagerAdapter = new MyPagerAdapter();
+    public View setPlugins(View view,int type){
         gridListAdapter = new MineMemberGridAdapter(getActivity());
-
-        final int len=plugins.size()%10==0?plugins.size()/10:plugins.size()/10+1;
+        List<Plugin> pl = new ArrayList<>();
         this.views=new View[len];
-        for(int i=0;i<len;i++){
-            NoScrollGridView gridView = new NoScrollGridView(getActivity());
-            gridView.setNumColumns(5);
-            gridView.setAdapter(gridListAdapter);
+
+        if (pl.size()!=0){
+            pl.clear();
+        }
+        NoScrollGridView gridView = new NoScrollGridView(getActivity());
+        gridView.setNumColumns(5);
+        gridView.setAdapter(gridListAdapter);
+
+        //为gridView添加数据
+        final int position;
+        if ((plugins.size()-type*10)>10 ||(plugins.size()-type*10)==10){
+                position=10;
+        }else{
+            position = plugins.size()%10;
+        }
+        for (int j=0;j<position;j++){
+            Plugin plu = plugins.get(type*10+j);
+            plu.setIconUrl(plugins.get(type * 10 + j).getIconUrl());
+            plu.setName(plugins.get(type * 10 + j).getName());
+            plu.setLinkUrl(plugins.get(type * 10 + j).getLinkUrl());
+            plu.setRemark(plugins.get(type * 10 + j).getRemark());
+            pl.add(plu);
+            }
+
+            gridListAdapter.setType(type);
+            gridListAdapter.setData(pl);
+            //gridView的每一项的点击事件
             gridListAdapter.setOnImage(this);
-            this.views[i]=gridView;
-        }
 
-        //设置小圆点
-        if (len>1) {
-            for (int i = 0; i < len; i++) {
-                ImageView imageView = new ImageView(getActivity());
-                imageView.setBackground(getResources().getDrawable(R.drawable.red_round_select));
-                imageView.setEnabled(false);
-                ll_icons.addView(imageView);
-                ll_icons.getChildAt(0).setEnabled(true);//默认第一个为选中的情况
-            }
-        }
-
-        this.pagerAdapter=new MyPagerAdapter();
-        this.vp_plug.setAdapter(pagerAdapter);
-        vp_plug.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                for (int i = 0; i < len; i++) {
-                    ll_icons.getChildAt(i).setEnabled(false);
-                }
-                ll_icons.getChildAt(position).setEnabled(true);
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });
+        return gridView;
     }
 
     @Override
@@ -261,65 +248,6 @@ public class MyFragment extends ToolBarFragment implements View.OnClickListener{
     }
 
     public void onClick(View view) {
-        //我的评论
-        if (view == my_comment) {startActivity(new Intent(getActivity(), MineCommentActivity.class));}
-        //编辑我的资料
-        if (view == iv_bianji) {startActivity(new Intent(getActivity(), MineEditActivity.class));}
-        //设置
-        if (view == iv_set) {startActivity(new Intent(getActivity(), MineSettingActivity.class));}
-        //消息
-        if (view == iv_message) {
-            if(Arad.preferences.getString("memberId")!=null&&!Arad.preferences.getString("memberId").equals("")){
-            startActivity(new Intent(getActivity(), MineMessageActivity.class));
-            }else {
-           startActivity(new Intent(getActivity(), LoginActivity.class));
-            }
-            }
-        //抢红包
-        //if (view==iv_message){intent = new Intent(getActivity(), RedPacketActivity.class);startActivity(intent);}
-        //我的店铺
-        if (view == my_shop) {
-            String state  = Arad.preferences.getString("companyState");
-            switch (state){
-                case "3": //没有店铺
-                    startActivity(new Intent(getActivity(), MineCreateShopOneActivity.class));
-                    break;
-                case "0": //待审核
-                    startActivity(new Intent(getActivity(), MineCreateShopThreeActivity.class));
-                    break;
-                case "1": //已通过
-                    startActivity(new Intent(getActivity(), MineOrderManageActivity.class));
-                    break;
-                case "2": //未通过
-                    alertDialog.show();
-                    break;
-            }
-        }
-        //黑名单
-        if (view == my_blacklist) {startActivity(new Intent(getActivity(), MineBlacklistActivity.class));}
-        //等级
-        if (view == iv_grade) {startActivity(new Intent(getActivity(), MineGradeActivity.class));}
-        //我的订单
-        if (view == my_order) {startActivity(new Intent(getActivity(), MineOrderActivity.class));}
-        //我的劵
-        if (view == my_juan) {startActivity(new Intent(getActivity(), MineJuanActivity.class));}
-        //积分商城
-        if (view == bt_integral) {startActivity(new Intent(getActivity(), MineIntegralActivity.class));}
-        //我的评价
-        if (view == my_pingjia) {startActivity(new Intent(getActivity(), MineAssessActivity.class));}
-        //我的收藏
-        if (view == my_collect) {startActivity(new Intent(getActivity(), MineCollectActivity.class));}
-        //我的小区
-        if (view == my_xiaoqu) {startActivity(new Intent(getActivity(), MinePlotActivity.class));}
-        //签到
-        if (view == bt_sign){mdao.sign(Arad.preferences.getString("memberId"));}
-        //我的发帖
-        if (view == my_post){startActivity(new Intent(getActivity(), MineQueryPostActivity.class));}
-        //我的草稿箱
-        if (view==my_drafts){startActivity(new Intent(getActivity(), MineDraftActivity.class));}
-        //收货地址
-        if (view==my_address){startActivity(new Intent(getActivity(), StoreManageAddressActivity.class));
-        }
 
         Object uriId = view.getTag();
         switch(view.getId()){
@@ -354,6 +282,95 @@ public class MyFragment extends ToolBarFragment implements View.OnClickListener{
             default:
                 break;
         }
+
+        if (Arad.preferences.getString("memberId").equals("")){
+            startActivity(new Intent(getActivity(), LoginActivity.class));
+        }else {
+            //我的评论
+            if (view == my_comment) {
+                startActivity(new Intent(getActivity(), MineCommentActivity.class));
+            }
+            //编辑我的资料
+            if (view == iv_bianji) {
+                startActivity(new Intent(getActivity(), MineEditActivity.class));
+            }
+            //设置
+            if (view == iv_set) {
+                startActivity(new Intent(getActivity(), MineSettingActivity.class));
+            }
+            //消息
+            if (view == iv_message) {
+                startActivity(new Intent(getActivity(), MineMessageActivity.class));
+            }
+            //抢红包
+            //if (view==iv_message){intent = new Intent(getActivity(), RedPacketActivity.class);startActivity(intent);}
+            //我的店铺
+            if (view == my_shop) {
+                String state = Arad.preferences.getString("companyState");
+                switch (state) {
+                    case "3": //没有店铺
+                        startActivity(new Intent(getActivity(), MineCreateShopOneActivity.class));
+                        break;
+                    case "0": //待审核
+                        startActivity(new Intent(getActivity(), MineCreateShopThreeActivity.class));
+                        break;
+                    case "1": //已通过
+                        startActivity(new Intent(getActivity(), MineOrderManageActivity.class));
+                        break;
+                    case "2": //未通过
+                        alertDialog.show();
+                        break;
+                }
+            }
+            //黑名单
+            if (view == my_blacklist) {
+                startActivity(new Intent(getActivity(), MineBlacklistActivity.class));
+            }
+            //等级
+            if (view == iv_grade) {
+                startActivity(new Intent(getActivity(), MineGradeActivity.class));
+            }
+            //我的订单
+            if (view == my_order) {
+                startActivity(new Intent(getActivity(), MineOrderActivity.class));
+            }
+            //我的劵
+            if (view == my_juan) {
+                startActivity(new Intent(getActivity(), MineJuanActivity.class));
+            }
+            //积分商城
+            if (view == bt_integral) {
+                startActivity(new Intent(getActivity(), MineIntegralActivity.class));
+            }
+            //我的评价
+            if (view == my_pingjia) {
+                startActivity(new Intent(getActivity(), MineAssessActivity.class));
+            }
+            //我的收藏
+            if (view == my_collect) {
+                startActivity(new Intent(getActivity(), MineCollectActivity.class));
+            }
+            //我的小区
+            if (view == my_xiaoqu) {
+                startActivity(new Intent(getActivity(), MinePlotActivity.class));
+            }
+            //签到
+            if (view == bt_sign) {
+                mdao.sign(Arad.preferences.getString("memberId"));
+            }
+            //我的发帖
+            if (view == my_post) {
+                startActivity(new Intent(getActivity(), MineQueryPostActivity.class));
+            }
+            //我的草稿箱
+            if (view == my_drafts) {
+                startActivity(new Intent(getActivity(), MineDraftActivity.class));
+            }
+            //收货地址
+            if (view == my_address) {
+                startActivity(new Intent(getActivity(), StoreManageAddressActivity.class));
+            }
+        }
     }
 
     @Override
@@ -368,11 +385,18 @@ public class MyFragment extends ToolBarFragment implements View.OnClickListener{
         }
     }
 
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @Override
     public void onRequestSuccess(int requestCode) {
         super.onRequestSuccess(requestCode);
         if (requestCode==0){
-            MessageUtils.showShortToast(getActivity(), "签到成功!连续签到"+Arad.preferences.getString("signTimes")+"天");
+            int singTime;
+            if (Arad.preferences.getString("signTimes")!=null && !Arad.preferences.getString("signTimes").equals("")) {
+                singTime = Integer.getInteger(Arad.preferences.getString("signTimes"));
+            }else{
+                singTime = 0;
+            }
+            MessageUtils.showShortToast(getActivity(), "签到成功!连续签到"+(singTime+1)+"天");
             editDao.getVipInfo(Arad.preferences.getString("memberId"));
             bt_sign.setText("已签到");
         }
@@ -404,6 +428,9 @@ public class MyFragment extends ToolBarFragment implements View.OnClickListener{
                 iv_message.setShowNumMode(2);
                 int num = Integer.parseInt(memberInfo.getMessageCount());
                 iv_message.setNum(num);
+            }else{
+                iv_message.setShowNumMode(2);
+                iv_message.setNum(0);
             }
 
             int redenvelopeNum = 0;
@@ -425,8 +452,47 @@ public class MyFragment extends ToolBarFragment implements View.OnClickListener{
                 //往gridView里添值。10个为一页
                 // %取模  \取整
                 this.plugins = pluginList;
-                setPlugins();
-                gridListAdapter.setData(pluginList);
+                //setPlugins();
+                //gridListAdapter.setData(pluginList);
+                len=plugins.size()%10==0?plugins.size()/10:plugins.size()/10+1;
+                this.views=new View[len];
+                pagerAdapter = new MyPagerAdapter();
+                this.pagerAdapter=new MyPagerAdapter();
+                this.vp_plug.setAdapter(pagerAdapter);
+
+                //设置小圆点
+                if (len>1) {
+                    for (int i = 0; i < len; i++) {
+                        ImageView imageView = new ImageView(getActivity());
+                        imageView.setBackground(getResources().getDrawable(R.drawable.red_round_select));
+                        imageView.setEnabled(false);
+                        LinearLayout.LayoutParams params=new LinearLayout.LayoutParams(25,25);
+                        params.leftMargin=10;
+                        ll_icons.addView(imageView,params);
+                        ll_icons.getChildAt(0).setEnabled(true);//默认第一个为选中的情况
+                    }
+                }
+
+                vp_plug.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+                    @Override
+                    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+                    }
+
+                    @Override
+                    public void onPageSelected(int position) {
+                        for (int i = 0; i < len; i++) {
+                            ll_icons.getChildAt(i).setEnabled(false);
+                        }
+                        ll_icons.getChildAt(position).setEnabled(true);
+                    }
+
+                    @Override
+                    public void onPageScrollStateChanged(int state) {
+
+                    }
+                });
+
             }
         }
     }
@@ -450,7 +516,7 @@ public class MyFragment extends ToolBarFragment implements View.OnClickListener{
 
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
-            View view=views[position];
+            View view = setPlugins(views[position],position);
             container.addView(view);
             return view;
         }

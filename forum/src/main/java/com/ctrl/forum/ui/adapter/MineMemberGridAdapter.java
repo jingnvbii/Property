@@ -25,12 +25,19 @@ public class MineMemberGridAdapter extends BaseAdapter {
     private List<Plugin> data;
     private Context context;
     private View.OnClickListener onImage;
+    private int type;
+
     public MineMemberGridAdapter( Context context){
         this.context = context;
     }
 
     public void setData(List<Plugin> data) {
         this.data = data;
+        notifyDataSetChanged();
+    }
+
+    public void setType(int type) {
+        this.type = type;
         notifyDataSetChanged();
     }
 
@@ -65,11 +72,12 @@ public class MineMemberGridAdapter extends BaseAdapter {
             holder=(ViewHolder)convertView.getTag();
         }
 
-        holder.iv_grid_item.setTag(position);
+        holder.iv_grid_item.setTag(type*10+position);
 
         if (data!=null && data.get(position)!=null){
             if (data.get(position).getIconUrl()!=null && !data.get(position).getIconUrl().equals("")) {
-                Arad.imageLoader.load(data.get(position).getIconUrl()).placeholder(context.getResources().getDrawable(R.mipmap.image_default)).into(holder.iv_grid_item);
+                Arad.imageLoader.load(data.get(position).getIconUrl()).placeholder(context.getResources().
+                        getDrawable(R.mipmap.image_default)).into(holder.iv_grid_item);
             }
             holder.tv_grid_item.setText(data.get(position).getName());
         }

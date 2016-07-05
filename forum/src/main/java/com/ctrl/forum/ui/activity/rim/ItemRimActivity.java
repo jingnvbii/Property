@@ -7,8 +7,8 @@ import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
@@ -17,15 +17,18 @@ import com.baidu.mapapi.SDKInitializer;
 import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.BitmapDescriptor;
 import com.baidu.mapapi.map.BitmapDescriptorFactory;
+import com.baidu.mapapi.map.InfoWindow;
+import com.baidu.mapapi.map.MapStatus;
+import com.baidu.mapapi.map.MapStatusUpdate;
 import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.map.Marker;
 import com.baidu.mapapi.map.MarkerOptions;
+import com.baidu.mapapi.map.OverlayOptions;
 import com.baidu.mapapi.model.LatLng;
 import com.baidu.mapapi.model.LatLngBounds;
 import com.beanu.arad.Arad;
 import com.beanu.arad.base.ToolBarActivity;
-import com.beanu.arad.utils.MessageUtils;
 import com.ctrl.forum.R;
 import com.ctrl.forum.base.Constant;
 import com.ctrl.forum.dao.RimDao;
@@ -48,6 +51,7 @@ public class ItemRimActivity extends ToolBarActivity implements View.OnClickList
     @InjectView(R.id.tv_item_one)
     TextView tv_item_one;
 
+
     private BitmapDescriptor bdA = BitmapDescriptorFactory.fromResource(R.drawable.ic_location_chatbox);
     private List<RimServiceCompany> rimServiceCompanies;
     private RimShopListAdapter rimShopListAdapter;
@@ -59,6 +63,7 @@ public class ItemRimActivity extends ToolBarActivity implements View.OnClickList
     private PopupWindow popupWindow;
     private TextView bo_hao,call_up,cancel;
     static int position;
+    private InfoWindow mInfoWindow;
 
     /**
      * MapView 是地图主控件
@@ -73,6 +78,7 @@ public class ItemRimActivity extends ToolBarActivity implements View.OnClickList
         setContentView(R.layout.activity_rim_item);
         ButterKnife.inject(this);
         mMapView = (MapView) findViewById(R.id.bmapView);
+        mMapView.setVisibility(View.GONE);
 
         Intent intent = getIntent();
         id = intent.getStringExtra("id");
@@ -128,41 +134,92 @@ public class ItemRimActivity extends ToolBarActivity implements View.OnClickList
 
     private void initMap() {
         mBaiduMap = mMapView.getMap();
-        MessageUtils.showShortToast(this,"mMapView.getMap()");
+        Marker mMarker = null;
        /* MapStatusUpdate msu = MapStatusUpdateFactory.zoomTo(14.0f);
         mBaiduMap.setMapStatus(msu);*/
 
-        //MapStatusUpdate u4 = MapStatusUpdateFactory.newLatLng(GEO_SHENGDONG);
-        //MapStatusUpdate u41 = MapStatusUpdateFactory.zoomBy(14);
-       // mBaiduMap.setMapStatus(u4);
-       // mBaiduMap.setMapStatus(u41);
+        LatLng cenpt = new LatLng(Double.valueOf(Arad.preferences.getString("latitude")),
+                Double.valueOf(Arad.preferences.getString("lontitude")));
+        //定义地图状态
+        MapStatus mMapStatus = new MapStatus.Builder()
+                .target(cenpt)
+                .zoom(14)
+                .build();
+        //定义MapStatusUpdate对象，以便描述地图状态将要发生的变化
+        MapStatusUpdate mMapStatusUpdate = MapStatusUpdateFactory.newMapStatus(mMapStatus);
+        //改变地图状态
+        mBaiduMap.setMapStatus(mMapStatusUpdate);
 
-        initOverlay();
+        for(int i=0;i<rimServiceCompanies.size();i++){
+            LatLng cenpt1 = new LatLng(rimServiceCompanies.get(i).getLatitude(),
+                    rimServiceCompanies.get(i).getLongitude());
+
+            //构建Marker图标
+            BitmapDescriptor bitmap = BitmapDescriptorFactory
+                    .fromResource(R.drawable.ic_location_chatbox);
+            //构建MarkerOption，用于在地图上添加Marker
+            OverlayOptions option = new MarkerOptions()
+                    .position(cenpt1)
+                    .icon(bitmap);
+            //在地图上添加Marker，并显示
+            mMarker = (Marker) (mBaiduMap.addOverlay(option));
+            mMarker.setTitle(rimServiceCompanies.get(i).getName());
+        }
+
+        //添加覆盖物
+        //initOverlay();
+
+        //点图标会显示名称
+        mBaiduMap.setOnMarkerClickListener(new BaiduMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                Button button = new Button(getApplicationContext());
+                button.setBackgroundResource(R.drawable.popup);
+                InfoWindow.OnInfoWindowClickListener listener = null;
+
+                button.setTextColor(getResources().getColor(R.color.text_black1));
+                button.setTextSize(16);
+                button.setText(marker.getTitle());
+                listener = new InfoWindow.OnInfoWindowClickListener() {
+                    public void onInfoWindowClick() {
+                        mBaiduMap.hideInfoWindow();
+                    }
+                };
+                LatLng ll = marker.getPosition();
+                mInfoWindow = new InfoWindow(BitmapDescriptorFactory.fromView(button), ll, -47, listener);
+                mBaiduMap.showInfoWindow(mInfoWindow);
+                return true;
+            }
+        });
     }
 
     private void initOverlay() {
-        MessageUtils.showShortToast(this,"123");
         LatLngBounds.Builder builder = new LatLngBounds.Builder();
         Marker mMarker = null;
-        for(int i=0;i<rimServiceCompanies.size();i++){
 
+       /* RimServiceCompany rc = new RimServiceCompany();
+        rc.setLongitude(116.555);
+        rc.setLatitude(39.12);
+        rimServiceCompanies.add(rc);*/
+        for(int i=0;i<rimServiceCompanies.size();i++){
             Double latitude = rimServiceCompanies.get(i).getLatitude();
             Double longitude = rimServiceCompanies.get(i).getLongitude();
             MarkerOptions ooA = new MarkerOptions().position(new LatLng(latitude, longitude)).icon(bdA).zIndex(9).draggable(false);
             //生长动画
             //ooA.animateType(MarkerOptions.MarkerAnimateType.grow);
-            mMarker = (Marker) (mBaiduMap.addOverlay(ooA));
-            LatLng l1 = mMarker.getPosition();
-            builder.include(l1);
-
-            MessageUtils.showShortToast(this, "builder.include(l1)");
-
             mBaiduMap.addOverlay(ooA);
+            mMarker = (Marker) (mBaiduMap.addOverlay(ooA));
+            mMarker.setTitle(rimServiceCompanies.get(i).getName());
+
+            LatLng l1 = mMarker.getPosition();
+
+            builder.include(l1);
+            builder.include(mMarker.getPosition());
+
         }
         mBaiduMap.setMapStatus(MapStatusUpdateFactory
                 .newLatLngBounds(builder.build()));
     }
-
 
     @Override
     protected void onPause() {
@@ -187,7 +244,8 @@ public class ItemRimActivity extends ToolBarActivity implements View.OnClickList
     //初始化弹窗
     private void initPop() {
         view = LayoutInflater.from(this).inflate(R.layout.call_phone,null);
-        popupWindow = new PopupWindow(view, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        popupWindow = new PopupWindow(view, getResources().getDisplayMetrics().widthPixels,
+                getResources().getDisplayMetrics().heightPixels);
         popupWindow.setFocusable(true);
         ColorDrawable colorDrawable = new ColorDrawable(getResources().getColor(R.color.pop_bg));
         colorDrawable.setAlpha(40);
@@ -225,7 +283,7 @@ public class ItemRimActivity extends ToolBarActivity implements View.OnClickList
              position = (int)id;
               bo_hao.setText(rimServiceCompanies.get(position).getTelephone());
               if (!bo_hao.getText().equals("")){
-                  popupWindow.showAtLocation(this.view, Gravity.BOTTOM, 0, 0);  //在底部
+                  popupWindow.showAtLocation(this.view, Gravity.BOTTOM, 0, 120);  //在底部
                   popupWindow.update();
               }
               break;
@@ -250,9 +308,12 @@ public class ItemRimActivity extends ToolBarActivity implements View.OnClickList
         if (requestCode==4){
             rimServiceCompanies = rimDao.getRimServiceCompanies();
             if (rimServiceCompanies!=null){
+                initMap();
+                mMapView.setVisibility(View.VISIBLE);
                 rimShopListAdapter.setRimServiceCompanies(rimServiceCompanies);
+            }else {
+                mMapView.setVisibility(View.GONE);
             }
-            initMap();
         }
         if (requestCode==9){
             if (rimServiceCompanies!=null){

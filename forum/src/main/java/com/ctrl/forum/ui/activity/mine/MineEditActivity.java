@@ -3,6 +3,7 @@ package com.ctrl.forum.ui.activity.mine;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -10,7 +11,6 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.text.format.DateFormat;
 import android.util.Base64;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +20,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.beanu.arad.Arad;
+import com.beanu.arad.utils.AnimUtil;
 import com.beanu.arad.utils.MessageUtils;
 import com.ctrl.forum.R;
 import com.ctrl.forum.base.AppToolBarActivity;
@@ -32,8 +33,6 @@ import com.ctrl.forum.utils.Utils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.Locale;
@@ -77,30 +76,15 @@ public class MineEditActivity extends AppToolBarActivity implements View.OnClick
     private View view;
     private PopupWindow popupWindow;
 
-    //查看相册Intent  key
-    public static final int LOOK_ALBUM_INTENT = 10009;
-    //访问相机Intent  key
-    public static final int LOOK_CAMERA_INTENT=10010;
     //裁剪照片Intent  key
     public static final int CROP_PHOTO_INTENT = 10011;
 
     private String encodeToString;//base64图片
-    private ImageView sv_loans_certificate;//上传头像
-    private ImageView image1;//加号
     private Bitmap bitmap;
-    private String path;//图片全路径
-    public static final int IMAGE_COMPLETE = 2; // 结果
-    public static final int CROPREQCODE = 3; // 截取
-    public static final int PHOTOZOOM = 0; // 相册/拍照
-    public static final int PHOTOTAKE = 1; // 相册/拍照
-    private String photoSavePath;//保存路径
-    private String photoSaveName;//图pian名
-    private LayoutInflater layoutInflater;
-    private String temppath;
+    /* 请求码*/
+    private static final int IMAGE_REQUEST_CODE = 0;
+    private static final int CAMERA_REQUEST_CODE = 1;
 
-    private File file = new File(Environment.getExternalStorageDirectory(), getPhotoFileName());
-   // private Context context;
-    private String httpImageUri;
 
     // 使用系统当前日期加以调整作为照片的名称
     /*@SuppressLint("SimpleDateFormat")*/
@@ -128,10 +112,6 @@ public class MineEditActivity extends AppToolBarActivity implements View.OnClick
         tv_jianjie.setText(Arad.preferences.getString("remark"));
         tv_phone.setText(Arad.preferences.getString("mobile"));
         tv_xiaoqu.setText(Arad.preferences.getString("communityName"));
-
-        String imgUrl = Arad.preferences.getString("imgUrl");
-        if (imgUrl!=null&&!imgUrl.equals(""))
-            Arad.imageLoader.load(imgUrl).placeholder(getResources().getDrawable(R.mipmap.iconfont_head)).into(iv_head);//设置头像
     }
 
     @Override
@@ -140,7 +120,7 @@ public class MineEditActivity extends AppToolBarActivity implements View.OnClick
         if (requestCode==1){
             MemberInfo memberInfo = edao.getMemberInfo();
             String url = memberInfo.getImgUrl();
-            if (url!=null && url.equals("")){
+            if (url!=null && !url.equals("")){
                 Arad.preferences.putString("imgUrl", url);
                 Arad.preferences.flush();
                 Arad.imageLoader.load(Arad.preferences.getString("imgUrl")).
@@ -148,17 +128,9 @@ public class MineEditActivity extends AppToolBarActivity implements View.OnClick
             }
         }
         if (requestCode==5){
+            showProgress(false);
             MessageUtils.showShortToast(getApplicationContext(), "修改头像成功");
-            String loadImageUrl = edao.getImageUrl();
-            Log.e("url===================", loadImageUrl);
-
-            Arad.preferences.putString("imgUrl", loadImageUrl);
-            Arad.preferences.flush();
-            putData();
-
-            /*Arad.imageLoader.load(loadImageUrl).resize(100,100).
-                    placeholder(this.getResources().getDrawable(R.mipmap.image_default)).into(iv_head);//设置头像*/
-           // edao.getVipInfo(Arad.preferences.getString("memberId"));
+            edao.getVipInfo(Arad.preferences.getString("memberId"));
         }
     }
 
@@ -192,9 +164,6 @@ public class MineEditActivity extends AppToolBarActivity implements View.OnClick
         rl_xiaoqu.setOnClickListener(this);
         rl_pwd.setOnClickListener(this);
         tv_tuichu.setOnClickListener(this);
-
-        photoSavePath=Environment.getExternalStorageDirectory()+"/ClipHeadPhoto/cache/";
-        photoSaveName =System.currentTimeMillis()+ ".png";
     }
 
     @Override
@@ -240,32 +209,18 @@ public class MineEditActivity extends AppToolBarActivity implements View.OnClick
                 startActivity(intent);
                 break;
             case R.id.take_picture: //拍照片
-               /* intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(file));
-                startActivityForResult(intent, LOOK_CAMERA_INTENT);*/
-
-                photoSaveName =String.valueOf(System.currentTimeMillis()) + ".png";
-                Uri imageUri = null;
-                Intent openCameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                imageUri = Uri.fromFile(new File(photoSavePath,photoSaveName));
-                openCameraIntent.putExtra(MediaStore.Images.Media.ORIENTATION, 0);
-                openCameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
-                startActivityForResult(openCameraIntent, PHOTOTAKE);
-
+                Intent intentFromCapture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                intentFromCapture.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(Environment.getExternalStorageDirectory(), "cxh.jpg")));
+                startActivityForResult(intentFromCapture, CAMERA_REQUEST_CODE);
+                AnimUtil.intentSlidIn(MineEditActivity.this);
                 //关闭弹窗
                 popupWindow.dismiss();
                 break;
             case R.id.choose_phone: //选择照片
-               /* Intent intent1;
-                intent1 = new Intent(Intent.ACTION_GET_CONTENT, null);
-                intent1.addCategory(Intent.CATEGORY_OPENABLE);
-                intent1.setType("image*//**//*");
-                intent1.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image*//*");
-                startActivityForResult(intent1,LOOK_ALBUM_INTENT);*/
-
-                Intent openAlbumIntent = new Intent(Intent.ACTION_GET_CONTENT);
-                openAlbumIntent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
-                startActivityForResult(openAlbumIntent, PHOTOZOOM);
+                Intent intentFromGallery = new Intent(Intent.ACTION_PICK, null);
+                intentFromGallery.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
+                startActivityForResult(intentFromGallery, IMAGE_REQUEST_CODE);
+                AnimUtil.intentSlidIn(MineEditActivity.this);
                 //关闭弹窗
                 popupWindow.dismiss();
                 break;
@@ -285,8 +240,8 @@ public class MineEditActivity extends AppToolBarActivity implements View.OnClick
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
+    protected void onRestart() {
+        super.onRestart();
         putData();
     }
 
@@ -294,46 +249,17 @@ public class MineEditActivity extends AppToolBarActivity implements View.OnClick
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
         if (resultCode == RESULT_OK) {
-            Uri uri = null;
             switch (requestCode) {
-                case PHOTOZOOM://相册
-                    String thePath = Utils.getInstance().getPath(this, data.getData());
-                    getImageToView1(thePath);
-                   /* if (data != null) {
-                        startPhotoZoom(data.getData());w
-                    }*/
-
-                   /* if (data==null) {
-                        return;
-                    }
-                    uri = data.getData();
-                    String[] proj = { MediaStore.Images.Media.DATA };
-                    Cursor cursor = managedQuery(uri, proj, null, null,null);
-                    int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-                    cursor.moveToFirst();
-                    path = cursor.getString(column_index);// 图片在的路径
-                    Intent intent3=new Intent(this, ClipActivity.class);
-                    intent3.putExtra("path", path);
-                    startActivityForResult(intent3, IMAGE_COMPLETE);*/
-
+                case IMAGE_REQUEST_CODE://相册
+                    Uri uri = data.getData();
+                    String thePath = Utils.getInstance().getPath(this, uri);
+                    Bitmap bitmap = zoomImg(thePath,50,50);
+                    getImageToView1(bitmap);
                     break;
-                case PHOTOTAKE://相机
-                    //startPhotoZoom(Uri.fromFile(file));
-                    path=photoSavePath+photoSaveName;
-                    /*uri = Uri.fromFile(new File(path));
-                    Intent intent2=new Intent(MineEditActivity.this, ClipActivity.class);
-                    intent2.putExtra("path", path);
-                    startActivityForResult(intent2, IMAGE_COMPLETE);*/
-                    getImageToView1(path);
-                    break;
-                case IMAGE_COMPLETE:
-                    temppath = data.getStringExtra("path");
-                    Log.e("temppath=======================", temppath);
-                   /* Bitmap bitmap = data.getExtras().getParcelable("bitmap");
-                    iv_head.setImageBitmap(bitmap);*/
-                    getImageToView1(temppath);
-
-                    iv_head.setImageBitmap(getLoacalBitmap(temppath));
+                case CAMERA_REQUEST_CODE://相机
+                    String path = Environment.getExternalStorageDirectory() + "/head.jpg";
+                    Bitmap bm = zoomImg(path,50,50);
+                    getImageToView1(bm);
                     break;
                 default:
                     break;
@@ -346,38 +272,23 @@ public class MineEditActivity extends AppToolBarActivity implements View.OnClick
     }
 
     /**
-     * @param url
-     * @return
-     */
-    public static Bitmap getLoacalBitmap(String url) {
-        try {
-            FileInputStream fis = new FileInputStream(url);
-            return BitmapFactory.decodeStream(fis);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    /**
      * 调用系统裁剪
      */
     private void startPhotoZoom(Uri uri) {
         // TODO Auto-generated method stub
         Intent intent = new Intent("com.android.camera.action.CROP");
         intent.setDataAndType(uri, "image/*");
-       /* intent.putExtra("crop", true);
+        intent.putExtra("crop", true);
         // 剪切比例
         intent.putExtra("aspectX", 1);
         intent.putExtra("aspectY", 1);
         int size = 360;
         // 输出大小
         intent.putExtra("outputX", size);
-        intent.putExtra("outputY", size);*/
+        intent.putExtra("outputY", size);
         intent.putExtra("return-data", true);
         startActivityForResult(intent, CROP_PHOTO_INTENT);
     }
-
     /**
      * 设置图片并将图片转成base64
      */
@@ -405,14 +316,12 @@ public class MineEditActivity extends AppToolBarActivity implements View.OnClick
         }
     }
 
-    private void getImageToView1(String path) {
-        Bitmap bitmap ;
+    private void getImageToView1(Bitmap bitmap) {
+        //Bitmap bitmap ;
         try{
-            bitmap = BitmapFactory.decodeFile(path);
+           // bitmap = BitmapFactory.decodeFile(path);
 
-            Log.e("bitmapPath==================",path);
-            Log.e("bitmap==================",bitmap.toString());
-            iv_head.setImageBitmap(bitmap);
+            //iv_head.setImageBitmap(bitmap);
 
             ByteArrayOutputStream out = new ByteArrayOutputStream();
             bitmap.compress(Bitmap.CompressFormat.JPEG, 50, out);
@@ -423,13 +332,38 @@ public class MineEditActivity extends AppToolBarActivity implements View.OnClick
 
             String photo = new String(encode);
             if (photo != null){
-                /**调用后台方法  将图片上传**/
-                //  String imgData = photo;
+                showProgress(true);
                 edao.modifyImgUrl(Arad.preferences.getString("memberId"), photo);
             }
         } catch (Exception e){
             e.printStackTrace();
         }
+    }
+
+    // 缩放图片
+    public static Bitmap zoomImg(String img, int newWidth ,int newHeight){
+    // 图片源
+        Bitmap bm = BitmapFactory.decodeFile(img);
+        if(null!=bm){
+            return zoomImg(bm,newWidth,newHeight);
+        }
+        return null;
+    }
+
+    // 缩放图片
+    public static Bitmap zoomImg(Bitmap bm, int newWidth ,int newHeight){
+        // 获得图片的宽高
+        int width = bm.getWidth();
+        int height = bm.getHeight();
+        // 计算缩放比例
+        float scaleWidth = ((float) newWidth) / width;
+        float scaleHeight = ((float) newHeight) / height;
+        // 取得想要缩放的matrix参数
+        Matrix matrix = new Matrix();
+        matrix.postScale(scaleWidth, scaleHeight);
+        // 得到新的图片
+        Bitmap newbm = Bitmap.createBitmap(bm, 0, 0, width, height, matrix, true);
+        return newbm;
     }
 
 }

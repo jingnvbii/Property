@@ -9,6 +9,7 @@
         android:layout_width="70dp"
         android:layout_height="80dp"
         android:scaleType="fitXY"
+        android:src="@mipmap/image_default"
         android:layout_marginRight="10dp"
         android:layout_alignBottom="@+id/tv_youhuiquan"
         android:layout_alignTop="@+id/tv_name" />

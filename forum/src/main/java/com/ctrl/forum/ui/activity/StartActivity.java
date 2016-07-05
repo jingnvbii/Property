@@ -34,7 +34,6 @@ public class StartActivity extends AppToolBarActivity {
         setContentView(R.layout.start_activity);
         ButterKnife.inject(this);
         initData();
-
     }
 
     private void initData() {

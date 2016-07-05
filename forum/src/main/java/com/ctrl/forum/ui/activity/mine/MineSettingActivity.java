@@ -4,7 +4,6 @@ import android.app.Notification;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
@@ -49,10 +48,6 @@ public class MineSettingActivity extends AppToolBarActivity implements View.OnCl
     RelativeLayout  feedback;   //意见反馈
     @InjectView(R.id.iv_clear)
     TextView iv_clear;
-    @InjectView(R.id.button)
-    Button button;
-    @InjectView(R.id.on)
-    Button on;
 
     MyBroadcastReceiver receiver;
 
@@ -89,26 +84,23 @@ public class MineSettingActivity extends AppToolBarActivity implements View.OnCl
     }
 
     private void setJPush() {
-        if (Arad.preferences.getBoolean("iv_system_notification")){//系统通知
-            //开启推送
-            JPushInterface.resumePush(getApplicationContext());
-        }else { JPushInterface.stopPush(getApplicationContext());}
-        if (Arad.preferences.getBoolean("iv_reply_comments")){//评论回复
-            //开启推送
-            JPushInterface.resumePush(getApplicationContext());
-        }else {JPushInterface.stopPush(getApplicationContext());}
+
         if (Arad.preferences.getBoolean("iv_voice")){//声音
             setSoundStyleBasic();
         }
+
         if (Arad.preferences.getBoolean("iv_vibration")){//振动
             setVibrateStyleBasic();
         }
+
         if (Arad.preferences.getBoolean("iv_voice") && Arad.preferences.getBoolean("iv_vibration")){
             setSoundVibrateStyleBasic();
         }
+
         if (!Arad.preferences.getBoolean("iv_voice") && !Arad.preferences.getBoolean("iv_vibration")){
             setNoSoundStyleBasic();
         }
+
         if (Arad.preferences.getBoolean("iv_night_no_message")){//夜间免打捞
             Set<Integer> days = new HashSet<>();
             days.add(1);

@@ -67,14 +67,18 @@ public class MineCompanyCollectFragment extends ToolBarFragment{
                     companyCollectFragmentAdapter = new CompanyCollectFragmentAdapter(getActivity());
                     lv_content.setAdapter(companyCollectFragmentAdapter);
                 }
-                cdao.companysCollection(Arad.preferences.getString("memberId"), "100", "100", PAGE_NUM + "", Constant.PAGE_SIZE + "");
+                cdao.companysCollection(Arad.preferences.getString("memberId"),
+                        Arad.preferences.getString("latitude"),
+                        Arad.preferences.getString("lontitude"), PAGE_NUM + "", Constant.PAGE_SIZE + "");
             }
 
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
                 if (companyCollects != null) {
                     PAGE_NUM += 1;
-                    cdao.companysCollection(Arad.preferences.getString("memberId"), "100", "100", PAGE_NUM + "", Constant.PAGE_SIZE + "");
+                    cdao.companysCollection(Arad.preferences.getString("memberId"),
+                            Arad.preferences.getString("latitude"),
+                            Arad.preferences.getString("lontitude"), PAGE_NUM + "", Constant.PAGE_SIZE + "");
                 } else {
                     lv_content.onRefreshComplete();
                 }

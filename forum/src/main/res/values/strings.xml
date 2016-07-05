@@ -521,5 +521,6 @@
     <string name="title_activity_merchant_order_detail">MerchantOrderDetailActivity</string>
     <string name="title_activity_order_pingjia">OrderPingjiaActivity</string>
     <string name="title_activity_integral_store_detail">IntegralStoreDetailActivity</string>
+    <string name="title_activity_dao_hang">DaoHangActivity</string>
 
 </resources>

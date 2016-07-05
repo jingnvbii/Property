@@ -7,6 +7,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.widget.FrameLayout;
 
 import com.ctrl.forum.R;
+import com.ctrl.forum.ui.activity.MainActivity;
 import com.ctrl.forum.ui.fragment.PlotFragment;
 
 /**
@@ -34,4 +35,9 @@ public class MinePlotActivity extends ActionBarActivity {
         transaction.commit();
     }
 
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        MainActivity.isFrist = true;
+    }
 }

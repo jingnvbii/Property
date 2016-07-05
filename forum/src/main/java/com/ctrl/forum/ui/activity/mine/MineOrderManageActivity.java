@@ -140,6 +140,7 @@ public class MineOrderManageActivity extends AppToolBarActivity implements View.
             case R.id.bt_send://发货
                 int position = (int)id;
                 odao.deliverGoods(companyOrders.get(position).getId(),Arad.preferences.getString("memberId"), companyOrders.get(position).getOrderNum());
+                showProgress(true);
                 break;
             default:
         for (int i = 0; i < ll_text.getChildCount(); i++) {
@@ -173,6 +174,7 @@ public class MineOrderManageActivity extends AppToolBarActivity implements View.
             orderManagerAdapter.notifyDataSetChanged();
         }
         if (requestCode==8){
+            showProgress(false);
             MessageUtils.showShortToast(this, "发货成功");
             if (companyOrders!=null){
                 companyOrders.clear();

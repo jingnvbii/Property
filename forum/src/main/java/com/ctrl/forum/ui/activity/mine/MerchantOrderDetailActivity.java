@@ -135,6 +135,7 @@ public class MerchantOrderDetailActivity extends AppToolBarActivity{
         }
         if (requestCode==8){
             MessageUtils.showShortToast(this,"发货成功");
+            this.finish();
         }
     }
 
@@ -182,8 +183,8 @@ public class MerchantOrderDetailActivity extends AppToolBarActivity{
                     tv_state.setText("已评价");
                     if (orderState.getLevel()!=null && !orderState.getLevel().equals("")){
                         float level = Float.valueOf(orderState.getLevel());
-                        ratingBar.setRating(level/2);
-                        good.setText(SetMemberLevel.setLeveText(level/2));
+                        ratingBar.setRating(level);
+                        good.setText(SetMemberLevel.setLeveText(level));
                     }else{
                         ratingBar.setRating(0);
                         good.setText("");

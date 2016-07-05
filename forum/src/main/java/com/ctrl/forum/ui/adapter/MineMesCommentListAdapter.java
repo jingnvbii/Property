@@ -15,7 +15,7 @@ import com.ctrl.forum.R;
 import com.ctrl.forum.base.SetMemberLevel;
 import com.ctrl.forum.entity.ReplyForMe;
 import com.ctrl.forum.face.FaceConversionUtil;
-import com.ctrl.forum.utils.DateUtil;
+import com.ctrl.forum.utils.TimeUtils;
 
 import java.util.List;
 
@@ -62,7 +62,7 @@ public class MineMesCommentListAdapter extends BaseAdapter {
             Arad.imageLoader.load(replyForMes.get(position).getImgUrl()).placeholder(context.getResources().getDrawable(R.mipmap.iconfont_head))
                     .into(holder.iconfont_head);
             SetMemberLevel.setLevelImage(context, holder.grad, replyForMes.get(position).getMemberLevel());
-            holder.tv_day.setText(DateUtil.getStringByFormat(replyForMes.get(position).getCreateTime(), "yyyy-MM-dd"));
+            holder.tv_day.setText(TimeUtils.dateTime(replyForMes.get(position).getCreateTime()+""));
             holder.comment_vip_name.setText(replyForMes.get(position).getMemberName());
 
             String replyType = replyForMes.get(position).getReplyType();

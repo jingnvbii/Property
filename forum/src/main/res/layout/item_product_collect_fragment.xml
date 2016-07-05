@@ -70,4 +70,5 @@
         android:paddingTop="@dimen/margin_left_and_right"
         />
 
+
 </RelativeLayout>

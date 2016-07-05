@@ -14,7 +14,7 @@ import com.ctrl.forum.R;
 import com.ctrl.forum.base.Constant;
 import com.ctrl.forum.dao.ReplyCommentDao;
 import com.ctrl.forum.entity.Message;
-import com.ctrl.forum.ui.activity.Invitation.InvitationDetailFromPlatformActivity;
+import com.ctrl.forum.ui.activity.Invitation.InvitationPinterestDetailActivity;
 import com.ctrl.forum.ui.activity.mine.MineOrderActivity;
 import com.ctrl.forum.ui.activity.mine.MineXianJuanActivity;
 import com.ctrl.forum.ui.activity.mine.MineYouJuanActivity;
@@ -83,7 +83,7 @@ public class MineMessageFragment extends ToolBarFragment {
         lv_content.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (messageList != null && messageList.get(position-1)!=null) {
+                if (messageList != null && messageList.get(position - 1) != null) {
                     rdao.modifyReadState(messageList.get(position - 1).getId());//更改消息通知为已读
                     String state = messageList.get(position - 1).getMsgType();
                     String targetId = messageList.get(position - 1).getTargetId();
@@ -106,27 +106,27 @@ public class MineMessageFragment extends ToolBarFragment {
                             startActivity(intent);
                             break;
                         case "5": //会员发布帖子<通知会员>
-                            intent = new Intent(getActivity(), InvitationDetailFromPlatformActivity.class);
+                            intent = new Intent(getActivity(), InvitationPinterestDetailActivity.class);
                             intent.putExtra("id", targetId);
                             startActivity(intent);
                             break;
                         case "6": //已发布帖子需要审核<通知会员>
-                            intent = new Intent(getActivity(), InvitationDetailFromPlatformActivity.class);
+                            intent = new Intent(getActivity(), InvitationPinterestDetailActivity.class);
                             intent.putExtra("id", targetId);
                             startActivity(intent);
                             break;
                         case "7": //帖子被赞<通知发帖人>
-                            intent = new Intent(getActivity(), InvitationDetailFromPlatformActivity.class);
+                            intent = new Intent(getActivity(), InvitationPinterestDetailActivity.class);
                             intent.putExtra("id", targetId);
                             startActivity(intent);
                             break;
                         case "8": //帖子收到评论
-                            intent = new Intent(getActivity(), InvitationDetailFromPlatformActivity.class);
+                            intent = new Intent(getActivity(), InvitationPinterestDetailActivity.class);
                             intent.putExtra("id", targetId);
                             startActivity(intent);
                             break;
                         case "9": //帖子评论收到回复
-                            intent = new Intent(getActivity(), InvitationDetailFromPlatformActivity.class);
+                            intent = new Intent(getActivity(), InvitationPinterestDetailActivity.class);
                             intent.putExtra("id", targetId);
                             startActivity(intent);
                             break;

@@ -1,13 +1,11 @@
 package com.ctrl.forum.ui.activity;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
-import android.view.KeyEvent;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -24,18 +22,20 @@ import com.beanu.arad.utils.AnimUtil;
 import com.beanu.arad.utils.MessageUtils;
 import com.ctrl.forum.R;
 import com.ctrl.forum.base.AppToolBarActivity;
-import com.ctrl.forum.base.MyApplication;
 import com.ctrl.forum.dao.LoginDao;
 import com.ctrl.forum.entity.MemberInfo;
 import com.ctrl.forum.ui.activity.mine.MineUpdatepwdActivity;
+import com.ctrl.forum.ui.activity.rim.ExampleUtil;
 import com.mob.tools.utils.UIHandler;
 
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 import butterknife.ButterKnife;
-import butterknife.InjectView;
+import cn.jpush.android.api.JPushInterface;
+import cn.jpush.android.api.TagAliasCallback;
 import cn.sharesdk.framework.Platform;
 import cn.sharesdk.framework.PlatformActionListener;
 import cn.sharesdk.framework.ShareSDK;
@@ -59,8 +59,6 @@ public class LoginActivity extends AppToolBarActivity implements View.OnClickLis
     private ImageView iv_weixin;//微信
     private LoginDao ldao;
     private MemberInfo memberInfo;
-    @InjectView(R.id.iv_back)//返回按钮
-    ImageView iv_back;
 
     public LocationClient mLocationClient = null;
     public BDLocationListener myListener = new MyLocationListener();
@@ -81,6 +79,7 @@ public class LoginActivity extends AppToolBarActivity implements View.OnClickLis
         ShareSDK.initSDK(this);
         initView();
         Arad.preferences.clear();
+
         mLocationClient = new LocationClient(getApplicationContext());     //声明LocationClient类
         mLocationClient.registerLocationListener(myListener);    //注册监听函数1
         initLocation();
@@ -199,7 +198,6 @@ public class LoginActivity extends AppToolBarActivity implements View.OnClickLis
        iv_weibo.setOnClickListener(this);
        iv_qqzone.setOnClickListener(this);
        iv_weixin.setOnClickListener(this);
-        iv_back.setOnClickListener(this);
 
         ldao=new LoginDao(this);
     }
@@ -263,7 +261,7 @@ public class LoginActivity extends AppToolBarActivity implements View.OnClickLis
                     ldao.requestLogin(et_username.getText().toString().trim(), et_pass_word.getText().toString().trim(), "1");
                     //没网的时候可以登陆
                   //  startActivity(new Intent(this,MainActivity.class));
-
+                      setAlias();
                 }
                 break;
             case R.id.tv_forget :
@@ -278,65 +276,105 @@ public class LoginActivity extends AppToolBarActivity implements View.OnClickLis
             case R.id.iv_weixin :
                 authorize(new Wechat(this));
                 break;
-            case R.id.iv_back:
-                // 创建退出对话框
-                AlertDialog isExit = new AlertDialog.Builder(this).create();
-                // 设置对话框标题
-                isExit.setTitle("系统提示");
-                // 设置对话框消息
-                isExit.setMessage("确定要退出吗");
-                // 添加选择按钮并注册监听
-                isExit.setButton( AlertDialog.BUTTON_POSITIVE, "确定", listener);
-                isExit.setButton(AlertDialog.BUTTON_NEGATIVE, "取消", listener);
-                // 显示对话框
-                isExit.show();
-                break;
         }
 
     }
 
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK )
-        {
-            // 创建退出对话框
-            AlertDialog isExit = new AlertDialog.Builder(this).create();
-            // 设置对话框标题
-            isExit.setTitle("系统提示");
-            // 设置对话框消息
-            isExit.setMessage("确定要退出吗");
-            // 添加选择按钮并注册监听
-            isExit.setButton(AlertDialog.BUTTON_POSITIVE,"确定", listener);
-            isExit.setButton(AlertDialog.BUTTON_NEGATIVE, "取消", listener);
-            // 显示对话框
-            isExit.show();
-
-        }
-
-        return false;
-
-    }
-
-    /**监听对话框里面的button点击事件*/
-    DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener()
-    {
-        public void onClick(DialogInterface dialog, int which)
-        {
-            switch (which)
-            {
-                case AlertDialog.BUTTON_POSITIVE:// "确认"按钮退出程序
-                   /* Arad.preferences.clear();
-                    Arad.preferences.flush();*/
-                    MyApplication.getInstance().exit();
-                    finish();
+    private static final int MSG_SET_ALIAS = 1001;
+    private static final int MSG_SET_TAGS = 1002;
+    private static final String TAG = "JPush";
+    private final Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(android.os.Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what) {
+                case MSG_SET_ALIAS:
+                    Log.d(TAG, "Set alias in handler.");
+                    JPushInterface.setAliasAndTags(getApplicationContext(), (String) msg.obj, null, mAliasCallback);
                     break;
-                case AlertDialog.BUTTON_NEGATIVE:// "取消"第二个按钮取消对话框
+
+                case MSG_SET_TAGS:
+                    Log.d(TAG, "Set tags in handler.");
+                    JPushInterface.setAliasAndTags(getApplicationContext(), null, (Set<String>) msg.obj, mTagsCallback);
                     break;
+
                 default:
-                    break;
+                    Log.i(TAG, "Unhandled msg - " + msg.what);
             }
         }
     };
+
+    private final TagAliasCallback mTagsCallback = new TagAliasCallback() {
+
+        @Override
+        public void gotResult(int code, String alias, Set<String> tags) {
+            String logs ;
+            switch (code) {
+                case 0:
+                    logs = "Set tag and alias success";
+                    Log.i(TAG, logs);
+                    break;
+
+                case 6002:
+                    logs = "Failed to set alias and tags due to timeout. Try again after 60s.";
+                    Log.i(TAG, logs);
+                    if (ExampleUtil.isConnected(getApplicationContext())) {
+                        mHandler.sendMessageDelayed(mHandler.obtainMessage(MSG_SET_TAGS, tags), 1000 * 60);
+                    } else {
+                        Log.i(TAG, "No network");
+                    }
+                    break;
+
+                default:
+                    logs = "Failed with errorCode = " + code;
+                    Log.e(TAG, logs);
+            }
+
+            ExampleUtil.showToast(logs, getApplicationContext());
+        }
+
+    };
+
+    private final TagAliasCallback mAliasCallback = new TagAliasCallback() {
+
+        @Override
+        public void gotResult(int code, String alias, Set<String> tags) {
+            String logs ;
+            switch (code) {
+                case 0:
+                    logs = "Set tag and alias success";
+                    Log.i(TAG, logs);
+                    break;
+                case 6002:
+                    logs = "Failed to set alias and tags due to timeout. Try again after 60s.";
+                    Log.i(TAG, logs);
+                    if (ExampleUtil.isConnected(getApplicationContext())) {
+                        mHandler.sendMessageDelayed(mHandler.obtainMessage(MSG_SET_ALIAS, alias), 1000 * 60);
+                    } else {
+                        Log.i(TAG, "No network");
+                    }
+                    break;
+                default:
+                    logs = "Failed with errorCode = " + code;
+                    Log.e(TAG, logs);
+            }
+            ExampleUtil.showToast(logs, getApplicationContext());
+        }
+
+    };
+
+    private void setAlias(){
+        String alias = Arad.preferences.getString("memberId");
+        if (TextUtils.isEmpty(alias)) {
+            return;
+        }
+        if (!ExampleUtil.isValidTagAndAlias(alias)) {
+            Toast.makeText(LoginActivity.this,"格式不对", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        //调用JPush API设置Alias
+        mHandler.sendMessage(mHandler.obtainMessage(MSG_SET_ALIAS, alias));
+    }
 
     private void authorize(Platform plat) {
         if(plat.isValid()) {
@@ -377,14 +415,12 @@ public class LoginActivity extends AppToolBarActivity implements View.OnClickLis
             UIHandler.sendEmptyMessage(MSG_AUTH_CANCEL, this);
         }
     }
-
     private void login(String plat, String userId, HashMap<String, Object> userInfo) {
         Message msg = new Message();
         msg.what = MSG_LOGIN;
         msg.obj = plat;
         UIHandler.sendMessage(msg, this);
     }
-
     public boolean handleMessage(Message msg) {
         switch(msg.what) {
             case MSG_USERID_FOUND: {
