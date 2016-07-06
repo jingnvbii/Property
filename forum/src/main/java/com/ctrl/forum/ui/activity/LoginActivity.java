@@ -1,11 +1,14 @@
 package com.ctrl.forum.ui.activity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -22,6 +25,7 @@ import com.beanu.arad.utils.AnimUtil;
 import com.beanu.arad.utils.MessageUtils;
 import com.ctrl.forum.R;
 import com.ctrl.forum.base.AppToolBarActivity;
+import com.ctrl.forum.base.MyApplication;
 import com.ctrl.forum.dao.LoginDao;
 import com.ctrl.forum.entity.MemberInfo;
 import com.ctrl.forum.ui.activity.mine.MineUpdatepwdActivity;
@@ -34,6 +38,7 @@ import java.util.List;
 import java.util.Set;
 
 import butterknife.ButterKnife;
+import butterknife.InjectView;
 import cn.jpush.android.api.JPushInterface;
 import cn.jpush.android.api.TagAliasCallback;
 import cn.sharesdk.framework.Platform;
@@ -59,6 +64,8 @@ public class LoginActivity extends AppToolBarActivity implements View.OnClickLis
     private ImageView iv_weixin;//微信
     private LoginDao ldao;
     private MemberInfo memberInfo;
+    @InjectView(R.id.iv_back)
+    ImageView iv_back;
 
     public LocationClient mLocationClient = null;
     public BDLocationListener myListener = new MyLocationListener();
@@ -198,6 +205,7 @@ public class LoginActivity extends AppToolBarActivity implements View.OnClickLis
        iv_weibo.setOnClickListener(this);
        iv_qqzone.setOnClickListener(this);
        iv_weixin.setOnClickListener(this);
+        iv_back.setOnClickListener(this);
 
         ldao=new LoginDao(this);
     }
@@ -249,8 +257,65 @@ public class LoginActivity extends AppToolBarActivity implements View.OnClickLis
     }
 
     @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK )
+        {
+            // 创建退出对话框
+            AlertDialog isExit = new AlertDialog.Builder(this).create();
+            // 设置对话框标题
+            isExit.setTitle("系统提示");
+            // 设置对话框消息
+            isExit.setMessage("确定要退出吗");
+            // 添加选择按钮并注册监听
+            isExit.setButton(AlertDialog.BUTTON_POSITIVE,"确定", listener);
+            isExit.setButton(AlertDialog.BUTTON_NEGATIVE, "取消", listener);
+            // 显示对话框
+            isExit.show();
+
+        }
+
+        return false;
+
+    }
+
+    /**监听对话框里面的button点击事件*/
+    DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener()
+    {
+        public void onClick(DialogInterface dialog, int which)
+        {
+            switch (which)
+            {
+                case AlertDialog.BUTTON_POSITIVE:// "确认"按钮退出程序
+                   /* Arad.preferences.clear();
+                    Arad.preferences.flush();*/
+                    MyApplication.getInstance().exit();
+                    finish();
+                    break;
+                case AlertDialog.BUTTON_NEGATIVE:// "取消"第二个按钮取消对话框
+                    break;
+                default:
+                    break;
+            }
+        }
+    };
+
+    @Override
     public void onClick(View v) {
         switch (v.getId()){
+            case R.id.iv_back:
+                // 创建退出对话框
+                AlertDialog isExit = new AlertDialog.Builder(this).create();
+                // 设置对话框标题
+                isExit.setTitle("系统提示");
+                // 设置对话框消息
+                isExit.setMessage("确定要退出吗");
+                // 添加选择按钮并注册监听
+                isExit.setButton(AlertDialog.BUTTON_POSITIVE,"确定", listener);
+                isExit.setButton(AlertDialog.BUTTON_NEGATIVE, "取消", listener);
+                // 显示对话框
+                isExit.show();
+
+                break;
             case R.id.tv_register :
                 Intent intent01=new Intent(this,RegisterActivity.class);
                 startActivity(intent01);

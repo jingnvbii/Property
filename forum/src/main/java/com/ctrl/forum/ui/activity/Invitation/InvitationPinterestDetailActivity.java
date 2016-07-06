@@ -500,20 +500,21 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
                 tv_name.setText(user.getNickName());
             }
             tv_address.setText(post.getContactAddress());
-            if(post.getContactPhone().equals("")||post.getContactPhone()==null){
-                ll_tel.setVisibility(View.GONE);
-            }else {
-                ll_tel.setVisibility(View.VISIBLE);
-                tv_tel.setText(post.getContactPhone());
 
-            }
             tv_introduction.setText(post.getTitle());
-            if(post.getContactName().equals("")||post.getContactName()==null) {
+            if(post.getContactName()==null||post.getContactName().equals("")) {
                 rl_detail_user.setVisibility(View.GONE);
             }else {
                 rl_detail_user.setVisibility(View.VISIBLE);
                 tv_title2_name.setText(post.getContactName());
 
+            }
+
+            if ( post.getContactPhone() == null||post.getContactPhone().equals("")) {
+                ll_tel.setVisibility(View.GONE);
+            } else {
+                ll_tel.setVisibility(View.VISIBLE);
+                tv_tel.setText(post.getContactPhone());
             }
 
 

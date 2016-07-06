@@ -45,6 +45,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     private ArrayList<NavigationBar> listNavigation;
     private Drawable drawable;
     private Drawable drawable2;
+    public static Boolean isFrist = false;
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {

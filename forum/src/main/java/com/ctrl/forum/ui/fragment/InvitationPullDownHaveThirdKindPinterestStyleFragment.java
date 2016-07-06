@@ -346,7 +346,6 @@ public class InvitationPullDownHaveThirdKindPinterestStyleFragment extends ToolB
     @Override
     public void onRefresh() {
         ll.setVisibility(View.VISIBLE);
-        listPost.clear();
         PAGE_NUM = 1;
         new Handler().postDelayed(new Runnable() {
             @Override
@@ -374,9 +373,6 @@ public class InvitationPullDownHaveThirdKindPinterestStyleFragment extends ToolB
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                if(listPost!=null){
-                    listPost.clear();
-                }
                 if(thirdKindId!=null){
                     idao.requestPostListByCategory(Arad.preferences.getString("memberId"),thirdKindId, "0", "", "",PAGE_NUM, Constant.PAGE_SIZE);
                 }
