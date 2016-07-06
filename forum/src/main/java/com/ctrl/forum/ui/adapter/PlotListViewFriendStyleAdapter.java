@@ -143,7 +143,7 @@ public class PlotListViewFriendStyleAdapter extends BaseAdapter {
         SetMemberLevel.setLevelImage(mcontext,holder.iv_friend_style_levlel,post.getMemberLevel());
         Arad.imageLoader.load(post.getImgUrl()).placeholder(R.mipmap.default_error).into(holder.iv_friend_style_title_photo);
 
-        if(post.getPostReplyList()!=null) {
+        if(post.getPostReplyList()!=null ) {
             holder.lv_friend_style_reply.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

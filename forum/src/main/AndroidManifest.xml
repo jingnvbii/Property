@@ -209,14 +209,13 @@
             android:value="developer-default" />
         <meta-data
             android:name="JPUSH_APPKEY"
-            android:value="9fd538694f3a9a23519b00c8" /> <!-- </>值来自开发者平台取得的AppKey -->
+            android:value="d03bc09bfe8296920ba3e528" /> <!-- </>值来自开发者平台取得的AppKey -->
 
         <!--
             APP_KEY：d03bc09bfe8296920ba3e528
             MASTER_SECRET：b9f031fcb6ae29bad6d91f30
         -->
 <!--             APP_KEY：9fd538694f3a9a23519b00c8 自己的 -->
-
         <!-- JPush结束 -->
 
         <!-- 百度地图KEY -->

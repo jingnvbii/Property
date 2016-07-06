@@ -11,8 +11,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.beanu.arad.Arad;
+import com.beanu.arad.base.ToolBarActivity;
 import com.ctrl.forum.R;
-import com.ctrl.forum.base.AppToolBarActivity;
 import com.ctrl.forum.base.MyBroadcastReceiver;
 import com.ctrl.forum.utils.DataCleanUtils;
 
@@ -27,7 +27,7 @@ import cn.jpush.android.api.JPushInterface;
 /**
  * 系统设置
  */
-public class MineSettingActivity extends AppToolBarActivity implements View.OnClickListener{
+public class MineSettingActivity extends ToolBarActivity implements View.OnClickListener{
     @InjectView(R.id.iv_system_notification) //系统通知
     CheckBox iv_system_notification;
     @InjectView(R.id.iv_reply_comments)  //评论回复

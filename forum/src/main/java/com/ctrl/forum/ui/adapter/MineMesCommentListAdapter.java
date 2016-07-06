@@ -138,7 +138,7 @@ public class MineMesCommentListAdapter extends BaseAdapter {
                             @Override
                             public void onClick(View v) {
                                 String id = "1";
-                                playSound(v,id, replyForMes.get(position).getSoundUrl());
+                                playSound(v,id, replyForMes.get(position).getMySoundUrl());
                             }
                         });
                     }

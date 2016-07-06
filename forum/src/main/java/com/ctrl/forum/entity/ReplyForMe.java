@@ -20,6 +20,15 @@ public class ReplyForMe {
     private String contentType; //评论内容类型（0：文字或者表情、1：图片、2：语音）
     private String myContentType; //回复内容类型（0：文字或者表情、1：图片、2：语音）
     private String isReplied; //是否有回复（0：无、1：有）
+    private String mySoundUrl; //我回复的语音Url
+
+    public String getMySoundUrl() {
+        return mySoundUrl;
+    }
+
+    public void setMySoundUrl(String mySoundUrl) {
+        this.mySoundUrl = mySoundUrl;
+    }
 
     public String getIsReplied() {
         return isReplied;
