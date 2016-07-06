@@ -6,9 +6,9 @@ import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.beanu.arad.Arad;
-import com.beanu.arad.base.ToolBarActivity;
 import com.beanu.arad.utils.MessageUtils;
 import com.ctrl.forum.R;
+import com.ctrl.forum.base.AppToolBarActivity;
 import com.ctrl.forum.base.ListItemTypeInterf;
 import com.ctrl.forum.dao.EditDao;
 import com.ctrl.forum.dao.InvitationDao;
@@ -25,7 +25,7 @@ import butterknife.InjectView;
 /**
  * 草稿箱
  */
-public class MineDraftActivity extends ToolBarActivity implements View.OnClickListener{
+public class MineDraftActivity extends AppToolBarActivity implements View.OnClickListener{
     @InjectView(R.id.lv_content)
     ListView lv_content;
 

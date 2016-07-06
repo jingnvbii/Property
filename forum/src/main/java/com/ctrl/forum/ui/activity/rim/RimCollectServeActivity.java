@@ -14,8 +14,8 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.beanu.arad.Arad;
-import com.beanu.arad.base.ToolBarActivity;
 import com.ctrl.forum.R;
+import com.ctrl.forum.base.AppToolBarActivity;
 import com.ctrl.forum.base.Constant;
 import com.ctrl.forum.dao.RimDao;
 import com.ctrl.forum.entity.RimServiceCompany;
@@ -31,7 +31,7 @@ import butterknife.InjectView;
 /**
  * 周边服务--我的收藏
  */
-public class RimCollectServeActivity extends ToolBarActivity implements View.OnClickListener{
+public class RimCollectServeActivity extends AppToolBarActivity implements View.OnClickListener{
     @InjectView(R.id.lv_collect)
     PullToRefreshListView lv_collect;
     @InjectView(R.id.iv_back)

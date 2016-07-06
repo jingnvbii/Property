@@ -215,6 +215,7 @@
         android:background="@color/line_gray" />
 
     <TextView
+        android:id="@+id/tv_pinglun_title"
         android:focusable="false"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

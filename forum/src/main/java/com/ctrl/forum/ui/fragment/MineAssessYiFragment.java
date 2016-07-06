@@ -8,7 +8,6 @@ import android.widget.ListView;
 
 import com.beanu.arad.Arad;
 import com.beanu.arad.base.ToolBarFragment;
-import com.beanu.arad.utils.MessageUtils;
 import com.ctrl.forum.R;
 import com.ctrl.forum.dao.ReplyCommentDao;
 import com.ctrl.forum.entity.Assess;
@@ -46,6 +45,7 @@ public class MineAssessYiFragment extends ToolBarFragment {
         assessYiAdapter = new MineAssessYiAdapter(getActivity());
         lv_content.setAdapter(assessYiAdapter);
 
+        lv_content.setMode(PullToRefreshBase.Mode.BOTH);
         lv_content.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
@@ -87,7 +87,6 @@ public class MineAssessYiFragment extends ToolBarFragment {
         super.onRequestSuccess(requestCode);
         lv_content.onRefreshComplete();
         if (requestCode==1){
-            MessageUtils.showShortToast(getActivity(),"获取已评价订单成功");
             assessYis = rcdao.getAssesses();
             if (assessYis!=null){
                 assessYiAdapter.setMessages(assessYis);
@@ -99,6 +98,5 @@ public class MineAssessYiFragment extends ToolBarFragment {
     public void onRequestFaild(String errorNo, String errorMessage) {
         super.onRequestFaild(errorNo, errorMessage);
         lv_content.onRefreshComplete();
-        MessageUtils.showShortToast(getActivity(),"获取已评价订单失败!");
     }
 }

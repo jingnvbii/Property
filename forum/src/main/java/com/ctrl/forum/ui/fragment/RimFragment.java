@@ -86,14 +86,14 @@ public class  RimFragment extends ToolBarFragment implements View.OnClickListene
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.rl_collect:
-                if (Arad.preferences.getString("memberId")==null){
+                if (Arad.preferences.getString("memberId").equals("")){
                     startActivity(new Intent(getActivity(), LoginActivity.class));
                 }else {
                     startActivity(new Intent(getActivity(), RimCollectServeActivity.class));
                 }
                 break;
             case R.id.rl_search:
-                if (Arad.preferences.getString("memberId")==null){
+                if (Arad.preferences.getString("memberId").equals("")){
                     startActivity(new Intent(getActivity(), LoginActivity.class));
                 }else {
                     startActivity(new Intent(getActivity(),RimSearchActivity.class));

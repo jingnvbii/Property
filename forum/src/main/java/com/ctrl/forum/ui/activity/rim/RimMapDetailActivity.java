@@ -270,7 +270,7 @@ public class RimMapDetailActivity extends ToolBarActivity implements View.OnClic
             }
 
             public void initSuccess() {
-               // Toast.makeText(RimMapDetailActivity.this, "百度导航引擎初始化成功", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(RimMapDetailActivity.this, "百度导航引擎初始化成功", Toast.LENGTH_SHORT).show();
                 initSetting();
             }
 

@@ -493,11 +493,11 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
             if (user != null) {
                 Arad.imageLoader.load(user.getImgUrl()).placeholder(R.mipmap.round_img).into(title_image);
                 Arad.imageLoader.load(user.getImgUrl()).placeholder(R.mipmap.round_img).into(title_image_2);
-            }
-            if(user.getNickName()==null) {
-                tv_name.setText(user.getUserName());
-            }else {
-                tv_name.setText(user.getNickName());
+                if (user.getNickName() == null) {
+                    tv_name.setText(user.getUserName());
+                } else {
+                    tv_name.setText(user.getNickName());
+                }
             }
             tv_address.setText(post.getContactAddress());
             if(post.getContactPhone().equals("")||post.getContactPhone()==null){

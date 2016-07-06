@@ -16,8 +16,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.beanu.arad.Arad;
-import com.beanu.arad.base.ToolBarActivity;
 import com.ctrl.forum.R;
+import com.ctrl.forum.base.AppToolBarActivity;
 import com.ctrl.forum.base.Constant;
 import com.ctrl.forum.customview.FlowLayoutView;
 import com.ctrl.forum.dao.SearchDao;
@@ -32,7 +32,7 @@ import butterknife.InjectView;
 /**
  * 周边搜索
  */
-public class RimSearchActivity extends ToolBarActivity implements View.OnClickListener{
+public class RimSearchActivity extends AppToolBarActivity implements View.OnClickListener{
     @InjectView(R.id.ed_search)
     EditText ed_search;
     @InjectView(R.id.iv_back)

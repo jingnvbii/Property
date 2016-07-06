@@ -49,7 +49,6 @@ public class HomeAutoSwitchPicHolder extends BaseHolder<List<String>>
        // this.mContext=context;
     }
 
-
     protected View initView() {
         View view = View.inflate(mContext, R.layout.home_autoswitchpic, null);
         mPager=(ViewPager) view.findViewById(R.id.item_home_viewPager);

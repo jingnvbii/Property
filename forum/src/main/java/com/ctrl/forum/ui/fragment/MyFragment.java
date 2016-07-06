@@ -139,7 +139,9 @@ public class MyFragment extends ToolBarFragment implements View.OnClickListener{
         editDao = new EditDao(this);
 
         String id = Arad.preferences.getString("memberId");
-        editDao.getVipInfo(id);
+        if (Arad.preferences.getString("memberId")!=null && !Arad.preferences.getString("memberId").equals("")) {
+            editDao.getVipInfo(id);
+        }
         editDao.getPlugins();
 
         bt_integral.setText("积分:" + Arad.preferences.getString("point"));
@@ -278,7 +280,7 @@ public class MyFragment extends ToolBarFragment implements View.OnClickListener{
                         startActivity(intent);
                     }
                 }
-                break;
+                return;
             default:
                 break;
         }
@@ -390,13 +392,14 @@ public class MyFragment extends ToolBarFragment implements View.OnClickListener{
     public void onRequestSuccess(int requestCode) {
         super.onRequestSuccess(requestCode);
         if (requestCode==0){
-            int singTime;
+           /* int singTime;
             if (Arad.preferences.getString("signTimes")!=null && !Arad.preferences.getString("signTimes").equals("")) {
-                singTime = Integer.getInteger(Arad.preferences.getString("signTimes"));
+                singTime = Integer.valueOf(Arad.preferences.getString("signTimes"));
             }else{
                 singTime = 0;
-            }
-            MessageUtils.showShortToast(getActivity(), "签到成功!连续签到"+(singTime+1)+"天");
+            }*/
+            //MessageUtils.showShortToast(getActivity(), "签到成功!连续签到"+(singTime+1)+"天");
+            MessageUtils.showShortToast(getActivity(), "签到成功!");
             editDao.getVipInfo(Arad.preferences.getString("memberId"));
             bt_sign.setText("已签到");
         }

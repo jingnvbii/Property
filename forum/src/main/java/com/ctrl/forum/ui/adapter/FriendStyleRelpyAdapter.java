@@ -1,6 +1,8 @@
 package com.ctrl.forum.ui.adapter;
 
 import android.content.Context;
+import android.graphics.drawable.AnimationDrawable;
+import android.media.MediaPlayer;
 import android.text.SpannableString;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +14,7 @@ import android.widget.TextView;
 import com.ctrl.forum.R;
 import com.ctrl.forum.entity.PostReply;
 import com.ctrl.forum.face.FaceConversionUtil;
+import com.ctrl.forum.manager.MediaManager;
 
 import java.util.List;
 
@@ -25,6 +28,7 @@ import butterknife.InjectView;
 public class FriendStyleRelpyAdapter extends BaseAdapter{
     private Context mcontext;
     private List<PostReply> list;
+    private View viewanim;
 
     public FriendStyleRelpyAdapter(Context context) {
                this.mcontext=context;
@@ -34,7 +38,6 @@ public class FriendStyleRelpyAdapter extends BaseAdapter{
         this.list = list;
         notifyDataSetChanged();
     }
-
 
     @Override
     public int getCount() {
@@ -61,7 +64,7 @@ public class FriendStyleRelpyAdapter extends BaseAdapter{
         }else {
             holder=(ViewHolder)convertView.getTag();
         }
-        PostReply merchant=list.get(position);
+        final PostReply merchant=list.get(position);
         holder.tv_reply_name.setText(merchant.getMemberName()+":");
         if(merchant.getContentType().equals("0")) {
             SpannableString spannableString2 = FaceConversionUtil.getInstace().getExpressionString(mcontext, merchant.getReplyContent());
@@ -73,9 +76,17 @@ public class FriendStyleRelpyAdapter extends BaseAdapter{
         }
         if (merchant.getContentType().equals("2")) {
            holder.rl_reply_voice.setVisibility(View.VISIBLE);
+         /*  holder.rl_reply_voice.setOnClickListener(new View.OnClickListener() {
+               @Override
+               public void onClick(View v) {
+                   playSound(v,merchant.getSoundUrl());
+               }
+           });*/
         }
         return convertView;
     }
+
+
 
     static class ViewHolder{
        /* @InjectView(R.id.iv_grid_item)//图片
@@ -90,4 +101,34 @@ public class FriendStyleRelpyAdapter extends BaseAdapter{
             ButterKnife.inject(this, view);
         }
     }
+
+    /*
+* 播放语音
+* */
+    public void playSound(View view, String soundUrl) {
+        // TODO Auto-generated method stub
+
+        // 播放动画
+        if (viewanim != null) {//让第二个播放的时候第一个停止播放
+            viewanim.setBackgroundResource(R.drawable.voice_default);
+            viewanim = null;
+        }
+        viewanim = view.findViewById(R.id.id_recorder_anim);
+        viewanim.setBackgroundResource(R.drawable.play);
+        AnimationDrawable drawable = (AnimationDrawable) viewanim
+                .getBackground();
+        drawable.start();
+
+        // 播放音频
+        MediaManager.playSoundFromUrl(mcontext, soundUrl,
+                new MediaPlayer.OnCompletionListener() {
+
+                    @Override
+                    public void onCompletion(MediaPlayer mp) {
+                        viewanim.setBackgroundResource(R.drawable.voice_default);
+                    }
+                });
+
+    }
+
 }
