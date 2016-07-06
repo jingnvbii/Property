@@ -241,7 +241,7 @@ public class InvitationDetailActivity extends AppToolBarActivity implements View
             tv_detail_content.setText(post.getContent());
             tv_detail_tel.setText(post.getContactPhone());
 
-            if(post.getContactPhone().equals("")||post.getContactPhone()==null){
+            if(post.getContactPhone()==null||post.getContactPhone().equals("")){
                 ll_tel.setVisibility(View.GONE);
             }else {
                 ll_tel.setVisibility(View.VISIBLE);

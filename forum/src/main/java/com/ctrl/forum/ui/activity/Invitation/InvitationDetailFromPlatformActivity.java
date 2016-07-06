@@ -488,7 +488,7 @@ public class InvitationDetailFromPlatformActivity extends AppToolBarActivity imp
             tv_address.setText(post.getContactAddress());
             tv_introduction.setText(post.getTitle());
 
-            if(post.getContactPhone().equals("")||post.getContactPhone()==null){
+            if(post.getContactPhone()==null||post.getContactPhone().equals("")){
                 ll_tel.setVisibility(View.GONE);
                 tv_link_tel.setVisibility(View.GONE);
             }else {
@@ -502,6 +502,10 @@ public class InvitationDetailFromPlatformActivity extends AppToolBarActivity imp
                 tv_link_url.setVisibility(View.GONE);
             }else {
                 tv_link_url.setVisibility(View.VISIBLE);
+            }
+
+            if(post.getReporterId().equals(Arad.preferences.getString("memberId"))){
+                tv_delete.setVisibility(View.VISIBLE);
             }
 
 
@@ -1376,6 +1380,11 @@ public class InvitationDetailFromPlatformActivity extends AppToolBarActivity imp
     * 回复评论
     * */
     public void replyPinglun(int position) {
+        if(Arad.preferences.getString("memberId")==null||Arad.preferences.getString("memberId").equals("")){
+            startActivity(new Intent(InvitationDetailFromPlatformActivity.this, LoginActivity.class));
+            AnimUtil.intentSlidOut(InvitationDetailFromPlatformActivity.this);
+            return;
+        }
         if(Arad.preferences.getString("isShielded").equals("1")){
             MessageUtils.showShortToast(InvitationDetailFromPlatformActivity.this,"您已经被屏蔽，不能回复评论");
         }

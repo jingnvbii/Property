@@ -792,7 +792,6 @@ public class StroeFragment extends ToolBarFragment implements View.OnClickListen
                 if(Arad.preferences.getString("memberId")==null||Arad.preferences.getString("memberId").equals("")){
                     startActivity(new Intent(getActivity(), LoginActivity.class));
                     AnimUtil.intentSlidOut(getActivity());
-                    getActivity().finish();
                     return;
                 }
                 Intent intent_toolbar = new Intent(getActivity(), StoreLocateActivity.class);

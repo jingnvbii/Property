@@ -8,7 +8,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -180,7 +179,6 @@ public class LoginActivity extends AppToolBarActivity implements View.OnClickLis
                     sb.append(p.getId() + " " + p.getName() + " " + p.getRank());
                 }
             }
-            //Log.i("BaiduLocationApiDem", sb.toString());
             latitude = location.getLatitude() + "";
             lontitude = location.getLongitude() + "";
         }
@@ -256,28 +254,6 @@ public class LoginActivity extends AppToolBarActivity implements View.OnClickLis
         }
     }
 
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK )
-        {
-            // 创建退出对话框
-            AlertDialog isExit = new AlertDialog.Builder(this).create();
-            // 设置对话框标题
-            isExit.setTitle("系统提示");
-            // 设置对话框消息
-            isExit.setMessage("确定要退出吗");
-            // 添加选择按钮并注册监听
-            isExit.setButton(AlertDialog.BUTTON_POSITIVE,"确定", listener);
-            isExit.setButton(AlertDialog.BUTTON_NEGATIVE, "取消", listener);
-            // 显示对话框
-            isExit.show();
-
-        }
-
-        return false;
-
-    }
-
     /**监听对话框里面的button点击事件*/
     DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener()
     {
@@ -286,8 +262,6 @@ public class LoginActivity extends AppToolBarActivity implements View.OnClickLis
             switch (which)
             {
                 case AlertDialog.BUTTON_POSITIVE:// "确认"按钮退出程序
-                   /* Arad.preferences.clear();
-                    Arad.preferences.flush();*/
                     MyApplication.getInstance().exit();
                     finish();
                     break;
@@ -303,18 +277,7 @@ public class LoginActivity extends AppToolBarActivity implements View.OnClickLis
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.iv_back:
-                // 创建退出对话框
-                AlertDialog isExit = new AlertDialog.Builder(this).create();
-                // 设置对话框标题
-                isExit.setTitle("系统提示");
-                // 设置对话框消息
-                isExit.setMessage("确定要退出吗");
-                // 添加选择按钮并注册监听
-                isExit.setButton(AlertDialog.BUTTON_POSITIVE,"确定", listener);
-                isExit.setButton(AlertDialog.BUTTON_NEGATIVE, "取消", listener);
-                // 显示对话框
-                isExit.show();
-
+                onBackPressed();
                 break;
             case R.id.tv_register :
                 Intent intent01=new Intent(this,RegisterActivity.class);
