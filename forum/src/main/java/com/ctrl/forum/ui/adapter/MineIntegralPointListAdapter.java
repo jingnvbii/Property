@@ -60,8 +60,15 @@ public class MineIntegralPointListAdapter extends BaseAdapter{
         }
 
         if (redeemHistories!=null && redeemHistories.get(position)!=null){
-            viewHolder.tv_day.setText(DateUtil.getStringByFormat(redeemHistories.get(position).getCreateTime(), "yyyy-MM-dd   hh:mm:ss"));
-            viewHolder.tv_fen.setText(redeemHistories.get(position).getPoint());
+            viewHolder.tv_day.setText(DateUtil.getStringByFormat(redeemHistories.get(position).getCreateTime(), "yyyy-MM-dd   HH:mm:ss"));
+            viewHolder.tv_fen.setText(redeemHistories.get(position).getPoint()+"");
+
+            int point = redeemHistories.get(position).getPoint();
+            if (point>0){
+                viewHolder.tv_fen.setText("+"+point);
+            }else{
+                viewHolder.tv_fen.setText(point+"");
+            }
 
             String doType  = redeemHistories.get(position).getDoType();
             switch (doType){

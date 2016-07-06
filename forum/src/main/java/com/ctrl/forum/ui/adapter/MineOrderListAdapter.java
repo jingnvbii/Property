@@ -213,7 +213,7 @@ public class MineOrderListAdapter extends BaseAdapter{
 
             holder.ctrl.setText(orders.get(position).getCompanyname());
             holder.tv_total.setText(orders.get(position).getTotalCost());
-            String time = DateUtil.getStringByFormat(orders.get(position).getCreateTime(),"yyyy-MM-dd  hh:mm:ss");
+            String time = DateUtil.getStringByFormat(orders.get(position).getCreateTime(),"yyyy-MM-dd  HH:mm:ss");
             holder.tv_time.setText(time);
             holder.tv_content.setText("本订单由"+orders.get(position).getCompanyname()+"提供");
             Arad.imageLoader.load(orders.get(position).getImg()).into(holder.iv_head);

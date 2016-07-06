@@ -86,8 +86,8 @@ public class MineMesCommentListAdapter extends BaseAdapter {
                 holder.ll_replay.setVisibility(View.GONE);
             }else{
                 holder.ll_replay.setVisibility(View.VISIBLE);
-                holder.tv_vip_name.setText(replyForMes.get(position).getMemberName()+":");
-                setType(replyForMes.get(position).getContentType(),holder.tv_comment,position,"2",holder); //myReplyContent
+                holder.tv_vip_name.setText(replyForMes.get(position).getMemberName() + ":");
+                setType(replyForMes.get(position).getMyContentType(),holder.tv_comment,position,"2",holder); //myReplyContent
             }
         }
 

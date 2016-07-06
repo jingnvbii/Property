@@ -384,6 +384,9 @@ public class MyFragment extends ToolBarFragment implements View.OnClickListener{
         String imgUrl = Arad.preferences.getString("imgUrl");
         if (imgUrl!=null&&!imgUrl.equals("")) {
             Arad.imageLoader.load(imgUrl).placeholder(getResources().getDrawable(R.mipmap.iconfont_head)).into(iv_head);//设置头像
+        }else{
+            //游客身份进行登录
+           iv_head.setImageDrawable(getResources().getDrawable(R.mipmap.image_default));
         }
     }
 
