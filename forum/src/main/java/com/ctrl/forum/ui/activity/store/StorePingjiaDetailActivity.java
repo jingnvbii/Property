@@ -47,7 +47,7 @@ public class StorePingjiaDetailActivity extends ToolBarActivity implements View.
    SparseArray<Fragment>fragments=new SparseArray<>();
 
 
-    //手指上下滑动时的最小速度
+    //手指上下滑动时的最小速度11
     private static final int YSPEED_MIN = 1000;
 
     //手指向右滑动时的最小距离
