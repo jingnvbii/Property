@@ -183,7 +183,9 @@ public class InvitationCommentDetaioActivity extends AppToolBarActivity implemen
         lv_comment_detail.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
-                listPostReply.clear();
+                if (listPostReply != null) {
+                    listPostReply.clear();
+                }
                 PAGE_NUM = 1;
                 new Handler().postDelayed(new Runnable() {
                     @Override

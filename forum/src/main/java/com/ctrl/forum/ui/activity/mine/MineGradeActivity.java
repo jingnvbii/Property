@@ -133,6 +133,7 @@ public class MineGradeActivity extends AppToolBarActivity implements View.OnClic
                 Arad.preferences.putInteger("dayMaxExp", levelInfo.getDayMaxExp());
                 Arad.preferences.putInteger("nexeLevel",nexeLevel);
                 Arad.preferences.putInteger("nextLevelExp", levelInfo.getNextLevelExp());
+                Arad.preferences.flush();
                 putViewData();
             }
         }

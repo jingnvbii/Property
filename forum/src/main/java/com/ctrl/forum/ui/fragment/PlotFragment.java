@@ -103,7 +103,6 @@ public class PlotFragment extends ToolBarFragment implements View.OnClickListene
     private InvitationDao idao;
     private PopupWindow mPopupWindow;
 
-
     //123
     private PopupWindow popupWindow;
     private PopupWindow popupWindow_share;
@@ -160,8 +159,9 @@ public class PlotFragment extends ToolBarFragment implements View.OnClickListene
                         imm.hideSoftInputFromWindow(v.getApplicationWindowToken(), 0);
                     }
                     if (!et_search.getText().toString().equals("")) {
-                        if (Arad.preferences.getString("memberId").equals("")){
+                        if (Arad.preferences.getString("memberId")!=null || Arad.preferences.getString("memberId").equals("")){
                             startActivity(new Intent(getActivity(), LoginActivity.class));
+                            et_search.setText("");
                         }else {
                             Intent intent = new Intent(getActivity(), PlotSearchResultActivity.class);
                             intent.putExtra("keyWord", et_search.getText().toString());
@@ -175,23 +175,33 @@ public class PlotFragment extends ToolBarFragment implements View.OnClickListene
             }
         });
 
+
         lv_content.setMode(PullToRefreshBase.Mode.BOTH);
         lv_content.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
-                rl_search.setVisibility(View.VISIBLE);
+                if (Arad.preferences.getString("memberId")!=null && !Arad.preferences.getString("memberId").equals("")) {
+                    rl_search.setVisibility(View.VISIBLE);
+                }else{
+                    rl_search.setVisibility(View.GONE);
+                    lv_content.onRefreshComplete();
+                }
                 if (posts != null) {
                     posts.clear();
                     PAGE_NUM = 1;
                 }
-                plotDao.queryCommunityPostList(Arad.preferences.getString("memberId"), communityId, PAGE_NUM + "", Constant.PAGE_SIZE + "");
+                if (Arad.preferences.getString("memberId")!=null && !Arad.preferences.getString("memberId").equals("")) {
+                    plotDao.queryCommunityPostList(Arad.preferences.getString("memberId"), communityId, PAGE_NUM + "", Constant.PAGE_SIZE + "");
+                }
             }
 
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
                 if (posts != null) {
                     PAGE_NUM += 1;
-                    plotDao.queryCommunityPostList(Arad.preferences.getString("memberId"), communityId, PAGE_NUM + "", Constant.PAGE_SIZE + "");
+                    if (Arad.preferences.getString("memberId")!=null && !Arad.preferences.getString("memberId").equals("")) {
+                        plotDao.queryCommunityPostList(Arad.preferences.getString("memberId"), communityId, PAGE_NUM + "", Constant.PAGE_SIZE + "");
+                    }
                 } else {
                     lv_content.onRefreshComplete();
                 }
@@ -234,12 +244,12 @@ public class PlotFragment extends ToolBarFragment implements View.OnClickListene
                         v.tv_friend_style_zan_num.setText((text.get(position) + 1) + "");
                         text.put(position,text.get(position) + 1);
                         v.iv_friend_style_zan_num.setImageResource(R.mipmap.zan_blue_shixin);
-                        MessageUtils.showShortToast(getActivity(), "点赞成功");
+                        //MessageUtils.showShortToast(getActivity(), "点赞成功");
                         isAdd.put(position,false);
                     } else {
                         idao.requesZambia("reduce", posts.get(position).getId(), Arad.preferences.getString("memberId")
                                 , posts.get(position).getTitle(), posts.get(position).getContent());
-                        MessageUtils.showShortToast(getActivity(), "取消点赞");
+                        //MessageUtils.showShortToast(getActivity(), "取消点赞");
                         v.tv_friend_style_zan_num.setText((text.get(position) - 1) + "");
                         text.put(position, text.get(position)-1);
                         v.iv_friend_style_zan_num.setImageResource(R.mipmap.zan_blue);
@@ -445,7 +455,9 @@ public class PlotFragment extends ToolBarFragment implements View.OnClickListene
     }
 
     private void initData() {
-        plotDao.queryCommunityPostList(Arad.preferences.getString("memberId"), communityId, PAGE_NUM + "", Constant.PAGE_SIZE + "");
+        if (Arad.preferences.getString("memberId")!=null && !Arad.preferences.getString("memberId").equals("")) {
+            plotDao.queryCommunityPostList(Arad.preferences.getString("memberId"), communityId, PAGE_NUM + "", Constant.PAGE_SIZE + "");
+        }
     }
 
     @Override
@@ -525,18 +537,18 @@ public class PlotFragment extends ToolBarFragment implements View.OnClickListene
     @Override
     public void onResume() {
         super.onResume();
-        Log.e("MainActivity.isFrist",MainActivity.isFrist.toString());
-        if (MainActivity.isFrist) {
-            if (posts!=null){
-                posts.clear();
+        if (Arad.preferences.getString("memberId")!=null && !Arad.preferences.getString("memberId").equals("")) {
+            if (MainActivity.isFrist) {
+                if (posts != null) {
+                    posts.clear();
+                }
+                tv_plot_name.setText(Arad.preferences.getString("communityName"));
+                plotDao.queryCommunityPostList(Arad.preferences.getString("memberId"),
+                        Arad.preferences.getString("communityId"),
+                        PAGE_NUM + "", Constant.PAGE_SIZE + "");
             }
-            tv_plot_name.setText(Arad.preferences.getString("communityName"));
-            plotDao.queryCommunityPostList(Arad.preferences.getString("memberId"),
-                    Arad.preferences.getString("communityId"),
-                    PAGE_NUM + "", Constant.PAGE_SIZE + "");
         }
     }
-
 
     public void clickShare(){
         shareDialog = new ShareDialog(getActivity());

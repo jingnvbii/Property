@@ -256,11 +256,11 @@ public class RimMapDetailActivity extends ToolBarActivity implements View.OnClic
         BaiduNaviManager.getInstance().init(this, mSDCardPath, APP_FOLDER_NAME, new BaiduNaviManager.NaviInitListener() {
             @Override
             public void onAuthResult(int status, String msg) {
-                if (0 == status) {
+               /* if (0 == status) {
                     authinfo = "key校验成功!";
                 } else {
                     authinfo = "key校验失败, " + msg;
-                }
+                }*/
                 RimMapDetailActivity.this.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -270,16 +270,16 @@ public class RimMapDetailActivity extends ToolBarActivity implements View.OnClic
             }
 
             public void initSuccess() {
-               Toast.makeText(RimMapDetailActivity.this, "百度导航引擎初始化成功", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(RimMapDetailActivity.this, "百度导航引擎初始化成功", Toast.LENGTH_SHORT).show();
                 initSetting();
             }
 
             public void initStart() {
-                Toast.makeText(RimMapDetailActivity.this, "百度导航引擎初始化开始", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(RimMapDetailActivity.this, "百度导航引擎初始化开始", Toast.LENGTH_SHORT).show();
             }
 
             public void initFailed() {
-                Toast.makeText(RimMapDetailActivity.this, "百度导航引擎初始化失败", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(RimMapDetailActivity.this, "百度导航引擎初始化失败", Toast.LENGTH_SHORT).show();
             }
 
 

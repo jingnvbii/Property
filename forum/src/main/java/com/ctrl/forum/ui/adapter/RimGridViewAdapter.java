@@ -65,23 +65,23 @@ public class RimGridViewAdapter extends BaseAdapter{
         final String id = data.get(position).getId();
         holder.bt_rim.setText(data.get(position).getName());
 
-        if (Arad.preferences.getString("memberId")!=null) {
-            if (data.get(position).getId() != null) {
-                holder.bt_rim.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
+        if (data.get(position).getId() != null) {
+            holder.bt_rim.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (Arad.preferences.getString("memberId") != null && !Arad.preferences.getString("memberId").equals("")){
                         Intent intent = new Intent(context, ItemRimActivity.class);
                         intent.putExtra("id", id);
                         intent.putExtra("title", title);
                         context.startActivity(intent);
+                    }else{
+                        context.startActivity(new Intent(context, LoginActivity.class));
                     }
-                });
-            }
-        }else{
-           context.startActivity(new Intent(context, LoginActivity.class));
+                }
+            });
         }
 
-        return convertView;
+            return convertView;
     }
 
     class ViewHolder{

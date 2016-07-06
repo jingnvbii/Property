@@ -6,7 +6,7 @@ package com.ctrl.forum.entity;
  */
 public class Assess {
     private String id;  //订单id
-    private String createTime; //创建时间
+    private long createTime; //创建时间
     private String totalCost;  //商品总价
     private String companyname; //商家名称
     private String img; //商家logo
@@ -22,11 +22,11 @@ public class Assess {
         this.companyname = companyname;
     }
 
-    public String getCreateTime() {
+    public long getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(String createTime) {
+    public void setCreateTime(long createTime) {
         this.createTime = createTime;
     }
 

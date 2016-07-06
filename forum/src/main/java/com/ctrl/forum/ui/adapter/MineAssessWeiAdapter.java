@@ -1,6 +1,7 @@
 package com.ctrl.forum.ui.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,8 +10,11 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.beanu.arad.Arad;
 import com.ctrl.forum.R;
 import com.ctrl.forum.entity.Assess;
+import com.ctrl.forum.ui.activity.mine.OrderPingjiaActivity;
+import com.ctrl.forum.utils.DateUtil;
 
 import java.util.List;
 
@@ -43,7 +47,7 @@ public class MineAssessWeiAdapter extends BaseAdapter {
     public long getItemId(int position) {return position;}
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
         if(convertView==null){
             convertView= LayoutInflater.from(context).inflate(R.layout.item_mine_assess_wei,parent,false);
@@ -55,9 +59,19 @@ public class MineAssessWeiAdapter extends BaseAdapter {
 
         if (messages!=null){
             holder.tv_name.setText(messages.get(position).getCompanyname());
-            holder.tv_total.setText(messages.get(position).getTotalCost());
-            holder.tv_data.setText(messages.get(position).getCreateTime());
-            //时间需改格式,评分条未传值,评价内容随评分条改变
+            holder.tv_total.setText(messages.get(position).getTotalCost()+"元");
+            holder.tv_data.setText(DateUtil.getStringByFormat(messages.get(position).getCreateTime(),"yyyy-MM-dd hh:mm:ss"));
+            Arad.imageLoader.load(messages.get(position).getImg()).into(holder.iv_head);
+
+            holder.assess_go.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(context, OrderPingjiaActivity.class);
+                    intent.putExtra("id",messages.get(position).getId());
+                    //intent.putExtra("companyId",companyId); //商家id
+                    context.startActivity(intent);
+                }
+            });
         }
 
         return convertView;

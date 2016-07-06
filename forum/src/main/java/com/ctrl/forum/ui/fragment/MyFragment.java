@@ -139,7 +139,9 @@ public class MyFragment extends ToolBarFragment implements View.OnClickListener{
         editDao = new EditDao(this);
 
         String id = Arad.preferences.getString("memberId");
-        editDao.getVipInfo(id);
+        if (Arad.preferences.getString("memberId")!=null && !Arad.preferences.getString("memberId").equals("")) {
+            editDao.getVipInfo(id);
+        }
         editDao.getPlugins();
 
         bt_integral.setText("积分:" + Arad.preferences.getString("point"));
@@ -278,7 +280,7 @@ public class MyFragment extends ToolBarFragment implements View.OnClickListener{
                         startActivity(intent);
                     }
                 }
-                break;
+                return;
             default:
                 break;
         }
@@ -382,6 +384,9 @@ public class MyFragment extends ToolBarFragment implements View.OnClickListener{
         String imgUrl = Arad.preferences.getString("imgUrl");
         if (imgUrl!=null&&!imgUrl.equals("")) {
             Arad.imageLoader.load(imgUrl).placeholder(getResources().getDrawable(R.mipmap.iconfont_head)).into(iv_head);//设置头像
+        }else{
+            //游客身份进行登录
+           iv_head.setImageDrawable(getResources().getDrawable(R.mipmap.image_default));
         }
     }
 
@@ -390,13 +395,14 @@ public class MyFragment extends ToolBarFragment implements View.OnClickListener{
     public void onRequestSuccess(int requestCode) {
         super.onRequestSuccess(requestCode);
         if (requestCode==0){
-            int singTime;
+           /* int singTime;
             if (Arad.preferences.getString("signTimes")!=null && !Arad.preferences.getString("signTimes").equals("")) {
-                singTime = Integer.getInteger(Arad.preferences.getString("signTimes"));
+                singTime = Integer.valueOf(Arad.preferences.getString("signTimes"));
             }else{
                 singTime = 0;
-            }
-            MessageUtils.showShortToast(getActivity(), "签到成功!连续签到"+(singTime+1)+"天");
+            }*/
+            //MessageUtils.showShortToast(getActivity(), "签到成功!连续签到"+(singTime+1)+"天");
+            MessageUtils.showShortToast(getActivity(), "签到成功!");
             editDao.getVipInfo(Arad.preferences.getString("memberId"));
             bt_sign.setText("已签到");
         }

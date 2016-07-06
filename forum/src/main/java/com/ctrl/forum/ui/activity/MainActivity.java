@@ -29,6 +29,8 @@ import com.ctrl.forum.utils.BitmapUtils;
 import java.util.ArrayList;
 
 public class MainActivity extends FragmentActivity implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
+    public static Boolean isFrist = false;
+
     private RadioButton rb1;//帖子按钮
     private RadioButton rb2;//商城按钮
     private RadioButton rb3;//小区按钮
@@ -45,7 +47,6 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     private ArrayList<NavigationBar> listNavigation;
     private Drawable drawable;
     private Drawable drawable2;
-    public static Boolean isFrist = false;
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -674,4 +675,9 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         }
     };
 
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        isFrist = true;
+    }
 }

@@ -5,7 +5,7 @@ package com.ctrl.forum.entity;
  * Created by Administrator on 2016/5/9.
  */
 public class RedeemHistory {
-    private String point;//积分（+获得-扣除）
+    private int point;//积分（+获得-扣除）
     private String doType;//用户行为类型（1：商城消费、2：积分兑换、3：每日签到、4：连续签到30天、5：连续签到100天、6：连续签到200天、7：绑定手机号、8：完整填写个人资料、9：回别人帖、10：被管理员拉黑、11：被拉黑设备...后续逐渐追加）
     private String totalPoint;//剩余积分
     private long createTime;//消耗时间
@@ -26,11 +26,11 @@ public class RedeemHistory {
         this.createTime = createTime;
     }
 
-    public String getPoint() {
+    public int getPoint() {
         return point;
     }
 
-    public void setPoint(String point) {
+    public void setPoint(int point) {
         this.point = point;
     }
 

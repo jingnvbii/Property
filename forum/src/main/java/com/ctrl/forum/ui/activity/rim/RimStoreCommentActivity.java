@@ -25,10 +25,10 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 
 import com.beanu.arad.Arad;
-import com.beanu.arad.base.ToolBarActivity;
 import com.beanu.arad.utils.AnimUtil;
 import com.beanu.arad.utils.MessageUtils;
 import com.ctrl.forum.R;
+import com.ctrl.forum.base.AppToolBarActivity;
 import com.ctrl.forum.base.Constant;
 import com.ctrl.forum.customview.AudioRecordButton;
 import com.ctrl.forum.dao.ImageDao;
@@ -53,7 +53,7 @@ import butterknife.InjectView;
 /**
  * 周边服务----店铺评论页面
  */
-public class RimStoreCommentActivity extends ToolBarActivity implements View.OnClickListener{
+public class RimStoreCommentActivity extends AppToolBarActivity implements View.OnClickListener{
     @InjectView(R.id.iv_input_add)
     ImageView iv_input_add;  //加号按钮
     @InjectView(R.id.iv_input_yuyin)//语音按钮图片

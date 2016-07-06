@@ -3,12 +3,10 @@ package com.ctrl.forum.ui.adapter;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.SpannableString;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -24,8 +22,9 @@ import com.ctrl.forum.customview.ListViewForScrollView;
 import com.ctrl.forum.customview.RoundImageView;
 import com.ctrl.forum.entity.Post;
 import com.ctrl.forum.entity.PostImage;
-import com.ctrl.forum.face.FaceConversionUtil;
 import com.ctrl.forum.ui.activity.Invitation.InvitationCommentDetaioActivity;
+import com.ctrl.forum.ui.activity.Invitation.InvitationPullDownActivity;
+import com.ctrl.forum.ui.activity.LoginActivity;
 import com.ctrl.forum.ui.activity.mine.MineDetailActivity;
 import com.ctrl.forum.utils.SysUtils;
 import com.ctrl.forum.utils.TimeUtils;
@@ -143,45 +142,43 @@ public class PlotListViewFriendStyleAdapter extends BaseAdapter {
         //holder.tv_friend_style_share_num.setText(post.getShareNum() + ""); //分享的数量
         SetMemberLevel.setLevelImage(mcontext,holder.iv_friend_style_levlel,post.getMemberLevel());
         Arad.imageLoader.load(post.getImgUrl()).placeholder(R.mipmap.default_error).into(holder.iv_friend_style_title_photo);
-        if(post.getPostReplyList()!=null) {
+
+        if(post.getPostReplyList()!=null ) {
+            holder.lv_friend_style_reply.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    if(Arad.preferences.getString("memberId")==null||Arad.preferences.getString("memberId").equals("")){
+                        mcontext.startActivity(new Intent(mcontext, LoginActivity.class));
+                        AnimUtil.intentSlidOut((InvitationPullDownActivity)mcontext);
+                        return;
+                    }
+                    Intent intent=new Intent(mcontext, InvitationCommentDetaioActivity.class);
+                    intent.putExtra("id",post.getId());
+                    intent.putExtra("reportid",post.getReporterId());
+                    mcontext.startActivity(intent);
+                    AnimUtil.intentSlidIn(mcontext);
+                }
+            });
             if (post.getPostReplyList().size() <= 3) {
-                List<String> listStr = new ArrayList<>();
-                for (int i = 0; i < post.getPostReplyList().size(); i++) {
-                    if (post.getPostReplyList().get(i).getContentType().equals("0")) {
-                        SpannableString spannableString2 = FaceConversionUtil.getInstace().getExpressionString(mcontext, post.getPostReplyList().get(i).getReplyContent());
-                        listStr.add(post.getPostReplyList().get(i).getMemberName()+":   " + spannableString2);
-                    }
-                    if (post.getPostReplyList().get(i).getContentType().equals("1")) {
-                        listStr.add(post.getPostReplyList().get(i).getMemberName()+":   " + "    [图片]");
-                    }
-                    if (post.getPostReplyList().get(i).getContentType().equals("2")) {
-                        listStr.add(post.getPostReplyList().get(i).getMemberName()+":   " + "    [语音]");
-                    }
-                }
-                ArrayAdapter<String> adapter = new ArrayAdapter<>(mcontext, R.layout.spinner_layout, listStr);
-                holder.lv_friend_style_reply.setAdapter(adapter);
-                // holder.tv_friend_style_shengyu_pinglun.setVisibility(View.GONE);
-                holder.tv_friend_style_shengyu_pinglun.setText("查看其他更多评论...");
-            } else {
-                List<String> listStr = new ArrayList<>();
-                for (int i = 0; i < 3; i++) {
-                    if (post.getPostReplyList().get(i).getContentType().equals("0")) {
-                        SpannableString spannableString2 = FaceConversionUtil.getInstace().getExpressionString(mcontext, post.getPostReplyList().get(i).getReplyContent());
-                        listStr.add(post.getPostReplyList().get(i).getMemberName()+":   " + spannableString2);
-                    }
-                    if (post.getPostReplyList().get(i).getContentType().equals("1")) {
-                        listStr.add(post.getPostReplyList().get(i).getMemberName()+":   " + "    [图片]");
-                    }
-                    if (post.getPostReplyList().get(i).getContentType().equals("2")) {
-                        listStr.add(post.getPostReplyList().get(i).getMemberName()+":   " + "    [语音]");
-                    }
-                }
-                ArrayAdapter<String> adapter = new ArrayAdapter<>(mcontext,  R.layout.spinner_layout, listStr);
+                holder.tv_pinglun_title.setVisibility(View.VISIBLE);
+                FriendStyleRelpyAdapter adapter = new FriendStyleRelpyAdapter(mcontext);
+                adapter.setList(post.getPostReplyList());
                 holder.lv_friend_style_reply.setAdapter(adapter);
                 holder.tv_friend_style_shengyu_pinglun.setVisibility(View.VISIBLE);
-                holder.tv_friend_style_shengyu_pinglun.setText("查看其他   " + (post.getPostReplyList().size() - 3) + "    评论");
+                holder.tv_friend_style_shengyu_pinglun.setText("查看其他更多评论...");
+            } else {
+                holder.tv_pinglun_title.setVisibility(View.VISIBLE);
+                FriendStyleRelpyAdapter adapter = new FriendStyleRelpyAdapter(mcontext);
+                adapter.setList(post.getPostReplyList());
+                holder.lv_friend_style_reply.setAdapter(adapter);
+                holder.tv_friend_style_shengyu_pinglun.setVisibility(View.VISIBLE);
+                holder.tv_friend_style_shengyu_pinglun.setText("查看其他更多评论...");
             }
+        }else {
+            holder.tv_friend_style_shengyu_pinglun.setVisibility(View.GONE);
+            holder.tv_pinglun_title.setVisibility(View.GONE);
         }
+
 
         // 是否含有图片
         if (post.getPostImgList() != null && post.getPostImgList().size() != 0) {
@@ -296,6 +293,8 @@ public class PlotListViewFriendStyleAdapter extends BaseAdapter {
                 GridViewForScrollView gv_images;
         @InjectView(R.id.iv_friend_style_zan_num)//点赞
         public  ImageView iv_friend_style_zan_num;
+        @InjectView(R.id.tv_pinglun_title)
+        TextView tv_pinglun_title;
         private int position;
 
         public void setPosition(int position){

@@ -39,7 +39,6 @@ public class FriendStyleRelpyAdapter extends BaseAdapter{
         notifyDataSetChanged();
     }
 
-
     @Override
     public int getCount() {
         return list==null?0:list.size();

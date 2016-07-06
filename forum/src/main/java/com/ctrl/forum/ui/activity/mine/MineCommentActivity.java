@@ -44,6 +44,7 @@ public class MineCommentActivity extends AppToolBarActivity {
         lv_comment.setAdapter(mineCommentListAdapter);
 
         initData();
+        lv_comment.setMode(PullToRefreshBase.Mode.BOTH);
         lv_comment.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
@@ -120,5 +121,11 @@ public class MineCommentActivity extends AppToolBarActivity {
                 mineCommentListAdapter.setObtainMyReplies(comments);
             }
         }
+    }
+
+    @Override
+    public void onRequestFaild(String errorNo, String errorMessage) {
+        super.onRequestFaild(errorNo, errorMessage);
+        lv_comment.onRefreshComplete();
     }
 }

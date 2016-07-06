@@ -18,6 +18,9 @@ import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
 import java.util.List;
 
+/**
+ * 黑名单
+ */
 public class MineBlacklistActivity extends AppToolBarActivity implements View.OnClickListener{
     private List<Blacklist> blacklists;
     private EditDao edao;
@@ -71,14 +74,13 @@ public class MineBlacklistActivity extends AppToolBarActivity implements View.On
         super.onRequestSuccess(requestCode);
         lv_blacklist.onRefreshComplete();
         if (requestCode==2){
-            MessageUtils.showShortToast(this, "获取成功");
             blacklists = edao.getBlacklists();
             if (blacklists!=null){
                 blacklistAdapter.setBlacklists(blacklists);
             }
         }
         if (requestCode==3){
-            MessageUtils.showShortToast(this,"去除成功");
+            MessageUtils.showShortToast(this,"取消屏蔽");
             blacklists.clear();
             blacklistAdapter = new MineBlacklistAdapter(getApplicationContext());
             lv_blacklist.setAdapter(blacklistAdapter);

@@ -8,7 +8,6 @@ import android.widget.ListView;
 
 import com.beanu.arad.Arad;
 import com.beanu.arad.base.ToolBarFragment;
-import com.beanu.arad.utils.MessageUtils;
 import com.ctrl.forum.R;
 import com.ctrl.forum.dao.ReplyCommentDao;
 import com.ctrl.forum.entity.Assess;
@@ -89,7 +88,6 @@ public class MineAssessWeiFragment extends ToolBarFragment {
         super.onRequestSuccess(requestCode);
         lv_content.onRefreshComplete();
         if (requestCode==1){
-            MessageUtils.showShortToast(getActivity(), "获取待评价订单成功");
             assessWeis = rcdao.getAssesses();
             if (assessWeis!=null){
                 assessWeiAdapter.setMessages(assessWeis);
@@ -101,6 +99,5 @@ public class MineAssessWeiFragment extends ToolBarFragment {
     public void onRequestFaild(String errorNo, String errorMessage) {
         super.onRequestFaild(errorNo, errorMessage);
         lv_content.onRefreshComplete();
-        MessageUtils.showShortToast(getActivity(), "获取待评价订单失败!");
     }
 }

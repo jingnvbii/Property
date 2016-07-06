@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.ctrl.forum.R;
 import com.ctrl.forum.entity.Assess;
+import com.ctrl.forum.utils.DateUtil;
 
 import java.util.List;
 
@@ -53,11 +54,8 @@ public class MineAssessYiAdapter extends BaseAdapter {
 
         if (messages!=null){
             holder.tv_name.setText(messages.get(position).getCompanyname());
-            holder.tv_time.setText(messages.get(position).getCreateTime());
-
-            //时间需改格式,评分条未传值,评价内容随评分条改变
+            holder.tv_time.setText(DateUtil.getStringByFormat(messages.get(position).getCreateTime(), "yyyy-MM-dd hh:mm:ss"));
         }
-
         return convertView;
     }
 
@@ -69,7 +67,8 @@ public class MineAssessYiAdapter extends BaseAdapter {
         @InjectView(R.id.rb)
         RatingBar rb;    //评分条(未做)
         @InjectView(R.id.tv_data)
-                TextView tv_data;  //评价
+        TextView tv_data;  //评价内容
+
         ViewHolder(View view) {
             ButterKnife.inject(this, view);
         }
