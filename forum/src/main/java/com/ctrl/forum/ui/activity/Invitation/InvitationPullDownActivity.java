@@ -338,14 +338,14 @@ public class InvitationPullDownActivity extends AppToolBarActivity implements Vi
         rightButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(Arad.preferences.getString("memberId")==null||Arad.preferences.getString("memberId").equals("")){
+                if (Arad.preferences.getString("memberId") == null || Arad.preferences.getString("memberId").equals("")) {
                     startActivity(new Intent(InvitationPullDownActivity.this, LoginActivity.class));
                     return;
                 }
-                if(Arad.preferences.getString("isShielded").equals("1")){
-                    MessageUtils.showShortToast(InvitationPullDownActivity.this,"您已经被屏蔽，不能发帖");
+                if (Arad.preferences.getString("isShielded").equals("1")) {
+                    MessageUtils.showShortToast(InvitationPullDownActivity.this, "您已经被屏蔽，不能发帖");
                 }
-                if(Arad.preferences.getString("isShielded").equals("0")){
+                if (Arad.preferences.getString("isShielded").equals("0")) {
                     Intent intent = new Intent(InvitationPullDownActivity.this, InvitationReleaseActivity.class);
                     intent.putExtra("channelId", channelId);
                     startActivity(intent);
@@ -362,10 +362,12 @@ public class InvitationPullDownActivity extends AppToolBarActivity implements Vi
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.iv_pull_down:
-                if(listCategory.size()>0){
-                    listCategory.clear();
+                if(listCategory!=null) {
+                    if (listCategory.size() > 0) {
+                        listCategory.clear();
+                    }
+                    idao.requesAllPostCategory(channelId);
                 }
-                idao.requesAllPostCategory(channelId);
                 break;
         }
     }

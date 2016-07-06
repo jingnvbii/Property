@@ -502,12 +502,16 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
             tv_address.setText(post.getContactAddress());
 
             tv_introduction.setText(post.getTitle());
-            if(post.getContactName()==null||post.getContactName().equals("")) {
+            if(post.getVcardDisplay().equals("0")){
                 rl_detail_user.setVisibility(View.GONE);
-            }else {
+            }
+            if(post.getVcardDisplay().equals("1")){
                 rl_detail_user.setVisibility(View.VISIBLE);
-                tv_title2_name.setText(post.getContactName());
+                tv_title2_name.setText(user.getNickName());
+            }
 
+            if(post.getReporterId().equals(Arad.preferences.getString("memberId"))){
+                tv_delete.setVisibility(View.VISIBLE);
             }
 
             if ( post.getContactPhone() == null||post.getContactPhone().equals("")) {
@@ -1394,6 +1398,11 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
     * 回复评论
     * */
     public void replyPinglun(int position) {
+        if(Arad.preferences.getString("memberId")==null||Arad.preferences.getString("memberId").equals("")){
+            startActivity(new Intent(InvitationPinterestDetailActivity.this, LoginActivity.class));
+            AnimUtil.intentSlidOut(InvitationPinterestDetailActivity.this);
+            return;
+        }
         if(Arad.preferences.getString("isShielded").equals("1")){
             MessageUtils.showShortToast(InvitationPinterestDetailActivity.this,"您已经被屏蔽，不能回复评论");
         }

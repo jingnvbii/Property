@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.beanu.arad.Arad;
@@ -72,12 +73,25 @@ public class FriendDetailReplyAdapter extends BaseAdapter{
         holder.tv_reply_name.setText(merchant.getMemberName());
         holder.tv_comment_detail_floor.setText(merchant.getMemberFloor()+"楼");
         holder.tv_reply_time.setText(TimeUtils.date(Long.parseLong(merchant.getCreateTime())));
-        SpannableString spannableString2 = FaceConversionUtil.getInstace().getExpressionString(mcontext, merchant.getReplyContent());
-        holder.tv_reply_content.setText(spannableString2);
+        if(merchant.getContentType().equals("0")) {
+            holder.tv_reply_content.setVisibility(View.VISIBLE);
+            SpannableString spannableString2 = FaceConversionUtil.getInstace().getExpressionString(mcontext, merchant.getReplyContent());
+            holder.tv_reply_content.setText(spannableString2);
+        }
+        if(merchant.getContentType().equals("1")) {
+            holder.tv_reply_content.setText(" [图片]");
+        }
+        if(merchant.getContentType().equals("2")) {
+            holder.tv_reply_content.setVisibility(View.GONE);
+            holder.rl_reply_voice.setVisibility(View.VISIBLE);
+        }
         Arad.imageLoader.load(merchant.getImgUrl()).placeholder(R.mipmap.default_error).into(holder.iv_reply_photo);
         String levlel = merchant.getMemberLevel();
         if (levlel != null) {
             switch (levlel) {
+                case "0":
+                    holder.iv_reply_level.setImageResource(R.mipmap.vip_icon);
+                    break;
                 case "1":
                     holder.iv_reply_level.setImageResource(R.mipmap.vip_icon1);
                     break;
@@ -100,6 +114,8 @@ public class FriendDetailReplyAdapter extends BaseAdapter{
                     holder.iv_reply_level.setImageResource(R.mipmap.vip_icon7);
                     break;
             }
+        }else {
+            holder.iv_reply_level.setImageResource(R.mipmap.vip_icon);
         }
 
         holder.iv_reply_photo.setOnClickListener(new View.OnClickListener() {
@@ -135,6 +151,8 @@ public class FriendDetailReplyAdapter extends BaseAdapter{
                 TextView tv_comment_detail_floor;
         @InjectView(R.id.tv_reply_content)
                 TextView tv_reply_content;
+        @InjectView(R.id.rl_reply_voice)
+        RelativeLayout rl_reply_voice;
         ViewHolder(View view) {
             ButterKnife.inject(this, view);
         }

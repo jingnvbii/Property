@@ -69,7 +69,8 @@ public class FriendStyleRelpyAdapter extends BaseAdapter{
         holder.tv_reply_name.setText(merchant.getMemberName()+":");
         if(merchant.getContentType().equals("0")) {
             SpannableString spannableString2 = FaceConversionUtil.getInstace().getExpressionString(mcontext, merchant.getReplyContent());
-            holder.tv_reply_content.setText(spannableString2);
+          //  spannableString2.setSpan( new AbsoluteSizeSpan( fontSize ), startIndex, endIndex, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE );
+           holder.tv_reply_content.setText(spannableString2);
         }
 
         if (merchant.getContentType().equals("1")) {

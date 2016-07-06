@@ -43,7 +43,7 @@
             android:layout_marginLeft="5dp"
             android:layout_toRightOf="@+id/iv_friend_style_title_photo"
             android:layout_below="@+id/tv_friend_style_name"
-            android:layout_marginTop="@dimen/margin_left_and_right"/>
+            android:layout_marginTop="5dp"/>
     </RelativeLayout>
 
        <TextView
