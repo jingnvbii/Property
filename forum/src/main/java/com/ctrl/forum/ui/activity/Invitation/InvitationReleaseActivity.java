@@ -851,10 +851,10 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
 
               String imagesUrl=getImagesUrl(mImageList);
                String thumbImagesUrl= getThumbImagesUrl(mImageList);
-                if(et_content.getText().toString().trim().length()<20){
+              /*  if(et_content.getText().toString().trim().length()<20){
                     MessageUtils.showShortToast(this,"帖子内容少于20个字符");
                     return;
-                }
+                }*/
                 if(Arad.preferences.getBoolean("isCallingChecked")){
                     if(checkInput()){
                        if(spinner_third_kind.getVisibility()==View.VISIBLE){
