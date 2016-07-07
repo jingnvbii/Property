@@ -128,6 +128,7 @@ public class InvitationDetailActivity extends AppToolBarActivity implements View
                 //AnimUtil.intentSlidIn(this);
             }
         });
+        lv_detail_reply.setFocusable(false);
     }
 
     private void initData() {
