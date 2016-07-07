@@ -651,6 +651,8 @@ public class StroeFragment extends ToolBarFragment implements View.OnClickListen
         lv01.addHeaderView(headview);
         lv01.setFocusable(false);
         listviewAdapter = new StoreFragmentAdapter(getActivity());
+
+        tv_change.setOnClickListener(this);
     }
 
     /*
@@ -735,6 +737,9 @@ public class StroeFragment extends ToolBarFragment implements View.OnClickListen
         String type = null;
         Intent intent = null;
         switch (v.getId()) {
+            case R.id.tv_change:
+                gotoDetail(item%listMallNotice.size());
+                break;
             case R.id.tv_store_home_more:
                 intent=new Intent(getActivity(),StoreScreenActivity.class);
                 intent.putExtra("latitude", latitude);
@@ -878,6 +883,33 @@ public class StroeFragment extends ToolBarFragment implements View.OnClickListen
                         AnimUtil.intentSlidIn(getActivity());
                         break;
                 }
+                break;
+        }
+    }
+
+    private void gotoDetail(int pos) {
+        String type = listMallNotice.get(pos).getType();
+        if(listMallNotice.get(pos).getTargetId()==null)return;
+        Intent intent=null;
+        switch (type){
+            case "0"://跳商家
+
+                intent=new Intent(getActivity(), StoreShopListVerticalStyleActivity.class);
+                intent.putExtra("id",listMallNotice.get(pos).getTargetId());
+                getActivity().startActivity(intent);
+                AnimUtil.intentSlidIn(getActivity());
+                break;
+            case "1"://跳商品
+                intent=new Intent(getActivity(), StoreShopListVerticalStyleActivity.class);
+                intent.putExtra("id",listMallNotice.get(pos).getTargetId());
+                getActivity().startActivity(intent);
+                AnimUtil.intentSlidIn(getActivity());
+                break;
+            case "2"://跳帖子
+                intent=new Intent(getActivity(), StoreShopListVerticalStyleActivity.class);
+                intent.putExtra("id",listMallNotice.get(pos).getTargetId());
+                getActivity().startActivity(intent);
+                AnimUtil.intentSlidIn(getActivity());
                 break;
         }
     }

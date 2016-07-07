@@ -75,6 +75,7 @@ public class FriendDetailReplyAdapter extends BaseAdapter{
         holder.tv_reply_time.setText(TimeUtils.date(Long.parseLong(merchant.getCreateTime())));
         if(merchant.getContentType().equals("0")) {
             holder.tv_reply_content.setVisibility(View.VISIBLE);
+            holder.rl_reply_voice.setVisibility(View.GONE);
             SpannableString spannableString2 = FaceConversionUtil.getInstace().getExpressionString(mcontext, merchant.getReplyContent());
             holder.tv_reply_content.setText(spannableString2);
         }
