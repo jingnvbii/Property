@@ -99,6 +99,7 @@ public class MyBroadcastReceiver extends BroadcastReceiver{
             notification = new Notification(R.mipmap.logo,"莱州人通知",System.currentTimeMillis());
         }
 
+        //12
         //notification.icon = R.mipmap.image_default;
 
         if (Arad.preferences.getBoolean("voice")){//声音
