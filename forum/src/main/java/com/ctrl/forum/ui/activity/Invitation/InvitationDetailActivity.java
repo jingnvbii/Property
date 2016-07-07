@@ -78,7 +78,7 @@ public class InvitationDetailActivity extends AppToolBarActivity implements View
     ListViewForScrollView lv_detail_image;
     @InjectView(R.id.lv_detail_reply)//回复列表
     ListViewForScrollView lv_detail_reply;
-    @InjectView(R.id.rl_friend_style_share)//分享
+    @InjectView(R.id.rl_friend_style_share)//分享11
     RelativeLayout rl_friend_style_share;
     @InjectView(R.id.rl_friend_style_pinglun)//评论
     RelativeLayout rl_friend_style_pinglun;
