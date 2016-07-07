@@ -58,7 +58,6 @@ public class MineIntegralPointListAdapter extends BaseAdapter{
         }else{
             viewHolder = (ViewHolder) convertView.getTag();
         }
-
         if (redeemHistories!=null && redeemHistories.get(position)!=null){
             viewHolder.tv_day.setText(DateUtil.getStringByFormat(redeemHistories.get(position).getCreateTime(), "yyyy-MM-dd   HH:mm:ss"));
             viewHolder.tv_fen.setText(redeemHistories.get(position).getPoint()+"");
@@ -69,51 +68,48 @@ public class MineIntegralPointListAdapter extends BaseAdapter{
             }else{
                 viewHolder.tv_fen.setText(point+"");
             }
-
             String doType  = redeemHistories.get(position).getDoType();
             switch (doType){
                 case "1":
-                    viewHolder.tv_content.setText("商城消费");
+                    viewHolder.tv_content.setText("商城消费奖励"+point+"积分");
                     break;
                 case "2":
-                    viewHolder.tv_content.setText("积分兑换");
+                    viewHolder.tv_content.setText("积分兑换"+point+"积分");
                     break;
                 case "3":
-                    viewHolder.tv_content.setText("每日签到");
+                    viewHolder.tv_content.setText("每日签到奖励"+point+"积分");
                     break;
                 case "4":
-                    viewHolder.tv_content.setText("连续签到30天");
+                    viewHolder.tv_content.setText("连续签到30天奖励"+point+"积分");
                     break;
                 case "5":
-                    viewHolder.tv_content.setText("连续签到100天");
+                    viewHolder.tv_content.setText("连续签到100天奖励"+point+"积分");
                     break;
                 case "6":
-                    viewHolder.tv_content.setText("连续签到200天");
+                    viewHolder.tv_content.setText("连续签到200天奖励"+point+"积分");
                     break;
                 case "7":
-                    viewHolder.tv_content.setText("绑定手机号");
+                    viewHolder.tv_content.setText("绑定手机号奖励"+point+"积分");
                     break;
                 case "8":
-                    viewHolder.tv_content.setText("完整填写个人资料");
+                    viewHolder.tv_content.setText("完整填写个人资料奖励"+point+"积分");
                     break;
                 case "9":
-                    viewHolder.tv_content.setText("回别人帖");
+                    viewHolder.tv_content.setText("回别人帖奖励"+point+"积分");
                     break;
                 case "10":
-                    viewHolder.tv_content.setText("被管理员拉黑");
+                    viewHolder.tv_content.setText("被管理员拉黑"+point+"积分");
                     break;
                 case "11":
-                    viewHolder.tv_content.setText("被拉黑设备");
+                    viewHolder.tv_content.setText("被拉黑设备"+point+"积分");
                     break;
                 default:
                     viewHolder.tv_content.setText("其它");
                     break;
             }
         }
-
         return convertView;
     }
-
     class ViewHolder{
         @InjectView(R.id.tv_content)
         TextView tv_content;
@@ -121,7 +117,6 @@ public class MineIntegralPointListAdapter extends BaseAdapter{
         TextView tv_day;
         @InjectView(R.id.tv_fen)
         TextView tv_fen;
-
         ViewHolder(View view) {
             ButterKnife.inject(this, view);
         }

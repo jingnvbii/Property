@@ -60,7 +60,7 @@ public class MineIntegralGridAdapter extends BaseAdapter{
         }
         if (product!=null) {
             holder.tv_name.setText(product.get(position).getName());
-            holder.tv_money.setText(product.get(position).getNeedPoint());
+            holder.tv_money.setText(product.get(position).getNeedPoint()+"积分");
             String url = product.get(position).getListImgUrl();
             Arad.imageLoader.load(url).placeholder(context.getResources().getDrawable(R.mipmap.shop_item)).into(holder.iv_pic);
         }

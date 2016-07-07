@@ -214,10 +214,10 @@ public class PlotFragment extends ToolBarFragment implements View.OnClickListene
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getActivity(), InvitationDetailActivity.class);
                 intent.putExtra("id", posts.get(position - 2).getId());
+                intent.putExtra("reportid",posts.get(position-2).getReporterId());
                 startActivity(intent);
             }
         });
-
 
         invitationListViewFriendStyleAdapter.setOnItemClickListener(new PlotListViewFriendStyleAdapter.OnItemClickListener() {
             @Override
@@ -542,6 +542,7 @@ public class PlotFragment extends ToolBarFragment implements View.OnClickListene
                 if (posts != null) {
                     posts.clear();
                 }
+                PAGE_NUM = 1;
                 tv_plot_name.setText(Arad.preferences.getString("communityName"));
                 plotDao.queryCommunityPostList(Arad.preferences.getString("memberId"),
                         Arad.preferences.getString("communityId"),

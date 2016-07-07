@@ -160,21 +160,16 @@ public class PlotListViewFriendStyleAdapter extends BaseAdapter {
                 }
             });
             if (post.getPostReplyList().size() <= 3) {
+                holder.lv_friend_style_reply.setVisibility(View.VISIBLE);
                 holder.tv_pinglun_title.setVisibility(View.VISIBLE);
                 FriendStyleRelpyAdapter adapter = new FriendStyleRelpyAdapter(mcontext);
                 adapter.setList(post.getPostReplyList());
                 holder.lv_friend_style_reply.setAdapter(adapter);
                 holder.tv_friend_style_shengyu_pinglun.setVisibility(View.VISIBLE);
-                holder.tv_friend_style_shengyu_pinglun.setText("查看其他更多评论...");
-            } else {
-                holder.tv_pinglun_title.setVisibility(View.VISIBLE);
-                FriendStyleRelpyAdapter adapter = new FriendStyleRelpyAdapter(mcontext);
-                adapter.setList(post.getPostReplyList());
-                holder.lv_friend_style_reply.setAdapter(adapter);
-                holder.tv_friend_style_shengyu_pinglun.setVisibility(View.VISIBLE);
-                holder.tv_friend_style_shengyu_pinglun.setText("查看其他更多评论...");
+                holder.tv_friend_style_shengyu_pinglun.setText("查看其他"+(post.getCommentNum()-3)+"条评论...");
             }
         }else {
+            holder.lv_friend_style_reply.setVisibility(View.GONE);
             holder.tv_friend_style_shengyu_pinglun.setVisibility(View.GONE);
             holder.tv_pinglun_title.setVisibility(View.GONE);
         }
@@ -313,7 +308,7 @@ public class PlotListViewFriendStyleAdapter extends BaseAdapter {
         int w = 0;
         switch (imgList.size()) {
             case 1:
-                w = wh;
+                w = SysUtils.getScreenWidth(mcontext)/2;
                 newGridView.setNumColumns(1);
                 break;
             case 2:
@@ -327,6 +322,13 @@ public class PlotListViewFriendStyleAdapter extends BaseAdapter {
                 w = wh * 3 + SysUtils.Dp2Px(mcontext, 2) * 2;
                 newGridView.setNumColumns(3);
                 break;
+            case 7:
+            case 8:
+            case 9:
+                w = wh * 3 + SysUtils.Dp2Px(mcontext, 2) * 2;
+                newGridView.setNumColumns(3);
+                break;
+
         }
 
         final ArrayList<String>imageUrl=new ArrayList<>();
