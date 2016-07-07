@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.beanu.arad.Arad;
@@ -57,6 +58,8 @@ public class InvitationDetailActivity extends AppToolBarActivity implements View
     RoundImageView title_image;
     @InjectView(R.id.tv_name)//发帖人
     TextView tv_name;
+    @InjectView(R.id.scrollView11)//发帖人
+            ScrollView scrollView11;
     @InjectView(R.id.tv_detail_title)//发帖标题
     TextView tv_detail_title;
     @InjectView(R.id.tv_detail_time)//发布时间
@@ -112,7 +115,7 @@ public class InvitationDetailActivity extends AppToolBarActivity implements View
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         initView();
         initData();
-
+        lv_detail_reply.setFocusable(false);
     }
 
     private void initData() {
@@ -209,7 +212,12 @@ public class InvitationDetailActivity extends AppToolBarActivity implements View
             }
             listPostReply2=new ArrayList<>();
             if(idao.getListPostReply2().size()>3){
+                tv_chakan_more.setVisibility(View.VISIBLE);
                 for(int i=0;i<3;i++){
+                    listPostReply2.add(idao.getListPostReply2().get(i));
+                }
+            }else {
+                for(int i=0;i<idao.getListPostReply2().size();i++){
                     listPostReply2.add(idao.getListPostReply2().get(i));
                 }
             }

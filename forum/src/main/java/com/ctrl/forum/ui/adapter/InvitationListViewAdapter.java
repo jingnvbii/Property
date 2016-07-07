@@ -82,6 +82,24 @@ public class InvitationListViewAdapter extends BaseAdapter{
                case 3:
                    type = 3;
                    break;
+               case 4:
+                   type = 3;
+                   break;
+               case 5:
+                   type = 3;
+                   break;
+               case 6:
+                   type = 3;
+                   break;
+               case 7:
+                   type = 3;
+                   break;
+               case 8:
+                   type = 3;
+                   break;
+               case 9:
+                   type = 3;
+                   break;
            }
            }else {
            type=0;
@@ -160,6 +178,9 @@ public class InvitationListViewAdapter extends BaseAdapter{
                 break;
             case 3:
               // Post mPos3 = mPostList.get(position);
+                if(post.getTitle()==null||post.getTitle().equals("")){
+                    holder3.tv_titile3.setVisibility(View.GONE);
+                }
                 holder3.tv_titile3.setText(post.getTitle());
                 holder3.tv_name3.setText(post.getMemberName());
                 holder3.tv_time3.setText(TimeUtils.dateTime(post.getPublishTime()));

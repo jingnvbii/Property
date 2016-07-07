@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.beanu.arad.Arad;
 import com.beanu.arad.utils.AnimUtil;
+import com.beanu.arad.utils.MessageUtils;
 import com.ctrl.forum.R;
 import com.ctrl.forum.base.AppToolBarActivity;
 import com.ctrl.forum.customview.ListViewForScrollView;
@@ -159,19 +160,23 @@ public class StoreShopDetailActivity extends AppToolBarActivity implements View.
              if (count % 2 == 0) {//奇数次点击
                  if (company.getCollectState().equals("0")) {
                      mRightButton.setImageResource(R.mipmap.zan_red_shixin);
+                     MessageUtils.showShortToast(this, "收藏成功");
                  }
 
                  if (company.getCollectState().equals("1")) {
                      mRightButton.setImageResource(R.mipmap.zan_red);
+                     MessageUtils.showShortToast(this, "取消收藏成功");
                  }
              }
              if(count%2==1){//偶数次点击
                  if (company.getCollectState().equals("0")) {
                      mRightButton.setImageResource(R.mipmap.zan_red);
+                     MessageUtils.showShortToast(this, "取消收藏成功");
                  }
 
                  if (company.getCollectState().equals("1")) {
                      mRightButton.setImageResource(R.mipmap.zan_red_shixin);
+                     MessageUtils.showShortToast(this, "收藏成功");
 
                  }
              }
@@ -300,7 +305,6 @@ public class StoreShopDetailActivity extends AppToolBarActivity implements View.
                         cdao.requestMemberCollect(Arad.preferences.getString("memberId"),
                                 "1",
                                 company.getId(),
-                                company.getId(),
                                 "0"
                         );
 
@@ -309,7 +313,6 @@ public class StoreShopDetailActivity extends AppToolBarActivity implements View.
                     if (company.getCollectState().equals("1")) {
                         cdao.requestMemberCollect(Arad.preferences.getString("memberId"),
                                 "1",
-                                company.getId(),
                                 company.getId(),
                                 "1"
                         );
@@ -321,7 +324,6 @@ public class StoreShopDetailActivity extends AppToolBarActivity implements View.
                         cdao.requestMemberCollect(Arad.preferences.getString("memberId"),
                                 "1",
                                 company.getId(),
-                                company.getId(),
                                 "1"
                         );
 
@@ -330,7 +332,6 @@ public class StoreShopDetailActivity extends AppToolBarActivity implements View.
                     if (company.getCollectState().equals("1")) {
                         cdao.requestMemberCollect(Arad.preferences.getString("memberId"),
                                 "1",
-                                company.getId(),
                                 company.getId(),
                                 "0"
                         );
