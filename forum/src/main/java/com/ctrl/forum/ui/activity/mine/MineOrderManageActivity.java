@@ -139,7 +139,7 @@ public class MineOrderManageActivity extends AppToolBarActivity implements View.
         switch (v.getId()){
             case R.id.bt_send://发货
                 int position = (int)id;
-                odao.deliverGoods(companyOrders.get(position).getId(),Arad.preferences.getString("memberId"), companyOrders.get(position).getOrderNum());
+                odao.deliverGoods(companyOrders.get(position).getId(), companyOrders.get(position).getOrderNum());
                 showProgress(true);
                 break;
             default:

@@ -9,7 +9,6 @@ import android.widget.ListView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
-import com.beanu.arad.Arad;
 import com.beanu.arad.utils.MessageUtils;
 import com.ctrl.forum.R;
 import com.ctrl.forum.base.AppToolBarActivity;
@@ -90,7 +89,7 @@ public class MerchantOrderDetailActivity extends AppToolBarActivity{
         tv_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mdao.deliverGoods(id, Arad.preferences.getString("memberId"), orderState.getOrderNum());
+                mdao.deliverGoods(id,orderState.getOrderNum());
             }
         });
 

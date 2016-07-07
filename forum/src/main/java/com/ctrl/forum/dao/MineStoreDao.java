@@ -143,14 +143,12 @@ public class MineStoreDao extends IDao {
     /**
      * 商家发货
      * @param id 订单主键id
-     * @param memberId 会员id
      * @param orderNum 订单编号
      */
-    public void deliverGoods(String id,String memberId,String orderNum){
+    public void deliverGoods(String id,String orderNum){
         String url = "order/deliverGoods";
         Map<String,String> map = new HashMap<>();
         map.put("id",id);
-        map.put("memberId",memberId);
         map.put("orderNum",orderNum);
         postRequest(Constant.RAW_URL+url,mapToRP(map),8);
     }
