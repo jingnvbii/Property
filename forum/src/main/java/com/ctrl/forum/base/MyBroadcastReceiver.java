@@ -107,7 +107,7 @@ public class MyBroadcastReceiver extends BroadcastReceiver{
             notification.defaults = Notification.DEFAULT_VIBRATE;
         }
 
-        // 设置在通知栏中点击后Notification自动消失
+        // 设置在通知栏中点击后Notification自动消失.
         notification.flags = Notification.FLAG_AUTO_CANCEL;
         //设置点击后转跳的新activity
         if (state!=null) {
