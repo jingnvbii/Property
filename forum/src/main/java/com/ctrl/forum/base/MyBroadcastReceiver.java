@@ -75,7 +75,7 @@ public class MyBroadcastReceiver extends BroadcastReceiver{
             Log.d(TAG, "[MyReceiver] 接收到推送下来的通知");
             int notifactionId = bundle.getInt(JPushInterface.EXTRA_NOTIFICATION_ID);
             Log.d(TAG, "[MyReceiver] 接收到推送下来的通知的ID: " + notifactionId);
-            // 在这里可以做些统计，或者做些其他工作
+            // 在这里可以做些统计，或者做些其他工作.
         }
         else if (JPushInterface.ACTION_NOTIFICATION_OPENED.equals(intent.getAction())) {
             System.out.println("用户点击打开了通知");
