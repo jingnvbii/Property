@@ -225,7 +225,12 @@ public class InvitationDetailActivity extends AppToolBarActivity implements View
             }
             listPostReply2=new ArrayList<>();
             if(idao.getListPostReply2().size()>3){
+                tv_chakan_more.setVisibility(View.VISIBLE);
                 for(int i=0;i<3;i++){
+                    listPostReply2.add(idao.getListPostReply2().get(i));
+                }
+            }else {
+                for(int i=0;i<idao.getListPostReply2().size();i++){
                     listPostReply2.add(idao.getListPostReply2().get(i));
                 }
             }

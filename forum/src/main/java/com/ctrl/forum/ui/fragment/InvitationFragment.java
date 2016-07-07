@@ -182,6 +182,7 @@ public class InvitationFragment extends ToolBarFragment implements View.OnClickL
         ViewGroup main = (ViewGroup) inflater.inflate(R.layout.fragment_invitation_home_header,
                 null);
 
+
     }
 
     @Override
@@ -236,6 +237,7 @@ public class InvitationFragment extends ToolBarFragment implements View.OnClickL
         myViewPager=(ViewPager)headview.findViewById(R.id.myviewpager);
        viewGroup=(LinearLayout)headview.findViewById(R.id.viewGroup);
         lv01.addHeaderView(headview);
+        tv_change.setOnClickListener(this);
     }
 
 
@@ -497,6 +499,9 @@ public class InvitationFragment extends ToolBarFragment implements View.OnClickL
         String type=null;
         Intent intent=null;
         switch (v.getId()){
+            case R.id.tv_change:
+                gotoDetail(item % listNoticeString.size());
+                break;
             case R.id.iv_recommend_1:
                 type=listRecommend.get(0).getType();
                 switch (type){
@@ -620,6 +625,32 @@ public class InvitationFragment extends ToolBarFragment implements View.OnClickL
                 break;
         }
 
+    }
+
+    private void gotoDetail(int pos) {
+        String type = listNotice.get(pos).getType();
+        if(listNotice.get(pos).getTargetId()==null)return;
+        Intent intent=null;
+        switch (type){
+            case "0"://跳商家
+               intent=new Intent(getActivity(), StoreShopListVerticalStyleActivity.class);
+                intent.putExtra("id",listNotice.get(pos).getTargetId());
+                getActivity().startActivity(intent);
+                AnimUtil.intentSlidIn(getActivity());
+                break;
+            case "1"://跳商品
+                 intent=new Intent(getActivity(), StoreShopListVerticalStyleActivity.class);
+                intent.putExtra("id",listNotice.get(pos).getTargetId());
+                getActivity().startActivity(intent);
+                AnimUtil.intentSlidIn(getActivity());
+                break;
+            case "2"://跳帖子
+                intent=new Intent(getActivity(), StoreShopListVerticalStyleActivity.class);
+                intent.putExtra("id",listNotice.get(pos).getTargetId());
+                getActivity().startActivity(intent);
+                AnimUtil.intentSlidIn(getActivity());
+                break;
+        }
     }
 
     class MyListener implements ViewPager.OnPageChangeListener {
