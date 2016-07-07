@@ -66,7 +66,6 @@ public class MyBroadcastReceiver extends BroadcastReceiver{
                     e.printStackTrace();
                 }
             }
-
             String title = bundle.getString(JPushInterface.EXTRA_TITLE);
             String message = bundle.getString(JPushInterface.EXTRA_MESSAGE);
             setNavti(context, title, message, messageKey);
@@ -95,10 +94,12 @@ public class MyBroadcastReceiver extends BroadcastReceiver{
         mManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         // 创建Notification对象 参数分别代表 通知栏 中显示的图标 显示的标题 显示的时间
         if (Arad.preferences.getBoolean("notificationShow")){//通知显示消息详情
-            notification = new Notification(R.mipmap.image_default,content,System.currentTimeMillis());
+            notification = new Notification(R.mipmap.logo,content,System.currentTimeMillis());
         }else{
-            notification = new Notification(R.mipmap.image_default,"莱州人通知",System.currentTimeMillis());
+            notification = new Notification(R.mipmap.logo,"莱州人通知",System.currentTimeMillis());
         }
+
+        //notification.icon = R.mipmap.image_default;
 
         if (Arad.preferences.getBoolean("voice")){//声音
             notification.defaults = Notification.DEFAULT_SOUND;
