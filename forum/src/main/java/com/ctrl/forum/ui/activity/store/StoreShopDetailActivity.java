@@ -108,7 +108,7 @@ public class StoreShopDetailActivity extends AppToolBarActivity implements View.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_store_shop_detail);
         ButterKnife.inject(this);
-        // 隐藏输入法
+        // 隐藏输入法11
         // getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         initView();
         initData();
