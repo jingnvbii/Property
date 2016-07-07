@@ -15,7 +15,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.beanu.arad.Arad;
@@ -25,6 +24,7 @@ import com.beanu.arad.utils.MessageUtils;
 import com.ctrl.forum.R;
 import com.ctrl.forum.base.AppToolBarActivity;
 import com.ctrl.forum.base.Constant;
+import com.ctrl.forum.customview.ImageZoomActivity;
 import com.ctrl.forum.customview.ListViewForScrollView;
 import com.ctrl.forum.customview.RoundImageView;
 import com.ctrl.forum.dao.InvitationDao;
@@ -58,8 +58,6 @@ public class InvitationDetailActivity extends AppToolBarActivity implements View
     RoundImageView title_image;
     @InjectView(R.id.tv_name)//发帖人
     TextView tv_name;
-    @InjectView(R.id.scrollView11)//发帖人
-            ScrollView scrollView11;
     @InjectView(R.id.tv_detail_title)//发帖标题
     TextView tv_detail_title;
     @InjectView(R.id.tv_detail_time)//发布时间
@@ -106,6 +104,8 @@ public class InvitationDetailActivity extends AppToolBarActivity implements View
     private Map<Integer,Integer> text = new HashMap<>();
     private int pariseNum;
 
+    final ArrayList<String>imageUrl=new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -115,7 +115,19 @@ public class InvitationDetailActivity extends AppToolBarActivity implements View
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         initView();
         initData();
-        lv_detail_reply.setFocusable(false);
+
+        lv_detail_image.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent=new Intent(getApplicationContext(), ImageZoomActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("imageList",imageUrl);
+                bundle.putInt("position",position);
+                intent.putExtras(bundle);
+                startActivity(intent);
+                //AnimUtil.intentSlidIn(this);
+            }
+        });
     }
 
     private void initData() {
@@ -212,12 +224,7 @@ public class InvitationDetailActivity extends AppToolBarActivity implements View
             }
             listPostReply2=new ArrayList<>();
             if(idao.getListPostReply2().size()>3){
-                tv_chakan_more.setVisibility(View.VISIBLE);
                 for(int i=0;i<3;i++){
-                    listPostReply2.add(idao.getListPostReply2().get(i));
-                }
-            }else {
-                for(int i=0;i<idao.getListPostReply2().size();i++){
                     listPostReply2.add(idao.getListPostReply2().get(i));
                 }
             }
@@ -227,9 +234,13 @@ public class InvitationDetailActivity extends AppToolBarActivity implements View
             post = idao.getPost2();
             user = idao.getUser();
             listPostImage=idao.getListPostImage();
-            if(listPostImage!=null)
-            mFriendDetailImageAdapter.setList(listPostImage);
+            if(listPostImage!=null) {
+                mFriendDetailImageAdapter.setList(listPostImage);
 
+                for (int i = 0; i < listPostImage.size(); i++) {
+                    imageUrl.add(listPostImage.get(i).getImg());
+                }
+            }
             Arad.imageLoader.load(user.getImgUrl()).placeholder(R.mipmap.default_error).into(title_image);
             if(user.getNickName()==null) {
                 tv_name.setText(user.getUserName());

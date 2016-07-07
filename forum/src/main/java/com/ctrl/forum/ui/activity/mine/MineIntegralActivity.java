@@ -56,12 +56,13 @@ public class MineIntegralActivity extends AppToolBarActivity implements View.OnC
         pullToRefreshGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(getApplicationContext(),MineIntegralStoreDetailActivity.class);
-                intent.putExtra("integralProductsId",integralProducts.get(position).getId());
+                Intent intent = new Intent(getApplicationContext(), MineIntegralStoreDetailActivity.class);
+                intent.putExtra("integralProductsId", integralProducts.get(position).getId());
                 startActivity(intent);
             }
         });
 
+        pullToRefreshGridView.setMode(PullToRefreshBase.Mode.BOTH);
         pullToRefreshGridView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<GridView>() {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<GridView> refreshView) {
@@ -90,8 +91,7 @@ public class MineIntegralActivity extends AppToolBarActivity implements View.OnC
         rl_last.setOnClickListener(this);
         rl_dui.setOnClickListener(this);
         rl_fen.setOnClickListener(this);
-
-        tv_total.setText(Arad.preferences.getString("point"));
+        tv_total.setText("剩余:"+Arad.preferences.getString("point")+"积分");
 
         rdao = new RemarkDao(this);
         rdao.getRemarkGoods(PAGE_NUM + "", Constant.PAGE_SIZE + "");

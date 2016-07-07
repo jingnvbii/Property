@@ -1,14 +1,13 @@
 package com.ctrl.forum.ui.activity.mine;
 
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.support.v4.view.ViewPager;
-import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.beanu.arad.Arad;
@@ -17,9 +16,10 @@ import com.ctrl.forum.R;
 import com.ctrl.forum.base.AppToolBarActivity;
 import com.ctrl.forum.dao.MallDao;
 import com.ctrl.forum.dao.RemarkDao;
+import com.ctrl.forum.entity.Banner;
 import com.ctrl.forum.entity.Image2;
 import com.ctrl.forum.entity.Product2;
-import com.ctrl.forum.ui.adapter.CommdityImageViewPagerAdapter;
+import com.ctrl.forum.loopview.HomeAutoSwitchPicHolder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,12 +36,8 @@ public class MineIntegralStoreDetailActivity extends AppToolBarActivity implemen
     Button btn_sure;
     @InjectView(R.id.webView)
     WebView webView;
-    @InjectView(R.id.tv_image_number)
-    TextView tv_image_number;
-    @InjectView(R.id.viewPager_commdity)//图片viewpager
-    ViewPager viewPager_commdity;
-    @InjectView(R.id.name)
-    TextView name;
+    @InjectView(R.id.banner)//图片viewpager
+    FrameLayout banner;
     @InjectView(R.id.tv_mey)
     TextView tv_mey;
     @InjectView(R.id.integral)
@@ -53,22 +49,10 @@ public class MineIntegralStoreDetailActivity extends AppToolBarActivity implemen
     private MallDao mdao;
     private Product2 product2;
     private List<Image2> image2;
-    private LayoutInflater inflater;
-    private List<View> views = new ArrayList<View>();
+    private List<Banner> listBanner = new ArrayList<>();
+    private ArrayList<String> mData;
+    private HomeAutoSwitchPicHolder mAutoSwitchPicHolder;
 
-    private Handler handler = new Handler(new Handler.Callback() {
-        @Override
-        public boolean handleMessage(Message msg) {
-            switch (msg.what) {
-                case 1:
-                    int position = (int) msg.obj + 1;
-                    tv_image_number.setText(position + "/" + image2.size());
-                    break;
-            }
-
-            return false;
-        }
-    });
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,29 +73,8 @@ public class MineIntegralStoreDetailActivity extends AppToolBarActivity implemen
         mdao.requestProduct(integralProductsId, Arad.preferences.getString("memberId"), "1");//获取积分商品详情
 
         btn_sure.setOnClickListener(this);
-        inflater = getLayoutInflater();
+        //inflater = getLayoutInflater();
 
-        viewPager_commdity.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                if (viewPager_commdity != null) {
-                    viewPager_commdity.invalidate();
-                }
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                Message message = handler.obtainMessage();
-                message.obj = position;
-                message.what = 1;
-                handler.sendMessage(message);
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });
     }
 
     @Override
@@ -122,32 +85,61 @@ public class MineIntegralStoreDetailActivity extends AppToolBarActivity implemen
             if (product2 != null) {
                 //为控件赋值
                 webView.loadDataWithBaseURL(null, product2.getInfomation(), "text/html", "utf-8", null);//单纯显示文字
-
-                name.setText(product2.getName());
-                tv_mey.setText(product2.getSellingPrice());
-                integral.setText(product2.getNeedPoint());
+                tv_mey.setText(product2.getOriginalPrice()+"元");
+                integral.setText(product2.getNeedPoint()+"积分");
             }
             image2 = mdao.getListProductImg();
             if (image2 != null && image2.size() != 0) {
-                //图片数量初始值
-                tv_image_number.setText(1 + "/" + image2.size());
-                for (int i = 0; i < image2.size(); i++) {
-                        View view = inflater.inflate(R.layout.commdity_image_item, null);
-                        views.add(view);
+                if (image2.size()>1) {
+                    for (int i = 0; i < image2.size(); i++) {
+                        Banner banner = new Banner();
+                        banner.setId(image2.get(i).getId());
+                        banner.setImgUrl(image2.get(i).getImg());
+                        banner.setTargetId(image2.get(i).getTargetId());
+                        //banner.setType(rimImage.get(i).getType());
+                        listBanner.add(banner);
+                    }
+                    banner.setVisibility(View.VISIBLE);
+                    setLoopView();
+                }else{
+                    LinearLayout.LayoutParams params=new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                            ViewGroup.LayoutParams.MATCH_PARENT);
+                    ImageView imageView = new ImageView(this);
+                    imageView.setScaleType(ImageView.ScaleType.FIT_XY);
+                    Arad.imageLoader.load(image2.get(0).getImg()).into(imageView);
+                    banner.addView(imageView,params);
                 }
-                // 1.设置幕后item的缓存数目
-                viewPager_commdity.setOffscreenPageLimit(image2.size());
-                // 2.设置页与页之间的间距
-                viewPager_commdity.setPageMargin(10);
-                // 3.将父类的touch事件分发至viewPgaer，否则只能滑动中间的一个view对象
-                viewPager_commdity.setAdapter(new CommdityImageViewPagerAdapter(views, image2)); // 为viewpager设置adapter
-
+            }else{
+                banner.setVisibility(View.GONE);
+            }
+            if (requestCode == 1) {
+                MessageUtils.showLongToast(this, "兑换积分成功");
+                this.finish();
             }
         }
-        if (requestCode == 1) {
-            MessageUtils.showLongToast(this, "兑换积分成功");
-            this.finish();
+    }
+
+    /**
+     * 轮播图
+     */
+    private void setLoopView() {
+        // 1.创建轮播的holder
+        mAutoSwitchPicHolder = new HomeAutoSwitchPicHolder(this);
+        // 2.得到轮播图的视图view
+        View autoPlayPicView = mAutoSwitchPicHolder.getRootView();
+        // 把轮播图的视图添加到主界面中
+        banner.addView(autoPlayPicView);
+        //4. 为轮播图设置数据
+        mAutoSwitchPicHolder.setData(getData());
+        mAutoSwitchPicHolder.setData(listBanner);
+    }
+
+    public List<String> getData() {
+        mData = new ArrayList<String>();
+        for(int i=0;i<image2.size();i++){
+            mData.add(image2.get(i).getImg());
         }
+        return mData;
     }
 
     @Override

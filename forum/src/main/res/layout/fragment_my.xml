@@ -203,6 +203,8 @@
                     android:layout_toEndOf="@+id/iv_comment"
                     android:layout_marginLeft="@dimen/margin_left_and_right"
                     android:layout_centerVertical="true"/>
+
+
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

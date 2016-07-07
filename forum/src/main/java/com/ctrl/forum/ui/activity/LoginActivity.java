@@ -238,6 +238,9 @@ public class LoginActivity extends AppToolBarActivity implements View.OnClickLis
 
             Arad.preferences.putString("address", address);
             Arad.preferences.flush();
+
+            setAlias();
+
           //  MessageUtils.showShortToast(this, "登录成功");
             Intent intent02=new Intent(this,MainActivity.class);
             intent02.putExtra("listNagationBar",(Serializable)ldao.getListNavigationBar());
@@ -289,7 +292,6 @@ public class LoginActivity extends AppToolBarActivity implements View.OnClickLis
                     ldao.requestLogin(et_username.getText().toString().trim(), et_pass_word.getText().toString().trim(), "1");
                     //没网的时候可以登陆
                   //  startActivity(new Intent(this,MainActivity.class));
-                      setAlias();
                 }
                 break;
             case R.id.tv_forget :
@@ -358,7 +360,7 @@ public class LoginActivity extends AppToolBarActivity implements View.OnClickLis
                     Log.e(TAG, logs);
             }
 
-            ExampleUtil.showToast(logs, getApplicationContext());
+           // ExampleUtil.showToast(logs, getApplicationContext());
         }
 
     };
@@ -386,7 +388,7 @@ public class LoginActivity extends AppToolBarActivity implements View.OnClickLis
                     logs = "Failed with errorCode = " + code;
                     Log.e(TAG, logs);
             }
-            ExampleUtil.showToast(logs, getApplicationContext());
+            //ExampleUtil.showToast(logs, getApplicationContext());
         }
 
     };

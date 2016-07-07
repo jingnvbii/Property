@@ -85,22 +85,6 @@ public class MinePointHistoryActivity extends ToolBarActivity {
     @Override
     public String setupToolBarTitle() {return getResources().getString(R.string.point_history);}
 
-   /* @Override
-    public boolean setupToolBarRightText(TextView mRightText) {
-        mRightText.setText(getResources().getString(R.string.clear_all));//清空
-        mRightText.setTextColor(getResources().getColor(R.color.text_white));
-        mRightText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (redeemHistories!=null){
-                    redeemHistories.clear();
-                    mineIntegralPointListAdapter.setExchaneProducts(redeemHistories);
-                }
-            }
-        });
-        return true;
-    }*/
-
     @Override
     public void onRequestSuccess(int requestCode) {
         super.onRequestSuccess(requestCode);

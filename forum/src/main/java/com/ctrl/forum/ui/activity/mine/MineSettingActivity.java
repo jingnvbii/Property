@@ -1,6 +1,5 @@
 package com.ctrl.forum.ui.activity.mine;
 
-import android.app.Notification;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -21,7 +20,6 @@ import java.util.Set;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import cn.jpush.android.api.BasicPushNotificationBuilder;
 import cn.jpush.android.api.JPushInterface;
 
 /**
@@ -48,24 +46,7 @@ public class MineSettingActivity extends ToolBarActivity implements View.OnClick
     RelativeLayout  feedback;   //意见反馈
     @InjectView(R.id.iv_clear)
     TextView iv_clear;
-
     MyBroadcastReceiver receiver;
-
-   // private MessageReceiver mMessageReceiver;
-    public static final String MESSAGE_RECEIVED_ACTION = "com.example.jpushdemo.MESSAGE_RECEIVED_ACTION";
-    public static final String KEY_TITLE = "title";
-    public static final String KEY_MESSAGE = "message";
-    public static final String KEY_EXTRAS = "extras";
-    public static boolean isForeground = false;
-
-    /*public void registerMessageReceiver() {
-        mMessageReceiver = new MessageReceiver();
-        IntentFilter filter = new IntentFilter();
-        filter.setPriority(IntentFilter.SYSTEM_HIGH_PRIORITY);
-        filter.addAction(MESSAGE_RECEIVED_ACTION);
-        registerReceiver(mMessageReceiver, filter);
-    }*/
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,8 +55,8 @@ public class MineSettingActivity extends ToolBarActivity implements View.OnClick
         init();
 
         receiver = new MyBroadcastReceiver();
-
-        setJPush();
+        initJpush();
+        //setJPush();
     }
 
     // 初始化 JPush。如果已经初始化，但没有登录成功，则执行重新登录。
@@ -84,24 +65,7 @@ public class MineSettingActivity extends ToolBarActivity implements View.OnClick
     }
 
     private void setJPush() {
-
-        if (Arad.preferences.getBoolean("iv_voice")){//声音
-            setSoundStyleBasic();
-        }
-
-        if (Arad.preferences.getBoolean("iv_vibration")){//振动
-            setVibrateStyleBasic();
-        }
-
-        if (Arad.preferences.getBoolean("iv_voice") && Arad.preferences.getBoolean("iv_vibration")){
-            setSoundVibrateStyleBasic();
-        }
-
-        if (!Arad.preferences.getBoolean("iv_voice") && !Arad.preferences.getBoolean("iv_vibration")){
-            setNoSoundStyleBasic();
-        }
-
-        if (Arad.preferences.getBoolean("iv_night_no_message")){//夜间免打捞
+        if (Arad.preferences.getBoolean("nightNoMessage")){//夜间免打捞
             Set<Integer> days = new HashSet<>();
             days.add(1);
             days.add(2);
@@ -122,50 +86,9 @@ public class MineSettingActivity extends ToolBarActivity implements View.OnClick
             days.add(7);
             JPushInterface.setPushTime(getApplicationContext(), days, 0, 23);
         }
-        if (Arad.preferences.getBoolean("iv_notification_show")){//通知显示消息详情
+        if (Arad.preferences.getBoolean("desktopIconHints")){ //桌面图标提示
 
         }else {}
-        if (Arad.preferences.getBoolean("iv_desktop_icon_hints")){ //桌面图标提示
-
-        }else {}
-    }
-
-    /**
-     *设置通知提示方式 - 设置为铃声
-     */
-    private void setSoundStyleBasic(){
-        BasicPushNotificationBuilder builder = new BasicPushNotificationBuilder(MineSettingActivity.this);
-        builder.statusBarDrawable = R.drawable.ic_launcher;
-        builder.notificationFlags = Notification.FLAG_AUTO_CANCEL;
-        builder.notificationDefaults = Notification.DEFAULT_SOUND;  //设置为铃声（ Notification.DEFAULT_SOUND）或者震动（ Notification.DEFAULT_VIBRATE）
-        JPushInterface.setPushNotificationBuilder(1, builder);
-    }
-
-    /**
-     *设置通知提示方式 - 设置为振动
-     */
-    private void setVibrateStyleBasic(){
-        BasicPushNotificationBuilder builder = new BasicPushNotificationBuilder(MineSettingActivity.this);
-        builder.statusBarDrawable = R.drawable.ic_launcher;
-        builder.notificationFlags = Notification.FLAG_AUTO_CANCEL;
-        builder.notificationDefaults = Notification.DEFAULT_VIBRATE;  //设置为铃声（ Notification.DEFAULT_SOUND）或者震动（ Notification.DEFAULT_VIBRATE）
-        JPushInterface.setPushNotificationBuilder(1, builder);
-    }
-    /**
-     *设置通知提示方式 - 设置为没有声音
-     */
-    private void setNoSoundStyleBasic(){
-        JPushInterface.setSilenceTime(getApplicationContext(), 0, 0, 23, 59);
-    }
-    /**
-     *设置通知提示方式 - 设置为铃声,振动
-     */
-    private void setSoundVibrateStyleBasic(){
-        BasicPushNotificationBuilder builder = new BasicPushNotificationBuilder(MineSettingActivity.this);
-        builder.statusBarDrawable = R.drawable.ic_launcher;
-        builder.notificationFlags = Notification.FLAG_AUTO_CANCEL;
-        builder.notificationDefaults = Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE;  //设置为铃声（ Notification.DEFAULT_SOUND）或者震动（ Notification.DEFAULT_VIBRATE）
-        JPushInterface.setPushNotificationBuilder(1, builder);
     }
 
     private void init() {
@@ -241,6 +164,8 @@ public class MineSettingActivity extends ToolBarActivity implements View.OnClick
                 setJPush();
             }
         });
+
+        Arad.preferences.flush();
     }
 
     @Override
