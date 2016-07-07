@@ -71,7 +71,7 @@ public class InvitationListViewFriendStyleAdapter extends BaseAdapter {
 
     public InvitationListViewFriendStyleAdapter(Activity context) {
         this.mcontext = context;
-        this.wh = (SysUtils.getScreenWidth(mcontext)- SysUtils.Dp2Px(mcontext, 99)) / 3;
+        this.wh = (SysUtils.getScreenWidth(mcontext)- SysUtils.Dp2Px(mcontext, 99)) /3;
     }
 
     public void setList(List<Post> list) {
@@ -119,10 +119,12 @@ public class InvitationListViewFriendStyleAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
         final Post post = mPostList.get(position);
-        holder.tv_friend_style_content.setText(post.getTitle());
+        if(post.getContent()==null||post.getContent().equals("")){
+            holder.tv_friend_style_content.setVisibility(View.GONE);
+        }
+        holder.tv_friend_style_content.setText(post.getContent());
         holder.tv_friend_style_name.setText(post.getMemberName());
-      //  holder.tv_friend_style_time.setText(TimeUtils.date(Long.parseLong(post.getPublishTime()))+"   "+post.getLocationName());
-        holder.tv_friend_style_time.setText(TimeUtils.dates(Long.parseLong(post.getPublishTime()))+"   "+post.getLocationName());
+        holder.tv_friend_style_time.setText(TimeUtils.dates(Long.parseLong(post.getPublishTime()))+"   "+(post.getLocationName()==null?"":post.getLocationName()));
         holder.tv_friend_style_zan_num.setText(post.getPraiseNum()+"");
         holder.tv_friend_style_pinglun_num.setText(post.getCommentNum()+"");
         holder.tv_friend_style_share_num.setText(post.getShareNum() + "");
@@ -174,27 +176,23 @@ public class InvitationListViewFriendStyleAdapter extends BaseAdapter {
                 }
             });
             if (post.getPostReplyList().size() <= 3) {
+                holder.lv_friend_style_reply.setVisibility(View.VISIBLE);
                 holder.tv_pinglun_title.setVisibility(View.VISIBLE);
                 FriendStyleRelpyAdapter adapter = new FriendStyleRelpyAdapter(mcontext);
                 adapter.setList(post.getPostReplyList());
                 holder.lv_friend_style_reply.setAdapter(adapter);
                 holder.tv_friend_style_shengyu_pinglun.setVisibility(View.VISIBLE);
-                holder.tv_friend_style_shengyu_pinglun.setText("查看其他更多评论...");
-            } else {
-                holder.tv_pinglun_title.setVisibility(View.VISIBLE);
-                FriendStyleRelpyAdapter adapter = new FriendStyleRelpyAdapter(mcontext);
-                adapter.setList(post.getPostReplyList());
-                holder.lv_friend_style_reply.setAdapter(adapter);
-                holder.tv_friend_style_shengyu_pinglun.setVisibility(View.VISIBLE);
-                holder.tv_friend_style_shengyu_pinglun.setText("查看其他更多评论...");
+                holder.tv_friend_style_shengyu_pinglun.setText("查看其他 "+(post.getCommentNum()-post.getPostReplyList().size())+"条 评论...");
             }
         }else {
             holder.tv_friend_style_shengyu_pinglun.setVisibility(View.GONE);
+            holder.lv_friend_style_reply.setVisibility(View.GONE);
             holder.tv_pinglun_title.setVisibility(View.GONE);
         }
 
+
         // 是否含有图片
-        if (post.getPostImgList() != null && post.getPostImgList().size() != 0) {
+        if (post.getPostImgList() != null) {
             holder.rl4.setVisibility(View.VISIBLE);
             initInfoImages(holder.gv_images,post.getPostImgList());
         } else {
@@ -591,7 +589,7 @@ public class InvitationListViewFriendStyleAdapter extends BaseAdapter {
         int w = 0;
         switch (imgList.size()) {
             case 1:
-                w = wh;
+                w = SysUtils.getScreenWidth(mcontext)/2;
                 newGridView.setNumColumns(1);
                 break;
             case 2:
@@ -602,6 +600,12 @@ public class InvitationListViewFriendStyleAdapter extends BaseAdapter {
             case 3:
             case 5:
             case 6:
+                w = wh * 3 + SysUtils.Dp2Px(mcontext, 2) * 2;
+                newGridView.setNumColumns(3);
+                break;
+            case 7:
+            case 8:
+            case 9:
                 w = wh * 3 + SysUtils.Dp2Px(mcontext, 2) * 2;
                 newGridView.setNumColumns(3);
                 break;

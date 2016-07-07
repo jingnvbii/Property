@@ -603,6 +603,21 @@ public class InvitationDao extends IDao {
         postRequest(Constant.RAW_URL+url, mapToRP(map),19);
     }
 
+    /**
+     * 添加按钮访问记录
+     * @param memberId //会员id
+     * @param buttonType //按钮类型（0：网址、1：电话）
+     * @param buttonContent //访问内容（访问的网址或者拨打的电话号码）
+     * */
+    public void requestAddButtonAccessHistory(String memberId,String buttonType,String buttonContent){
+        String url="buttonAccessHistory/addButtonAccessHistory";
+        Map<String,String> map = new HashMap<String,String>();
+        map.put("memberId",memberId);
+        map.put("buttonType",buttonType);
+        map.put("buttonContent",buttonContent);
+        postRequest(Constant.RAW_URL+url, mapToRP(map),20);
+    }
+
 
 
 

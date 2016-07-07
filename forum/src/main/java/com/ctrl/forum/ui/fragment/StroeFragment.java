@@ -232,9 +232,26 @@ public class StroeFragment extends ToolBarFragment implements View.OnClickListen
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
-        if(isVisibleToUser) {
-            PAGE_NUM = 0;
-        }
+       /* if(isVisibleToUser) {
+            PAGE_NUM=1;
+            showProgress(true);
+            if(latitude_now!=null&&longitude_now!=null){
+                mdao.requestInitMallRecommendCompany(latitude_now, longitude_now,
+                        String.valueOf(Constant.PAGE_SIZE), String.valueOf(PAGE_NUM));
+            }else if(latitude_address!=null&&longitude_address!=null){
+                mdao.requestInitMallRecommendCompany(latitude_address, longitude_address,
+                        String.valueOf(Constant.PAGE_SIZE), String.valueOf(PAGE_NUM));
+            }else if(latitude_map!=null&&longitude_map!=null){
+                mdao.requestInitMallRecommendCompany(latitude_map, longitude_map,
+                        String.valueOf(Constant.PAGE_SIZE), String.valueOf(PAGE_NUM));
+            }else if(latitude_search!=null&&longitude_search!=null){
+                mdao.requestInitMallRecommendCompany(latitude_search, longitude_search,
+                        String.valueOf(Constant.PAGE_SIZE), String.valueOf(PAGE_NUM));
+            }else {
+                mdao.requestInitMallRecommendCompany(latitude, longitude,
+                        String.valueOf(Constant.PAGE_SIZE), String.valueOf(PAGE_NUM));
+            }
+        }*/
     }
 
 
@@ -296,7 +313,11 @@ public class StroeFragment extends ToolBarFragment implements View.OnClickListen
 
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
-                PAGE_NUM += 1;
+                if(listMall==null){
+                    PAGE_NUM=1;
+                }else {
+                    PAGE_NUM += 1;
+                }
                 //  showProgress(true);
                 new Handler().postDelayed(new Runnable() {
                     @Override
@@ -413,7 +434,6 @@ public class StroeFragment extends ToolBarFragment implements View.OnClickListen
         super.onRequestSuccess(requestCode);
         lv_store_home.onRefreshComplete();
         bol=1;
-        showProgress(false);
         if (requestCode == 0) {
             listBanner = mdao.getListMallBanner();
             listMallKind = mdao.getListMallKind();
@@ -431,7 +451,7 @@ public class StroeFragment extends ToolBarFragment implements View.OnClickListen
             viewpagerAdapter = new MyViewPagerAdapter(getActivity(), map);
             myViewPager.setAdapter(viewpagerAdapter);
             myViewPager.setOnPageChangeListener(new MyListener());
-
+            showProgress(false);
         }
 
         if (requestCode == 1) {
@@ -439,6 +459,7 @@ public class StroeFragment extends ToolBarFragment implements View.OnClickListen
             listMall = mdao.getListMall();
             // Log.i("tag", "listPost---" + listPost.size());
             listviewAdapter.setList(listMall);
+            showProgress(false);
         }
     }
 
@@ -507,71 +528,6 @@ public class StroeFragment extends ToolBarFragment implements View.OnClickListen
             final App2Adapter app2adapter =new App2Adapter(getActivity(), listMallKind, i,this);
             appPage.setAdapter(app2adapter);
             appPage.setNumColumns(5);
-		/*	appPage.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> arg0, View arg1,
-                                        int arg2, long arg3) {
-                    // TODO Auto-generated method stub
-                    //  MessageUtils.showShortToast(getActivity(),"fdfsdfsd");
-                 *//*   int index = app2adapter.getPage() * (int)APP_PAGE_SIZE + arg2;
-
-                    for (int i = 0; i < (int)APP_PAGE_SIZE; i++) {
-                        if (i == arg2) {
-                            if(latitude_now!=null&&longitude_now!=null){
-                                Intent intent = new Intent(getActivity(), StoreScreenActivity.class);
-                                intent.putExtra("channelId", listMallKind.get(arg2).getId());
-                                intent.putExtra("latitude", latitude_now);
-                                intent.putExtra("longitude", longitude_now);
-                                intent.putExtra("address", address_now);
-                                intent.putExtra("name",  listMallKind.get(arg2).getKindName());
-                                getActivity().startActivity(intent);
-                                AnimUtil.intentSlidIn(getActivity());
-                            }else if(latitude_address!=null&&longitude_address!=null){
-                                Intent intent = new Intent(getActivity(), StoreScreenActivity.class);
-                                intent.putExtra("channelId", listMallKind.get(arg2).getId());
-                                intent.putExtra("latitude", latitude_address);
-                                intent.putExtra("longitude", longitude_address);
-                                intent.putExtra("address", address_address);
-                                intent.putExtra("name",  listMallKind.get(arg2).getKindName());
-                                getActivity().startActivity(intent);
-                                AnimUtil.intentSlidIn(getActivity());
-                            }else if(latitude_map!=null&&longitude_map!=null){
-                                Intent intent = new Intent(getActivity(), StoreScreenActivity.class);
-                                intent.putExtra("channelId", listMallKind.get(arg2).getId());
-                                intent.putExtra("latitude", latitude_map);
-                                intent.putExtra("longitude", longitude_map);
-                                intent.putExtra("address", address_map);
-                                intent.putExtra("name",  listMallKind.get(arg2).getKindName());
-                                getActivity().startActivity(intent);
-                                AnimUtil.intentSlidIn(getActivity());
-                            }else if(latitude_search!=null&&longitude_search!=null){
-                                Intent intent = new Intent(getActivity(), StoreScreenActivity.class);
-                                intent.putExtra("channelId", listMallKind.get(arg2).getId());
-                                intent.putExtra("latitude", latitude_search);
-                                intent.putExtra("longitude", longitude_search);
-                                intent.putExtra("address", address_search);
-                                intent.putExtra("name",  listMallKind.get(arg2).getKindName());
-                                getActivity().startActivity(intent);
-                                AnimUtil.intentSlidIn(getActivity());
-                            }else {
-                                Intent intent = new Intent(getActivity(), StoreScreenActivity.class);
-                                intent.putExtra("channelId", listMallKind.get(arg2).getId());
-                                intent.putExtra("latitude", latitude);
-                                intent.putExtra("longitude", longitude);
-                                intent.putExtra("address", tv_toolbar.getText().toString().trim());
-                                intent.putExtra("name",  listMallKind.get(arg2).getKindName());
-                                getActivity().startActivity(intent);
-                                AnimUtil.intentSlidIn(getActivity());
-                            }
-
-                        } else {
-				*//**//*arg0.getChildAt(i).setBackgroundColor(Color.argb(0, 0, 0, 0));*//**//*
-
-                        }
-                        }*//*
-
-                }
-            });*/
            appPage.setOnItemClickListener(app2adapter);
             map.put(i, appPage);
 

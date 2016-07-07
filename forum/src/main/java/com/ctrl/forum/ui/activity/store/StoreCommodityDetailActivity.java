@@ -212,19 +212,23 @@ public class StoreCommodityDetailActivity extends AppToolBarActivity implements 
             if (count % 2 == 0) {//奇数次点击
                 if (product.getCollectState().equals("0")) {
                     iv_zan.setImageResource(R.mipmap.shoucang_white);
+                    MessageUtils.showShortToast(this, "收藏成功");
                 }
                 if (product.getCollectState().equals("1")) {
                     iv_zan.setImageResource(R.mipmap.zan_white);
+                    MessageUtils.showShortToast(this, "取消收藏成功");
                 }
             }
             if (count % 2 == 1) {//偶数次点击
 
                 if (product.getCollectState().equals("0")) {
                     iv_zan.setImageResource(R.mipmap.zan_white);
+                    MessageUtils.showShortToast(this, "取消收藏成功");
                 }
 
                 if (product.getCollectState().equals("1")) {
                     iv_zan.setImageResource(R.mipmap.shoucang_white);
+                    MessageUtils.showShortToast(this, "收藏成功");
 
                 }
             }

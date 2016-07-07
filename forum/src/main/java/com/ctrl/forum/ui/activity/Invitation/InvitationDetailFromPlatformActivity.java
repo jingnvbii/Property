@@ -647,16 +647,29 @@ public class InvitationDetailFromPlatformActivity extends AppToolBarActivity imp
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_link_tel:
+                if(Arad.preferences.getString("memberId")==null||Arad.preferences.getString("memberId").equals("")){
+                    startActivity(new Intent(InvitationDetailFromPlatformActivity.this, LoginActivity.class));
+                    AnimUtil.intentSlidOut(InvitationDetailFromPlatformActivity.this);
+                    return;
+                }
                 if(!tv_tel.getText().toString().equals("")){
+                    idao.requestAddButtonAccessHistory(Arad.preferences.getString("memberId"),"1",tv_tel.getText().toString().trim());
                     AndroidUtil.dial(InvitationDetailFromPlatformActivity.this,tv_tel.getText().toString().trim());
                 }
                 break;
             case R.id.tv_link_url:
+                if(Arad.preferences.getString("memberId")==null||Arad.preferences.getString("memberId").equals("")){
+                    startActivity(new Intent(InvitationDetailFromPlatformActivity.this, LoginActivity.class));
+                    AnimUtil.intentSlidOut(InvitationDetailFromPlatformActivity.this);
+                    return;
+                }
                 if(post.getLinkUrl()!=null||!post.getLinkUrl().equals("")) {
+                    idao.requestAddButtonAccessHistory(Arad.preferences.getString("memberId"),"0",post.getLinkUrl());
                     Uri uri = Uri.parse(post.getLinkUrl());
                    Intent intent = new Intent(Intent.ACTION_VIEW, uri);
                     startActivity(intent);
                     AnimUtil.intentSlidIn(this);
+
                 }
                 break;
             case R.id.ll_tel:

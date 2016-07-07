@@ -48,6 +48,23 @@ public class CollectDao extends IDao {
         map.put("collectType",collectType);
         postRequest(Constant.RAW_URL + url, mapToRP(map), 666);
     }
+    /**
+     * 获取共通分类列表（或者下拉列表）用户获取店铺分类以及类似的下拉列表
+     * @param memberId //当前用户登录id
+     * @param type //收藏类型（0：商品、1：店铺、2：帖子、3：周边服务）
+     * @param targerId //目标id（帖子id、商品id、店铺id或者周边服务id）
+     * @param collectType //收藏状态（0-收藏 1-取消收藏）
+     *
+     * */
+    public void requestMemberCollect(String memberId,String type,String targerId,String collectType){
+        String url="memberCollection/memberCollect";
+        Map<String,String> map = new HashMap<String,String>();
+        map.put("memberId",memberId);
+        map.put("type",type);
+        map.put("targerId",targerId);
+        map.put("collectType",collectType);
+        postRequest(Constant.RAW_URL + url, mapToRP(map), 666);
+    }
 
     /**
      * 获取我收藏的商品列表

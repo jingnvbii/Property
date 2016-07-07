@@ -147,7 +147,6 @@
             android:layout_height="match_parent"
             android:gravity="center_vertical"
             android:layout_marginLeft="5dp"
-            android:hint="(朋友圈样式的栏目不用填写标题)"
             android:textColorHint="@color/text_red"
             android:textSize="@dimen/text_size_small"
             android:background="@null"/>

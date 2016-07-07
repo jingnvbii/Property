@@ -61,10 +61,15 @@ public class FriendGridAdapter extends BaseAdapter {
 		}else {
 			holder= (Holder) view.getTag();
 		}
-
-		Arad.imageLoader.load(list.get(position).getImg()).placeholder(R.mipmap.default_error).resize(150,150).into(holder.imageView);
-		AbsListView.LayoutParams param = new AbsListView.LayoutParams(wh,wh);
-        view.setLayoutParams(param);
+		Arad.imageLoader.load(list.get(position).getImg()).placeholder(R.mipmap.default_error).resize(300,300).into(holder.imageView);
+		if(list.size()==1){
+			int wh1 = SysUtils.getScreenWidth(context)/2;
+			AbsListView.LayoutParams param = new AbsListView.LayoutParams(wh1,wh1);
+			view.setLayoutParams(param);
+		} else {
+			AbsListView.LayoutParams param = new AbsListView.LayoutParams(wh,wh);
+			view.setLayoutParams(param);
+		}
 		return view;
 	}
 	

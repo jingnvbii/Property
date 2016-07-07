@@ -45,6 +45,7 @@ import com.ctrl.forum.R;
 import com.ctrl.forum.base.AppToolBarActivity;
 import com.ctrl.forum.base.Constant;
 import com.ctrl.forum.customview.AudioRecordButton;
+import com.ctrl.forum.customview.ImageZoomActivity;
 import com.ctrl.forum.customview.RoundImageView;
 import com.ctrl.forum.customview.ShareDialog;
 import com.ctrl.forum.dao.ImageDao;
@@ -210,6 +211,7 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
 
     private int count = 0;//点击计数器
     private TextView tv_title2_name;
+    private ArrayList<String> imageUrl;
 
 
     @Override
@@ -305,6 +307,16 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
         ll_tel.setOnClickListener(this);
         rl_detail_user.setOnClickListener(this);
         title_image.setOnClickListener(this);
+
+        iv001.setOnClickListener(this);
+        iv002.setOnClickListener(this);
+        iv003.setOnClickListener(this);
+        iv004.setOnClickListener(this);
+        iv005.setOnClickListener(this);
+        iv006.setOnClickListener(this);
+        iv007.setOnClickListener(this);
+        iv008.setOnClickListener(this);
+        iv009.setOnClickListener(this);
 
         lv_reply_detail.setMode(PullToRefreshBase.Mode.PULL_FROM_END);
         lv_reply_detail.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
@@ -604,6 +616,11 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
                 }
 
             }
+            imageUrl=new ArrayList<>();
+            for(int i=0;i<idao.getListPostImage().size();i++){
+                imageUrl.add(idao.getListPostImage().get(i).getImg());
+            }
+            
         }
 
 
@@ -663,10 +680,47 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
         return true;
     }
 
+    private void gotoImageZoomActivity(Activity activity,ArrayList<String>imageUrl,int pos){
+        Intent intent=new Intent(activity, ImageZoomActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("imageList",imageUrl);
+        bundle.putInt("position",pos);
+        intent.putExtras(bundle);
+        startActivity(intent);
+        AnimUtil.intentSlidIn(activity);
+    }
+
     @Override
     public void onClick(View v) {
         Intent intent=null;
         switch (v.getId()) {
+            case R.id.iv01:
+              gotoImageZoomActivity(InvitationPinterestDetailActivity.this,imageUrl,0);
+                break;
+            case R.id.iv02:
+              gotoImageZoomActivity(InvitationPinterestDetailActivity.this,imageUrl,1);
+                break;
+            case R.id.iv03:
+              gotoImageZoomActivity(InvitationPinterestDetailActivity.this,imageUrl,2);
+                break;
+            case R.id.iv04:
+              gotoImageZoomActivity(InvitationPinterestDetailActivity.this,imageUrl,3);
+                break;
+            case R.id.iv05:
+              gotoImageZoomActivity(InvitationPinterestDetailActivity.this,imageUrl,4);
+                break;
+            case R.id.iv06:
+              gotoImageZoomActivity(InvitationPinterestDetailActivity.this,imageUrl,5);
+                break;
+            case R.id.iv07:
+              gotoImageZoomActivity(InvitationPinterestDetailActivity.this,imageUrl,6);
+                break;
+            case R.id.iv08:
+              gotoImageZoomActivity(InvitationPinterestDetailActivity.this,imageUrl,7);
+                break;
+            case R.id.iv09:
+              gotoImageZoomActivity(InvitationPinterestDetailActivity.this,imageUrl,8);
+                break;
             case R.id.title_image:
                 if(Arad.preferences.getString("memberId")==null||Arad.preferences.getString("memberId").equals("")){
                     startActivity(new Intent(InvitationPinterestDetailActivity.this, LoginActivity.class));
