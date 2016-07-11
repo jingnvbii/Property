@@ -35,7 +35,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     private RadioButton rb2;//商城按钮
     private RadioButton rb3;//小区按钮
     private RadioButton rb4;//周边按钮
-    private RadioButton rb5;//我  按钮
+    private RadioButton rb5;//我  按钮1
     private InvitationFragment invitationFragment;
     private StroeFragment storeFragment;
     private PlotFragment plotFragment;
