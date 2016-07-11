@@ -44,7 +44,6 @@ import com.ctrl.forum.entity.PostImage;
 import com.ctrl.forum.entity.PostKind;
 import com.ctrl.forum.entity.Recommend;
 import com.ctrl.forum.loopview.HomeAutoSwitchPicHolder;
-import com.ctrl.forum.ui.activity.Invitation.InvitationDetailActivity;
 import com.ctrl.forum.ui.activity.Invitation.InvitationDetailFromPlatformActivity;
 import com.ctrl.forum.ui.activity.Invitation.InvitationPinterestDetailActivity;
 import com.ctrl.forum.ui.activity.Invitation.InvitationPullDownActivity;
@@ -68,24 +67,6 @@ import butterknife.InjectView;
  * Created by jason on 2016/4/7.
  */
 public class InvitationFragment extends ToolBarFragment implements View.OnClickListener{
-  /*  @InjectView(R.id.gridView1)
-    GridViewForScrollView gridView1;
-    @InjectView(R.id.framelayout)
-    FrameLayout framelayout;*/
-   /* @InjectView(R.id.tv_change)//文字轮播
-            TextView tv_change;*/
-   /* @InjectView(R.id.iv_recommend_1)//推荐列表图片1
-            ImageView iv_recommend_1;
-    @InjectView(R.id.iv_recommend_2)//推荐列表图片2
-            ImageView iv_recommend_2;
-    @InjectView(R.id.iv_recommend_3)//推荐列表图片3
-            ImageView iv_recommend_3;
-    @InjectView(R.id.iv_recommend_4)//推荐列表图片4
-            ImageView iv_recommend_4;
-    @InjectView(R.id.tv_change)//文字轮播
-            TextView tv_change;*/
-   /* @InjectView(R.id.lv_invitation_fragment)//下拉列表
-     PullToRefreshListView lv_invitation_fragment;*/
     @InjectView(R.id.ll_linear_layout)//父布局
             LinearLayout ll_linear_layout;
 
@@ -119,10 +100,6 @@ public class InvitationFragment extends ToolBarFragment implements View.OnClickL
     private int PAGE_NUM=1;
 
 
-
-
-
-
     /*
     * 实现文字上下轮播
     * */
@@ -140,7 +117,6 @@ public class InvitationFragment extends ToolBarFragment implements View.OnClickL
         public void handleMessage(android.os.Message msg) {
             switch (msg.what) {
                 case 1:
-
                     if (isloop) {
                         tv_change.setText(listNoticeString.get(item % listNoticeString.size()));
                         tv_change.setAnimation(set);
@@ -177,6 +153,7 @@ public class InvitationFragment extends ToolBarFragment implements View.OnClickL
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        showProgress(true);
         invitationListViewAdapter = new InvitationListViewAdapter(getActivity());
         inflater = getActivity().getLayoutInflater();
         ViewGroup main = (ViewGroup) inflater.inflate(R.layout.fragment_invitation_home_header,
@@ -215,7 +192,7 @@ public class InvitationFragment extends ToolBarFragment implements View.OnClickL
         tv_change.setText("");
         set.addAnimation(animation);
         set.addAnimation(ta);
-        set.setDuration(1000);
+        set.setDuration(2000);
         set.setRepeatMode(Animation.REVERSE);
     }
 
@@ -303,8 +280,6 @@ public class InvitationFragment extends ToolBarFragment implements View.OnClickL
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = null;
-                //  Log.i("tag", "positionlist---" + String.valueOf(position - lv01.getHeaderViewsCount()));
-                //  String type = listPost.get(position +lv01.getHeaderViewsCount()).getSourceType();
                 String type = listPost.get(position - lv01.getHeaderViewsCount()).getSourceType();
                 switch (type) {
                     case "0"://平台
@@ -347,7 +322,6 @@ public class InvitationFragment extends ToolBarFragment implements View.OnClickL
     @Override
     public void onRequestSuccess(int requestCode) {
         super.onRequestSuccess(requestCode);
-        showProgress(false);
         lv_invitation_fragment_home.onRefreshComplete();
         if (requestCode == 0) {
             listBanner = idao.getListBanner();
@@ -364,6 +338,7 @@ public class InvitationFragment extends ToolBarFragment implements View.OnClickL
             viewpagerAdapter = new MyViewPagerAdapter(getActivity(), map);
             myViewPager.setAdapter(viewpagerAdapter);
             myViewPager.setOnPageChangeListener(new MyListener());
+            showProgress(false);
         }
 
         if (requestCode == 1) {
@@ -371,6 +346,7 @@ public class InvitationFragment extends ToolBarFragment implements View.OnClickL
             listPost=idao.getListPost();
             if(listPost!=null) {
                invitationListViewAdapter.setList(listPost);
+               showProgress(false);
             }
         }
 
@@ -385,17 +361,6 @@ public class InvitationFragment extends ToolBarFragment implements View.OnClickL
             final AppAdapter adapter =new AppAdapter(getActivity(), listPostKind, i);
             appPage.setAdapter(adapter);
             appPage.setNumColumns(5);
-//			appPage.setOnItemClickListener(new OnItemClickListener() {
-//
-//				@Override
-//				public void onItemClick(AdapterView<?> arg0, View arg1,
-//						int arg2, long arg3) {
-//					// TODO Auto-generated method stub
-//		          Toast.makeText(MainActivity.this, "这是第"+((adapter.getPage()*8)+arg2)+"个", Toast.LENGTH_LONG).show();
-//
-//
-//				}
-//			});
             appPage.setOnItemClickListener(adapter);
             map.put(i, appPage);
 
@@ -432,20 +397,20 @@ public class InvitationFragment extends ToolBarFragment implements View.OnClickL
 
     private void initRecommend() {
         ll_tuijian.setVisibility(View.VISIBLE);
-        if (listRecommend.size() > 0) {
-            Arad.imageLoader.load(listRecommend.get(0).getImgUrl()).placeholder(R.mipmap.fuzhuang).into(iv_recommend_1);
+        if (listRecommend.size() > 0&&listRecommend.get(0).getImgUrl()!=null&&!listRecommend.get(0).getImgUrl().equals("")) {
+            Arad.imageLoader.load(listRecommend.get(0).getImgUrl()).placeholder(R.mipmap.default_error).into(iv_recommend_1);
             iv_recommend_1.setOnClickListener(this);
         }
-        if (listRecommend.size() > 1) {
-            Arad.imageLoader.load(listRecommend.get(1).getImgUrl()).placeholder(R.mipmap.fuzhuang).into(iv_recommend_2);
+        if (listRecommend.size() > 1&&listRecommend.get(1).getImgUrl()!=null&&!listRecommend.get(1).getImgUrl().equals("")) {
+            Arad.imageLoader.load(listRecommend.get(1).getImgUrl()).placeholder(R.mipmap.default_error).into(iv_recommend_2);
             iv_recommend_2.setOnClickListener(this);
         }
-        if (listRecommend.size() > 2) {
-            Arad.imageLoader.load(listRecommend.get(2).getImgUrl()).placeholder(R.mipmap.fuzhuang).into(iv_recommend_3);
+        if (listRecommend.size() > 2&&listRecommend.get(2).getImgUrl()!=null&&!listRecommend.get(2).getImgUrl().equals("")) {
+            Arad.imageLoader.load(listRecommend.get(2).getImgUrl()).placeholder(R.mipmap.default_error).into(iv_recommend_3);
             iv_recommend_3.setOnClickListener(this);
         }
-        if (listRecommend.size() > 3) {
-            Arad.imageLoader.load(listRecommend.get(3).getImgUrl()).placeholder(R.mipmap.fuzhuang).into(iv_recommend_4);
+        if (listRecommend.size() > 3&&listRecommend.get(3).getImgUrl()!=null&&!listRecommend.get(3).getImgUrl().equals("")) {
+            Arad.imageLoader.load(listRecommend.get(3).getImgUrl()).placeholder(R.mipmap.default_error).into(iv_recommend_4);
             iv_recommend_4.setOnClickListener(this);
         }
     }
@@ -518,7 +483,7 @@ public class InvitationFragment extends ToolBarFragment implements View.OnClickL
                         AnimUtil.intentSlidIn(getActivity());
                         break;
                     case "2"://跳帖子详情
-                        intent=new Intent(getActivity(), InvitationDetailActivity.class);
+                        intent=new Intent(getActivity(), InvitationPinterestDetailActivity.class);
                         intent.putExtra("id",listRecommend.get(0).getTargetId());
                         getActivity().startActivity(intent);
                         AnimUtil.intentSlidIn(getActivity());
@@ -548,7 +513,7 @@ public class InvitationFragment extends ToolBarFragment implements View.OnClickL
                         AnimUtil.intentSlidIn(getActivity());
                         break;
                     case "2"://跳帖子详情
-                        intent=new Intent(getActivity(), InvitationDetailActivity.class);
+                        intent=new Intent(getActivity(), InvitationPinterestDetailActivity.class);
                         intent.putExtra("id",listRecommend.get(1).getTargetId());
                         getActivity().startActivity(intent);
                         AnimUtil.intentSlidIn(getActivity());
@@ -579,7 +544,7 @@ public class InvitationFragment extends ToolBarFragment implements View.OnClickL
                         AnimUtil.intentSlidIn(getActivity());
                         break;
                     case "2"://跳帖子详情
-                        intent=new Intent(getActivity(), InvitationDetailActivity.class);
+                        intent=new Intent(getActivity(), InvitationPinterestDetailActivity.class);
                         intent.putExtra("id",listRecommend.get(2).getTargetId());
                         getActivity().startActivity(intent);
                         AnimUtil.intentSlidIn(getActivity());
@@ -610,7 +575,7 @@ public class InvitationFragment extends ToolBarFragment implements View.OnClickL
                         AnimUtil.intentSlidIn(getActivity());
                         break;
                     case "2"://跳帖子详情
-                        intent=new Intent(getActivity(), InvitationDetailActivity.class);
+                        intent=new Intent(getActivity(), InvitationPinterestDetailActivity.class);
                         intent.putExtra("id",listRecommend.get(3).getTargetId());
                         getActivity().startActivity(intent);
                         AnimUtil.intentSlidIn(getActivity());
@@ -639,13 +604,13 @@ public class InvitationFragment extends ToolBarFragment implements View.OnClickL
                 AnimUtil.intentSlidIn(getActivity());
                 break;
             case "1"://跳商品
-                 intent=new Intent(getActivity(), StoreShopListVerticalStyleActivity.class);
+                 intent=new Intent(getActivity(), StoreCommodityDetailActivity.class);
                 intent.putExtra("id",listNotice.get(pos).getTargetId());
                 getActivity().startActivity(intent);
                 AnimUtil.intentSlidIn(getActivity());
                 break;
             case "2"://跳帖子
-                intent=new Intent(getActivity(), StoreShopListVerticalStyleActivity.class);
+                intent=new Intent(getActivity(), InvitationPinterestDetailActivity.class);
                 intent.putExtra("id",listNotice.get(pos).getTargetId());
                 getActivity().startActivity(intent);
                 AnimUtil.intentSlidIn(getActivity());

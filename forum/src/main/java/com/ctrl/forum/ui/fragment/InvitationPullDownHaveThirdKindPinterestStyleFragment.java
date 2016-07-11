@@ -52,8 +52,6 @@ public class InvitationPullDownHaveThirdKindPinterestStyleFragment extends ToolB
     XListView xlv_pinerest_style;
     private GridView gridView1;
 
-   /* @InjectView(R.id.framelayout)//
-    FrameLayout framelayout;*/
 
     private int width;
     DisplayMetrics dm;
@@ -227,14 +225,9 @@ public class InvitationPullDownHaveThirdKindPinterestStyleFragment extends ToolB
             listPost = idao.getListPost();
             if(listCategroy3==null){
                 framelayout.setVisibility(View.VISIBLE);
-              //  ll.setVisibility(View.GONE);
-                // horizontalScrollView.setVisibility(View.VISIBLE);
                 gridView1.setVisibility(View.GONE);
-             //   idao.requestPostRotaingBanner("B_POST_MIDDLE");
             }else {
                 framelayout.setVisibility(View.GONE);
-              //  ll.setVisibility(View.VISIBLE);
-                // horizontalScrollView.setVisibility(View.VISIBLE);
                 gridView1.setVisibility(View.VISIBLE);
             }
             mInvitationListViewPinterestStyleAdapter.setList(listPost);
@@ -244,13 +237,9 @@ public class InvitationPullDownHaveThirdKindPinterestStyleFragment extends ToolB
         if (requestCode == 2) {
             bol = 0;
             framelayout.setVisibility(View.GONE);
-         //   ll.setVisibility(View.VISIBLE);
-            // horizontalScrollView.setVisibility(View.VISIBLE);
             gridView1.setVisibility(View.VISIBLE);
-            // horizontalScrollView.setVisibility(View.VISIBLE);
             listCategroy3 = idao.getListCategory();
             adapter.setList(listCategroy3);
-            // setValue();
         }
     }
 

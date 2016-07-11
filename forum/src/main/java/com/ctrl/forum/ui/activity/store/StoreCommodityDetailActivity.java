@@ -823,6 +823,10 @@ public class StoreCommodityDetailActivity extends AppToolBarActivity implements 
                 showCartPopupWindow(v);
                 break;
             case R.id.tv_add_cart://加入购物车
+                if(Arad.preferences.getString("memberId")==null||Arad.preferences.getString("memberId").equals("")){
+                    startActivity(new Intent(StoreCommodityDetailActivity.this, LoginActivity.class));
+                    return;
+                }
                 tv_add_cart.setVisibility(View.GONE);
                 rl_commodity_detail_add_cart.setVisibility(View.VISIBLE);
                 tv_commodity_detail_num.setVisibility(View.VISIBLE);

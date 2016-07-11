@@ -17,7 +17,7 @@ import com.beanu.arad.Arad;
 import com.beanu.arad.utils.AnimUtil;
 import com.ctrl.forum.R;
 import com.ctrl.forum.entity.Banner;
-import com.ctrl.forum.ui.activity.Invitation.InvitationDetailActivity;
+import com.ctrl.forum.ui.activity.Invitation.InvitationPinterestDetailActivity;
 import com.ctrl.forum.ui.activity.store.StoreCommodityDetailActivity;
 import com.ctrl.forum.ui.activity.store.StoreShopListVerticalStyleActivity;
 
@@ -172,12 +172,8 @@ public class HomeAutoSwitchPicHolder extends BaseHolder<List<String>>
             ImageView iv = new ImageView(UIUtils.getContext());
             iv.setScaleType(ImageView.ScaleType.FIT_XY);
             // 设置网络图片
-
-            // BitmapHelper.display(iv, mPictures.get(position));
-       //     Arad.imageLoader.load(listBanner.get(position).getImgUrl()).placeholder(R.mipmap.default_error).into(iv);
             if(mPictures.get(position)!=null&&!mPictures.get(position).equals(""))
-           Arad.imageLoader.load(mPictures.get(position)).placeholder(R.mipmap.default_error).into(iv);
-          // ImageLoader.getInstance().displayImage(mPictures.get(position),iv);
+            Arad.imageLoader.load(mPictures.get(position)).placeholder(R.mipmap.default_error).into(iv);
             container.addView(iv, 0);
 
             if (listBanner.get(mPosition).getType()!=null) {
@@ -201,7 +197,7 @@ public class HomeAutoSwitchPicHolder extends BaseHolder<List<String>>
                                 AnimUtil.intentSlidIn((Activity) mContext);
                                 break;
                             case "2"://跳帖子详情
-                                intent = new Intent(mContext, InvitationDetailActivity.class);
+                                intent = new Intent(mContext, InvitationPinterestDetailActivity.class);
                                 intent.putExtra("id", listBanner.get(mPosition).getTargetId());
                                 mContext.startActivity(intent);
                                 AnimUtil.intentSlidIn((Activity) mContext);

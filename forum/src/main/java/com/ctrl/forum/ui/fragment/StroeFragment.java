@@ -55,7 +55,7 @@ import com.ctrl.forum.entity.Notice;
 import com.ctrl.forum.entity.NoticeImage;
 import com.ctrl.forum.loopview.HomeAutoSwitchPicHolder;
 import com.ctrl.forum.service.LocationService;
-import com.ctrl.forum.ui.activity.Invitation.InvitationDetailActivity;
+import com.ctrl.forum.ui.activity.Invitation.InvitationPinterestDetailActivity;
 import com.ctrl.forum.ui.activity.LoginActivity;
 import com.ctrl.forum.ui.activity.store.StoreCommodityDetailActivity;
 import com.ctrl.forum.ui.activity.store.StoreLocateActivity;
@@ -211,7 +211,6 @@ public class StroeFragment extends ToolBarFragment implements View.OnClickListen
                     MessageUtils.showShortToast(getActivity(), "没有结果");
                 }
                 //获取反向地理编码结果
-                Log.i("tag", "地理位置--" + result.getAddress());
                 tv_toolbar.setText(result.getAddress());
                 latitude1 = result.getLocation().latitude;
                 longitude1 = result.getLocation().longitude;
@@ -563,20 +562,20 @@ public class StroeFragment extends ToolBarFragment implements View.OnClickListen
 
     private void initRecommend() {
         ll_tuijian.setVisibility(View.VISIBLE);
-        if (listMallRecommend.size() > 0) {
-            Arad.imageLoader.load(listMallRecommend.get(0).getImgUrl()).placeholder(R.mipmap.fuzhuang).into(iv01_store_recomend);
+        if (listMallRecommend.size() > 0&&listMallRecommend.get(0).getImgUrl()!=null&&!listMallRecommend.get(0).getImgUrl().equals("")) {
+            Arad.imageLoader.load(listMallRecommend.get(0).getImgUrl()).placeholder(R.mipmap.default_error).into(iv01_store_recomend);
             iv01_store_recomend.setOnClickListener(this);
         }
-        if (listMallRecommend.size() > 1) {
-            Arad.imageLoader.load(listMallRecommend.get(1).getImgUrl()).placeholder(R.mipmap.fuzhuang).into(iv02_store_recomend);
+        if (listMallRecommend.size() > 1&&listMallRecommend.get(1).getImgUrl()!=null&&!listMallRecommend.get(1).getImgUrl().equals("")) {
+            Arad.imageLoader.load(listMallRecommend.get(1).getImgUrl()).placeholder(R.mipmap.default_error).into(iv02_store_recomend);
             iv02_store_recomend.setOnClickListener(this);
         }
-        if (listMallRecommend.size() > 2) {
-            Arad.imageLoader.load(listMallRecommend.get(2).getImgUrl()).placeholder(R.mipmap.fuzhuang).into(iv03_store_recomend);
+        if (listMallRecommend.size() > 2&&listMallRecommend.get(2).getImgUrl()!=null&&!listMallRecommend.get(2).getImgUrl().equals("")) {
+            Arad.imageLoader.load(listMallRecommend.get(2).getImgUrl()).placeholder(R.mipmap.default_error).into(iv03_store_recomend);
             iv03_store_recomend.setOnClickListener(this);
         }
-        if (listMallRecommend.size() > 3) {
-            Arad.imageLoader.load(listMallRecommend.get(3).getImgUrl()).placeholder(R.mipmap.fuzhuang).into(iv04_store_recomend);
+        if (listMallRecommend.size() > 3&&listMallRecommend.get(3).getImgUrl()!=null&&!listMallRecommend.get(3).getImgUrl().equals("")) {
+            Arad.imageLoader.load(listMallRecommend.get(3).getImgUrl()).placeholder(R.mipmap.default_error).into(iv04_store_recomend);
             iv04_store_recomend.setOnClickListener(this);
         }
     }
@@ -622,7 +621,7 @@ public class StroeFragment extends ToolBarFragment implements View.OnClickListen
         tv_change.setText("");
         set.addAnimation(animation);
         set.addAnimation(ta);
-        set.setDuration(1000);
+        set.setDuration(2000);
         set.setRepeatMode(Animation.REVERSE);
     }
 
@@ -779,7 +778,7 @@ public class StroeFragment extends ToolBarFragment implements View.OnClickListen
                         AnimUtil.intentSlidIn(getActivity());
                         break;
                     case "2"://跳帖子详情
-                        intent = new Intent(getActivity(), InvitationDetailActivity.class);
+                        intent = new Intent(getActivity(), InvitationPinterestDetailActivity.class);
                         intent.putExtra("id", listMallRecommend.get(0).getTargetId());
                         getActivity().startActivity(intent);
                         AnimUtil.intentSlidIn(getActivity());
@@ -809,7 +808,7 @@ public class StroeFragment extends ToolBarFragment implements View.OnClickListen
                         AnimUtil.intentSlidIn(getActivity());
                         break;
                     case "2"://跳帖子详情
-                        intent = new Intent(getActivity(), InvitationDetailActivity.class);
+                        intent = new Intent(getActivity(), InvitationPinterestDetailActivity.class);
                         intent.putExtra("id", listMallRecommend.get(1).getTargetId());
                         getActivity().startActivity(intent);
                         AnimUtil.intentSlidIn(getActivity());
@@ -840,7 +839,7 @@ public class StroeFragment extends ToolBarFragment implements View.OnClickListen
                         AnimUtil.intentSlidIn(getActivity());
                         break;
                     case "2"://跳帖子详情
-                        intent = new Intent(getActivity(), InvitationDetailActivity.class);
+                        intent = new Intent(getActivity(), InvitationPinterestDetailActivity.class);
                         intent.putExtra("id", listMallRecommend.get(2).getTargetId());
                         getActivity().startActivity(intent);
                         AnimUtil.intentSlidIn(getActivity());
@@ -871,7 +870,7 @@ public class StroeFragment extends ToolBarFragment implements View.OnClickListen
                         AnimUtil.intentSlidIn(getActivity());
                         break;
                     case "2"://跳帖子详情
-                        intent = new Intent(getActivity(), InvitationDetailActivity.class);
+                        intent = new Intent(getActivity(), InvitationPinterestDetailActivity.class);
                         intent.putExtra("id", listMallRecommend.get(3).getTargetId());
                         getActivity().startActivity(intent);
                         AnimUtil.intentSlidIn(getActivity());
@@ -900,13 +899,13 @@ public class StroeFragment extends ToolBarFragment implements View.OnClickListen
                 AnimUtil.intentSlidIn(getActivity());
                 break;
             case "1"://跳商品
-                intent=new Intent(getActivity(), StoreShopListVerticalStyleActivity.class);
+                intent=new Intent(getActivity(), StoreCommodityDetailActivity.class);
                 intent.putExtra("id",listMallNotice.get(pos).getTargetId());
                 getActivity().startActivity(intent);
                 AnimUtil.intentSlidIn(getActivity());
                 break;
             case "2"://跳帖子
-                intent=new Intent(getActivity(), StoreShopListVerticalStyleActivity.class);
+                intent=new Intent(getActivity(), InvitationPinterestDetailActivity.class);
                 intent.putExtra("id",listMallNotice.get(pos).getTargetId());
                 getActivity().startActivity(intent);
                 AnimUtil.intentSlidIn(getActivity());

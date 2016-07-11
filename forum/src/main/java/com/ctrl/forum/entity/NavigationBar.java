@@ -8,7 +8,8 @@ import java.io.Serializable;
  */
 public class NavigationBar implements Serializable {
     private String kindName;//类别名称
-    private String kindIcon;//类别图标url
+    private String kindIcon;//类别未选中图标url
+    private String kindIconSelected;//类别选中图标url
     private String sort;//排序
     private String commentCode;//备注码（0：广场、1：商城、2：小区、3：周边、4：我）
 
@@ -44,4 +45,11 @@ public class NavigationBar implements Serializable {
         this.commentCode = commentCode;
     }
 
+    public String getKindIconSelected() {
+        return kindIconSelected;
+    }
+
+    public void setKindIconSelected(String kindIconSelected) {
+        this.kindIconSelected = kindIconSelected;
+    }
 }

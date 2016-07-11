@@ -244,7 +244,7 @@ public class InvitationCommentDetaioActivity extends AppToolBarActivity implemen
                 if (!isFromPinglun) {//无评论
                     idao.requestReplyPost(id, reportid,"", Arad.preferences.getString("memberId"), "2", "", soundUrl, "", "", "", "");
                 }else{//有评论
-                    idao.requestReplyPost(id,reportid, listPostReply.get(mPosition).getId(), Arad.preferences.getString("memberId"), "2","" ,soundUrl,listPostReply.get(mPosition).getMemberId(), "", "", "");
+                    idao.requestReplyPost(id,reportid, listPostReply.get(mPosition).getId(), Arad.preferences.getString("memberId"), "2","" ,soundUrl,listPostReply.get(mPosition).getMemberId(), listPostReply.get(mPosition).getMemberFloor(), "", "");
                 }
 
 
