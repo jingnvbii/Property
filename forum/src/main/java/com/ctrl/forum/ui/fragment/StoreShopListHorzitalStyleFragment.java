@@ -134,6 +134,10 @@ public class StoreShopListHorzitalStyleFragment extends ToolBarFragment implemen
         mAdapter.setOnItemClickListener(new StoreShopListHorzitalStyleGridViewAdapter.OnItemClickListener() {
             @Override
             public void onItemJiaClick(StoreShopListHorzitalStyleGridViewAdapter.ViewHolder holder) {
+                if(Arad.preferences.getString("memberId")==null||Arad.preferences.getString("memberId").equals("")){
+                    startActivity(new Intent(getActivity(), LoginActivity.class));
+                    return;
+                }
                 String nums = holder.tv_numbers.getText().toString().trim();
                 if (nums.isEmpty() || nums.equals("0")) {
                     if (aroundCompanies.get(pos).getProductList().get(holder.getPosition()).getStock().equals("0")) {

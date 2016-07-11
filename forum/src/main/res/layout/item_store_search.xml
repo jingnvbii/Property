@@ -9,12 +9,11 @@
         android:layout_width="match_parent"
         android:layout_height="150dp"
         android:scaleType="fitXY"
-        android:src="@mipmap/fuzhuang"/>
+/>
     <TextView
         android:id="@+id/tv_store_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="小贝日用便利店"
         android:layout_marginTop="5dp"
         android:textColor="@color/text_black"
         />
@@ -22,7 +21,6 @@
         android:id="@+id/tv_xiaoliang"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="月销：100 "
         android:layout_marginTop="10dp"
         android:textColor="@color/text_gray"
         />
@@ -33,7 +31,6 @@
         android:id="@+id/tv_price"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="200/件 "
         android:layout_marginTop="10dp"
         android:textColor="@color/text_red"
         />
@@ -49,6 +46,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="5dp"
+            android:visibility="gone"
             android:layout_toLeftOf="@+id/item_commedity_numbers"
             android:layout_centerVertical="true"
             android:src="@mipmap/subtract_cart_red"/>
@@ -59,6 +57,7 @@
             android:textSize="18sp"
             android:textStyle="bold"
             android:layout_marginLeft="5dp"
+            android:visibility="gone"
             android:layout_centerVertical="true"
             android:layout_marginRight="5dp"
             android:layout_toLeftOf="@+id/item_commedity_jia"

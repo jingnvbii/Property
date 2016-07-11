@@ -2,7 +2,6 @@ package com.ctrl.forum.ui.activity.Invitation;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -25,13 +24,11 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -46,6 +43,8 @@ import com.ctrl.forum.base.AppToolBarActivity;
 import com.ctrl.forum.base.Constant;
 import com.ctrl.forum.customview.AudioRecordButton;
 import com.ctrl.forum.customview.ImageZoomActivity;
+import com.ctrl.forum.customview.ListViewForScrollView;
+import com.ctrl.forum.customview.PullToRefreshView;
 import com.ctrl.forum.customview.RoundImageView;
 import com.ctrl.forum.customview.ShareDialog;
 import com.ctrl.forum.dao.ImageDao;
@@ -59,16 +58,16 @@ import com.ctrl.forum.face.FaceRelativeLayout;
 import com.ctrl.forum.manager.MediaManager;
 import com.ctrl.forum.ui.activity.LoginActivity;
 import com.ctrl.forum.ui.activity.mine.MineDetailActivity;
+import com.ctrl.forum.ui.adapter.FriendDetailImageAdapter;
 import com.ctrl.forum.ui.adapter.InvitationPinetestDetailAdapter;
 import com.ctrl.forum.utils.Base64Util;
 import com.ctrl.forum.utils.TimeUtils;
 import com.ctrl.forum.utils.Utils;
-import com.handmark.pulltorefresh.library.PullToRefreshBase;
-import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
@@ -134,7 +133,7 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
     @InjectView(R.id.ll_input_text)//文字输入布局
             LinearLayout ll_input_text;
     @InjectView(R.id.lv_reply_detail)//评论列表
-            PullToRefreshListView lv_reply_detail;
+            ListViewForScrollView lv_reply_detail;
     @InjectView(R.id.ll_facechoose)//表情布局
             RelativeLayout ll_facechoose;
     @InjectView(R.id.btn_send)//回复
@@ -149,6 +148,36 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
             ImageView iv02;
     @InjectView(R.id.iv03)//图片3
             ImageView iv03;
+
+    @InjectView(R.id.title_image)
+    ImageView title_image;
+    @InjectView(R.id. iv_levlel)
+    ImageView  iv_levlel;
+    @InjectView(R.id.tv_name)
+    TextView tv_name;
+    @InjectView(R.id. tv_release_time)
+    TextView  tv_release_time;
+    @InjectView(R.id.tv_address)
+    TextView tv_address;
+    @InjectView(R.id.tv_delete)
+    TextView tv_delete;
+    @InjectView(R.id.tv_introduction)
+    TextView tv_introduction;
+    @InjectView(R.id. tv_content)
+    TextView  tv_content;
+    @InjectView(R.id. tv_tel)
+    TextView  tv_tel;
+    @InjectView(R.id. ll_tel)
+    LinearLayout  ll_tel;
+    @InjectView(R.id. rl_detail_user)
+    RelativeLayout  rl_detail_user;
+    @InjectView(R.id. title_image_2)
+    RoundImageView  title_image_2;
+    @InjectView(R.id.lv_invitation_detail_image)
+    ListViewForScrollView lv_invitation_detail_image;
+    @InjectView(R.id.main_pull_refresh_view)
+    PullToRefreshView main_pull_refresh_view;
+
 
 
     /* 请求码*/
@@ -170,8 +199,7 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
     //  private InvitationDetailReplyAdapter replyAdapter;
     private InvitationPinetestDetailAdapter mInvitationCommentDetailAdapter;
     private View headview;
-    private ImageView title_image;
-    private TextView tv_name;
+  /*  private TextView tv_name;
     private ImageView iv_levlel;
     private ImageView iv001;
     private ImageView iv002;
@@ -188,7 +216,10 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
     private TextView tv_introduction;
     private TextView tv_content;
     private TextView tv_tel;
-    private LinearLayout ll_tel;
+    private LinearLayout ll_tel;*/
+     /*  private RelativeLayout rl_detail_user;
+    private RoundImageView title_image_2;*/
+    private FriendDetailImageAdapter mFriendDetailImageAdapter;
 
     private int TYPE = -1;
     private static final int REPLY_TYPE_TEXT = 0;//文字或表情
@@ -206,12 +237,12 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
     private LinearLayout ll_image_first;
     private LinearLayout ll_image_third;
     private ImageDao Idao;
-    private RelativeLayout rl_detail_user;
-    private RoundImageView title_image_2;
+
 
     private int count = 0;//点击计数器
     private TextView tv_title2_name;
     private ArrayList<String> imageUrl;
+  //  private ListViewForScrollView lv_invitation_detail_image;
 
 
     @Override
@@ -221,11 +252,11 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
         ButterKnife.inject(this);
         // 隐藏输入法1
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
-        AbsListView.LayoutParams layoutParams = new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, AbsListView.LayoutParams.WRAP_CONTENT);
+       /* AbsListView.LayoutParams layoutParams = new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, AbsListView.LayoutParams.WRAP_CONTENT);
         headview = getLayoutInflater().inflate(R.layout.fragment_invitation_pinterest_detail, lv_reply_detail, false);
-        headview.setLayoutParams(layoutParams);
-        ListView lv = lv_reply_detail.getRefreshableView();
-        lv.addHeaderView(headview);
+        headview.setLayoutParams(layoutParams);*/
+      /*  ListView lv = lv_reply_detail.getRefreshableView();
+        lv.addHeaderView(headview);*/
         initView();
         ShareSDK.initSDK(this);
     }
@@ -239,17 +270,8 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
 
     private void initView() {
         count = 0;
-        title_image = (ImageView) headview.findViewById(R.id.title_image);//用户头像
+      /*  title_image = (ImageView) headview.findViewById(R.id.title_image);//用户头像
         iv_levlel = (ImageView) headview.findViewById(R.id.iv_levlel);//等级
-        iv001 = (ImageView) headview.findViewById(R.id.iv01);//图片
-        iv002 = (ImageView) headview.findViewById(R.id.iv02);
-        iv003 = (ImageView) headview.findViewById(R.id.iv03);
-        iv004 = (ImageView) headview.findViewById(R.id.iv04);
-        iv005 = (ImageView) headview.findViewById(R.id.iv05);
-        iv006 = (ImageView) headview.findViewById(R.id.iv06);
-        iv007 = (ImageView) headview.findViewById(R.id.iv07);
-        iv008 = (ImageView) headview.findViewById(R.id.iv08);
-        iv009 = (ImageView) headview.findViewById(R.id.iv09);
         ll_image_first = (LinearLayout) headview.findViewById(R.id.ll_image_first);
         ll_image_second = (LinearLayout) headview.findViewById(R.id.ll_image_second);
         ll_image_third = (LinearLayout) headview.findViewById(R.id.ll_image_third);
@@ -265,6 +287,7 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
         ll_tel = (LinearLayout) headview.findViewById(R.id.ll_tel);//拨打电话
         title_image_2 = (RoundImageView) headview.findViewById(R.id.title_image_2);//头像
         title_image = (RoundImageView) headview.findViewById(R.id.title_image);//头像
+        lv_invitation_detail_image = (ListViewForScrollView) headview.findViewById(R.id.lv_invitation_detail_image);//头像*/
 
         btn_yuyin.setAudioFinishRecorderListener(new AudioRecordButton.AudioFinishRecorderListener() {
             @Override
@@ -297,6 +320,7 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
         Idao = new ImageDao(this);
         sdao = new SoundDao(this);
         idao.requesPostDetail(getIntent().getStringExtra("id"), Arad.preferences.getString("memberId"));
+       // idao.requesPostReplyList(getIntent().getStringExtra("id"), "1", String.valueOf(PAGE_NUM), String.valueOf(Constant.PAGE_SIZE));
         idao.requesPostReplyList(getIntent().getStringExtra("id"), "1", String.valueOf(PAGE_NUM), String.valueOf(Constant.PAGE_SIZE));
         iv_share.setOnClickListener(this);
         iv_zan.setOnClickListener(this);
@@ -308,17 +332,8 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
         rl_detail_user.setOnClickListener(this);
         title_image.setOnClickListener(this);
 
-        iv001.setOnClickListener(this);
-        iv002.setOnClickListener(this);
-        iv003.setOnClickListener(this);
-        iv004.setOnClickListener(this);
-        iv005.setOnClickListener(this);
-        iv006.setOnClickListener(this);
-        iv007.setOnClickListener(this);
-        iv008.setOnClickListener(this);
-        iv009.setOnClickListener(this);
 
-        lv_reply_detail.setMode(PullToRefreshBase.Mode.PULL_FROM_END);
+     /*   lv_reply_detail.setMode(PullToRefreshBase.Mode.PULL_FROM_END);
         lv_reply_detail.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
             @Override
             public void onRefresh(PullToRefreshBase<ListView> refreshView) {
@@ -326,37 +341,55 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
                 idao.requesPostReplyList(getIntent().getStringExtra("id"), "1", String.valueOf(PAGE_NUM), String.valueOf(Constant.PAGE_SIZE));
             }
         });
-
+*/
+        mFriendDetailImageAdapter=new FriendDetailImageAdapter(this);
         lv_reply_detail.setAdapter(mInvitationCommentDetailAdapter);
-
-        ll_main.setOnClickListener(new View.OnClickListener() {
+        lv_invitation_detail_image.setAdapter(mFriendDetailImageAdapter);
+        lv_invitation_detail_image.setFocusable(false);
+        lv_reply_detail.setFocusable(false);
+        main_pull_refresh_view.setOnHeaderRefreshListener(new PullToRefreshView.OnHeaderRefreshListener() {
             @Override
-            public void onClick(View v) {
-                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                boolean isOpen = imm.isActive();
-                //isOpen若返回true，则表示输入法打开
-                if (isOpen) {
-                    imm.hideSoftInputFromWindow(InvitationPinterestDetailActivity.this.getCurrentFocus().getWindowToken()
-                            , InputMethodManager.HIDE_NOT_ALWAYS);
-                    //接受软键盘输入的编辑文本或其它视图
-                    //  imm.showSoftInput(et_content,InputMethodManager.SHOW_FORCED);
-                }
+            public void onHeaderRefresh(PullToRefreshView view) {
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if(listPostReply2!=null){
+                            listPostReply2.clear();
+                        }
+                        main_pull_refresh_view.onHeaderRefreshComplete("更新于:"
+                                + Calendar.getInstance().getTime().toLocaleString());
+                        PAGE_NUM =1;
+                        idao.requesPostReplyList(getIntent().getStringExtra("id"), "1", String.valueOf(PAGE_NUM), String.valueOf(Constant.PAGE_SIZE));
+                    }
+                }, 1000);
+            }
+        });
+        main_pull_refresh_view.setOnFooterRefreshListener(new PullToRefreshView.OnFooterRefreshListener() {
+            @Override
+            public void onFooterRefresh(PullToRefreshView view) {
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        PAGE_NUM += 1;
+                        idao.requesPostReplyList(getIntent().getStringExtra("id"), "1", String.valueOf(PAGE_NUM), String.valueOf(Constant.PAGE_SIZE));
+                    }
+                }, 1000);
+
             }
         });
 
 
-        lv_reply_detail.setOnClickListener(new View.OnClickListener() {
+
+        lv_invitation_detail_image.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onClick(View v) {
-                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                boolean isOpen = imm.isActive();
-                //isOpen若返回true，则表示输入法打开
-                if (isOpen) {
-                    imm.hideSoftInputFromWindow(InvitationPinterestDetailActivity.this.getCurrentFocus().getWindowToken()
-                            , InputMethodManager.HIDE_NOT_ALWAYS);
-                    //接受软键盘输入的编辑文本或其它视图
-                    //  imm.showSoftInput(et_content,InputMethodManager.SHOW_FORCED);
-                }
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent=new Intent(InvitationPinterestDetailActivity.this, ImageZoomActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("imageList",imageUrl);
+                bundle.putInt("position",position);
+                intent.putExtras(bundle);
+                startActivity(intent);
+                AnimUtil.intentSlidIn(InvitationPinterestDetailActivity.this);
             }
         });
 
@@ -366,7 +399,7 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
     @Override
     public void onRequestFaild(String errorNo, String errorMessage) {
         super.onRequestFaild(errorNo, errorMessage);
-        lv_reply_detail.onRefreshComplete();
+        main_pull_refresh_view.onFooterRefreshComplete();
         if(errorNo.equals("027")){
           //  MessageUtils.showShortToast(this, "已经拉黑过，无需重复拉黑");
         }
@@ -452,7 +485,8 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
             isFromPinglun = false;
         }
         if (requestCode == 5) {
-            lv_reply_detail.onRefreshComplete();
+          //  lv_reply_detail.onRefreshComplete();
+            main_pull_refresh_view.onFooterRefreshComplete();
             //   MessageUtils.showShortToast(this, "获取评论列表成功");
             if (popupWindow != null) {
                 if (popupWindow.isShowing()) {
@@ -519,7 +553,12 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
             }
             if(post.getVcardDisplay().equals("1")){
                 rl_detail_user.setVisibility(View.VISIBLE);
-                tv_title2_name.setText(user.getNickName());
+                if(user.getNickName()==null){
+                    tv_title2_name.setText(user.getUserName());
+
+                }else {
+                    tv_title2_name.setText(user.getNickName());
+                }
             }
 
             if(post.getReporterId().equals(Arad.preferences.getString("memberId"))){
@@ -574,7 +613,8 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
             tv_release_time.setText("发布时间：" + TimeUtils.date(Long.parseLong(post.getPublishTime())));
          //   tv_introduction.setText(post.getBlurbs());
             tv_content.setText(post.getContent());
-            if (idao.getListPostImage() != null) {
+            mFriendDetailImageAdapter.setList(idao.getListPostImage());
+          /*  if (idao.getListPostImage() != null) {
                 if (idao.getListPostImage().size() >= 1) {
                     ll_image_first.setVisibility(View.VISIBLE);
                     iv001.setVisibility(View.VISIBLE);
@@ -615,7 +655,7 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
                     Arad.imageLoader.load(idao.getListPostImage().get(8).getImg()).placeholder(R.mipmap.default_error).into(iv009);
                 }
 
-            }
+            }*/
             imageUrl=new ArrayList<>();
             for(int i=0;i<idao.getListPostImage().size();i++){
                 imageUrl.add(idao.getListPostImage().get(i).getImg());

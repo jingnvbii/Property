@@ -41,7 +41,6 @@ import com.ctrl.forum.ui.adapter.InvitationListViewAdapter;
 import com.ctrl.forum.ui.adapter.InvitationListViewBlockStyleAdapter;
 import com.ctrl.forum.ui.adapter.InvitationListViewFriendStyleAdapter;
 import com.ctrl.forum.ui.adapter.InvitationPullDownGridViewAdapter;
-import com.ctrl.forum.ui.adapter.testAdapter;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
@@ -60,8 +59,6 @@ import butterknife.InjectView;
 public class InvitationPullDownHaveThirdKindFragment extends ToolBarFragment {
     @InjectView(R.id.lv_invitation_pull_down_have_third_kind)
     PullToRefreshListView lv_invitation_pull_down_have_third_kind;
-  /*  @InjectView(R.id.framelayout)
-    FrameLayout framelayout;*/
 
 
     private List<Merchant> list;
@@ -72,7 +69,6 @@ public class InvitationPullDownHaveThirdKindFragment extends ToolBarFragment {
     DisplayMetrics dm;
     private int NUM = 4; // 每行显示个数
     private int hSpacing = 20;// 水平间距
-    private testAdapter mAdapter;
     private List<Category2> mCategory2List;
     private InvitationListViewAdapter invitationListViewAdapter;
     private InvitationDao idao;
@@ -99,7 +95,6 @@ public class InvitationPullDownHaveThirdKindFragment extends ToolBarFragment {
     private int newPosition;
     private List<Banner> listBanner;
     private String keyword;
-    private int mMotionY;
 
     private Map<Integer,Boolean> isAdd = new HashMap<>();
     private Map<Integer,Integer> text = new HashMap<>();
@@ -216,35 +211,6 @@ public class InvitationPullDownHaveThirdKindFragment extends ToolBarFragment {
         getScreenDen();
         lv.addHeaderView(headview);
         lv.setFocusable(false);
-      /*  lv.setOnTouchListener(new View.OnTouchListener() {
-            public boolean onTouch(View v, MotionEvent event) {
-                // 记录点击时 y 的坐标11
-                int y = (int) event.getY();
-                switch (event.getAction()) {
-                    case MotionEvent.ACTION_DOWN:
-                        // 第一次点击是 ACTION_DOWN 事件，把值保存起来
-                        mMotionY = y;
-                        break;
-                    case MotionEvent.ACTION_MOVE:
-                        // 当你滑动屏幕时是 ACTION_MOVE 事件，在这里做逻辑处理
-                        // （y - mMotionY） 的正负就代表了 向上和向下
-                        if ((y - mMotionY) >4) {
-                            if (ll.getVisibility() == View.GONE) {
-                                ll.setVisibility(View.VISIBLE);
-                            }
-                        } else if((y - mMotionY) <-4){
-                            if (ll.getVisibility() == View.VISIBLE) {
-                                ll.setVisibility(View.GONE);
-                            }
-                        }else {
-
-                        }
-                        mMotionY = y;
-                        break;
-                }
-                return false;
-            }
-        });*/
 
         lv_invitation_pull_down_have_third_kind.setMode(PullToRefreshBase.Mode.BOTH);
         lv_invitation_pull_down_have_third_kind.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
@@ -437,15 +403,9 @@ public class InvitationPullDownHaveThirdKindFragment extends ToolBarFragment {
             bol = 0;
             if(listCategroy3==null) {
                 framelayout.setVisibility(View.VISIBLE);
-              //  idao.requestPostRotaingBanner("B_POST_MIDDLE");
-
-            //   ll.setVisibility(View.GONE);
-                // horizontalScrollView.setVisibility(View.VISIBLE);
                 gridView1.setVisibility(View.GONE);
             }else {
                 framelayout.setVisibility(View.GONE);
-            //   ll.setVisibility(View.VISIBLE);
-                // horizontalScrollView.setVisibility(View.VISIBLE);
                 gridView1.setVisibility(View.VISIBLE);
             }
             listPost = idao.getListPost();
@@ -467,7 +427,6 @@ public class InvitationPullDownHaveThirdKindFragment extends ToolBarFragment {
         if (requestCode == 2) {
             bol = 0;
             framelayout.setVisibility(View.GONE);
-            // horizontalScrollView.setVisibility(View.VISIBLE);
             gridView1.setVisibility(View.VISIBLE);
 
             listCategroy3 = idao.getListCategory();
@@ -515,21 +474,6 @@ public class InvitationPullDownHaveThirdKindFragment extends ToolBarFragment {
         super.onRequestFaild(errorNo, errorMessage);
         lv_invitation_pull_down_have_third_kind.onRefreshComplete();
         showProgress(false);
-      /*  if(errorNo.equals("006")){
-            if(listPost2!=null)
-            listPost2.clear();
-            switch (styleType) {
-                case "1":
-                    invitationListViewAdapter.setList(listPost2);
-                    break;
-                case "2":
-                    mInvitationListViewBlockStyleAdapter.setList(listPost2);
-                    break;
-                case "4":
-                    mInvitationListViewFriendStyleAdapter.setList(listPost2);
-                    break;
-            }
-        }*/
     }
 
     @Override

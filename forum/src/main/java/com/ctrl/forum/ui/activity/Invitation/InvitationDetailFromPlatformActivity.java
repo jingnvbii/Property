@@ -226,7 +226,7 @@ public class InvitationDetailFromPlatformActivity extends AppToolBarActivity imp
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_invitation_pinterest_detail);
+        setContentView(R.layout.activity_invitation_pinterest_from_plat_detail);
         ButterKnife.inject(this);
         // 隐藏输入法
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);

@@ -67,7 +67,7 @@ public class RegisterActivity extends AppToolBarActivity implements View.OnClick
         super.onRequestSuccess(requestCode);
         if (requestCode == 0) {
            MessageUtils.showShortToast(this, "注册成功");
-            finish();
+          finish();
         }
 
         if (requestCode == 1) {

@@ -6,9 +6,11 @@ import com.beanu.arad.http.IDao;
 import com.beanu.arad.http.INetResult;
 import com.beanu.arad.utils.JsonUtil;
 import com.ctrl.forum.base.Constant;
+import com.ctrl.forum.entity.Advertising;
 import com.ctrl.forum.entity.MemberInfo;
 import com.ctrl.forum.entity.NavigationBar;
 import com.ctrl.forum.entity.ReceiveAddress;
+import com.ctrl.forum.entity.StartAds;
 import com.fasterxml.jackson.databind.JsonNode;
 
 import java.io.IOException;
@@ -33,6 +35,9 @@ public class LoginDao extends IDao {
      * */
     private List<ReceiveAddress> listReceiveAddress = new ArrayList<>();
     private List<NavigationBar> listNavigationBar=new ArrayList<>();
+    private List<Advertising> listAdvertising=new ArrayList<>();
+    private List<StartAds> listAds=new ArrayList<>();
+    private StartAds startAds;
 
     public LoginDao(INetResult activity){
         super(activity);
@@ -111,6 +116,8 @@ public class LoginDao extends IDao {
         if(requestCode == 2){
             Log.d("demo","dao中结果集(修改密码): " + result);
             listNavigationBar = JsonUtil.node2pojoList(result.findValue("navigationBar"), NavigationBar.class);
+            listAdvertising = JsonUtil.node2pojoList(result.findValue("advertisingList"), Advertising.class);
+            startAds = JsonUtil.node2pojo(result.findValue("startADS"), StartAds.class);
         }
     }
 
@@ -125,5 +132,17 @@ public class LoginDao extends IDao {
 
     public List<NavigationBar> getListNavigationBar() {
         return listNavigationBar;
+    }
+
+    public List<Advertising> getListAdvertising() {
+        return listAdvertising;
+    }
+
+    public List<StartAds> getListAds() {
+        return listAds;
+    }
+
+    public StartAds getStartAds() {
+        return startAds;
     }
 }

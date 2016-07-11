@@ -202,7 +202,9 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
             public void run() {
                 for (int i = 0; i < listNavigation.size(); i++) {
                     drawable = BitmapUtils.getDrawable(listNavigation.get(i).getKindIcon());
+                    //drawable2 = BitmapUtils.getDrawable(listNavigation.get(i).getKindIcon());
                     listDrawable.add(drawable);
+                  //  listDrawable2.add(drawable2);
                 }
                 mHandler.sendEmptyMessage(1);
             }
@@ -593,8 +595,8 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         if (rb1.isChecked()) {
-            listDrawable.get(0).setBounds(0, 0, 50, 50);
-            rb1.setCompoundDrawables(null, listDrawable.get(0), null, null);
+                listDrawable.get(0).setBounds(0, 0, 50, 50);
+                rb1.setCompoundDrawables(null, listDrawable.get(0), null, null);
         } else {
             drawable2.setBounds(0, 0, 50, 50);
             rb1.setCompoundDrawables(null, listDrawable2.get(0), null, null);

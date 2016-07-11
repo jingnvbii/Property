@@ -395,6 +395,10 @@ public class StoreShopListVerticalStyleActivity extends AppToolBarActivity imple
 
                 @Override
                 public void onItemJiaClick(FoodAdapter.ViewHolder holder) {
+                    if(Arad.preferences.getString("memberId")==null||Arad.preferences.getString("memberId").equals("")){
+                        startActivity(new Intent(StoreShopListVerticalStyleActivity.this, LoginActivity.class));
+                        return;
+                    }
                     String nums = holder.item_menu_content_number.getText().toString().trim();
                     if (nums.isEmpty() || nums.equals("0")) {
                         if(foodList.get(holder.getPosition()).getStock().equals("0")){
