@@ -84,7 +84,9 @@ public class StoreManageAddressActivity extends AppToolBarActivity implements Vi
                 adapter.setList(listAddress);
         }
         if (requestCode == 4) {
-            MessageUtils.showShortToast(this, "设置默认地址成功");
+            if (getIntent().getFlags()!=888){
+                MessageUtils.showShortToast(this, "设置默认地址成功");
+            }
             adao.requestGetAddressList(Arad.preferences.getString("memberId"));
             intent.putExtra("province",adao.getListAddress().get(mposition).getProvince());
             intent.putExtra("city",adao.getListAddress().get(mposition).getCity());

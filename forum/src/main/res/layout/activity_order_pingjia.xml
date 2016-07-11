@@ -34,6 +34,7 @@
             android:layout_centerVertical="true"
             android:gravity="center_vertical"
             android:id="@+id/ratingBar"
+            android:stepSize="1"
             android:rating="5"
             android:layout_marginLeft="10dp"
             android:layout_toRightOf="@+id/textView15"

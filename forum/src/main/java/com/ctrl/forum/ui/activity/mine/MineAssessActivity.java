@@ -68,14 +68,12 @@ public class MineAssessActivity extends AppToolBarActivity{
             @Override
             public void onPageScrollStateChanged(int arg0) {
 
-
             }
         });
-
     }
 
     private void initData() {
-       fragments = new ArrayList<>();
+        fragments = new ArrayList<>();
         assessWeiFragment = new MineAssessWeiFragment();
         assessYiFragment = new MineAssessYiFragment();
         fragments.add(assessWeiFragment);
@@ -113,7 +111,6 @@ public class MineAssessActivity extends AppToolBarActivity{
 
         fl_content.setCurrentItem(text.indexOfChild(v));
     }
-
 
     @Override
     public boolean setupToolBarLeftButton(ImageView leftButton) {

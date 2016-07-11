@@ -55,7 +55,6 @@ public class MyBroadcastReceiver extends BroadcastReceiver{
            // processCustomMessage(context, bundle);
             // 自定义消息不会展示在通知栏，完全要开发者写代码去处理
             bundle.getString(JPushInterface.EXTRA_APP_KEY);
-            Log.e("key===============", bundle.getString(JPushInterface.EXTRA_APP_KEY));
 
             String extras = bundle.getString(JPushInterface.EXTRA_EXTRA);
             if (!ExampleUtil.isEmpty(extras)) {
@@ -68,7 +67,14 @@ public class MyBroadcastReceiver extends BroadcastReceiver{
             }
             String title = bundle.getString(JPushInterface.EXTRA_TITLE);
             String message = bundle.getString(JPushInterface.EXTRA_MESSAGE);
-            setNavti(context, title, message, messageKey);
+
+            if (Arad.preferences.getBoolean("replyComments")){//评论回复
+                setNavti(context, "评论回复", message, messageKey);
+            }else{
+                if (Arad.preferences.getBoolean("systemNotification")){//系统通知
+                    setNavti(context, "系统通知", message, messageKey);
+                }
+            }
         }
         else if (JPushInterface.ACTION_NOTIFICATION_RECEIVED.equals(intent.getAction())) {
             Log.d(TAG, "[MyReceiver] 接收到推送下来的通知");
@@ -96,7 +102,7 @@ public class MyBroadcastReceiver extends BroadcastReceiver{
         if (Arad.preferences.getBoolean("notificationShow")){//通知显示消息详情
             notification = new Notification(R.mipmap.logo,content,System.currentTimeMillis());
         }else{
-            notification = new Notification(R.mipmap.logo,"莱州人通知",System.currentTimeMillis());
+            notification = new Notification(R.mipmap.logo,title,System.currentTimeMillis());
         }
 
         //12
@@ -146,15 +152,16 @@ public class MyBroadcastReceiver extends BroadcastReceiver{
             }
         }
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
         //通过bundle可以带一些数据过去 这里将字符串传递了过去
-        bundle = new Bundle();
+        /*bundle = new Bundle();
         bundle.putString("name", "从Notification转跳过来的");
-        intent.putExtras(bundle);
+        intent.putExtras(bundle);*/
 
         //设置通知栏中显示的内容
         PendingIntent contentIntent = PendingIntent.getActivity(context,
                 R.string.app_name, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        notification.setLatestEventInfo(context, "莱州人",
+        notification.setLatestEventInfo(context, title,
                 content, contentIntent);
         mManager.notify(0,notification);
     }

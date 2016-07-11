@@ -1,5 +1,6 @@
 package com.ctrl.forum.ui.activity.mine;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,7 @@ import com.ctrl.forum.entity.Banner;
 import com.ctrl.forum.entity.Image2;
 import com.ctrl.forum.entity.Product2;
 import com.ctrl.forum.loopview.HomeAutoSwitchPicHolder;
+import com.ctrl.forum.ui.activity.store.StoreManageAddressActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,6 +54,7 @@ public class MineIntegralStoreDetailActivity extends AppToolBarActivity implemen
     private List<Banner> listBanner = new ArrayList<>();
     private ArrayList<String> mData;
     private HomeAutoSwitchPicHolder mAutoSwitchPicHolder;
+    private static int ADDRESS = 1002;
 
 
     @Override
@@ -146,10 +149,27 @@ public class MineIntegralStoreDetailActivity extends AppToolBarActivity implemen
     public void onClick(View v){
             switch (v.getId()) {
                 case R.id.btn_sure:
-                    rdao.convertRemarkGoods(Arad.preferences.getString("memberId"), integralProductsId);
+                    Intent intent = new Intent(this, StoreManageAddressActivity.class);
+                    intent.setFlags(888);
+                    startActivityForResult(intent,RESULT_OK);
                     break;
             }
         }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode==RESULT_OK){
+            if (requestCode==ADDRESS){ //兑换积分
+                String id = data.getStringExtra("province");
+
+                //rdao.convertRemarkGoods(Arad.preferences.getString("memberId"), integralProductsId);
+            }
+        }else{
+            return;
+        }
+
+        super.onActivityResult(requestCode, resultCode, data);
+    }
 
     @Override
     public boolean setupToolBarLeftButton(ImageView leftButton) {

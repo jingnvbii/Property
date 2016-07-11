@@ -46,12 +46,14 @@ public class RemarkDao extends IDao {
      * 兑换积分商品
      * @param memberId  用户id
      * @param productId  商品id
+     * @param addressId  地址id
      */
-    public void convertRemarkGoods(String memberId,String productId){
+    public void convertRemarkGoods(String memberId,String productId,String addressId){
         String url="MemberIntegral/exchangeIntegralProduct";
         Map<String,String> map = new HashMap<>();
         map.put("memberId",memberId);
         map.put("productId",productId);
+        map.put("addressId",addressId);
         postRequest(Constant.RAW_URL + url, mapToRP(map), 1);
     }
 

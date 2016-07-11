@@ -84,7 +84,8 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:id="@+id/iv_head"
-            android:src="@mipmap/image_default"
+            android:src="@mipmap/my_gray"
+            android:scaleType="fitXY"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/margin_left_and_right"  />

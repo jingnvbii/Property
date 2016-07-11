@@ -5,7 +5,7 @@
     <com.ctrl.forum.customview.MineHeadView
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:src="@mipmap/iconfont_head"
+        android:src="@mipmap/my_gray"
         android:layout_marginLeft="@dimen/margin_left_and_right"
         android:layout_marginTop="@dimen/margin_left_and_right"
         android:id="@+id/iv_head" />

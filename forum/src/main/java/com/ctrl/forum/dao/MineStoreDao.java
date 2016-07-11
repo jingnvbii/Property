@@ -166,12 +166,10 @@ public class MineStoreDao extends IDao {
             companyOrders.addAll(list);
         }
         if (requestCode==2){
-
             Log.d("demo", "dao中结果集(获取店铺商品分类以及分类下的商品): " + result);
             productCategories = JsonUtil.node2pojoList(result.findValue("productCategoryList"), CProductCategory.class);
             products = JsonUtil.node2pojoList(result.findValue("productList"),CProduct.class);
             Log.e("products============", productCategories.get(0).getcProducts().toString());
-
         }
         if (requestCode==3){
             Log.d("demo", "dao中结果集(用户商品上下架): " + result);

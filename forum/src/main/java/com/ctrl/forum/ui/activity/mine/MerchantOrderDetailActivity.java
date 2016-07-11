@@ -8,7 +8,6 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RatingBar;
 import android.widget.TextView;
-
 import com.beanu.arad.utils.MessageUtils;
 import com.ctrl.forum.R;
 import com.ctrl.forum.base.AppToolBarActivity;
@@ -19,9 +18,7 @@ import com.ctrl.forum.entity.OrderItem;
 import com.ctrl.forum.entity.OrderState;
 import com.ctrl.forum.ui.adapter.MineOrderDetailAdapter;
 import com.ctrl.forum.utils.DateUtil;
-
 import java.util.List;
-
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 

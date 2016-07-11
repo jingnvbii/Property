@@ -42,7 +42,7 @@
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:gravity="center"
-                android:background="@mipmap/iconfont_head"/>
+                android:background="@mipmap/my_gray"/>
         </RelativeLayout>
 
         <TextView
