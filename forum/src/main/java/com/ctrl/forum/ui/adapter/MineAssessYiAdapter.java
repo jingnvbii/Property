@@ -54,7 +54,7 @@ public class MineAssessYiAdapter extends BaseAdapter {
 
         if (messages!=null){
             holder.tv_name.setText(messages.get(position).getCompanyname());
-            holder.tv_time.setText(DateUtil.getStringByFormat(messages.get(position).getCreateTime(), "yyyy-MM-dd hh:mm:ss"));
+            holder.tv_time.setText(DateUtil.getStringByFormat(messages.get(position).getCreateTime(), "yyyy-MM-dd HH:mm:ss"));
         }
         return convertView;
     }

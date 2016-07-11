@@ -84,7 +84,6 @@ public class MineMessageFragment extends ToolBarFragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (messageList != null && messageList.get(position - 1) != null) {
-                    rdao.modifyReadState(messageList.get(position - 1).getId());//更改消息通知为已读
                     String state = messageList.get(position - 1).getMsgType();
                     String targetId = messageList.get(position - 1).getTargetId();
                     Intent intent;

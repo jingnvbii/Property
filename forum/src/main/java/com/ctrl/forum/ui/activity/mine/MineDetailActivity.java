@@ -148,10 +148,10 @@ public class MineDetailActivity extends AppToolBarActivity implements View.OnCli
             tv_name.setText(memberInfo.getNickName());
             SetMemberLevel.setLevelImage(this, iv_grade, memberInfo.getMemberLevel());
             shop_detail.setText(memberInfo.getCompanyKind());
-            Arad.imageLoader.load(memberInfo.getImgUrl()).placeholder(getResources().getDrawable(R.mipmap.iconfont_head)).into(iv_head);
+            Arad.imageLoader.load(memberInfo.getImgUrl()).placeholder(getResources().getDrawable(R.mipmap.my_gray)).into(iv_head);
         }
         if (companyInfo!=null){
-            Arad.imageLoader.load(companyInfo.getImg()).placeholder(getResources().getDrawable(R.mipmap.iconfont_head)).into(shop_head);
+            Arad.imageLoader.load(companyInfo.getImg()).placeholder(getResources().getDrawable(R.mipmap.my_gray)).into(shop_head);
             shop_name.setText(companyInfo.getName());
             tv_time.setText(companyInfo.getWorkStartTime()+"--"
                     +companyInfo.getWorkEndTime());

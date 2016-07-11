@@ -124,7 +124,7 @@ public class MineEditActivity extends AppToolBarActivity implements View.OnClick
                 Arad.preferences.putString("imgUrl", url);
                 Arad.preferences.flush();
                 Arad.imageLoader.load(Arad.preferences.getString("imgUrl")).
-                        placeholder(getResources().getDrawable(R.mipmap.image_default)).into(iv_head);//设置头像
+                        placeholder(getResources().getDrawable(R.mipmap.my_gray)).into(iv_head);//设置头像
             }
         }
         if (requestCode==5){
@@ -228,10 +228,11 @@ public class MineEditActivity extends AppToolBarActivity implements View.OnClick
                 popupWindow.dismiss();
                 break;
             case R.id.tv_tuichu://退出登陆
-
                 Arad.preferences.clear();
                 Arad.preferences.flush();
                 DataCleanUtils.clearAllCache(this.getApplicationContext());
+                Arad.preferences.putBoolean("isFirstIn",false);
+                Arad.preferences.flush();
                 startActivity(new Intent(this, LoginActivity.class));
                 //((MainActivity)context).finish();
                 this.finish();

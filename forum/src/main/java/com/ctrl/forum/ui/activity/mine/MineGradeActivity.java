@@ -62,7 +62,6 @@ public class MineGradeActivity extends AppToolBarActivity implements View.OnClic
 
     private void initData() {
         levelInfo = new LevelInfo();
-
         mdao = new MemberDao(this);
         mdao.getLevelInfo(Arad.preferences.getString("memberId"));
     }
@@ -75,7 +74,7 @@ public class MineGradeActivity extends AppToolBarActivity implements View.OnClic
         String grad = Arad.preferences.getString("memberLevel"); //等级
         String imgUrl = Arad.preferences.getString("imgUrl");
         if (imgUrl!=null&&!imgUrl.equals(""))
-            Arad.imageLoader.load(imgUrl).placeholder(getResources().getDrawable(R.mipmap.iconfont_head)).into(iv_header);//设置头像
+           Arad.imageLoader.load(imgUrl).placeholder(getResources().getDrawable(R.mipmap.my_gray)).into(iv_header);//设置头像
         SetMemberLevel.setLevelImage(this, iv_grade, grad);//设置等级
     }
 
@@ -127,12 +126,12 @@ public class MineGradeActivity extends AppToolBarActivity implements View.OnClic
         if (requestCode==1){
             levelInfo = mdao.getLevelInfos();
             if (levelInfo!=null){
-                int nexeLevel  = levelInfo.getCurrentExp()+levelInfo.getNextLevelExp();
+                int nextLevelExp  = levelInfo.getNextLevelExp()-levelInfo.getCurrentExp();
                 Arad.preferences.putInteger("todayExp", levelInfo.getTodayExp());
                 Arad.preferences.putInteger("currentExp", levelInfo.getCurrentExp());
                 Arad.preferences.putInteger("dayMaxExp", levelInfo.getDayMaxExp());
-                Arad.preferences.putInteger("nexeLevel",nexeLevel);
-                Arad.preferences.putInteger("nextLevelExp", levelInfo.getNextLevelExp());
+                Arad.preferences.putInteger("nexeLevel",levelInfo.getNextLevelExp());
+                Arad.preferences.putInteger("nextLevelExp", nextLevelExp);
                 Arad.preferences.flush();
                 putViewData();
             }

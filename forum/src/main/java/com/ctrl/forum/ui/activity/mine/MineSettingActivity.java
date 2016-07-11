@@ -67,23 +67,23 @@ public class MineSettingActivity extends ToolBarActivity implements View.OnClick
     private void setJPush() {
         if (Arad.preferences.getBoolean("nightNoMessage")){//夜间免打捞
             Set<Integer> days = new HashSet<>();
+            days.add(0);
             days.add(1);
             days.add(2);
             days.add(3);
             days.add(4);
             days.add(5);
             days.add(6);
-            days.add(7);
             JPushInterface.setPushTime(getApplicationContext(), days, 8, 22);
         }else {
             Set<Integer> days = new HashSet<>();
+            days.add(0);
             days.add(1);
             days.add(2);
             days.add(3);
             days.add(4);
             days.add(5);
             days.add(6);
-            days.add(7);
             JPushInterface.setPushTime(getApplicationContext(), days, 0, 23);
         }
         if (Arad.preferences.getBoolean("desktopIconHints")){ //桌面图标提示

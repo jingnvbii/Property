@@ -58,7 +58,8 @@ public class MineMessageListAdapter extends BaseAdapter{
         }
 
        if (messages!=null && messages.get(position)!=null){
-           Arad.imageLoader.load(messages.get(position).getImgUrl()).placeholder(context.getResources().getDrawable(R.mipmap.iconfont_head)).into(holder.iv_icon);
+           Arad.imageLoader.load(messages.get(position).getImgUrl()).
+                   placeholder(context.getResources().getDrawable(R.mipmap.my_gray)).into(holder.iv_icon);
            holder.tv_content.setText(messages.get(position).getContent());
 
            holder.tv_data.setText(TimeUtils.dateTime(messages.get(position).getCreateTime()));

@@ -143,14 +143,12 @@ public class MineStoreDao extends IDao {
     /**
      * 商家发货
      * @param id 订单主键id
-     * @param memberId 会员id
      * @param orderNum 订单编号
      */
-    public void deliverGoods(String id,String memberId,String orderNum){
+    public void deliverGoods(String id,String orderNum){
         String url = "order/deliverGoods";
         Map<String,String> map = new HashMap<>();
         map.put("id",id);
-        map.put("memberId",memberId);
         map.put("orderNum",orderNum);
         postRequest(Constant.RAW_URL+url,mapToRP(map),8);
     }
@@ -168,12 +166,10 @@ public class MineStoreDao extends IDao {
             companyOrders.addAll(list);
         }
         if (requestCode==2){
-
             Log.d("demo", "dao中结果集(获取店铺商品分类以及分类下的商品): " + result);
             productCategories = JsonUtil.node2pojoList(result.findValue("productCategoryList"), CProductCategory.class);
             products = JsonUtil.node2pojoList(result.findValue("productList"),CProduct.class);
             Log.e("products============", productCategories.get(0).getcProducts().toString());
-
         }
         if (requestCode==3){
             Log.d("demo", "dao中结果集(用户商品上下架): " + result);

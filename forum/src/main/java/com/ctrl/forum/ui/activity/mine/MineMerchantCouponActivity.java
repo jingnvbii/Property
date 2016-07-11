@@ -28,6 +28,9 @@ import java.util.List;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
+/**
+ * 现金卷赠与
+ */
 public class MineMerchantCouponActivity extends AppToolBarActivity implements View.OnClickListener{
     @InjectView(R.id.lv_content)
     ListView lv_content;

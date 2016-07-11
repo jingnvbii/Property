@@ -166,7 +166,7 @@ public class PlotListViewFriendStyleAdapter extends BaseAdapter {
                 adapter.setList(post.getPostReplyList());
                 holder.lv_friend_style_reply.setAdapter(adapter);
                 holder.tv_friend_style_shengyu_pinglun.setVisibility(View.VISIBLE);
-                holder.tv_friend_style_shengyu_pinglun.setText("查看其他"+(post.getCommentNum()-3)+"条评论...");
+                holder.tv_friend_style_shengyu_pinglun.setText("查看其他"+(post.getCommentNum()-post.getPostReplyList().size())+"条评论...");
             }
         }else {
             holder.lv_friend_style_reply.setVisibility(View.GONE);
