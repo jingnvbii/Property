@@ -159,7 +159,7 @@ public class MineIntegralStoreDetailActivity extends AppToolBarActivity implemen
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode==RESULT_OK){
-            if (requestCode==ADDRESS){ //兑换积分
+            if (requestCode==ADDRESS){ //兑换积分12
                 String id = data.getStringExtra("province");
 
                 //rdao.convertRemarkGoods(Arad.preferences.getString("memberId"), integralProductsId);
