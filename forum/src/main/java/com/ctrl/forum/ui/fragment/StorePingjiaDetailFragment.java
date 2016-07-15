@@ -67,7 +67,7 @@ public class StorePingjiaDetailFragment extends ToolBarFragment {
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser && bol == 1)
-            mdao.requestCompanysEvaluate(id, String.valueOf(PAGE_NUM), String.valueOf(Constant.PAGE_SIZE));
+            mdao.requestCompanysEvaluate(id,String.valueOf(type),String.valueOf(PAGE_NUM), String.valueOf(Constant.PAGE_SIZE));
     }
 
     @Override
@@ -137,7 +137,7 @@ public class StorePingjiaDetailFragment extends ToolBarFragment {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        mdao.requestCompanysEvaluate(id, String.valueOf(PAGE_NUM), String.valueOf(Constant.PAGE_SIZE));
+                        mdao.requestCompanysEvaluate(id,String.valueOf(type),String.valueOf(PAGE_NUM), String.valueOf(Constant.PAGE_SIZE));
                     }
                 }, 500);
 
@@ -149,7 +149,7 @@ public class StorePingjiaDetailFragment extends ToolBarFragment {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        mdao.requestCompanysEvaluate(id, String.valueOf(PAGE_NUM), String.valueOf(Constant.PAGE_SIZE));
+                        mdao.requestCompanysEvaluate(id,String.valueOf(type),String.valueOf(PAGE_NUM), String.valueOf(Constant.PAGE_SIZE));
                     }
                 }, 500);
             }

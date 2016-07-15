@@ -73,7 +73,11 @@ public class InvitationListViewBlockStyleAdapter extends BaseAdapter {
         }
             Post post = mPostList.get(position);
             holder.tv_block_style_titile.setText(post.getTitle());
-            Arad.imageLoader.load(post.getImgUrl()).placeholder(R.mipmap.default_error).into(holder.iv_block_style_photo);
+            if(post.getPostImgList()!=null) {
+                Arad.imageLoader.load(post.getPostImgList().get(0).getImg()).placeholder(R.mipmap.default_error).resize(250,250).into(holder.iv_block_style_photo);
+            }else {
+                holder.iv_block_style_photo.setImageResource(R.mipmap.default_error);
+            }
             if(post.getPublishTime()!=null)
             holder.tv_block_style_time.setText(TimeUtils.date(Long.parseLong(post.getPublishTime())));
             holder.tv_block_style_zan.setText(post.getCommentNum()+"");

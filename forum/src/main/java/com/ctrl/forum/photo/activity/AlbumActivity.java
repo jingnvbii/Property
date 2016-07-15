@@ -252,6 +252,5 @@ protected void onRestart() {
 	protected void onDestroy() {
 		super.onDestroy();
 		unregisterReceiver(broadcastReceiver);
-
 	}
 }
