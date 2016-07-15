@@ -862,7 +862,7 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
                     preUpload(uri);
                     doUpload();
                 }
-                //遍历比价两个集合，若是有相同的，则为删除的图片的url,不同的，增加的集合里面是新增加的图片的url,删除的集合里是删除的图片的url
+                //遍历比价两11个集合，若是有相同的，则为删除的图片的url,不同的，增加的集合里面是新增加的图片的url,删除的集合里是删除的图片的url
             /*    for (int i=0;i<addImages.size();i++){
                     String addUrl = addImages.get(i).getImgUrl();
                     for (int j=0;j<delImages.size();j++){
