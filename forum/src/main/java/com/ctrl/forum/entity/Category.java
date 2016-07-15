@@ -15,8 +15,17 @@ public class Category {
     private String canPublish;//是否允许发帖（0：禁止、1：允许）
     private String canComment;//是否允许评论（0：禁止、1：允许）
     private String canCollect;//是否允许收藏（0：禁止、1：允许）
+    private String showAll;//是否是[全部]分类（0：否、1：是）
 
     private List<Category2>categorylist;//三级帖子列表
+
+    public String getShowAll() {
+        return showAll;
+    }
+
+    public void setShowAll(String showAll) {
+        this.showAll = showAll;
+    }
 
     public List<Category2> getCategorylist() {
         return categorylist;

@@ -20,7 +20,6 @@ import android.widget.TextView;
 import com.beanu.arad.Arad;
 import com.beanu.arad.base.ToolBarFragment;
 import com.beanu.arad.utils.AnimUtil;
-import com.beanu.arad.utils.MessageUtils;
 import com.ctrl.forum.R;
 import com.ctrl.forum.base.Constant;
 import com.ctrl.forum.dao.InvitationDao;
@@ -98,15 +97,18 @@ public class InvitationPullDownHaveThirdKindFragment extends ToolBarFragment {
 
     private Map<Integer,Boolean> isAdd = new HashMap<>();
     private Map<Integer,Integer> text = new HashMap<>();
+    private String showAll;
+    private String firstId;
 
 
-
-    public static InvitationPullDownHaveThirdKindFragment newInstance(String channelId,String styleType,String thirdKindId,String keyword) {
+    public static InvitationPullDownHaveThirdKindFragment newInstance(String channelId,String styleType,String thirdKindId,String keyword,String showAll,String firstId) {
         InvitationPullDownHaveThirdKindFragment fragment = new InvitationPullDownHaveThirdKindFragment();
         fragment.channelId = channelId;
         fragment.styleType = styleType;
         fragment.keyword = keyword;
         fragment.thirdKindId = thirdKindId;
+        fragment.showAll = showAll;
+        fragment.firstId = firstId;
         return fragment;
     }
 
@@ -145,12 +147,12 @@ public class InvitationPullDownHaveThirdKindFragment extends ToolBarFragment {
                         holder.tv_friend_style_zan_num.setText((text.get(position) + 1) + "");
                         text.put(position,text.get(position) + 1);
                         holder.iv_friend_style_zan_num.setImageResource(R.mipmap.zan_blue_shixin);
-                        MessageUtils.showShortToast(getActivity(), "点赞成功");
+                       // MessageUtils.showShortToast(getActivity(), "点赞成功");
                         isAdd.put(position,false);
                     } else {
                         idao.requesZambia("reduce", listPost.get(position).getId(), Arad.preferences.getString("memberId")
                                 , listPost.get(position).getTitle(), listPost.get(position).getContent());
-                        MessageUtils.showShortToast(getActivity(), "取消点赞");
+                       // MessageUtils.showShortToast(getActivity(), "取消点赞");
                         holder.tv_friend_style_zan_num.setText((text.get(position) - 1) + "");
                         text.put(position, text.get(position)-1);
                         holder.iv_friend_style_zan_num.setImageResource(R.mipmap.zan_blue);
@@ -178,24 +180,29 @@ public class InvitationPullDownHaveThirdKindFragment extends ToolBarFragment {
 
         if (isVisibleToUser&&bol==1 ) {
             showProgress(true);
-
             if(listCategroy3!=null)listCategroy3.clear();
             if(keyword!=null){
                 if(listPost!=null){
                     listPost.clear();
                 }
+                idao.requestPostRotaingBanner("B_POST_MIDDLE");
                 idao.requesPostCategory(channelId, "2", "0");
                 idao.requestPostListByCategory(Arad.preferences.getString("memberId"), thirdKindId, "0", keyword,"", PAGE_NUM, Constant.PAGE_SIZE);
-            }else if(thirdKindId==null) {
-                idao.requestPostRotaingBanner("B_POST_MIDDLE");
-               idao.requesPostCategory(channelId, "2", "0");
-                idao.requestPostListByCategory(Arad.preferences.getString("memberId"), channelId, "0", "","", PAGE_NUM, Constant.PAGE_SIZE);
             }else if(thirdKindId!=null) {
                 idao.requesPostCategory(channelId, "2", "0");
                 idao.requestPostListByCategory(Arad.preferences.getString("memberId"), thirdKindId, "0", "","", PAGE_NUM, Constant.PAGE_SIZE);
-            }else {
+          
+            }else if(showAll.equals("1")) {
+               // idao.requesPostCategory(channelId, "2", "0");
+                idao.requestPostRotaingBanner("B_POST_MIDDLE");
+                idao.requestPostListByCategory(Arad.preferences.getString("memberId"), firstId, "0", "","", PAGE_NUM, Constant.PAGE_SIZE);
+            }else if(thirdKindId==null){
+                idao.requestPostRotaingBanner("B_POST_MIDDLE");
+                idao.requesPostCategory(channelId, "2", "0");
+                idao.requestPostListByCategory(Arad.preferences.getString("memberId"), channelId, "0", "","", PAGE_NUM, Constant.PAGE_SIZE);
+           }else {
                 //
-           }
+            }
         }
     }
 
@@ -230,9 +237,10 @@ public class InvitationPullDownHaveThirdKindFragment extends ToolBarFragment {
 
                         }else if (listCategroy3 != null) {
                             idao.requestPostListByCategory(Arad.preferences.getString("memberId"), listCategroy3.get(Position).getId(), "0", "", "", PAGE_NUM, Constant.PAGE_SIZE);
-                        } else {
-                            idao.requestPostListByCategory(Arad.preferences.getString("memberId"), channelId, "0", "", "", PAGE_NUM, Constant.PAGE_SIZE);
-
+                        } else if(showAll.equals("1")){
+                            idao.requestPostListByCategory(Arad.preferences.getString("memberId"), firstId, "0", keyword, "", PAGE_NUM, Constant.PAGE_SIZE);
+                        }else {
+                            idao.requestPostListByCategory(Arad.preferences.getString("memberId"), channelId, "0", keyword, "", PAGE_NUM, Constant.PAGE_SIZE);
                         }
                     }
 
@@ -250,12 +258,12 @@ public class InvitationPullDownHaveThirdKindFragment extends ToolBarFragment {
                         // TODO Auto-generated method stub
                         if(thirdKindId!=null){
                             idao.requestPostListByCategory(Arad.preferences.getString("memberId"), thirdKindId, "0", "", "", PAGE_NUM, Constant.PAGE_SIZE);
-
                         }else if (listCategroy3 != null) {
                             idao.requestPostListByCategory(Arad.preferences.getString("memberId"), listCategroy3.get(Position).getId(), "0", "", "", PAGE_NUM, Constant.PAGE_SIZE);
-                        } else {
-                            idao.requestPostListByCategory(Arad.preferences.getString("memberId"), channelId, "0", "", "", PAGE_NUM, Constant.PAGE_SIZE);
-
+                        } else if(showAll.equals("1")){
+                            idao.requestPostListByCategory(Arad.preferences.getString("memberId"), firstId, "0", keyword, "", PAGE_NUM, Constant.PAGE_SIZE);
+                        }else {
+                            idao.requestPostListByCategory(Arad.preferences.getString("memberId"), channelId, "0", keyword, "", PAGE_NUM, Constant.PAGE_SIZE);
                         }
                     }
                 }, 500);
@@ -394,8 +402,8 @@ public class InvitationPullDownHaveThirdKindFragment extends ToolBarFragment {
 
         if(requestCode==19){
             listBanner=idao.getListBanner();
-            if(listBanner!=null) {
-                //设置轮播图
+            //设置轮播图
+            if(listBanner!=null&&framelayout.getVisibility()==View.VISIBLE) {
                 setLoopView();
             }
         }

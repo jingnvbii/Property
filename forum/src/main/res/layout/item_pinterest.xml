@@ -8,7 +8,6 @@
         android:id="@+id/iv_pinerest_style_image"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@mipmap/pinterest_img"
         android:adjustViewBounds="true"
         android:minHeight="200dp"
         android:scaleType="fitXY"
@@ -25,7 +24,7 @@
             android:layout_height="wrap_content"
             android:textColor="@color/white"
             android:layout_marginLeft="10dp"
-            android:text="离幸福的房间多少级反倒是发斯蒂芬"/>
+            />
 
          <ImageView
              android:id="@+id/iv_zan"
@@ -39,7 +38,6 @@
             android:id="@+id/tv_pinerest_style_zan"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="10"
             android:layout_toRightOf="@+id/iv_zan"
             android:layout_below="@+id/tv_pinerest_style_title"
             android:layout_marginLeft="5dp"
@@ -49,7 +47,6 @@
             android:id="@+id/tv_pinerest_style_imagenum"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="3图"
             android:textColor="@color/white"
             android:layout_alignParentRight="true"
             android:layout_below="@+id/tv_pinerest_style_title"

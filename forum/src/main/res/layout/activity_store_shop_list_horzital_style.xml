@@ -44,6 +44,12 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/ll_title_horzital"
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_height="wrap_content">
+
+    <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -125,7 +131,7 @@
             android:layout_toRightOf="@+id/iv_style_img"
             />
     </RelativeLayout>
-
+    </LinearLayout>
     <HorizontalScrollView
         android:id="@+id/horizontalScrollView_shop_horzital_style"
         android:layout_width="match_parent"
@@ -142,6 +148,13 @@
         </LinearLayout>
     </HorizontalScrollView>
 
+    <LinearLayout
+        android:id="@+id/ll_content_horzital"
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_weight="1"
+        android:layout_height="wrap_content">
+
     <android.support.v4.view.ViewPager
         android:id="@+id/viewpager_shop"
         android:layout_width="match_parent"
@@ -150,6 +163,8 @@
         android:flipInterval="400"
         android:layout_marginTop="10dp"
         android:persistentDrawingCache="animation" />
+
+    </LinearLayout>
 
     <View
         android:layout_width="match_parent"

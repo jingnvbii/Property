@@ -14,6 +14,8 @@ import android.view.VelocityTracker;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -49,7 +51,7 @@ import butterknife.InjectView;
 * 商城定位 activity
 * */
 
-public class StoreShopListHorzitalStyleActivity extends ToolBarActivity implements View.OnClickListener{
+public class StoreShopListHorzitalStyleActivity extends ToolBarActivity implements View.OnClickListener,Animation.AnimationListener{
 
     private RadioGroup myRadioGroup;
     @InjectView(R.id.lay_shop_horzital_style)
@@ -85,6 +87,11 @@ public class StoreShopListHorzitalStyleActivity extends ToolBarActivity implemen
             TextView tv_time;
     @InjectView(R.id.ratingBar)//评价等级
     RatingBar ratingBar;
+
+    @InjectView(R.id.ll_title_horzital)
+    LinearLayout ll_title_horzital;
+    @InjectView(R.id.ll_content_horzital)
+    LinearLayout ll_content_horzital;
 
     @InjectView(R.id.et_horzital_style_search)//搜索输入
     EditText et_horzital_style_search;
@@ -224,7 +231,9 @@ public class StoreShopListHorzitalStyleActivity extends ToolBarActivity implemen
             myRadioGroup.addView(radio);
              myRadioGroup.addView(view);
             StoreShopListHorzitalStyleFragment fragment = StoreShopListHorzitalStyleFragment.newInstance(listProductCategroy,i,
-                    m_list_car,m_list_all_price,m_list_submit,m_list_num);
+                    m_list_car,m_list_all_price,m_list_submit,m_list_num,ll_title_horzital
+
+            );
             fragments.add(fragment);
         }
         myRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -252,7 +261,7 @@ public class StoreShopListHorzitalStyleActivity extends ToolBarActivity implemen
                     List<Fragment> list = new ArrayList<Fragment>();
                     for (int i = 0; i < listProductCategroy.size(); i++) {
                         list.add(StoreShopListHorzitalStyleFragment.newInstance(listProductCategroy, i,
-                                m_list_car, m_list_all_price, m_list_submit, m_list_num));
+                                m_list_car, m_list_all_price, m_list_submit, m_list_num,ll_title_horzital));
                     }
                     viewPagerAdapter.setPagerItems(list);
                 }
@@ -333,6 +342,44 @@ public class StoreShopListHorzitalStyleActivity extends ToolBarActivity implemen
     }
     public void setAnim(){
         GoodsAnimUtil.setOnEndAnimListener(new onEndAnim());
+    }
+
+    @Override
+    public void onAnimationStart(Animation animation) {
+        ll_title_horzital.setVisibility(View.VISIBLE);
+        if (mIsTitleHide) {
+            LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) ll_content_horzital
+                    .getLayoutParams();
+            lp.setMargins(0, 0, 0, 0);
+            ll_content_horzital.setLayoutParams(lp);
+
+        } else {
+            LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) ll_title_horzital
+                    .getLayoutParams();
+            lp.setMargins(0, 0, 0, 0);
+            ll_title_horzital.setLayoutParams(lp);
+            LinearLayout.LayoutParams lp1 = (LinearLayout.LayoutParams) ll_content_horzital
+                    .getLayoutParams();
+            lp1.setMargins(0,
+                    0,
+                    0, 0);
+            ll_content_horzital.setLayoutParams(lp1);
+        }
+    }
+
+    @Override
+    public void onAnimationEnd(Animation animation) {
+        if (mIsTitleHide) {
+            ll_title_horzital.setVisibility(View.GONE);
+        } else {
+
+        }
+        mIsAnim = false;
+    }
+
+    @Override
+    public void onAnimationRepeat(Animation animation) {
+
     }
 
     /**
@@ -421,15 +468,28 @@ public class StoreShopListHorzitalStyleActivity extends ToolBarActivity implemen
             m_list_num.setVisibility(View.VISIBLE);
         }
     }
+    private boolean mIsTitleHide = false;
+    private boolean mIsAnim = false;
+    private float lastX = 0;
+    private float lastY = 0;
 
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent event) {
+        if (mIsAnim) {
+            return super.dispatchTouchEvent(event);
+        }
+        final int action = event.getAction();
+        float x = event.getX();
+        float y = event.getY();
         createVelocityTracker(event);
-        switch (event.getAction()) {
+        switch (action) {
             case MotionEvent.ACTION_DOWN:
                 xDown = event.getRawX();
                 yDown = event.getRawY();
+
+                lastY = y;
+                lastX = x;
                 break;
             case MotionEvent.ACTION_MOVE:
                 if(mViewpager.getCurrentItem()==0) {
@@ -448,6 +508,30 @@ public class StoreShopListHorzitalStyleActivity extends ToolBarActivity implemen
                         finish();
                     }
                 }
+
+                float dY = Math.abs(y - lastY);
+                float dX = Math.abs(x - lastX);
+                boolean down = y > lastY ? true : false;
+                lastY = y;
+                lastX = x;
+                if (dX < 8 && dY > 8 && !mIsTitleHide && !down) {
+                    Animation anim = AnimationUtils.loadAnimation(
+                            StoreShopListHorzitalStyleActivity.this, R.anim.push_top_in);
+//              anim.setFillAfter(true);
+                    anim.setAnimationListener(StoreShopListHorzitalStyleActivity.this);
+                    ll_title_horzital.startAnimation(anim);
+                } else if (dX < 8 && dY > 8 && mIsTitleHide && down) {
+                    Animation anim = AnimationUtils.loadAnimation(
+                            StoreShopListHorzitalStyleActivity.this, R.anim.push_top_out);
+//              anim.setFillAfter(true);
+                    anim.setAnimationListener(StoreShopListHorzitalStyleActivity.this);
+                    ll_title_horzital.startAnimation(anim);
+                } else {
+                    return super.dispatchTouchEvent(event);
+                }
+                mIsTitleHide = !mIsTitleHide;
+                mIsAnim = true;
+
                 break;
             case MotionEvent.ACTION_UP:
                 recycleVelocityTracker();
@@ -491,6 +575,9 @@ public class StoreShopListHorzitalStyleActivity extends ToolBarActivity implemen
 
 
 
+
+
+
     @Override
     public String setupToolBarTitle() {
         return getIntent().getStringExtra("name");
@@ -524,4 +611,11 @@ public class StoreShopListHorzitalStyleActivity extends ToolBarActivity implemen
         });
         return true;
     }
+
+
+
+
+
+
+
 }

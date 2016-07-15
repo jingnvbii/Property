@@ -35,6 +35,7 @@ public class StorePingjiaDetailFragment extends ToolBarFragment {
     private MallDao mdao;
     private int PAGE_NUM = 1;
     private int bol = 1;
+    private boolean isFirst = true;
 
     private StoreShopDetailPingLunListViewAdapter mAdapter;
     private int type;
@@ -59,6 +60,7 @@ public class StorePingjiaDetailFragment extends ToolBarFragment {
         super.onCreate(savedInstanceState);
         mdao = new MallDao(this);
         id = getActivity().getIntent().getStringExtra("id");
+        mAdapter = new StoreShopDetailPingLunListViewAdapter(getActivity());
     }
 
     @Override
@@ -86,20 +88,25 @@ public class StorePingjiaDetailFragment extends ToolBarFragment {
             listBad = mdao.getListBad();
             switch (type) {
                 case 0:
+                    if(allEvaluationlist.size()>0)
                     mAdapter.setList(allEvaluationlist);
                     break;
                 case 1:
+                    if(listPraise.size()>0)
                     mAdapter.setList(listPraise);
                     break;
                 case 2:
+                    if(listMedium.size()>0)
                     mAdapter.setList(listMedium);
                     break;
                 case 3:
+                    if(listBad.size()>0)
                     mAdapter.setList(listBad);
                     break;
-
             }
+            if(isFirst)
             setNum();
+            isFirst=false;
         }
     }
 
@@ -153,16 +160,10 @@ public class StorePingjiaDetailFragment extends ToolBarFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mAdapter = new StoreShopDetailPingLunListViewAdapter(getActivity());
         lv_pingjia_detail.setAdapter(mAdapter);
         lv_pingjia_detail.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-               /* if (!TextUtils.isEmpty(aroundCompanies.get(position).getMobile())) {
-                    AndroidUtil.dial(getActivity(), aroundCompanies.get(position).getMobile());
-                } else {
-                    MessageUtils.showShortToast(getActivity(), "该服务暂无联系电话");
-                }*/
             }
         });
 
@@ -174,8 +175,6 @@ public class StorePingjiaDetailFragment extends ToolBarFragment {
         goodNum=listPraise.size()==0?"0":listPraise.get(0).getCount();
         mediumNum=listMedium.size()==0?"0":listMedium.get(0).getCount();
         badNum=listBad.size()==0?"0":listBad.get(0).getCount();
-        
-        
         activity.setNum(allNum,goodNum,mediumNum,badNum);
     }
 }

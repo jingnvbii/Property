@@ -16,6 +16,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
@@ -67,9 +68,11 @@ public class StoreShopListHorzitalStyleFragment extends ToolBarFragment implemen
     private TextView tvNum;
     private int bol=0;
     private Button m_list_submit_popup;
+    private LinearLayout ll_title_horzital;
 
     public static StoreShopListHorzitalStyleFragment newInstance(List<ProductCategroy>aroundCompanies,
-                                                                 int pos,ImageView iv,TextView tv,Button btn,TextView tvNum) {
+                                                                 int pos,ImageView iv,TextView tv,Button btn,TextView tvNum,LinearLayout  ll_title_horzital
+    ) {
         StoreShopListHorzitalStyleFragment fragment = new StoreShopListHorzitalStyleFragment();
         fragment.aroundCompanies = aroundCompanies;
         fragment.iv=iv;
@@ -77,6 +80,7 @@ public class StoreShopListHorzitalStyleFragment extends ToolBarFragment implemen
         fragment.btn=btn;
         fragment.tvNum=tvNum;
         fragment.pos=pos;
+        fragment.ll_title_horzital=ll_title_horzital;
         return fragment;
     }
 
@@ -112,6 +116,7 @@ public class StoreShopListHorzitalStyleFragment extends ToolBarFragment implemen
             activity.getAdapter().reLoad();
         }
     }
+
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {

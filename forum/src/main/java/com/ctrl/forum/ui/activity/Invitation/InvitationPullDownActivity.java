@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
+import android.view.VelocityTracker;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
@@ -27,10 +28,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.beanu.arad.Arad;
+import com.beanu.arad.base.ToolBarActivity;
 import com.beanu.arad.utils.AnimUtil;
 import com.beanu.arad.utils.MessageUtils;
 import com.ctrl.forum.R;
-import com.ctrl.forum.base.AppToolBarActivity;
+import com.ctrl.forum.base.MyApplication;
 import com.ctrl.forum.customview.CustomViewPager;
 import com.ctrl.forum.customview.XListView;
 import com.ctrl.forum.dao.InvitationDao;
@@ -65,7 +67,7 @@ import cn.sharesdk.wechat.moments.WechatMoments;
  * 帖子列表 三级分类下拉页面 activity
  * Created by jason on 2016/4/8
  */
-public class InvitationPullDownActivity extends AppToolBarActivity implements View.OnClickListener, XListView.IXListViewListener ,PlatformActionListener{
+public class InvitationPullDownActivity extends ToolBarActivity implements View.OnClickListener, XListView.IXListViewListener ,PlatformActionListener{
     @InjectView(R.id.viewpager_invitation_pull_down)
     CustomViewPager viewpager_invitation_pull_down;
     @InjectView(R.id.lay)
@@ -113,6 +115,32 @@ public class InvitationPullDownActivity extends AppToolBarActivity implements Vi
     public static boolean isFromSearch=false;
     private String keyword;
 
+    //手指上下滑动时的最小速度11
+    private static final int YSPEED_MIN = 1000;
+
+    //手指向右滑动时的最小距离
+    private static final int XDISTANCE_MIN = 50;
+
+    //手指向上滑或下滑时的最小距离
+    private static final int YDISTANCE_MIN = 100;
+
+    //记录手指按下时的横坐标。
+    private float xDown;
+
+    //记录手指按下时的纵坐标。
+    private float yDown;
+
+    //记录手指移动时的横坐标。
+    private float xMove;
+
+    //记录手指移动时的纵坐标。
+    private float yMove;
+
+    //用于计算手指滑动的速度。
+    private VelocityTracker mVelocityTracker;
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -122,6 +150,7 @@ public class InvitationPullDownActivity extends AppToolBarActivity implements Vi
         channelId = getIntent().getStringExtra("channelId");
         elvAdapter = new ExpandableListViewAllCategroyAdapter(this);
         initView();
+        MyApplication.getInstance().addActivity(this);
     }
 
     private void initView() {
@@ -129,7 +158,7 @@ public class InvitationPullDownActivity extends AppToolBarActivity implements Vi
         idao = new InvitationDao(this);
         idao.requesPostCategory(channelId, "1", "0");
         iv_pull_down.setOnClickListener(this);
-        viewpager_invitation_pull_down.setScrollble(false);//禁止viewpager滚动
+       // viewpager_invitation_pull_down.setScrollble(false);//禁止viewpager滚动
 
     }
 
@@ -208,10 +237,10 @@ public class InvitationPullDownActivity extends AppToolBarActivity implements Vi
             myRadioGroup.addView(view);
             styleType = listCategory.get(i).getStyleType();
             if (styleType.equals("3")) {
-                invitationPullDownHaveThirdKindPinterestStyleFragment = InvitationPullDownHaveThirdKindPinterestStyleFragment.newInstance(InvitationPullDownActivity.this,listCategory.get(i).getId(),null,null);
+                invitationPullDownHaveThirdKindPinterestStyleFragment = InvitationPullDownHaveThirdKindPinterestStyleFragment.newInstance(InvitationPullDownActivity.this,listCategory.get(i).getId(),null,null,listCategory.get(i).getShowAll(),channelId);
                 fragments.add(invitationPullDownHaveThirdKindPinterestStyleFragment);
             } else {
-               invitationPullDownHaveThirdKindFragment = InvitationPullDownHaveThirdKindFragment.newInstance(listCategory.get(i).getId(), listCategory.get(i).getStyleType(),null,null);
+               invitationPullDownHaveThirdKindFragment = InvitationPullDownHaveThirdKindFragment.newInstance(listCategory.get(i).getId(), listCategory.get(i).getStyleType(),null,null,listCategory.get(i).getShowAll(),channelId);
                 fragments.add(invitationPullDownHaveThirdKindFragment);
             }
         }
@@ -244,9 +273,9 @@ public class InvitationPullDownActivity extends AppToolBarActivity implements Vi
                     for (int i = 0; i < listCategory.size(); i++) {
                         styleType = listCategory.get(i).getStyleType();
                         if (styleType.equals("3")) {
-                            list.add(InvitationPullDownHaveThirdKindPinterestStyleFragment.newInstance(InvitationPullDownActivity.this, listCategory.get(i).getId(), thirdKindId, keyword1));
+                            list.add(InvitationPullDownHaveThirdKindPinterestStyleFragment.newInstance(InvitationPullDownActivity.this, listCategory.get(i).getId(), thirdKindId, keyword1,listCategory.get(i).getShowAll(),channelId));
                         } else {
-                            list.add(InvitationPullDownHaveThirdKindFragment.newInstance(listCategory.get(i).getId(), listCategory.get(i).getStyleType(), thirdKindId, keyword1));
+                            list.add(InvitationPullDownHaveThirdKindFragment.newInstance(listCategory.get(i).getId(), listCategory.get(i).getStyleType(), thirdKindId, keyword1,listCategory.get(i).getShowAll(),channelId));
                         }
                     }
                 } else {
@@ -254,9 +283,9 @@ public class InvitationPullDownActivity extends AppToolBarActivity implements Vi
                         styleType = listCategory2.get(i).getStyleType();
 
                         if (styleType.equals("3")) {
-                            list.add(InvitationPullDownHaveThirdKindPinterestStyleFragment.newInstance(InvitationPullDownActivity.this, listCategory2.get(i).getId(), thirdKindId, keyword1));
+                            list.add(InvitationPullDownHaveThirdKindPinterestStyleFragment.newInstance(InvitationPullDownActivity.this, listCategory2.get(i).getId(), thirdKindId, keyword1,listCategory.get(i).getShowAll(),channelId));
                         } else {
-                            list.add(InvitationPullDownHaveThirdKindFragment.newInstance(listCategory2.get(i).getId(), listCategory2.get(i).getStyleType(), thirdKindId, keyword1));
+                            list.add(InvitationPullDownHaveThirdKindFragment.newInstance(listCategory2.get(i).getId(), listCategory2.get(i).getStyleType(), thirdKindId, keyword1,listCategory.get(i).getShowAll(),channelId));
                         }
                     }
                 }
@@ -298,6 +327,73 @@ public class InvitationPullDownActivity extends AppToolBarActivity implements Vi
             mGroupPostion=position;
 
         }
+    }
+
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent event) {
+        createVelocityTracker(event);
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                xDown = event.getRawX();
+                yDown = event.getRawY();
+                break;
+            case MotionEvent.ACTION_MOVE:
+                if(viewpager_invitation_pull_down.getCurrentItem()==0) {
+                    xMove = event.getRawX();
+                    yMove = event.getRawY();
+                    //滑动的距离
+                    int distanceX = (int) (xMove - xDown);
+                    int distanceY = (int) (yMove - yDown);
+                    //获取顺时速度
+                    int ySpeed = getScrollVelocity();
+                    //关闭Activity需满足以下条件：
+                    //1.x轴滑动的距离>XDISTANCE_MIN
+                    //2.y轴滑动的距离在YDISTANCE_MIN范围内
+                    //3.y轴上（即上下滑动的速度）<XSPEED_MIN，如果大于，则认为用户意图是在上下滑动而非左滑结束Activity
+                    if (distanceX > XDISTANCE_MIN && (distanceY < YDISTANCE_MIN && distanceY > -YDISTANCE_MIN) && ySpeed < YSPEED_MIN) {
+                        finish();
+                    }
+                }
+                break;
+            case MotionEvent.ACTION_UP:
+                recycleVelocityTracker();
+                break;
+            default:
+                break;
+        }
+        return super.dispatchTouchEvent(event);
+    }
+
+    /**
+     * 创建VelocityTracker对象，并将触摸界面的滑动事件加入到VelocityTracker当中。
+     *
+     * @param event
+     *
+     */
+    private void createVelocityTracker(MotionEvent event) {
+        if (mVelocityTracker == null) {
+            mVelocityTracker = VelocityTracker.obtain();
+        }
+        mVelocityTracker.addMovement(event);
+    }
+
+    /**
+     * 回收VelocityTracker对象。
+     */
+    private void recycleVelocityTracker() {
+        mVelocityTracker.recycle();
+        mVelocityTracker = null;
+    }
+
+    /**
+     *
+     * @return 滑动速度，以每秒钟移动了多少像素值为单位。
+     */
+    private int getScrollVelocity() {
+        mVelocityTracker.computeCurrentVelocity(1000);
+        int velocity = (int) mVelocityTracker.getYVelocity();
+        return Math.abs(velocity);
     }
 
 

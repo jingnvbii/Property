@@ -2,7 +2,6 @@ package com.ctrl.forum.ui.activity;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -173,7 +172,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
         listDrawable = new ArrayList<>();
         listDrawable2 = new ArrayList<>();
-        Resources res = getResources();
+      /*  Resources res = getResources();
         for (int i = 0; i < listNavigation.size(); i++) {
             if (listNavigation.get(i).getCommentCode().equals("0")) {
                 drawable2 = res.getDrawable(R.drawable.guangchang_gray);
@@ -195,16 +194,16 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                 drawable2 = res.getDrawable(R.drawable.my_gray);
                 listDrawable2.add(drawable2);
             }
-        }
+        }*/
 
         new Thread(new Runnable() {
             @Override
             public void run() {
                 for (int i = 0; i < listNavigation.size(); i++) {
-                    drawable = BitmapUtils.getDrawable(listNavigation.get(i).getKindIcon());
-                    //drawable2 = BitmapUtils.getDrawable(listNavigation.get(i).getKindIcon());
+                    drawable = BitmapUtils.getDrawable(listNavigation.get(i).getKindIconSelected());
+                    drawable2 = BitmapUtils.getDrawable(listNavigation.get(i).getKindIcon());
                     listDrawable.add(drawable);
-                  //  listDrawable2.add(drawable2);
+                    listDrawable2.add(drawable2);
                 }
                 mHandler.sendEmptyMessage(1);
             }

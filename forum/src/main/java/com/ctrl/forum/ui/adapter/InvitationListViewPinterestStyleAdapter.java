@@ -1,6 +1,7 @@
 package com.ctrl.forum.ui.adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -66,7 +67,7 @@ public class InvitationListViewPinterestStyleAdapter extends BaseAdapter {
         Post post = mPostList.get(position);
         holder.tv_pinerest_style_title.setText(post.getTitle());
         if (post.getPostImgList() != null) {
-            Arad.imageLoader.load(post.getPostImgList().get(0).getImg()).placeholder(R.mipmap.default_error).into(holder.iv_pinerest_style_image);
+            Arad.imageLoader.load(post.getPostImgList().get(0).getImg()).placeholder(R.mipmap.default_error).config(Bitmap.Config.RGB_565).into(holder.iv_pinerest_style_image);
         }
         holder.tv_pinerest_style_zan.setText(post.getPraiseNum() + "");
         if(post.getPostImgList()!=null)

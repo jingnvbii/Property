@@ -165,11 +165,16 @@ public class StoreOrderDetailActivity extends AppToolBarActivity implements View
 
             if(listAddress.size()>0) {
                 tv_address_none.setVisibility(View.GONE);
+                tv_order_address.setText(listAddress.get(0).getAddressBase() + listAddress.get(0).getAddressDetail());
+                tv_order_name.setText(listAddress.get(0).getReceiveName() + "     " + listAddress.get(0).getMobile());
+                name = listAddress.get(0).getReceiveName();
+                tel = listAddress.get(0).getMobile();
+                address = listAddress.get(0).getAddressBase()+listAddress.get(0).getAddressDetail();
+                province = listAddress.get(0).getProvince();
+                city = listAddress.get(0).getCity();
+                area =listAddress.get(0).getArea();
             }
 
-
-            tv_order_address.setText(listAddress.get(0).getAddressBase() + listAddress.get(0).getAddressDetail());
-            tv_order_name.setText(listAddress.get(0).getReceiveName() + "     " + listAddress.get(0).getMobile());
             tv_order_detail_all_price.setText("共￥" + productsTotal + "元");
             mStoreOrderDetailAdapter.setList(listProduct);
 
@@ -185,12 +190,6 @@ public class StoreOrderDetailActivity extends AppToolBarActivity implements View
               //  tv_youhuiquaqn_money.setText("暂无优惠券可用");
             }
 
-            name = listAddress.get(0).getReceiveName();
-            tel = listAddress.get(0).getMobile();
-            address = listAddress.get(0).getAddressBase()+listAddress.get(0).getAddressDetail();
-            province = listAddress.get(0).getProvince();
-            city = listAddress.get(0).getCity();
-            area =listAddress.get(0).getArea();
 
             if(amounts!=null) {
                 productsTotal = productsTotal + Double.parseDouble(amounts);

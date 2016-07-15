@@ -21,7 +21,6 @@ import com.ctrl.forum.photo.util.PublicWay;
 import com.ctrl.forum.photo.util.Res;
 import com.ctrl.forum.photo.zoom.PhotoView;
 import com.ctrl.forum.photo.zoom.ViewPagerFixed;
-import com.ctrl.forum.ui.activity.Invitation.InvitationReleaseActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -153,8 +152,8 @@ public class GalleryActivity extends Activity {
 	private class GallerySendListener implements OnClickListener {
 		public void onClick(View v) {
 			finish();
-			intent.setClass(mContext,InvitationReleaseActivity.class);
-			startActivity(intent);
+		/*	intent.setClass(mContext,InvitationReleaseActivity.class);
+			startActivity(intent);*/
 		}
 
 	}
@@ -179,7 +178,8 @@ public class GalleryActivity extends Activity {
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
-			if(position==1){
+			onBackPressed();
+			/*if(position==1){
 				this.finish();
 				intent.setClass(GalleryActivity.this, AlbumActivity.class);
 				startActivity(intent);
@@ -187,7 +187,7 @@ public class GalleryActivity extends Activity {
 				this.finish();
 				intent.setClass(GalleryActivity.this, ShowAllPhoto.class);
 				startActivity(intent);
-			}
+			}*/
 		}
 		return true;
 	}

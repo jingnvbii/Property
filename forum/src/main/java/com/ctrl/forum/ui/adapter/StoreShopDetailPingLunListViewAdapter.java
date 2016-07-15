@@ -68,7 +68,12 @@ public class StoreShopDetailPingLunListViewAdapter extends BaseAdapter{
         holder.tv_pinlun_time.setText(TimeUtils.date(Long.parseLong(mShopReply.getCreateTime())));
         if(mShopReply.getKfReplay()!=null) {
             holder.rl_kf.setVisibility(View.VISIBLE);
-            holder.tv_huifu_content.setText(mShopReply.getKfReplay());
+            holder.tv_huifu_content.setText("客服回复：" + mShopReply.getKfReplay());
+            if(mShopReply.getReplyTime()!=null){
+                holder.tv_huifu_time.setText(TimeUtils.date(Long.parseLong(mShopReply.getReplyTime())));
+            }else {
+                holder.tv_huifu_time.setText("");
+            }
         }else {
             holder.rl_kf.setVisibility(View.GONE);
         }
