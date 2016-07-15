@@ -187,7 +187,7 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_invitation_release);
-        // 隐藏输入法
+        // 隐藏输入法1
        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         ButterKnife.inject(this);
         PublicWay.activityList.add(this);
