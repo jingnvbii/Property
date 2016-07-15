@@ -36,7 +36,7 @@ public class Config {
 	public static int BLOCK_TRY_TIMES = 2;
 	public static int CHUNK_TRY_TIMES = 3;
 
-	public static final String UP_HOST = "http://7xsf4j.com1.z0.glb.clouddn.com";
-	//public static final String UP_HOST = "http://up.qiniu.com";
+	//public static final String UP_HOST = "http://7xsf4j.com1.z0.glb.clouddn.com";
+	public static final String UP_HOST = "http://up.qiniu.com";
 
 }

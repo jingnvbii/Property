@@ -108,14 +108,16 @@ public class MallDao extends IDao {
     /**
      * 获取店铺评价列表接口
      * @param companyId //商铺id
+     * @param evaluationType //商铺id
      * @param pageNum //第几页
      * @param pageSize //每页几条
      *
      * */
-    public void requestCompanysEvaluate(String companyId,String pageNum,String pageSize){
+    public void requestCompanysEvaluate(String companyId,String evaluationType,String pageNum,String pageSize){
         String url="companys/getEvaluate";
         Map<String,String> map = new HashMap<String,String>();
         map.put("companyId",companyId);
+        map.put("evaluationType",evaluationType);
         map.put("pageNum",pageNum);
         map.put("pageSize",pageSize);
         postRequest(Constant.RAW_URL + url, mapToRP(map), 3);

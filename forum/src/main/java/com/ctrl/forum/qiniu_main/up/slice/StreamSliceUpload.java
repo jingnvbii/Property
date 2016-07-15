@@ -42,7 +42,6 @@ public class StreamSliceUpload extends SliceUpload {
 		br.setBuf(b);
 		StreamUploadBlock bu = new StreamUploadBlock(this, authorizer, getHttpClient(), Config.UP_HOST, currentBlockIdx, start,
 				len, Config.CHUNK_SIZE, Config.FIRST_CHUNK, br);
-
 		currentBlockIdx++;
 		return bu;
 	}

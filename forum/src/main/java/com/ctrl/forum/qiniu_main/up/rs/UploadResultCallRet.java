@@ -9,6 +9,7 @@ import org.json.JSONObject;
 public class UploadResultCallRet extends CallRet {
 	protected String hash;
 	protected String key;
+	private String name;
 
 	public UploadResultCallRet(CallRet ret) {
 		super(ret);
@@ -31,8 +32,12 @@ public class UploadResultCallRet extends CallRet {
 		JSONObject jsonObject = new JSONObject(this.response);
 		hash = jsonObject.optString("hash", null);
 		key = jsonObject.optString("key", null);
+		name = jsonObject.optString("name", null);
 	}
 
+	public String getName() {
+		return name;
+	}
 	public String getHash() {
 		return hash;
 	}

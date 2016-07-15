@@ -153,6 +153,7 @@ public class QiniuUploadUitls {
 
 	private String getRealUrl(String fileUrlUUID) {
 		String filePath = "http://" + QiNiuConfig.QINIU_BUCKNAME + ".qiniudn.com/" + fileUrlUUID;
+		//String filePath = "http://7xsf4j.com1.z0.glb.clouddn.com"+ fileUrlUUID;
 		return filePath;
 	}
 
