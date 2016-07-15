@@ -24,7 +24,6 @@ import com.ctrl.forum.ui.adapter.StartImageViewPagerAdapter;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ScheduledExecutorService;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -68,7 +67,6 @@ public class StartActivity extends ToolBarActivity implements View.OnClickListen
         }
     });
     private List<Advertising> listAdvertising;
-    private ScheduledExecutorService scheduledExecutorService;
     private StartAds startAds;
     private int len;
 
@@ -164,7 +162,7 @@ public class StartActivity extends ToolBarActivity implements View.OnClickListen
 
 
            }else {//不是第一次进入
-              Arad.imageLoader.load(startAds.getKindIcon()).placeholder(R.mipmap.yindaoye).into(iv_start);
+              Arad.imageLoader.load(startAds.getKindIcon()).placeholder(R.mipmap.default_error).into(iv_start);
                Handler x = new Handler();
                x.postDelayed(new splashhandler(), 2000);
            }

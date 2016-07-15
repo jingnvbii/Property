@@ -1,26 +1,32 @@
 package com.ctrl.forum.ui.activity.Invitation;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Base64;
+import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -29,6 +35,7 @@ import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.beanu.arad.Arad;
 import com.beanu.arad.utils.AndroidUtil;
@@ -44,15 +51,46 @@ import com.ctrl.forum.entity.Image;
 import com.ctrl.forum.entity.List2;
 import com.ctrl.forum.entity.Post2;
 import com.ctrl.forum.entity.PostImage;
+import com.ctrl.forum.photo.activity.AlbumActivity;
+import com.ctrl.forum.photo.activity.GalleryActivity;
+import com.ctrl.forum.photo.util.Bimp;
+import com.ctrl.forum.photo.util.FileUtils;
+import com.ctrl.forum.photo.util.ImageItem;
+import com.ctrl.forum.photo.util.Res;
+import com.ctrl.forum.qiniu.QiNiuConfig;
+import com.ctrl.forum.qiniu_main.up.UpApi;
+import com.ctrl.forum.qiniu_main.up.UpParam;
+import com.ctrl.forum.qiniu_main.up.Upload;
+import com.ctrl.forum.qiniu_main.up.UploadHandler;
+import com.ctrl.forum.qiniu_main.up.auth.Authorizer;
+import com.ctrl.forum.qiniu_main.up.rs.PutExtra;
+import com.ctrl.forum.qiniu_main.up.rs.UploadResultCallRet;
+import com.ctrl.forum.qiniu_main.up.slice.Block;
+import com.ctrl.forum.qiniu_main.util.Util;
 import com.ctrl.forum.ui.activity.WebViewActivity;
 import com.ctrl.forum.utils.Utils;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
+import java.util.UUID;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -62,7 +100,6 @@ import butterknife.InjectView;
  * Created by Administrator on 2016/4/11.
  */
 public class InvitationReleaseActivity extends AppToolBarActivity implements View.OnClickListener{
-    private GridViewForScrollView noScrollgridview;
     private View parentView;
     private PopupWindow pop = null;
     private LinearLayout ll_popup;
@@ -85,38 +122,21 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
     private String adress;
     private String tel;
 
+    private GridAdapter adapter;
+
 
     private String tv_location_name;//位置标识
 
 
-    @InjectView(R.id.iv01)
-    ImageView iv01;
-    @InjectView(R.id.iv02)
-    ImageView iv02;
-    @InjectView(R.id.iv03)
-    ImageView iv03;
-    @InjectView(R.id.iv04)
-    ImageView iv04;
-    @InjectView(R.id.iv05)
-    ImageView iv05;
-    @InjectView(R.id.iv06)
-    ImageView iv06;
-    @InjectView(R.id.iv07)
-    ImageView iv07;
-    @InjectView(R.id.iv08)
-    ImageView iv08;
-    @InjectView(R.id.iv09)
-    ImageView iv09;
 
-    @InjectView(R.id.ll_image_second)//图片布局2
-     LinearLayout ll_image_second;
-    @InjectView(R.id.ll_image_third)//图片布局3
-     LinearLayout ll_image_third;
-    @InjectView(R.id.ll_gen)//图片布局3
-     LinearLayout ll_gen;
 
     @InjectView(R.id.tv_release)//发布
     TextView tv_release;
+
+    @InjectView(R.id.noScrollgridview)
+    GridViewForScrollView noScrollgridview;
+
+
 
    @InjectView(R.id.et_tittle)//标题
     EditText et_tittle;
@@ -167,9 +187,14 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
         // 隐藏输入法
        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         ButterKnife.inject(this);
+        initBuildToken();
+        Res.init(this);
+        bimap = BitmapFactory.decodeResource(
+                getResources(),
+                R.drawable.icon_addpic_unfocused);
        Init();
        initView();
-        checkActivity();
+       checkActivity();
 
     }
 
@@ -200,69 +225,16 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
         tv_release.setOnClickListener(this);
         tv_release_save.setOnClickListener(this);
         tougao.setOnClickListener(this);
-        ll_gen.setOnClickListener(this);
-
-
-        //初始化控件宽高
-        setImageViewWidth(iv01);
-        listImg.add(iv01);
-        listImg.add(iv02);
-        listImg.add(iv03);
-        listImg.add(iv04);
-        listImg.add(iv05);
-        listImg.add(iv06);
-        listImg.add(iv07);
-        listImg.add(iv08);
-        listImg.add(iv09);
-        iv01.setOnClickListener(this);
-        iv02.setOnClickListener(this);
-        iv03.setOnClickListener(this);
-        iv04.setOnClickListener(this);
-        iv05.setOnClickListener(this);
-        iv06.setOnClickListener(this);
-        iv07.setOnClickListener(this);
-        iv08.setOnClickListener(this);
-        iv09.setOnClickListener(this);
-    }
-
-
-    private void showDelDialog(final int posititon) {
-        new AlertDialog.Builder(this)
-                .setTitle("确定删除吗？")
-                .setPositiveButton("确定",new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        // iDao.requestDelImg(iDao.getImg().getImgId());
-                        delImages.add(mImageList.get(imageFlag-1)); //删除的图片
-                        delImg(imageFlag);
-                    }
-                })
-
-                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
-
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                }).show();
-
 
     }
+
+
 
     public void Init() {
         channelId=getIntent().getStringExtra("channelId");
-
-
-
         Idao=new ImageDao(this);
-
-    }
-    public void showDialog(){
-
         pop = new PopupWindow(InvitationReleaseActivity.this);
-
         View view = getLayoutInflater().inflate(R.layout.item_popupwindows, null);
-
         ll_popup = (LinearLayout) view.findViewById(R.id.ll_popup);
 
         pop.setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
@@ -290,19 +262,17 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
         });
         bt1.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent intentFromCapture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                intentFromCapture.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(Environment.getExternalStorageDirectory(), "cxh.jpg")));
-                startActivityForResult(intentFromCapture, CAMERA_REQUEST_CODE);
-                AnimUtil.intentSlidIn(InvitationReleaseActivity.this);
+                photo();
                 pop.dismiss();
                 ll_popup.clearAnimation();
             }
         });
         bt2.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent intentFromGallery = new Intent(Intent.ACTION_PICK, null);
-                intentFromGallery.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
-                startActivityForResult(intentFromGallery, IMAGE_REQUEST_CODE);
+                Intent intent = new Intent(InvitationReleaseActivity.this,
+                        AlbumActivity.class);
+                startActivity(intent);
+               // overridePendingTransition(R.anim.activity_translate_in, R.anim.activity_translate_out);
                 AnimUtil.intentSlidIn(InvitationReleaseActivity.this);
                 pop.dismiss();
                 ll_popup.clearAnimation();
@@ -315,9 +285,157 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
             }
         });
 
-        pop.showAtLocation(ll_popup, Gravity.BOTTOM,0,0);
+        noScrollgridview.setSelector(new ColorDrawable(Color.TRANSPARENT));
+        adapter = new GridAdapter(this);
+        adapter.update();
+        noScrollgridview.setAdapter(adapter);
+        noScrollgridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+                                    long arg3) {
+                if (arg2 == Bimp.tempSelectBitmap.size()) {
+                    ll_popup.startAnimation(AnimationUtils.loadAnimation(InvitationReleaseActivity.this, R.anim.activity_translate_in));
+                    pop.showAtLocation(noScrollgridview, Gravity.BOTTOM, 0, 0);
+                } else {
+                    Intent intent = new Intent(InvitationReleaseActivity.this, GalleryActivity.class);
+                    intent.putExtra("position", "1");
+                    intent.putExtra("ID", arg2);
+                    startActivity(intent);
+                    AnimUtil.intentSlidIn(InvitationReleaseActivity.this);
+                }
+            }
+        });
+
 
     }
+    public class GridAdapter extends BaseAdapter {
+        private LayoutInflater inflater;
+        private int selectedPosition = -1;
+        private boolean shape;
+
+        public boolean isShape() {
+            return shape;
+        }
+
+        public void setShape(boolean shape) {
+            this.shape = shape;
+        }
+
+        public GridAdapter(Context context) {
+            inflater = LayoutInflater.from(context);
+        }
+
+        public void update() {
+            loading();
+        }
+
+        public int getCount() {
+            if(Bimp.tempSelectBitmap.size() == 9){
+                return 9;
+            }
+            return (Bimp.tempSelectBitmap.size() + 1);
+        }
+
+        public Object getItem(int arg0) {
+            return null;
+        }
+
+        public long getItemId(int arg0) {
+            return 0;
+        }
+
+        public void setSelectedPosition(int position) {
+            selectedPosition = position;
+        }
+
+        public int getSelectedPosition() {
+            return selectedPosition;
+        }
+
+        public View getView(int position, View convertView, ViewGroup parent) {
+            ViewHolder holder = null;
+            if (convertView == null) {
+                convertView = inflater.inflate(R.layout.item_published_grida,
+                        parent, false);
+                holder = new ViewHolder();
+                holder.image = (ImageView) convertView
+                        .findViewById(R.id.item_grida_image);
+                convertView.setTag(holder);
+            } else {
+                holder = (ViewHolder) convertView.getTag();
+            }
+
+            if (position ==Bimp.tempSelectBitmap.size()) {
+                holder.image.setImageBitmap(BitmapFactory.decodeResource(
+                        getResources(), R.drawable.icon_addpic_unfocused));
+                if (position == 9) {
+                    holder.image.setVisibility(View.GONE);
+                }
+            } else {
+                holder.image.setImageBitmap(Bimp.tempSelectBitmap.get(position).getBitmap());
+            }
+
+            return convertView;
+        }
+
+        public class ViewHolder {
+            public ImageView image;
+        }
+
+        Handler handler = new Handler() {
+            public void handleMessage(Message msg) {
+                switch (msg.what) {
+                    case 1:
+                        adapter.notifyDataSetChanged();
+                        break;
+                }
+                super.handleMessage(msg);
+            }
+        };
+
+        public void loading() {
+            new Thread(new Runnable() {
+                public void run() {
+                    while (true) {
+                        if (Bimp.max == Bimp.tempSelectBitmap.size()) {
+                            Message message = new Message();
+                            message.what = 1;
+                            handler.sendMessage(message);
+                            break;
+                        } else {
+                            Bimp.max += 1;
+                            Message message = new Message();
+                            message.what = 1;
+                            handler.sendMessage(message);
+                        }
+                    }
+                }
+            }).start();
+        }
+    }
+
+    public String getString(String s) {
+        String path = null;
+        if (s == null)
+            return "";
+        for (int i = s.length() - 1; i > 0; i++) {
+            s.charAt(i);
+        }
+        return path;
+    }
+
+    protected void onRestart() {
+        adapter.update();
+        super.onRestart();
+    }
+
+    private static final int TAKE_PICTURE = 0x000001;
+
+    public void photo() {
+        Intent openCameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(openCameraIntent, TAKE_PICTURE);
+    }
+
 
     @Override
     public void onRequestFaild(String errorNo, String errorMessage) {
@@ -342,11 +460,11 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
 
         if(requestCode==888){
             showProgress(false);
-            MessageUtils.showShortToast(this, "图片上传成功");
+          //  MessageUtils.showShortToast(this, "图片上传成功");
             Image image=Idao.getImage();
             mImageList.add(image);
             addImages.add(image); //添加的图片
-            setBitmapImg();
+          //  setBitmapImg();
         }
 
         if (requestCode == 3){
@@ -398,14 +516,6 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
                 mImageList.add(image);
                 delIds.put(mImageList.get(i).getImgUrl(), listPostImage.get(i).getId());
             }
-            if (mImageList.size()>3){
-                ll_image_second.setVisibility(View.VISIBLE);
-            }
-            if (mImageList.size()>7){
-                ll_image_third.setVisibility(View.VISIBLE);
-            }
-            setBitmapImg();
-            bitmapClick();
         }
 
         if (requestCode == 12) {
@@ -496,98 +606,6 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
         });
     }
 
-    private void bitmapClick() {
-        iv01.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                if (mImageList.size() >= 1) {
-                    imageFlag = 1;
-                    showDelDialog(1);
-                }
-                return true;
-            }
-        });
-        iv02.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                if (mImageList.size() >= 2) {
-                    imageFlag = 2;
-                    showDelDialog(2);
-                }
-                return true;
-            }
-        });
-        iv03.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                if (mImageList.size() >= 3) {
-                    imageFlag = 3;
-                    showDelDialog(3);
-                }
-                return true;
-            }
-        });
-        iv04.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                if (mImageList.size() >= 4) {
-                    imageFlag = 4;
-                    showDelDialog(4);
-                }
-                return true;
-            }
-        });
-        iv05.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                if (mImageList.size() >= 5) {
-                    imageFlag = 5;
-                    showDelDialog(5);
-                }
-                return true;
-            }
-        });
-        iv06.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                if (mImageList.size() >= 6) {
-                    imageFlag = 6;
-                    showDelDialog(6);
-                }
-                return true;
-            }
-        });
-        iv07.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                if (mImageList.size() >= 7) {
-                    imageFlag = 7;
-                    showDelDialog(7);
-                }
-                return true;
-            }
-        });
-        iv08.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                if (mImageList.size() >= 8) {
-                    imageFlag = 8;
-                    showDelDialog(8);
-                }
-                return true;
-            }
-        });
-        iv09.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                if (mImageList.size() >= 9) {
-                    imageFlag = 9;
-                    showDelDialog(9);
-                }
-                return true;
-            }
-        });
-    }
 
     private boolean checkInput(){
         if(TextUtils.isEmpty(name)){
@@ -836,9 +854,16 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
                     }
                 break;
             case R.id.tv_release:
-
-                //遍历比价两个集合，若是有相同的，则为删除的图片的url,不同的，增加的集合里面是新增加的图片的url,删除的集合里是删除的图片的url
-                for (int i=0;i<addImages.size();i++){
+                if(Bimp.tempSelectBitmap.size()>0) {
+                    Uri uri = null;
+                    for (int i = 0; i < Bimp.tempSelectBitmap.size(); i++) {
+                        uri = Uri.parse(MediaStore.Images.Media.insertImage(getContentResolver(), Bimp.tempSelectBitmap.get(i).getBitmap(), null, null));
+                    }
+                    preUpload(uri);
+                    doUpload();
+                }
+                //遍历比价两11个集合，若是有相同的，则为删除的图片的url,不同的，增加的集合里面是新增加的图片的url,删除的集合里是删除的图片的url
+            /*    for (int i=0;i<addImages.size();i++){
                     String addUrl = addImages.get(i).getImgUrl();
                     for (int j=0;j<delImages.size();j++){
                         String delurl = delImages.get(j).getImgUrl();
@@ -851,10 +876,10 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
 
               String imagesUrl=getImagesUrl(mImageList);
                String thumbImagesUrl= getThumbImagesUrl(mImageList);
-              /*  if(et_content.getText().toString().trim().length()<20){
-                    MessageUtils.showShortToast(this,"帖子内容少于20个字符");
+                if(et_content.getText().toString().equals("")&&mImageList.size()==0){
+                    MessageUtils.showShortToast(this,"帖子内容不可为空");
                     return;
-                }*/
+                }
                 if(Arad.preferences.getBoolean("isCallingChecked")){
                     if(checkInput()){
                        if(spinner_third_kind.getVisibility()==View.VISIBLE){
@@ -1021,7 +1046,7 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
                                     getThumbImagesUrl(addImages));
                         }
                     }
-                }
+                }*/
 
                 break;
             case R.id.tv_tel:
@@ -1042,94 +1067,13 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
             case R.id.tv_release_back:
                 onBackPressed();
                 break;
-            case R.id.iv01:
-                if(mImageList.size() >= 1){
-                    //
-                } else {
-                    showDialog();
-                }
-
-                //setBitmapImg();
-                break;
-            case R.id.iv02:
-                if(mImageList.size() >= 2){
-                    //
-                } else {
-                    showDialog();
-                }
-
-                //setBitmapImg();
-                break;
-            case R.id.iv03:
-                if(mImageList.size() >= 3){
-                    //
-                } else {
-                    showDialog();
-                }
-
-                //setBitmapImg();
-                break;
-            case R.id.iv04:
-                if(mImageList.size() >= 4){
-                    //
-                } else {
-                    showDialog();
-                }
-
-                //setBitmapImg();
-                break;
-            case R.id.iv05:
-                if(mImageList.size() >= 5){
-                    //
-                } else {
-                    showDialog();
-                }
-
-                //setBitmapImg();
-                break;
-            case R.id.iv06:
-                if(mImageList.size() >= 6){
-                    //
-                } else {
-                    showDialog();
-                }
-
-                //setBitmapImg();
-                break;
-            case R.id.iv07:
-                if(mImageList.size() >= 7){
-                    //
-                } else {
-                    showDialog();
-                }
-
-                //setBitmapImg();
-                break;
-            case R.id.iv08:
-                if(mImageList.size() >= 8){
-                    //
-                } else {
-                    showDialog();
-                }
-
-                //setBitmapImg();
-                break;
-            case R.id.iv09:
-                if(mImageList.size() >=9){
-                    //
-                } else {
-                    showDialog();
-                }
-
-                //setBitmapImg();
-                break;
         }
 
     }
 
-
     private void getImageToView1(String path) {
         Bitmap bitmap ;
+
         try{
             bitmap = BitmapFactory.decodeFile(path);
             ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -1144,7 +1088,7 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
                 // Log.d("demo","上传方法2");
                 /**调用后台方法  将图片上传**/
               //  String imgData = photo;
-                showProgress(true);
+               // showProgress(true);
                 Idao.requestUploadImage(photo);
             }
         } catch (Exception e){
@@ -1152,6 +1096,11 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Bimp.tempSelectBitmap.clear();
+    }
 
     /**
      * @param requestCode
@@ -1168,22 +1117,29 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
                 return;
             }
             switch (requestCode) {
+                case TAKE_PICTURE:
+                    if (Bimp.tempSelectBitmap.size() < 9 && resultCode == RESULT_OK) {
+                        String fileName = String.valueOf(System.currentTimeMillis());
+                        Bitmap bm = (Bitmap) data.getExtras().get("data");
+                        FileUtils.saveBitmap(bm, fileName);
+                        ImageItem takePhoto = new ImageItem();
+                        takePhoto.setBitmap(bm);
+                        Bimp.tempSelectBitmap.add(takePhoto);
+
+                    }
+                    break;
+
                 case IMAGE_REQUEST_CODE:
                     Uri uri = data.getData();
                     String thePath = Utils.getInstance().getPath(this, uri);
                     getImageToView1(thePath);
                     break;
-                case CAMERA_REQUEST_CODE:
-                    getImageToView1(Environment.getExternalStorageDirectory()+"/cxh.jpg");
-                    break;
 
                 case 100:
                     if(resultCode==RESULT_OK){
-
                         name=data.getStringExtra("name");
                         adress=data.getStringExtra("adress");
                         tel=data.getStringExtra("tel");
-
                     }
                     break;
                 case 101:
@@ -1216,1111 +1172,6 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
 
     }
 
-    private void setBitmapImg(){
-
-        setImageViewWidth(iv01);
-        setImageViewWidth(iv02);
-        setImageViewWidth(iv03);
-        setImageViewWidth(iv04);
-        setImageViewWidth(iv05);
-        setImageViewWidth(iv06);
-        setImageViewWidth(iv07);
-        setImageViewWidth(iv08);
-        setImageViewWidth(iv09);
-
-        if (mImageList != null){
-
-            if(mImageList.size()==0){
-                iv01.setVisibility(View.VISIBLE);
-                iv01.setImageResource(R.mipmap.add_pic);
-                iv02.setVisibility(View.INVISIBLE);
-                iv03.setVisibility(View.INVISIBLE);
-                iv04.setVisibility(View.INVISIBLE);
-                iv05.setVisibility(View.INVISIBLE);
-                iv06.setVisibility(View.INVISIBLE);
-                iv07.setVisibility(View.INVISIBLE);
-                iv08.setVisibility(View.INVISIBLE);
-                iv09.setVisibility(View.INVISIBLE);
-            }
-            if(mImageList.size() == 1) {
-                iv01.setVisibility(View.VISIBLE);
-                iv02.setVisibility(View.VISIBLE);
-                iv02.setImageResource(R.mipmap.add_pic);
-                iv03.setVisibility(View.INVISIBLE);
-                iv04.setVisibility(View.INVISIBLE);
-                iv06.setVisibility(View.INVISIBLE);
-                iv07.setVisibility(View.INVISIBLE);
-                iv08.setVisibility(View.INVISIBLE);
-                iv09.setVisibility(View.INVISIBLE);
-                iv05.setVisibility(View.INVISIBLE);
-
-
-                for(int i = 0 ; i < mImageList.size() ; i++){
-                    // Log.i("tag","mImageList----"+mImageList.size());
-                    //  Log.i("tag","mImageList  url----"+mImageList.get(i).getThumbImgUrl());
-                    Arad.imageLoader.load(mImageList.get(i).getThumbImgUrl()).into(listImg.get(i));
-                }
-
-            }
-
-            if(mImageList.size() == 2){
-                iv01.setVisibility(View.VISIBLE);
-                iv02.setVisibility(View.VISIBLE);
-                iv03.setVisibility(View.VISIBLE);
-                iv03.setImageResource(R.mipmap.add_pic);
-                iv04.setVisibility(View.INVISIBLE);
-                iv05.setVisibility(View.INVISIBLE);
-                iv06.setVisibility(View.INVISIBLE);
-                iv07.setVisibility(View.INVISIBLE);
-                iv08.setVisibility(View.INVISIBLE);
-                iv09.setVisibility(View.INVISIBLE);
-
-
-                for(int i = 0 ; i < mImageList.size() ; i ++){
-                    Arad.imageLoader.load(mImageList.get(i).getThumbImgUrl()).into(listImg.get(i));
-                }
-
-            }
-
-            if(mImageList.size() == 3){
-                iv01.setVisibility(View.VISIBLE);
-                iv02.setVisibility(View.VISIBLE);
-                iv03.setVisibility(View.VISIBLE);
-                iv04.setVisibility(View.VISIBLE);
-                iv04.setImageResource(R.mipmap.add_pic);
-                iv05.setVisibility(View.INVISIBLE);
-                iv06.setVisibility(View.INVISIBLE);
-                iv07.setVisibility(View.INVISIBLE);
-                iv08.setVisibility(View.INVISIBLE);
-                iv09.setVisibility(View.INVISIBLE);
-
-
-                for(int i = 0 ; i < mImageList.size() ; i ++){
-                    Arad.imageLoader.load(mImageList.get(i).getThumbImgUrl()).into(listImg.get(i));
-                }
-            }
-
-            if (mImageList.size() == 4){
-                ll_image_second.setVisibility(View.VISIBLE);
-
-
-                iv01.setVisibility(View.VISIBLE);
-                iv02.setVisibility(View.VISIBLE);
-                iv03.setVisibility(View.VISIBLE);
-                iv04.setVisibility(View.VISIBLE);
-                iv05.setVisibility(View.VISIBLE);
-                iv05.setImageResource(R.mipmap.add_pic);
-                iv06.setVisibility(View.INVISIBLE);
-                iv07.setVisibility(View.INVISIBLE);
-                iv08.setVisibility(View.INVISIBLE);
-                iv09.setVisibility(View.INVISIBLE);
-
-                for(int i = 0 ; i < mImageList.size() ; i ++){
-                    Arad.imageLoader.load(mImageList.get(i).getThumbImgUrl()).into(listImg.get(i));
-                }
-            }
-            if (mImageList.size() ==5){
-                //  ll_image_second.setVisibility(View.VISIBLE);
-                iv01.setVisibility(View.VISIBLE);
-                iv02.setVisibility(View.VISIBLE);
-                iv03.setVisibility(View.VISIBLE);
-                iv04.setVisibility(View.VISIBLE);
-                iv05.setVisibility(View.VISIBLE);
-                iv06.setVisibility(View.VISIBLE);
-                iv06.setImageResource(R.mipmap.add_pic);
-                iv07.setVisibility(View.INVISIBLE);
-                iv08.setVisibility(View.INVISIBLE);
-                iv09.setVisibility(View.INVISIBLE);
-
-                for(int i = 0 ; i < mImageList.size() ; i ++){
-                    Arad.imageLoader.load(mImageList.get(i).getThumbImgUrl()).into(listImg.get(i));
-                }
-            }
-            if (mImageList.size() == 6){
-                iv01.setVisibility(View.VISIBLE);
-                iv02.setVisibility(View.VISIBLE);
-                iv03.setVisibility(View.VISIBLE);
-                iv04.setVisibility(View.VISIBLE);
-                iv05.setVisibility(View.VISIBLE);
-                iv06.setVisibility(View.VISIBLE);
-                iv07.setVisibility(View.VISIBLE);
-                iv07.setImageResource(R.mipmap.add_pic);
-                iv08.setVisibility(View.INVISIBLE);
-                iv09.setVisibility(View.INVISIBLE);
-
-                for(int i = 0 ; i < mImageList.size() ; i ++){
-                    Arad.imageLoader.load(mImageList.get(i).getThumbImgUrl()).into(listImg.get(i));
-                }
-            }
-            if (mImageList.size() == 7){
-                iv01.setVisibility(View.VISIBLE);
-                iv02.setVisibility(View.VISIBLE);
-                iv03.setVisibility(View.VISIBLE);
-                iv04.setVisibility(View.VISIBLE);
-                iv05.setVisibility(View.VISIBLE);
-                iv06.setVisibility(View.VISIBLE);
-                iv07.setVisibility(View.VISIBLE);
-                iv08.setVisibility(View.VISIBLE);
-                iv08.setImageResource(R.mipmap.add_pic);
-                iv09.setVisibility(View.INVISIBLE);
-
-                for(int i = 0 ; i < mImageList.size() ; i ++){
-                    Arad.imageLoader.load(mImageList.get(i).getThumbImgUrl()).into(listImg.get(i));
-                }
-            }
-            if (mImageList.size() == 8){
-                ll_image_third.setVisibility(View.VISIBLE);
-                iv01.setVisibility(View.VISIBLE);
-                iv02.setVisibility(View.VISIBLE);
-                iv03.setVisibility(View.VISIBLE);
-                iv04.setVisibility(View.VISIBLE);
-                iv05.setVisibility(View.VISIBLE);
-                iv06.setVisibility(View.VISIBLE);
-                iv07.setVisibility(View.VISIBLE);
-                iv08.setVisibility(View.VISIBLE);
-                iv09.setVisibility(View.VISIBLE);
-                iv09.setImageResource(R.mipmap.add_pic);
-
-                for(int i = 0 ; i < mImageList.size() ; i ++){
-                    Arad.imageLoader.load(mImageList.get(i).getThumbImgUrl()).into(listImg.get(i));
-                }
-            }
-            if (mImageList.size() == 9){
-                //  ll_image_third.setVisibility(View.VISIBLE);
-                iv01.setVisibility(View.VISIBLE);
-                iv02.setVisibility(View.VISIBLE);
-                iv03.setVisibility(View.VISIBLE);
-                iv04.setVisibility(View.VISIBLE);
-                iv05.setVisibility(View.VISIBLE);
-                iv06.setVisibility(View.VISIBLE);
-                iv07.setVisibility(View.VISIBLE);
-                iv08.setVisibility(View.VISIBLE);
-                iv09.setVisibility(View.VISIBLE);
-
-                for(int i = 0 ; i < mImageList.size() ; i ++){
-                    Arad.imageLoader.load(mImageList.get(i).getThumbImgUrl()).into(listImg.get(i));
-                }
-            }
-        }
-    }
-
-    private void delImg(int imgFlg) {
-        if(mImageList != null){
-
-            /**长按 第一张图*/
-            if(imgFlg == 1){
-                if(mImageList.size() == 1){
-
-                    mImageList.remove(0);
-
-                    iv01.setVisibility(View.VISIBLE);
-                    iv01.setImageResource(R.mipmap.add_pic);
-                    iv02.setVisibility(View.INVISIBLE);
-                    iv03.setVisibility(View.INVISIBLE);
-                    iv04.setVisibility(View.INVISIBLE);
-                    iv05.setVisibility(View.INVISIBLE);
-                    iv06.setVisibility(View.INVISIBLE);
-                    iv07.setVisibility(View.INVISIBLE);
-                    iv08.setVisibility(View.INVISIBLE);
-                    iv09.setVisibility(View.INVISIBLE);
-                    setBitmapImg();
-
-                }
-
-                if(mImageList.size() == 2){
-                    mImageList.remove(0);
-
-                    iv01.setVisibility(View.VISIBLE);
-                    iv02.setVisibility(View.VISIBLE);
-                    iv02.setImageResource(R.mipmap.add_pic);
-                    iv03.setVisibility(View.INVISIBLE);
-                    iv04.setVisibility(View.INVISIBLE);
-                    iv05.setVisibility(View.INVISIBLE);
-                    iv06.setVisibility(View.INVISIBLE);
-                    iv07.setVisibility(View.INVISIBLE);
-                    iv08.setVisibility(View.INVISIBLE);
-                    iv09.setVisibility(View.INVISIBLE);
-
-
-                    setBitmapImg();
-                }
-
-                if(mImageList.size() == 3){
-                    mImageList.remove(0);
-
-
-                    iv01.setVisibility(View.VISIBLE);
-                    iv02.setVisibility(View.VISIBLE);
-                    iv03.setVisibility(View.VISIBLE);
-                    iv03.setImageResource(R.mipmap.add_pic);
-                    iv04.setVisibility(View.INVISIBLE);
-                    iv05.setVisibility(View.INVISIBLE);
-                    iv06.setVisibility(View.INVISIBLE);
-                    iv07.setVisibility(View.INVISIBLE);
-                    iv08.setVisibility(View.INVISIBLE);
-                    iv09.setVisibility(View.INVISIBLE);
-
-
-                    setBitmapImg();
-                }
-                if(mImageList.size() == 4){
-                    mImageList.remove(0);
-                    ll_image_second.setVisibility(View.GONE);
-
-
-                    iv01.setVisibility(View.VISIBLE);
-                    iv02.setVisibility(View.VISIBLE);
-                    iv03.setVisibility(View.VISIBLE);
-                    iv04.setVisibility(View.VISIBLE);
-                    iv04.setImageResource(R.mipmap.add_pic);
-                    iv05.setVisibility(View.INVISIBLE);
-                    iv06.setVisibility(View.INVISIBLE);
-                    iv07.setVisibility(View.INVISIBLE);
-                    iv08.setVisibility(View.INVISIBLE);
-                    iv09.setVisibility(View.INVISIBLE);
-                    setBitmapImg();
-                }
-                if (mImageList.size() == 5){
-                    mImageList.remove(0);
-
-                    //  ll_image_second.setVisibility(View.GONE);
-                    iv01.setVisibility(View.VISIBLE);
-                    iv02.setVisibility(View.VISIBLE);
-                    iv03.setVisibility(View.VISIBLE);
-                    iv04.setVisibility(View.VISIBLE);
-                    iv05.setVisibility(View.VISIBLE);
-                    iv05.setImageResource(R.mipmap.add_pic);
-                    iv06.setVisibility(View.INVISIBLE);
-                    iv07.setVisibility(View.INVISIBLE);
-                    iv08.setVisibility(View.INVISIBLE);
-                    iv09.setVisibility(View.INVISIBLE);
-                    setBitmapImg();
-                }
-                if(mImageList.size() == 6){
-                    mImageList.remove(0);
-
-
-                    iv01.setVisibility(View.VISIBLE);
-                    iv02.setVisibility(View.VISIBLE);
-                    iv03.setVisibility(View.VISIBLE);
-                    iv04.setVisibility(View.VISIBLE);
-                    iv05.setVisibility(View.VISIBLE);
-                    iv06.setVisibility(View.VISIBLE);
-                    iv06.setImageResource(R.mipmap.add_pic);
-                    iv07.setVisibility(View.INVISIBLE);
-                    iv08.setVisibility(View.INVISIBLE);
-                    iv09.setVisibility(View.INVISIBLE);
-                    setBitmapImg();
-                }
-                if(mImageList.size() == 7){
-                    mImageList.remove(0);
-
-
-                    iv01.setVisibility(View.VISIBLE);
-                    iv02.setVisibility(View.VISIBLE);
-                    iv03.setVisibility(View.VISIBLE);
-                    iv04.setVisibility(View.VISIBLE);
-                    iv05.setVisibility(View.VISIBLE);
-                    iv06.setVisibility(View.VISIBLE);
-                    iv07.setVisibility(View.VISIBLE);
-                    iv07.setImageResource(R.mipmap.add_pic);
-                    iv08.setVisibility(View.INVISIBLE);
-                    iv09.setVisibility(View.INVISIBLE);
-                    setBitmapImg();
-                }
-                if(mImageList.size() == 8){
-                    mImageList.remove(0);
-                    ll_image_third.setVisibility(View.GONE);
-
-
-                    iv01.setVisibility(View.VISIBLE);
-                    iv02.setVisibility(View.VISIBLE);
-                    iv03.setVisibility(View.VISIBLE);
-                    iv04.setVisibility(View.VISIBLE);
-                    iv05.setVisibility(View.VISIBLE);
-                    iv06.setVisibility(View.VISIBLE);
-                    iv07.setVisibility(View.VISIBLE);
-                    iv08.setVisibility(View.VISIBLE);
-                    iv08.setImageResource(R.mipmap.add_pic);
-                    iv09.setVisibility(View.INVISIBLE);
-                    setBitmapImg();
-                }
-                if(mImageList.size() ==9){
-                    mImageList.remove(0);
-                    //  ll_image_third.setVisibility(View.GONE);
-
-                    iv01.setVisibility(View.VISIBLE);
-                    iv02.setVisibility(View.VISIBLE);
-                    iv03.setVisibility(View.VISIBLE);
-                    iv04.setVisibility(View.VISIBLE);
-                    iv05.setVisibility(View.VISIBLE);
-                    iv06.setVisibility(View.VISIBLE);
-                    iv07.setVisibility(View.VISIBLE);
-                    iv08.setVisibility(View.VISIBLE);
-                    iv09.setVisibility(View.VISIBLE);
-                    iv09.setImageResource(R.mipmap.add_pic);
-                    setBitmapImg();
-                }
-            }
-
-            /**长按 第二张图*/
-            if(imgFlg == 2){
-                if(mImageList.size() == 1){
-                    //
-                }
-
-                if(mImageList.size() == 2){
-                    mImageList.remove(1);
-
-                    iv01.setVisibility(View.VISIBLE);
-                    iv02.setVisibility(View.VISIBLE);
-                    iv02.setImageResource(R.mipmap.add_pic);
-                    iv03.setVisibility(View.INVISIBLE);
-                    iv04.setVisibility(View.INVISIBLE);
-                    iv05.setVisibility(View.INVISIBLE);
-                    iv06.setVisibility(View.INVISIBLE);
-                    iv07.setVisibility(View.INVISIBLE);
-                    iv08.setVisibility(View.INVISIBLE);
-                    iv09.setVisibility(View.INVISIBLE);
-
-                    setBitmapImg();
-                }
-
-                if(mImageList.size() == 3){
-                    mImageList.remove(1);
-
-
-                    iv01.setVisibility(View.VISIBLE);
-                    iv02.setVisibility(View.VISIBLE);
-                    iv03.setVisibility(View.VISIBLE);
-                    iv03.setImageResource(R.mipmap.add_pic);
-                    iv04.setVisibility(View.INVISIBLE);
-                    iv05.setVisibility(View.INVISIBLE);
-                    iv06.setVisibility(View.INVISIBLE);
-                    iv07.setVisibility(View.INVISIBLE);
-                    iv08.setVisibility(View.INVISIBLE);
-                    iv09.setVisibility(View.INVISIBLE);
-
-
-
-                    setBitmapImg();
-                }
-
-                if(mImageList.size() == 4){
-                    mImageList.remove(1);
-                    ll_image_second.setVisibility(View.GONE);
-
-
-                    iv01.setVisibility(View.VISIBLE);
-                    iv02.setVisibility(View.VISIBLE);
-                    iv03.setVisibility(View.VISIBLE);
-                    iv04.setVisibility(View.VISIBLE);
-                    iv04.setImageResource(R.mipmap.add_pic);
-                    iv05.setVisibility(View.INVISIBLE);
-                    iv06.setVisibility(View.INVISIBLE);
-                    iv07.setVisibility(View.INVISIBLE);
-                    iv08.setVisibility(View.INVISIBLE);
-                    iv09.setVisibility(View.INVISIBLE);
-
-
-                    setBitmapImg();
-                }
-
-                if(mImageList.size() == 5){
-                    mImageList.remove(1);
-
-                    iv01.setVisibility(View.VISIBLE);
-                    iv02.setVisibility(View.VISIBLE);
-                    iv03.setVisibility(View.VISIBLE);
-                    iv04.setVisibility(View.VISIBLE);
-                    iv05.setVisibility(View.VISIBLE);
-                    iv05.setImageResource(R.mipmap.add_pic);
-                    iv06.setVisibility(View.INVISIBLE);
-                    iv07.setVisibility(View.INVISIBLE);
-                    iv08.setVisibility(View.INVISIBLE);
-                    iv09.setVisibility(View.INVISIBLE);
-                    setBitmapImg();
-                }
-                if(mImageList.size() == 6){
-                    mImageList.remove(1);
-
-
-                    iv01.setVisibility(View.VISIBLE);
-                    iv02.setVisibility(View.VISIBLE);
-                    iv03.setVisibility(View.VISIBLE);
-                    iv04.setVisibility(View.VISIBLE);
-                    iv05.setVisibility(View.VISIBLE);
-                    iv06.setVisibility(View.VISIBLE);
-                    iv06.setImageResource(R.mipmap.add_pic);
-                    iv07.setVisibility(View.INVISIBLE);
-                    iv08.setVisibility(View.INVISIBLE);
-                    iv09.setVisibility(View.INVISIBLE);
-                    setBitmapImg();
-                }
-                if(mImageList.size() == 7){
-                    mImageList.remove(1);
-
-
-                    iv01.setVisibility(View.VISIBLE);
-                    iv02.setVisibility(View.VISIBLE);
-                    iv03.setVisibility(View.VISIBLE);
-                    iv04.setVisibility(View.VISIBLE);
-                    iv05.setVisibility(View.VISIBLE);
-                    iv06.setVisibility(View.VISIBLE);
-                    iv07.setVisibility(View.VISIBLE);
-                    iv07.setImageResource(R.mipmap.add_pic);
-                    iv08.setVisibility(View.INVISIBLE);
-                    iv09.setVisibility(View.INVISIBLE);
-                    setBitmapImg();
-                }
-                if(mImageList.size() == 8){
-                    mImageList.remove(1);
-                    ll_image_third.setVisibility(View.GONE);
-
-
-                    iv01.setVisibility(View.VISIBLE);
-                    iv02.setVisibility(View.VISIBLE);
-                    iv03.setVisibility(View.VISIBLE);
-                    iv04.setVisibility(View.VISIBLE);
-                    iv05.setVisibility(View.VISIBLE);
-                    iv06.setVisibility(View.VISIBLE);
-                    iv07.setVisibility(View.VISIBLE);
-                    iv08.setVisibility(View.VISIBLE);
-                    iv08.setImageResource(R.mipmap.add_pic);
-                    iv09.setVisibility(View.INVISIBLE);
-                    setBitmapImg();
-                }
-                if(mImageList.size() ==9){
-                    mImageList.remove(1);
-
-                    iv01.setVisibility(View.VISIBLE);
-                    iv02.setVisibility(View.VISIBLE);
-                    iv03.setVisibility(View.VISIBLE);
-                    iv04.setVisibility(View.VISIBLE);
-                    iv05.setVisibility(View.VISIBLE);
-                    iv06.setVisibility(View.VISIBLE);
-                    iv07.setVisibility(View.VISIBLE);
-                    iv08.setVisibility(View.VISIBLE);
-                    iv09.setVisibility(View.VISIBLE);
-                    iv09.setImageResource(R.mipmap.add_pic);
-                    setBitmapImg();
-                }
-            }
-
-
-            /**长按 第三张图*/
-            if(imgFlg == 3){
-                if(mImageList.size() == 1){
-//
-                }
-
-                if(mImageList.size() == 2){
-                    //
-                }
-
-                if(mImageList.size() == 3){
-                    mImageList.remove(2);
-
-
-                    iv01.setVisibility(View.VISIBLE);
-                    iv02.setVisibility(View.VISIBLE);
-                    iv03.setVisibility(View.VISIBLE);
-                    iv03.setImageResource(R.mipmap.add_pic);
-                    iv04.setVisibility(View.INVISIBLE);
-                    iv05.setVisibility(View.INVISIBLE);
-                    iv06.setVisibility(View.INVISIBLE);
-                    iv07.setVisibility(View.INVISIBLE);
-                    iv08.setVisibility(View.INVISIBLE);
-                    iv09.setVisibility(View.INVISIBLE);
-
-
-
-                    setBitmapImg();
-                }
-
-                if(mImageList.size() == 4){
-                    mImageList.remove(2);
-                    ll_image_second.setVisibility(View.GONE);
-
-
-                    iv01.setVisibility(View.VISIBLE);
-                    iv02.setVisibility(View.VISIBLE);
-                    iv03.setVisibility(View.VISIBLE);
-                    iv04.setVisibility(View.VISIBLE);
-                    iv04.setImageResource(R.mipmap.add_pic);
-                    iv05.setVisibility(View.INVISIBLE);
-                    iv06.setVisibility(View.INVISIBLE);
-                    iv07.setVisibility(View.INVISIBLE);
-                    iv08.setVisibility(View.INVISIBLE);
-                    iv09.setVisibility(View.INVISIBLE);
-
-
-                    setBitmapImg();
-                }
-
-                if(mImageList.size() == 5){
-                    mImageList.remove(2);
-
-                    iv01.setVisibility(View.VISIBLE);
-                    iv02.setVisibility(View.VISIBLE);
-                    iv03.setVisibility(View.VISIBLE);
-                    iv04.setVisibility(View.VISIBLE);
-                    iv05.setVisibility(View.VISIBLE);
-                    iv05.setImageResource(R.mipmap.add_pic);
-                    iv06.setVisibility(View.INVISIBLE);
-                    iv07.setVisibility(View.INVISIBLE);
-                    iv08.setVisibility(View.INVISIBLE);
-                    iv09.setVisibility(View.INVISIBLE);
-                    setBitmapImg();
-                }
-                if(mImageList.size() == 6){
-                    mImageList.remove(2);
-
-
-                    iv01.setVisibility(View.VISIBLE);
-                    iv02.setVisibility(View.VISIBLE);
-                    iv03.setVisibility(View.VISIBLE);
-                    iv04.setVisibility(View.VISIBLE);
-                    iv05.setVisibility(View.VISIBLE);
-                    iv06.setVisibility(View.VISIBLE);
-                    iv06.setImageResource(R.mipmap.add_pic);
-                    iv07.setVisibility(View.INVISIBLE);
-                    iv08.setVisibility(View.INVISIBLE);
-                    iv09.setVisibility(View.INVISIBLE);
-                    setBitmapImg();
-                }
-                if(mImageList.size() == 7){
-                    mImageList.remove(2);
-
-
-                    iv01.setVisibility(View.VISIBLE);
-                    iv02.setVisibility(View.VISIBLE);
-                    iv03.setVisibility(View.VISIBLE);
-                    iv04.setVisibility(View.VISIBLE);
-                    iv05.setVisibility(View.VISIBLE);
-                    iv06.setVisibility(View.VISIBLE);
-                    iv07.setVisibility(View.VISIBLE);
-                    iv07.setImageResource(R.mipmap.add_pic);
-                    iv08.setVisibility(View.INVISIBLE);
-                    iv09.setVisibility(View.INVISIBLE);
-                    setBitmapImg();
-                }
-                if(mImageList.size() == 8){
-                    mImageList.remove(2);
-                    ll_image_third.setVisibility(View.GONE);
-
-
-                    iv01.setVisibility(View.VISIBLE);
-                    iv02.setVisibility(View.VISIBLE);
-                    iv03.setVisibility(View.VISIBLE);
-                    iv04.setVisibility(View.VISIBLE);
-                    iv05.setVisibility(View.VISIBLE);
-                    iv06.setVisibility(View.VISIBLE);
-                    iv07.setVisibility(View.VISIBLE);
-                    iv08.setVisibility(View.VISIBLE);
-                    iv08.setImageResource(R.mipmap.add_pic);
-                    iv09.setVisibility(View.INVISIBLE);
-                    setBitmapImg();
-                }
-                if(mImageList.size() ==9){
-                    mImageList.remove(2);
-
-                    iv01.setVisibility(View.VISIBLE);
-                    iv02.setVisibility(View.VISIBLE);
-                    iv03.setVisibility(View.VISIBLE);
-                    iv04.setVisibility(View.VISIBLE);
-                    iv05.setVisibility(View.VISIBLE);
-                    iv06.setVisibility(View.VISIBLE);
-                    iv07.setVisibility(View.VISIBLE);
-                    iv08.setVisibility(View.VISIBLE);
-                    iv09.setVisibility(View.VISIBLE);
-                    iv09.setImageResource(R.mipmap.add_pic);
-                    setBitmapImg();
-                }
-            }
-            /**长按 第四张图*/
-            if(imgFlg == 4){
-                if(mImageList.size() == 1){
-//
-                }
-
-                if(mImageList.size() == 2){
-                    //
-                }
-
-                if(mImageList.size() == 3){
-
-                }
-
-                if(mImageList.size() == 4){
-                    mImageList.remove(3);
-                    ll_image_second.setVisibility(View.GONE);
-
-
-                    iv01.setVisibility(View.VISIBLE);
-                    iv02.setVisibility(View.VISIBLE);
-                    iv03.setVisibility(View.VISIBLE);
-                    iv04.setVisibility(View.VISIBLE);
-                    iv04.setImageResource(R.mipmap.add_pic);
-                    iv05.setVisibility(View.INVISIBLE);
-                    iv06.setVisibility(View.INVISIBLE);
-                    iv07.setVisibility(View.INVISIBLE);
-                    iv08.setVisibility(View.INVISIBLE);
-                    iv09.setVisibility(View.INVISIBLE);
-
-
-                    setBitmapImg();
-                }
-
-                if(mImageList.size() == 5){
-                    mImageList.remove(3);
-
-                    iv01.setVisibility(View.VISIBLE);
-                    iv02.setVisibility(View.VISIBLE);
-                    iv03.setVisibility(View.VISIBLE);
-                    iv04.setVisibility(View.VISIBLE);
-                    iv05.setVisibility(View.VISIBLE);
-                    iv05.setImageResource(R.mipmap.add_pic);
-                    iv06.setVisibility(View.INVISIBLE);
-                    iv07.setVisibility(View.INVISIBLE);
-                    iv08.setVisibility(View.INVISIBLE);
-                    iv09.setVisibility(View.INVISIBLE);
-                    setBitmapImg();
-                }
-                if(mImageList.size() == 6){
-                    mImageList.remove(3);
-
-
-                    iv01.setVisibility(View.VISIBLE);
-                    iv02.setVisibility(View.VISIBLE);
-                    iv03.setVisibility(View.VISIBLE);
-                    iv04.setVisibility(View.VISIBLE);
-                    iv05.setVisibility(View.VISIBLE);
-                    iv06.setVisibility(View.VISIBLE);
-                    iv06.setImageResource(R.mipmap.add_pic);
-                    iv07.setVisibility(View.INVISIBLE);
-                    iv08.setVisibility(View.INVISIBLE);
-                    iv09.setVisibility(View.INVISIBLE);
-                    setBitmapImg();
-                }
-                if(mImageList.size() == 7){
-                    mImageList.remove(3);
-
-
-                    iv01.setVisibility(View.VISIBLE);
-                    iv02.setVisibility(View.VISIBLE);
-                    iv03.setVisibility(View.VISIBLE);
-                    iv04.setVisibility(View.VISIBLE);
-                    iv05.setVisibility(View.VISIBLE);
-                    iv06.setVisibility(View.VISIBLE);
-                    iv07.setVisibility(View.VISIBLE);
-                    iv07.setImageResource(R.mipmap.add_pic);
-                    iv08.setVisibility(View.INVISIBLE);
-                    iv09.setVisibility(View.INVISIBLE);
-                    setBitmapImg();
-                }
-                if(mImageList.size() == 8){
-                    mImageList.remove(3);
-                    ll_image_third.setVisibility(View.GONE);
-
-
-
-                    iv01.setVisibility(View.VISIBLE);
-                    iv02.setVisibility(View.VISIBLE);
-                    iv03.setVisibility(View.VISIBLE);
-                    iv04.setVisibility(View.VISIBLE);
-                    iv05.setVisibility(View.VISIBLE);
-                    iv06.setVisibility(View.VISIBLE);
-                    iv07.setVisibility(View.VISIBLE);
-                    iv08.setVisibility(View.VISIBLE);
-                    iv08.setImageResource(R.mipmap.add_pic);
-                    iv09.setVisibility(View.INVISIBLE);
-                    setBitmapImg();
-                }
-                if(mImageList.size() ==9){
-                    mImageList.remove(3);
-
-                    iv01.setVisibility(View.VISIBLE);
-                    iv02.setVisibility(View.VISIBLE);
-                    iv03.setVisibility(View.VISIBLE);
-                    iv04.setVisibility(View.VISIBLE);
-                    iv05.setVisibility(View.VISIBLE);
-                    iv06.setVisibility(View.VISIBLE);
-                    iv07.setVisibility(View.VISIBLE);
-                    iv08.setVisibility(View.VISIBLE);
-                    iv09.setVisibility(View.VISIBLE);
-                    iv09.setImageResource(R.mipmap.add_pic);
-                    setBitmapImg();
-                }
-            }
-            /**长按 第五张图*/
-            if(imgFlg == 5){
-                if(mImageList.size() == 1){
-//
-                }
-
-                if(mImageList.size() == 2){
-                    //
-                }
-
-                if(mImageList.size() == 3){
-
-                }
-
-                if(mImageList.size() == 4){
-                    //
-                }
-
-                if(mImageList.size() == 5){
-                    mImageList.remove(4);
-
-                    // ll_image_second.setVisibility(View.GONE);
-                    iv01.setVisibility(View.VISIBLE);
-                    iv02.setVisibility(View.VISIBLE);
-                    iv03.setVisibility(View.VISIBLE);
-                    iv04.setVisibility(View.VISIBLE);
-                    iv05.setVisibility(View.VISIBLE);
-                    iv05.setImageResource(R.mipmap.add_pic);
-                    iv06.setVisibility(View.INVISIBLE);
-                    iv07.setVisibility(View.INVISIBLE);
-                    iv08.setVisibility(View.INVISIBLE);
-                    iv09.setVisibility(View.INVISIBLE);
-                    setBitmapImg();
-                }
-                if(mImageList.size() == 6){
-                    mImageList.remove(4);
-
-
-                    iv01.setVisibility(View.VISIBLE);
-                    iv02.setVisibility(View.VISIBLE);
-                    iv03.setVisibility(View.VISIBLE);
-                    iv04.setVisibility(View.VISIBLE);
-                    iv05.setVisibility(View.VISIBLE);
-                    iv06.setVisibility(View.VISIBLE);
-                    iv06.setImageResource(R.mipmap.add_pic);
-                    iv07.setVisibility(View.INVISIBLE);
-                    iv08.setVisibility(View.INVISIBLE);
-                    iv09.setVisibility(View.INVISIBLE);
-                    setBitmapImg();
-                }
-                if(mImageList.size() == 7){
-                    mImageList.remove(4);
-
-
-                    iv01.setVisibility(View.VISIBLE);
-                    iv02.setVisibility(View.VISIBLE);
-                    iv03.setVisibility(View.VISIBLE);
-                    iv04.setVisibility(View.VISIBLE);
-                    iv05.setVisibility(View.VISIBLE);
-                    iv06.setVisibility(View.VISIBLE);
-                    iv07.setVisibility(View.VISIBLE);
-                    iv07.setImageResource(R.mipmap.add_pic);
-                    iv08.setVisibility(View.INVISIBLE);
-                    iv09.setVisibility(View.INVISIBLE);
-                    setBitmapImg();
-                }
-                if(mImageList.size() == 8){
-                    mImageList.remove(4);
-                    ll_image_third.setVisibility(View.GONE);
-
-                    iv01.setVisibility(View.VISIBLE);
-                    iv02.setVisibility(View.VISIBLE);
-                    iv03.setVisibility(View.VISIBLE);
-                    iv04.setVisibility(View.VISIBLE);
-                    iv05.setVisibility(View.VISIBLE);
-                    iv06.setVisibility(View.VISIBLE);
-                    iv07.setVisibility(View.VISIBLE);
-                    iv08.setVisibility(View.VISIBLE);
-                    iv08.setImageResource(R.mipmap.add_pic);
-                    iv09.setVisibility(View.INVISIBLE);
-                    setBitmapImg();
-                }
-                if(mImageList.size() ==9){
-                    mImageList.remove(4);
-
-
-                    iv01.setVisibility(View.VISIBLE);
-                    iv02.setVisibility(View.VISIBLE);
-                    iv03.setVisibility(View.VISIBLE);
-                    iv04.setVisibility(View.VISIBLE);
-                    iv05.setVisibility(View.VISIBLE);
-                    iv06.setVisibility(View.VISIBLE);
-                    iv07.setVisibility(View.VISIBLE);
-                    iv08.setVisibility(View.VISIBLE);
-                    iv09.setVisibility(View.VISIBLE);
-                    iv09.setImageResource(R.mipmap.add_pic);
-                    setBitmapImg();
-                }
-            }
-            /**长按 第六张图*/
-            if(imgFlg == 6){
-                if(mImageList.size() == 1){
-//
-                }
-
-                if(mImageList.size() == 2){
-                    //
-                }
-
-                if(mImageList.size() == 3){
-
-                }
-
-                if(mImageList.size() == 4){
-                    //
-                }
-
-                if(mImageList.size() == 5){
-                    //
-                }
-                if(mImageList.size() == 6){
-                    mImageList.remove(5);
-
-
-                    iv01.setVisibility(View.VISIBLE);
-                    iv02.setVisibility(View.VISIBLE);
-                    iv03.setVisibility(View.VISIBLE);
-                    iv04.setVisibility(View.VISIBLE);
-                    iv05.setVisibility(View.VISIBLE);
-                    iv06.setVisibility(View.VISIBLE);
-                    iv06.setImageResource(R.mipmap.add_pic);
-                    iv07.setVisibility(View.INVISIBLE);
-                    iv08.setVisibility(View.INVISIBLE);
-                    iv09.setVisibility(View.INVISIBLE);
-                    setBitmapImg();
-                }
-                if(mImageList.size() == 7){
-                    mImageList.remove(5);
-
-
-                    iv01.setVisibility(View.VISIBLE);
-                    iv02.setVisibility(View.VISIBLE);
-                    iv03.setVisibility(View.VISIBLE);
-                    iv04.setVisibility(View.VISIBLE);
-                    iv05.setVisibility(View.VISIBLE);
-                    iv06.setVisibility(View.VISIBLE);
-                    iv07.setVisibility(View.VISIBLE);
-                    iv07.setImageResource(R.mipmap.add_pic);
-                    iv08.setVisibility(View.INVISIBLE);
-                    iv09.setVisibility(View.INVISIBLE);
-                    setBitmapImg();
-                }
-                if(mImageList.size() == 8){
-                    mImageList.remove(5);
-                    ll_image_third.setVisibility(View.GONE);
-
-                    iv01.setVisibility(View.VISIBLE);
-                    iv02.setVisibility(View.VISIBLE);
-                    iv03.setVisibility(View.VISIBLE);
-                    iv04.setVisibility(View.VISIBLE);
-                    iv05.setVisibility(View.VISIBLE);
-                    iv06.setVisibility(View.VISIBLE);
-                    iv07.setVisibility(View.VISIBLE);
-                    iv08.setVisibility(View.VISIBLE);
-                    iv08.setImageResource(R.mipmap.add_pic);
-                    iv09.setVisibility(View.INVISIBLE);
-                    setBitmapImg();
-                }
-                if(mImageList.size() ==9){
-                    mImageList.remove(5);
-
-
-                    iv01.setVisibility(View.VISIBLE);
-                    iv02.setVisibility(View.VISIBLE);
-                    iv03.setVisibility(View.VISIBLE);
-                    iv04.setVisibility(View.VISIBLE);
-                    iv05.setVisibility(View.VISIBLE);
-                    iv06.setVisibility(View.VISIBLE);
-                    iv07.setVisibility(View.VISIBLE);
-                    iv08.setVisibility(View.VISIBLE);
-                    iv09.setVisibility(View.VISIBLE);
-                    iv09.setImageResource(R.mipmap.add_pic);
-                    setBitmapImg();
-                }
-            }
-            /**长按 第七张图*/
-            if(imgFlg == 7){
-                if(mImageList.size() == 1){
-//
-                }
-
-                if(mImageList.size() == 2){
-                    //
-                }
-
-                if(mImageList.size() == 3){
-
-                }
-
-                if(mImageList.size() == 4){
-                    //
-                }
-
-                if(mImageList.size() == 5){
-                    //
-                }
-                if(mImageList.size() == 6){
-                    //
-                }
-                if(mImageList.size() == 7){
-                    mImageList.remove(6);
-
-
-                    iv01.setVisibility(View.VISIBLE);
-                    iv02.setVisibility(View.VISIBLE);
-                    iv03.setVisibility(View.VISIBLE);
-                    iv04.setVisibility(View.VISIBLE);
-                    iv05.setVisibility(View.VISIBLE);
-                    iv06.setVisibility(View.VISIBLE);
-                    iv07.setVisibility(View.VISIBLE);
-                    iv07.setImageResource(R.mipmap.add_pic);
-                    iv08.setVisibility(View.INVISIBLE);
-                    iv09.setVisibility(View.INVISIBLE);
-                    setBitmapImg();
-                }
-                if(mImageList.size() == 8){
-                    mImageList.remove(6);
-                    ll_image_third.setVisibility(View.GONE);
-
-
-                    iv01.setVisibility(View.VISIBLE);
-                    iv02.setVisibility(View.VISIBLE);
-                    iv03.setVisibility(View.VISIBLE);
-                    iv04.setVisibility(View.VISIBLE);
-                    iv05.setVisibility(View.VISIBLE);
-                    iv06.setVisibility(View.VISIBLE);
-                    iv07.setVisibility(View.VISIBLE);
-                    iv08.setVisibility(View.VISIBLE);
-                    iv08.setImageResource(R.mipmap.add_pic);
-                    iv09.setVisibility(View.INVISIBLE);
-                    setBitmapImg();
-                }
-                if(mImageList.size() ==9){
-                    mImageList.remove(6);
-
-                    iv01.setVisibility(View.VISIBLE);
-                    iv02.setVisibility(View.VISIBLE);
-                    iv03.setVisibility(View.VISIBLE);
-                    iv04.setVisibility(View.VISIBLE);
-                    iv05.setVisibility(View.VISIBLE);
-                    iv06.setVisibility(View.VISIBLE);
-                    iv07.setVisibility(View.VISIBLE);
-                    iv08.setVisibility(View.VISIBLE);
-                    iv09.setVisibility(View.VISIBLE);
-                    iv09.setImageResource(R.mipmap.add_pic);
-                    setBitmapImg();
-                }
-            }
-            /**长按 第八张图*/
-            if(imgFlg == 8){
-                if(mImageList.size() == 1){
-//
-                }
-
-                if(mImageList.size() == 2){
-                    //
-                }
-
-                if(mImageList.size() == 3){
-
-                }
-
-                if(mImageList.size() == 4){
-                    //
-                }
-
-                if(mImageList.size() == 5){
-                    //
-                }
-                if(mImageList.size() == 6){
-                    //
-                }
-                if(mImageList.size() == 7){
-                    //
-                }
-                if(mImageList.size() == 8){
-                    mImageList.remove(7);
-                    ll_image_third.setVisibility(View.GONE);
-
-
-                    iv01.setVisibility(View.VISIBLE);
-                    iv02.setVisibility(View.VISIBLE);
-                    iv03.setVisibility(View.VISIBLE);
-                    iv04.setVisibility(View.VISIBLE);
-                    iv05.setVisibility(View.VISIBLE);
-                    iv06.setVisibility(View.VISIBLE);
-                    iv07.setVisibility(View.VISIBLE);
-                    iv08.setVisibility(View.VISIBLE);
-                    iv08.setImageResource(R.mipmap.add_pic);
-                    iv09.setVisibility(View.INVISIBLE);
-                    setBitmapImg();
-                }
-                if(mImageList.size() ==9){
-                    mImageList.remove(7);
-
-                    iv01.setVisibility(View.VISIBLE);
-                    iv02.setVisibility(View.VISIBLE);
-                    iv03.setVisibility(View.VISIBLE);
-                    iv04.setVisibility(View.VISIBLE);
-                    iv05.setVisibility(View.VISIBLE);
-                    iv06.setVisibility(View.VISIBLE);
-                    iv07.setVisibility(View.VISIBLE);
-                    iv08.setVisibility(View.VISIBLE);
-                    iv09.setVisibility(View.VISIBLE);
-                    iv09.setImageResource(R.mipmap.add_pic);
-                    setBitmapImg();
-                }
-            }
-            /**长按 第九张图*/
-            if(imgFlg == 9){
-                if(mImageList.size() == 1){
-//
-                }
-
-                if(mImageList.size() == 2){
-                    //
-                }
-
-                if(mImageList.size() == 3){
-
-                }
-
-                if(mImageList.size() == 4){
-                    //
-                }
-
-                if(mImageList.size() == 5){
-                    //
-                }
-                if(mImageList.size() == 6){
-                    //
-                }
-                if(mImageList.size() == 7){
-                    //
-                }
-                if(mImageList.size() == 8){
-                    //
-                }
-                if(mImageList.size() ==9){
-                    mImageList.remove(8);
-
-                    //  ll_image_third.setVisibility(View.GONE);
-                    iv01.setVisibility(View.VISIBLE);
-                    iv02.setVisibility(View.VISIBLE);
-                    iv03.setVisibility(View.VISIBLE);
-                    iv04.setVisibility(View.VISIBLE);
-                    iv05.setVisibility(View.VISIBLE);
-                    iv06.setVisibility(View.VISIBLE);
-                    iv07.setVisibility(View.VISIBLE);
-                    iv08.setVisibility(View.VISIBLE);
-                    iv09.setVisibility(View.VISIBLE);
-                    iv09.setImageResource(R.mipmap.add_pic);
-                    setBitmapImg();
-                }
-            }
-
-        }
-    }
 
     @Override
     public boolean setupToolBarLeftText(TextView mLeftText) {
@@ -2342,4 +1193,324 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
         mRightText.setTextColor(getResources().getColor(R.color.text_blue));
         return true;
     }
+
+
+    // ********* 以下为七牛sdk相关代码 *********
+
+    long start = 0;
+    private static Authorizer authorizer = new Authorizer();
+
+    private static Date buildTokenDate;
+    private static ScheduledExecutorService replenishTimer = Executors.newScheduledThreadPool(1, new UpApi.DaemonThreadFactory());
+    private static ReadWriteLock rw = new ReentrantReadWriteLock();
+    private void initBuildToken() {
+        replenishTimer.scheduleAtFixedRate(new Runnable() {
+            private long gap = 1000 * 60 * 40; // 40分钟
+            public void run() {
+                if (getBuildTokenDate() == null || (new Date().getTime() - getBuildTokenDate().getTime() > gap)) {
+                    buildToken();
+                }
+            }
+
+        }, 0, 10, TimeUnit.MINUTES);
+
+        authorizer.setUploadToken(QiNiuConfig.token);
+        buildTokenDate = new Date();
+    }
+
+    private Random r = new Random();
+    private void buildToken() {
+        try {
+            rw.writeLock().lock();
+            if (r.nextBoolean()) {// 模拟
+                throw new RuntimeException("  获取token失败。  ");
+            }
+            authorizer.setUploadToken(QiNiuConfig.token);
+            buildTokenDate = new Date();
+        } catch (Exception e) {
+
+        } finally {
+            rw.writeLock().unlock();
+        }
+    }
+
+    private Date getBuildTokenDate() {
+        try {
+            rw.readLock().lock();
+            return buildTokenDate;
+        } finally {
+            rw.readLock().unlock();
+        }
+    }
+
+    public Authorizer getAuthorizer() {
+        try {
+            rw.readLock().lock();
+            return authorizer;
+        } finally {
+            rw.readLock().unlock();
+        }
+    }
+
+    // *************************
+
+    private UploadHandler uploadHandler = new UploadHandler() {
+        @Override
+        protected void onProcess(long contentLength, long currentUploadLength, long lastUploadLength, UpParam p, Object passParam) {
+            long now = System.currentTimeMillis();
+            long time = (now - start) / 1000;
+            long v = currentUploadLength / 1000 / (time + 1);
+           /* String o = textViewCurrent.getText() == null ? "" : textViewCurrent.getText().toString();
+            String m = passParam + "  : " + p.getName();
+            String txt = o + "\n1" + m + "\n共: " + contentLength / 1024 + "KB, 历史已上传: " + lastUploadLength / 1024 + "KB, 本次已上传: "
+                    + currentUploadLength / 1024 + "KB, 耗时: " + time + "秒, 速度: " + v + "KB/s";
+            txt = txt.substring(Math.max(0, txt.length() - 1300));
+            textViewCurrent.setText(txt);
+            Log.d("handler", textViewCurrent.getText().toString());*/
+        }
+
+        @Override
+        protected void onSuccess(UploadResultCallRet ret, UpParam p, Object passParam) {
+
+            Toast.makeText(InvitationReleaseActivity.this, "上传成功!", Toast.LENGTH_LONG).show();
+          /*  String o = textViewCurrent.getText() == null ? "" : textViewCurrent.getText().toString();
+            // o;
+            textViewCurrent.setText("");
+            textViewCurrent.setText("\n" + ret.getStatusCode() + " " + ret.getResponse());
+            Log.d("handler", textViewCurrent.getText().toString());*/
+
+            Log.d("tag", "\n" + ret.getStatusCode() + " " + ret.getResponse());
+            try {
+                String sourceId = generateSourceId(p, passParam);
+                clean(sourceId);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        @Override
+        protected void onFailure(UploadResultCallRet ret, UpParam p, Object passParam) {
+           /* String o = textViewCurrent.getText() == null ? "" : textViewCurrent.getText().toString();
+            textViewCurrent.setText(o + "\n" + ret.getStatusCode() + " " + ret.getResponse() + ", X-Reqid: " + ret.getReqId()
+                    + (ret.getException() == null ? "" : " e:" + ret.getException() + " -- " + ret.getException().getMessage()));
+            Log.d("handler", textViewCurrent.getText().toString());*/
+            if (ret.getException() != null) {
+                ret.getException().printStackTrace();
+            }
+        }
+
+        @Override
+        protected void onBlockSuccess(List<Block> uploadedBlocks, Block block, UpParam p, Object passParam) {
+            try {
+                String sourceId = generateSourceId(p, passParam);
+                addBlock(sourceId, block);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+    };
+
+    private List<Upload> ups = new LinkedList<Upload>();
+
+    private void preUpload(Uri uri) {
+        // 此参数会传递到回调
+        String passObject = "test: " + uri.getEncodedPath() + "passObject";
+
+        String qiniuKey = UUID.randomUUID().toString();
+        PutExtra extra = null;
+
+        Upload up = UpApi.build(getAuthorizer(), qiniuKey, uri, this, extra, passObject, uploadHandler);
+        addUp(up);
+    }
+
+    private synchronized void addUp(Upload up) {
+        if (!contains(up)) {
+            ups.add(up);
+            showUps();
+        }
+    }
+
+    private synchronized boolean contains(Upload up) {
+        for (Upload u : ups) {
+            if (up.getPassParam() != null && up.getPassParam().equals(u.getPassParam())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private List<UpApi.Executor> executors = new ArrayList<UpApi.Executor>();
+
+    private synchronized void doUpload() {
+        System.out.println("doup: 启动上传任务");
+        for (Upload up : ups) {
+            if (UpApi.isSliceUpload(up)) {
+                String sourceId = generateSourceId(up.getUpParam(), up.getPassParam());
+                List<Block> bls = null;
+                try {
+                    bls = load(sourceId);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                // 设置以前上传的断点记录。 直传会忽略此参数
+                up.setLastUploadBlocks(bls);
+            }
+            // UpApi.execute(up, bls);
+            UpApi.Executor executor =  UpApi.execute(up);
+            executors.add(executor);
+        }
+        System.out.println("doup: 启动上传任务完毕");
+        start = System.currentTimeMillis();
+    }
+
+    // 取消上传 **************************
+    private void cancel() {
+        try {
+            for (UpApi.Executor executor : executors) {
+                executor.cancel();
+            }
+            showUps();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        cancel0();
+    }
+
+    // 上传成功、失败、取消后等，也应将对应的UpLoad、Executor 取消，避免一直被引用，不能回收
+    private synchronized void cancel0() {
+        try {
+            for (int l = ups.size(); l > 0; l--) {
+                ups.remove(ups.get(0));
+            }
+            showUps();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void showUps() {
+        StringBuilder sb = new StringBuilder();
+        for (Upload up : ups) {
+            sb.append(up.getUpParam().getName()).append(", ");
+        }
+      //  title.setText(sb);
+    }
+
+    // 断点记录 记录到文件示例 ******************************
+    public static String RESUME_DIR;
+    private File getDir() throws IOException {
+        String dir = RESUME_DIR;
+        String qinuDir = ".qiniu_up";
+        if (dir == null) {
+            // dir = System.getProperties().getProperty("user.home");
+            File exdir = Environment.getExternalStorageDirectory();
+            dir = exdir.getCanonicalPath();
+            return new File(exdir, qinuDir);
+        } else {
+            return new File(dir, qinuDir);
+        }
+    }
+
+    private File initFile(File dir, String sourceId) throws IOException {
+        dir.mkdirs();
+        File file = new File(dir, sourceId);
+        if (!file.exists()) {
+            file.createNewFile();
+        }
+        return file;
+    }
+
+    private String generateSourceId(UpParam p, Object passParam) {
+        String s = p.getName() + "-" + p.getSize() + "-" + passParam;
+        String ss = Util.urlsafeBase64(s);
+        return ss;
+    }
+
+    private List<Block> load(String sourceId) throws IOException {
+        File file = new File(getDir(), sourceId);
+        if (!file.exists()) {
+            return null;
+        }
+        List<Block> bls = null;
+        FileReader freader = null;
+        BufferedReader reader = null;
+        try {
+            bls = new ArrayList<Block>();
+            freader = new FileReader(file);
+            reader = new BufferedReader(freader);
+            String line = null;
+            while ((line = reader.readLine()) != null) {
+                Block b = analyLine(line);
+                if (b != null) {
+                    bls.add(b);
+                }
+            }
+            Collections.reverse(bls);
+        } finally {
+            if (reader != null) {
+                try {
+                    reader.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (freader != null) {
+                try {
+                    freader.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return bls;
+    }
+
+    private void addBlock(String sourceId, Block block) throws IOException {
+        File file = initFile(getDir(), sourceId);
+        String l = sync(block);
+        BufferedWriter writer = null;
+        try {
+            writer = new BufferedWriter(new FileWriter(file, true));
+            writer.newLine();
+            writer.write(l);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (writer != null) {
+                try {
+                    writer.close();
+                } catch (Exception e) {
+                }
+            }
+        }
+    }
+
+    private void clean(String sourceId) throws IOException {
+        File file = new File(getDir(), sourceId);
+        file.delete();
+    }
+
+    private Block analyLine(String line) {
+        String[] s = line.split(",");
+        if (s.length >= 4) {
+            int idx = Integer.parseInt(s[0]);
+            String ctx = s[1];
+            long length = Long.parseLong(s[2]);
+            String host = s[3];
+            Block block = new Block(idx, ctx, length, host);
+            return block;
+        } else {
+            return null;
+        }
+    }
+
+    private String sync(Block b) {
+        return b.getIdx() + "," + b.getCtx() + "," + b.getLength() + "," + b.getHost();
+    }
+
+
+
+
+
 }

@@ -173,6 +173,8 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
     RelativeLayout  rl_detail_user;
     @InjectView(R.id. title_image_2)
     RoundImageView  title_image_2;
+    @InjectView(R.id. tv_title2_name)
+    TextView  tv_title2_name;
     @InjectView(R.id.lv_invitation_detail_image)
     ListViewForScrollView lv_invitation_detail_image;
     @InjectView(R.id.main_pull_refresh_view)
@@ -240,7 +242,7 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
 
 
     private int count = 0;//点击计数器
-    private TextView tv_title2_name;
+    private int count_daoxu = 0;//倒叙计数器
     private ArrayList<String> imageUrl;
   //  private ListViewForScrollView lv_invitation_detail_image;
 
@@ -270,6 +272,7 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
 
     private void initView() {
         count = 0;
+        count_daoxu=0;
       /*  title_image = (ImageView) headview.findViewById(R.id.title_image);//用户头像
         iv_levlel = (ImageView) headview.findViewById(R.id.iv_levlel);//等级
         ll_image_first = (LinearLayout) headview.findViewById(R.id.ll_image_first);
@@ -497,6 +500,7 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
             listPostReply2 = idao.getListPostReply2();
             mInvitationCommentDetailAdapter.setList(listPostReply2);
             //  lv_reply_detail.setAdapter(replyAdapter);
+            count_daoxu++;
 
         }
         if (requestCode == 14) {
@@ -539,27 +543,31 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
             if (user != null) {
                 Arad.imageLoader.load(user.getImgUrl()).placeholder(R.mipmap.round_img).into(title_image);
                 Arad.imageLoader.load(user.getImgUrl()).placeholder(R.mipmap.round_img).into(title_image_2);
-                if (user.getNickName() == null) {
-                    tv_name.setText(user.getUserName());
-                } else {
+                if(user.getNickName()!=null&&!user.getNickName().equals("")){
                     tv_name.setText(user.getNickName());
+                }else {
+                    String mobile = user.getUserName();
+                    String result = mobile.substring(0,3)+"****"+mobile.substring(7,mobile.length());
+                    tv_name.setText(result);
+                }
+                if(post.getVcardDisplay().equals("0")){
+                    rl_detail_user.setVisibility(View.GONE);
+                }
+                if(post.getVcardDisplay().equals("1")){
+                    rl_detail_user.setVisibility(View.VISIBLE);
+                    if(user.getNickName()!=null&&!user.getNickName().equals("")){
+                        tv_title2_name.setText(user.getNickName());
+                    }else {
+                        String mobile = user.getUserName();
+                        String result = mobile.substring(0,3)+"****"+mobile.substring(7,mobile.length());
+                        tv_title2_name.setText(result);
+                    }
                 }
             }
             tv_address.setText(post.getContactAddress());
 
             tv_introduction.setText(post.getTitle());
-            if(post.getVcardDisplay().equals("0")){
-                rl_detail_user.setVisibility(View.GONE);
-            }
-            if(post.getVcardDisplay().equals("1")){
-                rl_detail_user.setVisibility(View.VISIBLE);
-                if(user.getNickName()==null){
-                    tv_title2_name.setText(user.getUserName());
 
-                }else {
-                    tv_title2_name.setText(user.getNickName());
-                }
-            }
 
             if(post.getReporterId().equals(Arad.preferences.getString("memberId"))){
                 tv_delete.setVisibility(View.VISIBLE);
@@ -799,7 +807,15 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
                 if (listPostReply2 != null) {
                     listPostReply2.clear();
                 }
-                idao.requesPostReplyList(getIntent().getStringExtra("id"), "0", String.valueOf(PAGE_NUM), String.valueOf(Constant.PAGE_SIZE));
+                if ((count_daoxu-1) % 2 == 0) {//奇数次点击
+                    idao.requesPostReplyList(getIntent().getStringExtra("id"), "0", String.valueOf(PAGE_NUM), String.valueOf(Constant.PAGE_SIZE));
+
+                }
+                if ((count_daoxu-1) % 2 == 1) {//偶数次点击
+                    idao.requesPostReplyList(getIntent().getStringExtra("id"), "1", String.valueOf(PAGE_NUM), String.valueOf(Constant.PAGE_SIZE));
+                }
+
+              //  idao.requesPostReplyList(getIntent().getStringExtra("id"), "0", String.valueOf(PAGE_NUM), String.valueOf(Constant.PAGE_SIZE));
                 break;
             case R.id.tv_pinbizuozhe://屏蔽作者
                 if(Arad.preferences.getString("memberId")==null||Arad.preferences.getString("memberId").equals("")){

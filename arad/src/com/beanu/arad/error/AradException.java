@@ -137,6 +137,18 @@ public class AradException extends Exception {
 				else if(error_code.equals("028")){
 					result = "已经点过赞了";
 				}
+				else if(error_code.equals("029")){
+					result = "该订单已支付，请勿重复操作！";
+				}
+				else if(error_code.equals("030")){
+					result = "已经取消收藏了,无需重复取消！";
+				}
+				else if(error_code.equals("031")){
+					result = "已经收藏了,无需重复收藏！";
+				}
+				else if(error_code.equals("032")){
+					result = "管理员不能被加入黑名单！";
+				}
                 else {
                     result = Arad.app.getString(R.string.unknown_error_code) + error_code;
                 }

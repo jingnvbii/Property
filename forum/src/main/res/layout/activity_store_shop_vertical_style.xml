@@ -54,6 +54,12 @@
    </RelativeLayout>
 
     <LinearLayout
+        android:id="@+id/ll_title"
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_height="wrap_content">
+
+    <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -133,9 +139,11 @@
             android:layout_toRightOf="@+id/iv_style_img"
             />
     </RelativeLayout>
+    </LinearLayout>
     <LinearLayout
+        android:id="@+id/ll_lv"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="match_parent"
         android:layout_weight="1"
         android:orientation="horizontal" >
 
@@ -143,7 +151,7 @@
         <ListView
             android:id="@+id/lv_business_shop_food_orderfoods_foodTypes"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="3"
             android:cacheColorHint="#00000000"
             android:divider="@color/line_gray"
@@ -155,8 +163,8 @@
 
         <com.ctrl.forum.customview.PinnedHeaderListView
             android:id="@+id/lv_business_shop_food_orderfoods_foods"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:cacheColorHint="#00000000"
             android:divider="@null"

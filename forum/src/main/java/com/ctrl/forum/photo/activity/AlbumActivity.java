@@ -102,9 +102,10 @@ public class AlbumActivity extends Activity {
 	private class AlbumSendListener implements OnClickListener {
 		public void onClick(View v) {
 			//overridePendingTransition(R.anim.activity_translate_in, R.anim.activity_translate_out);
-			intent.setClass(mContext, InvitationReleaseActivity.class);
+		/*	intent.setClass(mContext, InvitationReleaseActivity.class);
 			startActivity(intent);
-			AnimUtil.intentSlidOut(AlbumActivity.this);
+			AnimUtil.intentSlidOut(AlbumActivity.this);*/
+			onBackPressed();
 		}
 
 	}
@@ -112,8 +113,9 @@ public class AlbumActivity extends Activity {
 	// 返回按钮监听
 	private class BackListener implements OnClickListener {
 		public void onClick(View v) {
-			intent.setClass(AlbumActivity.this, ImageFile.class);
-			startActivity(intent);
+		/*	intent.setClass(AlbumActivity.this, ImageFile.class);
+			startActivity(intent);*/
+			onBackPressed();
 		}
 	}
 
@@ -225,8 +227,9 @@ public class AlbumActivity extends Activity {
 
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
-			intent.setClass(AlbumActivity.this,InvitationReleaseActivity .class);
-			startActivity(intent);
+			/*intent.setClass(AlbumActivity.this,InvitationReleaseActivity .class);
+			startActivity(intent);*/
+			onBackPressed();
 		}
 		return false;
 

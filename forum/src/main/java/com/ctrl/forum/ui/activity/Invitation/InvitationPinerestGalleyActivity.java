@@ -25,10 +25,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.beanu.arad.Arad;
+import com.beanu.arad.base.ToolBarActivity;
 import com.beanu.arad.utils.AndroidUtil;
 import com.beanu.arad.utils.AnimUtil;
 import com.ctrl.forum.R;
-import com.ctrl.forum.base.AppToolBarActivity;
 import com.ctrl.forum.customview.ShareDialog;
 import com.ctrl.forum.dao.InvitationDao;
 import com.ctrl.forum.entity.MemberInfo;
@@ -69,7 +69,7 @@ import cn.sharesdk.wechat.moments.WechatMoments;
  * @version 2014年10月18日  下午11:47:53
  * @QQ:595163260
  */
-public class InvitationPinerestGalleyActivity extends AppToolBarActivity implements View.OnClickListener ,PlatformActionListener{
+public class InvitationPinerestGalleyActivity extends ToolBarActivity implements View.OnClickListener ,PlatformActionListener{
     @InjectView(R.id.tv_image_remark)//照片备注
     TextView tv_image_remark;
     @InjectView(R.id.tv_image_tel)//电话连接

@@ -1,7 +1,9 @@
 package com.ctrl.forum.ui.activity.Invitation;
 
 import android.content.Intent;
+import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.ColorDrawable;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -32,10 +34,11 @@ import com.ctrl.forum.entity.MemberInfo;
 import com.ctrl.forum.entity.Post2;
 import com.ctrl.forum.entity.PostImage;
 import com.ctrl.forum.entity.PostReply2;
+import com.ctrl.forum.manager.MediaManager;
 import com.ctrl.forum.ui.activity.LoginActivity;
 import com.ctrl.forum.ui.activity.mine.MineDetailActivity;
 import com.ctrl.forum.ui.adapter.FriendDetailImageAdapter;
-import com.ctrl.forum.ui.adapter.FriendDetailReplyAdapter;
+import com.ctrl.forum.ui.adapter.InvitationDetailReply2Adapter;
 import com.ctrl.forum.utils.TimeUtils;
 
 import java.util.ArrayList;
@@ -95,7 +98,7 @@ public class InvitationDetailActivity extends AppToolBarActivity implements View
     private MemberInfo user;
     private List<PostImage> listPostImage;
     private FriendDetailImageAdapter mFriendDetailImageAdapter;
-    private FriendDetailReplyAdapter mFriendDetailReplyAdapter;
+    private InvitationDetailReply2Adapter mFriendDetailReplyAdapter;
     private List<PostReply2> listPostReply2;
     private int PAGE_NUM=1;
     private int count=0;
@@ -105,6 +108,7 @@ public class InvitationDetailActivity extends AppToolBarActivity implements View
     private int pariseNum;
 
     final ArrayList<String>imageUrl=new ArrayList<>();
+    private View viewanim;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -137,7 +141,8 @@ public class InvitationDetailActivity extends AppToolBarActivity implements View
         idao.requesPostDetail(getIntent().getStringExtra("id"), Arad.preferences.getString("memberId"));
         idao.requesPostReplyList(getIntent().getStringExtra("id"), "1", "", "");
         mFriendDetailImageAdapter=new FriendDetailImageAdapter(this);
-        mFriendDetailReplyAdapter=new FriendDetailReplyAdapter(this);
+       // mFriendDetailReplyAdapter=new FriendDetailReplyAdapter(this);
+        mFriendDetailReplyAdapter=new InvitationDetailReply2Adapter(this);
         lv_detail_image.setAdapter(mFriendDetailImageAdapter);
         lv_detail_reply.setAdapter(mFriendDetailReplyAdapter);
         lv_detail_reply.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -248,10 +253,12 @@ public class InvitationDetailActivity extends AppToolBarActivity implements View
                 }
             }
             Arad.imageLoader.load(user.getImgUrl()).placeholder(R.mipmap.default_error).into(title_image);
-            if(user.getNickName()==null) {
-                tv_name.setText(user.getUserName());
-            }else {
+            if(user.getNickName()!=null){
                 tv_name.setText(user.getNickName());
+            }else {
+                String mobile = user.getUserName();
+                String result = mobile.substring(0,3)+"****"+mobile.substring(7,mobile.length());
+                tv_name.setText(result);
             }
 
             if(post.getZambiastate().equals("0")){
@@ -591,4 +598,51 @@ public class InvitationDetailActivity extends AppToolBarActivity implements View
         // 设置好参数之后再show
         popupWindow.showAtLocation(rl_friend_style_more, Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
     }
+
+
+    /*
+* 播放语音
+* */
+    public void playSound(View view,String soundUrl) {
+        // TODO Auto-generated method stub
+
+        // 播放动画
+        if (viewanim!=null) {//让第二个播放的时候第一个停止播放
+            viewanim.setBackgroundResource(R.drawable.voice_default);
+            viewanim=null;
+        }
+        viewanim = view.findViewById(R.id.id_recorder_anim);
+        viewanim.setBackgroundResource(R.drawable.play);
+        AnimationDrawable drawable = (AnimationDrawable) viewanim
+                .getBackground();
+        drawable.start();
+
+        // 播放音频
+        MediaManager.playSoundFromUrl(InvitationDetailActivity.this, soundUrl,
+                new MediaPlayer.OnCompletionListener() {
+
+                    @Override
+                    public void onCompletion(MediaPlayer mp) {
+                        viewanim.setBackgroundResource(R.drawable.voice_default);
+
+                    }
+                });
+
+    }
+
+
+    @Override
+    protected void onPause() {
+        // TODO Auto-generated method stub
+        super.onPause();
+        MediaManager.pause();
+    }
+
+    @Override
+    protected void onResume() {
+        // TODO Auto-generated method stub
+        super.onResume();
+        MediaManager.resume();
+    }
+
 }

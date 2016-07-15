@@ -12,6 +12,15 @@ public class ShopReply {
     private String kfReplay;//客服回复
     private String reportName;//回复用户昵称
     private String count;//当前列表总数
+    private String replyTime;//客服回复时间
+
+    public String getReplyTime() {
+        return replyTime;
+    }
+
+    public void setReplyTime(String replyTime) {
+        this.replyTime = replyTime;
+    }
 
     public String getCount() {
         return count;

@@ -63,7 +63,7 @@ public class FriendDetailReplyAdapter extends BaseAdapter{
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder=null;
         if(convertView==null){
-            convertView= LayoutInflater.from(mcontext).inflate(R.layout.item_friend_detail_reply,parent,false);
+            convertView= LayoutInflater.from(mcontext).inflate(R.layout.item_invitation_detail,parent,false);
             holder=new ViewHolder(convertView);
             convertView.setTag(holder);
         }else {
@@ -72,7 +72,7 @@ public class FriendDetailReplyAdapter extends BaseAdapter{
         final PostReply2 merchant=list.get(position);
         holder.tv_reply_name.setText(merchant.getMemberName());
         holder.tv_comment_detail_floor.setText(merchant.getMemberFloor()+"楼");
-        holder.tv_reply_time.setText(TimeUtils.date(Long.parseLong(merchant.getCreateTime())));
+        holder.tv_reply_time.setText(TimeUtils.timeFormat(Long.parseLong(merchant.getCreateTime()), "yyyy-MM-dd"));
         if(merchant.getContentType().equals("0")) {
             holder.tv_reply_content.setVisibility(View.VISIBLE);
             holder.rl_reply_voice.setVisibility(View.GONE);

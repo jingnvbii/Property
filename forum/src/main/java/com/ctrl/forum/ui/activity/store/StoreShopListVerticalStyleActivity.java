@@ -18,11 +18,14 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.RatingBar;
@@ -60,7 +63,7 @@ import butterknife.InjectView;
 * 商城店铺垂直样式 activity
 * */
 
-public class StoreShopListVerticalStyleActivity extends AppToolBarActivity implements View.OnClickListener {
+public class StoreShopListVerticalStyleActivity extends AppToolBarActivity implements View.OnClickListener ,Animation.AnimationListener{
 
     /**
      * 购物车布局
@@ -87,6 +90,10 @@ public class StoreShopListVerticalStyleActivity extends AppToolBarActivity imple
     ImageView iv_store_information_close;
     @InjectView(R.id.rl_store_information)//公告布局
     RelativeLayout rl_store_information;
+    @InjectView(R.id.ll_title)//店铺介绍布局
+            LinearLayout ll_title;
+    @InjectView(R.id.ll_lv)//店铺介绍布局
+            LinearLayout ll_lv;
 
     @InjectView(R.id.et_vertical_style_search)//搜索栏
     EditText et_vertical_style_search;
@@ -170,7 +177,64 @@ public class StoreShopListVerticalStyleActivity extends AppToolBarActivity imple
         mContext = this;
         initView();
         initFoodData();
+        // showHideTitleBar(true);
     }
+
+    private boolean mIsTitleHide = false;
+    private boolean mIsAnim = false;
+    private float lastX = 0;
+    private float lastY = 0;
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent event)
+    {
+        super.dispatchTouchEvent(event);
+        if (mIsAnim) {
+            return false;
+        }
+        final int action = event.getAction();
+
+        float x = event.getX();
+        float y = event.getY();
+
+        switch (action) {
+            case MotionEvent.ACTION_DOWN:
+                lastY = y;
+                lastX = x;
+                return false;
+            case MotionEvent.ACTION_MOVE:
+                float dY = Math.abs(y - lastY);
+                float dX = Math.abs(x - lastX);
+                boolean down = y > lastY ? true : false;
+                lastY = y;
+                lastX = x;
+                if (dX < 8 && dY > 8 && !mIsTitleHide && !down) {
+                    Animation anim = AnimationUtils.loadAnimation(
+                            StoreShopListVerticalStyleActivity.this, R.anim.push_top_in);
+//              anim.setFillAfter(true);  
+                    anim.setAnimationListener(StoreShopListVerticalStyleActivity.this);
+                    ll_title.startAnimation(anim);
+                } else if (dX < 8 && dY > 8 && mIsTitleHide && down) {
+                    Animation anim = AnimationUtils.loadAnimation(
+                            StoreShopListVerticalStyleActivity.this, R.anim.push_top_out);
+//              anim.setFillAfter(true);  
+                    anim.setAnimationListener(StoreShopListVerticalStyleActivity.this);
+                    ll_title.startAnimation(anim);
+                } else {
+                    return false;
+                }
+                mIsTitleHide = !mIsTitleHide;
+                mIsAnim = true;
+                break;
+            default:
+                return false;
+        }
+        return false;
+    }
+
+
+
+
+    private boolean isFirstPull;
 
     private void initView() {
         tv_vertical_style_search.setOnClickListener(this);
@@ -183,6 +247,7 @@ public class StoreShopListVerticalStyleActivity extends AppToolBarActivity imple
         m_list_car_vertical_style.setOnClickListener(this);
         m_list_submit_vertical_style.setOnClickListener(this);
         iv_store_information_close.setOnClickListener(this);
+
 /*
         Arad.imageLoader.load(getIntent().getStringExtra("url")).placeholder(R.mipmap.default_error).into(iv_style_img);
         tv_shop_name.setText(getIntent().getStringExtra("name"));
@@ -203,6 +268,7 @@ public class StoreShopListVerticalStyleActivity extends AppToolBarActivity imple
         });
 
     }
+
 
     private String getCategroyName(String id) {
         String name=null;
@@ -339,6 +405,7 @@ public class StoreShopListVerticalStyleActivity extends AppToolBarActivity imple
                     foodTpyePositionList);
             lv_Content.setAdapter(foodAdapter);
             lv_Content.setOnScrollListener(foodAdapter);
+
             lv_Content.setPinnedHeaderView(LayoutInflater.from(this).inflate(
                     R.layout.listview_head, lv_Content, false));
 
@@ -707,8 +774,46 @@ public class StoreShopListVerticalStyleActivity extends AppToolBarActivity imple
         return true;
     }
 
+    @Override
+    public void onAnimationStart(Animation animation) {
+        ll_title.setVisibility(View.VISIBLE);
+        if (mIsTitleHide) {
+           LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) ll_lv
+                    .getLayoutParams();
+            lp.setMargins(0, 0, 0, 0);
+            ll_lv.setLayoutParams(lp);
 
-      /**
+        } else {
+            LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) ll_title
+                    .getLayoutParams();
+            lp.setMargins(0, 0, 0, 0);
+            ll_title.setLayoutParams(lp);
+            LinearLayout.LayoutParams lp1 = (LinearLayout.LayoutParams) ll_lv
+                    .getLayoutParams();
+            lp1.setMargins(0,
+                   0,
+                    0, 0);
+            ll_lv.setLayoutParams(lp1);
+        }
+    }
+
+    @Override
+    public void onAnimationEnd(Animation animation) {
+        if (mIsTitleHide) {
+            ll_title.setVisibility(View.GONE);
+        } else {
+
+        }
+        mIsAnim = false;
+    }
+
+    @Override
+    public void onAnimationRepeat(Animation animation) {
+
+    }
+
+
+    /**
      * 动画结束后，更新所有数量和所有价格
      */
     class onEndAnim implements GoodsAnimUtil.OnEndAnimListener {

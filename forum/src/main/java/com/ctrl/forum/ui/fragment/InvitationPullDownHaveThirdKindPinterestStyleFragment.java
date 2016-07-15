@@ -78,14 +78,18 @@ public class InvitationPullDownHaveThirdKindPinterestStyleFragment extends ToolB
     private boolean isFirst=true;
     private List<Banner> listBanner;
     private String keyword;
+    private String showAll;
+    private String firstId;
 
 
-    public static InvitationPullDownHaveThirdKindPinterestStyleFragment newInstance(Context context,String id,String thirdKindId,String keyword) {
+    public static InvitationPullDownHaveThirdKindPinterestStyleFragment newInstance(Context context,String id,String thirdKindId,String keyword,String showAll,String firstId) {
         InvitationPullDownHaveThirdKindPinterestStyleFragment fragment = new InvitationPullDownHaveThirdKindPinterestStyleFragment();
         fragment.id = id;
         mContext=context;
         fragment.thirdKindId = thirdKindId;
         fragment.keyword = keyword;
+        fragment.showAll = showAll;
+        fragment.firstId = firstId;
         return fragment;
     }
 
@@ -117,15 +121,18 @@ public class InvitationPullDownHaveThirdKindPinterestStyleFragment extends ToolB
                 if(listPost!=null){
                     listPost.clear();
                 }
+                idao.requestPostRotaingBanner("B_POST_MIDDLE");
                 idao.requesPostCategory(id, "2", "0");
                 idao.requestPostListByCategory(Arad.preferences.getString("memberId"), thirdKindId, "0", keyword,"", PAGE_NUM, Constant.PAGE_SIZE);
-            }else if(thirdKindId==null) {
-
-                idao.requesPostCategory(id, "2", "0");
-                idao.requestPostListByCategory(Arad.preferences.getString("memberId"), id, "0", "","", PAGE_NUM, Constant.PAGE_SIZE);
             }else if(thirdKindId!=null) {
                 idao.requesPostCategory(id, "2", "0");
                 idao.requestPostListByCategory(Arad.preferences.getString("memberId"), thirdKindId, "0", "","", PAGE_NUM, Constant.PAGE_SIZE);
+            }else if(showAll.equals("1")) {
+                idao.requestPostRotaingBanner("B_POST_MIDDLE");
+                idao.requestPostListByCategory(Arad.preferences.getString("memberId"),firstId, "0", "","", PAGE_NUM, Constant.PAGE_SIZE);
+            }else if(thirdKindId==null){
+                idao.requesPostCategory(id, "2", "0");
+                idao.requestPostListByCategory(Arad.preferences.getString("memberId"), id, "0", "","", PAGE_NUM, Constant.PAGE_SIZE);
             }else {
                 //
             }
@@ -265,7 +272,7 @@ public class InvitationPullDownHaveThirdKindPinterestStyleFragment extends ToolB
     private void setLoopView() {
 
         // 1.创建轮播的holder
-            mAutoSwitchPicHolder = new HomeAutoSwitchPicHolder(getActivity());
+         mAutoSwitchPicHolder = new HomeAutoSwitchPicHolder(getActivity());
         // 2.得到轮播图的视图view
         View autoPlayPicView = mAutoSwitchPicHolder.getRootView();
         // 把轮播图的视图添加到主界面中
@@ -342,13 +349,16 @@ public class InvitationPullDownHaveThirdKindPinterestStyleFragment extends ToolB
                 if(listPost!=null){
                     listPost.clear();
                 }
+
                 if(thirdKindId!=null){
-                    idao.requestPostListByCategory(Arad.preferences.getString("memberId"),thirdKindId, "0", "", "",PAGE_NUM, Constant.PAGE_SIZE);
+                    idao.requestPostListByCategory(Arad.preferences.getString("memberId"), thirdKindId, "0", "", "", PAGE_NUM, Constant.PAGE_SIZE);
                 }
-                else if (listCategroy3 != null) {
+                if (listCategroy3 != null) {
                     idao.requestPostListByCategory(Arad.preferences.getString("memberId"),listCategroy3.get(Position).getId(), "0", "", "",PAGE_NUM, Constant.PAGE_SIZE);
+                }else if(showAll.equals("1")){
+                    idao.requestPostListByCategory(Arad.preferences.getString("memberId"),firstId, "0", keyword, "",PAGE_NUM, Constant.PAGE_SIZE);
                 }else {
-                    idao.requestPostListByCategory(Arad.preferences.getString("memberId"), id, "0", "", "", PAGE_NUM, Constant.PAGE_SIZE);
+                    idao.requestPostListByCategory(Arad.preferences.getString("memberId"), id, "0", keyword, "", PAGE_NUM, Constant.PAGE_SIZE);
                 }
             }
         }, 500);
@@ -367,8 +377,10 @@ public class InvitationPullDownHaveThirdKindPinterestStyleFragment extends ToolB
                 }
                 if (listCategroy3 != null) {
                     idao.requestPostListByCategory(Arad.preferences.getString("memberId"),listCategroy3.get(Position).getId(), "0", "", "",PAGE_NUM, Constant.PAGE_SIZE);
+                }else if(showAll.equals("1")){
+                    idao.requestPostListByCategory(Arad.preferences.getString("memberId"),firstId, "0", keyword, "",PAGE_NUM, Constant.PAGE_SIZE);
                 }else {
-                    idao.requestPostListByCategory(Arad.preferences.getString("memberId"), id, "0", "", "", PAGE_NUM, Constant.PAGE_SIZE);
+                    idao.requestPostListByCategory(Arad.preferences.getString("memberId"), id, "0", keyword, "", PAGE_NUM, Constant.PAGE_SIZE);
                 }
             }
         }, 500);

@@ -456,7 +456,6 @@ public class StroeFragment extends ToolBarFragment implements View.OnClickListen
         if (requestCode == 1) {
             //   MessageUtils.showShortToast(getActivity(), "获取推荐商家列表成功");
             listMall = mdao.getListMall();
-            // Log.i("tag", "listPost---" + listPost.size());
             listviewAdapter.setList(listMall);
             showProgress(false);
         }
