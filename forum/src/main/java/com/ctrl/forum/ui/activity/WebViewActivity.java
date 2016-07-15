@@ -1,6 +1,5 @@
 package com.ctrl.forum.ui.activity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.webkit.WebView;
@@ -17,7 +16,6 @@ import com.ctrl.forum.entity.ItemValues;
 public class WebViewActivity extends AppToolBarActivity {
 
     private WebView webView;
-    private Intent intent;
     private String data;
     private String title;
     private String itemKey;
@@ -29,8 +27,7 @@ public class WebViewActivity extends AppToolBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_web_view);
         webView = (WebView) findViewById(R.id.webView);
-        intent = getIntent();
-        title = intent.getStringExtra("title");
+        title = getIntent().getStringExtra("title");
         getData();
     }
 

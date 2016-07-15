@@ -304,14 +304,6 @@ public class PlotAddInvitationActivity extends AppToolBarActivity implements Vie
     @Override
     public void onRequestSuccess(int requestCode) {
         super.onRequestSuccess(requestCode);
-        if (requestCode == 66) {
-            itemValues = kdao.getItemValues();
-            Intent intent = new Intent(this,WebViewActivity.class);
-            intent.putExtra("data",itemValues.getItemValue());
-            intent.putExtra("title","投稿协议");
-            startActivity(intent);
-        }
-
         if (requestCode == 3){
             Post2 post2 = idao.getPost2(); //帖子内容
             name = post2.getContactName();
@@ -841,7 +833,9 @@ public class PlotAddInvitationActivity extends AppToolBarActivity implements Vie
                 //setBitmapImg();
                 break;
             case R.id.tougao:
-                kdao.ueryDictionary("POST_PROTOCOL"); //投稿协议
+                Intent intent1 = new Intent(this,WebViewActivity.class);
+                intent1.putExtra("title","投稿协议");
+                startActivity(intent1);
                 break;
             case R.id.ll_all:
                 InputMethodManager imm=(InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
