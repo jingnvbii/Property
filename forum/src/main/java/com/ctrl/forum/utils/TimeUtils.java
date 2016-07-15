@@ -66,6 +66,37 @@ public class TimeUtils {
 
     }
 
+    public static String dateTime1(String ctime){
+        Long time=Long.parseLong(ctime);
+        if (time < 1000000000000L) {
+            // if timestamp given in seconds, convert to millis
+            time *= 1000;
+        }
+
+        long now = System.currentTimeMillis();
+        if (time > now || time <= 0) {
+            return null;
+        }
+
+        final long diff = now - time;
+        if (diff < MINUTE) {
+            return "刚刚";
+        } else if (diff < 2 * MINUTE) {
+            return "1分钟前";
+        } else if (diff < 50 * MINUTE) {
+            return diff / MINUTE + " 分钟前";
+        } else if (diff < 90 * MINUTE) {
+            return "1小时前";
+        } else if (diff < 24 * HOUR) {
+            return diff / HOUR + " 小时前";
+        } else if (diff < 48 * HOUR) {
+            return "昨天";
+        } else {
+            return timeFormat(time,"MM月dd日");
+        }
+
+    }
+
     /*
     * 毫秒转日期
     * */

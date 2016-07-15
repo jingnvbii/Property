@@ -229,7 +229,6 @@ public class MineEditActivity extends AppToolBarActivity implements View.OnClick
                 break;
             case R.id.tv_tuichu://退出登陆
                 Arad.preferences.clear();
-                Arad.preferences.flush();
                 DataCleanUtils.clearAllCache(this.getApplicationContext());
                 Arad.preferences.putBoolean("isFirstIn",false);
                 Arad.preferences.flush();

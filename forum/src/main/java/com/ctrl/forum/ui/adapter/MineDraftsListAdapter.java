@@ -150,7 +150,6 @@ public class MineDraftsListAdapter extends BaseAdapter{
             default:
                 break;
         }
-
         return convertView;
     }
 

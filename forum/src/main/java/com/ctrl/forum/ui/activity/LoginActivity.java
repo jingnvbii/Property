@@ -84,6 +84,7 @@ public class LoginActivity extends AppToolBarActivity implements View.OnClickLis
         ButterKnife.inject(this);
         ShareSDK.initSDK(this);
         initView();
+
         mLocationClient = new LocationClient(getApplicationContext());     //声明LocationClient类
         mLocationClient.registerLocationListener(myListener);    //注册监听函数1
         initLocation();
@@ -212,7 +213,7 @@ public class LoginActivity extends AppToolBarActivity implements View.OnClickLis
         if(requestCode==0){
             memberInfo=ldao.getMemberInfo();
             Arad.preferences.putString("memberId", memberInfo.getId());
-            Arad.preferences.putString("nickName", memberInfo.getNickName());
+            Arad.preferences.putString("nickName", memberInfo.getMemberName());
             Arad.preferences.putString("mobile", memberInfo.getMobile());
             Arad.preferences.putString("point", memberInfo.getPoint());
             Arad.preferences.putString("remark", memberInfo.getRemark());
@@ -239,7 +240,7 @@ public class LoginActivity extends AppToolBarActivity implements View.OnClickLis
 
           //  MessageUtils.showShortToast(this, "登录成功");
             Intent intent02=new Intent(this,MainActivity.class);
-            intent02.putExtra("listNagationBar",(Serializable)ldao.getListNavigationBar());
+            intent02.putExtra("listNagationBar", (Serializable) ldao.getListNavigationBar());
             startActivity(intent02);
             AnimUtil.intentSlidIn(this);
         }

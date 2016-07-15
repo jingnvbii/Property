@@ -118,7 +118,6 @@ public class AppToolBarActivity extends ToolBarActivity {
     }
 
     /**
-     *
      * @return 滑动速度，以每秒钟移动了多少像素值为单位。
      */
     private int getScrollVelocity() {

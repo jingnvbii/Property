@@ -10,9 +10,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.beanu.arad.Arad;
+import com.beanu.arad.base.ToolBarActivity;
 import com.beanu.arad.utils.MessageUtils;
 import com.ctrl.forum.R;
-import com.ctrl.forum.base.AppToolBarActivity;
 import com.ctrl.forum.base.Constant;
 import com.ctrl.forum.dao.MineStoreDao;
 import com.ctrl.forum.entity.CompanyOrder;
@@ -29,7 +29,7 @@ import butterknife.InjectView;
 /**
  * 订单管理
  */
-public class MineOrderManageActivity extends AppToolBarActivity implements View.OnClickListener{
+public class MineOrderManageActivity extends ToolBarActivity implements View.OnClickListener{
     @InjectView(R.id.ll_text)
     LinearLayout ll_text;
     @InjectView(R.id.lv_content)
@@ -46,6 +46,7 @@ public class MineOrderManageActivity extends AppToolBarActivity implements View.
     private MineStoreDao odao;
     public static int type = 0;
     private int PAGE_NUM =1;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

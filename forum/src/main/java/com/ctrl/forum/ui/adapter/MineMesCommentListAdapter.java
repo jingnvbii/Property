@@ -69,7 +69,7 @@ public class MineMesCommentListAdapter extends BaseAdapter {
             Arad.imageLoader.load(replyForMes.get(position).getImgUrl()).placeholder(context.getResources().getDrawable(R.mipmap.my_gray))
                     .into(holder.iconfont_head);
             SetMemberLevel.setLevelImage(context, holder.grad, replyForMes.get(position).getMemberLevel());
-            holder.tv_day.setText(TimeUtils.dateTime(replyForMes.get(position).getCreateTime()+""));
+            holder.tv_day.setText(TimeUtils.dateTime1(replyForMes.get(position).getCreateTime()+""));
             holder.comment_vip_name.setText(replyForMes.get(position).getMemberName());
 
             String replyType = replyForMes.get(position).getReplyType();

@@ -62,7 +62,7 @@ public class MineMessageListAdapter extends BaseAdapter{
                    placeholder(context.getResources().getDrawable(R.mipmap.my_gray)).into(holder.iv_icon);
            holder.tv_content.setText(messages.get(position).getContent());
 
-           holder.tv_data.setText(TimeUtils.dateTime(messages.get(position).getCreateTime()));
+           holder.tv_data.setText(TimeUtils.dateTime1(messages.get(position).getCreateTime()));
 
            String state = messages.get(position).getReporterId();
            if (state.equals("admin")){
@@ -71,7 +71,6 @@ public class MineMessageListAdapter extends BaseAdapter{
                holder.tv_name.setText(messages.get(position).getMemberName());
            }
        }
-
         return convertView;
     }
 

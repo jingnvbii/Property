@@ -222,15 +222,16 @@ public class PlotListViewFriendStyleAdapter extends BaseAdapter {
         }
 
         holder.setPosition(position);
-       setOnListtener(holder);
+        setOnListtener(holder);
 
         holder.iv_friend_style_title_photo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(mcontext, MineDetailActivity.class);
-                intent.putExtra("id",post.getReporterId());
-                mcontext.startActivity(intent);
-                AnimUtil.intentSlidIn(mcontext);
+                if (!post.getReporterId().equals("admin")) {
+                    Intent intent = new Intent(mcontext, MineDetailActivity.class);
+                    intent.putExtra("id", post.getReporterId());
+                    mcontext.startActivity(intent);
+                }
             }
         });
 

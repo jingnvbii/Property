@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.beanu.arad.Arad;
@@ -26,24 +25,12 @@ import butterknife.InjectView;
  */
 public class RimListViewAdapter extends BaseAdapter{
     private List<RimServeCategory> data;
-   // private List<RimServeCategorySecond> grid;
     private List<RimServeCategorySecond> grid;
     private Context context;
     private RimGridViewAdapter rimGridViewAdapter;
-    private View.OnClickListener onSearch;
-    private View.OnClickListener onCollect;
-    private int type;
 
     public RimListViewAdapter(Context context){
         this.context = context;
-    }
-
-    public void setOnCollect(View.OnClickListener onCollect) {
-        this.onCollect = onCollect;
-    }
-
-    public void setOnSearch(View.OnClickListener onSearch) {
-        this.onSearch = onSearch;
     }
 
     public void setRimGridViewAdapter(RimGridViewAdapter rimGridViewAdapter) {
@@ -56,29 +43,8 @@ public class RimListViewAdapter extends BaseAdapter{
     }
 
     @Override
-    public int getViewTypeCount() {
-        return 3;
-    }
-
-    @Override
-    public int getItemViewType(int position) {
-        switch (position){
-            case 0:
-                type = 0;
-                break;
-            case 1:
-                type = 1;
-                break;
-            default:
-                type = 2;
-                break;
-        }
-        return type;
-    }
-
-    @Override
     public int getCount() {
-        return data==null?2:data.size()+2;
+        return data==null?0:data.size();
     }
 
     @Override
@@ -93,99 +59,44 @@ public class RimListViewAdapter extends BaseAdapter{
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder holder = null;
-        ViewHolder2 holder2 = null;
         ViewHolder3 holder3 = null;
         if(convertView==null) {
-            switch (type) {
-                case 0:
-                    convertView= LayoutInflater.from(context).inflate(R.layout.item_rim_list_search,parent,false);
-                    holder=new ViewHolder(convertView);
-                    holder.rl_search.setOnClickListener(onSearch);
-                    convertView.setTag(holder);
-                    break;
-                case 1:
-                    convertView= LayoutInflater.from(context).inflate(R.layout.item_rim_list_collect,parent,false);
-                    holder2=new ViewHolder2(convertView);
-                    holder2.rl_collect.setOnClickListener(onCollect);
-                    convertView.setTag(holder2);
-                    break;
-                case 2:
-                    convertView= LayoutInflater.from(context).inflate(R.layout.item_rim_list,parent,false);
-                    holder3=new ViewHolder3(convertView);
-                    convertView.setTag(holder3);
-                    break;
-            }
+            convertView= LayoutInflater.from(context).inflate(R.layout.item_rim_list,parent,false);
+            holder3=new ViewHolder3(convertView);
+            convertView.setTag(holder3);
         }else {
-            switch (type) {
-                case 0:
-                    holder=(ViewHolder)convertView.getTag();
-                    break;
-                case 1:
-                    holder2=(ViewHolder2)convertView.getTag();
-                    break;
-                case 2:
-                    holder3=(ViewHolder3)convertView.getTag();
-                    break;
+            holder3=(ViewHolder3)convertView.getTag();
+        }
+
+        if (data!=null){
+            if (data.get(position).getCategoryIcon()!=null && !data.get(position).getCategoryIcon().equals("")) {
+                Arad.imageLoader.load(data.get(position).getCategoryIcon()).
+                        placeholder(context.getResources().getDrawable(R.mipmap.hot)).
+                        into(holder3.iv_pic);
+            }
+            holder3.tv_title.setText(data.get(position).getName());
+            holder3.gv_hot.setAdapter(rimGridViewAdapter);
+            grid = data.get(position).getAroundservicecategorylist();
+            if (grid!=null){
+                if (grid.size()%3==0){
+                    //直接给gridView赋值
+                    rimGridViewAdapter.setData(grid);
+                }if (grid.size()%3==1){
+                    RimServeCategorySecond da = new RimServeCategorySecond();
+                    grid.add(da);
+                    RimServeCategorySecond da1 = new RimServeCategorySecond();
+                    grid.add(da1);
+                    rimGridViewAdapter.setData(grid);
+                }
+                if (grid.size()%3==2){
+                    RimServeCategorySecond da = new RimServeCategorySecond();
+                    grid.add(da);
+                    rimGridViewAdapter.setData(grid);}
             }
         }
-
-        switch (type){
-            case 0:
-                holder.rl_search.setTag(position);
-                break;
-            case 1:
-                holder2.rl_collect.setTag(position);
-                break;
-            case 2:
-                if (data!=null){
-                    if (data.get(position-2).getCategoryIcon()!=null && !data.get(position-2).getCategoryIcon().equals("")) {
-                        Arad.imageLoader.load(data.get(position - 2).getCategoryIcon()).
-                                placeholder(context.getResources().getDrawable(R.mipmap.hot)).
-                                into(holder3.iv_pic);
-                    }
-                    holder3.tv_title.setText(data.get(position - 2).getName());
-                holder3.gv_hot.setAdapter(rimGridViewAdapter);
-                    grid = data.get(position - 2).getAroundservicecategorylist();
-                   if (grid!=null){
-                       if (grid.size()%3==0){
-                          //直接给gridView赋值
-                           rimGridViewAdapter.setData(grid);
-                       }if (grid.size()%3==1){
-                           RimServeCategorySecond da = new RimServeCategorySecond();
-                           grid.add(da);
-                           RimServeCategorySecond da1 = new RimServeCategorySecond();
-                           grid.add(da1);
-                           rimGridViewAdapter.setData(grid);
-                       }
-                       if (grid.size()%3==2){
-                           RimServeCategorySecond da = new RimServeCategorySecond();
-                           grid.add(da);
-                           rimGridViewAdapter.setData(grid);
-                       }
-                   }
-                }
-                break;
-        }
-
         return convertView;
     }
 
-    class ViewHolder{
-        @InjectView(R.id.rl_search)
-        RelativeLayout rl_search;
-        ViewHolder(View view) {
-            ButterKnife.inject(this, view);
-        }
-    }
-
-    class ViewHolder2{
-        @InjectView(R.id.rl_collect)
-        RelativeLayout rl_collect;
-        ViewHolder2(View view) {
-            ButterKnife.inject(this, view);
-        }
-    }
     class ViewHolder3{
         @InjectView(R.id.iv_pic)
         ImageView iv_pic;

@@ -16,8 +16,8 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.beanu.arad.Arad;
+import com.beanu.arad.base.ToolBarActivity;
 import com.ctrl.forum.R;
-import com.ctrl.forum.base.AppToolBarActivity;
 import com.ctrl.forum.base.Constant;
 import com.ctrl.forum.dao.PlotDao;
 import com.ctrl.forum.dao.RimDao;
@@ -36,7 +36,7 @@ import butterknife.InjectView;
 /**
  * 小区--周边服务
  */
-public class PlotRimServeActivity extends AppToolBarActivity implements View.OnClickListener{
+public class PlotRimServeActivity extends ToolBarActivity implements View.OnClickListener{
     @InjectView(R.id.ll_category)
     LinearLayout ll_category;
     @InjectView(R.id.lv_content)

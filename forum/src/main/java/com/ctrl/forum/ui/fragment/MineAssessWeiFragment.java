@@ -48,6 +48,7 @@ public class MineAssessWeiFragment extends ToolBarFragment {
         assessWeiAdapter = new MineAssessWeiAdapter(getActivity());
         lv_content.setAdapter(assessWeiAdapter);
 
+        lv_content.setMode(PullToRefreshBase.Mode.BOTH);
         lv_content.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
@@ -58,7 +59,6 @@ public class MineAssessWeiFragment extends ToolBarFragment {
                     lv_content.onRefreshComplete();
                 }
             }
-
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
                 if (assessWeis != null) {

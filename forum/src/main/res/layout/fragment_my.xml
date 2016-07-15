@@ -148,7 +148,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/iv_grade"
-            android:src="@mipmap/vip_icon2"
+            android:src="@mipmap/vip_icon"
             android:layout_centerVertical="true"
             android:layout_toRightOf="@+id/textView10"
             android:layout_marginLeft="4dp"

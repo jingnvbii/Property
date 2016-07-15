@@ -17,7 +17,6 @@ import java.util.List;
 import java.util.Map;
 
 /**
-<<<<<<< HEAD
  * 搜索
  * Created by Administrator on 2016/5/24.
  */
@@ -34,11 +33,8 @@ public class SearchDao extends IDao {
         super(activity);
     }
 
-    //fd
-
     /**
      * 获取我的搜索历史记录
-<<<<<<< HEAD
      * @param memberId 会员id
      * @param searchType 搜索类型（0：帖子、1：商品、2：店铺、3：周边服务）
      * @param pageNum 页数

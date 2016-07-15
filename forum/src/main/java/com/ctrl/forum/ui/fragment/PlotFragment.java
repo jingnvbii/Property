@@ -41,7 +41,6 @@ import com.ctrl.forum.entity.Post;
 import com.ctrl.forum.loopview.HomeAutoSwitchPicHolder;
 import com.ctrl.forum.ui.activity.Invitation.InvitationDetailActivity;
 import com.ctrl.forum.ui.activity.LoginActivity;
-import com.ctrl.forum.ui.activity.MainActivity;
 import com.ctrl.forum.ui.activity.mine.MineFindFlotActivity;
 import com.ctrl.forum.ui.activity.plot.PlotAddInvitationActivity;
 import com.ctrl.forum.ui.activity.plot.PlotRimServeActivity;
@@ -83,10 +82,10 @@ public class PlotFragment extends ToolBarFragment implements View.OnClickListene
     TextView rim_serve; //周边服务
     @InjectView(R.id.iv_back)
     ImageView iv_back;
-    @InjectView(R.id.et_search)
-    EditText et_search;
-    @InjectView(R.id.rl_search)
-    RelativeLayout rl_search;
+    /*@InjectView(R.id.rl_search)
+    RelativeLayout rl_search;*/
+   /* @InjectView(R.id.et_search)
+    EditText et_search;*/
 
     private PlotListViewFriendStyleAdapter invitationListViewFriendStyleAdapter;
 
@@ -110,6 +109,9 @@ public class PlotFragment extends ToolBarFragment implements View.OnClickListene
     private Map<Integer,Boolean> isAdd = new HashMap<>();
     private Map<Integer,Integer> text = new HashMap<>();
 
+    private RelativeLayout rl_search;
+    private EditText search;
+
     public static PlotFragment newInstance() {
         PlotFragment fragment = new PlotFragment();
         return fragment;
@@ -129,7 +131,7 @@ public class PlotFragment extends ToolBarFragment implements View.OnClickListene
     public View onCreateView(final LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_plot, container, false);
         ButterKnife.inject(this, view);
-        rl_search.setVisibility(View.GONE);
+       // rl_search.setVisibility(View.GONE);
 
         checkActivity();
 
@@ -144,12 +146,23 @@ public class PlotFragment extends ToolBarFragment implements View.OnClickListene
         communityId = Arad.preferences.getString("communityId");
         plotDao = new PlotDao(this);
 
-        if (!MainActivity.isFrist){
-            initData();
-        }
+        initData();
+
+        //listview增加头部布局
+        AbsListView.LayoutParams layoutParams = new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, AbsListView.LayoutParams.WRAP_CONTENT);
+        View headview = getActivity().getLayoutInflater().inflate(R.layout.item_plot_header_view, lv_content, false);
+        frameLayout = (FrameLayout) headview.findViewById(R.id.framelayout);
+        search = (EditText) headview.findViewById(R.id.et_search);
+        rl_search = (RelativeLayout) headview.findViewById(R.id.rl_search);
+        search.setFocusable(true);
+        search.setFocusableInTouchMode(true);
+        search.setClickable(true);
+        search.requestFocus();
+        headview.setLayoutParams(layoutParams);
+        lv_content.getRefreshableView().addHeaderView(headview);
 
         //为输入框注册键盘监听事件
-        et_search.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        search.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_GO) {
@@ -158,14 +171,14 @@ public class PlotFragment extends ToolBarFragment implements View.OnClickListene
                     if (imm.isActive()) {
                         imm.hideSoftInputFromWindow(v.getApplicationWindowToken(), 0);
                     }
-                    if (!et_search.getText().toString().equals("")) {
-                        if (Arad.preferences.getString("memberId")!=null || Arad.preferences.getString("memberId").equals("")){
+                    if (!search.getText().toString().equals("")) {
+                        if (Arad.preferences.getString("memberId") == null || Arad.preferences.getString("memberId").equals("")) {
                             startActivity(new Intent(getActivity(), LoginActivity.class));
-                            et_search.setText("");
-                        }else {
+                            search.setText("");
+                        } else {
                             Intent intent = new Intent(getActivity(), PlotSearchResultActivity.class);
-                            intent.putExtra("keyWord", et_search.getText().toString());
-                            et_search.setText("");
+                            intent.putExtra("keyWord", search.getText().toString());
+                            search.setText("");
                             startActivity(intent);
                         }
                     }
@@ -175,22 +188,16 @@ public class PlotFragment extends ToolBarFragment implements View.OnClickListene
             }
         });
 
-
         lv_content.setMode(PullToRefreshBase.Mode.BOTH);
         lv_content.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
-                if (Arad.preferences.getString("memberId")!=null && !Arad.preferences.getString("memberId").equals("")) {
-                    rl_search.setVisibility(View.VISIBLE);
-                }else{
-                    rl_search.setVisibility(View.GONE);
-                    lv_content.onRefreshComplete();
-                }
                 if (posts != null) {
                     posts.clear();
-                    PAGE_NUM = 1;
+                    rl_search.setVisibility(View.VISIBLE);
                 }
-                if (Arad.preferences.getString("memberId")!=null && !Arad.preferences.getString("memberId").equals("")) {
+                if (Arad.preferences.getString("memberId") != null && !Arad.preferences.getString("memberId").equals("")) {
+                    PAGE_NUM = 1;
                     plotDao.queryCommunityPostList(Arad.preferences.getString("memberId"), communityId, PAGE_NUM + "", Constant.PAGE_SIZE + "");
                 }
             }
@@ -199,7 +206,7 @@ public class PlotFragment extends ToolBarFragment implements View.OnClickListene
             public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
                 if (posts != null) {
                     PAGE_NUM += 1;
-                    if (Arad.preferences.getString("memberId")!=null && !Arad.preferences.getString("memberId").equals("")) {
+                    if (Arad.preferences.getString("memberId") != null && !Arad.preferences.getString("memberId").equals("")) {
                         plotDao.queryCommunityPostList(Arad.preferences.getString("memberId"), communityId, PAGE_NUM + "", Constant.PAGE_SIZE + "");
                     }
                 } else {
@@ -214,7 +221,7 @@ public class PlotFragment extends ToolBarFragment implements View.OnClickListene
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getActivity(), InvitationDetailActivity.class);
                 intent.putExtra("id", posts.get(position - 2).getId());
-                intent.putExtra("reportid",posts.get(position-2).getReporterId());
+                intent.putExtra("reportid", posts.get(position - 2).getReporterId());
                 startActivity(intent);
             }
         });
@@ -225,7 +232,7 @@ public class PlotFragment extends ToolBarFragment implements View.OnClickListene
                 int position = v.getPosition();
                 int tex = posts.get(position).getPraiseNum();
 
-                if (isAdd.get(position)==null) {
+                if (isAdd.get(position) == null) {
                     if (posts.get(position).getPraiseState().equals("0")) {
                         isAdd.put(position, true);
                     } else {
@@ -233,45 +240,37 @@ public class PlotFragment extends ToolBarFragment implements View.OnClickListene
                     }
                 }
 
-                if (text.get(position)==null){
-                    text.put(position,tex);
+                if (text.get(position) == null) {
+                    text.put(position, tex);
                 }
 
-                if (posts.get(position).getPraiseState()!=null) {
+                if (posts.get(position).getPraiseState() != null) {
                     if (isAdd.get(position)) {
-                        idao.requesZambia("add", posts.get(position).getId(),Arad.preferences.getString("memberId")
-                        ,posts.get(position).getTitle(),posts.get(position).getContent());
+                        idao.requesZambia("add", posts.get(position).getId(), Arad.preferences.getString("memberId")
+                                , posts.get(position).getTitle(), posts.get(position).getContent());
                         v.tv_friend_style_zan_num.setText((text.get(position) + 1) + "");
-                        text.put(position,text.get(position) + 1);
+                        text.put(position, text.get(position) + 1);
                         v.iv_friend_style_zan_num.setImageResource(R.mipmap.zan_blue_shixin);
                         //MessageUtils.showShortToast(getActivity(), "点赞成功");
-                        isAdd.put(position,false);
+                        isAdd.put(position, false);
                     } else {
                         idao.requesZambia("reduce", posts.get(position).getId(), Arad.preferences.getString("memberId")
                                 , posts.get(position).getTitle(), posts.get(position).getContent());
                         //MessageUtils.showShortToast(getActivity(), "取消点赞");
                         v.tv_friend_style_zan_num.setText((text.get(position) - 1) + "");
-                        text.put(position, text.get(position)-1);
+                        text.put(position, text.get(position) - 1);
                         v.iv_friend_style_zan_num.setImageResource(R.mipmap.zan_blue);
-                        isAdd.put(position,true);
+                        isAdd.put(position, true);
                     }
                 }
             }
         });
-
-        //listview增加头部布局
-        AbsListView.LayoutParams layoutParams = new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, AbsListView.LayoutParams.WRAP_CONTENT);
-        View headview = getActivity().getLayoutInflater().inflate(R.layout.item_plot_header_view, lv_content, false);
-        frameLayout = (FrameLayout) headview.findViewById(R.id.framelayout);
-        headview.setLayoutParams(layoutParams);
-        lv_content.getRefreshableView().addHeaderView(headview);
 
         idao = new InvitationDao(this);
         idao.requestPostRotaingBanner("B_COMMUNITY_TOP");
 
         return view;
     }
-
     /**
      * 轮播图
      */
@@ -506,7 +505,8 @@ public class PlotFragment extends ToolBarFragment implements View.OnClickListene
                 if (Arad.preferences.getString("memberId").equals("")){
                     startActivity(new Intent(getActivity(), LoginActivity.class));
                 }else {
-                    startActivity(new Intent(getActivity(),MineFindFlotActivity.class));
+                    Intent intent = new Intent(getActivity(),MineFindFlotActivity.class);
+                    startActivityForResult(intent,1203);
                 }
                 break;
             case R.id.rim_post:
@@ -535,20 +535,22 @@ public class PlotFragment extends ToolBarFragment implements View.OnClickListene
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        if (Arad.preferences.getString("memberId")!=null && !Arad.preferences.getString("memberId").equals("")) {
-            if (MainActivity.isFrist) {
-                if (posts != null) {
-                    posts.clear();
-                }
-                PAGE_NUM = 1;
-                tv_plot_name.setText(Arad.preferences.getString("communityName"));
-                plotDao.queryCommunityPostList(Arad.preferences.getString("memberId"),
-                        Arad.preferences.getString("communityId"),
-                        PAGE_NUM + "", Constant.PAGE_SIZE + "");
-            }
-        }
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+       if (resultCode==getActivity().RESULT_OK){
+           if (requestCode==1203){
+               communityId = Arad.preferences.getString("communityId");
+               tv_plot_name.setText(Arad.preferences.getString("communityName"));
+               if (posts != null) {
+                   posts.clear();
+               }
+               plotDao.queryCommunityPostList(Arad.preferences.getString("memberId"),
+                       communityId,
+                       PAGE_NUM + "", Constant.PAGE_SIZE + "");
+           }
+       }else {
+           return;
+       }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     public void clickShare(){

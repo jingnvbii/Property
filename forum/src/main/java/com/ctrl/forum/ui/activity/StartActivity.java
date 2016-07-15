@@ -131,9 +131,8 @@ public class StartActivity extends ToolBarActivity implements View.OnClickListen
            listAdvertising=ldao.getListAdvertising();
            startAds=ldao.getStartAds();
            Boolean isFirstIn= Arad.preferences.getBoolean("isFirstIn",true);
-         //  Log.i("tag", "isFirstin====" + isFirstIn);
            if(isFirstIn){//第一次进入
-               Arad.preferences.putBoolean("isFirstIn", false);
+               Arad.preferences.putBoolean("isFirstIn",false);
                Arad.preferences.flush();
                iv_start.setVisibility(View.GONE);
                viewPager_start.setVisibility(View.VISIBLE);

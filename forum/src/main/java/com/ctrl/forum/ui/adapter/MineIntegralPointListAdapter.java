@@ -63,45 +63,84 @@ public class MineIntegralPointListAdapter extends BaseAdapter{
             viewHolder.tv_fen.setText(redeemHistories.get(position).getPoint()+"");
 
             int point = redeemHistories.get(position).getPoint();
+            String add = null;
             if (point>0){
                 viewHolder.tv_fen.setText("+"+point);
+                add = "奖励"+point+"积分";
             }else{
                 viewHolder.tv_fen.setText(point+"");
+                add = point+"积分";
             }
             String doType  = redeemHistories.get(position).getDoType();
             switch (doType){
                 case "1":
-                    viewHolder.tv_content.setText("商城消费奖励"+point+"积分");
+                    viewHolder.tv_content.setText("商城消费"+add);
                     break;
                 case "2":
-                    viewHolder.tv_content.setText("积分兑换"+point+"积分");
+                    viewHolder.tv_content.setText("积分兑换"+add);
                     break;
                 case "3":
-                    viewHolder.tv_content.setText("每日签到奖励"+point+"积分");
+                    viewHolder.tv_content.setText("每日签到"+add);
                     break;
                 case "4":
-                    viewHolder.tv_content.setText("连续签到30天奖励"+point+"积分");
+                    viewHolder.tv_content.setText("连续签到30天"+add);
                     break;
                 case "5":
-                    viewHolder.tv_content.setText("连续签到100天奖励"+point+"积分");
+                    viewHolder.tv_content.setText("连续签到100天"+add);
                     break;
                 case "6":
-                    viewHolder.tv_content.setText("连续签到200天奖励"+point+"积分");
+                    viewHolder.tv_content.setText("连续签到200天"+add);
                     break;
                 case "7":
-                    viewHolder.tv_content.setText("绑定手机号奖励"+point+"积分");
+                    viewHolder.tv_content.setText("绑定手机号"+add);
                     break;
                 case "8":
-                    viewHolder.tv_content.setText("完整填写个人资料奖励"+point+"积分");
+                    viewHolder.tv_content.setText("完整填写个人资料"+add);
                     break;
                 case "9":
-                    viewHolder.tv_content.setText("回别人帖奖励"+point+"积分");
+                    viewHolder.tv_content.setText("回别人帖"+add);
                     break;
                 case "10":
-                    viewHolder.tv_content.setText("被管理员拉黑"+point+"积分");
+                    viewHolder.tv_content.setText("被管理员拉黑"+add);
                     break;
                 case "11":
-                    viewHolder.tv_content.setText("被拉黑设备"+point+"积分");
+                    viewHolder.tv_content.setText("被拉黑设备"+add);
+                    break;
+                case "12":
+                    viewHolder.tv_content.setText("发布帖子"+add);
+                    break;
+                case "13":
+                    viewHolder.tv_content.setText("被人回帖"+add);
+                    break;
+                case "14":
+                    viewHolder.tv_content.setText("收到赞"+add);
+                    break;
+                case "15":
+                    viewHolder.tv_content.setText("连续登陆达到30天"+add);
+                    break;
+                case "16":
+                    viewHolder.tv_content.setText("连续登陆达到100天"+add);
+                    break;
+                case "17":
+                    viewHolder.tv_content.setText("连续登陆达到200天"+add);
+                    break;
+                case "18":
+                    viewHolder.tv_content.setText("写商品评论"+add);
+                    break;
+                case "19":
+                    viewHolder.tv_content.setText("新用户注册"+add);
+                    break;
+                case "20":
+                    viewHolder.tv_content.setText("被单个用户拉黑"+add);
+                    break;
+                case "21":
+                    viewHolder.tv_content.setText("用户删除自己发布的帖子"+add);
+                    break;
+                case "22":
+                    viewHolder.tv_content.setText("管理员删除用户发布的帖子"+add);
+                    break;
+                case "23":
+                    viewHolder.tv_content.setText("取消赞"+add);
                     break;
                 default:
                     viewHolder.tv_content.setText("其它");

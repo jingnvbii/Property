@@ -2,8 +2,10 @@ package com.ctrl.forum.ui.activity.mine;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.FrameLayout;
@@ -80,14 +82,37 @@ public class MineIntegralStoreDetailActivity extends AppToolBarActivity implemen
 
     }
 
+    private WebSettings settings;
+    /*
+ * 加载富文本
+ * */
+    private void loadRichText() {
+        //自适应屏幕
+        settings = webView.getSettings();
+        settings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
+        settings.setLoadWithOverviewMode(true);
+        DisplayMetrics metrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        int mDensity = metrics.densityDpi;
+        if (mDensity == 120) {
+            settings.setDefaultZoom(WebSettings.ZoomDensity.CLOSE);
+        } else if (mDensity == 160) {
+            settings.setDefaultZoom(WebSettings.ZoomDensity.MEDIUM);
+        } else if (mDensity == 240) {
+            settings.setDefaultZoom(WebSettings.ZoomDensity.FAR);
+        }
+        webView.getSettings().setDefaultTextEncodingName("UTF-8");
+        webView.loadDataWithBaseURL(null, product2.getInfomation(), "text/html", "UTF-8", null);
+    }
+
     @Override
     public void onRequestSuccess(int requestCode) {
         super.onRequestSuccess(requestCode);
         if (requestCode == 4) {
             product2 = mdao.getProduct2();
             if (product2 != null) {
+                loadRichText();
                 //为控件赋值
-                webView.loadDataWithBaseURL(null, product2.getInfomation(), "text/html", "utf-8", null);//单纯显示文字
                 tv_mey.setText(product2.getOriginalPrice()+"元");
                 integral.setText(product2.getNeedPoint()+"积分");
             }
@@ -115,10 +140,10 @@ public class MineIntegralStoreDetailActivity extends AppToolBarActivity implemen
             }else{
                 banner.setVisibility(View.GONE);
             }
-            if (requestCode == 1) {
-                MessageUtils.showLongToast(this, "兑换积分成功");
-                this.finish();
-            }
+        }
+        if (requestCode == 1) {
+            MessageUtils.showLongToast(this, "兑换积分成功");
+            this.finish();
         }
     }
 
@@ -151,7 +176,7 @@ public class MineIntegralStoreDetailActivity extends AppToolBarActivity implemen
                 case R.id.btn_sure:
                     Intent intent = new Intent(this, StoreManageAddressActivity.class);
                     intent.setFlags(888);
-                    startActivityForResult(intent,RESULT_OK);
+                    startActivityForResult(intent,ADDRESS);
                     break;
             }
         }
@@ -160,14 +185,12 @@ public class MineIntegralStoreDetailActivity extends AppToolBarActivity implemen
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode==RESULT_OK){
             if (requestCode==ADDRESS){ //兑换积分
-                String id = data.getStringExtra("province");
-
-                //rdao.convertRemarkGoods(Arad.preferences.getString("memberId"), integralProductsId);
+                String id = data.getStringExtra("id");
+                rdao.convertRemarkGoods(Arad.preferences.getString("memberId"), integralProductsId,id);
             }
         }else{
             return;
         }
-
         super.onActivityResult(requestCode, resultCode, data);
     }
 
