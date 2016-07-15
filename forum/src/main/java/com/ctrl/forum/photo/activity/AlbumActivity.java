@@ -1,6 +1,5 @@
 package com.ctrl.forum.photo.activity;
 
-
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -28,6 +27,7 @@ import com.ctrl.forum.photo.util.ImageItem;
 import com.ctrl.forum.photo.util.PublicWay;
 import com.ctrl.forum.photo.util.Res;
 import com.ctrl.forum.ui.activity.Invitation.InvitationReleaseActivity;
+import com.ctrl.forum.ui.activity.plot.PlotAddInvitationActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,6 +61,8 @@ public class AlbumActivity extends Activity {
 	private AlbumHelper helper;
 	public static List<ImageBucket> contentList;
 	public static Bitmap bitmap;
+	private Class<?> activity;
+
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(Res.getLayoutID("plugin_camera_album"));
@@ -74,6 +76,14 @@ public class AlbumActivity extends Activity {
 		initListener();
 		//这个函数主要用来控制预览和完成按钮的状态
 		isShowOkBt();
+		if (getIntent().getStringExtra("activity")!=null && !getIntent().getStringExtra("activity").equals("")) {
+			if (getIntent().getStringExtra("activity").equals("PlotAddInvitationActivity")) {
+				activity = PlotAddInvitationActivity.class;
+			}
+			if (getIntent().getStringExtra("activity").equals("InvitationReleaseActivity")) {
+				activity = InvitationReleaseActivity.class;
+			}
+		}
 	}
 	
 	BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {  
@@ -123,13 +133,12 @@ public class AlbumActivity extends Activity {
 	private class CancelListener implements OnClickListener {
 		public void onClick(View v) {
 			Bimp.tempSelectBitmap.clear();
-			intent.setClass(mContext, InvitationReleaseActivity.class);
+			intent.setClass(mContext, activity);
 			startActivity(intent);
 			AnimUtil.intentSlidOut(AlbumActivity.this);
+			onBackPressed();
 		}
 	}
-
-	
 
 	// 初始化，给一些对象赋值
 	private void init() {
@@ -193,7 +202,6 @@ public class AlbumActivity extends Activity {
 				});
 
 		okButton.setOnClickListener(new AlbumSendListener());
-
 	}
 
 	private boolean removeOneData(ImageItem imageItem) {

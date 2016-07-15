@@ -228,8 +228,6 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
 
     }
 
-
-
     public void Init() {
         channelId=getIntent().getStringExtra("channelId");
         Idao=new ImageDao(this);
@@ -305,9 +303,8 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
                 }
             }
         });
-
-
     }
+
     public class GridAdapter extends BaseAdapter {
         private LayoutInflater inflater;
         private int selectedPosition = -1;
@@ -435,7 +432,6 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
         Intent openCameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         startActivityForResult(openCameraIntent, TAKE_PICTURE);
     }
-
 
     @Override
     public void onRequestFaild(String errorNo, String errorMessage) {
@@ -605,7 +601,6 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
             }
         });
     }
-
 
     private boolean checkInput(){
         if(TextUtils.isEmpty(name)){
