@@ -102,6 +102,7 @@ public class MineFindFlotActivity extends ToolBarActivity implements View.OnClic
             Arad.preferences.putString("communityId", goodId);
             Arad.preferences.putString("communityName", communityName);
             Arad.preferences.flush();
+            setResult(RESULT_OK);
             this.finish();
         }
     }

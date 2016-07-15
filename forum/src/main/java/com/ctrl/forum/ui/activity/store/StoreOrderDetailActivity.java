@@ -167,7 +167,6 @@ public class StoreOrderDetailActivity extends AppToolBarActivity implements View
                 tv_address_none.setVisibility(View.GONE);
             }
 
-
             tv_order_address.setText(listAddress.get(0).getAddressBase() + listAddress.get(0).getAddressDetail());
             tv_order_name.setText(listAddress.get(0).getReceiveName() + "     " + listAddress.get(0).getMobile());
             tv_order_detail_all_price.setText("共￥" + productsTotal + "元");

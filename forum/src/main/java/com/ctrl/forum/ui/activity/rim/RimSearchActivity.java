@@ -41,6 +41,8 @@ public class RimSearchActivity extends AppToolBarActivity implements View.OnClic
     FlowLayoutView flowlayout;
     @InjectView(R.id.rl_history)
     ListView rl_history;
+    @InjectView(R.id.clear_all)
+    TextView clear_all; //清空历史记录
 
     private SearchDao searchDao;
     private List<SearchHistory> hotSearch;
@@ -108,6 +110,7 @@ public class RimSearchActivity extends AppToolBarActivity implements View.OnClic
     private void initView() {
         iv_back.setOnClickListener(this);
         flowlayout.setOnClickListener(this);
+        clear_all.setOnClickListener(this);
     }
 
     //流式布局
@@ -148,6 +151,9 @@ public class RimSearchActivity extends AppToolBarActivity implements View.OnClic
                 break;
             case R.id.flowlayout:
                 break;
+            case R.id.clear_all:
+                searchDao.deleteSearchHistory(Arad.preferences.getString("memberId"),"3");
+                break;
         }
     }
 
@@ -166,6 +172,12 @@ public class RimSearchActivity extends AppToolBarActivity implements View.OnClic
             hotSearch = searchDao.getHotSearch();
             if (hotSearch!=null){
                 initChildViews();
+            }
+        }
+        if (requestCode==1){
+            if (searchHistory!=null){
+                searchHistory.clear();
+                rimSearchHistoryAdapter.notifyDataSetChanged();
             }
         }
     }

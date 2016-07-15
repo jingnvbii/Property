@@ -2,6 +2,7 @@ package com.ctrl.forum.ui.activity.plot;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -18,6 +19,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -115,6 +117,8 @@ public class PlotAddInvitationActivity extends AppToolBarActivity implements Vie
             TextView tougao;
     @InjectView(R.id.tv_plot_name)
     TextView tv_plot_name;//小区名称
+    @InjectView(R.id.ll_all)
+    LinearLayout ll_all;
 
     /* 请求码*/
     private static final int IMAGE_REQUEST_CODE = 0;
@@ -136,7 +140,7 @@ public class PlotAddInvitationActivity extends AppToolBarActivity implements Vie
 
     private boolean isSave;//是否存草稿
     private String delId = "";
-
+    private List<Bitmap> newBmp = new ArrayList<>();//新加载的图片
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -178,6 +182,7 @@ public class PlotAddInvitationActivity extends AppToolBarActivity implements Vie
         tv_release.setOnClickListener(this);
         tv_release_save.setOnClickListener(this);
         tougao.setOnClickListener(this);
+        ll_all.setOnClickListener(this);
 
         //初始化控件宽高
         setImageViewWidth(iv01);
@@ -212,7 +217,6 @@ public class PlotAddInvitationActivity extends AppToolBarActivity implements Vie
                         delImg(imageFlag);
                     }
                 })
-
                 .setNegativeButton("取消", new DialogInterface.OnClickListener() {
 
                     @Override
@@ -220,8 +224,6 @@ public class PlotAddInvitationActivity extends AppToolBarActivity implements Vie
                         dialog.dismiss();
                     }
                 }).show();
-
-
     }
 
     public void Init() {
@@ -601,8 +603,6 @@ public class PlotAddInvitationActivity extends AppToolBarActivity implements Vie
             return delId.substring(0, delId.length() - 1);
         }
         return "";
-
-
     }
 
     @Override
@@ -625,45 +625,49 @@ public class PlotAddInvitationActivity extends AppToolBarActivity implements Vie
                 String imagesUrl1=getImagesUrl(mImageList);
                 String thumbImagesUrl1= getThumbImagesUrl(mImageList);
 
-                if(edit==null || edit.equals("")) {
-                    idao.requesReleasePost(
-                            Arad.preferences.getString("memberId"),
-                            Arad.preferences.getString("communityId"),
-                            "1",
-                            "0",
-                            "0",
-                            "",
-                            et_content.getText().toString().trim(),
-                            vcardDisplay,
-                            name,
-                            adress,
-                            tel,
-                            locationLongitude,
-                            locationLatitude,
-                            tv_location_name,
-                            imagesUrl1,
-                            thumbImagesUrl1
-                    );
-                }else{//编辑状态下存草稿
-                   // getImagesUrl(imageId);
-                    idao.requesPlotPostEditor(
-                            id,
-                            "1",
-                            Arad.preferences.getString("communityId"),
-                            "0",
-                            "0",
-                            "",
-                            et_content.getText().toString().trim(),
-                            vcardDisplay,
-                            name,
-                            adress,
-                            tel,
-                            locationLongitude,
-                            locationLatitude,
-                            tv_location_name,
-                            getDelImageId(delImages),  //删除图片的id的字符串
-                            getImagesUrl(addImages),
-                            getThumbImagesUrl(addImages)); //不对
+                if (!et_content.getText().toString().equals("") || imagesUrl1!=null){
+                    if (edit == null || edit.equals("")) {
+                        idao.requesReleasePost(
+                                Arad.preferences.getString("memberId"),
+                                Arad.preferences.getString("communityId"),
+                                "1",
+                                "0",
+                                "0",
+                                "",
+                                et_content.getText().toString().trim(),
+                                vcardDisplay,
+                                name,
+                                adress,
+                                tel,
+                                locationLongitude,
+                                locationLatitude,
+                                tv_location_name,
+                                imagesUrl1,
+                                thumbImagesUrl1
+                        );
+                    } else {//编辑状态下存草稿
+                        // getImagesUrl(imageId);
+                        idao.requesPlotPostEditor(
+                                id,
+                                "1",
+                                Arad.preferences.getString("communityId"),
+                                "0",
+                                "0",
+                                "",
+                                et_content.getText().toString().trim(),
+                                vcardDisplay,
+                                name,
+                                adress,
+                                tel,
+                                locationLongitude,
+                                locationLatitude,
+                                tv_location_name,
+                                getDelImageId(delImages),  //删除图片的id的字符串
+                                getImagesUrl(addImages),
+                                getThumbImagesUrl(addImages)); //不对
+                    }
+                }else {
+                    MessageUtils.showShortToast(this,"内容不能为空!");
                 }
                 break;
             case R.id.tv_release: //发布
@@ -686,46 +690,50 @@ public class PlotAddInvitationActivity extends AppToolBarActivity implements Vie
                     MessageUtils.showShortToast(this,"帖子内容少于20个字符");
                     return;
                 }*/
-                if(checkInput()) {
-                    if (edit == null || edit.equals("")) {
-                        idao.requesReleasePost(
-                                Arad.preferences.getString("memberId"),
-                                Arad.preferences.getString("communityId"),
-                                "1",
-                                "1",
-                                "0",
-                                "",
-                                et_content.getText().toString().trim(),
-                                vcardDisplay,
-                                name,
-                                adress,
-                                tel,
-                                locationLongitude,
-                                locationLatitude,
-                                tv_location_name,
-                                imagesUrl,
-                                thumbImagesUrl
-                        );
-                    }else{//编辑状态下发布帖子
-                        idao.requesPlotPostEditor(
-                                id,
-                                "1",
-                                Arad.preferences.getString("communityId"),
-                                "0",
-                                "1",
-                                "",
-                                et_content.getText().toString().trim(),
-                                vcardDisplay,
-                                name,
-                                adress,
-                                tel,
-                                locationLongitude,
-                                locationLatitude,
-                                tv_location_name,
-                                getDelImageId(delImages),  //删除图片的id的字符串
-                                getImagesUrl(addImages),
-                                getThumbImagesUrl(addImages)); //不对
+                if (!et_content.getText().toString().equals("") || imagesUrl!=null) {
+                    if (checkInput()) {
+                        if (edit == null || edit.equals("")) {
+                            idao.requesReleasePost(
+                                    Arad.preferences.getString("memberId"),
+                                    Arad.preferences.getString("communityId"),
+                                    "1",
+                                    "1",
+                                    "0",
+                                    "",
+                                    et_content.getText().toString().trim(),
+                                    vcardDisplay,
+                                    name,
+                                    adress,
+                                    tel,
+                                    locationLongitude,
+                                    locationLatitude,
+                                    tv_location_name,
+                                    imagesUrl,
+                                    thumbImagesUrl
+                            );
+                        } else {//编辑状态下发布帖子
+                            idao.requesPlotPostEditor(
+                                    id,
+                                    "1",
+                                    Arad.preferences.getString("communityId"),
+                                    "0",
+                                    "1",
+                                    "",
+                                    et_content.getText().toString().trim(),
+                                    vcardDisplay,
+                                    name,
+                                    adress,
+                                    tel,
+                                    locationLongitude,
+                                    locationLatitude,
+                                    tv_location_name,
+                                    getDelImageId(delImages),  //删除图片的id的字符串
+                                    getImagesUrl(addImages),
+                                    getThumbImagesUrl(addImages)); //不对
+                        }
                     }
+                }else{
+                    MessageUtils.showShortToast(this,"内容不能为空!");
                 }
                 break;
             case R.id.tv_tel:
@@ -830,14 +838,23 @@ public class PlotAddInvitationActivity extends AppToolBarActivity implements Vie
                 } else {
                     showDialog();
                 }
-
                 //setBitmapImg();
                 break;
             case R.id.tougao:
                 kdao.ueryDictionary("POST_PROTOCOL"); //投稿协议
                 break;
+            case R.id.ll_all:
+                InputMethodManager imm=(InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                boolean isOpen=imm.isActive();
+                //isOpen若返回true，则表示输入法打开
+                if(isOpen){
+                    imm.hideSoftInputFromWindow(PlotAddInvitationActivity.this.getCurrentFocus().getWindowToken()
+                            ,InputMethodManager.HIDE_NOT_ALWAYS);
+                    //接受软键盘输入的编辑文本或其它视图
+                    //imm.showSoftInput(et_content,InputMethodManager.SHOW_FORCED);
+                }
+                break;
         }
-
     }
 
     private void getImageToView1(String path) {
@@ -856,7 +873,8 @@ public class PlotAddInvitationActivity extends AppToolBarActivity implements Vie
                 // Log.d("demo","上传方法2");
                 /**调用后台方法  将图片上传**/
                 //  String imgData = photo;
-                showProgress(true);
+                //showProgress(true);
+
                 Idao.requestUploadImage(photo);
             }
         } catch (Exception e){
@@ -916,7 +934,6 @@ public class PlotAddInvitationActivity extends AppToolBarActivity implements Vie
     }
 
     private void setImageViewWidth(ImageView imageView){
-
         ViewGroup.LayoutParams params = imageView.getLayoutParams();
         int w= (AndroidUtil.getDeviceWidth(this)-20)/4;
         android.util.Log.d("demo", "width : " + w);

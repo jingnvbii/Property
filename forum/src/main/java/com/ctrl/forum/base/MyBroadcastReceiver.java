@@ -69,7 +69,7 @@ public class MyBroadcastReceiver extends BroadcastReceiver{
             String message = bundle.getString(JPushInterface.EXTRA_MESSAGE);
 
             if (Arad.preferences.getBoolean("replyComments")){//评论回复
-                setNavti(context, "评论回复", message, messageKey);
+                setNavti(context, "您收到一条新消息", message, messageKey);
             }else{
                 if (Arad.preferences.getBoolean("systemNotification")){//系统通知
                     setNavti(context, "系统通知", message, messageKey);

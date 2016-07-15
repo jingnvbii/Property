@@ -14,6 +14,7 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.beanu.arad.Arad;
+import com.beanu.arad.utils.MessageUtils;
 import com.ctrl.forum.R;
 import com.ctrl.forum.base.AppToolBarActivity;
 import com.ctrl.forum.base.Constant;
@@ -65,10 +66,8 @@ public class RimCollectServeActivity extends AppToolBarActivity implements View.
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
                 if (rimServiceCompanies != null) {
                     rimServiceCompanies.clear();
-                    PAGE_NUM = 1;
-                    rimShopListAdapter = new RimShopListAdapter(getApplication());
-                    lv_collect.setAdapter(rimShopListAdapter);
                 }
+                PAGE_NUM = 1;
                 rimDao.getAroundServiceCollectionList(Arad.preferences.getString("memberId"), PAGE_NUM + "", Constant.PAGE_SIZE + "");
             }
 
@@ -136,7 +135,7 @@ public class RimCollectServeActivity extends AppToolBarActivity implements View.
                 this.finish();
                 break;
             case R.id.iv_phone:
-                initPop();
+                //initPop();
                 position = (int)id;
                 bo_hao.setText(rimServiceCompanies.get(position).getTelephone());
                 if (!bo_hao.getText().equals("")){
@@ -177,13 +176,11 @@ public class RimCollectServeActivity extends AppToolBarActivity implements View.
     @Override
     protected void onRestart() {
         super.onRestart();
-        initPop();
         if (rimServiceCompanies != null) {
             rimServiceCompanies.clear();
             PAGE_NUM = 1;
-            rimShopListAdapter = new RimShopListAdapter(getApplication());
-            lv_collect.setAdapter(rimShopListAdapter);
         }
         rimDao.getAroundServiceCollectionList(Arad.preferences.getString("memberId"), PAGE_NUM + "", Constant.PAGE_SIZE + "");
+        initPop();
     }
 }

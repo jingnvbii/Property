@@ -12,9 +12,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.beanu.arad.Arad;
-import com.beanu.arad.base.ToolBarActivity;
 import com.beanu.arad.utils.MessageUtils;
 import com.ctrl.forum.R;
+import com.ctrl.forum.base.AppToolBarActivity;
 import com.ctrl.forum.customview.MinePinnedHeaderListView;
 import com.ctrl.forum.dao.MallDao;
 import com.ctrl.forum.dao.MineStoreDao;
@@ -30,7 +30,7 @@ import java.util.Map;
 /**
  * 店铺管理
  */
-public class MineShopManagerActivity extends ToolBarActivity implements CompoundButton.OnCheckedChangeListener{
+public class MineShopManagerActivity extends AppToolBarActivity implements CompoundButton.OnCheckedChangeListener{
     private MinePinnedHeaderListView right_listview;
     private MineShopManagerAdapter sectionedAdapter;
     private boolean isScroll = true;

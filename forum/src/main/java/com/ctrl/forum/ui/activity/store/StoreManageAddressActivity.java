@@ -88,6 +88,7 @@ public class StoreManageAddressActivity extends AppToolBarActivity implements Vi
                 MessageUtils.showShortToast(this, "设置默认地址成功");
             }
             adao.requestGetAddressList(Arad.preferences.getString("memberId"));
+            intent.putExtra("id",adao.getListAddress().get(mposition).getId());
             intent.putExtra("province",adao.getListAddress().get(mposition).getProvince());
             intent.putExtra("city",adao.getListAddress().get(mposition).getCity());
             intent.putExtra("area",adao.getListAddress().get(mposition).getArea());

@@ -97,8 +97,10 @@ public class MineCommentListAdapter extends BaseAdapter {
             }
             holder.tv_name.setText(obtainMyReplies.get(position).getReceiverName());
             if (obtainMyReplies.get(position).getReplyType().equals("0")){
+                holder.tv_aite.setText("评论@");
                 holder.tv_append.setText("的帖子");
             }else{
+                holder.tv_aite.setText("回复@");
                 holder.tv_append.setText("的评论");
             }
 
@@ -119,6 +121,8 @@ public class MineCommentListAdapter extends BaseAdapter {
         TextView tv_append;
         @InjectView(R.id.rl_reply_voice)
         RelativeLayout rl_reply_voice;
+        @InjectView(R.id.tv_aite)
+        TextView tv_aite;
         ViewHolder(View view) {
             ButterKnife.inject(this, view);
         }

@@ -143,7 +143,7 @@ public class ItemRimActivity extends ToolBarActivity implements View.OnClickList
         //定义地图状态
         MapStatus mMapStatus = new MapStatus.Builder()
                 .target(cenpt)
-                .zoom(14)
+                .zoom(13)
                 .build();
         //定义MapStatusUpdate对象，以便描述地图状态将要发生的变化
         MapStatusUpdate mMapStatusUpdate = MapStatusUpdateFactory.newMapStatus(mMapStatus);
@@ -177,7 +177,8 @@ public class ItemRimActivity extends ToolBarActivity implements View.OnClickList
                 button.setBackgroundResource(R.drawable.popup);
                 InfoWindow.OnInfoWindowClickListener listener = null;
 
-                button.setTextColor(getResources().getColor(R.color.text_black1));
+                button.setTextColor(getResources().
+                        getColor(R.color.text_black1));
                 button.setTextSize(16);
                 button.setText(marker.getTitle());
                 listener = new InfoWindow.OnInfoWindowClickListener() {
@@ -215,7 +216,6 @@ public class ItemRimActivity extends ToolBarActivity implements View.OnClickList
 
             builder.include(l1);
             builder.include(mMarker.getPosition());
-
         }
         mBaiduMap.setMapStatus(MapStatusUpdateFactory
                 .newLatLngBounds(builder.build()));

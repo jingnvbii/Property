@@ -60,8 +60,9 @@ public class MineAssessWeiAdapter extends BaseAdapter {
         if (messages!=null){
             holder.tv_name.setText(messages.get(position).getCompanyname());
             holder.tv_total.setText(messages.get(position).getTotalCost()+"元");
-            holder.tv_data.setText(DateUtil.getStringByFormat(messages.get(position).getCreateTime(),"yyyy-MM-dd hh:mm:ss"));
-            Arad.imageLoader.load(messages.get(position).getImg()).into(holder.iv_head);
+            holder.tv_data.setText(DateUtil.getStringByFormat(messages.get(position).getCreateTime(),"yyyy-MM-dd HH:mm:ss"));
+            Arad.imageLoader.load(messages.get(position).getImg()).
+                    placeholder(context.getResources().getDrawable(R.mipmap.image_default)).into(holder.iv_head);
 
             holder.assess_go.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -73,7 +74,6 @@ public class MineAssessWeiAdapter extends BaseAdapter {
                 }
             });
         }
-
         return convertView;
     }
 

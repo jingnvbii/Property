@@ -77,6 +77,13 @@ public class MineDraftActivity extends AppToolBarActivity implements View.OnClic
             }
         }
         if (requestCode==8){
+            if (datas!=null){
+                datas.clear();
+            }
+            if (draftsPostLists!=null){
+                draftsPostLists.clear();
+            }
+            editDao.getDraftsList(Arad.preferences.getString("memberId"));
             MessageUtils.showShortToast(this, "帖子删除成功");
         }
     }
@@ -105,9 +112,6 @@ public class MineDraftActivity extends AppToolBarActivity implements View.OnClic
             case R.id.bt_delete:
                 position = (String)id;
                 idao.requesDeltePost(position);
-                datas.clear();
-                draftsPostLists.clear();
-                editDao.getDraftsList(Arad.preferences.getString("memberId"));
                 break;
         }
     }

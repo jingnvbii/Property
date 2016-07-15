@@ -33,6 +33,7 @@ import com.ctrl.forum.dao.MemberDao;
 import com.ctrl.forum.entity.MemberInfo;
 import com.ctrl.forum.entity.Plugin;
 import com.ctrl.forum.ui.activity.LoginActivity;
+import com.ctrl.forum.ui.activity.MainActivity;
 import com.ctrl.forum.ui.activity.mine.MineAssessActivity;
 import com.ctrl.forum.ui.activity.mine.MineBlacklistActivity;
 import com.ctrl.forum.ui.activity.mine.MineCollectActivity;
@@ -135,24 +136,37 @@ public class MyFragment extends ToolBarFragment implements View.OnClickListener{
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     public void initData(){
-        mdao = new MemberDao(this);
-        editDao = new EditDao(this);
-
         String id = Arad.preferences.getString("memberId");
         if (Arad.preferences.getString("memberId")!=null && !Arad.preferences.getString("memberId").equals("")) {
             editDao.getVipInfo(id);
         }
-        editDao.getPlugins();
-
-        bt_integral.setText("积分:" + Arad.preferences.getString("point"));
+      /*  bt_integral.setText("积分:" + Arad.preferences.getString("point"));
+        Log.e("nickName==================",Arad.preferences.getString("nickName"));
         tv_nickName.setText("昵称:" + Arad.preferences.getString("nickName"));
         String grad = Arad.preferences.getString("memberLevel"); //等级
         String imgUrl = Arad.preferences.getString("imgUrl");
 
         if (imgUrl!=null&&!imgUrl.equals(""))
         Arad.imageLoader.load(imgUrl).placeholder(getResources().getDrawable(R.mipmap.my_gray)).into(iv_head);//设置头像
-        SetMemberLevel.setLevelImage(getActivity(), iv_grade, grad);//设置等级
+        SetMemberLevel.setLevelImage(getActivity(), iv_grade, grad);//设置等级*/
+    }
 
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_my, container, false);
+        ButterKnife.inject(this, view);
+        mdao = new MemberDao(this);
+        editDao = new EditDao(this);
+        if (!MainActivity.isFrist){
+            initData();
+        }
+        init();
+        editDao.getPlugins();
         alertDialog = new AlertDialog.Builder(getActivity()).
                 setTitle("审核未通过请重新申请!").
                 setPositiveButton("确定", new DialogInterface.OnClickListener() {
@@ -169,21 +183,6 @@ public class MyFragment extends ToolBarFragment implements View.OnClickListener{
                     }
                 }).
                 create();
-
-    }
-
-    @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_my, container, false);
-        ButterKnife.inject(this, view);
-        initData();
-        init();
-
         return view;
     }
     //注册点击监听事件
@@ -380,13 +379,15 @@ public class MyFragment extends ToolBarFragment implements View.OnClickListener{
         super.onResume();
         bt_integral.setText("积分:" + Arad.preferences.getString("point"));
         tv_nickName.setText("昵称:" + Arad.preferences.getString("nickName"));
-        editDao.getVipInfo(Arad.preferences.getString("memberId"));
         String imgUrl = Arad.preferences.getString("imgUrl");
         if (imgUrl!=null&&!imgUrl.equals("")) {
             Arad.imageLoader.load(imgUrl).placeholder(getResources().getDrawable(R.mipmap.my_gray)).into(iv_head);//设置头像
         }else{
-            //游客身份进行登录
+           //游客身份进行登录
            iv_head.setImageDrawable(getResources().getDrawable(R.mipmap.my_gray));
+        }
+        if (MainActivity.isFrist){
+            editDao.getVipInfo(Arad.preferences.getString("memberId"));
         }
     }
 
@@ -408,7 +409,7 @@ public class MyFragment extends ToolBarFragment implements View.OnClickListener{
         }
         if (requestCode==1) {
             memberInfo = editDao.getMemberInfo();
-            Arad.preferences.putString("nickName", memberInfo.getNickName());//昵称
+            Arad.preferences.putString("nickName", memberInfo.getMemberName());//昵称
             Arad.preferences.putString("mobile", memberInfo.getMobile()); //手机号
             Arad.preferences.putString("point", memberInfo.getPoint()); //积分
             Arad.preferences.putString("remark", memberInfo.getRemark());//简介
@@ -424,6 +425,15 @@ public class MyFragment extends ToolBarFragment implements View.OnClickListener{
             Arad.preferences.putString("signState", memberInfo.getSignState());//是否签到; 0:没签到   1:已签到
 
             Arad.preferences.flush();
+
+            bt_integral.setText("积分:" + Arad.preferences.getString("point"));
+            tv_nickName.setText("昵称:" + Arad.preferences.getString("nickName"));
+            String grad = Arad.preferences.getString("memberLevel"); //等级
+            String imgUrl = Arad.preferences.getString("imgUrl");
+            if (imgUrl!=null&&!imgUrl.equals(""))
+                Arad.imageLoader.load(imgUrl).placeholder(getResources().getDrawable(R.mipmap.my_gray)).into(iv_head);//设置头像
+            SetMemberLevel.setLevelImage(getActivity(), iv_grade, grad);//设置等级
+
             if (memberInfo.getSignState().equals("0")) {
                 bt_sign.setText("签到");
             } else {

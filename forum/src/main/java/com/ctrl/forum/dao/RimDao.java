@@ -242,7 +242,8 @@ public class RimDao extends IDao {
             rimSeverCompanyDetails.addAll(list);
         }
         if (requestCode==8){
-            rimServiceCompanies = JsonUtil.node2pojoList(result.findValue("aroundServiceCollectionList"), RimServiceCompany.class);
+            List<RimServiceCompany> list = JsonUtil.node2pojoList(result.findValue("aroundServiceCollectionList"), RimServiceCompany.class);
+            rimServiceCompanies.addAll(list);
         }
     }
 
