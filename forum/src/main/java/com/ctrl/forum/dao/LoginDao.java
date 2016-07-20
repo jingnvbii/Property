@@ -48,13 +48,14 @@ public class LoginDao extends IDao {
      * @param userName 用户名
      * @param password 密码
      * @param lastLoginType （1：Android、2：IOS、3：WEB）
-     *
+     * @param deviceImei 设备串码
      * */
-    public void requestLogin(String userName,String password,String lastLoginType){
+    public void requestLogin(String userName,String password,String deviceImei,String lastLoginType){
         String url="member/login";
         Map<String,String> map = new HashMap<String,String>();
         map.put("userName",userName);
         map.put("password",password);
+        map.put("deviceImei",deviceImei);
         map.put("lastLoginType",lastLoginType);
         postRequest(Constant.RAW_URL+url, mapToRP(map), 0);
     }
