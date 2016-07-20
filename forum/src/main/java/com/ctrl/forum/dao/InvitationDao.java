@@ -258,7 +258,7 @@ public class InvitationDao extends IDao {
                                  String thumbImgPostPicStr
     ){
         Map<String,String> map = new HashMap<String,String>();
-        map.put(Constant.METHOD,"post/editorPost");//方法名称
+        String url="post/editorPost";
         map.put("id",id);
         map.put("categoryId",categoryId);
         map.put("categoryType",categoryType);
@@ -277,7 +277,7 @@ public class InvitationDao extends IDao {
         map.put("UploadPostPicStr",UploadPostPicStr);
         map.put("thumbImgPostPicStr",thumbImgPostPicStr);
 
-        postRequest(Constant.RAW_URL, mapToRP(map),6);
+        postRequest(Constant.RAW_URL+url, mapToRP(map),6);
     }
 
     /**
