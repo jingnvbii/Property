@@ -240,7 +240,7 @@ public class InvitationFragment extends ToolBarFragment implements View.OnClickL
         View autoPlayPicView = mAutoSwitchPicHolder.getRootView();
         // 把轮播图的视图添加到主界面中
         framelayout.addView(autoPlayPicView);
-        //4. 为轮播图设置数据
+        //4. 为轮播图设置数据1
         mAutoSwitchPicHolder.setData(getData());
         mAutoSwitchPicHolder.setData(listBanner);
     }
