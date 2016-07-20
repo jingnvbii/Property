@@ -19,7 +19,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
-import com.beanu.arad.utils.AnimUtil;
 import com.ctrl.forum.photo.adapter.AlbumGridViewAdapter;
 import com.ctrl.forum.photo.util.AlbumHelper;
 import com.ctrl.forum.photo.util.Bimp;
@@ -27,7 +26,6 @@ import com.ctrl.forum.photo.util.ImageBucket;
 import com.ctrl.forum.photo.util.ImageItem;
 import com.ctrl.forum.photo.util.PublicWay;
 import com.ctrl.forum.photo.util.Res;
-import com.ctrl.forum.ui.activity.Invitation.InvitationReleaseActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -115,6 +113,7 @@ public class AlbumActivity extends Activity {
 		public void onClick(View v) {
 		/*	intent.setClass(AlbumActivity.this, ImageFile.class);
 			startActivity(intent);*/
+			Bimp.tempSelectBitmap.clear();
 			onBackPressed();
 		}
 	}
@@ -123,9 +122,10 @@ public class AlbumActivity extends Activity {
 	private class CancelListener implements OnClickListener {
 		public void onClick(View v) {
 			Bimp.tempSelectBitmap.clear();
-			intent.setClass(mContext, InvitationReleaseActivity.class);
+			/*intent.setClass(mContext, InvitationReleaseActivity.class);
 			startActivity(intent);
-			AnimUtil.intentSlidOut(AlbumActivity.this);
+			AnimUtil.intentSlidOut(AlbumActivity.this);*/
+			onBackPressed();
 		}
 	}
 
@@ -229,6 +229,7 @@ public class AlbumActivity extends Activity {
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
 			/*intent.setClass(AlbumActivity.this,InvitationReleaseActivity .class);
 			startActivity(intent);*/
+			Bimp.tempSelectBitmap.clear();
 			onBackPressed();
 		}
 		return false;

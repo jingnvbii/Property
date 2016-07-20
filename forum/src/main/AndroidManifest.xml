@@ -273,6 +273,7 @@
             android:windowSoftInputMode="stateVisible|adjustResize" />
         <activity
             android:name=".ui.activity.Invitation.InvitationDetailFromPlatformActivity"
+            android:hardwareAccelerated="true"
             android:windowSoftInputMode="stateVisible|adjustResize" />
         <activity android:name=".ui.activity.Invitation.InvitationDetailActivity" />
         <activity android:name=".customview.ImageZoomActivity" />

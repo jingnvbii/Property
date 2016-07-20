@@ -20,6 +20,7 @@ import com.ctrl.forum.entity.PostKind;
 import com.ctrl.forum.entity.PostReply;
 import com.ctrl.forum.entity.PostReply2;
 import com.ctrl.forum.entity.Recommend;
+import com.ctrl.forum.entity.RelateMap;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 
@@ -60,7 +61,7 @@ public class InvitationDao extends IDao {
     private List<PostDrafts> listPostDrafts = new ArrayList<>();//草稿箱帖子列表
     private List<CategoryItem> listCategroyItem = new ArrayList<>();//帖子分类级联列表
     private Post2 post2;
-    private List <Post>listRelateMap=new ArrayList<>();//关联帖子列表
+    private List <RelateMap>listRelateMap=new ArrayList<>();//关联帖子列表
     private List <NoticeImage>listNoticeImage=new ArrayList<>();//帖子公告图片
     private NoticeImage noticeImage;
     //  private ArrayList<PostImage> list=new ArrayList<>();
@@ -678,7 +679,7 @@ public class InvitationDao extends IDao {
             list3 = JsonUtil.node2pojoList(result.findValue("list3"), CategoryItem.class);
             list2s = JsonUtil.node2pojoList(result.findValue("list2"), CategoryItem.class);
             userInfo=JsonUtil.node2pojo(result.findValue("user"), MemberInfo.class);
-            List<Post> data = JsonUtil.node2pojo(result.findValue("relatedMap"), new TypeReference<List<Post>>() {
+            List<RelateMap> data = JsonUtil.node2pojo(result.findValue("relatedMap"), new TypeReference<List<RelateMap>>() {
             });
             listRelateMap.addAll(data);
             post2=JsonUtil.node2pojo(result.findValue("post"), Post2.class);
@@ -774,7 +775,7 @@ public class InvitationDao extends IDao {
         return userInfo;
     }
 
-    public List<Post> getListRelateMap() {
+    public List<RelateMap> getListRelateMap() {
         return listRelateMap;
     }
 

@@ -104,6 +104,19 @@
         android:layout_height="1px"
         android:background="@color/line_gray" />
 
+     <TextView
+         android:id="@+id/tv_daoyu"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:paddingLeft="10dp"
+         android:paddingTop="5dp"
+         android:visibility="gone"
+         android:paddingRight="10dp"
+         android:paddingBottom="30dp"
+         android:background="@mipmap/duobianxing"
+         />
+
+
     <TextView
         android:id="@+id/tv_introduction"
         android:layout_width="wrap_content"
@@ -197,8 +210,7 @@
             android:id="@+id/ll_relate"
             android:layout_width="match_parent"
             android:orientation="vertical"
-            android:layout_marginTop="20dp"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:background="@color/white"
             >
             <TextView

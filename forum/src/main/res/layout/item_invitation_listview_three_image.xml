@@ -6,7 +6,6 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="全国了立下了发送的方式的减肥 是对方就看到啥"
         android:textColor="@color/text_black"
         android:maxLines="2"
         android:layout_alignTop="@+id/iv_title_photo"
@@ -28,7 +27,6 @@
         android:layout_marginRight="5dp"
         android:scaleType="fitXY"
         android:layout_height="80dp"
-        android:src="@mipmap/item_store_list"
         />
     <ImageView
         android:id="@+id/iv_image3_02"
@@ -39,7 +37,6 @@
         android:layout_marginRight="5dp"
         android:layout_centerHorizontal="true"
         android:layout_height="80dp"
-        android:src="@mipmap/item_store_list"
         />
     <ImageView
         android:id="@+id/iv_image3_03"
@@ -49,7 +46,6 @@
         android:layout_weight="1"
         android:layout_marginLeft="5dp"
         android:layout_height="80dp"
-        android:src="@mipmap/item_store_list"
         />
 
     </LinearLayout>
@@ -58,11 +54,10 @@
         android:id="@+id/tv_daoyu"
         android:layout_below="@+id/ll"
         android:layout_width="match_parent"
+        android:textColor="@color/text_gray"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
         android:visibility="gone"
-        android:text="fsdfdsfdfdfsdfsdfsdfsdfsdfsdfsdf"
-
         />
 
 
@@ -70,7 +65,6 @@
         android:layout_below="@+id/tv_daoyu"
         android:layout_width="20dp"
         android:layout_height="20dp"
-        android:src="@mipmap/baby"
         android:scaleType="fitXY"
         android:id="@+id/imageView3"
         android:layout_marginTop="10dp"
@@ -82,7 +76,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="@dimen/text_size_small"
-        android:text="给自己一片天"
         android:layout_marginTop="10dp"
         android:layout_marginLeft="5dp"
         android:layout_below="@+id/tv_daoyu"
@@ -93,7 +86,6 @@
     <TextView
         android:layout_width="80dp"
         android:layout_height="wrap_content"
-        android:text="一分钟前"
         android:layout_marginTop="10dp"
         android:layout_below="@+id/tv_daoyu"
         android:drawablePadding="5dp"
@@ -107,7 +99,6 @@
         android:id="@+id/tv_numbers03"
         android:layout_width="50dp"
         android:layout_height="wrap_content"
-        android:text="20"
         android:layout_marginTop="10dp"
         android:drawableLeft="@mipmap/number_small"
         android:drawablePadding="5dp"

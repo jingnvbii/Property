@@ -144,7 +144,7 @@ public class InvitationPinerestGalleyActivity extends ToolBarActivity implements
     private void initData() {
         id = getIntent().getStringExtra("id");
         idao = new InvitationDao(this);
-        idao.requesPostDetail(id,Arad.preferences.getString("memberId"));
+        idao.requesPostDetail(id, Arad.preferences.getString("memberId"));
     }
 
     private void initView() {
@@ -217,16 +217,25 @@ public class InvitationPinerestGalleyActivity extends ToolBarActivity implements
             user = idao.getUser();
             listViews = new ArrayList<>();
            // listViews2 = new ArrayList<>();
-           if(listPostImage==null)return;
-            for (int i = 0; i <listPostImage.size(); i++) {
-                ImageView view = new ImageView(this);
+           if(listPostImage==null){
+               ImageView view = new ImageView(this);
                // TextView view2=new TextView(this);
-                Arad.imageLoader.load(listPostImage.get(i).getImg()).placeholder(R.mipmap.default_error).into(view);
+              view.setImageResource(R.mipmap.default_error);
                // view2.setText(post.getPostImgList().get(i).getRemark());
-                view.setScaleType(ImageView.ScaleType.FIT_XY);
-                listViews.add(view);
-              //  listViews2.add(view2);
-            }
+               view.setScaleType(ImageView.ScaleType.FIT_XY);
+               listViews.add(view);
+               tv_titile.setVisibility(View.GONE);
+           }else {
+               for (int i = 0; i < listPostImage.size(); i++) {
+                   ImageView view = new ImageView(this);
+                   // TextView view2=new TextView(this);
+                   Arad.imageLoader.load(listPostImage.get(i).getImg()).placeholder(R.mipmap.default_error).into(view);
+                   // view2.setText(post.getPostImgList().get(i).getRemark());
+                   view.setScaleType(ImageView.ScaleType.FIT_XY);
+                   listViews.add(view);
+                   //  listViews2.add(view2);
+               }
+           }
 
             if(post.getZambiastate().equals("0")){
                 iv_zan.setImageResource(R.mipmap.zan_white);

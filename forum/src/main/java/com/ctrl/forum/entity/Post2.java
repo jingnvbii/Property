@@ -39,9 +39,36 @@ public class Post2 {
     private String linkLongitude;//
     private String linkLatitude;//
     private String reportSign;//发布人署名
+    private String contentType;//内容类型（0：帖子、1：链接原文、2：商品详情页、3：店铺首页）
+    private String articleLink;//原文链接
+    private String linkItemId;//连接对象id（商品id或者店铺id）
 
     private List<PostImage> postImgList;//图片列表
     private List<PostReply2> postReplyList;//回复列表
+
+    public String getContentType() {
+        return contentType;
+    }
+
+    public void setContentType(String contentType) {
+        this.contentType = contentType;
+    }
+
+    public String getArticleLink() {
+        return articleLink;
+    }
+
+    public void setArticleLink(String articleLink) {
+        this.articleLink = articleLink;
+    }
+
+    public String getLinkItemId() {
+        return linkItemId;
+    }
+
+    public void setLinkItemId(String linkItemId) {
+        this.linkItemId = linkItemId;
+    }
 
     public String getLinkLongitude() {
         return linkLongitude;

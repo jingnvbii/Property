@@ -444,7 +444,7 @@ public class InvitationPullDownActivity extends ToolBarActivity implements View.
                 if (Arad.preferences.getString("isShielded").equals("0")) {
                     Intent intent = new Intent(InvitationPullDownActivity.this, InvitationReleaseActivity.class);
                     intent.putExtra("channelId", channelId);
-                    startActivity(intent);
+                    startActivityForResult(intent, 222);
                     AnimUtil.intentSlidIn(InvitationPullDownActivity.this);
                 }
 
@@ -472,6 +472,9 @@ public class InvitationPullDownActivity extends ToolBarActivity implements View.
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode==1111&&resultCode==RESULT_OK){
+        }
+        if(requestCode==222&&resultCode==RESULT_OK){
+            viewPagerAdapter.reLoad();
         }
     }
 

@@ -157,6 +157,12 @@ public class InvitationListViewAdapter extends BaseAdapter{
                // Post mPost1 = mPostList.get(position);
                holder1.tv_titile0.setText(post.getTitle());
                 holder1.tv_name0.setText(post.getMemberName());
+                if(post.getBlurbs()!=null&&!post.getBlurbs().equals("")){
+                    holder1.tv_daoyu.setVisibility(View.VISIBLE);
+                    holder1.tv_daoyu.setText(post.getBlurbs());
+                }else {
+                    holder1.tv_daoyu.setVisibility(View.GONE);
+                }
                 if(post.getPublishTime()!=null)
                 holder1.tv_time0.setText(TimeUtils.dateTime(post.getPublishTime()));
                 holder1.tv_numbers0.setText(post.getCommentNum() + "");
@@ -170,6 +176,12 @@ public class InvitationListViewAdapter extends BaseAdapter{
               //  holder2.tv_time1.setText(TimeUtils.date(Long.parseLong(post.getPublishTime())));
                 holder2.tv_time1.setText(TimeUtils.dateTime(post.getPublishTime()));
                 holder2.tv_numbers1.setText(post.getCommentNum() + "");
+                if(post.getBlurbs()!=null&&!post.getBlurbs().equals("")){
+                    holder2.tv_daoyu.setVisibility(View.VISIBLE);
+                    holder2.tv_daoyu.setText(post.getBlurbs());
+                }else {
+                    holder2.tv_daoyu.setVisibility(View.GONE);
+                }
                 Arad.imageLoader.load(post.getImgUrl()).placeholder(R.mipmap.default_error).resize(50,50)
                         .centerCrop().into(holder2.imageView2);
                 if(post.getPostImgList()!=null) {
@@ -185,6 +197,12 @@ public class InvitationListViewAdapter extends BaseAdapter{
                 holder3.tv_name3.setText(post.getMemberName());
                 holder3.tv_time3.setText(TimeUtils.dateTime(post.getPublishTime()));
                 holder3.tv_numbers03.setText(post.getCommentNum() + "");
+                if(post.getBlurbs()!=null&&!post.getBlurbs().equals("")){
+                    holder3.tv_daoyu.setVisibility(View.VISIBLE);
+                    holder3.tv_daoyu.setText(post.getBlurbs());
+                }else {
+                    holder3.tv_daoyu.setVisibility(View.GONE);
+                }
                 Arad.imageLoader.load(post.getImgUrl()).placeholder(R.mipmap.default_error).resize(50,50)
                         .centerCrop().into(holder3.imageView3);
                 if(post.getPostImgList()!=null) {
@@ -207,6 +225,8 @@ public class InvitationListViewAdapter extends BaseAdapter{
                 TextView tv_name0;
         @InjectView(R.id.tv_time0)//时间
                 TextView tv_time0;
+        @InjectView(R.id.tv_daoyu)//导语
+                TextView tv_daoyu;
         @InjectView(R.id.tv_numbers0)//评论数
         TextView  tv_numbers0;
         @InjectView(R.id.imageView0)
@@ -222,6 +242,8 @@ public class InvitationListViewAdapter extends BaseAdapter{
                 TextView tv_name1;
         @InjectView(R.id.tv_time1)//时间
                 TextView tv_time1;
+        @InjectView(R.id.tv_daoyu)//导语
+                TextView tv_daoyu;
         @InjectView(R.id.tv_numbers1)//评论数
         TextView  tv_numbers1;
         @InjectView(R.id.imageView1)
@@ -239,6 +261,8 @@ public class InvitationListViewAdapter extends BaseAdapter{
                 TextView tv_name3;
         @InjectView(R.id.tv_time3)//时间
                 TextView tv_time3;
+        @InjectView(R.id.tv_daoyu)//导语
+                TextView tv_daoyu;
         @InjectView(R.id.tv_numbers03)//评论数
         TextView  tv_numbers03;
         @InjectView(R.id.imageView3)

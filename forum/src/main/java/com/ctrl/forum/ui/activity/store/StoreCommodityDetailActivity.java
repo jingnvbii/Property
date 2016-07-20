@@ -827,6 +827,10 @@ public class StoreCommodityDetailActivity extends AppToolBarActivity implements 
                     startActivity(new Intent(StoreCommodityDetailActivity.this, LoginActivity.class));
                     return;
                 }
+                if(product.getStock().equals("0")){
+                    MessageUtils.showShortToast(StoreCommodityDetailActivity.this,"库存不足");
+                    return;
+                }
                 tv_add_cart.setVisibility(View.GONE);
                 rl_commodity_detail_add_cart.setVisibility(View.VISIBLE);
                 tv_commodity_detail_num.setVisibility(View.VISIBLE);

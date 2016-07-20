@@ -18,6 +18,7 @@ import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -107,7 +108,6 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
     private TextView tv_tel;//联系电话
     private TextView tv_location;//位置
     private TextView tv_name;//名片
-
     private Spinner spinner_second_kind;
     private Spinner spinner_third_kind;
     private InvitationDao idao;
@@ -121,28 +121,16 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
     private String name;
     private String adress;
     private String tel;
-
     private GridAdapter adapter;
-
-
     private String tv_location_name;//位置标识
-
-
-
-
     @InjectView(R.id.tv_release)//发布
     TextView tv_release;
-
     @InjectView(R.id.noScrollgridview)
     GridViewForScrollView noScrollgridview;
-
-
-
    @InjectView(R.id.et_tittle)//标题
     EditText et_tittle;
     @InjectView(R.id.et_content)//内容
     EditText et_content;
-
     @InjectView(R.id.tv_release_back)//取消
     TextView tv_release_back;
     @InjectView(R.id.tv_release_save)//存草稿
@@ -165,14 +153,11 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
     private String checkType3;
     private String checkType2;
     private List<CategoryItem> listItemCategroy3;
-
     private boolean isSave;//是否存草稿
-
     private String vcardDisplay;
     private List<List2> list;
     private String categoryTree; //分类
     private String[] eid;
-
     private Map<String,String> delIds = new HashMap<>();
     private List<Image> delImages = new ArrayList<>(); //删除的图片
     private List<Image> addImages = new ArrayList<>(); //添加的图片
@@ -190,15 +175,19 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
         // 隐藏输入法1
        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         ButterKnife.inject(this);
-        PublicWay.activityList.add(this);
         initBuildToken();
         Res.init(this);
         bimap = BitmapFactory.decodeResource(
                 getResources(),
                 R.drawable.icon_addpic_unfocused);
-       Init();
+        PublicWay.activityList.add(this);
+
+        Bimp.max=0;
+        Init();
        initView();
        checkActivity();
+
+
 
     }
 
@@ -275,6 +264,7 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
             public void onClick(View v) {
                 Intent intent = new Intent(InvitationReleaseActivity.this,
                         AlbumActivity.class);
+                intent.putExtra("activity","InvitationReleaseActivity");
                 startActivity(intent);
                // overridePendingTransition(R.anim.activity_translate_in, R.anim.activity_translate_out);
                 AnimUtil.intentSlidIn(InvitationReleaseActivity.this);
@@ -297,8 +287,6 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
 
             public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
                                     long arg3) {
-                Log.i("tag","arg2===o"+arg2);
-                Log.i("tag","size==  bimp=o"+Bimp.tempSelectBitmap.size());
                 if (arg2 == Bimp.tempSelectBitmap.size()) {
                     ll_popup.startAnimation(AnimationUtils.loadAnimation(InvitationReleaseActivity.this, R.anim.activity_translate_in));
                     pop.showAtLocation(noScrollgridview, Gravity.BOTTOM, 0, 0);
@@ -432,8 +420,10 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
 
     protected void onRestart() {
         adapter.update();
+        Bimp.max=Bimp.tempSelectBitmap.size();
         super.onRestart();
     }
+
 
     private static final int TAKE_PICTURE = 0x000001;
 
@@ -461,8 +451,9 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
                 MessageUtils.showShortToast(this, "帖子发布成功");
             }
             isSave=false;
-            resetBimp();
+            setResult(RESULT_OK);
             finish();
+
         }
 
         if(requestCode==888){
@@ -918,8 +909,8 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
                     for (int i = 0; i < Bimp.tempSelectBitmap.size(); i++) {
                         uri = Uri.parse(MediaStore.Images.Media.insertImage(getContentResolver(), Bimp.tempSelectBitmap.get(i).getBitmap(), null, null));
                         preUpload(uri);
-                        doUpload();
                     }
+                    doUpload();
                 }
                 if(!et_content.getText().toString().equals("")) {
                     //发布帖子
@@ -1175,7 +1166,7 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
     @Override
     protected void onDestroy() {
         super.onDestroy();
-       resetBimp();
+        resetBimp();
        // System.exit(0);
     }
 
@@ -1249,6 +1240,13 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
 
     }
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            onBackPressed();
+        }
+        return false;
+    }
 
     @Override
     public boolean setupToolBarLeftText(TextView mLeftText) {
@@ -1357,10 +1355,17 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
             textViewCurrent.setText("\n" + ret.getStatusCode() + " " + ret.getResponse());
             Log.d("handler", textViewCurrent.getText().toString());*/
 
-            String url=QiNiuConfig.BASE_URL+qiniuKey;
-            urlList.add(url);
-            if (urlList.size() == Bimp.tempSelectBitmap.size()){
-              releaseInvitation();
+            if (ups.size() == Bimp.tempSelectBitmap.size()){
+                for(int i=0;i<ups.size();i++){
+                    String url=QiNiuConfig.BASE_URL+keyList.get(i);
+                    urlList.add(url);
+                    Log.i("tag","url==i=="+urlList.get(i));
+                }
+                if(urlList.size()==Bimp.tempSelectBitmap.size()) {
+                    Log.i("tag","check type=11=="+checkType2);
+                    Log.i("tag","check type=22=="+checkType3);
+                    releaseInvitation();
+                }
             }
             try {
                 String sourceId = generateSourceId(p, passParam);
@@ -1403,7 +1408,6 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
     private void preUpload(Uri uri) {
         // 此参数会传递到回调
         String passObject = "test: " + uri.getEncodedPath() + "passObject";
-
         qiniuKey =UUID.randomUUID().toString();
         keyList.add(qiniuKey);
         PutExtra extra = null;
