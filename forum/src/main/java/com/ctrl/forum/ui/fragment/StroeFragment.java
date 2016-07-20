@@ -154,10 +154,15 @@ public class StroeFragment extends ToolBarFragment implements View.OnClickListen
     private int item = 0;
     private AnimationSet set = new AnimationSet(true);
     private AlphaAnimation animation = new AlphaAnimation(0.1f, 1.0f);
+    private AlphaAnimation animation2 = new AlphaAnimation(1.0f, 1.0f);
     private TranslateAnimation ta = new TranslateAnimation(
             Animation.RELATIVE_TO_SELF, 0, Animation.RELATIVE_TO_SELF,
             0, Animation.RELATIVE_TO_SELF, 2.0f,
             Animation.RELATIVE_TO_SELF, 0);
+    private TranslateAnimation ta2 = new TranslateAnimation(
+            Animation.RELATIVE_TO_SELF, 0, Animation.RELATIVE_TO_SELF,
+            0, Animation.RELATIVE_TO_SELF,0,
+            Animation.RELATIVE_TO_SELF,-2.0f);
     private Handler handler = new Handler() {
         public void handleMessage(android.os.Message msg) {
             switch (msg.what) {
@@ -551,13 +556,14 @@ public class StroeFragment extends ToolBarFragment implements View.OnClickListen
         for (int i = 0; i < listMallNotice.size(); i++) {
             listNoticeString.add(listMallNotice.get(i).getContent());
         }
+       // tv_change.setText(listNoticeString.get(item));
         //实现自动切换界面
         new Thread(new Runnable() {
             @Override
             public void run() {
                 while (isloop) {
                     //系统时钟的睡眠方法---->电量的消耗很少。
-                    SystemClock.sleep(4000);
+                    SystemClock.sleep(5000);
                     handler.sendEmptyMessage(1);
                 }
             }
@@ -623,10 +629,16 @@ public class StroeFragment extends ToolBarFragment implements View.OnClickListen
     }
 
     private void initNoticeView() {
-        tv_change.setText("");
+
+        ta.setDuration(2000);
+        animation.setDuration(500);
+        animation2.setDuration(500);
+        ta2.setDuration(2000);
+        ta.setStartOffset(4000);
         set.addAnimation(animation);
         set.addAnimation(ta);
-        set.setDuration(2000);
+        set.addAnimation(ta2);
+        set.addAnimation(animation2);
         set.setRepeatMode(Animation.REVERSE);
     }
 

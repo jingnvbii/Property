@@ -400,9 +400,9 @@ public class InvitationPullDownActivity extends ToolBarActivity implements View.
     @Override
     public String setupToolBarTitle() {
         TextView tv_title = getmTitle();
-        tv_title.setText("帖子列表");
+       // tv_title.setText(get);
         tv_title.setTextColor(getResources().getColor(R.color.text_black));
-        return "帖子列表";
+        return getIntent().getStringExtra("channelName");
     }
 
     @Override
