@@ -380,14 +380,19 @@ public class MyFragment extends ToolBarFragment implements View.OnClickListener{
         bt_integral.setText("积分:" + Arad.preferences.getString("point"));
         tv_nickName.setText("昵称:" + Arad.preferences.getString("nickName"));
         String imgUrl = Arad.preferences.getString("imgUrl");
-        if (imgUrl!=null&&!imgUrl.equals("")) {
-            Arad.imageLoader.load(imgUrl).placeholder(getResources().getDrawable(R.mipmap.my_gray)).into(iv_head);//设置头像
-        }else{
-           //游客身份进行登录
-           iv_head.setImageDrawable(getResources().getDrawable(R.mipmap.my_gray));
-        }
-        if (MainActivity.isFrist){
-            editDao.getVipInfo(Arad.preferences.getString("memberId"));
+        if (Arad.preferences.getString("memberId")!=null && !Arad.preferences.getString("memberId").equals("")) {
+            if (imgUrl != null && !imgUrl.equals("")) {
+                Arad.imageLoader.load(imgUrl).placeholder(getResources().getDrawable(R.mipmap.my_gray)).into(iv_head);//设置头像
+                if (MainActivity.isFrist) {
+                    editDao.getVipInfo(Arad.preferences.getString("memberId"));
+                }
+            }else {
+                //游客身份进行登录
+                iv_head.setImageDrawable(getResources().getDrawable(R.mipmap.my_gray));
+            }
+        }else {
+            //游客身份进行登录
+            iv_head.setImageDrawable(getResources().getDrawable(R.mipmap.my_gray));
         }
     }
 

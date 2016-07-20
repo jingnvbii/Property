@@ -199,6 +199,8 @@ public class PlotFragment extends ToolBarFragment implements View.OnClickListene
                 if (Arad.preferences.getString("memberId") != null && !Arad.preferences.getString("memberId").equals("")) {
                     PAGE_NUM = 1;
                     plotDao.queryCommunityPostList(Arad.preferences.getString("memberId"), communityId, PAGE_NUM + "", Constant.PAGE_SIZE + "");
+                }else{
+                    lv_content.onRefreshComplete();
                 }
             }
 
@@ -486,7 +488,10 @@ public class PlotFragment extends ToolBarFragment implements View.OnClickListene
         if (requestCode==19){
            listBanner = idao.getListBanner();
             if (listBanner!=null){
+                frameLayout.setVisibility(View.VISIBLE);
                setLoopView();
+            }else{
+                frameLayout.setVisibility(View.GONE);
             }
         }
     }
@@ -513,7 +518,8 @@ public class PlotFragment extends ToolBarFragment implements View.OnClickListene
                 if (Arad.preferences.getString("memberId").equals("")){
                     startActivity(new Intent(getActivity(), LoginActivity.class));
                 }else {
-                    startActivity(new Intent(getActivity(),PlotAddInvitationActivity.class));
+                    Intent intent = new Intent(getActivity(),PlotAddInvitationActivity.class);
+                    startActivityForResult(intent,7788);
                 }
                 break;
             case R.id.rim_serve:
@@ -543,6 +549,16 @@ public class PlotFragment extends ToolBarFragment implements View.OnClickListene
                if (posts != null) {
                    posts.clear();
                }
+               PAGE_NUM=1;
+               plotDao.queryCommunityPostList(Arad.preferences.getString("memberId"),
+                       communityId,
+                       PAGE_NUM + "", Constant.PAGE_SIZE + "");
+           }
+           if (requestCode==7788){
+               if (posts != null) {
+                   posts.clear();
+               }
+               PAGE_NUM=1;
                plotDao.queryCommunityPostList(Arad.preferences.getString("memberId"),
                        communityId,
                        PAGE_NUM + "", Constant.PAGE_SIZE + "");

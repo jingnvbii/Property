@@ -12,6 +12,7 @@ public class ImageItem implements Serializable {
 	public String imagePath;
 	private Bitmap bitmap;
 	public boolean isSelected = false;
+	private String imageUrl;
 	
 	public String getImageId() {
 		return imageId;
@@ -51,7 +52,24 @@ public class ImageItem implements Serializable {
 	public void setBitmap(Bitmap bitmap) {
 		this.bitmap = bitmap;
 	}
-	
-	
-	
+
+	public String getImageUrl() {
+		return imageUrl;
+	}
+
+	public void setImageUrl(String imageUrl) {
+		this.imageUrl = imageUrl;
+	}
+
+	@Override
+	public String toString() {
+		return "ImageItem{" +
+				"bitmap=" + bitmap +
+				", imageId='" + imageId + '\'' +
+				", thumbnailPath='" + thumbnailPath + '\'' +
+				", imagePath='" + imagePath + '\'' +
+				", isSelected=" + isSelected +
+				", imageUrl='" + imageUrl + '\'' +
+				'}';
+	}
 }

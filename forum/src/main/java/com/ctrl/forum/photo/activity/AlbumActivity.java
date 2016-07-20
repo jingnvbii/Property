@@ -1,6 +1,5 @@
 package com.ctrl.forum.photo.activity;
 
-
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -10,6 +9,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -19,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import com.beanu.arad.utils.AnimUtil;
 import com.ctrl.forum.photo.adapter.AlbumGridViewAdapter;
 import com.ctrl.forum.photo.util.AlbumHelper;
 import com.ctrl.forum.photo.util.Bimp;
@@ -26,6 +27,8 @@ import com.ctrl.forum.photo.util.ImageBucket;
 import com.ctrl.forum.photo.util.ImageItem;
 import com.ctrl.forum.photo.util.PublicWay;
 import com.ctrl.forum.photo.util.Res;
+import com.ctrl.forum.ui.activity.Invitation.InvitationReleaseActivity;
+import com.ctrl.forum.ui.activity.plot.PlotAddInvitationActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,6 +62,9 @@ public class AlbumActivity extends Activity {
 	private AlbumHelper helper;
 	public static List<ImageBucket> contentList;
 	public static Bitmap bitmap;
+	private Class<?> activity;
+    public static List<ImageItem> addList = new ArrayList<>(); //从编辑界面进来新增的图片
+
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(Res.getLayoutID("plugin_camera_album"));
@@ -72,6 +78,14 @@ public class AlbumActivity extends Activity {
 		initListener();
 		//这个函数主要用来控制预览和完成按钮的状态
 		isShowOkBt();
+		if (getIntent().getStringExtra("activity")!=null && !getIntent().getStringExtra("activity").equals("")) {
+			if (getIntent().getStringExtra("activity").equals("PlotAddInvitationActivity")) {
+				activity = PlotAddInvitationActivity.class;
+			}
+			if (getIntent().getStringExtra("activity").equals("InvitationReleaseActivity")) {
+				activity = InvitationReleaseActivity.class;
+			}
+		}
 	}
 	
 	BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {  
@@ -93,7 +107,6 @@ public class AlbumActivity extends Activity {
 				startActivity(intent);
 			}
 		}
-
 	}
 
 	// 完成按钮的监听
@@ -113,7 +126,6 @@ public class AlbumActivity extends Activity {
 		public void onClick(View v) {
 		/*	intent.setClass(AlbumActivity.this, ImageFile.class);
 			startActivity(intent);*/
-			Bimp.tempSelectBitmap.clear();
 			onBackPressed();
 		}
 	}
@@ -122,14 +134,15 @@ public class AlbumActivity extends Activity {
 	private class CancelListener implements OnClickListener {
 		public void onClick(View v) {
 			Bimp.tempSelectBitmap.clear();
-			/*intent.setClass(mContext, InvitationReleaseActivity.class);
+
+			addList.clear();  //删除增加的图片
+
+			intent.setClass(mContext, activity);
 			startActivity(intent);
-			AnimUtil.intentSlidOut(AlbumActivity.this);*/
+			AnimUtil.intentSlidOut(AlbumActivity.this);
 			onBackPressed();
 		}
 	}
-
-	
 
 	// 初始化，给一些对象赋值
 	private void init() {
@@ -181,10 +194,17 @@ public class AlbumActivity extends Activity {
 						if (isChecked) {
 							chooseBt.setVisibility(View.VISIBLE);
 							Bimp.tempSelectBitmap.add(dataList.get(position));
+
+							addList.add(dataList.get(position));
+							Log.e("addList",addList.toString());
+
 							okButton.setText(Res.getString("finish")+"(" + Bimp.tempSelectBitmap.size()
 									+ "/"+PublicWay.num+")");
 						} else {
 							Bimp.tempSelectBitmap.remove(dataList.get(position));
+
+							addList.remove(dataList.get(position));
+
 							chooseBt.setVisibility(View.GONE);
 							okButton.setText(Res.getString("finish")+"(" + Bimp.tempSelectBitmap.size() + "/"+PublicWay.num+")");
 						}
@@ -193,7 +213,6 @@ public class AlbumActivity extends Activity {
 				});
 
 		okButton.setOnClickListener(new AlbumSendListener());
-
 	}
 
 	private boolean removeOneData(ImageItem imageItem) {
@@ -229,7 +248,6 @@ public class AlbumActivity extends Activity {
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
 			/*intent.setClass(AlbumActivity.this,InvitationReleaseActivity .class);
 			startActivity(intent);*/
-			Bimp.tempSelectBitmap.clear();
 			onBackPressed();
 		}
 		return false;

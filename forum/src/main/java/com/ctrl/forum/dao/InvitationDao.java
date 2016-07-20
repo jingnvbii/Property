@@ -683,7 +683,6 @@ public class InvitationDao extends IDao {
             });
             listRelateMap.addAll(data);
             post2=JsonUtil.node2pojo(result.findValue("post"), Post2.class);
-
         }
 
         if(requestCode == 4){
@@ -767,8 +766,8 @@ public class InvitationDao extends IDao {
         return listCategroyItem;
     }
 
-
     public Post2 getPost2(){
+        //Log.e("post2.getPost2=============", post2.toString());
         return post2;
     }
     public MemberInfo getUser(){

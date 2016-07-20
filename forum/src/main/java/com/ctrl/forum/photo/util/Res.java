@@ -27,7 +27,6 @@ public class Res {
 
 	/**
 	 * layout文件夹下的xml文件id获取
-	 * 
 	 */
 	public static int getLayoutID(String layoutName) {
 		return resources.getIdentifier(layoutName, "layout", pkgName);
