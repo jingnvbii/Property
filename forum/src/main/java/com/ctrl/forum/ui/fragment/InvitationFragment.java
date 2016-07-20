@@ -101,7 +101,7 @@ public class InvitationFragment extends ToolBarFragment implements View.OnClickL
 
 
     /*
-    * 实现文字上下轮播
+    * 实现文字上下轮播1
     * */
     private boolean isloop = true;
     private List<String> listNoticeString = new ArrayList<>();
