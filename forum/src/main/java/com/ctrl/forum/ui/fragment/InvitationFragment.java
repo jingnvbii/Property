@@ -337,7 +337,7 @@ public class InvitationFragment extends ToolBarFragment implements View.OnClickL
     @Override
     public void onRequestFaild(String errorNo, String errorMessage) {
         super.onRequestFaild(errorNo, errorMessage);
-        showProgress(false);
+       // showProgress(false);
         lv_invitation_fragment_home.onRefreshComplete();
     }
 

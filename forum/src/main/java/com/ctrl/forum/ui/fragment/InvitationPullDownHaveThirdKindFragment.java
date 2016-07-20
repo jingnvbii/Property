@@ -370,6 +370,7 @@ public class InvitationPullDownHaveThirdKindFragment extends ToolBarFragment {
                     listPost.clear();
                 }
                 bol = 1;
+                gridViewAdapter.setPos(position);
                 Position = position;
                 thirdKindId=listCategroy3.get(position).getId();
                 idao.requestPostListByCategory(Arad.preferences.getString("memberId"), listCategroy3.get(position).getId(), "0", "", "",PAGE_NUM, Constant.PAGE_SIZE);
