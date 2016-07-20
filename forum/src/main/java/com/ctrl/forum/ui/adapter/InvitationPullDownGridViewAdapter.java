@@ -1,6 +1,7 @@
 package com.ctrl.forum.ui.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +23,7 @@ import butterknife.InjectView;
 public class InvitationPullDownGridViewAdapter extends BaseAdapter{
     private Context mContext;
     private List<Category>kindList;
+    private int pos=-1;
 
     public InvitationPullDownGridViewAdapter(Context context) {
                this.mContext=context;
@@ -29,6 +31,10 @@ public class InvitationPullDownGridViewAdapter extends BaseAdapter{
 
     public void setList(List<Category> list) {
         this.kindList = list;
+        notifyDataSetChanged();
+    }
+    public void setPos(int pos) {
+        this.pos = pos;
         notifyDataSetChanged();
     }
 
@@ -60,6 +66,11 @@ public class InvitationPullDownGridViewAdapter extends BaseAdapter{
         }
         Category kind=kindList.get(position);
         holder.item_tv.setText(kind.getName());
+        if(position==pos){
+            holder.item_tv.setBackgroundResource(R.drawable.blue_border_bg_selcet);
+        }else {
+            holder.item_tv.setBackgroundColor(Color.parseColor("#00000000"));
+        }
         return convertView;
     }
 

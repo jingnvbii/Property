@@ -62,8 +62,8 @@ public class StoreGridViewAdapter extends BaseAdapter{
         }
         MallKind kind=kindList.get(position);
         holder.tv_grid_item.setText(kind.getKindName());
-        if(kind.getKindIcon()!=null)
-        Arad.imageLoader.load(kind.getKindIcon()).placeholder(R.drawable.ic_launcher).into(holder.iv_grid_item);
+        if(kind.getKindIcon()!=null&&!kind.getKindIcon().equals(""))
+        Arad.imageLoader.load(kind.getKindIcon()).placeholder(R.mipmap.default_error).into(holder.iv_grid_item);
         return convertView;
     }
 
