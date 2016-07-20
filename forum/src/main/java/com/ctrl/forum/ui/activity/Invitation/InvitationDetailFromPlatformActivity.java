@@ -24,8 +24,10 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -61,15 +63,15 @@ import com.ctrl.forum.dao.InvitationDao;
 import com.ctrl.forum.dao.SoundDao;
 import com.ctrl.forum.entity.Image;
 import com.ctrl.forum.entity.MemberInfo;
-import com.ctrl.forum.entity.Post;
 import com.ctrl.forum.entity.Post2;
 import com.ctrl.forum.entity.PostReply2;
+import com.ctrl.forum.entity.RelateMap;
 import com.ctrl.forum.face.FaceRelativeLayout;
 import com.ctrl.forum.manager.MediaManager;
 import com.ctrl.forum.ui.activity.LoginActivity;
 import com.ctrl.forum.ui.activity.mine.MineDetailActivity;
 import com.ctrl.forum.ui.adapter.InvitationDetailFromPlatAdapter;
-import com.ctrl.forum.ui.adapter.InvitationListViewAdapter;
+import com.ctrl.forum.ui.adapter.InvitationListViewForRelateAdapter;
 import com.ctrl.forum.utils.Base64Util;
 import com.ctrl.forum.utils.TimeUtils;
 import com.ctrl.forum.utils.Utils;
@@ -171,7 +173,8 @@ public class InvitationDetailFromPlatformActivity extends AppToolBarActivity imp
 
     @InjectView(R.id.tv_introduction)
     TextView tv_introduction;
-
+    @InjectView(R.id.tv_daoyu)
+    TextView tv_daoyu;
     @InjectView(R.id.tv_tel)
     TextView tv_tel;
 
@@ -224,8 +227,8 @@ public class InvitationDetailFromPlatformActivity extends AppToolBarActivity imp
     private float second;//语音时长;
     private MemberInfo user;
 
-    private InvitationListViewAdapter mInvitationListViewAdapter;
-    private List<Post> listRelateMap;
+    private InvitationListViewForRelateAdapter mInvitationListViewAdapter;
+    private List<RelateMap> listRelateMap;
     private ImageDao Idao;
     private String longitude;
     private String latutude;
@@ -316,7 +319,7 @@ public class InvitationDetailFromPlatformActivity extends AppToolBarActivity imp
         tv_link_tel.setOnClickListener(this);
         tv_link_url.setOnClickListener(this);
 
-        mInvitationListViewAdapter = new InvitationListViewAdapter(this);
+        mInvitationListViewAdapter = new InvitationListViewForRelateAdapter(this);
 
         lv_reply_detail.setAdapter(replyAdapter);
         lv_relevance_invitation.setAdapter(mInvitationListViewAdapter);
@@ -350,6 +353,29 @@ public class InvitationDetailFromPlatformActivity extends AppToolBarActivity imp
                     }
                 }, 1000);
 
+            }
+        });
+
+        lv_relevance_invitation.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = null;
+                String type = listRelateMap.get(position).getRtuRelatedPost().getSourceType();
+                switch (type) {
+                    case "0"://平台
+                        intent = new Intent(InvitationDetailFromPlatformActivity.this, InvitationDetailFromPlatformActivity.class);
+                        intent.putExtra("id", listRelateMap.get(position).getRtuRelatedPost().getId());
+                        startActivity(intent);
+                        AnimUtil.intentSlidIn(InvitationDetailFromPlatformActivity.this);
+
+                        break;
+                    case "1"://app
+                        intent = new Intent(InvitationDetailFromPlatformActivity.this, InvitationPinterestDetailActivity.class);
+                        intent.putExtra("id", listRelateMap.get(position).getRtuRelatedPost().getId());
+                        startActivity(intent);
+                        AnimUtil.intentSlidIn(InvitationDetailFromPlatformActivity.this);
+                        break;
+                }
             }
         });
 
@@ -517,6 +543,11 @@ public class InvitationDetailFromPlatformActivity extends AppToolBarActivity imp
             tv_address.setText(post.getContactAddress());
             tv_introduction.setText(post.getTitle());
 
+            if(post.getBlurbs()!=null&&!post.getBlurbs().equals("")){
+                tv_daoyu.setVisibility(View.VISIBLE);
+                tv_daoyu.setText(post.getBlurbs());
+            }
+
             if (post.getContactPhone() == null || post.getContactPhone().equals("")) {
                 ll_tel.setVisibility(View.GONE);
                 tv_link_tel.setVisibility(View.GONE);
@@ -538,6 +569,8 @@ public class InvitationDetailFromPlatformActivity extends AppToolBarActivity imp
 
             if(listRelateMap==null||listRelateMap.size()==0){
                 ll_relate.setVisibility(View.GONE);
+            }else {
+                mInvitationListViewAdapter.setList(listRelateMap);
             }
 
 
@@ -582,14 +615,14 @@ public class InvitationDetailFromPlatformActivity extends AppToolBarActivity imp
             if (post.getPublishTime() != null && !post.getPublishTime().equals("")) {
                 tv_release_time.setText("发布时间：" + TimeUtils.date(Long.parseLong(post.getPublishTime())));
             }
-            tv_introduction.setText(post.getBlurbs());
-            listRelateMap = idao.getListRelateMap();
-            mInvitationListViewAdapter.setList(listRelateMap);
+
 
             //加载富文本
             loadRichText();
 
             if(post.getLinkLatitude().equals("0")&&post.getLinkLongitude().equals("0")){
+                mapview_invitation.setVisibility(View.GONE);
+            }else if(post.getLinkLatitude().equals("")||post.getLinkLongitude().equals("")){
                 mapview_invitation.setVisibility(View.GONE);
             }else {
                 //显示地图
@@ -639,10 +672,57 @@ public class InvitationDetailFromPlatformActivity extends AppToolBarActivity imp
     * */
     private void loadRichText() {
         //自适应屏幕
+        webview.getSettings().setJavaScriptEnabled(true);
         webview.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
         webview.getSettings().setLoadWithOverviewMode(true);
         webview.getSettings().setDefaultTextEncodingName("UTF -8");
-        webview.loadDataWithBaseURL(null, post.getContent(), "text/html", "UTF-8", null);
+        //判断html中是否包含视频<iframe width="300" height="150">标签
+
+        if(post.getContent().indexOf("iframe") == -1 && post.getContent().indexOf("IFRAME") == -1){
+
+            // 设置加载进来的页面自适应手机屏幕
+
+            webview.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
+
+        }else{
+
+            webview.setWebChromeClient(new
+                    WebChromeClient()); // chrom
+
+            webview.getSettings().setPluginState(WebSettings.PluginState.ON); //Support Plugins, for example just like flash plugin.
+
+        }
+
+        //采用javascript控制width和height标签值
+
+        String javascript="<script type='text/javascript'>"  +
+
+                "var y=document.getElementsByTagName('img');"  +
+
+                "for(var i=0;i<y.length;i++){"  +
+
+                "y[i].setAttribute('width','100%');"
+                +
+
+                "y[i].removeAttribute('height');"
+                +
+
+                "y[i].style.width='100%';"
+                +
+
+                "var str = y[i].getAttribute('style');"  +
+
+                "str = str.replace(/height\\b\\s*\\:\\s*\\d+\\px;?/ig, '');"  +
+
+                "y[i].setAttribute('style',str);}</script>";
+
+
+
+        //html拼接
+
+        String htmlContent = post.getContent() + javascript;
+        webview.loadDataWithBaseURL(null, htmlContent, "text/html", "UTF-8", null);
+       // webview.loadDataWithBaseURL(null, post.getContent(), "text/html", "UTF-8", null);
 
     }
 

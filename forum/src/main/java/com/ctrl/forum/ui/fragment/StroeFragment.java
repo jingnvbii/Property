@@ -442,10 +442,16 @@ public class StroeFragment extends ToolBarFragment implements View.OnClickListen
             Arad.imageLoader.load(listNoticeImage.get(0).getImgUrl()).placeholder(R.mipmap.jinrigonggao_red).into(iv_notice_store_home);
             //    MessageUtils.showShortToast(getActivity(), "商城初始化成功");
             setValue();
-            initRecommend();//推荐列表初始化
-            initNotice();//公告栏数据初始化
-            //调用轮播图
-            setLoopView();
+            if(listMallRecommend!=null&&listMallRecommend.size()>0) {
+                initRecommend();//推荐列表初始化
+            }
+            if(listMallNotice!=null&&listMallNotice.size()>0) {
+                initNotice();//公告栏数据初始化
+            }
+            if(listBanner!=null&&listBanner.size()>0) {
+                //调用轮播图
+                setLoopView();
+            }
             initViewPager();
             viewpagerAdapter = new MyViewPagerAdapter(getActivity(), map);
             myViewPager.setAdapter(viewpagerAdapter);

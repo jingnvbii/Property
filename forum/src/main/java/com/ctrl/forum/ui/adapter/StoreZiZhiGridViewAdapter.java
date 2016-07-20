@@ -60,8 +60,8 @@ public class StoreZiZhiGridViewAdapter extends BaseAdapter{
             holder=(ViewHolder)convertView.getTag();
         }
         Qualification2 mQualification=kindList.get(position);
+        if(mQualification.getImg()!=null&&!mQualification.getImg().equals(""))
         Arad.imageLoader.load(mQualification.getImg()).placeholder(R.mipmap.default_error).into(holder.iv_zizhi);
-
         return convertView;
     }
 

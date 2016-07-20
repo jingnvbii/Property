@@ -30,10 +30,38 @@ public class Post {
     private List<PostReply> postReplyList;//回复列表
     private String content;//帖子标题
 
+    private String contentType;//内容类型（0：帖子、1：链接原文、2：商品详情页、3：店铺首页）
+    private String articleLink;//原文链接
+    private String linkItemId;//连接对象id（商品id或者店铺id）
+
     private String praiseState; //点赞的状态
 
     private String zambiastate;//是否被当前用户点赞
     private String collectstate;//是否被当前用户收藏
+
+    public String getContentType() {
+        return contentType;
+    }
+
+    public void setContentType(String contentType) {
+        this.contentType = contentType;
+    }
+
+    public String getArticleLink() {
+        return articleLink;
+    }
+
+    public void setArticleLink(String articleLink) {
+        this.articleLink = articleLink;
+    }
+
+    public String getLinkItemId() {
+        return linkItemId;
+    }
+
+    public void setLinkItemId(String linkItemId) {
+        this.linkItemId = linkItemId;
+    }
 
     public String getPraiseState() {
         return praiseState;

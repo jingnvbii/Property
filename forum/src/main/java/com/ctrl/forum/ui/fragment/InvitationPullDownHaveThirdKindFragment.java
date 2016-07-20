@@ -1,6 +1,7 @@
 package com.ctrl.forum.ui.fragment;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -36,6 +37,8 @@ import com.ctrl.forum.ui.activity.Invitation.InvitationPinterestDetailActivity;
 import com.ctrl.forum.ui.activity.Invitation.InvitationPullDownActivity;
 import com.ctrl.forum.ui.activity.Invitation.InvitationSearchActivity;
 import com.ctrl.forum.ui.activity.LoginActivity;
+import com.ctrl.forum.ui.activity.store.StoreCommodityDetailActivity;
+import com.ctrl.forum.ui.activity.store.StoreShopListVerticalStyleActivity;
 import com.ctrl.forum.ui.adapter.InvitationListViewAdapter;
 import com.ctrl.forum.ui.adapter.InvitationListViewBlockStyleAdapter;
 import com.ctrl.forum.ui.adapter.InvitationListViewFriendStyleAdapter;
@@ -180,6 +183,8 @@ public class InvitationPullDownHaveThirdKindFragment extends ToolBarFragment {
 
         if (isVisibleToUser&&bol==1 ) {
             showProgress(true);
+            if(framelayout!=null)
+            framelayout.setVisibility(View.GONE);
             if(listCategroy3!=null)listCategroy3.clear();
             if(keyword!=null){
                 if(listPost!=null){
@@ -276,36 +281,79 @@ public class InvitationPullDownHaveThirdKindFragment extends ToolBarFragment {
                 newPosition = position - lv.getHeaderViewsCount();
                 Intent intent = null;
                 String type = listPost.get(newPosition).getSourceType();
+                String contentType=listPost.get(newPosition).getContentType();
                 if(styleType.equals("4")){
-                    intent = new Intent(getActivity(), InvitationDetailActivity.class);
-                    intent.putExtra("id", listPost.get(newPosition).getId());
-                    intent.putExtra("reportid", listPost.get(newPosition).getReporterId());
-                    startActivity(intent);
-                    AnimUtil.intentSlidIn(getActivity());
-                }else {
-
-                    switch (type) {
-                        case "0"://平台
-                            intent = new Intent(getActivity(), InvitationDetailFromPlatformActivity.class);
+                    switch (contentType){
+                        case "0":
+                            intent = new Intent(getActivity(), InvitationDetailActivity.class);
                             intent.putExtra("id", listPost.get(newPosition).getId());
+                            intent.putExtra("reportid", listPost.get(newPosition).getReporterId());
                             startActivity(intent);
                             AnimUtil.intentSlidIn(getActivity());
-
                             break;
-                        case "1"://app
-                            intent = new Intent(getActivity(), InvitationPinterestDetailActivity.class);
-                            intent.putExtra("id", listPost.get(newPosition).getId());
-                            startActivity(intent);
+                        case "1":
+                            Uri uri = Uri.parse(listPost.get(newPosition).getArticleLink());
+                            intent = new Intent(Intent.ACTION_VIEW, uri);
+                            getActivity().startActivity(intent);
+                            AnimUtil.intentSlidIn(getActivity());
+                            break;
+                        case "2":
+                            intent=new Intent(getActivity(), StoreCommodityDetailActivity.class);
+                            intent.putExtra("id",listPost.get(newPosition).getLinkItemId());
+                            getActivity().startActivity(intent);
+                            AnimUtil.intentSlidIn(getActivity());
+                            break;
+                        case "3":
+                            intent=new Intent(getActivity(), StoreShopListVerticalStyleActivity.class);
+                            intent.putExtra("id",listPost.get(newPosition).getLinkItemId());
+                            getActivity().startActivity(intent);
                             AnimUtil.intentSlidIn(getActivity());
                             break;
                     }
+
+                }else {
+                    switch (contentType){
+                        case "0":
+                            switch (type) {
+                                case "0"://平台
+                                    intent = new Intent(getActivity(), InvitationDetailFromPlatformActivity.class);
+                                    intent.putExtra("id", listPost.get(newPosition).getId());
+                                    startActivity(intent);
+                                    AnimUtil.intentSlidIn(getActivity());
+
+                                    break;
+                                case "1"://app
+                                    intent = new Intent(getActivity(), InvitationPinterestDetailActivity.class);
+                                    intent.putExtra("id", listPost.get(newPosition).getId());
+                                    startActivity(intent);
+                                    AnimUtil.intentSlidIn(getActivity());
+                                    break;
+                            }
+                            break;
+                        case "1":
+                            Uri uri = Uri.parse(listPost.get(newPosition).getArticleLink());
+                            intent = new Intent(Intent.ACTION_VIEW, uri);
+                            getActivity().startActivity(intent);
+                            AnimUtil.intentSlidIn(getActivity());
+                            break;
+                        case "2":
+                            intent=new Intent(getActivity(), StoreCommodityDetailActivity.class);
+                            intent.putExtra("id",listPost.get(newPosition).getLinkItemId());
+                            getActivity().startActivity(intent);
+                            AnimUtil.intentSlidIn(getActivity());
+                            break;
+                        case "3":
+                            intent=new Intent(getActivity(), StoreShopListVerticalStyleActivity.class);
+                            intent.putExtra("id",listPost.get(newPosition).getLinkItemId());
+                            getActivity().startActivity(intent);
+                            AnimUtil.intentSlidIn(getActivity());
+                            break;
+                    }
+
                 }
 
             }
         });
-
-
-
         return view;
     }
 
@@ -402,6 +450,7 @@ public class InvitationPullDownHaveThirdKindFragment extends ToolBarFragment {
 
         if(requestCode==19){
             listBanner=idao.getListBanner();
+            framelayout.setVisibility(View.VISIBLE);
             //设置轮播图
             if(listBanner!=null&&framelayout.getVisibility()==View.VISIBLE) {
                 setLoopView();
@@ -410,7 +459,7 @@ public class InvitationPullDownHaveThirdKindFragment extends ToolBarFragment {
         if (requestCode == 1) {
             bol = 0;
             if(listCategroy3==null) {
-                framelayout.setVisibility(View.VISIBLE);
+             //   framelayout.setVisibility(View.VISIBLE);
                 gridView1.setVisibility(View.GONE);
             }else {
                 framelayout.setVisibility(View.GONE);
@@ -482,12 +531,18 @@ public class InvitationPullDownHaveThirdKindFragment extends ToolBarFragment {
         super.onRequestFaild(errorNo, errorMessage);
         lv_invitation_pull_down_have_third_kind.onRefreshComplete();
         showProgress(false);
+        if(errorNo.equals("006")){
+            framelayout.setVisibility(View.GONE);
+        }
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         gridView1.setAdapter(gridViewAdapter);
+        if(listBanner!=null&&listBanner.size()==0){
+            framelayout.setVisibility(View.GONE);
+        }
         if(styleType!=null) {
             switch (styleType) {
                 case "1":

@@ -2,6 +2,7 @@ package com.ctrl.forum.ui.fragment;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -32,6 +33,8 @@ import com.ctrl.forum.ui.activity.Invitation.InvitationPinerestGalleyActivity;
 import com.ctrl.forum.ui.activity.Invitation.InvitationPullDownActivity;
 import com.ctrl.forum.ui.activity.Invitation.InvitationSearchActivity;
 import com.ctrl.forum.ui.activity.LoginActivity;
+import com.ctrl.forum.ui.activity.store.StoreCommodityDetailActivity;
+import com.ctrl.forum.ui.activity.store.StoreShopListVerticalStyleActivity;
 import com.ctrl.forum.ui.adapter.InvitationListViewPinterestStyleAdapter;
 import com.ctrl.forum.ui.adapter.InvitationPullDownGridViewAdapter;
 import com.ctrl.forum.ui.adapter.JasonViewPagerAdapter;
@@ -159,10 +162,36 @@ public class InvitationPullDownHaveThirdKindPinterestStyleFragment extends ToolB
             @Override
             public void onItemClick(PLA_AdapterView<?> parent, View view, int position, long id) {
                 int nowPos = position - xlv_pinerest_style.getHeaderViewsCount();
-                Intent intent = new Intent(getActivity(), InvitationPinerestGalleyActivity.class);
-                intent.putExtra("id", listPost.get(nowPos).getId());
-                startActivityForResult(intent,202);
-                AnimUtil.intentSlidIn(getActivity());
+                Intent intent=null;
+                String contentType=listPost.get(nowPos).getContentType();
+                switch (contentType){
+                    case "0":
+                        intent = new Intent(getActivity(), InvitationPinerestGalleyActivity.class);
+                        intent.putExtra("id", listPost.get(nowPos).getId());
+                        startActivityForResult(intent, 202);
+                        AnimUtil.intentSlidIn(getActivity());
+                        break;
+                    case "1":
+                        Uri uri = Uri.parse(listPost.get(nowPos).getArticleLink());
+                        intent = new Intent(Intent.ACTION_VIEW, uri);
+                        getActivity().startActivity(intent);
+                        AnimUtil.intentSlidIn(getActivity());
+                        break;
+                    case "2":
+                        intent=new Intent(getActivity(), StoreCommodityDetailActivity.class);
+                        intent.putExtra("id",listPost.get(nowPos).getLinkItemId());
+                        getActivity().startActivity(intent);
+                        AnimUtil.intentSlidIn(getActivity());
+                        break;
+                    case "3":
+                        intent=new Intent(getActivity(), StoreShopListVerticalStyleActivity.class);
+                        intent.putExtra("id",listPost.get(nowPos).getLinkItemId());
+                        getActivity().startActivity(intent);
+                        AnimUtil.intentSlidIn(getActivity());
+                        break;
+                }
+
+
             }
         });
         initData();
@@ -215,6 +244,8 @@ public class InvitationPullDownHaveThirdKindPinterestStyleFragment extends ToolB
 
     }
 
+
+
     @Override
     public void onRequestSuccess(int requestCode) {
         super.onRequestSuccess(requestCode);
@@ -222,6 +253,7 @@ public class InvitationPullDownHaveThirdKindPinterestStyleFragment extends ToolB
         xlv_pinerest_style.stopRefresh();
         if(requestCode==19){
             listBanner=idao.getListBanner();
+            framelayout.setVisibility(View.VISIBLE);
             //设置轮播图
             if(listBanner!=null&&framelayout.getVisibility()==View.VISIBLE) {
                 setLoopView();
@@ -231,7 +263,7 @@ public class InvitationPullDownHaveThirdKindPinterestStyleFragment extends ToolB
             bol = 0;
             listPost = idao.getListPost();
             if(listCategroy3==null){
-                framelayout.setVisibility(View.VISIBLE);
+             //   framelayout.setVisibility(View.VISIBLE);
                 gridView1.setVisibility(View.GONE);
             }else {
                 framelayout.setVisibility(View.GONE);
@@ -296,6 +328,9 @@ public class InvitationPullDownHaveThirdKindPinterestStyleFragment extends ToolB
         super.onRequestFaild(errorNo, errorMessage);
         xlv_pinerest_style.stopLoadMore();
         xlv_pinerest_style.stopRefresh();
+        if(errorNo.equals("006")){
+            framelayout.setVisibility(View.GONE);
+        }
     }
 
     private void setValue() {
@@ -335,6 +370,9 @@ public class InvitationPullDownHaveThirdKindPinterestStyleFragment extends ToolB
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        if(listBanner!=null&&listBanner.size()==0){
+            framelayout.setVisibility(View.GONE);
+        }
         xlv_pinerest_style.setAdapter(mInvitationListViewPinterestStyleAdapter);
         gridView1.setAdapter(adapter);
     }

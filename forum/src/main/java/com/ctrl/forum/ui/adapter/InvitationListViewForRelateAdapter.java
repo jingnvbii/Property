@@ -11,8 +11,10 @@ import android.widget.TextView;
 import com.beanu.arad.Arad;
 import com.ctrl.forum.R;
 import com.ctrl.forum.customview.RoundImageView;
+import com.ctrl.forum.entity.MemberInfo;
 import com.ctrl.forum.entity.Post;
 import com.ctrl.forum.entity.PostImage;
+import com.ctrl.forum.entity.RelateMap;
 import com.ctrl.forum.utils.TimeUtils;
 
 import java.util.List;
@@ -24,34 +26,41 @@ import butterknife.InjectView;
  * 帖子一级分类列表样式adapter  adapter
  * Created by jason on 2016/4/8.
  */
-public class InvitationListViewAdapter extends BaseAdapter{
+public class InvitationListViewForRelateAdapter extends BaseAdapter{
     private Context mcontext;
-    private List<Post>mPostList;
     private List<PostImage>mPostImageList;
     private LayoutInflater inflter;
+    private List<RelateMap> mListRelateMap;
 
-    private List<PostImage> imageList;
+  /*  private List<Post> mPostList;
+    private List<PostImage> mListPostImage;
+    private List<MemberInfo> mListUser;*/
 
 
-
-    public InvitationListViewAdapter(Context context) {
+    public InvitationListViewForRelateAdapter(Context context) {
                this.mcontext=context;
     }
 
-    public void setList(List<Post> list) {
-        this.mPostList = list;
+    public void setList(List<RelateMap> list) {
+        this.mListRelateMap = list;
         notifyDataSetChanged();
     }
+/*    public void setList(List<Post> list,List<MemberInfo>listUser,List<PostImage>listPostImage) {
+        this.mPostList = list;
+        this.mListUser = listUser;
+        this.mListPostImage = listPostImage;
+        notifyDataSetChanged();
+    }*/
 
 
     @Override
     public int getCount() {
-        return mPostList==null?0:mPostList.size();
+        return mListRelateMap==null?0:mListRelateMap.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return mPostList.get(position);
+        return mListRelateMap.get(position);
     }
 
     @Override
@@ -67,8 +76,8 @@ public class InvitationListViewAdapter extends BaseAdapter{
     @Override
     public int getItemViewType(int position) {
        int type=0;
-       if(mPostList.get(position).getPostImgList()!=null) {
-           int size = mPostList.get(position).getPostImgList().size();
+       if(mListRelateMap.get(position).getRelatedpostImgList()!=null) {
+           int size =mListRelateMap.get(position).getRelatedpostImgList().size();
            switch (size) {
                case 0:
                    type = 0;
@@ -150,7 +159,9 @@ public class InvitationListViewAdapter extends BaseAdapter{
                     break;
             }
             }
-        Post post=mPostList.get(position);
+        Post post=mListRelateMap.get(position).getRtuRelatedPost();
+        MemberInfo user=mListRelateMap.get(position).getRelateduser();
+         List<PostImage> postImageList=mListRelateMap.get(position).getRelatedpostImgList();
         switch (type){
             case 0:
                 if(post==null){break;}
@@ -166,7 +177,7 @@ public class InvitationListViewAdapter extends BaseAdapter{
                 if(post.getPublishTime()!=null)
                 holder1.tv_time0.setText(TimeUtils.dateTime(post.getPublishTime()));
                 holder1.tv_numbers0.setText(post.getCommentNum() + "");
-                Arad.imageLoader.load(post.getImgUrl()).placeholder(R.mipmap.default_error).resize(50,50)
+                Arad.imageLoader.load(user.getImgUrl()).placeholder(R.mipmap.default_error).resize(50,50)
                         .centerCrop().into(holder1.imageView1);
                 break;
             case 1:
@@ -182,10 +193,10 @@ public class InvitationListViewAdapter extends BaseAdapter{
                 }else {
                     holder2.tv_daoyu.setVisibility(View.GONE);
                 }
-                Arad.imageLoader.load(post.getImgUrl()).placeholder(R.mipmap.default_error).resize(50,50)
+                Arad.imageLoader.load(user.getImgUrl()).placeholder(R.mipmap.default_error).resize(50,50)
                         .centerCrop().into(holder2.imageView2);
-                if(post.getPostImgList()!=null) {
-                    Arad.imageLoader.load(post.getPostImgList().get(0).getImg()).placeholder(R.mipmap.default_error).resize(150,150).into(holder2.iv_title_photo1);
+                if(postImageList!=null) {
+                    Arad.imageLoader.load(postImageList.get(0).getImg()).placeholder(R.mipmap.default_error).resize(150,150).into(holder2.iv_title_photo1);
                 }
                 break;
             case 3:
@@ -203,12 +214,12 @@ public class InvitationListViewAdapter extends BaseAdapter{
                 }else {
                     holder3.tv_daoyu.setVisibility(View.GONE);
                 }
-                Arad.imageLoader.load(post.getImgUrl()).placeholder(R.mipmap.default_error).resize(50,50)
+                Arad.imageLoader.load(user.getImgUrl()).placeholder(R.mipmap.default_error).resize(50,50)
                         .centerCrop().into(holder3.imageView3);
-                if(post.getPostImgList()!=null) {
-                    Arad.imageLoader.load(post.getPostImgList().get(0).getImg()).placeholder(R.mipmap.default_error).resize(150,150).into(holder3.iv_image3_01);
-                    Arad.imageLoader.load(post.getPostImgList().get(1).getImg()).placeholder(R.mipmap.default_error).resize(150,150).into(holder3.iv_image3_02);
-                    Arad.imageLoader.load(post.getPostImgList().get(2).getImg()).placeholder(R.mipmap.default_error).resize(150,150).into(holder3.iv_image3_03);
+                if(postImageList!=null) {
+                    Arad.imageLoader.load(postImageList.get(0).getImg()).placeholder(R.mipmap.default_error).resize(150,150).into(holder3.iv_image3_01);
+                    Arad.imageLoader.load(postImageList.get(1).getImg()).placeholder(R.mipmap.default_error).resize(150,150).into(holder3.iv_image3_02);
+                    Arad.imageLoader.load(postImageList.get(2).getImg()).placeholder(R.mipmap.default_error).resize(150,150).into(holder3.iv_image3_03);
                 }
 
                 break;
@@ -221,12 +232,12 @@ public class InvitationListViewAdapter extends BaseAdapter{
     static class ViewHolder1{
         @InjectView(R.id.tv_titile0)//标题
                 TextView tv_titile0;
+        @InjectView(R.id.tv_daoyu)//导语
+                TextView tv_daoyu;
         @InjectView(R.id.tv_name0)//昵称
                 TextView tv_name0;
         @InjectView(R.id.tv_time0)//时间
                 TextView tv_time0;
-        @InjectView(R.id.tv_daoyu)//导语
-                TextView tv_daoyu;
         @InjectView(R.id.tv_numbers0)//评论数
         TextView  tv_numbers0;
         @InjectView(R.id.imageView0)
@@ -240,10 +251,10 @@ public class InvitationListViewAdapter extends BaseAdapter{
                 TextView tv_titile1;
         @InjectView(R.id.tv_name1)//昵称
                 TextView tv_name1;
-        @InjectView(R.id.tv_time1)//时间
-                TextView tv_time1;
         @InjectView(R.id.tv_daoyu)//导语
                 TextView tv_daoyu;
+        @InjectView(R.id.tv_time1)//时间
+                TextView tv_time1;
         @InjectView(R.id.tv_numbers1)//评论数
         TextView  tv_numbers1;
         @InjectView(R.id.imageView1)
@@ -261,7 +272,7 @@ public class InvitationListViewAdapter extends BaseAdapter{
                 TextView tv_name3;
         @InjectView(R.id.tv_time3)//时间
                 TextView tv_time3;
-        @InjectView(R.id.tv_daoyu)//导语
+        @InjectView(R.id.tv_daoyu)//时间
                 TextView tv_daoyu;
         @InjectView(R.id.tv_numbers03)//评论数
         TextView  tv_numbers03;
