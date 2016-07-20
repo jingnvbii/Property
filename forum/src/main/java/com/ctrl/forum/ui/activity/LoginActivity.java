@@ -28,6 +28,7 @@ import com.ctrl.forum.R;
 import com.ctrl.forum.base.AppToolBarActivity;
 import com.ctrl.forum.base.MyApplication;
 import com.ctrl.forum.dao.LoginDao;
+import com.ctrl.forum.entity.Data;
 import com.ctrl.forum.entity.MemberInfo;
 import com.ctrl.forum.ui.activity.mine.MineUpdatepwdActivity;
 import com.ctrl.forum.ui.activity.rim.ExampleUtil;
@@ -245,11 +246,18 @@ public class LoginActivity extends AppToolBarActivity implements View.OnClickLis
 
             setAlias();
 
-          //  MessageUtils.showShortToast(this, "登录成功");
-            Intent intent02=new Intent(this,MainActivity.class);
-            intent02.putExtra("listNagationBar", (Serializable) ldao.getListNavigationBar());
-            startActivity(intent02);
-            AnimUtil.intentSlidIn(this);
+            Data data= ldao.getData();
+            if (data!=null){
+                int handleDay = data.getHandleDay();
+                if (handleDay==0){
+                    Intent intent02=new Intent(this,MainActivity.class);
+                    intent02.putExtra("listNagationBar", (Serializable) ldao.getListNavigationBar());
+                    startActivity(intent02);
+                    AnimUtil.intentSlidIn(this);
+                }else{
+                   MessageUtils.showShortToast(this,"您已被拉黑"+handleDay+"天");
+                }
+            }
         }
     }
 

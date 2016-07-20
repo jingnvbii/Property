@@ -7,6 +7,7 @@ import com.beanu.arad.http.INetResult;
 import com.beanu.arad.utils.JsonUtil;
 import com.ctrl.forum.base.Constant;
 import com.ctrl.forum.entity.Advertising;
+import com.ctrl.forum.entity.Data;
 import com.ctrl.forum.entity.MemberInfo;
 import com.ctrl.forum.entity.NavigationBar;
 import com.ctrl.forum.entity.ReceiveAddress;
@@ -38,6 +39,7 @@ public class LoginDao extends IDao {
     private List<Advertising> listAdvertising=new ArrayList<>();
     private List<StartAds> listAds=new ArrayList<>();
     private StartAds startAds;
+    private Data data = new Data(); //(拉黑天数)
 
     public LoginDao(INetResult activity){
         super(activity);
@@ -108,6 +110,7 @@ public class LoginDao extends IDao {
             memberInfo = JsonUtil.node2pojo(result.findValue("memberInfo"), MemberInfo.class);
             listReceiveAddress = JsonUtil.node2pojoList(result.findValue("receiveAddressList"), ReceiveAddress.class);
             listNavigationBar = JsonUtil.node2pojoList(result.findValue("navigationBar"), NavigationBar.class);
+            data = JsonUtil.node2pojo(result.findValue("data"),Data.class);
         }
         if(requestCode == 1){
             Log.d("demo","dao中结果集(修改密码): " + result);
@@ -145,5 +148,9 @@ public class LoginDao extends IDao {
 
     public StartAds getStartAds() {
         return startAds;
+    }
+
+    public Data getData() {
+        return data;
     }
 }
