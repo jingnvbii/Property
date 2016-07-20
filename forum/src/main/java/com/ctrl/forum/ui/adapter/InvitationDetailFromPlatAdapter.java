@@ -156,9 +156,8 @@ public class InvitationDetailFromPlatAdapter extends BaseAdapter {
                     }
                 });
             } else {
-                //
-            }
 
+            }
         }
         if (mPostReply2.getReplyType().equals("1")) {//有评论
             holder.rl_pinglun.setVisibility(View.VISIBLE);//评论布局显示

@@ -29,7 +29,7 @@
         android:gravity="top"
         android:hint="@string/max_input"
         android:textColorHint="@color/text_newpwd"
-        android:textSize="20sp"
+        android:textSize="16sp"
         android:ems="50"
         android:maxLength="200"
         android:textColor="@color/black"/>
@@ -42,6 +42,7 @@
         android:background="@color/white">
 
         <EditText
+            android:textSize="16sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:inputType="phone"

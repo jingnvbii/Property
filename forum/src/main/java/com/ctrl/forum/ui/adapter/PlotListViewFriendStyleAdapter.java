@@ -174,7 +174,6 @@ public class PlotListViewFriendStyleAdapter extends BaseAdapter {
             holder.tv_pinglun_title.setVisibility(View.GONE);
         }
 
-
         // 是否含有图片
         if (post.getPostImgList() != null && post.getPostImgList().size() != 0) {
             holder.rl4.setVisibility(View.VISIBLE);
