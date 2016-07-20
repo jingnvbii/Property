@@ -101,7 +101,7 @@ public class InvitationFragment extends ToolBarFragment implements View.OnClickL
 
 
     /*
-    * 实现文字上下轮播1
+    * 实现文字上下轮播
     * */
     private boolean isloop = true;
     private List<String> listNoticeString = new ArrayList<>();
@@ -281,22 +281,44 @@ public class InvitationFragment extends ToolBarFragment implements View.OnClickL
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = null;
                 String type = listPost.get(position - lv01.getHeaderViewsCount()).getSourceType();
-                switch (type) {
-                    case "0"://平台
-                        intent = new Intent(getActivity(), InvitationDetailFromPlatformActivity.class);
-                        intent.putExtra("id", listPost.get(position - lv01.getHeaderViewsCount()).getId());
-                        startActivity(intent);
-                        AnimUtil.intentSlidIn(getActivity());
+                String contentType = listPost.get(position - lv01.getHeaderViewsCount()).getContentType();
+                switch (contentType) {
+                    case "0":
+                        switch (type) {
+                            case "0"://平台
+                                intent = new Intent(getActivity(), InvitationDetailFromPlatformActivity.class);
+                                intent.putExtra("id", listPost.get(position - lv01.getHeaderViewsCount()).getId());
+                                startActivity(intent);
+                                AnimUtil.intentSlidIn(getActivity());
 
+                                break;
+                            case "1"://app
+                                intent = new Intent(getActivity(), InvitationPinterestDetailActivity.class);
+                                intent.putExtra("id", listPost.get(position - lv01.getHeaderViewsCount()).getId());
+                                startActivityForResult(intent, 666);
+                                AnimUtil.intentSlidIn(getActivity());
+                                break;
+                        }
                         break;
-                    case "1"://app
-                        intent = new Intent(getActivity(), InvitationPinterestDetailActivity.class);
-                        intent.putExtra("id", listPost.get(position - lv01.getHeaderViewsCount()).getId());
-                        startActivityForResult(intent, 666);
+                    case "1":
+                        Uri uri = Uri.parse(listPost.get(position - lv01.getHeaderViewsCount()).getArticleLink());
+                        intent = new Intent(Intent.ACTION_VIEW, uri);
+                        getActivity().startActivity(intent);
+                        AnimUtil.intentSlidIn(getActivity());
+                        break;
+                    case "2":
+                        intent = new Intent(getActivity(), StoreCommodityDetailActivity.class);
+                        intent.putExtra("id", listPost.get(position - lv01.getHeaderViewsCount()).getLinkItemId());
+                        getActivity().startActivity(intent);
+                        AnimUtil.intentSlidIn(getActivity());
+                        break;
+                    case "3":
+                        intent = new Intent(getActivity(), StoreShopListVerticalStyleActivity.class);
+                        intent.putExtra("id", listPost.get(position - lv01.getHeaderViewsCount()).getLinkItemId());
+                        getActivity().startActivity(intent);
                         AnimUtil.intentSlidIn(getActivity());
                         break;
                 }
-
 
             }
         });
@@ -330,10 +352,13 @@ public class InvitationFragment extends ToolBarFragment implements View.OnClickL
             listRecommend = idao.getListRecommend();
            // MessageUtils.showShortToast(getActivity(), "初始化成功");
             setValue();
-            initRecommend();//推荐列表初始化
-            initNotice();//公告栏数据初始化
-
-            if (listBanner!=null && listBanner.size()!=0) {
+            if(listRecommend!=null&&listRecommend.size()>0) {
+                initRecommend();//推荐列表初始化
+            }
+            if(listNotice!=null&&listNotice.size()>0) {
+                initNotice();//公告栏数据初始化
+            }
+            if(listBanner!=null&&listBanner.size()>0) {
                 //调用轮播图
                 setLoopView();
             }
