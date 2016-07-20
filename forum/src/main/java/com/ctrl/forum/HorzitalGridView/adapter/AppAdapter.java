@@ -108,6 +108,7 @@ public class AppAdapter extends BaseAdapter implements OnItemClickListener {
 			if (i == arg2) {
 				Intent intent = new Intent(mContext, InvitationPullDownActivity.class);
 				intent.putExtra("channelId",mList.get(arg2).getId());
+				intent.putExtra("channelName",mList.get(arg2).getName());
 				mContext.startActivity(intent);
 
 			/*	arg0.getChildAt(i).setBackgroundResource(
