@@ -148,7 +148,7 @@ public class InvitationDetailActivity extends AppToolBarActivity implements View
         lv_detail_reply.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if(Arad.preferences.getString("memberId")==null||Arad.preferences.getString("memberId").equals("")){
+                if (Arad.preferences.getString("memberId") == null || Arad.preferences.getString("memberId").equals("")) {
                     startActivity(new Intent(InvitationDetailActivity.this, LoginActivity.class));
                     AnimUtil.intentSlidOut(InvitationDetailActivity.this);
                     return;
@@ -247,18 +247,20 @@ public class InvitationDetailActivity extends AppToolBarActivity implements View
             listPostImage=idao.getListPostImage();
             if(listPostImage!=null) {
                 mFriendDetailImageAdapter.setList(listPostImage);
-
                 for (int i = 0; i < listPostImage.size(); i++) {
                     imageUrl.add(listPostImage.get(i).getImg());
                 }
             }
-            Arad.imageLoader.load(user.getImgUrl()).placeholder(R.mipmap.default_error).into(title_image);
-            if(user.getNickName()!=null){
-                tv_name.setText(user.getNickName());
-            }else {
-                String mobile = user.getUserName();
-                String result = mobile.substring(0,3)+"****"+mobile.substring(7,mobile.length());
-                tv_name.setText(result);
+            if (user!= null) {
+                if (user.getImgUrl() != null && !user.getImgUrl().equals(""))
+                    Arad.imageLoader.load(user.getImgUrl()).placeholder(R.mipmap.default_error).into(title_image);
+                if (user.getNickName() != null) {
+                    tv_name.setText(user.getNickName());
+                } else {
+                    String mobile = user.getUserName();
+                    String result = mobile.substring(0, 3) + "****" + mobile.substring(7, mobile.length());
+                    tv_name.setText(result);
+                }
             }
 
             if(post.getZambiastate().equals("0")){
@@ -283,38 +285,39 @@ public class InvitationDetailActivity extends AppToolBarActivity implements View
 
             pariseNum=post.getPraiseNum();
             tv_friend_style_zan_num.setText(pariseNum+"");
-            String levlel = idao.getUser().getMemberLevel();
-            if (levlel != null) {
-                switch (levlel) {
-                    case "0":
-                        iv_detail_levlel.setImageResource(R.mipmap.vip_icon);
-                        break;
-                    case "1":
-                        iv_detail_levlel.setImageResource(R.mipmap.vip_icon1);
-                        break;
-                    case "2":
-                        iv_detail_levlel.setImageResource(R.mipmap.vip_icon2);
-                        break;
-                    case "3":
-                        iv_detail_levlel.setImageResource(R.mipmap.vip_icon3);
-                        break;
-                    case "4":
-                        iv_detail_levlel.setImageResource(R.mipmap.vip_icon4);
-                        break;
-                    case "5":
-                        iv_detail_levlel.setImageResource(R.mipmap.vip_icon5);
-                        break;
-                    case "6":
-                        iv_detail_levlel.setImageResource(R.mipmap.vip_icon6);
-                        break;
-                    case "7":
-                        iv_detail_levlel.setImageResource(R.mipmap.vip_icon7);
-                        break;
+            if (idao.getUser()!=null) {
+                String levlel = idao.getUser().getMemberLevel();
+                if (levlel != null) {
+                    switch (levlel) {
+                        case "0":
+                            iv_detail_levlel.setImageResource(R.mipmap.vip_icon);
+                            break;
+                        case "1":
+                            iv_detail_levlel.setImageResource(R.mipmap.vip_icon1);
+                            break;
+                        case "2":
+                            iv_detail_levlel.setImageResource(R.mipmap.vip_icon2);
+                            break;
+                        case "3":
+                            iv_detail_levlel.setImageResource(R.mipmap.vip_icon3);
+                            break;
+                        case "4":
+                            iv_detail_levlel.setImageResource(R.mipmap.vip_icon4);
+                            break;
+                        case "5":
+                            iv_detail_levlel.setImageResource(R.mipmap.vip_icon5);
+                            break;
+                        case "6":
+                            iv_detail_levlel.setImageResource(R.mipmap.vip_icon6);
+                            break;
+                        case "7":
+                            iv_detail_levlel.setImageResource(R.mipmap.vip_icon7);
+                            break;
+                    }
+                } else {
+                    iv_detail_levlel.setImageResource(R.mipmap.vip_icon);
                 }
-            }else {
-                iv_detail_levlel.setImageResource(R.mipmap.vip_icon);
             }
-
         }
     }
 

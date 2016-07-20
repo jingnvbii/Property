@@ -332,8 +332,11 @@ public class InvitationFragment extends ToolBarFragment implements View.OnClickL
             setValue();
             initRecommend();//推荐列表初始化
             initNotice();//公告栏数据初始化
-            //调用轮播图
-            setLoopView();
+
+            if (listBanner!=null && listBanner.size()!=0) {
+                //调用轮播图
+                setLoopView();
+            }
             initViewPager();
             viewpagerAdapter = new MyViewPagerAdapter(getActivity(), map);
             myViewPager.setAdapter(viewpagerAdapter);

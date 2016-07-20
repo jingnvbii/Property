@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -17,6 +18,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.ctrl.forum.photo.util.Bimp;
+import com.ctrl.forum.photo.util.ImageItem;
 import com.ctrl.forum.photo.util.PublicWay;
 import com.ctrl.forum.photo.util.Res;
 import com.ctrl.forum.photo.zoom.PhotoView;
@@ -57,6 +59,7 @@ public class GalleryActivity extends Activity {
 	public List<String> del = new ArrayList<String>();
 	
 	private Context mContext;
+	public static List<ImageItem> delList = new ArrayList<>();
 
 	RelativeLayout photo_relativeLayout;
 	@Override
@@ -130,6 +133,10 @@ public class GalleryActivity extends Activity {
 
 		public void onClick(View v) {
 			if (listViews.size() == 1) {
+				ImageItem ii = new ImageItem();
+				ii.setImageUrl(Bimp.tempSelectBitmap.get(location).getImageUrl());
+				delList.add(ii);
+				AlbumActivity.addList.clear();
 				Bimp.tempSelectBitmap.clear();
 				Bimp.max = 0;
 				send_bt.setText(Res.getString("finish")+"(" + Bimp.tempSelectBitmap.size() + "/"+PublicWay.num+")");
@@ -137,6 +144,17 @@ public class GalleryActivity extends Activity {
                 sendBroadcast(intent);  
 				finish();
 			} else {
+				ImageItem ii = new ImageItem();
+				ii.setImageUrl(Bimp.tempSelectBitmap.get(location).getImageUrl());
+				delList.add(ii);
+				for (int i=0;i<AlbumActivity.addList.size();i++){
+					if (Bimp.tempSelectBitmap.get(location).getImageId()!=null && !Bimp.tempSelectBitmap.get(location).getImageId().equals("")){
+						if (Bimp.tempSelectBitmap.get(location).getImageId().equals(AlbumActivity.addList.get(i).getImageId())){
+							AlbumActivity.addList.remove(i);
+							Log.e("AlbumActivity.addList", AlbumActivity.addList.toString());
+						}
+					}
+				}
 				Bimp.tempSelectBitmap.remove(location);
 				Bimp.max--;
 				pager.removeAllViews();

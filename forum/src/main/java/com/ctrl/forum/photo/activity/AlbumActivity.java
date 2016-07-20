@@ -9,6 +9,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -62,6 +63,7 @@ public class AlbumActivity extends Activity {
 	public static List<ImageBucket> contentList;
 	public static Bitmap bitmap;
 	private Class<?> activity;
+    public static List<ImageItem> addList = new ArrayList<>(); //从编辑界面进来新增的图片
 
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -105,7 +107,6 @@ public class AlbumActivity extends Activity {
 				startActivity(intent);
 			}
 		}
-
 	}
 
 	// 完成按钮的监听
@@ -133,6 +134,9 @@ public class AlbumActivity extends Activity {
 	private class CancelListener implements OnClickListener {
 		public void onClick(View v) {
 			Bimp.tempSelectBitmap.clear();
+
+			addList.clear();  //删除增加的图片
+
 			intent.setClass(mContext, activity);
 			startActivity(intent);
 			AnimUtil.intentSlidOut(AlbumActivity.this);
@@ -190,10 +194,17 @@ public class AlbumActivity extends Activity {
 						if (isChecked) {
 							chooseBt.setVisibility(View.VISIBLE);
 							Bimp.tempSelectBitmap.add(dataList.get(position));
+
+							addList.add(dataList.get(position));
+							Log.e("addList",addList.toString());
+
 							okButton.setText(Res.getString("finish")+"(" + Bimp.tempSelectBitmap.size()
 									+ "/"+PublicWay.num+")");
 						} else {
 							Bimp.tempSelectBitmap.remove(dataList.get(position));
+
+							addList.remove(dataList.get(position));
+
 							chooseBt.setVisibility(View.GONE);
 							okButton.setText(Res.getString("finish")+"(" + Bimp.tempSelectBitmap.size() + "/"+PublicWay.num+")");
 						}
