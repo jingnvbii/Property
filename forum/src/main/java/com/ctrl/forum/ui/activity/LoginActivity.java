@@ -1,11 +1,13 @@
 package com.ctrl.forum.ui.activity;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -76,6 +78,7 @@ public class LoginActivity extends AppToolBarActivity implements View.OnClickLis
     private static final int MSG_AUTH_CANCEL = 3;
     private static final int MSG_AUTH_ERROR= 4;
     private static final int MSG_AUTH_COMPLETE = 5;
+    private String deviceImei="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,6 +92,10 @@ public class LoginActivity extends AppToolBarActivity implements View.OnClickLis
         mLocationClient.registerLocationListener(myListener);    //注册监听函数1
         initLocation();
         mLocationClient.start();
+
+        Context context = getWindow().getContext();
+        TelephonyManager telephonemanage = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+        deviceImei = telephonemanage.getDeviceId();
     }
 
     @Override
@@ -286,9 +293,7 @@ public class LoginActivity extends AppToolBarActivity implements View.OnClickLis
                 break;
             case R.id.tv_login :
                 if(checkInput()){
-                    ldao.requestLogin(et_username.getText().toString().trim(), et_pass_word.getText().toString().trim(), "1");
-                    //没网的时候可以登陆
-                  //  startActivity(new Intent(this,MainActivity.class));
+                    ldao.requestLogin(et_username.getText().toString().trim(), et_pass_word.getText().toString().trim(),deviceImei, "1");
                 }
                 break;
             case R.id.tv_forget :

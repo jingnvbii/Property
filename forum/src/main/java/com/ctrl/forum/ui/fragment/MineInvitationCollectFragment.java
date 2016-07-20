@@ -1,11 +1,9 @@
 package com.ctrl.forum.ui.fragment;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.beanu.arad.Arad;
@@ -14,8 +12,6 @@ import com.ctrl.forum.R;
 import com.ctrl.forum.base.Constant;
 import com.ctrl.forum.dao.CollectDao;
 import com.ctrl.forum.entity.CollectionPost;
-import com.ctrl.forum.ui.activity.Invitation.InvitationDetailFromPlatformActivity;
-import com.ctrl.forum.ui.activity.Invitation.InvitationPinterestDetailActivity;
 import com.ctrl.forum.ui.adapter.MinePostCollectListAdapter;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
@@ -81,7 +77,8 @@ public class MineInvitationCollectFragment extends ToolBarFragment{
             }
         });
 
-        lv_content.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        //点击跳转
+        /*lv_content.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (collectionPosts.get(position-1)!=null) {
@@ -99,7 +96,7 @@ public class MineInvitationCollectFragment extends ToolBarFragment{
                     }
                 }
             }
-        });
+        });*/
 
         return view;
     }

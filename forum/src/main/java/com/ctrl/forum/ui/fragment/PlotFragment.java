@@ -487,6 +487,7 @@ public class PlotFragment extends ToolBarFragment implements View.OnClickListene
 
         if (requestCode==19){
            listBanner = idao.getListBanner();
+
             if (listBanner!=null){
                 frameLayout.setVisibility(View.VISIBLE);
                setLoopView();

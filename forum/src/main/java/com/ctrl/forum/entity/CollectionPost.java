@@ -10,14 +10,32 @@ public class CollectionPost {
     private String postCreateTime; //帖子创建时间
     private String postImgUrl; //帖子用户头像
     private String reportName; //发帖人昵称（没用用手机号）
-    private String sourceType;
+    private String contentType; //内容类型（0：帖子、1：链接原文、2：商品详情页、3：店铺首页）
+    private String articleLink; //原文链接
+    private String linkItemId; //连接对象id（商品id或者店铺id）
 
-    public String getSourceType() {
-        return sourceType;
+    public String getArticleLink() {
+        return articleLink;
     }
 
-    public void setSourceType(String sourceType) {
-        this.sourceType = sourceType;
+    public void setArticleLink(String articleLink) {
+        this.articleLink = articleLink;
+    }
+
+    public String getLinkItemId() {
+        return linkItemId;
+    }
+
+    public void setLinkItemId(String linkItemId) {
+        this.linkItemId = linkItemId;
+    }
+
+    public String getContentType() {
+        return contentType;
+    }
+
+    public void setContentType(String contentType) {
+        this.contentType = contentType;
     }
 
     public String getPostCreateTime() {
