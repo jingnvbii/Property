@@ -130,12 +130,12 @@ public class MineDraftsListAdapter extends BaseAdapter{
                            intent.putExtra("communityId",drafts.getCommunityId());
                            intent.putExtra("communityName",drafts.getCommunityName());
                            intent.putExtra("id",drafts.getId());
-                           intent.putExtra("edit","plot");
+                           //intent.putExtra("edit","plot");
                            mcontext.startActivity(intent);
                        }else{
                            Intent intent = new Intent(mcontext, InvitationReleaseActivity.class);
                            intent.putExtra("id",drafts.getId());
-                           intent.putExtra("edit","invitation");
+                           //intent.putExtra("edit","invitation");
                            mcontext.startActivity(intent);
                        }
 

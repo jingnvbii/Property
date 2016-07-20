@@ -1,17 +1,25 @@
 package com.ctrl.forum.ui.fragment;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.beanu.arad.Arad;
 import com.beanu.arad.base.ToolBarFragment;
+import com.beanu.arad.utils.AnimUtil;
 import com.ctrl.forum.R;
 import com.ctrl.forum.base.Constant;
 import com.ctrl.forum.dao.CollectDao;
 import com.ctrl.forum.entity.CollectionPost;
+import com.ctrl.forum.ui.activity.Invitation.InvitationDetailFromPlatformActivity;
+import com.ctrl.forum.ui.activity.Invitation.InvitationPinterestDetailActivity;
+import com.ctrl.forum.ui.activity.store.StoreCommodityDetailActivity;
+import com.ctrl.forum.ui.activity.store.StoreShopListVerticalStyleActivity;
 import com.ctrl.forum.ui.adapter.MinePostCollectListAdapter;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
@@ -78,25 +86,50 @@ public class MineInvitationCollectFragment extends ToolBarFragment{
         });
 
         //点击跳转
-        /*lv_content.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        lv_content.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = null;
                 if (collectionPosts.get(position-1)!=null) {
-                    if (collectionPosts.get(position-1).getSourceType()!=null){
-                        String type = collectionPosts.get(position-1).getSourceType();
-                        if (type.equals("0")){
-                            Intent intent = new Intent(getActivity(), InvitationDetailFromPlatformActivity.class);
-                            intent.putExtra("id", collectionPosts.get(position-1).getPostId());
-                            startActivity(intent);
-                        }else{
-                            Intent intent = new Intent(getActivity(), InvitationPinterestDetailActivity.class);
-                            intent.putExtra("id", collectionPosts.get(position-1).getPostId());
-                            startActivity(intent);
+                    if (collectionPosts.get(position-1).getContentType()!=null){
+                        String type = collectionPosts.get(position-1).getContentType();
+                        switch (type){
+                            case "0":
+                                String iType = collectionPosts.get(position-1).getSourceType();
+                                if (iType.equals("0")){
+                                    intent = new Intent(getActivity(), InvitationDetailFromPlatformActivity.class);
+                                    intent.putExtra("id", collectionPosts.get(position-1).getPostId());
+                                    startActivity(intent);
+                                }else{
+                                    intent = new Intent(getActivity(), InvitationPinterestDetailActivity.class);
+                                    intent.putExtra("id", collectionPosts.get(position-1).getPostId());
+                                    startActivity(intent);
+                                }
+                                break;
+                            case "1":
+                                Uri uri = Uri.parse(collectionPosts.get(position - 1).getArticleLink());
+                                intent = new Intent(Intent.ACTION_VIEW, uri);
+                                getActivity().startActivity(intent);
+                                AnimUtil.intentSlidIn(getActivity());
+                                break;
+                            case "2":
+                                intent = new Intent(getActivity(), StoreCommodityDetailActivity.class);
+                                intent.putExtra("id", collectionPosts.get(position-1).getLinkItemId());
+                                startActivity(intent);
+                                break;
+                            case "3":
+                                intent = new Intent(getActivity(), StoreShopListVerticalStyleActivity.class);
+                                intent.putExtra("id",collectionPosts.get(position-1).getLinkItemId());
+                                getActivity().startActivity(intent);
+                                AnimUtil.intentSlidIn(getActivity());
+                                break;
+                            default:
+                                break;
                         }
                     }
                 }
             }
-        });*/
+        });
 
         return view;
     }

@@ -50,6 +50,7 @@ import com.ctrl.forum.photo.activity.GalleryActivity;
 import com.ctrl.forum.photo.util.Bimp;
 import com.ctrl.forum.photo.util.FileUtils;
 import com.ctrl.forum.photo.util.ImageItem;
+import com.ctrl.forum.photo.util.PublicWay;
 import com.ctrl.forum.photo.util.Res;
 import com.ctrl.forum.qiniu.QiNiuConfig;
 import com.ctrl.forum.qiniu_main.up.UpApi;
@@ -138,7 +139,7 @@ public class PlotAddInvitationActivity extends AppToolBarActivity implements Vie
     private String locationLatitude;
     private String vcardDisplay;
     private InvitationDao idao;
-    private String edit = ""; //是否是编辑状态
+     //private String edit = ""; //是否是编辑状态
     private String id; //编辑状态时的帖子id
 
     private Map<String, String> delIds = new HashMap<>();
@@ -170,7 +171,7 @@ public class PlotAddInvitationActivity extends AppToolBarActivity implements Vie
                 getResources(),
                 R.drawable.icon_addpic_unfocused);
 
-        edit = getIntent().getStringExtra("edit");
+        //edit = getIntent().getStringExtra("edit");
         initBuildToken();
         idao = new InvitationDao(this);
 
@@ -278,14 +279,14 @@ public class PlotAddInvitationActivity extends AppToolBarActivity implements Vie
             }
         });
         bt1.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
+            public void onClick(View v) {//拍照
                 photo();
                 pop.dismiss();
                 ll_popup.clearAnimation();
             }
         });
         bt2.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
+            public void onClick(View v) {//相册中选取
                 Intent intent = new Intent(PlotAddInvitationActivity.this,
                         AlbumActivity.class);
                 intent.putExtra("activity","PlotAddInvitationActivity");
@@ -323,7 +324,6 @@ public class PlotAddInvitationActivity extends AppToolBarActivity implements Vie
                     intent.putExtra("ID", arg2);
                     startActivity(intent);
                     AnimUtil.intentSlidIn(PlotAddInvitationActivity.this);
-                    //showDelDialog(arg2);
                 }
             }
         });
@@ -362,10 +362,6 @@ public class PlotAddInvitationActivity extends AppToolBarActivity implements Vie
             listPostImage = idao.getListPostImage();//图片
             for (int i = 0; i < listPostImage.size(); i++) {
                 final PostImage post = listPostImage.get(i);
-               /* ImageNew in = new ImageNew();
-                in.setImgUrl(post.getImg());
-                primary.add(in);*/
-
                 delIds.put(post.getImg(), listPostImage.get(i).getId());//用来存放获取到的图片的url对应的id
             }
 
@@ -446,6 +442,7 @@ public class PlotAddInvitationActivity extends AppToolBarActivity implements Vie
         }
         return null;
     }
+
     private boolean checkInput() {
         if (Arad.preferences.getBoolean("isCallingChecked")) {
             if (TextUtils.isEmpty(name)) {
@@ -584,18 +581,12 @@ public class PlotAddInvitationActivity extends AppToolBarActivity implements Vie
     //发布帖子或者存草稿
     private void releaseInvitation(String type) {
 
-      /*  for (int i=0;i<GalleryActivity.delList.size();i++){
-            if (GalleryActivity.delList.get(i).getImageUrl() == null) {
-                GalleryActivity.delList.remove(i);
-            }
-        }*/
-
         String imagesUrl1 = getImagesUrl(urlList);
         if (!et_content.getText().toString().equals("") || imagesUrl1 != null) {
             switch (type){
                 case "0"://存草稿
                     isSave = true;
-                    if (edit == null || edit.equals("")) {
+                    if (!checkActivity()) {
                         idao.requesReleasePost(
                                 Arad.preferences.getString("memberId"),
                                 Arad.preferences.getString("communityId"),
@@ -638,7 +629,7 @@ public class PlotAddInvitationActivity extends AppToolBarActivity implements Vie
                     break;
                 case "1"://发布帖子
                     if (checkInput()) {
-                        if (edit == null || edit.equals("")) {
+                        if (!checkActivity()) {
                             idao.requesReleasePost(
                                     Arad.preferences.getString("memberId"),
                                     Arad.preferences.getString("communityId"),
@@ -881,6 +872,11 @@ public class PlotAddInvitationActivity extends AppToolBarActivity implements Vie
         Bimp.tempSelectBitmap.clear();
         GalleryActivity.delList.clear();
         AlbumActivity.addList.clear();
+        for(int i=0;i< PublicWay.activityList.size();i++){
+            if (null != PublicWay.activityList.get(i)) {
+                PublicWay.activityList.get(i).finish();
+            }
+        }
     }
 
 
