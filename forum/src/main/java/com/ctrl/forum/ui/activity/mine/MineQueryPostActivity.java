@@ -3,6 +3,7 @@ package com.ctrl.forum.ui.activity.mine;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -20,7 +21,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.beanu.arad.Arad;
-import com.beanu.arad.utils.MessageUtils;
 import com.ctrl.forum.R;
 import com.ctrl.forum.base.AppToolBarActivity;
 import com.ctrl.forum.base.Constant;
@@ -29,6 +29,8 @@ import com.ctrl.forum.customview.XListView;
 import com.ctrl.forum.dao.InvitationDao;
 import com.ctrl.forum.entity.Post;
 import com.ctrl.forum.ui.activity.Invitation.InvitationDetailActivity;
+import com.ctrl.forum.ui.activity.store.StoreCommodityDetailActivity;
+import com.ctrl.forum.ui.activity.store.StoreShopListVerticalStyleActivity;
 import com.ctrl.forum.ui.adapter.PlotListViewFriendStyleAdapter;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
@@ -130,9 +132,37 @@ public class MineQueryPostActivity extends AppToolBarActivity implements View.On
         lv_content.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(MineQueryPostActivity.this, InvitationDetailActivity.class);
-                intent.putExtra("id", posts.get(position - 1).getId());
-                startActivity(intent);
+                Intent intent = null;
+                if (posts.get(position-1)!=null) {
+                    if (posts.get(position-1).getContentType()!=null){
+                        String type = posts.get(position-1).getContentType();
+                        switch (type){
+                            case "0":
+                                intent = new Intent(getApplicationContext(), InvitationDetailActivity.class);
+                                intent.putExtra("id", posts.get(position - 1).getId());
+                                intent.putExtra("reportid", posts.get(position - 1).getReporterId());
+                                startActivity(intent);
+                                break;
+                            case "1":
+                                Uri uri = Uri.parse(posts.get(position - 1).getArticleLink());
+                                intent = new Intent(Intent.ACTION_VIEW, uri);
+                                startActivity(intent);
+                                break;
+                            case "2":
+                                intent = new Intent(getApplicationContext(), StoreCommodityDetailActivity.class);
+                                intent.putExtra("id", posts.get(position-1).getLinkItemId());
+                                startActivity(intent);
+                                break;
+                            case "3":
+                                intent = new Intent(getApplicationContext(), StoreShopListVerticalStyleActivity.class);
+                                intent.putExtra("id", posts.get(position - 1).getLinkItemId());
+                                startActivity(intent);
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                }
             }
         });
 
@@ -161,12 +191,12 @@ public class MineQueryPostActivity extends AppToolBarActivity implements View.On
                         v.tv_friend_style_zan_num.setText((text.get(position) + 1) + "");
                         text.put(position,text.get(position) + 1);
                         v.iv_friend_style_zan_num.setImageResource(R.mipmap.zan_blue_shixin);
-                        MessageUtils.showShortToast(getApplicationContext(), "点赞成功");
+                        //MessageUtils.showShortToast(getApplicationContext(), "点赞成功");
                         isAdd.put(position,false);
                     } else {
                         idao.requesZambia("reduce", posts.get(position).getId(), Arad.preferences.getString("memberId")
                                 , posts.get(position).getTitle(), posts.get(position).getContent());
-                        MessageUtils.showShortToast(getApplicationContext(), "取消点赞");
+                        //MessageUtils.showShortToast(getApplicationContext(), "取消点赞");
                         v.tv_friend_style_zan_num.setText((text.get(position) - 1) + "");
                         text.put(position, text.get(position)-1);
                         v.iv_friend_style_zan_num.setImageResource(R.mipmap.zan_blue);
@@ -500,7 +530,6 @@ public class MineQueryPostActivity extends AppToolBarActivity implements View.On
 
     @Override
     public void onComplete(Platform platform, int i, HashMap<String, Object> hashMap) {
-
     }
 
     @Override

@@ -425,24 +425,6 @@ public class PlotAddInvitationActivity extends AppToolBarActivity implements Vie
         return bm;
     }
 
-    /**
-     * 获取图片
-     * @param path 图片路径
-     * @return
-     */
-    public static Bitmap getImageBitmap(String path) throws Exception{
-        URL url = new URL(path);
-        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        conn.setConnectTimeout(5000);
-        conn.setRequestMethod("GET");
-        if(conn.getResponseCode() == 200){
-            InputStream inStream = conn.getInputStream();
-            Bitmap bitmap = BitmapFactory.decodeStream(inStream);
-            return bitmap;
-        }
-        return null;
-    }
-
     private boolean checkInput() {
         if (Arad.preferences.getBoolean("isCallingChecked")) {
             if (TextUtils.isEmpty(name)) {
@@ -487,11 +469,13 @@ public class PlotAddInvitationActivity extends AppToolBarActivity implements Vie
                     delImageIds.add(delIds.get(imageId.get(i).getImageUrl()));
                 }
             }
-            for (int i = 0; i < delImageIds.size(); i++) {
-                //转换成字符串
-                delId = delId + delImageIds.get(i) + ",";
-            }
-            return delId.substring(0, delId.length() - 1);
+            if (delImageIds.size()!=0) {
+                for (int i = 0; i < delImageIds.size(); i++) {
+                    //转换成字符串
+                    delId = delId + delImageIds.get(i) + ",";
+                }
+                return delId.substring(0, delId.length() - 1);
+            }else{return "";}
         }
         return "";
     }
@@ -624,7 +608,7 @@ public class PlotAddInvitationActivity extends AppToolBarActivity implements Vie
                                 tv_location_name,
                                 getDelImageId(GalleryActivity.delList),  //删除图片的id的字符串
                                 imagesUrl1,
-                                imagesUrl1);//不对
+                                imagesUrl1);
                     }
                     break;
                 case "1"://发布帖子
@@ -653,8 +637,8 @@ public class PlotAddInvitationActivity extends AppToolBarActivity implements Vie
                         id,
                         "1",
                         Arad.preferences.getString("communityId"),
-                        "0",
                         "1",
+                        "0",
                         "",
                         et_content.getText().toString().trim(),
                         vcardDisplay,
@@ -666,7 +650,7 @@ public class PlotAddInvitationActivity extends AppToolBarActivity implements Vie
                         tv_location_name,
                         getDelImageId(GalleryActivity.delList),  //删除图片的id的字符串
                            imagesUrl1,
-                           imagesUrl1); //不对
+                           imagesUrl1);
                         }
                     }
                     break;

@@ -818,6 +818,7 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
                 AnimUtil.intentSlidIn(InvitationReleaseActivity.this);
                 break;
             case R.id.tv_release_save: //存草稿
+                TYPE="0";
                 isSave=true;
                 checkContent();
                 if(!et_content.getText().toString().equals("")) {
@@ -826,6 +827,7 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
                 }
                 break;
             case R.id.tv_release:
+                TYPE="1";
                 checkContent();
                 if(!et_content.getText().toString().equals("")) {
                     //发布帖子
@@ -1380,13 +1382,23 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
                 }
                 if (checkActivity()){
                     if (urlList.size() == AlbumActivity.addList.size()){
-                        releaseInvitation();
+                        if (TYPE.equals("0")){
+                            saveInvitation();
+                        }
+                        if (TYPE.equals("1")){
+                            releaseInvitation();
+                        }
                     }
                 }else{
                     if(urlList.size()==Bimp.tempSelectBitmap.size()) {
-                        Log.i("tag","check type=11=="+checkType2);
+                        Log.i("tag", "check type=11=="+checkType2);
                         Log.i("tag","check type=22=="+checkType3);
-                        releaseInvitation();
+                        if (TYPE.equals("0")){
+                            saveInvitation();
+                        }
+                        if (TYPE.equals("1")){
+                            releaseInvitation();
+                        }
                     }
                 }
             }

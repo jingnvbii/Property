@@ -3,6 +3,7 @@ package com.ctrl.forum.ui.fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -29,6 +30,7 @@ import android.widget.Toast;
 
 import com.beanu.arad.Arad;
 import com.beanu.arad.base.ToolBarFragment;
+import com.beanu.arad.utils.AnimUtil;
 import com.beanu.arad.utils.MessageUtils;
 import com.ctrl.forum.R;
 import com.ctrl.forum.base.Constant;
@@ -45,6 +47,8 @@ import com.ctrl.forum.ui.activity.mine.MineFindFlotActivity;
 import com.ctrl.forum.ui.activity.plot.PlotAddInvitationActivity;
 import com.ctrl.forum.ui.activity.plot.PlotRimServeActivity;
 import com.ctrl.forum.ui.activity.plot.PlotSearchResultActivity;
+import com.ctrl.forum.ui.activity.store.StoreCommodityDetailActivity;
+import com.ctrl.forum.ui.activity.store.StoreShopListVerticalStyleActivity;
 import com.ctrl.forum.ui.adapter.PlotListViewFriendStyleAdapter;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
@@ -221,10 +225,40 @@ public class PlotFragment extends ToolBarFragment implements View.OnClickListene
         lv_content.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(getActivity(), InvitationDetailActivity.class);
-                intent.putExtra("id", posts.get(position - 2).getId());
-                intent.putExtra("reportid", posts.get(position - 2).getReporterId());
-                startActivity(intent);
+                Intent intent = null;
+                if (posts.get(position-2)!=null) {
+                    if (posts.get(position-2).getContentType()!=null){
+                        String type = posts.get(position-2).getContentType();
+                        switch (type){
+                            case "0":
+                                intent = new Intent(getActivity(), InvitationDetailActivity.class);
+                                intent.putExtra("id", posts.get(position - 2).getId());
+                                intent.putExtra("reportid", posts.get(position - 2).getReporterId());
+                                getActivity().startActivity(intent);
+                                AnimUtil.intentSlidIn(getActivity());
+                                break;
+                            case "1":
+                                Uri uri = Uri.parse(posts.get(position - 2).getArticleLink());
+                                intent = new Intent(Intent.ACTION_VIEW, uri);
+                                getActivity().startActivity(intent);
+                                AnimUtil.intentSlidIn(getActivity());
+                                break;
+                            case "2":
+                                intent = new Intent(getActivity(), StoreCommodityDetailActivity.class);
+                                intent.putExtra("id", posts.get(position-2).getLinkItemId());
+                                getActivity().startActivity(intent);
+                                break;
+                            case "3":
+                                intent = new Intent(getActivity(), StoreShopListVerticalStyleActivity.class);
+                                intent.putExtra("id",posts.get(position-2).getLinkItemId());
+                                getActivity().startActivity(intent);
+                                AnimUtil.intentSlidIn(getActivity());
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                }
             }
         });
 

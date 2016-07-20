@@ -5,6 +5,15 @@ package com.ctrl.forum.entity;
  */
 public class Data {
     private int evaluationCount;
+    private int handleDay; //(拉黑天数)
+
+    public int getHandleDay() {
+        return handleDay;
+    }
+
+    public void setHandleDay(int handleDay) {
+        this.handleDay = handleDay;
+    }
 
     public int getEvaluationCount() {
         return evaluationCount;
