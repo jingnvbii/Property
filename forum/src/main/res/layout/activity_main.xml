@@ -10,5 +10,6 @@
         android:layout_weight="1" >
     </FrameLayout>
     <include
+        android:id="@+id/ll_rb"
         layout="@layout/layout_radiobutton_horizontal"></include>
 </LinearLayout>

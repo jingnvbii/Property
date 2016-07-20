@@ -13,6 +13,7 @@ import com.beanu.arad.base.ToolBarFragment;
 import com.ctrl.forum.R;
 import com.ctrl.forum.base.Constant;
 import com.ctrl.forum.dao.MallDao;
+import com.ctrl.forum.entity.Count2;
 import com.ctrl.forum.entity.ShopReply;
 import com.ctrl.forum.ui.activity.store.StorePingjiaDetailActivity;
 import com.ctrl.forum.ui.adapter.StoreShopDetailPingLunListViewAdapter;
@@ -48,6 +49,7 @@ public class StorePingjiaDetailFragment extends ToolBarFragment {
     private String goodNum;
     private String mediumNum;
     private String badNum;
+    private Count2 count;
 
     public static StorePingjiaDetailFragment newInstance(int type) {
         StorePingjiaDetailFragment fragment = new StorePingjiaDetailFragment();
@@ -83,10 +85,12 @@ public class StorePingjiaDetailFragment extends ToolBarFragment {
         if (requestCode == 3) {
             bol = 0;
             allEvaluationlist = mdao.getListAllEvaluation();
-            listPraise = mdao.getListPraise();
+            count=mdao.getCount();
+            mAdapter.setList(allEvaluationlist);
+          /*  listPraise = mdao.getListPraise();
             listMedium = mdao.getListMedium();
-            listBad = mdao.getListBad();
-            switch (type) {
+            listBad = mdao.getListBad();*/
+          /*  switch (type) {
                 case 0:
                     if(allEvaluationlist.size()>0)
                     mAdapter.setList(allEvaluationlist);
@@ -103,9 +107,11 @@ public class StorePingjiaDetailFragment extends ToolBarFragment {
                     if(listBad.size()>0)
                     mAdapter.setList(listBad);
                     break;
-            }
-            if(isFirst)
+            }*/
+
             setNum();
+            if(isFirst)
+         //   setNum();
             isFirst=false;
         }
     }
@@ -119,7 +125,7 @@ public class StorePingjiaDetailFragment extends ToolBarFragment {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
                 PAGE_NUM = 1;
-                switch (type) {
+              /*  switch (type) {
                     case 0:
                         allEvaluationlist.clear();
                         break;
@@ -132,8 +138,9 @@ public class StorePingjiaDetailFragment extends ToolBarFragment {
                     case 3:
                         listBad.clear();
                         break;
-                }
-
+                }*/
+                if(allEvaluationlist!=null)
+                 allEvaluationlist.clear();
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -171,10 +178,9 @@ public class StorePingjiaDetailFragment extends ToolBarFragment {
 
     private void setNum() {
         StorePingjiaDetailActivity activity=(StorePingjiaDetailActivity)getActivity();
-        allNum=allEvaluationlist.size()==0?"0":allEvaluationlist.get(0).getCount();
-        goodNum=listPraise.size()==0?"0":listPraise.get(0).getCount();
+     /*   goodNum=listPraise.size()==0?"0":listPraise.get(0).getCount();
         mediumNum=listMedium.size()==0?"0":listMedium.get(0).getCount();
-        badNum=listBad.size()==0?"0":listBad.get(0).getCount();
-        activity.setNum(allNum,goodNum,mediumNum,badNum);
+        badNum=listBad.size()==0?"0":listBad.get(0).getCount();*/
+        activity.setNum(count);
     }
 }

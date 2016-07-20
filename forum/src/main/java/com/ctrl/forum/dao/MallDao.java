@@ -10,6 +10,7 @@ import com.ctrl.forum.entity.Banner;
 import com.ctrl.forum.entity.CashCoupons;
 import com.ctrl.forum.entity.Company;
 import com.ctrl.forum.entity.CompanyUnion;
+import com.ctrl.forum.entity.Count2;
 import com.ctrl.forum.entity.Image2;
 import com.ctrl.forum.entity.Mall;
 import com.ctrl.forum.entity.MallKind;
@@ -61,6 +62,7 @@ public class MallDao extends IDao {
     private Product2 product2;
     private List<NoticeImage> listNoticeImage=new ArrayList<>();//公告图片
     private List<Product2> listProducts=new ArrayList<>();
+    private Count2 count;
 
 
     public MallDao(INetResult activity){
@@ -303,9 +305,10 @@ public class MallDao extends IDao {
         if(requestCode == 3){
             Log.d("demo", "dao中结果集(店铺评价列表返回): " + result);
             listAllEvaluation = JsonUtil.node2pojoList(result.findValue("allEvaluationlist"), ShopReply.class);
-            listPraise = JsonUtil.node2pojoList(result.findValue("praiseList"), ShopReply.class);
+            count=JsonUtil.node2pojo(result.findValue("count"), Count2.class);
+          /*  listPraise = JsonUtil.node2pojoList(result.findValue("praiseList"), ShopReply.class);
             listMedium = JsonUtil.node2pojoList(result.findValue("mediumList"), ShopReply.class);
-            listBad = JsonUtil.node2pojoList(result.findValue("badList"), ShopReply.class);
+            listBad = JsonUtil.node2pojoList(result.findValue("badList"), ShopReply.class);*/
 
         }
         if(requestCode == 4){
@@ -427,5 +430,9 @@ public class MallDao extends IDao {
 
     public List<Product2> getListProducts() {
         return listProducts;
+    }
+
+    public Count2 getCount() {
+        return count;
     }
 }

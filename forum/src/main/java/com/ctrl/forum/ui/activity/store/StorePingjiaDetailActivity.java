@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.beanu.arad.base.ToolBarActivity;
 import com.ctrl.forum.R;
 import com.ctrl.forum.base.MyApplication;
+import com.ctrl.forum.entity.Count2;
 import com.ctrl.forum.ui.fragment.StorePingjiaDetailFragment;
 
 import butterknife.ButterKnife;
@@ -85,11 +86,11 @@ public class StorePingjiaDetailActivity extends ToolBarActivity implements View.
     }
 
 
-    public void setNum(String allNum,String goodNum,String mediumNum,String badNum){
-        rb_all.setText("全部"+"("+allNum+")");
-        rb_good.setText("好评"+"("+goodNum+")");
-        rb_medium.setText("中评"+"("+mediumNum+")");
-        rb_bad.setText("差评"+"("+badNum+")");
+    public void setNum(Count2 count){
+        rb_all.setText("全部"+"("+count.getQuanbu()+")");
+        rb_good.setText("好评"+"("+count.getHaoping()+")");
+        rb_medium.setText("中评"+"("+count.getZhongping()+")");
+        rb_bad.setText("差评"+"("+count.getChaping()+")");
     }
 
 

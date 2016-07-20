@@ -6,15 +6,16 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 
 import com.beanu.arad.Arad;
+import com.beanu.arad.base.ToolBarActivity;
 import com.ctrl.forum.R;
 import com.ctrl.forum.base.MyApplication;
 import com.ctrl.forum.entity.NavigationBar;
@@ -27,9 +28,14 @@ import com.ctrl.forum.utils.BitmapUtils;
 
 import java.util.ArrayList;
 
-public class MainActivity extends FragmentActivity implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
-    public static Boolean isFrist = false;
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 
+public class MainActivity extends ToolBarActivity implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
+    @InjectView(R.id.ll_rb)
+    RadioGroup ll_rb;
+
+    public static Boolean isFrist = false;
     private RadioButton rb1;//帖子按钮
     private RadioButton rb2;//商城按钮
     private RadioButton rb3;//小区按钮
@@ -49,6 +55,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
+            ll_rb.setVisibility(View.VISIBLE);
             if (msg.what == 2) {
                 if (rb1.isChecked()) {
                     drawable.setBounds(0, 0, 50, 50);
@@ -151,6 +158,8 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
             }
 
+            showProgress(false);
+
 
         }
 
@@ -162,6 +171,8 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ButterKnife.inject(this);
+        showProgress(true);
         initView();
         initData();
         MyApplication.getInstance().addActivity(this);
@@ -169,7 +180,6 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
     private void initData() {
         listNavigation = (ArrayList<NavigationBar>) getIntent().getSerializableExtra("listNagationBar");
-
         listDrawable = new ArrayList<>();
         listDrawable2 = new ArrayList<>();
       /*  Resources res = getResources();
@@ -213,6 +223,8 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
 
     private void initView() {
+        ll_rb.setVisibility(View.GONE);
+
         rb1 = (RadioButton) findViewById(R.id.rb_1);
         rb2 = (RadioButton) findViewById(R.id.rb_2);
         rb3 = (RadioButton) findViewById(R.id.rb_3);
