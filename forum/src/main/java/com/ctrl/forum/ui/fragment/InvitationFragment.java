@@ -234,7 +234,7 @@ public class InvitationFragment extends ToolBarFragment implements View.OnClickL
  * */
     private void setLoopView() {
         framelayout.setVisibility(View.VISIBLE);
-        // 1.创建轮播的holder1
+        // 1.创建轮播的holder
         mAutoSwitchPicHolder = new HomeAutoSwitchPicHolder(getActivity());
         // 2.得到轮播图的视图view
         View autoPlayPicView = mAutoSwitchPicHolder.getRootView();
