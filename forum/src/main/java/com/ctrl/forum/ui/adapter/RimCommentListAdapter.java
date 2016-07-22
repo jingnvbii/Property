@@ -1,6 +1,8 @@
 package com.ctrl.forum.ui.adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.text.SpannableString;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +16,7 @@ import android.widget.TextView;
 import com.beanu.arad.Arad;
 import com.ctrl.forum.R;
 import com.ctrl.forum.base.SetMemberLevel;
+import com.ctrl.forum.customview.ImageZoomActivity;
 import com.ctrl.forum.entity.CompanyEvaluation;
 import com.ctrl.forum.face.FaceConversionUtil;
 import com.ctrl.forum.ui.activity.rim.RimStoreCommentActivity;
@@ -33,6 +36,7 @@ public class RimCommentListAdapter extends BaseAdapter {
     private Context context;
     private List<CompanyEvaluation> list;
     private int type;
+    private View viewanim;
 
     public RimCommentListAdapter(Context context) {
         this.context = context;
@@ -137,19 +141,36 @@ public class RimCommentListAdapter extends BaseAdapter {
                         activity.playSound(v, companyEvaluation.getSoundUrl());
                     }
                 });
-
                 break;
             case 1:
-                CompanyEvaluation companyEvaluation1 = list.get(position);
+                final CompanyEvaluation companyEvaluation1 = list.get(position);
                 viewHolder.tv_data.setText(DateUtil.getStringByFormat(companyEvaluation1.getCreateTime(), "yyyy-MM-dd"));
                 viewHolder.tv_name.setText(companyEvaluation1.getMemberName());
                 Arad.imageLoader.load(companyEvaluation1.getImgUrl()).into(viewHolder.iv_head);
                 SetMemberLevel.setLevelImage(context,viewHolder.iv_grade,companyEvaluation1.getMemberLevel());
-                for (int i=0;i<companyEvaluation1.getCompanyEvaluationPicList().size();i++){
-                    String imageUrl = companyEvaluation1.getCompanyEvaluationPicList().get(i).getThumbImg();
-                    ImageView iv_pic = (ImageView) viewHolder.ll_threePic.getChildAt(i);
-                    Arad.imageLoader.load(imageUrl).into(iv_pic);
+                final ArrayList<String>imageUrl=new ArrayList<>();
+                for(int i=0;i<companyEvaluation1.getCompanyEvaluationPicList().size();i++){
+                    imageUrl.add(companyEvaluation1.getCompanyEvaluationPicList().get(i).getImg());
                 }
+
+                for (int i=0;i<companyEvaluation1.getCompanyEvaluationPicList().size();i++){
+                    String imageUrls = companyEvaluation1.getCompanyEvaluationPicList().get(i).getThumbImg();
+                    ImageView iv_pic = (ImageView) viewHolder.ll_threePic.getChildAt(i);
+                    Arad.imageLoader.load(imageUrls).into(iv_pic);
+                    final int finalI = i;
+                    iv_pic.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent=new Intent(context, ImageZoomActivity.class);
+                            Bundle bundle = new Bundle();
+                            bundle.putSerializable("imageList", imageUrl);
+                            bundle.putInt("position", finalI);
+                            intent.putExtras(bundle);
+                            context.startActivity(intent);
+                        }
+                    });
+                }
+
                 break;
             case 2:
                 CompanyEvaluation companyEvaluation2 = list.get(position);
@@ -224,5 +245,4 @@ public class RimCommentListAdapter extends BaseAdapter {
         TextView tv_replay;
         ViewHolder3(View view) {ButterKnife.inject(this, view);}
     }
-
 }

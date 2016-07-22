@@ -23,6 +23,11 @@ public class Image {
         this.thumbImgUrl = thumbImgUrl;
     }
 
-
-
+    @Override
+    public String toString() {
+        return "Image{" +
+                "imgUrl='" + imgUrl + '\'' +
+                ", thumbImgUrl='" + thumbImgUrl + '\'' +
+                '}';
+    }
 }

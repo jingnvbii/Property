@@ -67,9 +67,6 @@ public class  RimFragment extends ToolBarFragment implements View.OnClickListene
 
         initView();
 
-        rimListViewAdapter.setRimGridViewAdapter(rimGridViewAdapter);
-        lv_content.setAdapter(rimListViewAdapter);
-
         View v = new TextView(getActivity());
         v.setBackgroundColor(getResources().getColor(R.color.main_bg));
         lv_content.addFooterView(v);
@@ -85,6 +82,8 @@ public class  RimFragment extends ToolBarFragment implements View.OnClickListene
         lv_content.addHeaderView(headview);
 
         //lv_content.setOnTouchListener(toun);
+        rimListViewAdapter.setRimGridViewAdapter(rimGridViewAdapter);
+        lv_content.setAdapter(rimListViewAdapter);
 
         return view;
     }

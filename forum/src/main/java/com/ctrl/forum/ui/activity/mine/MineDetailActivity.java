@@ -52,6 +52,10 @@ public class MineDetailActivity extends AppToolBarActivity implements View.OnCli
     TextView tv_juan;
     @InjectView(R.id.tv_hui)
     TextView tv_hui;
+    @InjectView(R.id.shop_information)
+    RelativeLayout shop_information;
+    @InjectView(R.id.shop_information_name)
+    TextView shop_information_name;
 
     private String id;
     private MemberDao mdao;
@@ -125,11 +129,11 @@ public class MineDetailActivity extends AppToolBarActivity implements View.OnCli
                    Intent intent1 = new Intent(Intent.ACTION_DIAL,Uri.parse("tel:"+tel));
                    intent1.setFlags(intent1.FLAG_ACTIVITY_NEW_TASK);
                    startActivity(intent1);
-               }
+               }else{MessageUtils.showShortToast(this,"该店铺暂无电话!");}
                break;
        }
     }
-
+    //http://115.28.243.3:8008/ctrl-api/companys/queryCompanyByMemberId?memberId=8e64b73b1bc741b5b09610140b0a9710
     @Override
     public void onRequestSuccess(int requestCode) {
         super.onRequestSuccess(requestCode);
@@ -151,6 +155,8 @@ public class MineDetailActivity extends AppToolBarActivity implements View.OnCli
             Arad.imageLoader.load(memberInfo.getImgUrl()).placeholder(getResources().getDrawable(R.mipmap.my_gray)).into(iv_head);
         }
         if (companyInfo!=null){
+            shop_information_name.setVisibility(View.VISIBLE);
+            shop_information.setVisibility(View.VISIBLE);
             Arad.imageLoader.load(companyInfo.getImg()).placeholder(getResources().getDrawable(R.mipmap.my_gray)).into(shop_head);
             shop_name.setText(companyInfo.getName());
             tv_time.setText(companyInfo.getWorkStartTime()+"--"
