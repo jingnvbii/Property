@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.beanu.arad.Arad;
@@ -67,7 +68,12 @@ public class InvitationListViewPinterestStyleAdapter extends BaseAdapter {
         Post post = mPostList.get(position);
         holder.tv_pinerest_style_title.setText(post.getTitle());
         if (post.getPostImgList() != null) {
+            holder.iv_pinerest_style_image.setVisibility(View.VISIBLE);
+            holder.rl_content.setVisibility(View.VISIBLE);
             Arad.imageLoader.load(post.getPostImgList().get(0).getImg()).placeholder(R.mipmap.default_error).config(Bitmap.Config.RGB_565).into(holder.iv_pinerest_style_image);
+        }else {
+            holder.iv_pinerest_style_image.setVisibility(View.GONE);
+            holder.rl_content.setVisibility(View.GONE);
         }
         holder.tv_pinerest_style_zan.setText(post.getPraiseNum() + "");
         if(post.getPostImgList()!=null)
@@ -84,6 +90,8 @@ public class InvitationListViewPinterestStyleAdapter extends BaseAdapter {
                 TextView tv_pinerest_style_imagenum;
         @InjectView(R.id.tv_pinerest_style_zan)//点赞数
                 TextView tv_pinerest_style_zan;
+        @InjectView(R.id.rl_content)//点赞数
+                RelativeLayout rl_content;
 
         ViewHolder(View view) {
             ButterKnife.inject(this, view);
