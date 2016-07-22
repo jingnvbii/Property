@@ -151,7 +151,7 @@ public class MineEditActivity extends AppToolBarActivity implements View.OnClick
         choose_phone.setOnClickListener(this);
         cancel.setOnClickListener(this);
     }
-    //控件的初始化
+    //控件的初始化1
     private void init() {
         edao = new EditDao(this);
 
