@@ -1,6 +1,7 @@
 package com.ctrl.forum.ui.adapter;
 
 import android.content.Context;
+import android.text.SpannableString;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import com.beanu.arad.Arad;
 import com.ctrl.forum.R;
 import com.ctrl.forum.base.SetMemberLevel;
 import com.ctrl.forum.entity.CompanyEvaluation;
+import com.ctrl.forum.face.FaceConversionUtil;
 import com.ctrl.forum.ui.activity.rim.RimStoreCommentActivity;
 import com.ctrl.forum.utils.DateUtil;
 
@@ -155,7 +157,8 @@ public class RimCommentListAdapter extends BaseAdapter {
                 viewHolder3.tv_name.setText(companyEvaluation2.getMemberName());
                 Arad.imageLoader.load(companyEvaluation2.getImgUrl()).into(viewHolder3.iv_head);
                 SetMemberLevel.setLevelImage(context, viewHolder3.iv_grade, companyEvaluation2.getMemberLevel());
-                viewHolder3.tv_replay.setText(companyEvaluation2.getContent());
+                SpannableString spannableString2 = FaceConversionUtil.getInstace().getExpressionString(context, companyEvaluation2.getContent());
+                viewHolder3.tv_replay.setText(spannableString2);
                 break;
             default:
                 break;

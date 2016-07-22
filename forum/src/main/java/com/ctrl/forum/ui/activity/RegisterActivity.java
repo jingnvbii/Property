@@ -66,8 +66,8 @@ public class RegisterActivity extends AppToolBarActivity implements View.OnClick
     public void onRequestSuccess(int requestCode) {
         super.onRequestSuccess(requestCode);
         if (requestCode == 0) {
-           MessageUtils.showShortToast(this, "注册成功");
-          finish();
+            MessageUtils.showShortToast(this, "注册成功");
+            finish();
         }
 
         if (requestCode == 1) {
@@ -103,7 +103,6 @@ public class RegisterActivity extends AppToolBarActivity implements View.OnClick
                         time.start();
                     } else {
                         MessageUtils.showShortToast(this, "手机号格式不正确");
-
                     }
                 } else {
                     MessageUtils.showShortToast(this, "手机号为空");
@@ -114,6 +113,7 @@ public class RegisterActivity extends AppToolBarActivity implements View.OnClick
                 if (checkAllInput()) {
                     rdao.requestRegiste(et_username.getText().toString().trim(), et_pass_word.getText().toString().trim(), "");
                 }
+                break;
             case R.id.tv_user_agreement:
                 Intent intent = new Intent(this,WebViewActivity.class);
                 intent.putExtra("title","用户使用协议");

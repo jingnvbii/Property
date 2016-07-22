@@ -69,14 +69,19 @@ public class FriendStyleRelpyAdapter extends BaseAdapter{
         if(merchant.getContentType().equals("0")) {
             SpannableString spannableString2 = FaceConversionUtil.getInstace().getExpressionString(mcontext, merchant.getReplyContent());
           //  spannableString2.setSpan( new AbsoluteSizeSpan( fontSize ), startIndex, endIndex, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE );
-           holder.tv_reply_content.setText(spannableString2);
+            holder.tv_reply_content.setVisibility(View.VISIBLE);
+            holder.tv_reply_content.setText(spannableString2);
+            holder.rl_reply_voice.setVisibility(View.GONE);
         }
 
         if (merchant.getContentType().equals("1")) {
+            holder.tv_reply_content.setVisibility(View.VISIBLE);
            holder.tv_reply_content.setText(" [图片]");
+            holder.rl_reply_voice.setVisibility(View.GONE);
         }
         if (merchant.getContentType().equals("2")) {
            holder.rl_reply_voice.setVisibility(View.VISIBLE);
+            holder.tv_reply_content.setVisibility(View.GONE);
          /*  holder.rl_reply_voice.setOnClickListener(new View.OnClickListener() {
                @Override
                public void onClick(View v) {

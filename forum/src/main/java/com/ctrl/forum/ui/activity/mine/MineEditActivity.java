@@ -7,7 +7,6 @@ import android.graphics.Matrix;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.text.format.DateFormat;
 import android.util.Base64;
@@ -32,7 +31,6 @@ import com.ctrl.forum.utils.DataCleanUtils;
 import com.ctrl.forum.utils.Utils;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.Locale;
@@ -66,7 +64,7 @@ public class MineEditActivity extends AppToolBarActivity implements View.OnClick
     @InjectView(R.id.tv_xiaoqu)
     TextView tv_xiaoqu;    //小区
     @InjectView(R.id.iv_head)
-    MineHeadView iv_head; //头像
+    public MineHeadView iv_head; //头像
     @InjectView(R.id.tv_tuichu)
     TextView tv_tuichu;    //昵称
 
@@ -128,9 +126,9 @@ public class MineEditActivity extends AppToolBarActivity implements View.OnClick
             }
         }
         if (requestCode==5){
+            edao.getVipInfo(Arad.preferences.getString("memberId"));
             showProgress(false);
             MessageUtils.showShortToast(getApplicationContext(), "修改头像成功");
-            edao.getVipInfo(Arad.preferences.getString("memberId"));
         }
     }
 
@@ -153,7 +151,7 @@ public class MineEditActivity extends AppToolBarActivity implements View.OnClick
         choose_phone.setOnClickListener(this);
         cancel.setOnClickListener(this);
     }
-    //控件的初始化
+    //控件的初始化1
     private void init() {
         edao = new EditDao(this);
 
@@ -209,9 +207,8 @@ public class MineEditActivity extends AppToolBarActivity implements View.OnClick
                 startActivity(intent);
                 break;
             case R.id.take_picture: //拍照片
-                Intent intentFromCapture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                intentFromCapture.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(Environment.getExternalStorageDirectory(), "cxh.jpg")));
-                startActivityForResult(intentFromCapture, CAMERA_REQUEST_CODE);
+                Intent openCameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityForResult(openCameraIntent, CAMERA_REQUEST_CODE);
                 AnimUtil.intentSlidIn(MineEditActivity.this);
                 //关闭弹窗
                 popupWindow.dismiss();
@@ -233,7 +230,6 @@ public class MineEditActivity extends AppToolBarActivity implements View.OnClick
                 Arad.preferences.putBoolean("isFirstIn",false);
                 Arad.preferences.flush();
                 startActivity(new Intent(this, LoginActivity.class));
-                //((MainActivity)context).finish();
                 this.finish();
                 break;
         }
@@ -257,8 +253,7 @@ public class MineEditActivity extends AppToolBarActivity implements View.OnClick
                     getImageToView1(bitmap);
                     break;
                 case CAMERA_REQUEST_CODE://相机
-                    String path = Environment.getExternalStorageDirectory() + "/head.jpg";
-                    Bitmap bm = zoomImg(path,50,50);
+                    Bitmap bm = zoomImg((Bitmap)data.getExtras().get("data"),50,50);
                     getImageToView1(bm);
                     break;
                 default:

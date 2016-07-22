@@ -237,6 +237,7 @@ public class PlotRimServeActivity extends ToolBarActivity implements View.OnClic
                 CompantyCategyId = category2s.get(ll_category.indexOfChild(v)).getId();
                 if (rimServiceCompanies!=null){
                     rimServiceCompanies.clear();
+                    plotRimServeAdapter.notifyDataSetChanged();
                 }
                 PAGE_NUM=1;
                 plotDao.getAroundServiceCompanyList(PAGE_NUM + "", Constant.PAGE_SIZE + "",
@@ -245,8 +246,6 @@ public class PlotRimServeActivity extends ToolBarActivity implements View.OnClic
                 ((TextView) v).setTextColor(getResources().getColor(R.color.red_bg));
                 break;
         }
-
-
     }
 
 }

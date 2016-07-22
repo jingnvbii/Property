@@ -32,6 +32,7 @@ public class MineCommentActivity extends AppToolBarActivity {
     private ReplyCommentDao replyCommentDao;
     private String id;
     static String title;
+    private String memberId = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,14 +53,14 @@ public class MineCommentActivity extends AppToolBarActivity {
                     comments.clear();
                     PAGE_NUM = 1;
                 }
-                replyCommentDao.obtainMyReply(Arad.preferences.getString("memberId"), PAGE_NUM, Constant.PAGE_SIZE);
+                replyCommentDao.obtainMyReply(memberId, PAGE_NUM, Constant.PAGE_SIZE);
             }
 
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
                 if (comments != null) {
                     PAGE_NUM += 1;
-                    replyCommentDao.obtainMyReply(Arad.preferences.getString("memberId"), PAGE_NUM, Constant.PAGE_SIZE);
+                    replyCommentDao.obtainMyReply(memberId, PAGE_NUM, Constant.PAGE_SIZE);
                 } else {
                     lv_comment.onRefreshComplete();
                 }
@@ -86,14 +87,14 @@ public class MineCommentActivity extends AppToolBarActivity {
 
     private void initData() {
         replyCommentDao = new ReplyCommentDao(this);
-        id = getIntent().getStringExtra("id");
-        if (id==null || id.equals("")){
-            replyCommentDao.obtainMyReply(Arad.preferences.getString("memberId"), PAGE_NUM, Constant.PAGE_SIZE);
+        if (getIntent().getStringExtra("id")==null || getIntent().getStringExtra("id").equals("")){
+            memberId = Arad.preferences.getString("memberId");
             title = getResources().getString(R.string.my_comment);
         }else{
-            replyCommentDao.obtainMyReply(id, PAGE_NUM, Constant.PAGE_SIZE);
+            memberId = getIntent().getStringExtra("id");
             title = "他的评论";
         }
+        replyCommentDao.obtainMyReply(memberId, PAGE_NUM, Constant.PAGE_SIZE);
     }
 
     @Override

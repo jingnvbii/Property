@@ -14,7 +14,7 @@ import com.ctrl.forum.R;
 import com.ctrl.forum.base.Constant;
 import com.ctrl.forum.dao.ReplyCommentDao;
 import com.ctrl.forum.entity.ReplyForMe;
-import com.ctrl.forum.ui.activity.Invitation.InvitationDetailFromPlatformActivity;
+import com.ctrl.forum.ui.activity.Invitation.InvitationDetailActivity;
 import com.ctrl.forum.ui.adapter.MineMesCommentListAdapter;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
@@ -76,7 +76,7 @@ public class MineCommentFragment extends ToolBarFragment {
         lv_content.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(getActivity(), InvitationDetailFromPlatformActivity.class);
+                Intent intent = new Intent(getActivity(), InvitationDetailActivity.class);
                 intent.putExtra("id", replyForMes.get(position-1).getPostId());
                 startActivity(intent);
             }
