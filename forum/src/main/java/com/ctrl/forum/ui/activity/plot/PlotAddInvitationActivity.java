@@ -721,7 +721,7 @@ public class PlotAddInvitationActivity extends AppToolBarActivity implements Vie
                 case 101:
                     if (resultCode == RESULT_CANCELED) {
                         tv_location_name = "";
-                        locationLongitude = "";//经度
+                        locationLongitude = "";//经度1
                         locationLatitude = "";//纬度
                     }
                     if (resultCode == RESULT_OK) {
