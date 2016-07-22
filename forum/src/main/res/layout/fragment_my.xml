@@ -158,13 +158,11 @@
 
     </RelativeLayout>
 
-       <android.support.v4.view.ViewPager
+       <com.ctrl.forum.customview.WrapContentHeightViewPager
            android:id="@+id/vp_plug"
            android:background="@color/white"
-           android:paddingTop="5dp"
-           android:paddingBottom="10dp"
            android:layout_width="match_parent"
-           android:layout_height="163dp"/>
+           android:layout_height="wrap_content"/>
 
        <LinearLayout
            android:id="@+id/ll_icons"

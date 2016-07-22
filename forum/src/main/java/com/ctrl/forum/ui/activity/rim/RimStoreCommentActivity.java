@@ -39,6 +39,7 @@ import com.ctrl.forum.entity.Image;
 import com.ctrl.forum.manager.MediaManager;
 import com.ctrl.forum.ui.adapter.RimCommentListAdapter;
 import com.ctrl.forum.utils.Base64Util;
+import com.ctrl.forum.utils.InputMethodUtils;
 import com.ctrl.forum.utils.Utils;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 
@@ -621,6 +622,7 @@ public class RimStoreCommentActivity extends AppToolBarActivity implements View.
               break;
           case R.id.btn_send:
               reply();
+              InputMethodUtils.hide(this);
           case R.id.et_sendmessage:
               if (ll_bottom_edit.getVisibility()==View.VISIBLE){
                   ll_bottom_edit.setVisibility(View.GONE);

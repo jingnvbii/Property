@@ -255,7 +255,7 @@ public class LoginActivity extends AppToolBarActivity implements View.OnClickLis
                     startActivity(intent02);
                     AnimUtil.intentSlidIn(this);
                 }else{
-                   MessageUtils.showShortToast(this,"您已被拉黑"+handleDay+"天");
+                   MessageUtils.showShortToast(this,"您的设备已被拉黑"+handleDay+"天");
                 }
             }
         }
@@ -455,6 +455,7 @@ public class LoginActivity extends AppToolBarActivity implements View.OnClickLis
             UIHandler.sendEmptyMessage(MSG_AUTH_CANCEL, this);
         }
     }
+
     private void login(String plat, String userId, HashMap<String, Object> userInfo) {
         Message msg = new Message();
         msg.what = MSG_LOGIN;
@@ -498,10 +499,6 @@ public class LoginActivity extends AppToolBarActivity implements View.OnClickLis
         }
         return false;
     }
-
-
-
-
 
     private boolean checkInput(){
           if(TextUtils.isEmpty(et_username.getText().toString().trim())){

@@ -530,13 +530,14 @@ public class InvitationPinerestGalleyActivity extends ToolBarActivity implements
         });
 
         popupWindow = new PopupWindow(contentView,
-                LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT, true);
+                getResources().getDisplayMetrics().widthPixels,
+                getResources().getDisplayMetrics().heightPixels);
         // 设置SelectPicPopupWindow弹出窗体可点击
         popupWindow.setFocusable(true);
         // 设置SelectPicPopupWindow弹出窗体动画效果
         popupWindow.setAnimationStyle(R.style.AnimBottom);
         // 实例化一个ColorDrawable颜色为半透明
-        ColorDrawable dw = new ColorDrawable(0x00000000);
+        ColorDrawable dw = new ColorDrawable(0x20000000);
         // 设置SelectPicPopupWindow弹出窗体的背景
         // 如果不设置PopupWindow的背景，无论是点击外部区域还是Back键都无法dismiss弹框
         // 我觉得这里是API的一个bug
@@ -572,7 +573,7 @@ public class InvitationPinerestGalleyActivity extends ToolBarActivity implements
             }
         });
         // 设置好参数之后再show
-        popupWindow.showAtLocation(InvitationPinerestGalleyActivity.this.findViewById(R.id.framelayout), Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
+        popupWindow.showAtLocation(InvitationPinerestGalleyActivity.this.findViewById(R.id.framelayout), Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 120);
 
     }
 

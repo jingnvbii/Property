@@ -63,7 +63,7 @@ public class MineQueryPostActivity extends AppToolBarActivity implements View.On
     private int PAGE_NUM =1;
     //private MineQueryPostAdapter mineQueryPostAdapter;
     private InvitationDao invitationDao;
-    private String ids = "";
+    //private String ids = "";
     static String title;
     private PlotListViewFriendStyleAdapter adapter;
 
@@ -76,6 +76,7 @@ public class MineQueryPostActivity extends AppToolBarActivity implements View.On
     private Map<Integer,Integer> text = new HashMap<>();
     private Activity activity;
     private PopupWindow mPopupWindow;
+    private String memberId ="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,18 +84,17 @@ public class MineQueryPostActivity extends AppToolBarActivity implements View.On
         setContentView(R.layout.activity_mine_query_post);
         ButterKnife.inject(this);
 
-        ids = getIntent().getStringExtra("id");
-
         invitationDao = new InvitationDao(this);
         idao = new InvitationDao(this);
 
-        if (ids!=null && !ids.equals("")){
-            invitationDao.queryMyPostList(ids,PAGE_NUM+"",Constant.PAGE_SIZE+"");
+        if (getIntent().getStringExtra("id")!=null && !getIntent().getStringExtra("id").equals("")){
+            memberId = getIntent().getStringExtra("id");
             title = "他的发帖";
         }else{
-            invitationDao.queryMyPostList(Arad.preferences.getString("memberId"),PAGE_NUM+"",Constant.PAGE_SIZE+"");
+            memberId = Arad.preferences.getString("memberId");
             title = getResources().getString(R.string.my_post);
         }
+        invitationDao.queryMyPostList(memberId,PAGE_NUM+"",Constant.PAGE_SIZE+"");
 
         //mineQueryPostAdapter = new MineQueryPostAdapter(this);
         adapter = new PlotListViewFriendStyleAdapter(this);
@@ -114,7 +114,7 @@ public class MineQueryPostActivity extends AppToolBarActivity implements View.On
                     posts.clear();
                     PAGE_NUM = 1;
                 }
-                invitationDao.queryMyPostList(Arad.preferences.getString("memberId"), PAGE_NUM + "", Constant.PAGE_SIZE + "");
+                invitationDao.queryMyPostList(memberId, PAGE_NUM + "", Constant.PAGE_SIZE + "");
 
             }
 
@@ -122,7 +122,7 @@ public class MineQueryPostActivity extends AppToolBarActivity implements View.On
             public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
                 if (posts != null) {
                     PAGE_NUM += 1;
-                    invitationDao.queryMyPostList(Arad.preferences.getString("memberId"), PAGE_NUM + "", Constant.PAGE_SIZE + "");
+                    invitationDao.queryMyPostList(memberId, PAGE_NUM + "", Constant.PAGE_SIZE + "");
                 } else {
                     lv_content.onRefreshComplete();
                 }
@@ -186,7 +186,7 @@ public class MineQueryPostActivity extends AppToolBarActivity implements View.On
 
                 if (posts.get(position).getPraiseState()!=null) {
                     if (isAdd.get(position)) {
-                        idao.requesZambia("add", posts.get(position).getId(),Arad.preferences.getString("memberId")
+                        idao.requesZambia("add", posts.get(position).getId(),memberId
                                 ,posts.get(position).getTitle(),posts.get(position).getContent());
                         v.tv_friend_style_zan_num.setText((text.get(position) + 1) + "");
                         text.put(position,text.get(position) + 1);
@@ -194,7 +194,7 @@ public class MineQueryPostActivity extends AppToolBarActivity implements View.On
                         //MessageUtils.showShortToast(getApplicationContext(), "点赞成功");
                         isAdd.put(position,false);
                     } else {
-                        idao.requesZambia("reduce", posts.get(position).getId(), Arad.preferences.getString("memberId")
+                        idao.requesZambia("reduce", posts.get(position).getId(),memberId
                                 , posts.get(position).getTitle(), posts.get(position).getContent());
                         //MessageUtils.showShortToast(getApplicationContext(), "取消点赞");
                         v.tv_friend_style_zan_num.setText((text.get(position) - 1) + "");
@@ -244,14 +244,14 @@ public class MineQueryPostActivity extends AppToolBarActivity implements View.On
 * 举报请求
 * */
     public void requestJuBao(String postId,String reportId,PopupWindow popupWindow){
-        idao.requePostReport(postId, "", reportId, Arad.preferences.getString("memberId"));
+        idao.requePostReport(postId, "", reportId, memberId);
         mPopupWindow=popupWindow;
     }
     /*
  * 屏蔽作者请求
  * */
     public void requeMemberBlackListAdd(String reportId,PopupWindow popupWindow){
-        idao.requeMemberBlackListAdd(Arad.preferences.getString("memberId"), reportId);
+        idao.requeMemberBlackListAdd(memberId, reportId);
         mPopupWindow=popupWindow;
     }
 
@@ -593,12 +593,11 @@ public class MineQueryPostActivity extends AppToolBarActivity implements View.On
         if (posts != null) {
             posts.clear();
         }
-        if (ids != null && !ids.equals("")) {
-            invitationDao.queryMyPostList(ids, PAGE_NUM + "", Constant.PAGE_SIZE + "");
+       /* if (memberId.equals(Arad.preferences.getString("memberId"))) {
             title = "他的发帖";
         } else {
-            invitationDao.queryMyPostList(Arad.preferences.getString("memberId"), PAGE_NUM + "", Constant.PAGE_SIZE + "");
             title = getResources().getString(R.string.my_post);
-        }
+        }*/
+        invitationDao.queryMyPostList(memberId, PAGE_NUM + "", Constant.PAGE_SIZE + "");
     }
 }

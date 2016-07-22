@@ -79,9 +79,7 @@ public class MineNewpwdActivity extends AppToolBarActivity {
     public void onClick(View V){
         if (checkInput()){
            ldao.requestChangePassword(userName, et_input.getText().toString().trim());
-            //finish();
         }
-
     }
 
     @Override

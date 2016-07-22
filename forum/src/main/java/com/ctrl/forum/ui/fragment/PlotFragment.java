@@ -478,7 +478,6 @@ public class PlotFragment extends ToolBarFragment implements View.OnClickListene
                 }
             });
         }
-
     }
 
     private void initView() {
@@ -491,7 +490,12 @@ public class PlotFragment extends ToolBarFragment implements View.OnClickListene
 
     private void initData() {
         if (Arad.preferences.getString("memberId")!=null && !Arad.preferences.getString("memberId").equals("")) {
-            plotDao.queryCommunityPostList(Arad.preferences.getString("memberId"), communityId, PAGE_NUM + "", Constant.PAGE_SIZE + "");
+            if(communityId==null || communityId.equals("")){
+                tv_plot_name.setText("选择小区");
+                MessageUtils.showShortToast(getActivity(),"当前无小区，请选择加入小区！");
+            }else {
+                plotDao.queryCommunityPostList(Arad.preferences.getString("memberId"), communityId, PAGE_NUM + "", Constant.PAGE_SIZE + "");
+            }
         }
     }
 
@@ -583,6 +587,7 @@ public class PlotFragment extends ToolBarFragment implements View.OnClickListene
                tv_plot_name.setText(Arad.preferences.getString("communityName"));
                if (posts != null) {
                    posts.clear();
+                   invitationListViewFriendStyleAdapter.notifyDataSetChanged();
                }
                PAGE_NUM=1;
                plotDao.queryCommunityPostList(Arad.preferences.getString("memberId"),

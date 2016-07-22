@@ -209,7 +209,7 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
     private void initView() {
         channelId=getIntent().getStringExtra("channelId");
         idao = new InvitationDao(this);
-        idao.requesItemCategory2(channelId,"1");
+        idao.requesItemCategory2(channelId, "1");
 
         tv_tel=(TextView)findViewById(R.id.tv_tel);
         tv_location=(TextView)findViewById(R.id.tv_location);
@@ -820,16 +820,15 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
             case R.id.tv_release_save: //存草稿
                 TYPE="0";
                 isSave=true;
-                checkContent();
-                if(!et_content.getText().toString().equals("")) {
-                    //存草稿
+                //checkContent();
+                if (checkContent()){
                     saveInvitation();
                 }
                 break;
             case R.id.tv_release:
                 TYPE="1";
-                checkContent();
-                if(!et_content.getText().toString().equals("")) {
+                //checkContent();
+                if(checkContent()) {
                     //发布帖子
                     releaseInvitation();
                 }
@@ -857,10 +856,10 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
     }
 
     //检查输入框总是否有内容,从哪个界面进来的
-    public void checkContent(){
+    public Boolean checkContent(){
         if(et_content.getText().toString().equals("")&&Bimp.tempSelectBitmap.size()==0){
             MessageUtils.showShortToast(this,"帖子内容不可为空");
-            return;
+            return false;
         }
         if (checkActivity()) {
             if (AlbumActivity.addList.size() > 0) {
@@ -868,17 +867,32 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
                 for (int i = 0; i < AlbumActivity.addList.size(); i++) {
                     uri = Uri.parse(MediaStore.Images.Media.insertImage(getContentResolver(), AlbumActivity.addList.get(i).getBitmap(), null, null));
                     preUpload(uri);
-                    doUpload();
+                }
+                doUpload();
+                return false;
+            }else {
+                if (!et_content.getText().toString().equals("")) {
+                    return true;
                 }
             }
+            return false;
         }else{
             if(Bimp.tempSelectBitmap.size()>0) {
                 Uri uri = null;
+                Log.e("Bimp.tempSelectBitmap.size()",Bimp.tempSelectBitmap.size()+"");
                 for (int i = 0; i < Bimp.tempSelectBitmap.size(); i++) {
                     uri = Uri.parse(MediaStore.Images.Media.insertImage(getContentResolver(), Bimp.tempSelectBitmap.get(i).getBitmap(), null, null));
                     preUpload(uri);
+                    Log.e("preUpload","preUpload");
                 }
                 doUpload();
+                return false;
+            }else {
+                if (!et_content.getText().toString().equals("")) {
+                    Log.e("et_content!=null","1");
+                    return true;
+                }
+                return false;
             }
         }
     }
@@ -1373,8 +1387,10 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
             textViewCurrent.setText("");
             textViewCurrent.setText("\n" + ret.getStatusCode() + " " + ret.getResponse());
             Log.d("handler", textViewCurrent.getText().toString());*/
-
+            Log.e("0","1");
+            Log.e("ups.size()",ups.size()+"");
             if (ups.size() == Bimp.tempSelectBitmap.size()){
+                Log.e("1","1");
                 for(int i=0;i<ups.size();i++){
                     String url=QiNiuConfig.BASE_URL+keyList.get(i);
                     urlList.add(url);
@@ -1390,13 +1406,16 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
                         }
                     }
                 }else{
+                    Log.e("1","2");
                     if(urlList.size()==Bimp.tempSelectBitmap.size()) {
+                        Log.e("1","3");
                         Log.i("tag", "check type=11=="+checkType2);
                         Log.i("tag","check type=22=="+checkType3);
                         if (TYPE.equals("0")){
                             saveInvitation();
                         }
                         if (TYPE.equals("1")){
+                            Log.e("1", "4");
                             releaseInvitation();
                         }
                     }

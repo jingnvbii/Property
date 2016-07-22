@@ -383,6 +383,7 @@ public class PlotAddInvitationActivity extends AppToolBarActivity implements Vie
         }
 
         if (requestCode == 7) {
+            showProgress(false);
             if (isSave) {
                 MessageUtils.showShortToast(this, "存草稿成功");
             } else {
@@ -393,6 +394,7 @@ public class PlotAddInvitationActivity extends AppToolBarActivity implements Vie
             this.finish();
         }
         if (requestCode == 6) {
+            showProgress(false);
             if (isSave) {
                 MessageUtils.showShortToast(this, "存草稿成功");
             } else {
@@ -537,6 +539,11 @@ public class PlotAddInvitationActivity extends AppToolBarActivity implements Vie
 
     //上传图片，发布帖子
     private void upImgPass() {
+        showProgress(true);
+        if(et_content.getText().toString().equals("")&&Bimp.tempSelectBitmap.size()==0){
+            MessageUtils.showShortToast(this,"帖子内容不可为空");
+            return;
+        }
         if (checkActivity()) {
             if (AlbumActivity.addList.size() > 0) {
                 Uri uri = null;
@@ -544,6 +551,11 @@ public class PlotAddInvitationActivity extends AppToolBarActivity implements Vie
                     uri = Uri.parse(MediaStore.Images.Media.insertImage(getContentResolver(), AlbumActivity.addList.get(i).getBitmap(), null, null));
                     preUpload(uri);
                     doUpload();
+                }
+            }else{
+                if(!et_content.getText().toString().equals("")) {
+                    //发布帖子
+                    releaseInvitation(TYPE);
                 }
             }
         }else{
@@ -554,11 +566,12 @@ public class PlotAddInvitationActivity extends AppToolBarActivity implements Vie
                     preUpload(uri);
                     doUpload();
                 }
+            }else{
+                if(!et_content.getText().toString().equals("")) {
+                    //发布帖子
+                    releaseInvitation(TYPE);
+                }
             }
-        }
-        if(!et_content.getText().toString().equals("")) {
-            //发布帖子
-            releaseInvitation(TYPE);
         }
     }
 
