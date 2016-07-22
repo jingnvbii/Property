@@ -143,12 +143,12 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
             EditText et_sendmessage;
     @InjectView(R.id.ll_image_custom_facerelativelayout)//图片布局
             LinearLayout ll_image_custom_facerelativelayout;
-    @InjectView(R.id.iv01)//图片1
-            ImageView iv01;
+  /*  @InjectView(R.id.iv01)//图片1
+            ImageView iv1;
     @InjectView(R.id.iv02)//图片2
-            ImageView iv02;
+            ImageView iv2;
     @InjectView(R.id.iv03)//图片3
-            ImageView iv03;
+            ImageView iv3;*/
 
     @InjectView(R.id.title_image)
     ImageView title_image;
@@ -176,6 +176,8 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
     RoundImageView  title_image_2;
     @InjectView(R.id. tv_title2_name)
     TextView  tv_title2_name;
+    @InjectView(R.id. tv_contact_address)
+    TextView  tv_contact_address;
     @InjectView(R.id.lv_invitation_detail_image)
     ListViewForScrollView lv_invitation_detail_image;
     @InjectView(R.id.main_pull_refresh_view)
@@ -202,26 +204,6 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
     //  private InvitationDetailReplyAdapter replyAdapter;
     private InvitationPinetestDetailAdapter mInvitationCommentDetailAdapter;
     private View headview;
-  /*  private TextView tv_name;
-    private ImageView iv_levlel;
-    private ImageView iv001;
-    private ImageView iv002;
-    private ImageView iv003;
-    private ImageView iv004;
-    private ImageView iv005;
-    private ImageView iv006;
-    private ImageView iv007;
-    private ImageView iv008;
-    private ImageView iv009;
-    private TextView tv_release_time;
-    private TextView tv_address;
-    private TextView tv_delete;
-    private TextView tv_introduction;
-    private TextView tv_content;
-    private TextView tv_tel;
-    private LinearLayout ll_tel;*/
-     /*  private RelativeLayout rl_detail_user;
-    private RoundImageView title_image_2;*/
     private FriendDetailImageAdapter mFriendDetailImageAdapter;
 
     private int TYPE = -1;
@@ -245,7 +227,10 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
     private int count = 0;//点击计数器
     private int count_daoxu = 0;//倒叙计数器
     private ArrayList<String> imageUrl;
-  //  private ListViewForScrollView lv_invitation_detail_image;
+    private ImageView iv1;
+    private ImageView iv2;
+    private ImageView iv3;
+    //  private ListViewForScrollView lv_invitation_detail_image;
 
 
     @Override
@@ -272,28 +257,11 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
     }
 
     private void initView() {
-
+        iv1=(ImageView)FaceRelativeLayout.findViewById(R.id.iv01);
+        iv2=(ImageView)FaceRelativeLayout.findViewById(R.id.iv02);
+        iv3=(ImageView)FaceRelativeLayout.findViewById(R.id.iv03);
         count = 0;
         count_daoxu=0;
-      /*  title_image = (ImageView) headview.findViewById(R.id.title_image);//用户头像
-        iv_levlel = (ImageView) headview.findViewById(R.id.iv_levlel);//等级
-        ll_image_first = (LinearLayout) headview.findViewById(R.id.ll_image_first);
-        ll_image_second = (LinearLayout) headview.findViewById(R.id.ll_image_second);
-        ll_image_third = (LinearLayout) headview.findViewById(R.id.ll_image_third);
-        tv_name = (TextView) headview.findViewById(R.id.tv_name);//发帖人昵称
-        tv_title2_name = (TextView) headview.findViewById(R.id.tv_title2_name);//发帖人昵称
-        tv_release_time = (TextView) headview.findViewById(R.id.tv_release_time);//发布时间
-        tv_address = (TextView) headview.findViewById(R.id.tv_address);//发布地点
-        tv_delete = (TextView) headview.findViewById(R.id.tv_delete);//删除本帖
-        tv_introduction = (TextView) headview.findViewById(R.id.tv_introduction);//导语
-        tv_content = (TextView) headview.findViewById(R.id.tv_content);//内容
-        tv_tel = (TextView) headview.findViewById(R.id.tv_tel);//电话
-        rl_detail_user = (RelativeLayout) headview.findViewById(R.id.rl_detail_user);//用户布局
-        ll_tel = (LinearLayout) headview.findViewById(R.id.ll_tel);//拨打电话
-        title_image_2 = (RoundImageView) headview.findViewById(R.id.title_image_2);//头像
-        title_image = (RoundImageView) headview.findViewById(R.id.title_image);//头像
-        lv_invitation_detail_image = (ListViewForScrollView) headview.findViewById(R.id.lv_invitation_detail_image);//头像*/
-
         btn_yuyin.setAudioFinishRecorderListener(new AudioRecordButton.AudioFinishRecorderListener() {
             @Override
             public void onFinished(float seconds, String filePath) {
@@ -310,9 +278,9 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
             }
         });
 
-        listImg.add(iv01);
-        listImg.add(iv02);
-        listImg.add(iv03);
+        listImg.add(iv1);
+        listImg.add(iv2);
+        listImg.add(iv3);
 
         isFromPinglun = false;
 
@@ -419,12 +387,12 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
         }
         if (requestCode == 888) {
             showProgress(false);
-            MessageUtils.showShortToast(this, "图片上传成功");
+        //    MessageUtils.showShortToast(this, "图片上传成功");
             et_sendmessage.setEnabled(false);
             Image image = Idao.getImage();
             mImageList.add(image);
             setBitmapImg();
-            iv01.setOnLongClickListener(new View.OnLongClickListener() {
+            iv1.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
                     if (mImageList.size() >= 1) {
@@ -434,7 +402,7 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
                     return true;
                 }
             });
-            iv02.setOnLongClickListener(new View.OnLongClickListener() {
+            iv2.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
                     if (mImageList.size() >= 2) {
@@ -444,7 +412,7 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
                     return true;
                 }
             });
-            iv03.setOnLongClickListener(new View.OnLongClickListener() {
+            iv3.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
                     if (mImageList.size() >= 3) {
@@ -566,10 +534,14 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
                     }
                 }
             }
-            tv_address.setText(post.getContactAddress());
+            if(post.getLocationName()!=null)
+            tv_address.setText(post.getLocationName());
             tv_introduction.setText(post.getTitle());
 
-
+            if(post.getContactAddress()!=null){
+                tv_contact_address.setVisibility(View.VISIBLE);
+                tv_contact_address.setText("地址："+post.getContactAddress());
+            }
             if(post.getReporterId().equals(Arad.preferences.getString("memberId"))){
                 tv_delete.setVisibility(View.VISIBLE);
             }
@@ -620,51 +592,8 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
                 iv_zan.setImageResource(R.mipmap.zan_blue_shixin);
             }
             tv_release_time.setText("发布时间：" + TimeUtils.date(Long.parseLong(post.getPublishTime())));
-         //   tv_introduction.setText(post.getBlurbs());
             tv_content.setText(post.getContent());
             mFriendDetailImageAdapter.setList(idao.getListPostImage());
-          /*  if (idao.getListPostImage() != null) {
-                if (idao.getListPostImage().size() >= 1) {
-                    ll_image_first.setVisibility(View.VISIBLE);
-                    iv001.setVisibility(View.VISIBLE);
-                    Arad.imageLoader.load(idao.getListPostImage().get(0).getImg()).placeholder(R.mipmap.default_error).into(iv001);
-                }
-                if (idao.getListPostImage().size() >= 2) {
-                    iv002.setVisibility(View.VISIBLE);
-                    Arad.imageLoader.load(idao.getListPostImage().get(1).getImg()).placeholder(R.mipmap.default_error).into(iv002);
-                }
-                if (idao.getListPostImage().size() >= 3) {
-                    iv003.setVisibility(View.VISIBLE);
-                    Arad.imageLoader.load(idao.getListPostImage().get(2).getImg()).placeholder(R.mipmap.default_error).into(iv003);
-                }
-                if (idao.getListPostImage().size() >= 4) {
-                    iv004.setVisibility(View.VISIBLE);
-                    Arad.imageLoader.load(idao.getListPostImage().get(3).getImg()).placeholder(R.mipmap.default_error).into(iv004);
-                }
-                if (idao.getListPostImage().size() >= 5) {
-                    ll_image_second.setVisibility(View.VISIBLE);
-                    iv005.setVisibility(View.VISIBLE);
-                    Arad.imageLoader.load(idao.getListPostImage().get(4).getImg()).placeholder(R.mipmap.default_error).into(iv005);
-                }
-                if (idao.getListPostImage().size() >= 6) {
-                    iv006.setVisibility(View.VISIBLE);
-                    Arad.imageLoader.load(idao.getListPostImage().get(5).getImg()).placeholder(R.mipmap.default_error).into(iv006);
-                }
-                if (idao.getListPostImage().size() >= 7) {
-                    iv007.setVisibility(View.VISIBLE);
-                    Arad.imageLoader.load(idao.getListPostImage().get(6).getImg()).placeholder(R.mipmap.default_error).into(iv007);
-                }
-                if (idao.getListPostImage().size() >= 8) {
-                    iv008.setVisibility(View.VISIBLE);
-                    Arad.imageLoader.load(idao.getListPostImage().get(7).getImg()).placeholder(R.mipmap.default_error).into(iv008);
-                }
-                if (idao.getListPostImage().size() >= 9) {
-                    ll_image_third.setVisibility(View.VISIBLE);
-                    iv009.setVisibility(View.VISIBLE);
-                    Arad.imageLoader.load(idao.getListPostImage().get(8).getImg()).placeholder(R.mipmap.default_error).into(iv009);
-                }
-
-            }*/
             imageUrl=new ArrayList<>();
             for(int i=0;i<idao.getListPostImage().size();i++){
                 imageUrl.add(idao.getListPostImage().get(i).getImg());
@@ -743,7 +672,7 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
     public void onClick(View v) {
         Intent intent=null;
         switch (v.getId()) {
-            case R.id.iv01:
+         /*   case R.id.iv01:
               gotoImageZoomActivity(InvitationPinterestDetailActivity.this,imageUrl,0);
                 break;
             case R.id.iv02:
@@ -769,7 +698,7 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
                 break;
             case R.id.iv09:
               gotoImageZoomActivity(InvitationPinterestDetailActivity.this,imageUrl,8);
-                break;
+                break;*/
             case R.id.title_image:
                 if(Arad.preferences.getString("memberId")==null||Arad.preferences.getString("memberId").equals("")){
                     startActivity(new Intent(InvitationPinterestDetailActivity.this, LoginActivity.class));
@@ -1043,6 +972,13 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
 
                 if (ll_bottom_edit.getVisibility() == View.VISIBLE) {
                     ll_bottom_edit.setVisibility(View.GONE);
+                    ll_image_custom_facerelativelayout.setVisibility(View.GONE);
+                    if(mImageList!=null){
+                        mImageList.clear();
+                    }
+
+                    et_sendmessage.setEnabled(true);
+
                 } else {
                     ll_bottom_edit.setVisibility(View.VISIBLE);
                     Arad.preferences.putBoolean("isFromAPP", true);
@@ -1148,34 +1084,31 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
     }
 
     private void setBitmapImg() {
-
-
         if (mImageList != null) {
-
             if (mImageList.size() == 0) {
                 ll_image_custom_facerelativelayout.setVisibility(View.GONE);
-                iv01.setVisibility(View.INVISIBLE);
-                iv02.setVisibility(View.INVISIBLE);
-                iv03.setVisibility(View.INVISIBLE);
+                iv1.setVisibility(View.INVISIBLE);
+                iv2.setVisibility(View.INVISIBLE);
+                iv3.setVisibility(View.INVISIBLE);
             }
             if (mImageList.size() == 1) {
                 ll_image_custom_facerelativelayout.setVisibility(View.VISIBLE);
-                iv01.setVisibility(View.VISIBLE);
-                iv02.setVisibility(View.INVISIBLE);
-                iv03.setVisibility(View.INVISIBLE);
+                ll_image_custom_facerelativelayout.clearAnimation();
+                iv1.setVisibility(View.VISIBLE);
+                iv2.setVisibility(View.INVISIBLE);
+                iv3.setVisibility(View.INVISIBLE);
                 for (int i = 0; i < mImageList.size(); i++) {
-                    // Log.i("tag","mImageList----"+mImageList.size());
-                    //  Log.i("tag","mImageList  url----"+mImageList.get(i).getThumbImgUrl());
                     Arad.imageLoader.load(mImageList.get(i).getThumbImgUrl()).into(listImg.get(i));
+                    listImg.get(i).clearAnimation();
                 }
 
             }
 
             if (mImageList.size() == 2) {
                 ll_image_custom_facerelativelayout.setVisibility(View.VISIBLE);
-                iv01.setVisibility(View.VISIBLE);
-                iv02.setVisibility(View.VISIBLE);
-                iv03.setVisibility(View.INVISIBLE);
+                iv1.setVisibility(View.VISIBLE);
+                iv2.setVisibility(View.VISIBLE);
+                iv3.setVisibility(View.INVISIBLE);
                 for (int i = 0; i < mImageList.size(); i++) {
                     Arad.imageLoader.load(mImageList.get(i).getThumbImgUrl()).into(listImg.get(i));
                 }
@@ -1183,9 +1116,9 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
             }
 
             if (mImageList.size() == 3) {
-                iv01.setVisibility(View.VISIBLE);
-                iv02.setVisibility(View.VISIBLE);
-                iv03.setVisibility(View.VISIBLE);
+                iv1.setVisibility(View.VISIBLE);
+                iv2.setVisibility(View.VISIBLE);
+                iv3.setVisibility(View.VISIBLE);
                 for (int i = 0; i < mImageList.size(); i++) {
                     Arad.imageLoader.load(mImageList.get(i).getThumbImgUrl()).into(listImg.get(i));
                 }
@@ -1194,42 +1127,42 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
         }
     }
 
-    private void delImg(int imgFlg) {
+  private void delImg(int imgFlg) {
 
         if (mImageList != null) {
 
-            /**长按 第一张图*/
+            //**长按 第一张图*//*
             if (imgFlg == 1) {
                 if (mImageList.size() == 1) {
                     et_sendmessage.setEnabled(true);
                     mImageList.remove(0);
 
                     ll_image_custom_facerelativelayout.setVisibility(View.GONE);
-                    iv01.setVisibility(View.INVISIBLE);
-                    iv02.setVisibility(View.INVISIBLE);
-                    iv03.setVisibility(View.INVISIBLE);
+                    iv1.setVisibility(View.INVISIBLE);
+                    iv2.setVisibility(View.INVISIBLE);
+                    iv3.setVisibility(View.INVISIBLE);
                     setBitmapImg();
 
                 }
 
                 if (mImageList.size() == 2) {
                     mImageList.remove(0);
-                    iv01.setVisibility(View.VISIBLE);
-                    iv02.setVisibility(View.INVISIBLE);
-                    iv03.setVisibility(View.INVISIBLE);
+                    iv1.setVisibility(View.VISIBLE);
+                    iv2.setVisibility(View.INVISIBLE);
+                    iv3.setVisibility(View.INVISIBLE);
                     setBitmapImg();
                 }
 
                 if (mImageList.size() == 3) {
                     mImageList.remove(0);
-                    iv01.setVisibility(View.VISIBLE);
-                    iv02.setVisibility(View.VISIBLE);
-                    iv03.setVisibility(View.INVISIBLE);
+                    iv1.setVisibility(View.VISIBLE);
+                    iv2.setVisibility(View.VISIBLE);
+                    iv3.setVisibility(View.INVISIBLE);
                     setBitmapImg();
                 }
             }
 
-            /**长按 第二张图*/
+            //**长按 第二张图*//*
             if (imgFlg == 2) {
                 if (mImageList.size() == 1) {
                     //
@@ -1237,9 +1170,9 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
 
                 if (mImageList.size() == 2) {
                     mImageList.remove(1);
-                    iv01.setVisibility(View.VISIBLE);
-                    iv02.setVisibility(View.INVISIBLE);
-                    iv03.setVisibility(View.INVISIBLE);
+                    iv1.setVisibility(View.VISIBLE);
+                    iv2.setVisibility(View.INVISIBLE);
+                    iv3.setVisibility(View.INVISIBLE);
 
                     setBitmapImg();
                 }
@@ -1248,9 +1181,9 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
                     mImageList.remove(1);
 
 
-                    iv01.setVisibility(View.VISIBLE);
-                    iv02.setVisibility(View.VISIBLE);
-                    iv03.setVisibility(View.INVISIBLE);
+                    iv1.setVisibility(View.VISIBLE);
+                    iv2.setVisibility(View.VISIBLE);
+                    iv3.setVisibility(View.INVISIBLE);
 
 
                     setBitmapImg();
@@ -1259,7 +1192,7 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
             }
 
 
-            /**长按 第三张图*/
+            //**长按 第三张图*//*
             if (imgFlg == 3) {
                 if (mImageList.size() == 1) {
 //
@@ -1273,9 +1206,9 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
                     mImageList.remove(2);
 
 
-                    iv01.setVisibility(View.VISIBLE);
-                    iv02.setVisibility(View.VISIBLE);
-                    iv03.setVisibility(View.INVISIBLE);
+                    iv1.setVisibility(View.VISIBLE);
+                    iv2.setVisibility(View.VISIBLE);
+                    iv3.setVisibility(View.INVISIBLE);
 
 
                     setBitmapImg();

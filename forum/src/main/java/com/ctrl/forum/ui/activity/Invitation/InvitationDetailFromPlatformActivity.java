@@ -144,12 +144,12 @@ public class InvitationDetailFromPlatformActivity extends AppToolBarActivity imp
     @InjectView(R.id.et_sendmessage)//回复内容
             EditText et_sendmessage;
 
-    @InjectView(R.id.iv01)//图片1
+   /* @InjectView(R.id.iv01)//图片1
             ImageView iv01;
     @InjectView(R.id.iv02)//图片2
             ImageView iv02;
     @InjectView(R.id.iv03)//图片3
-            ImageView iv03;
+            ImageView iv03;*/
     @InjectView(R.id.ll_image_custom_facerelativelayout)//图片布局
             LinearLayout ll_image_custom_facerelativelayout;
 
@@ -235,6 +235,9 @@ public class InvitationDetailFromPlatformActivity extends AppToolBarActivity imp
     private String latutude;
     private int count;
     private int count_dapxu;
+    private ImageView iv01;
+    private ImageView iv02;
+    private ImageView iv03;
 
 
     @Override
@@ -262,6 +265,9 @@ public class InvitationDetailFromPlatformActivity extends AppToolBarActivity imp
     }
 
     private void initView() {
+        iv01=(ImageView)FaceRelativeLayout.findViewById(R.id.iv01);
+        iv01=(ImageView)FaceRelativeLayout.findViewById(R.id.iv02);
+        iv01=(ImageView)FaceRelativeLayout.findViewById(R.id.iv03);
         count = 0;
         count_dapxu = 0;
         isFromPinglun = false;
@@ -1056,6 +1062,11 @@ public class InvitationDetailFromPlatformActivity extends AppToolBarActivity imp
                 ll_facechoose.setVisibility(View.GONE);
                 if (ll_bottom_edit.getVisibility() == View.VISIBLE) {
                     ll_bottom_edit.setVisibility(View.GONE);
+                    ll_image_custom_facerelativelayout.setVisibility(View.GONE);
+                    if(mImageList!=null){
+                        mImageList.clear();
+                    }
+                    et_sendmessage.setEnabled(true);
                 } else {
                     ll_bottom_edit.setVisibility(View.VISIBLE);
                     Arad.preferences.putBoolean("isFromApp", false);

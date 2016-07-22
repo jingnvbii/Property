@@ -13,7 +13,7 @@ public class FileUtils {
 	public static String SDPATH = Environment.getExternalStorageDirectory()
 			+ "/Photo_LJ/";
 
-	public static void saveBitmap(Bitmap bm, String picName) {
+	public static File saveBitmap(Bitmap bm, String picName) {
 		try {
 			if (!isFileExist("")) {
 				File tempf = createSDDir("");
@@ -26,12 +26,14 @@ public class FileUtils {
 			bm.compress(Bitmap.CompressFormat.JPEG, 90, out);
 			out.flush();
 			out.close();
+			return f;
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-	}
+		return null;
+		}
 
 	public static File createSDDir(String dirName) throws IOException {
 		File dir = new File(SDPATH + dirName);

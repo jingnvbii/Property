@@ -54,7 +54,6 @@ import com.ctrl.forum.entity.PostImage;
 import com.ctrl.forum.photo.activity.AlbumActivity;
 import com.ctrl.forum.photo.activity.GalleryActivity;
 import com.ctrl.forum.photo.util.Bimp;
-import com.ctrl.forum.photo.util.FileUtils;
 import com.ctrl.forum.photo.util.ImageItem;
 import com.ctrl.forum.photo.util.PublicWay;
 import com.ctrl.forum.photo.util.Res;
@@ -69,6 +68,7 @@ import com.ctrl.forum.qiniu_main.up.rs.UploadResultCallRet;
 import com.ctrl.forum.qiniu_main.up.slice.Block;
 import com.ctrl.forum.qiniu_main.util.Util;
 import com.ctrl.forum.ui.activity.WebViewActivity;
+import com.ctrl.forum.utils.BitmapUtils;
 import com.ctrl.forum.utils.Utils;
 
 import java.io.BufferedInputStream;
@@ -432,6 +432,9 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
     public void photo() {
         Intent openCameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         startActivityForResult(openCameraIntent, TAKE_PICTURE);
+      /*  Intent intentFromCapture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        intentFromCapture.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(Environment.getExternalStorageDirectory(), "lzr.jpg")));
+        startActivityForResult(intentFromCapture, TAKE_PICTURE);*/
     }
 
     @Override
@@ -881,7 +884,10 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
                 Uri uri = null;
                 Log.e("Bimp.tempSelectBitmap.size()",Bimp.tempSelectBitmap.size()+"");
                 for (int i = 0; i < Bimp.tempSelectBitmap.size(); i++) {
-                    uri = Uri.parse(MediaStore.Images.Media.insertImage(getContentResolver(), Bimp.tempSelectBitmap.get(i).getBitmap(), null, null));
+                 //   uri = Uri.parse(MediaStore.Images.Media.insertImage(getContentResolver(), Bimp.tempSelectBitmap.get(i).getBitmap(), null, null));
+                    Log.i("tag","path2123123===="+Bimp.tempSelectBitmap.get(i).getImagePath());
+                    uri= Utils.getUriFromPath(this,Bimp.tempSelectBitmap.get(i).getImagePath());
+                    Log.i("tag","uri==="+uri);
                     preUpload(uri);
                     Log.e("preUpload","preUpload");
                 }
@@ -984,7 +990,10 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
         }
     }
 
-/*
+
+
+
+    /*
 * 发布帖子
 * */
     private void releaseInvitation() {
@@ -1221,12 +1230,15 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
             switch (requestCode) {
                 case TAKE_PICTURE:
                     if (Bimp.tempSelectBitmap.size() < 9 && resultCode == RESULT_OK) {
-                        String fileName = String.valueOf(System.currentTimeMillis());
-                        Bitmap bm = (Bitmap) data.getExtras().get("data");
-                        FileUtils.saveBitmap(bm, fileName);
-                        ImageItem takePhoto = new ImageItem();
-                        takePhoto.setBitmap(bm);
-                        Bimp.tempSelectBitmap.add(takePhoto);
+                            Bitmap bitmap =(Bitmap)data.getExtras().get("data");
+                             String fileName = String.valueOf(System.currentTimeMillis());
+                            // String path = FileUtils.saveBitmap(bm, fileName).getPath();
+                            BitmapUtils.saveImageToGallery(this, bitmap, "laizhouren", fileName);
+                            ImageItem takePhoto = new ImageItem();
+                            takePhoto.setBitmap(bitmap);
+                            takePhoto.setImagePath(Environment.getExternalStorageDirectory()
+                                    + "/laizhouren/" + fileName + ".jpg");
+                            Bimp.tempSelectBitmap.add(takePhoto);
                     }
                     break;
 

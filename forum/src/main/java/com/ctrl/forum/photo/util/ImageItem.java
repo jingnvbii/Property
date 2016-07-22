@@ -1,6 +1,7 @@
 package com.ctrl.forum.photo.util;
 
 import android.graphics.Bitmap;
+import android.net.Uri;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -13,7 +14,16 @@ public class ImageItem implements Serializable {
 	private Bitmap bitmap;
 	public boolean isSelected = false;
 	private String imageUrl;
-	
+	private Uri uri;
+
+	public Uri getUri() {
+		return uri;
+	}
+
+	public void setUri(Uri uri) {
+		this.uri = uri;
+	}
+
 	public String getImageId() {
 		return imageId;
 	}

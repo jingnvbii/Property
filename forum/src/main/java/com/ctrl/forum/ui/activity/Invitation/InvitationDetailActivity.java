@@ -67,6 +67,10 @@ public class InvitationDetailActivity extends AppToolBarActivity implements View
     TextView tv_detail_time;
     @InjectView(R.id.tv_detail_tel)//发布电话
     TextView tv_detail_tel;
+    @InjectView(R.id.tv_contact_address)//发布电话
+    TextView tv_contact_address;
+    @InjectView(R.id.tv_address)//发布电话
+    TextView tv_address;
     @InjectView(R.id.tv_detail_content)//发布内容
     TextView tv_detail_content;
     @InjectView(R.id.tv_friend_style_zan_num)//点赞数量
@@ -274,6 +278,16 @@ public class InvitationDetailActivity extends AppToolBarActivity implements View
             tv_detail_title.setText(post.getTitle());
             tv_detail_content.setText(post.getContent());
             tv_detail_tel.setText(post.getContactPhone());
+
+            if(post.getContactAddress()!=null){
+                tv_contact_address.setVisibility(View.VISIBLE);
+                tv_contact_address.setText("地址："+post.getContactAddress());
+            }
+
+            if(post.getLocationName()!=null){
+                tv_address.setText(post.getLocationName());
+            }
+
 
             if(post.getContactPhone()==null||post.getContactPhone().equals("")){
                 ll_tel.setVisibility(View.GONE);

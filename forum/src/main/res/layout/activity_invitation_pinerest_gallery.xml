@@ -14,7 +14,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="@dimen/margin_left_and_right"
+            android:paddingLeft="@dimen/margin_left_and_right"
+            android:paddingRight="20dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
             android:src="@mipmap/jiantou_left_white"/>
 
         <TextView
@@ -36,8 +39,8 @@
 
         <com.ctrl.forum.photo.zoom.ViewPagerFixed
             android:id="@+id/gallery01"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_centerHorizontal="true"
             android:background="@color/plugin_camera_black"
             android:unselectedAlpha="1">
@@ -61,6 +64,7 @@
             android:text="电话连接"
             android:layout_gravity="bottom|right"
             android:layout_marginBottom="70dp"
+            android:visibility="gone"
             android:paddingTop="5dp"
             android:paddingBottom="5dp"
             android:paddingRight="20dp"
