@@ -182,7 +182,7 @@ public class InvitationDetailActivity extends AppToolBarActivity implements View
     public void onRequestSuccess(int requestCode) {
         super.onRequestSuccess(requestCode);
         if (requestCode == 14) {
-            if (count % 2 == 0) {//奇数次点击
+            if (count % 2 == 0) {//奇数次点击1
                 if (post.getZambiastate().equals("0")) {
                     //  MessageUtils.showShortToast(this, "取消点赞成功");
                     iv_friend_style_zan_num.setImageResource(R.mipmap.zan_blue_shixin);
