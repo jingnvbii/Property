@@ -147,7 +147,6 @@ public class RimStoreCommentActivity extends AppToolBarActivity implements View.
         intent = getIntent();
         rimServiceCompaniesId = intent.getStringExtra("rimServiceCompaniesId");
         rimDao.getcollectAroundCompany(rimServiceCompaniesId, PAGE_NUM + "", Constant.PAGE_SIZE + "");
-
     }
 
     private void initView() {
@@ -686,7 +685,6 @@ public class RimStoreCommentActivity extends AppToolBarActivity implements View.
                 });
 
     }
-
 
     @Override
     protected void onPause() {

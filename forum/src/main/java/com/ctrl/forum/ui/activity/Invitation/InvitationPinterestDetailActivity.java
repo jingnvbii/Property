@@ -143,12 +143,16 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
             EditText et_sendmessage;
     @InjectView(R.id.ll_image_custom_facerelativelayout)//图片布局
             LinearLayout ll_image_custom_facerelativelayout;
-    @InjectView(R.id.iv01)//图片1
+   /* @InjectView(R.id.iv01)//图片1
             ImageView iv01;
     @InjectView(R.id.iv02)//图片2
             ImageView iv02;
     @InjectView(R.id.iv03)//图片3
-            ImageView iv03;
+            ImageView iv03;*/
+    private ImageView iv01;
+    private ImageView iv02;
+    private ImageView iv03;
+
 
     @InjectView(R.id.title_image)
     ImageView title_image;
@@ -306,9 +310,12 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-
             }
         });
+
+        iv01 = (ImageView) ll_image_custom_facerelativelayout.findViewById(R.id.iv01);
+        iv02 = (ImageView) findViewById(R.id.iv02);
+        iv03 = (ImageView) findViewById(R.id.iv03);
 
         listImg.add(iv01);
         listImg.add(iv02);
@@ -1161,6 +1168,7 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
             if (mImageList.size() == 1) {
                 ll_image_custom_facerelativelayout.setVisibility(View.VISIBLE);
                 iv01.setVisibility(View.VISIBLE);
+                iv01.setImageDrawable(this.getResources().getDrawable(R.mipmap.image_default));
                 iv02.setVisibility(View.INVISIBLE);
                 iv03.setVisibility(View.INVISIBLE);
                 for (int i = 0; i < mImageList.size(); i++) {
@@ -1168,7 +1176,6 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
                     //  Log.i("tag","mImageList  url----"+mImageList.get(i).getThumbImgUrl());
                     Arad.imageLoader.load(mImageList.get(i).getThumbImgUrl()).into(listImg.get(i));
                 }
-
             }
 
             if (mImageList.size() == 2) {
@@ -1179,7 +1186,6 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
                 for (int i = 0; i < mImageList.size(); i++) {
                     Arad.imageLoader.load(mImageList.get(i).getThumbImgUrl()).into(listImg.get(i));
                 }
-
             }
 
             if (mImageList.size() == 3) {

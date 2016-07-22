@@ -259,14 +259,13 @@ public class PlotAddInvitationActivity extends AppToolBarActivity implements Vie
         pop.setOutsideTouchable(true);
         pop.setContentView(view);
 
-        //ll_popup = (LinearLayout) view.findViewById(R.id.ll_popup);
+        ll_popup = (LinearLayout) view.findViewById(R.id.ll_popup);
 
        /* pop.setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
         pop.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
         pop.setBackgroundDrawable(new BitmapDrawable());
         pop.setFocusable(true);
         pop.setOutsideTouchable(true);*/
-
 
         RelativeLayout parent = (RelativeLayout) view.findViewById(R.id.parent);
         Button bt1 = (Button) view
@@ -545,12 +544,12 @@ public class PlotAddInvitationActivity extends AppToolBarActivity implements Vie
 
     //上传图片，发布帖子
     private void upImgPass() {
-        showProgress(true);
         if(et_content.getText().toString().equals("")&&Bimp.tempSelectBitmap.size()==0){
             MessageUtils.showShortToast(this,"帖子内容不可为空");
             return;
         }
         if (checkActivity()) {
+            showProgress(true);
             if (AlbumActivity.addList.size() > 0) {
                 Uri uri = null;
                 for (int i = 0; i < AlbumActivity.addList.size(); i++) {
@@ -565,6 +564,7 @@ public class PlotAddInvitationActivity extends AppToolBarActivity implements Vie
                 }
             }
         }else{
+            showProgress(true);
             if (Bimp.tempSelectBitmap.size() > 0) {
                 Uri uri = null;
                 for (int i = 0; i < Bimp.tempSelectBitmap.size(); i++) {

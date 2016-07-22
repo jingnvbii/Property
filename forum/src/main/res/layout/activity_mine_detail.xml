@@ -53,6 +53,7 @@
         android:textColor="@color/line_gray" />
 
     <TextView
+        android:id="@+id/shop_information_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/shop"
@@ -60,9 +61,12 @@
         android:textSize="@dimen/text_size_basic"
         android:layout_marginLeft="@dimen/margin_left_and_right"
         android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp"/>
+        android:layout_marginBottom="5dp"
+        android:visibility="gone"/>
 
     <RelativeLayout
+        android:id="@+id/shop_information"
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="77dp"
         android:background="@color/white">
@@ -108,7 +112,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/men_cloth"
+            android:text=""
             android:textSize="@dimen/text_size_medium"
             android:id="@+id/shop_name"
             android:layout_marginLeft="@dimen/margin_left_and_right"
@@ -120,7 +124,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/men_cloth"
+            android:text=""
             android:textSize="@dimen/text_size_basic"
             android:textColor="@color/text_newpwd"
             android:id="@+id/shop_detail"
@@ -144,7 +148,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="9:00-21:00"
+            android:text=""
             android:textColor="@color/text_newpwd"
             android:textSize="@dimen/text_size_basic"
             android:id="@+id/tv_time"

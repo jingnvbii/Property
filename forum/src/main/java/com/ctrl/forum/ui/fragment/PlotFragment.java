@@ -140,17 +140,6 @@ public class PlotFragment extends ToolBarFragment implements View.OnClickListene
         checkActivity();
 
         initView();
-        invitationListViewFriendStyleAdapter = new PlotListViewFriendStyleAdapter(getActivity());
-        lv_content.setAdapter(invitationListViewFriendStyleAdapter);
-        invitationListViewFriendStyleAdapter.setOnLove(this);
-
-        invitationListViewFriendStyleAdapter.setOnShare(this);
-        invitationListViewFriendStyleAdapter.setOnMoreDialog(this);
-
-        communityId = Arad.preferences.getString("communityId");
-        plotDao = new PlotDao(this);
-
-        initData();
 
         //listview增加头部布局
         AbsListView.LayoutParams layoutParams = new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, AbsListView.LayoutParams.WRAP_CONTENT);
@@ -164,6 +153,18 @@ public class PlotFragment extends ToolBarFragment implements View.OnClickListene
         search.requestFocus();
         headview.setLayoutParams(layoutParams);
         lv_content.getRefreshableView().addHeaderView(headview);
+
+        invitationListViewFriendStyleAdapter = new PlotListViewFriendStyleAdapter(getActivity());
+        lv_content.setAdapter(invitationListViewFriendStyleAdapter);
+        invitationListViewFriendStyleAdapter.setOnLove(this);
+
+        invitationListViewFriendStyleAdapter.setOnShare(this);
+        invitationListViewFriendStyleAdapter.setOnMoreDialog(this);
+
+        communityId = Arad.preferences.getString("communityId");
+        plotDao = new PlotDao(this);
+
+        initData();
 
         //为输入框注册键盘监听事件
         search.setOnEditorActionListener(new TextView.OnEditorActionListener() {

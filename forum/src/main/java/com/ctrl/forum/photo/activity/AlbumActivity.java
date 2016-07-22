@@ -19,7 +19,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
-import com.beanu.arad.utils.AnimUtil;
 import com.ctrl.forum.photo.adapter.AlbumGridViewAdapter;
 import com.ctrl.forum.photo.util.AlbumHelper;
 import com.ctrl.forum.photo.util.Bimp;
@@ -136,10 +135,9 @@ public class AlbumActivity extends Activity {
 			Bimp.tempSelectBitmap.clear();
 
 			addList.clear();  //删除增加的图片
-
-			intent.setClass(mContext, activity);
+			/*intent.setClass(mContext, activity);
 			startActivity(intent);
-			AnimUtil.intentSlidOut(AlbumActivity.this);
+			AnimUtil.intentSlidOut(AlbumActivity.this);*/
 			onBackPressed();
 		}
 	}
