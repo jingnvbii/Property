@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.text.SpannableString;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -162,6 +163,7 @@ public class InvitationDetailFromPlatAdapter extends BaseAdapter {
         }
         if (mPostReply2.getReplyType().equals("1")) {//有评论
             holder.rl_pinglun.setVisibility(View.VISIBLE);//评论布局显示
+            Log.i("tag", "replyType" + mPostReply2.getReplyType());
             if (mPostReply2.getContentType().equals("0") && mPostReply2.getPreContentType().equals("0")) {//回复与评论都是文字
                 holder.tv_reply_content.setVisibility(View.VISIBLE);
                 holder.rl_reply_voice.setVisibility(View.GONE);

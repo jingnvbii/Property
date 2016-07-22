@@ -42,6 +42,7 @@ import com.ctrl.forum.entity.PostReply2;
 import com.ctrl.forum.manager.MediaManager;
 import com.ctrl.forum.ui.adapter.InvitationCommentDetailAdapter;
 import com.ctrl.forum.utils.Base64Util;
+import com.ctrl.forum.utils.InputMethodUtils;
 import com.ctrl.forum.utils.Utils;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
@@ -295,9 +296,10 @@ public class InvitationCommentDetaioActivity extends AppToolBarActivity implemen
 
     /*
     * 输入框复位
-    * */
+    **/
     private void reset() {
-        isFromPinglun = false;
+        InputMethodUtils.hide(InvitationCommentDetaioActivity.this);
+         isFromPinglun = false;
         et_sendmessage.setText("");
         if(!et_sendmessage.isEnabled()){
             et_sendmessage.setEnabled(true);

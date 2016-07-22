@@ -73,6 +73,7 @@ import com.ctrl.forum.ui.activity.mine.MineDetailActivity;
 import com.ctrl.forum.ui.adapter.InvitationDetailFromPlatAdapter;
 import com.ctrl.forum.ui.adapter.InvitationListViewForRelateAdapter;
 import com.ctrl.forum.utils.Base64Util;
+import com.ctrl.forum.utils.InputMethodUtils;
 import com.ctrl.forum.utils.TimeUtils;
 import com.ctrl.forum.utils.Utils;
 
@@ -619,14 +620,15 @@ public class InvitationDetailFromPlatformActivity extends AppToolBarActivity imp
 
             //加载富文本
             loadRichText();
-
-            if(post.getLinkLatitude().equals("0")&&post.getLinkLongitude().equals("0")){
-                mapview_invitation.setVisibility(View.GONE);
-            }else if(post.getLinkLatitude().equals("")||post.getLinkLongitude().equals("")){
-                mapview_invitation.setVisibility(View.GONE);
-            }else {
-                //显示地图
-                showMap();
+            if(post.getLinkLatitude()!=null&&post.getLinkLongitude()!=null) {
+                if (post.getLinkLatitude().equals("0") && post.getLinkLongitude().equals("0")) {
+                    mapview_invitation.setVisibility(View.GONE);
+                } else if (post.getLinkLatitude().equals("") || post.getLinkLongitude().equals("")) {
+                    mapview_invitation.setVisibility(View.GONE);
+                } else {
+                    //显示地图
+                    showMap();
+                }
             }
         }
 
@@ -1370,6 +1372,7 @@ public class InvitationDetailFromPlatformActivity extends AppToolBarActivity imp
     * 输入框复位
     * */
     private void reset() {
+        InputMethodUtils.hide(InvitationDetailFromPlatformActivity.this);
         isFromPinglun = false;
         if (!et_sendmessage.isEnabled()) {
             et_sendmessage.setEnabled(true);
