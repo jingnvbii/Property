@@ -47,12 +47,12 @@
                     android:layout_toRightOf="@id/title_image"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:layout_centerVertical="true"
+                    android:layout_marginTop="5dp"
                     android:layout_marginLeft="10dp"
                     android:textColor="@color/text_black"/>
 
-             <!--   <TextView
+                <TextView
+                    android:id="@+id/tv_address"
                     android:layout_marginTop="5dp"
                     android:layout_marginBottom="10dp"
                     android:layout_toRightOf="@+id/title_image"
@@ -60,16 +60,13 @@
                     android:layout_marginLeft="10dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="历下区辅导辅导辅导"
                     />
--->
 
                     <ImageView
                     android:id="@+id/iv_detail_levlel"
                     android:layout_toRightOf="@id/tv_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
                     android:layout_marginTop="10dp"
                     android:layout_marginLeft="5dp"
                     />
@@ -109,7 +106,7 @@
                 android:layout_marginTop="10dp"
                 android:textSize="12sp"
                 android:layout_marginLeft="@dimen/margin_left_and_right"
-                android:text="发布时间：1123" />
+                 />
 
 
             <LinearLayout
@@ -136,6 +133,14 @@
                     android:src="@mipmap/tel"/>
             </LinearLayout>
 
+            <TextView
+                android:id="@+id/tv_contact_address"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:textSize="14sp"
+                android:layout_marginLeft="@dimen/margin_left_and_right"
+              />
             <TextView
                 android:id="@+id/tv_detail_content"
                 android:layout_width="wrap_content"

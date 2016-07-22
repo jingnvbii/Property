@@ -217,21 +217,28 @@ public class InvitationPinerestGalleyActivity extends ToolBarActivity implements
             user = idao.getUser();
             listViews = new ArrayList<>();
            // listViews2 = new ArrayList<>();
+            if(post.getContactPhone()!=null&&!post.getContactPhone().equals("")){
+                tv_image_tel.setVisibility(View.VISIBLE);
+            }
+
            if(listPostImage==null){
                ImageView view = new ImageView(this);
+            //   view.setAdjustViewBounds(true);
                // TextView view2=new TextView(this);
               view.setImageResource(R.mipmap.default_error);
                // view2.setText(post.getPostImgList().get(i).getRemark());
-               view.setScaleType(ImageView.ScaleType.FIT_XY);
+            //   view.setScaleType(ImageView.ScaleType.FIT_XY);
                listViews.add(view);
                tv_titile.setVisibility(View.GONE);
            }else {
                for (int i = 0; i < listPostImage.size(); i++) {
                    ImageView view = new ImageView(this);
+                   view.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,
+                           LayoutParams.WRAP_CONTENT));
                    // TextView view2=new TextView(this);
                    Arad.imageLoader.load(listPostImage.get(i).getImg()).placeholder(R.mipmap.default_error).into(view);
                    // view2.setText(post.getPostImgList().get(i).getRemark());
-                   view.setScaleType(ImageView.ScaleType.FIT_XY);
+                 //  view.setScaleType(ImageView.ScaleType.FIT_XY);
                    listViews.add(view);
                    //  listViews2.add(view2);
                }
@@ -277,8 +284,8 @@ public class InvitationPinerestGalleyActivity extends ToolBarActivity implements
         PhotoView img = new PhotoView(this);
         img.setBackgroundColor(0xff000000);
         img.setImageBitmap(bm);
-        img.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
-                LayoutParams.MATCH_PARENT));
+        img.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,
+                LayoutParams.WRAP_CONTENT));
         listViews.add(img);
     }
 
@@ -521,7 +528,7 @@ public class InvitationPinerestGalleyActivity extends ToolBarActivity implements
         TextView tv_image_dial = (TextView)contentView.findViewById(R.id.tv_image_dial);//拨打电话
         TextView tv_image_tel_cancel = (TextView)contentView.findViewById(R.id.tv_image_tel_cancel);//取消
 
-        tv_iamge_phone_num.setText(user.getMobile());
+        tv_iamge_phone_num.setText(post.getContactPhone());
         tv_image_dial.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

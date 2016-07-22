@@ -204,4 +204,28 @@ public class Utils {
 		return value;
 	}
 
+	public static Uri getUriFromPath(Context context,String path){
+		Uri mUri = Uri.parse("content://media/external/images/media");
+		Uri mImageUri = null;
+
+		Cursor cursor = context.getContentResolver().query(
+				MediaStore.Images.Media.EXTERNAL_CONTENT_URI, null, null,
+				null, MediaStore.Images.Media.DEFAULT_SORT_ORDER);
+		cursor.moveToFirst();
+
+		while (!cursor.isAfterLast()) {
+			String data = cursor.getString(cursor
+					.getColumnIndex(MediaStore.MediaColumns.DATA));
+			if (path.equals(data)) {
+				int ringtoneID = cursor.getInt(cursor
+						.getColumnIndex(MediaStore.MediaColumns._ID));
+				mImageUri = Uri.withAppendedPath(mUri, ""
+						+ ringtoneID);
+				break;
+			}
+			cursor.moveToNext();
+		}
+		return mImageUri;
+	}
+
 }

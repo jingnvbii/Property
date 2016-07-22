@@ -238,7 +238,7 @@ public class LocationActivity extends AppToolBarActivity implements View.OnClick
                         Intent intent = new Intent();
                         intent.putExtra("locationLongitude", location.getLongitude());
                         intent.putExtra("locationLatitude", location.getLatitude());
-                        intent.putExtra("location", mPoiInfoListStr.get(position));
+                        intent.putExtra("location", mPoiInfoListStr.get(position-1));
                         setResult(RESULT_OK, intent);
                         finish();
                     }
