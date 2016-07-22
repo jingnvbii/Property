@@ -11,9 +11,9 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 
+import com.beanu.arad.base.ToolBarActivity;
 import com.beanu.arad.utils.AndroidUtil;
 import com.ctrl.forum.R;
-import com.ctrl.forum.base.AppToolBarActivity;
 import com.ctrl.forum.dao.OrderDao;
 import com.ctrl.forum.entity.OrderItem;
 import com.ctrl.forum.entity.OrderState;
@@ -30,7 +30,7 @@ import butterknife.InjectView;
 * 商城订单状态 activity
 * */
 
-public class StoreOrderStatusActivity extends AppToolBarActivity implements View.OnClickListener {
+public class StoreOrderStatusActivity extends ToolBarActivity implements View.OnClickListener {
     @InjectView(R.id.iv_order_status_back)//返回按钮
             ImageView iv_order_status_back;
     @InjectView(R.id.iv_order_status_share)//分享按钮

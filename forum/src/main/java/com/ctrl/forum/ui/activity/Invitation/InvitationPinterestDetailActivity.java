@@ -61,6 +61,7 @@ import com.ctrl.forum.ui.activity.mine.MineDetailActivity;
 import com.ctrl.forum.ui.adapter.FriendDetailImageAdapter;
 import com.ctrl.forum.ui.adapter.InvitationPinetestDetailAdapter;
 import com.ctrl.forum.utils.Base64Util;
+import com.ctrl.forum.utils.InputMethodUtils;
 import com.ctrl.forum.utils.TimeUtils;
 import com.ctrl.forum.utils.Utils;
 
@@ -271,6 +272,7 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
     }
 
     private void initView() {
+
         count = 0;
         count_daoxu=0;
       /*  title_image = (ImageView) headview.findViewById(R.id.title_image);//用户头像
@@ -542,7 +544,6 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
             user = idao.getUser();
             if (user != null) {
                 Arad.imageLoader.load(user.getImgUrl()).placeholder(R.mipmap.round_img).into(title_image);
-                Arad.imageLoader.load(user.getImgUrl()).placeholder(R.mipmap.round_img).into(title_image_2);
                 if(user.getNickName()!=null&&!user.getNickName().equals("")){
                     tv_name.setText(user.getNickName());
                 }else {
@@ -555,6 +556,7 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
                 }
                 if(post.getVcardDisplay().equals("1")){
                     rl_detail_user.setVisibility(View.VISIBLE);
+                    Arad.imageLoader.load(user.getImgUrl()).placeholder(R.mipmap.round_img).into(title_image_2);
                     if(user.getNickName()!=null&&!user.getNickName().equals("")){
                         tv_title2_name.setText(user.getNickName());
                     }else {
@@ -565,7 +567,6 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
                 }
             }
             tv_address.setText(post.getContactAddress());
-
             tv_introduction.setText(post.getTitle());
 
 
@@ -668,7 +669,7 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
             for(int i=0;i<idao.getListPostImage().size();i++){
                 imageUrl.add(idao.getListPostImage().get(i).getImg());
             }
-            
+
         }
 
 
@@ -793,7 +794,7 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
                 break;
             case R.id.ll_tel://一键拨打电话
                 if (user.getMobile() != null)
-                    AndroidUtil.dial(this, user.getMobile());
+                    AndroidUtil.dial(this, tv_tel.getText().toString().trim());
                 break;
             case R.id.tv_zhikanlouzhu://收藏
                 if(Arad.preferences.getString("memberId")==null||Arad.preferences.getString("memberId").equals("")){
@@ -1359,6 +1360,7 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
     * 输入框复位
     * */
     private void reset() {
+        InputMethodUtils.hide(InvitationPinterestDetailActivity.this);
         isFromPinglun = false;
         if (!et_sendmessage.isEnabled()) {
             et_sendmessage.setEnabled(true);

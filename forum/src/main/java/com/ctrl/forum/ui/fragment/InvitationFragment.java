@@ -257,8 +257,22 @@ public class InvitationFragment extends ToolBarFragment implements View.OnClickL
         idao = new InvitationDao(this);
       //  showProgress(true);
         idao.requestInitPostHomePage();
-        idao.requestPostListByCategory(Arad.preferences.getString("memberId"), "", "0", "","", PAGE_NUM, Constant.PAGE_SIZE);
+        idao.requestPostListByCategory(Arad.preferences.getString("memberId"), "", "0", "", "", PAGE_NUM, Constant.PAGE_SIZE);
         lv_invitation_fragment_home.setMode(PullToRefreshBase.Mode.BOTH);
+       /* lv_invitation_fragment_home.setOnLastItemVisibleListener(new PullToRefreshBase.OnLastItemVisibleListener() {
+            @Override
+            public void onLastItemVisible() {
+                PAGE_NUM += 1;
+                //  showProgress(true);
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        idao.requestInitPostHomePage();
+                        idao.requestPostListByCategory(Arad.preferences.getString("memberId"), "", "0", "", "", PAGE_NUM, Constant.PAGE_SIZE);
+                    }
+                }, 500);
+            }
+        });*/
         lv_invitation_fragment_home.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {

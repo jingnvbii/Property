@@ -4,28 +4,28 @@
     android:background="@color/main_bg"
     android:id="@+id/ll_main"
     android:layout_height="match_parent">
-
     <include
         android:id="@+id/include"
         layout="@layout/toolbar_common_main"
         android:layout_width="match_parent"
         android:layout_height="@dimen/toolbar_height"
         ></include>
-
     <com.ctrl.forum.customview.PullToRefreshView
         android:id="@+id/main_pull_refresh_view"
         android:layout_width="match_parent"
         android:layout_weight="1"
         android:layout_height="match_parent">
-
     <ScrollView
         android:layout_width="match_parent"
         android:fillViewport="true"
         android:layout_height="match_parent">
    <LinearLayout
+       android:id="@+id/ll_all"
        android:layout_width="match_parent"
        android:orientation="vertical"
+       android:focusable="true"
        android:layout_height="match_parent">
+
 
     <include
         layout="@layout/fragment_invitation_pinterest_detail"
