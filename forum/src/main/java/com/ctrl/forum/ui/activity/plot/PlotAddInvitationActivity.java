@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -139,11 +138,9 @@ public class PlotAddInvitationActivity extends AppToolBarActivity implements Vie
     private String locationLatitude;
     private String vcardDisplay;
     private InvitationDao idao;
-     //private String edit = ""; //是否是编辑状态
     private String id; //编辑状态时的帖子id
 
     private Map<String, String> delIds = new HashMap<>();
-    //private List<ImageItem> delImages = new ArrayList<>(); //删除的图片
 
     private boolean isSave;//是否存草稿
     private String delId = "";
@@ -155,7 +152,6 @@ public class PlotAddInvitationActivity extends AppToolBarActivity implements Vie
     private String qiNiuImgUrl;//添加图片的url
     private String TYPE;
     private List<PostImage> listPostImage = new ArrayList<>();
-    //private List<ImageNew> primary = new ArrayList<>(); //从草稿箱进来时获取到的imageList的url集合
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -251,16 +247,26 @@ public class PlotAddInvitationActivity extends AppToolBarActivity implements Vie
         }
 
         channelId = getIntent().getStringExtra("channelId");
-        pop = new PopupWindow(PlotAddInvitationActivity.this);
+        //pop = new PopupWindow(PlotAddInvitationActivity.this);
         View view = getLayoutInflater().inflate(R.layout.item_popupwindows, null);
-        ll_popup = (LinearLayout) view.findViewById(R.id.ll_popup);
+        pop = new PopupWindow(view,
+                getResources().getDisplayMetrics().widthPixels,
+                getResources().getDisplayMetrics().heightPixels);
+        pop.setFocusable(true);
+        ColorDrawable colorDrawable = new ColorDrawable(getResources().getColor(R.color.pop_bg));
+        colorDrawable.setAlpha(40);
+        pop.setBackgroundDrawable(colorDrawable);
+        pop.setOutsideTouchable(true);
+        pop.setContentView(view);
 
-        pop.setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
+        //ll_popup = (LinearLayout) view.findViewById(R.id.ll_popup);
+
+       /* pop.setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
         pop.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
         pop.setBackgroundDrawable(new BitmapDrawable());
         pop.setFocusable(true);
-        pop.setOutsideTouchable(true);
-        pop.setContentView(view);
+        pop.setOutsideTouchable(true);*/
+
 
         RelativeLayout parent = (RelativeLayout) view.findViewById(R.id.parent);
         Button bt1 = (Button) view
@@ -317,7 +323,7 @@ public class PlotAddInvitationActivity extends AppToolBarActivity implements Vie
                                     long arg3) {
                 if (arg2 == Bimp.tempSelectBitmap.size()) {
                     ll_popup.startAnimation(AnimationUtils.loadAnimation(PlotAddInvitationActivity.this, R.anim.activity_translate_in));
-                    pop.showAtLocation(noScrollgridview, Gravity.BOTTOM, 0, 0);
+                    pop.showAtLocation(noScrollgridview, Gravity.BOTTOM, 0, 120);
                 } else {
                     Intent intent = new Intent(PlotAddInvitationActivity.this, GalleryActivity.class);
                     intent.putExtra("position", "1");

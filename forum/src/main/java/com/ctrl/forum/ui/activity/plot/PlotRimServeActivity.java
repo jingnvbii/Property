@@ -41,6 +41,7 @@ public class PlotRimServeActivity extends ToolBarActivity implements View.OnClic
     LinearLayout ll_category;
     @InjectView(R.id.lv_content)
     PullToRefreshListView lv_content;
+    private TextView tv;
 
     private PlotDao plotDao;
     private RimDao rimDao;
@@ -115,18 +116,15 @@ public class PlotRimServeActivity extends ToolBarActivity implements View.OnClic
     //初始化分类列表
     private void initView() {
         for (int i = 0; i < category2s.size(); i++) {
-            TextView v = new TextView(this);
-            //TextView v = (TextView) ll_category.getChildAt(i);
-            v.setTextColor(getResources().getColor(R.color.text_black));
+            View view = LayoutInflater.from(this).inflate(R.layout.textview_layout, null);
+            TextView v = (TextView) view.findViewById(R.id.tv_text);
             v.setText(category2s.get(i).getName());
-            v.setTextSize(getResources().getDimension(R.dimen.text_size_num));
-            v.setPadding(30, 30, 30, 30);
-            //v.setWidth(1);
-            v.setOnClickListener(this);
-            ll_category.addView(v);
+            view.setOnClickListener(this);
+            ll_category.addView(view);
         }
-        TextView v = (TextView)ll_category.getChildAt(0);
-        v.setTextColor(getResources().getColor(R.color.red_bg));
+        View v = ll_category.getChildAt(0);
+        tv = (TextView) v.findViewById(R.id.tv_text);
+        tv.setTextColor(getResources().getColor(R.color.red_bg));
         CompantyCategyId = category2s.get(0).getId();
         plotDao.getAroundServiceCompanyList(PAGE_NUM + "", Constant.PAGE_SIZE + "",
                 Arad.preferences.getString("memberId"), CompantyCategyId,
@@ -231,7 +229,9 @@ public class PlotRimServeActivity extends ToolBarActivity implements View.OnClic
                 break;
             default:
                 for (int i = 0; i < ll_category.getChildCount(); i++) {
-                    ((TextView) ll_category.getChildAt(i)).setTextColor(getResources().getColor(R.color.text_black1));
+                    View view = ll_category.getChildAt(i);
+                    tv = (TextView) view.findViewById(R.id.tv_text);
+                    tv.setTextColor(getResources().getColor(R.color.text_black1));
                 }
 
                 CompantyCategyId = category2s.get(ll_category.indexOfChild(v)).getId();
@@ -243,7 +243,9 @@ public class PlotRimServeActivity extends ToolBarActivity implements View.OnClic
                 plotDao.getAroundServiceCompanyList(PAGE_NUM + "", Constant.PAGE_SIZE + "",
                         Arad.preferences.getString("memberId"), CompantyCategyId,
                         Arad.preferences.getString("latitude"), Arad.preferences.getString("lontitude"));
-                ((TextView) v).setTextColor(getResources().getColor(R.color.red_bg));
+
+                tv = (TextView) v.findViewById(R.id.tv_text);
+                tv.setTextColor(getResources().getColor(R.color.red_bg));
                 break;
         }
     }

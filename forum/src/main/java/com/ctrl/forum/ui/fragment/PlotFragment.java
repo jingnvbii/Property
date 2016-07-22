@@ -136,7 +136,7 @@ public class PlotFragment extends ToolBarFragment implements View.OnClickListene
         View view = inflater.inflate(R.layout.fragment_plot, container, false);
         ButterKnife.inject(this, view);
        // rl_search.setVisibility(View.GONE);
-
+        idao = new InvitationDao(this);
         checkActivity();
 
         initView();
@@ -196,6 +196,7 @@ public class PlotFragment extends ToolBarFragment implements View.OnClickListene
         lv_content.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
+                idao.requestPostRotaingBanner("B_COMMUNITY_TOP");
                 if (posts != null) {
                     posts.clear();
                     rl_search.setVisibility(View.VISIBLE);
@@ -203,7 +204,7 @@ public class PlotFragment extends ToolBarFragment implements View.OnClickListene
                 if (Arad.preferences.getString("memberId") != null && !Arad.preferences.getString("memberId").equals("")) {
                     PAGE_NUM = 1;
                     plotDao.queryCommunityPostList(Arad.preferences.getString("memberId"), communityId, PAGE_NUM + "", Constant.PAGE_SIZE + "");
-                }else{
+                } else {
                     lv_content.onRefreshComplete();
                 }
             }
@@ -226,7 +227,7 @@ public class PlotFragment extends ToolBarFragment implements View.OnClickListene
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = null;
-                if (posts.get(position-2)!=null) {
+                if (posts.get(position - 2)!=null) {
                     if (posts.get(position-2).getContentType()!=null){
                         String type = posts.get(position-2).getContentType();
                         switch (type){
@@ -302,7 +303,6 @@ public class PlotFragment extends ToolBarFragment implements View.OnClickListene
             }
         });
 
-        idao = new InvitationDao(this);
         idao.requestPostRotaingBanner("B_COMMUNITY_TOP");
 
         return view;
@@ -481,7 +481,11 @@ public class PlotFragment extends ToolBarFragment implements View.OnClickListene
     }
 
     private void initView() {
-        tv_plot_name.setText(Arad.preferences.getString("communityName"));
+        if (Arad.preferences.getString("communityName").equals("")){
+            tv_plot_name.setText("选择小区");
+        }else{
+            tv_plot_name.setText(Arad.preferences.getString("communityName"));
+        }
 
         tv_plot_name.setOnClickListener(this);
         rim_post.setOnClickListener(this);
@@ -491,7 +495,6 @@ public class PlotFragment extends ToolBarFragment implements View.OnClickListene
     private void initData() {
         if (Arad.preferences.getString("memberId")!=null && !Arad.preferences.getString("memberId").equals("")) {
             if(communityId==null || communityId.equals("")){
-                tv_plot_name.setText("选择小区");
                 MessageUtils.showShortToast(getActivity(),"当前无小区，请选择加入小区！");
             }else {
                 plotDao.queryCommunityPostList(Arad.preferences.getString("memberId"), communityId, PAGE_NUM + "", Constant.PAGE_SIZE + "");
@@ -525,7 +528,6 @@ public class PlotFragment extends ToolBarFragment implements View.OnClickListene
 
         if (requestCode==19){
            listBanner = idao.getListBanner();
-
             if (listBanner!=null){
                 frameLayout.setVisibility(View.VISIBLE);
                setLoopView();
