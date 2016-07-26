@@ -9,6 +9,7 @@ import android.text.SpannableString;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -26,6 +27,7 @@ import com.ctrl.forum.R;
 import com.ctrl.forum.ui.activity.Invitation.InvitationCommentDetaioActivity;
 import com.ctrl.forum.ui.activity.Invitation.InvitationDetailFromPlatformActivity;
 import com.ctrl.forum.ui.activity.Invitation.InvitationPinterestDetailActivity;
+import com.ctrl.forum.utils.InputMethodUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -128,6 +130,10 @@ public class FaceRelativeLayout extends RelativeLayout implements
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.btn_face:
+			/*if(InputMethodUtils.isShow(context,et_sendmessage)){
+				InputMethodUtils.hide(context);
+			}*/
+			InputMethodUtils.hide(context);
 			// 隐藏表情选择框
 			ll_add.setVisibility(GONE);
 			if (view.getVisibility() == View.VISIBLE) {
@@ -199,6 +205,14 @@ public class FaceRelativeLayout extends RelativeLayout implements
 		tv_photo_graph=(TextView)findViewById(R.id.tv_photo_graph);
 		tv_photo_album.setOnClickListener(this);
 		tv_photo_graph.setOnClickListener(this);
+
+		et_sendmessage.setOnTouchListener(new OnTouchListener() {
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				hideFaceView();
+				return false;
+			}
+		});
 	}
 
 	/**

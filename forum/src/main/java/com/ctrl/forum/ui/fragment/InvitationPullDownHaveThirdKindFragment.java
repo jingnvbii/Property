@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -176,6 +177,8 @@ public class InvitationPullDownHaveThirdKindFragment extends ToolBarFragment {
         if(!InvitationPullDownActivity.isFromSelcet){
             thirdKindId=null;
         }
+        Log.i("tag", "isFromSearch===" + InvitationPullDownActivity.isFromSearch);
+        Log.i("tag", "keyword===" + keyword);
         if(!InvitationPullDownActivity.isFromSearch){
             keyword=null;
            // thirdKindId=null;
@@ -190,23 +193,23 @@ public class InvitationPullDownHaveThirdKindFragment extends ToolBarFragment {
                 if(listPost!=null){
                     listPost.clear();
                 }
-                idao.requestPostRotaingBanner("B_POST_MIDDLE");
+                Log.i("tag", "111===" );
                 idao.requesPostCategory(channelId, "2", "0");
-                idao.requestPostListByCategory(Arad.preferences.getString("memberId"), thirdKindId, "0", keyword,"", PAGE_NUM, Constant.PAGE_SIZE);
+                idao.requestPostListByCategory(Arad.preferences.getString("memberId"), channelId, "0", keyword,"", PAGE_NUM, Constant.PAGE_SIZE);
             }else if(thirdKindId!=null) {
+                Log.i("tag", "222===" );
                 idao.requesPostCategory(channelId, "2", "0");
                 idao.requestPostListByCategory(Arad.preferences.getString("memberId"), thirdKindId, "0", "","", PAGE_NUM, Constant.PAGE_SIZE);
           
             }else if(showAll.equals("1")) {
+                Log.i("tag", "333===" );
                // idao.requesPostCategory(channelId, "2", "0");
                 idao.requestPostRotaingBanner("B_POST_MIDDLE");
                 idao.requestPostListByCategory(Arad.preferences.getString("memberId"), firstId, "0", "","", PAGE_NUM, Constant.PAGE_SIZE);
-            }else if(thirdKindId==null){
-                idao.requestPostRotaingBanner("B_POST_MIDDLE");
+            }else {
+                Log.i("tag", "444===" );
                 idao.requesPostCategory(channelId, "2", "0");
                 idao.requestPostListByCategory(Arad.preferences.getString("memberId"), channelId, "0", "","", PAGE_NUM, Constant.PAGE_SIZE);
-           }else {
-                //
             }
         }
     }
@@ -460,7 +463,8 @@ public class InvitationPullDownHaveThirdKindFragment extends ToolBarFragment {
         if (requestCode == 1) {
             bol = 0;
             if(listCategroy3==null) {
-             //   framelayout.setVisibility(View.VISIBLE);
+                idao.requestPostRotaingBanner("B_POST_MIDDLE");
+                //   framelayout.setVisibility(View.VISIBLE);
                 gridView1.setVisibility(View.GONE);
             }else {
                 framelayout.setVisibility(View.GONE);

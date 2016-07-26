@@ -7,7 +7,7 @@
     <LinearLayout
         android:layout_marginTop="10dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical"
         android:background="@color/white">
 
@@ -159,7 +159,7 @@
      <com.ctrl.forum.customview.ListViewForScrollView
          android:id="@+id/lv_invitation_detail_image"
          android:layout_width="match_parent"
-         android:layout_height="wrap_content">
+         android:layout_height="match_parent">
 
      </com.ctrl.forum.customview.ListViewForScrollView>
 
@@ -334,26 +334,29 @@
                 android:layout_centerVertical="true"
                 android:layout_alignParentRight="true"/>
         </RelativeLayout>
-    </LinearLayout>
-<LinearLayout
-android:layout_width="match_parent"
-android:orientation="vertical"
-android:layout_marginTop="10dp"
-android:layout_height="match_parent"
-android:background="@color/white"
-    >
-<TextView
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="10dp"
-    android:paddingBottom="10dp"
-    android:gravity="center"
-    android:textColor="@color/text_black"
-    android:layout_marginLeft="@dimen/margin_left_and_right"
-    android:text="评论"
-    />
 
-</LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:layout_marginTop="10dp"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:paddingBottom="10dp"
+                android:gravity="center"
+                android:textColor="@color/text_black"
+                android:layout_marginLeft="@dimen/margin_left_and_right"
+                android:text="评论"
+                />
+
+        </LinearLayout>
+
+    </LinearLayout>
 
 
 </LinearLayout>

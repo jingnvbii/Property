@@ -3,6 +3,7 @@ package com.ctrl.forum.ui.adapter;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.text.SpannableString;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,6 +18,7 @@ import android.widget.TextView;
 import com.beanu.arad.Arad;
 import com.beanu.arad.utils.AnimUtil;
 import com.ctrl.forum.R;
+import com.ctrl.forum.customview.ImageZoomActivity;
 import com.ctrl.forum.customview.RoundImageView;
 import com.ctrl.forum.entity.PostReply2;
 import com.ctrl.forum.face.FaceConversionUtil;
@@ -26,6 +28,7 @@ import com.ctrl.forum.ui.activity.LoginActivity;
 import com.ctrl.forum.ui.activity.mine.MineDetailActivity;
 import com.ctrl.forum.utils.TimeUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -335,7 +338,43 @@ public class InvitationDetailFromPlatAdapter extends BaseAdapter {
                 AnimUtil.intentSlidIn((Activity) mcontext);
             }
         });
+
+        if(mPostReply2.getPostReplyImgList()!=null){
+            final ArrayList<String>list1=new ArrayList<>();
+            for(int i=0;i<mPostReply2.getPostReplyImgList().size();i++){
+                list1.add(mPostReply2.getPostReplyImgList().get(i).getImg());
+            }
+            holder.iv_reply_invitation_image1.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    goToImageZoomActivity(mcontext,list1,0);
+                }
+            });
+            holder.iv_reply_invitation_image2.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    goToImageZoomActivity(mcontext,list1,1);
+                }
+            });
+            holder.iv_reply_invitation_image3.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    goToImageZoomActivity(mcontext,list1,2);
+                }
+            });
+
+        }
         return convertView;
+    }
+
+    private void goToImageZoomActivity(Context context,ArrayList<String> list,int pos){
+        Intent intent=new Intent(context, ImageZoomActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("imageList", list);
+        bundle.putInt("position", pos);
+        intent.putExtras(bundle);
+        context.startActivity(intent);
+        AnimUtil.intentSlidIn((Activity) context);
     }
 
     static class ViewHolder {

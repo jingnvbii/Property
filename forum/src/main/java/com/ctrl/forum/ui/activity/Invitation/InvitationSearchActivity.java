@@ -9,6 +9,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -43,6 +44,8 @@ public class InvitationSearchActivity extends AppToolBarActivity implements View
     ListView lv_invitation_history_search;
     @InjectView(R.id.tv_delete_invitation_history)//清空历史记录
     TextView tv_delete_invitation_history;
+    @InjectView(R.id.iv_toolbar_left)//清空历史记录
+            ImageView iv_toolbar_left;
     private SearchDao sdao;
     private List<SearchHistory> listHistorySearch;
     private List<HotSearch> listHotSearch;
@@ -63,6 +66,7 @@ public class InvitationSearchActivity extends AppToolBarActivity implements View
     private void initView() {
         tv_invitation_search.setOnClickListener(this);
         tv_delete_invitation_history.setOnClickListener(this);
+        iv_toolbar_left.setOnClickListener(this);
     }
 
     private void initData() {
@@ -133,6 +137,9 @@ public class InvitationSearchActivity extends AppToolBarActivity implements View
     @Override
     public void onClick(View v) {
         switch (v.getId()){
+            case R.id.iv_toolbar_left:
+                onBackPressed();
+                break;
             case R.id.tv_invitation_search:
                 if(TextUtils.isEmpty(et_invitation_search.getText().toString().trim())){
                     MessageUtils.showShortToast(InvitationSearchActivity.this,"搜索关键字为空");

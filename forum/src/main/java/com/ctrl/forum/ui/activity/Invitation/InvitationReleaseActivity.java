@@ -830,7 +830,7 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
                 break;
             case R.id.tv_release:
                 TYPE="1";
-                //checkContent();
+                checkContent();
                 if(checkContent()) {
                     //发布帖子
                     releaseInvitation();
@@ -882,7 +882,6 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
         }else{
             if(Bimp.tempSelectBitmap.size()>0) {
                 Uri uri = null;
-                Log.e("Bimp.tempSelectBitmap.size()",Bimp.tempSelectBitmap.size()+"");
                 for (int i = 0; i < Bimp.tempSelectBitmap.size(); i++) {
                  //   uri = Uri.parse(MediaStore.Images.Media.insertImage(getContentResolver(), Bimp.tempSelectBitmap.get(i).getBitmap(), null, null));
                     Log.i("tag","path2123123===="+Bimp.tempSelectBitmap.get(i).getImagePath());
@@ -1374,7 +1373,7 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
 
 
     // *************************
-
+    private int count=0;
     private UploadHandler uploadHandler = new UploadHandler() {
         @Override
         protected void onProcess(long contentLength, long currentUploadLength, long lastUploadLength, UpParam p, Object passParam) {
@@ -1390,6 +1389,7 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
             Log.d("handler", textViewCurrent.getText().toString());*/
         }
 
+
         @Override
         protected void onSuccess(UploadResultCallRet ret, UpParam p, Object passParam) {
 
@@ -1401,12 +1401,13 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
             Log.d("handler", textViewCurrent.getText().toString());*/
             Log.e("0","1");
             Log.e("ups.size()",ups.size()+"");
-            if (ups.size() == Bimp.tempSelectBitmap.size()){
+            count++;
+            if (count == Bimp.tempSelectBitmap.size()){
                 Log.e("1","1");
-                for(int i=0;i<ups.size();i++){
+                for(int i=0;i<count;i++){
                     String url=QiNiuConfig.BASE_URL+keyList.get(i);
                     urlList.add(url);
-                    Log.i("tag","url==i=="+urlList.get(i));
+                    Log.i("tag","url==i=="+url);
                 }
                 if (checkActivity()){
                     if (urlList.size() == AlbumActivity.addList.size()){
