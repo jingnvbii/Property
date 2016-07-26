@@ -10,27 +10,17 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/toolbar_height"
         ></include>
-    <com.ctrl.forum.customview.PullToRefreshView
+   <!-- <com.ctrl.forum.customview.PullToRefreshView
         android:id="@+id/main_pull_refresh_view"
         android:layout_width="match_parent"
         android:layout_weight="1"
-        android:layout_height="match_parent">
-    <ScrollView
-        android:layout_width="match_parent"
-        android:fillViewport="true"
-        android:layout_height="match_parent">
-   <LinearLayout
-       android:id="@+id/ll_all"
-       android:layout_width="match_parent"
-       android:orientation="vertical"
-       android:focusable="true"
-       android:layout_height="match_parent">
+        android:layout_height="match_parent">-->
 
 
-    <include
+  <!--  <include
         layout="@layout/fragment_invitation_pinterest_detail"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"></include>
+        android:layout_height="wrap_content"></include>-->
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
@@ -41,17 +31,16 @@
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:background="@color/line_gray" />
-        <com.ctrl.forum.customview.ListViewForScrollView
+        <ListView
             android:id="@+id/lv_reply_detail"
             android:layout_width="match_parent"
             android:background="@color/white"
             android:layout_height="match_parent"
             >
-        </com.ctrl.forum.customview.ListViewForScrollView>
+        </ListView>
     </LinearLayout>
-   </LinearLayout>
-    </ScrollView>
-    </com.ctrl.forum.customview.PullToRefreshView>
+
+  <!--  </com.ctrl.forum.customview.PullToRefreshView>-->
     <FrameLayout
         android:id="@+id/framelayout"
         android:layout_width="match_parent"
@@ -102,6 +91,5 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"></include>
     </FrameLayout>
-    </LinearLayout>
 
-
+</LinearLayout>

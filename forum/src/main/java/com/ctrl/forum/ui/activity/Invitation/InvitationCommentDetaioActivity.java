@@ -17,6 +17,7 @@ import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
@@ -25,6 +26,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.beanu.arad.Arad;
@@ -71,6 +73,8 @@ public class InvitationCommentDetaioActivity extends AppToolBarActivity implemen
             LinearLayout ll_input_text;
     @InjectView(R.id.iv_input_add)//加号
             ImageView iv_input_add;
+    @InjectView(R.id.ll_facechoose)//表情布局
+            RelativeLayout ll_facechoose;
     @InjectView(R.id.FaceRelativeLayout)//自定义输入编辑布局
             com.ctrl.forum.face.FaceRelativeLayout FaceRelativeLayout;
     @InjectView(R.id.btn_yuyin)//语音按钮
@@ -123,6 +127,20 @@ public class InvitationCommentDetaioActivity extends AppToolBarActivity implemen
     }
 
     private void initView() {
+        et_sendmessage.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if(InputMethodUtils.isShow(InvitationCommentDetaioActivity.this,et_sendmessage)){
+                    if(ll_bottom_edit!=null&&ll_bottom_edit.getVisibility()==View.VISIBLE){
+                        ll_bottom_edit.setVisibility(View.GONE);
+                        ll_image_custom_facerelativelayout.setVisibility(View.GONE);
+                    }
+                }else {
+                    InputMethodUtils.show(InvitationCommentDetaioActivity.this,et_sendmessage);
+                }
+                return false;
+            }
+        });
         iv_input_add.setOnClickListener(this);
         iv_input_yuyin.setOnClickListener(this);
         btn_send.setOnClickListener(this);
@@ -675,6 +693,8 @@ public class InvitationCommentDetaioActivity extends AppToolBarActivity implemen
 * 文字与图片切换
 * */
     private void changeTextAndImage() {
+        InputMethodUtils.hide(InvitationCommentDetaioActivity.this);
+        ll_facechoose.setVisibility(View.GONE);
         if(ll_bottom_edit.getVisibility()==View.VISIBLE){
             ll_bottom_edit.setVisibility(View.GONE);
         }else {

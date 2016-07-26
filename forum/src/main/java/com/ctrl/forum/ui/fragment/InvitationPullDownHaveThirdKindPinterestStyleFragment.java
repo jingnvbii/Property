@@ -118,26 +118,22 @@ public class InvitationPullDownHaveThirdKindPinterestStyleFragment extends ToolB
             //thirdKindId=null;
         }
         if (isVisibleToUser&&bol==1 ) {
-            idao.requestPostRotaingBanner("B_POST_MIDDLE");
             if(listCategroy3!=null)listCategroy3.clear();
             if(keyword!=null){
                 if(listPost!=null){
                     listPost.clear();
                 }
-                idao.requestPostRotaingBanner("B_POST_MIDDLE");
                 idao.requesPostCategory(id, "2", "0");
-                idao.requestPostListByCategory(Arad.preferences.getString("memberId"), thirdKindId, "0", keyword,"", PAGE_NUM, Constant.PAGE_SIZE);
+                idao.requestPostListByCategory(Arad.preferences.getString("memberId"), id, "0", keyword,"", PAGE_NUM, Constant.PAGE_SIZE);
             }else if(thirdKindId!=null) {
                 idao.requesPostCategory(id, "2", "0");
                 idao.requestPostListByCategory(Arad.preferences.getString("memberId"), thirdKindId, "0", "","", PAGE_NUM, Constant.PAGE_SIZE);
             }else if(showAll.equals("1")) {
                 idao.requestPostRotaingBanner("B_POST_MIDDLE");
                 idao.requestPostListByCategory(Arad.preferences.getString("memberId"),firstId, "0", "","", PAGE_NUM, Constant.PAGE_SIZE);
-            }else if(thirdKindId==null){
+            }else {
                 idao.requesPostCategory(id, "2", "0");
                 idao.requestPostListByCategory(Arad.preferences.getString("memberId"), id, "0", "","", PAGE_NUM, Constant.PAGE_SIZE);
-            }else {
-                //
             }
         }
 
@@ -264,7 +260,8 @@ public class InvitationPullDownHaveThirdKindPinterestStyleFragment extends ToolB
             bol = 0;
             listPost = idao.getListPost();
             if(listCategroy3==null){
-             //   framelayout.setVisibility(View.VISIBLE);
+                idao.requestPostRotaingBanner("B_POST_MIDDLE");
+                //   framelayout.setVisibility(View.VISIBLE);
                 gridView1.setVisibility(View.GONE);
             }else {
                 framelayout.setVisibility(View.GONE);

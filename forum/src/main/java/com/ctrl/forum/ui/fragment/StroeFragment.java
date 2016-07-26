@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
 import android.util.DisplayMetrics;
@@ -561,11 +560,12 @@ public class StroeFragment extends ToolBarFragment implements View.OnClickListen
         new Thread(new Runnable() {
             @Override
             public void run() {
+                handler.sendEmptyMessage(1);
+/*
                 while (isloop) {
                     //系统时钟的睡眠方法---->电量的消耗很少。
                     SystemClock.sleep(5000);
-                    handler.sendEmptyMessage(1);
-                }
+                }*/
             }
         }).start();
 
@@ -630,16 +630,35 @@ public class StroeFragment extends ToolBarFragment implements View.OnClickListen
 
     private void initNoticeView() {
 
-        ta.setDuration(2000);
-        animation.setDuration(500);
-        animation2.setDuration(500);
-        ta2.setDuration(2000);
+        ta.setDuration(800);
+      /*  animation.setDuration(500);
+        animation2.setDuration(500);*/
+        ta2.setDuration(800);
         ta.setStartOffset(4000);
         set.addAnimation(animation);
         set.addAnimation(ta);
         set.addAnimation(ta2);
         set.addAnimation(animation2);
         set.setRepeatMode(Animation.REVERSE);
+
+        set.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                item += 1;
+                if (listMallNotice.size() > 1)
+                    handler.sendEmptyMessage(1);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
     }
 
     private void initView() {

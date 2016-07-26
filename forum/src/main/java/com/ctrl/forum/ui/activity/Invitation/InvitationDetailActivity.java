@@ -279,7 +279,7 @@ public class InvitationDetailActivity extends AppToolBarActivity implements View
             tv_detail_content.setText(post.getContent());
             tv_detail_tel.setText(post.getContactPhone());
 
-            if(post.getContactAddress()!=null){
+            if(post.getContactAddress()!=null&&!post.getContactAddress().equals("")){
                 tv_contact_address.setVisibility(View.VISIBLE);
                 tv_contact_address.setText("地址："+post.getContactAddress());
             }

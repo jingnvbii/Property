@@ -843,7 +843,7 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
                 break;
             case R.id.tv_release:
                 TYPE="1";
-                //checkContent();
+                checkContent();
                 if(checkContent()) {
                     showProgress(true);
                     //发布帖子
@@ -1302,7 +1302,7 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
 
 
     // *************************
-
+    private int count=0;
     private UploadHandler uploadHandler = new UploadHandler() {
         @Override
         protected void onProcess(long contentLength, long currentUploadLength, long lastUploadLength, UpParam p, Object passParam) {
@@ -1317,6 +1317,7 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
             textViewCurrent.setText(txt);
             Log.d("handler", textViewCurrent.getText().toString());*/
         }
+
 
         @Override
         protected void onSuccess(UploadResultCallRet ret, UpParam p, Object passParam) {
@@ -1336,7 +1337,7 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
                     String url=QiNiuConfig.BASE_URL+keyList.get(i);
                     Log.e("url===========",url.toString());
                     urlList.add(url);
-                    Log.i("tag","url==i=="+urlList.get(i));
+                    Log.i("tag","url==i=="+url);
                 }
                 if (checkActivity()){
                     if (urlList.size() == AlbumActivity.addList.size()){
