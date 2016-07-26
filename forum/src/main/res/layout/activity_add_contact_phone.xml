@@ -94,6 +94,7 @@
         android:layout_height="@dimen/text_height"
         android:gravity="center_vertical"
         android:paddingLeft="5dp"
+        android:inputType="number"
         />
     <View
         android:layout_below="@id/tv_tel"
