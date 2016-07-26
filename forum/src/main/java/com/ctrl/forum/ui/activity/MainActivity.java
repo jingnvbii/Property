@@ -18,6 +18,7 @@ import com.beanu.arad.Arad;
 import com.beanu.arad.base.ToolBarActivity;
 import com.ctrl.forum.R;
 import com.ctrl.forum.base.MyApplication;
+import com.ctrl.forum.customview.CircleRadioView;
 import com.ctrl.forum.entity.NavigationBar;
 import com.ctrl.forum.ui.fragment.InvitationFragment;
 import com.ctrl.forum.ui.fragment.MyFragment;
@@ -40,7 +41,7 @@ public class MainActivity extends ToolBarActivity implements View.OnClickListene
     private RadioButton rb2;//商城按钮
     private RadioButton rb3;//小区按钮
     private RadioButton rb4;//周边按钮
-    private RadioButton rb5;//我  按钮1
+    private CircleRadioView rb5;//我  按钮1
     private InvitationFragment invitationFragment;
     private StroeFragment storeFragment;
     private PlotFragment plotFragment;
@@ -88,9 +89,11 @@ public class MainActivity extends ToolBarActivity implements View.OnClickListene
                 if (rb5.isChecked()) {
                     drawable.setBounds(0, 0, 50, 50);
                     rb5.setCompoundDrawables(null, listDrawable.get(4), null, null);
+                    rb5.setNum(10);
                 } else {
                     drawable2.setBounds(0, 0, 50, 50);
                     rb5.setCompoundDrawables(null, listDrawable2.get(4), null, null);
+                    rb5.setNum(15);
                 }
             }
             if (msg.what == 1) {
@@ -147,20 +150,18 @@ public class MainActivity extends ToolBarActivity implements View.OnClickListene
                                 if (rb5.isChecked()) {
                                     drawable.setBounds(0, 0, 50, 50);
                                     rb5.setCompoundDrawables(null, drawable, null, null);
+                                    //rb5.setNum(16);
                                 } else {
                                     drawable2.setBounds(0, 0, 50, 50);
                                     rb5.setCompoundDrawables(null, listDrawable2.get(4), null, null);
+                                    //rb5.setNum(203); //角标，消息的数量
                                 }
                                 break;
                         }
                     }
                 }
-
             }
-
             showProgress(false);
-
-
         }
 
 
@@ -218,9 +219,7 @@ public class MainActivity extends ToolBarActivity implements View.OnClickListene
                 mHandler.sendEmptyMessage(1);
             }
         }).start();
-
     }
-
 
     private void initView() {
         ll_rb.setVisibility(View.GONE);
@@ -229,7 +228,7 @@ public class MainActivity extends ToolBarActivity implements View.OnClickListene
         rb2 = (RadioButton) findViewById(R.id.rb_2);
         rb3 = (RadioButton) findViewById(R.id.rb_3);
         rb4 = (RadioButton) findViewById(R.id.rb_4);
-        rb5 = (RadioButton) findViewById(R.id.rb_5);
+        rb5 = (CircleRadioView) findViewById(R.id.rb_5);
         rb1.setOnClickListener(this);
         rb2.setOnClickListener(this);
         rb3.setOnClickListener(this);
@@ -241,14 +240,12 @@ public class MainActivity extends ToolBarActivity implements View.OnClickListene
         rb4.setOnCheckedChangeListener(this);
         rb5.setOnCheckedChangeListener(this);
 
-
     }
 
     private void setDefaultFragment() {
         rb1.setChecked(true);
         setTabSelection(0);
     }
-
 
     @Override
     public void onClick(View v) {
@@ -282,7 +279,6 @@ public class MainActivity extends ToolBarActivity implements View.OnClickListene
 
 
     }
-
 
     /**
      * 根据传入的index参数来设置选中的tab页。

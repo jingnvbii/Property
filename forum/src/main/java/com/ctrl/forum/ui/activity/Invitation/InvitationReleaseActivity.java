@@ -174,6 +174,7 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
     private String TYPE;
     private List<PostImage> listPostImage = new ArrayList<>();
 
+    private int count=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -182,6 +183,12 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
         // 隐藏输入法1
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         ButterKnife.inject(this);
+        id = getIntent().getStringExtra("id");
+        if (id==null || id.equals("")){
+            Arad.preferences.putBoolean("isCallingChecked", false);
+            Arad.preferences.flush();
+        }
+
         initBuildToken();
         Res.init(this);
         initView();
@@ -198,7 +205,6 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
     }
 
     private Boolean checkActivity() {
-        id = getIntent().getStringExtra("id");
         if (id != null && !id.equals("")) {
             return true;
         }else{
@@ -362,33 +368,32 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
                 holder = (ViewHolder) convertView.getTag();
             }
 
-            if (position ==Bimp.tempSelectBitmap.size()) {
+            if (position == Bimp.tempSelectBitmap.size()) {
                 holder.image.setImageBitmap(BitmapFactory.decodeResource(
                         getResources(), R.drawable.icon_addpic_unfocused));
                 if (position == 9) {
                     holder.image.setVisibility(View.GONE);
                 }
             } else {
-                holder.image.setImageBitmap(Bimp.tempSelectBitmap.get(position).getBitmap());
+                    holder.image.setImageBitmap(Bimp.tempSelectBitmap.get(position).getBitmap());
             }
-
-            return convertView;
-        }
+                return convertView;
+            }
 
         public class ViewHolder {
             public ImageView image;
         }
 
         Handler handler = new Handler() {
-            public void handleMessage(Message msg) {
-                switch (msg.what) {
-                    case 1:
-                        adapter.notifyDataSetChanged();
-                        break;
+                public void handleMessage(Message msg) {
+                    switch (msg.what) {
+                        case 1:
+                            adapter.notifyDataSetChanged();
+                            break;
+                    }
+                    super.handleMessage(msg);
                 }
-                super.handleMessage(msg);
-            }
-        };
+            };
 
         public void loading() {
             new Thread(new Runnable() {
@@ -422,9 +427,14 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
     }
 
     protected void onRestart() {
+        super.onRestart();
         adapter.update();
         Bimp.max=Bimp.tempSelectBitmap.size();
-        super.onRestart();
+        if (Arad.preferences.getBoolean("isCallingChecked")) {
+            vcardDisplay = "1";
+        } else {
+            vcardDisplay = "0";
+        }
     }
 
     private static final int TAKE_PICTURE = 0x000001;
@@ -492,6 +502,14 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
                 et_tittle.setText(post2.getTitle());
                 categoryTree = post2.getCategoryTree();
                 eid = categoryTree.split(",", categoryTree.length());
+                //名片
+                vcardDisplay = post2.getVcardDisplay();
+                if (vcardDisplay.equals("0")){
+                    Arad.preferences.putBoolean("isCallingChecked",false);
+                }else{
+                    Arad.preferences.putBoolean("isCallingChecked",true);
+                }
+                Arad.preferences.flush();
             }
 
             //二级菜单列表
@@ -511,21 +529,12 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
                 setSecondSpinner3();
             }
 
-
-            //名片
-            vcardDisplay = post2.getVcardDisplay();
-            if (vcardDisplay.equals("0")){
-                Arad.preferences.putBoolean("isCallingChecked",false);
-            }else{
-                Arad.preferences.putBoolean("isCallingChecked",true);
-            }
-            Arad.preferences.flush();
-
             listPostImage = idao.getListPostImage();//图片
             for (int i = 0; i < listPostImage.size(); i++) {
                 final PostImage post = listPostImage.get(i);
                 delIds.put(post.getImg(), listPostImage.get(i).getId());//用来存放获取到的图片的url对应的id
             }
+
 
             new Thread(new Runnable() {
                 @Override
@@ -839,11 +848,17 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
                 
             case R.id.tv_tel:
                 intent=new Intent(this,AddContactPhoneActivity.class);
+                intent.putExtra("name", name);
+                intent.putExtra("adress", adress);
+                intent.putExtra("tel", tel);
                 startActivityForResult(intent, 100);
                 AnimUtil.intentSlidIn(this);
                 break;
             case R.id.tv_location:
                 intent=new Intent(this,LocationActivity.class);
+                intent.putExtra("locationLongitude", locationLongitude);
+                intent.putExtra("locationLatitude", locationLatitude);
+                intent.putExtra("tv_location_name", tv_location_name);
                 startActivityForResult(intent, 101);
                 AnimUtil.intentSlidIn(this);
                 break;
@@ -882,20 +897,17 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
         }else{
             if(Bimp.tempSelectBitmap.size()>0) {
                 Uri uri = null;
-                Log.e("Bimp.tempSelectBitmap.size()",Bimp.tempSelectBitmap.size()+"");
                 for (int i = 0; i < Bimp.tempSelectBitmap.size(); i++) {
                  //   uri = Uri.parse(MediaStore.Images.Media.insertImage(getContentResolver(), Bimp.tempSelectBitmap.get(i).getBitmap(), null, null));
                     Log.i("tag","path2123123===="+Bimp.tempSelectBitmap.get(i).getImagePath());
                     uri= Utils.getUriFromPath(this,Bimp.tempSelectBitmap.get(i).getImagePath());
-                    Log.i("tag","uri==="+uri);
+                    Log.i("tag", "uri===" + uri);
                     preUpload(uri);
-                    Log.e("preUpload","preUpload");
                 }
                 doUpload();
                 return false;
             }else {
                 if (!et_content.getText().toString().equals("")) {
-                    Log.e("et_content!=null","1");
                     return true;
                 }
                 return false;
@@ -917,7 +929,7 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
                         checkType3,
                         et_tittle.getText().toString().trim(),
                         et_content.getText().toString().trim(),
-                        "0",
+                        vcardDisplay,
                         name,
                         adress,
                         tel,
@@ -936,7 +948,7 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
                         checkType3,
                         et_tittle.getText().toString().trim(),
                         et_content.getText().toString().trim(),
-                        "0",
+                        vcardDisplay,
                         name,
                         adress,
                         tel,
@@ -957,7 +969,7 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
                         checkType2,
                         et_tittle.getText().toString().trim(),
                         et_content.getText().toString().trim(),
-                        "0",
+                        vcardDisplay,
                         name,
                         adress,
                         tel,
@@ -976,7 +988,7 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
                         checkType2,
                         et_tittle.getText().toString().trim(),
                         et_content.getText().toString().trim(),
-                        "0",
+                        vcardDisplay,
                         name,
                         adress,
                         tel,
@@ -990,12 +1002,7 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
         }
     }
 
-
-
-
-    /*
-* 发布帖子
-* */
+    //发布帖子
     private void releaseInvitation() {
         String imagesUrl=getImageUrl(urlList);
         String thumbImagesUrl= getImageUrl(urlList);
@@ -1011,7 +1018,7 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
                             checkType3,
                             et_tittle.getText().toString().trim(),
                             et_content.getText().toString().trim(),
-                            "1",
+                            vcardDisplay,
                             name,
                             adress,
                             tel,
@@ -1030,7 +1037,7 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
                             checkType3,
                             et_tittle.getText().toString().trim(),
                             et_content.getText().toString().trim(),
-                            "1",
+                            vcardDisplay,
                             name,
                             adress,
                             tel,
@@ -1051,7 +1058,7 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
                             checkType2,
                             et_tittle.getText().toString().trim(),
                             et_content.getText().toString().trim(),
-                            "1",
+                            vcardDisplay,
                             name,
                             adress,
                             tel,
@@ -1070,7 +1077,7 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
                             checkType2,
                             et_tittle.getText().toString().trim(),
                             et_content.getText().toString().trim(),
-                            "1",
+                            vcardDisplay,
                             name,
                             adress,
                             tel,
@@ -1083,89 +1090,6 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
                 }
             }
         }
-        /*else {
-            if(spinner_third_kind.getVisibility()==View.VISIBLE){
-                if(!checkActivity()) {
-                    idao.requesInvitationPost(
-                            Arad.preferences.getString("memberId"),
-                            thirdKindId,
-                            "0",
-                            "1",
-                            checkType3,
-                            et_tittle.getText().toString().trim(),
-                            et_content.getText().toString().trim(),
-                            "0",
-                            name,
-                            adress,
-                            tel,
-                            locationLongitude,
-                            locationLatitude,
-                            tv_location_name,
-                            imagesUrl,
-                            thumbImagesUrl
-                    );
-                }else{
-                    idao.requesPostEditor(
-                            id,
-                            thirdKindId,
-                            "0",
-                            "1",
-                            checkType3,
-                            et_tittle.getText().toString().trim(),
-                            et_content.getText().toString().trim(),
-                            "0",
-                            name,
-                            adress,
-                            tel,
-                            locationLongitude,
-                            locationLatitude,
-                            tv_location_name,
-                            getDelImageId(delImages),  //删除图片的id的字符串
-                            getImagesUrl(addImages),
-                            getThumbImagesUrl(addImages));
-                }
-            }else {
-                if (!checkActivity()) {
-                    idao.requesInvitationPost(
-                            Arad.preferences.getString("memberId"),
-                            secondKindId,
-                            "0",
-                            "1",
-                            checkType2,
-                            et_tittle.getText().toString().trim(),
-                            et_content.getText().toString().trim(),
-                            "0",
-                            name,
-                            adress,
-                            tel,
-                            locationLongitude,
-                            locationLatitude,
-                            tv_location_name,
-                            imagesUrl,
-                            thumbImagesUrl
-                    );
-                }else{
-                    idao.requesPostEditor(
-                            id,
-                            secondKindId,
-                            "0",
-                            "1",
-                            checkType2,
-                            et_tittle.getText().toString().trim(),
-                            et_content.getText().toString().trim(),
-                            "1",
-                            name,
-                            adress,
-                            tel,
-                            locationLongitude,
-                            locationLatitude,
-                            tv_location_name,
-                            getDelImageId(delImages),  //删除图片的id的字符串
-                            getImagesUrl(addImages),
-                            getThumbImagesUrl(addImages));
-                }
-            }
-        }*/
 
     }
 
@@ -1218,7 +1142,6 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
      * @param resultCode
      * @param data
      */
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         try {
@@ -1314,9 +1237,7 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
         return true;
     }
 
-
     // ********* 以下为七牛sdk相关代码 *********
-
     long start = 0;
     private static Authorizer authorizer = new Authorizer();
 
@@ -1401,10 +1322,12 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
             Log.d("handler", textViewCurrent.getText().toString());*/
             Log.e("0","1");
             Log.e("ups.size()",ups.size()+"");
-            if (ups.size() == Bimp.tempSelectBitmap.size()){
+            count++;
+            if (count == Bimp.tempSelectBitmap.size()){
                 Log.e("1","1");
-                for(int i=0;i<ups.size();i++){
+                for(int i=0;i<count;i++){
                     String url=QiNiuConfig.BASE_URL+keyList.get(i);
+                    Log.e("url===========",url.toString());
                     urlList.add(url);
                     Log.i("tag","url==i=="+urlList.get(i));
                 }
@@ -1440,9 +1363,6 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
                 e.printStackTrace();
             }
         }
-
-
-
 
         @Override
         protected void onFailure(UploadResultCallRet ret, UpParam p, Object passParam) {

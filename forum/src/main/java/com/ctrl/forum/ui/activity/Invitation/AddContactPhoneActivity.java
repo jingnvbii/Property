@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.ctrl.forum.R;
 import com.ctrl.forum.base.AppToolBarActivity;
+import com.ctrl.forum.utils.InputMethodUtils;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -77,6 +78,8 @@ public class AddContactPhoneActivity extends AppToolBarActivity {
                 intent.putExtra("adress",et_address.getText().toString().trim());
                 intent.putExtra("tel",et_tel.getText().toString().trim());
                 setResult(RESULT_OK, intent);
+                // 隐藏输入法
+                InputMethodUtils.hide(AddContactPhoneActivity.this);
                 finish();
             }
         });

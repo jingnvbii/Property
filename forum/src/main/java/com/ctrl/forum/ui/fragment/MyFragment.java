@@ -5,7 +5,6 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -51,6 +50,7 @@ import com.ctrl.forum.ui.activity.mine.MineOrderManageActivity;
 import com.ctrl.forum.ui.activity.mine.MinePlotActivity;
 import com.ctrl.forum.ui.activity.mine.MineQueryPostActivity;
 import com.ctrl.forum.ui.activity.mine.MineSettingActivity;
+import com.ctrl.forum.ui.activity.mine.PlugWebView;
 import com.ctrl.forum.ui.activity.store.StoreManageAddressActivity;
 import com.ctrl.forum.ui.adapter.MineMemberGridAdapter;
 
@@ -109,6 +109,8 @@ public class MyFragment extends ToolBarFragment implements View.OnClickListener{
     ViewPager vp_plug;
     @InjectView(R.id.ll_icons)
     LinearLayout ll_icons;
+    @InjectView(R.id.edit_bg_view)
+    ImageView edit_bg_view;
 
     private MemberDao mdao;
     private EditDao editDao;
@@ -204,6 +206,7 @@ public class MyFragment extends ToolBarFragment implements View.OnClickListener{
         iv_grade.setOnClickListener(this);
         bt_integral.setOnClickListener(this);
         bt_sign.setOnClickListener(this);
+        edit_bg_view.setOnClickListener(this);
     }
 
     public View setPlugins(View view,int type){
@@ -263,22 +266,28 @@ public class MyFragment extends ToolBarFragment implements View.OnClickListener{
                         url = uri;
                     }
                     if (url.equals("http")) {
-                        Intent intent = new Intent();
+                        //调用安卓自带的浏览器
+                       /* Intent intent = new Intent();
                         intent.setAction(Intent.ACTION_VIEW);//没有指明调用哪个浏览器
                         //intent.setData(Uri.parse("http://" + uri));   //网址不全
                         intent.setData(Uri.parse(uri));   //网址不对
                         //intent.setData(Uri.parse("http://www.baidu.com"));
+                        startActivity(intent);*/
+
+                        //调用webView加载
+                        Intent intent = new Intent(getActivity(),PlugWebView.class);
+                        intent.putExtra("url",uri);
+                        intent.putExtra("title",plugins.get(position).getName());
                         startActivity(intent);
                     } else {
                         MessageUtils.showShortToast(getActivity(), "网址格式不对");
-                        Intent intent = new Intent();
+                        /*Intent intent = new Intent();
                         intent.setAction(Intent.ACTION_VIEW);//没有指明调用哪个浏览器
                         intent.setData(Uri.parse("http://" + uri));   //网址不全
-                        //intent.setData(Uri.parse(uri));   //网址不对
-                        //intent.setData(Uri.parse("http://www.baidu.com"));
-                        startActivity(intent);
+                        startActivity(intent);*/
                     }
                 }
+
                 return;
             default:
                 break;
@@ -293,6 +302,9 @@ public class MyFragment extends ToolBarFragment implements View.OnClickListener{
             }
             //编辑我的资料
             if (view == iv_bianji) {
+                startActivity(new Intent(getActivity(), MineEditActivity.class));
+            }
+            if (view==edit_bg_view){
                 startActivity(new Intent(getActivity(), MineEditActivity.class));
             }
             //设置
@@ -445,6 +457,7 @@ public class MyFragment extends ToolBarFragment implements View.OnClickListener{
                 bt_sign.setText("已签到");
             }
 
+            //右上角的小图标
             if (memberInfo.getMessageCount() != null) {
                 iv_message.setShowNumMode(2);
                 int num = Integer.parseInt(memberInfo.getMessageCount());

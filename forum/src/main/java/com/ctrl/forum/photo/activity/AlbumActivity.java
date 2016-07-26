@@ -9,7 +9,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -194,7 +193,6 @@ public class AlbumActivity extends Activity {
 							Bimp.tempSelectBitmap.add(dataList.get(position));
 
 							addList.add(dataList.get(position));
-							Log.e("addList",addList.toString());
 
 							okButton.setText(Res.getString("finish")+"(" + Bimp.tempSelectBitmap.size()
 									+ "/"+PublicWay.num+")");

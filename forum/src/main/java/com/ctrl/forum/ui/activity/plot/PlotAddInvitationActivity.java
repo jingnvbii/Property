@@ -47,7 +47,6 @@ import com.ctrl.forum.entity.PostImage;
 import com.ctrl.forum.photo.activity.AlbumActivity;
 import com.ctrl.forum.photo.activity.GalleryActivity;
 import com.ctrl.forum.photo.util.Bimp;
-import com.ctrl.forum.photo.util.FileUtils;
 import com.ctrl.forum.photo.util.ImageItem;
 import com.ctrl.forum.photo.util.PublicWay;
 import com.ctrl.forum.photo.util.Res;
@@ -65,6 +64,7 @@ import com.ctrl.forum.ui.activity.Invitation.AddContactPhoneActivity;
 import com.ctrl.forum.ui.activity.Invitation.CallingCardActivity;
 import com.ctrl.forum.ui.activity.Invitation.LocationActivity;
 import com.ctrl.forum.ui.activity.WebViewActivity;
+import com.ctrl.forum.utils.FileUtils;
 import com.ctrl.forum.utils.Utils;
 
 import java.io.BufferedInputStream;
@@ -161,6 +161,11 @@ public class PlotAddInvitationActivity extends AppToolBarActivity implements Vie
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         ButterKnife.inject(this);
         Res.init(this);
+        id = getIntent().getStringExtra("id");
+        if (id==null || id.equals("")){
+            Arad.preferences.putBoolean("isCallingChecked", false);
+            Arad.preferences.flush();
+        }
 
         initView();
         bimap = BitmapFactory.decodeResource(
@@ -173,14 +178,13 @@ public class PlotAddInvitationActivity extends AppToolBarActivity implements Vie
 
         if (checkActivity()){
             idao.requesPostDetail(id, Arad.preferences.getString("memberId"));
+            showProgress(true);
         }
-
         Init();
         Bimp.max=0;
     }
 
     private Boolean checkActivity() {
-        id = getIntent().getStringExtra("id");
         if (id != null && !id.equals("")) {
             return true;
         }else{
@@ -237,14 +241,6 @@ public class PlotAddInvitationActivity extends AppToolBarActivity implements Vie
 
     public void Init() {
         tv_plot_name.setText(Arad.preferences.getString("communityName"));
-
-        channelId = getIntent().getStringExtra("channelId");
-
-        if (Arad.preferences.getBoolean("isCallingChecked")) {
-            vcardDisplay = "1";
-        } else {
-            vcardDisplay = "0";
-        }
 
         channelId = getIntent().getStringExtra("channelId");
         //pop = new PopupWindow(PlotAddInvitationActivity.this);
@@ -383,6 +379,7 @@ public class PlotAddInvitationActivity extends AppToolBarActivity implements Vie
                         Bimp.tempSelectBitmap.add(ii); //网络中获取
                     }
                     adapter.update();
+                    showProgress(false);
                 }
             }).start();
         }
@@ -492,12 +489,22 @@ public class PlotAddInvitationActivity extends AppToolBarActivity implements Vie
         Intent intent = null;
         switch (v.getId()) {
             case R.id.tv_release_save: //存草稿0
+                if (ups!=null){
+                    ups.clear();
+                }
                 TYPE="0";
+                showProgress(true);
                 upImgPass();
                 break;
             case R.id.tv_release: //发布1
-                TYPE="1";
-                upImgPass();
+                if (ups!=null){
+                    ups.clear();
+                }
+                if (checkInput()) {
+                    TYPE="1";
+                    showProgress(true);
+                    upImgPass();
+                }
                 break;
             case R.id.tv_tel:
                 intent = new Intent(this, AddContactPhoneActivity.class);
@@ -549,7 +556,6 @@ public class PlotAddInvitationActivity extends AppToolBarActivity implements Vie
             return;
         }
         if (checkActivity()) {
-            showProgress(true);
             if (AlbumActivity.addList.size() > 0) {
                 Uri uri = null;
                 for (int i = 0; i < AlbumActivity.addList.size(); i++) {
@@ -564,11 +570,12 @@ public class PlotAddInvitationActivity extends AppToolBarActivity implements Vie
                 }
             }
         }else{
-            showProgress(true);
             if (Bimp.tempSelectBitmap.size() > 0) {
                 Uri uri = null;
                 for (int i = 0; i < Bimp.tempSelectBitmap.size(); i++) {
                     uri = Uri.parse(MediaStore.Images.Media.insertImage(getContentResolver(), Bimp.tempSelectBitmap.get(i).getBitmap(), null, null));
+                    //uri = Bimp.tempSelectBitmap.get(i).getUri();
+                    Log.e("uri=========",uri+"");
                     preUpload(uri);
                     doUpload();
                 }
@@ -631,28 +638,27 @@ public class PlotAddInvitationActivity extends AppToolBarActivity implements Vie
                     }
                     break;
                 case "1"://发布帖子
-                    if (checkInput()) {
-                        if (!checkActivity()) {
-                            idao.requesReleasePost(
-                                    Arad.preferences.getString("memberId"),
-                                    Arad.preferences.getString("communityId"),
-                                    "1",
-                                    "1",
-                                    "0",
-                                    "",
-                                    et_content.getText().toString().trim(),
-                                    vcardDisplay,
-                                    name,
-                                    adress,
-                                    tel,
-                                    locationLongitude,
-                                    locationLatitude,
-                                    tv_location_name,
-                                    imagesUrl1,
-                                    imagesUrl1
-                            );
-                        } else {//编辑状态下发布帖子
-                   idao.requesPlotPostEditor(
+                    if (!checkActivity()) {
+                        idao.requesReleasePost(
+                                Arad.preferences.getString("memberId"),
+                                Arad.preferences.getString("communityId"),
+                                "1",
+                                "1",
+                                "0",
+                                "",
+                                et_content.getText().toString().trim(),
+                                vcardDisplay,
+                                name,
+                                adress,
+                                tel,
+                                locationLongitude,
+                                locationLatitude,
+                                tv_location_name,
+                                imagesUrl1,
+                                imagesUrl1
+                        );
+                    } else {//编辑状态下发布帖子
+                        idao.requesPlotPostEditor(
                         id,
                         "1",
                         Arad.preferences.getString("communityId"),
@@ -668,10 +674,9 @@ public class PlotAddInvitationActivity extends AppToolBarActivity implements Vie
                         locationLatitude,
                         tv_location_name,
                         getDelImageId(GalleryActivity.delList),  //删除图片的id的字符串
-                           imagesUrl1,
-                           imagesUrl1);
+                                imagesUrl1,
+                                imagesUrl1);
                         }
-                    }
                     break;
                 default:
                     break;
@@ -701,13 +706,14 @@ public class PlotAddInvitationActivity extends AppToolBarActivity implements Vie
                     ii.setBitmap(BitmapFactory.decodeFile(thePath));
                     Bimp.tempSelectBitmap.add(Bimp.tempSelectBitmap.size(), ii);
                     break;
-                case TAKE_PICTURE:
+                case TAKE_PICTURE: //拍照
                     if (Bimp.tempSelectBitmap.size() < 9 && resultCode == RESULT_OK) {
                         String fileName = String.valueOf(System.currentTimeMillis());
                         Bitmap bm = (Bitmap) data.getExtras().get("data");
                         FileUtils.saveBitmap(bm, fileName);
                         ImageItem takePhoto = new ImageItem();
                         takePhoto.setBitmap(bm);
+                        //takePhoto.setUri(Uri.parse(fileName));
                         Bimp.tempSelectBitmap.add(takePhoto);
                     }
                     break;
@@ -856,6 +862,11 @@ public class PlotAddInvitationActivity extends AppToolBarActivity implements Vie
     protected void onRestart() {
         adapter.update();
         Bimp.max = Bimp.tempSelectBitmap.size();
+        if (Arad.preferences.getBoolean("isCallingChecked")) {
+            vcardDisplay = "1";
+        } else {
+            vcardDisplay = "0";
+        }
         super.onRestart();
     }
 
@@ -870,7 +881,7 @@ public class PlotAddInvitationActivity extends AppToolBarActivity implements Vie
     }
 
     @Override
-    protected void onDestroy() {
+     protected void onDestroy() {
         super.onDestroy();
         Bimp.tempSelectBitmap.clear();
         GalleryActivity.delList.clear();
@@ -899,7 +910,6 @@ public class PlotAddInvitationActivity extends AppToolBarActivity implements Vie
                     buildToken();
                 }
             }
-
         }, 0, 10, TimeUnit.MINUTES);
 
         authorizer.setUploadToken(QiNiuConfig.token);
@@ -961,13 +971,14 @@ public class PlotAddInvitationActivity extends AppToolBarActivity implements Vie
         @Override
         protected void onSuccess(UploadResultCallRet ret, UpParam p, Object passParam) {
 
-             //Toast.makeText(PlotAddInvitationActivity.this, "上传成功!", Toast.LENGTH_LONG).show();
+            // Toast.makeText(PlotAddInvitationActivity.this, "上传成功!", Toast.LENGTH_LONG).show();
           /*  String o = textViewCurrent.getText() == null ? "" : textViewCurrent.getText().toString();
             // o;
             textViewCurrent.setText("");
             textViewCurrent.setText("\n" + ret.getStatusCode() + " " + ret.getResponse());
             Log.d("handler", textViewCurrent.getText().toString());*/
             //qiNiuImgUrl=QiNiuConfig.BASE_URL+qiniuKey;
+
             qiNiuImgUrl=QiNiuConfig.BASE_URL+keyList.get(urlList.size());
             urlList.add(urlList.size(), qiNiuImgUrl);
             if (checkActivity()){

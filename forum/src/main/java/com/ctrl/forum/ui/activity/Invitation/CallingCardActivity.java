@@ -1,6 +1,7 @@
 package com.ctrl.forum.ui.activity.Invitation;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -27,6 +28,7 @@ public class CallingCardActivity extends AppToolBarActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.calling_card_activity);
         ButterKnife.inject(this);
+
         if(Arad.preferences.getBoolean("isCallingChecked")){
             cb_calling.setChecked(true);
         }else {
@@ -38,6 +40,7 @@ public class CallingCardActivity extends AppToolBarActivity{
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 Arad.preferences.putBoolean("isCallingChecked",isChecked);
                 Arad.preferences.flush();
+                Log.e("isCallingChecked========", Arad.preferences.getBoolean("isCallingChecked")+"");
             }
         });
 
