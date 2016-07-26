@@ -177,8 +177,8 @@ public class PlotAddInvitationActivity extends AppToolBarActivity implements Vie
         idao = new InvitationDao(this);
 
         if (checkActivity()){
-            idao.requesPostDetail(id, Arad.preferences.getString("memberId"));
             showProgress(true);
+            idao.requesPostDetail(id, Arad.preferences.getString("memberId"));
         }
         Init();
         Bimp.max=0;

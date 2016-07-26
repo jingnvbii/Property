@@ -459,6 +459,7 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
     public void onRequestSuccess(int requestCode) {
         super.onRequestSuccess(requestCode);
         if(requestCode==7){
+            showProgress(false);
             if(isSave){
                 MessageUtils.showShortToast(this,"存草稿成功");
             }else {
@@ -470,6 +471,7 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
         }
 
         if (requestCode == 6) {
+            showProgress(false);
             if (isSave) {
                 MessageUtils.showShortToast(this, "存草稿成功");
             } else {
@@ -550,6 +552,7 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
                     adapter.update();
                 }
             }).start();
+
         }
 
         if (requestCode == 12) {
@@ -834,6 +837,7 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
                 isSave=true;
                 //checkContent();
                 if (checkContent()){
+                    showProgress(true);
                     saveInvitation();
                 }
                 break;
@@ -841,6 +845,7 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
                 TYPE="1";
                 //checkContent();
                 if(checkContent()) {
+                    showProgress(true);
                     //发布帖子
                     releaseInvitation();
                 }
@@ -880,6 +885,7 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
             return false;
         }
         if (checkActivity()) {
+            showProgress(true);
             if (AlbumActivity.addList.size() > 0) {
                 Uri uri = null;
                 for (int i = 0; i < AlbumActivity.addList.size(); i++) {
@@ -895,6 +901,7 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
             }
             return false;
         }else{
+            showProgress(true);
             if(Bimp.tempSelectBitmap.size()>0) {
                 Uri uri = null;
                 for (int i = 0; i < Bimp.tempSelectBitmap.size(); i++) {
