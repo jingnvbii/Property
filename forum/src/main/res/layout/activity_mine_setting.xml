@@ -44,6 +44,7 @@
             android:textColor="@color/text_black1"/>
 
         <CheckBox
+            android:checked="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/iv_system_notification"
@@ -78,6 +79,7 @@
             android:textColor="@color/text_black1"/>
 
         <CheckBox
+            android:checked="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/iv_reply_comments"
@@ -120,6 +122,7 @@
             android:textColor="@color/text_black1"/>
 
         <CheckBox
+            android:checked="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/iv_voice"
@@ -151,6 +154,7 @@
             android:textColor="@color/text_black1"/>
 
         <CheckBox
+            android:checked="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/iv_vibration"
@@ -183,6 +187,7 @@
             android:id="@+id/textView7" />
 
         <CheckBox
+            android:checked="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/iv_night_no_message"
@@ -224,6 +229,7 @@
             android:textColor="@color/text_black1"/>
 
         <CheckBox
+            android:checked="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/iv_notification_show"
@@ -255,6 +261,7 @@
             android:textColor="@color/text_black1"/>
 
         <CheckBox
+            android:checked="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/iv_desktop_icon_hints"

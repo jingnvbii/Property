@@ -2,7 +2,6 @@
 <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal" android:layout_width="match_parent"
     android:background="@color/white"
-
     android:layout_height="wrap_content">
 
     <RadioButton
@@ -25,7 +24,8 @@
         style="@style/rb_style"
         android:text="@string/rb4_string"
         />
-    <RadioButton
+
+    <com.ctrl.forum.customview.CircleRadioView
         android:id="@+id/rb_5"
         style="@style/rb_style"
         android:text="@string/rb5_string"

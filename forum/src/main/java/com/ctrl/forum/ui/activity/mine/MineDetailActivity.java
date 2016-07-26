@@ -149,7 +149,12 @@ public class MineDetailActivity extends AppToolBarActivity implements View.OnCli
 
     private void putValue() {
         if (memberInfo!=null){
-            tv_name.setText(memberInfo.getNickName());
+            if (memberInfo.getNickName()==null || memberInfo.getNickName().equals("")){
+                String str = memberInfo.getUserName();
+                tv_name.setText(str.substring(0,3)+"****"+str.substring(7,11));
+            }else{
+                tv_name.setText(memberInfo.getNickName());
+            }
             SetMemberLevel.setLevelImage(this, iv_grade, memberInfo.getMemberLevel());
             shop_detail.setText(memberInfo.getCompanyKind());
             Arad.imageLoader.load(memberInfo.getImgUrl()).placeholder(getResources().getDrawable(R.mipmap.my_gray)).into(iv_head);

@@ -8,7 +8,8 @@
 
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
-    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
@@ -48,7 +49,7 @@
     <uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
 
-    <!--百度导航权限开始-->
+    <!-- 百度导航权限开始 -->
     <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
     <uses-permission android:name="android.permission.BAIDU_LOCATION_SERVICE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -74,7 +75,7 @@
     <!-- 摄影机 -->
     <uses-permission android:name="android.permission.CAMERA" />
 
-    <!--百度导航权限结束-->
+    <!-- 百度导航权限结束 -->
 
 
     <!-- JPush权限开始 -->
@@ -211,18 +212,22 @@
             android:name="JPUSH_APPKEY"
             android:value="d03bc09bfe8296920ba3e528" /> <!-- </>值来自开发者平台取得的AppKey -->
 
+
         <!--
             APP_KEY：d03bc09bfe8296920ba3e528
             MASTER_SECRET：b9f031fcb6ae29bad6d91f30
         -->
-<!--             APP_KEY：9fd538694f3a9a23519b00c8 自己的 -->
+        <!-- APP_KEY：9fd538694f3a9a23519b00c8 自己的 -->
         <!-- JPush结束 -->
 
+
         <!-- 百度地图KEY -->
-       <!-- <meta-data
+        <!--
+            <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
-            android:value="cLdsvjVtjj2dO8fNZXPS2VKGkot67wTK" />-->
- 
+            android:value="cLdsvjVtjj2dO8fNZXPS2VKGkot67wTK" />
+        -->
+
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
             android:value="M1hXUYaAVVIyarwOGvCFCk3wHC99w8kZ" />
@@ -442,6 +447,10 @@
         <activity
             android:name=".ui.activity.rim.BNDemoGuideActivity"
             android:label="@string/title_activity_dao_hang" >
+        </activity>
+        <activity
+            android:name=".ui.activity.mine.PlugWebView"
+            android:label="@string/title_activity_plug_web_view" >
         </activity>
     </application>
 
