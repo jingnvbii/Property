@@ -73,7 +73,6 @@ public class InvitationPullDownHaveThirdKindFragment extends ToolBarFragment {
     private int NUM = 4; // 每行显示个数
     private int hSpacing = 20;// 水平间距
     private List<Category2> mCategory2List;
-    private InvitationListViewAdapter invitationListViewAdapter;
     private InvitationDao idao;
     private String channelId;
     private int PAGE_NUM = 1;
@@ -86,6 +85,7 @@ public class InvitationPullDownHaveThirdKindFragment extends ToolBarFragment {
     private int bol = 1;
     private boolean  isFirst=true;
     private String styleType;
+    private InvitationListViewAdapter invitationListViewAdapter;
     private InvitationListViewBlockStyleAdapter mInvitationListViewBlockStyleAdapter;
     private InvitationListViewFriendStyleAdapter mInvitationListViewFriendStyleAdapter;
     private InvitationPullDownGridViewAdapter gridViewAdapter;
@@ -398,7 +398,8 @@ public class InvitationPullDownHaveThirdKindFragment extends ToolBarFragment {
                 bol=1;
                 Intent intent = new Intent(getActivity(), InvitationSearchActivity.class);
                 intent.putExtra("styleType",styleType);
-                startActivityForResult(intent, 1111);
+                intent.putExtra("channelId",channelId);
+                startActivity(intent);
                 AnimUtil.intentSlidIn(getActivity());
             }
         });
