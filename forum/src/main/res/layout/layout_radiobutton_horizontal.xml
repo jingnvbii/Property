@@ -4,22 +4,22 @@
     android:background="@color/white"
     android:layout_height="wrap_content">
 
-    <RadioButton
+    <com.ctrl.forum.customview.CircleRadioView
         android:id="@+id/rb_1"
         style="@style/rb_style"
         android:text="@string/rb1_string"
         />
-    <RadioButton
+    <com.ctrl.forum.customview.CircleRadioView
         android:id="@+id/rb_2"
         style="@style/rb_style"
         android:text="@string/rb2_string"
         />
-    <RadioButton
+    <com.ctrl.forum.customview.CircleRadioView
         android:id="@+id/rb_3"
         style="@style/rb_style"
         android:text="@string/rb3_string"
         />
-    <RadioButton
+    <com.ctrl.forum.customview.CircleRadioView
         android:id="@+id/rb_4"
         style="@style/rb_style"
         android:text="@string/rb4_string"

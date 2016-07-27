@@ -19,6 +19,15 @@ public class Product2 {
     private String categoryName;//分类
     private String listImgUrl;//图片地址
     private String companyId;//店铺id
+    private String isAdded; //是否上架
+
+    public String getIsAdded() {
+        return isAdded;
+    }
+
+    public void setIsAdded(String isAdded) {
+        this.isAdded = isAdded;
+    }
 
     public String getCompanyId() {
         return companyId;
