@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -241,13 +242,13 @@ public class RimMapDetailActivity extends ToolBarActivity implements View.OnClic
                 popupWindow.dismiss();
                 break;
             case R.id.tv_dh: //开启导航
+                Log.e("start","1234");
                 if (BaiduNaviManager.isNaviInited()) {
                     routeplanToNavi(CoordinateType.BD09LL);
                 }
                 break;
         }
     }
-
     private void initNavi() {
 
         BNOuterTTSPlayerCallback ttsCallback = null;
@@ -255,7 +256,7 @@ public class RimMapDetailActivity extends ToolBarActivity implements View.OnClic
         BaiduNaviManager.getInstance().init(this, mSDCardPath, APP_FOLDER_NAME, new BaiduNaviManager.NaviInitListener() {
             @Override
             public void onAuthResult(int status, String msg) {
-               /* if (0 == status) {
+                /*if (0 == status) {
                     authinfo = "key校验成功!";
                 } else {
                     authinfo = "key校验失败, " + msg;
@@ -321,13 +322,13 @@ public class RimMapDetailActivity extends ToolBarActivity implements View.OnClic
             int type = msg.what;
             switch (type) {
                 case BaiduNaviManager.TTSPlayMsgType.PLAY_START_MSG: {
-                    //showToastMsg("Handler : TTS play start");
-                    //showToastMsg("导航开始");
+                   /* showToastMsg("Handler : TTS play start");
+                    showToastMsg("导航开始");*/
                     break;
                 }
                 case BaiduNaviManager.TTSPlayMsgType.PLAY_END_MSG: {
-                    //showToastMsg("Handler : TTS play end");
-                    //showToastMsg("导航结束");
+                    /*showToastMsg("Handler : TTS play end");
+                    showToastMsg("导航结束");*/
                     break;
                 }
                 default :

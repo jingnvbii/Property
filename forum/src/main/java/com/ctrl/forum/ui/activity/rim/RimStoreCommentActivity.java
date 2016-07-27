@@ -17,6 +17,7 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -135,6 +136,13 @@ public class RimStoreCommentActivity extends AppToolBarActivity implements View.
                 } else {
                     lv_content.onRefreshComplete();
                 }
+            }
+        });
+
+        lv_content.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                InputMethodUtils.hide(RimStoreCommentActivity.this);
             }
         });
     }
@@ -605,6 +613,7 @@ public class RimStoreCommentActivity extends AppToolBarActivity implements View.
     public void onClick(View v) {
       switch (v.getId()){
           case R.id.iv_input_add:
+              InputMethodUtils.hide(this);
               changeTextAndImage();
               if (ll_facechoose.getVisibility()==View.VISIBLE){
                   ll_facechoose.setVisibility(View.GONE);

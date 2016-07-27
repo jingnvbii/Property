@@ -144,6 +144,8 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
     TextView tv_release_save;
     @InjectView(R.id.tougao)//存草稿
     TextView tougao;
+    @InjectView(R.id.ll_gen)
+    LinearLayout ll_gen;
 
 
     /* 请求码*/
@@ -240,6 +242,7 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
         tv_release.setOnClickListener(this);
         tv_release_save.setOnClickListener(this);
         tougao.setOnClickListener(this);
+        ll_gen.setOnClickListener(this);
 
     }
 

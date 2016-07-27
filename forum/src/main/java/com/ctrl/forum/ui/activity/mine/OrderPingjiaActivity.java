@@ -20,7 +20,7 @@ import butterknife.InjectView;
 /**
  * 订单评价
  */
-public class OrderPingjiaActivity extends AppToolBarActivity {
+public class  OrderPingjiaActivity extends AppToolBarActivity {
     private OrderDao odao;
 
     @InjectView(R.id.ratingBar)

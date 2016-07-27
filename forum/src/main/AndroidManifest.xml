@@ -229,6 +229,17 @@
         -->
 
         <meta-data
+            android:name="BaiduMobAd_CELL_LOCATION"
+            android:value="true" />
+        <meta-data
+            android:name="BaiduMobAd_GPS_LOCATION"
+            android:value="true" />
+        <meta-data
+            android:name="BaiduMobAd_WIFI_LOCATION"
+            android:value="true" />
+
+
+        <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
             android:value="M1hXUYaAVVIyarwOGvCFCk3wHC99w8kZ" />
 
