@@ -41,6 +41,7 @@ public class MainActivity extends ToolBarActivity implements View.OnClickListene
     @InjectView(R.id.ll_rb)
     RadioGroup ll_rb;
 
+
     private MemberInfo memberInfo;
     private EditDao edao;
     public static Boolean isFrist = false;
