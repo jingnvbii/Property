@@ -116,7 +116,7 @@
                 android:id="@+id/iv_friend_style_zan_num"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:src="@mipmap/zan_blue"/>
+                android:src="@mipmap/zan_gray_kong"/>
 
 
         <TextView
@@ -149,7 +149,7 @@
                 android:layout_toRightOf="@+id/iv_zan"
                 android:layout_marginLeft="5dp"
                 android:layout_width="wrap_content"
-                android:drawableLeft="@mipmap/pinglun_friend"
+                android:drawableLeft="@mipmap/pinglun_gray_friend"
                 android:drawablePadding="5dp"
                 android:layout_centerInParent="true"
                 android:gravity="center"
@@ -172,7 +172,7 @@
                 android:layout_toRightOf="@+id/iv_zan"
                 android:layout_marginLeft="5dp"
                 android:layout_width="wrap_content"
-                android:drawableLeft="@mipmap/share_friend"
+                android:drawableLeft="@mipmap/share_gary_friend"
                 android:drawablePadding="5dp"
                 android:layout_centerInParent="true"
                 android:gravity="center"
@@ -195,7 +195,7 @@
                 android:layout_toRightOf="@+id/iv_zan"
                 android:layout_marginLeft="5dp"
                 android:layout_width="wrap_content"
-                android:drawableLeft="@mipmap/more_friend"
+                android:drawableLeft="@mipmap/more_gray_shixin"
                 android:drawablePadding="5dp"
                 android:layout_centerInParent="true"
                 android:gravity="center"

@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.beanu.arad.Arad;
@@ -66,7 +67,7 @@ public class InvitationListViewAdapter extends BaseAdapter{
 
     @Override
     public int getItemViewType(int position) {
-       int type=0;
+       int type=-1;
        if(mPostList.get(position).getPostImgList()!=null) {
            int size = mPostList.get(position).getPostImgList().size();
            switch (size) {
@@ -150,65 +151,85 @@ public class InvitationListViewAdapter extends BaseAdapter{
                     break;
             }
             }
-        Post post=mPostList.get(position);
+      //  Post post=mPostList.get(position);
         switch (type){
             case 0:
-                if(post==null){break;}
-               // Post mPost1 = mPostList.get(position);
-               holder1.tv_titile0.setText(post.getTitle());
-                holder1.tv_name0.setText(post.getMemberName());
+                Post mPost1 = mPostList.get(position);
+                if(mPost1==null){break;}
+                holder1.tv_titile0.setText(mPost1.getTitle());
+                holder1.tv_name0.setText(mPost1.getMemberName());
                /* if(post.getBlurbs()!=null&&!post.getBlurbs().equals("")){
                     holder1.tv_daoyu.setVisibility(View.VISIBLE);
                     holder1.tv_daoyu.setText(post.getBlurbs());
                 }else {
                     holder1.tv_daoyu.setVisibility(View.GONE);
                 }*/
-                if(post.getPublishTime()!=null)
-                holder1.tv_time0.setText(TimeUtils.dateTime(post.getPublishTime()));
-                holder1.tv_numbers0.setText(post.getCommentNum() + "");
-                Arad.imageLoader.load(post.getImgUrl()).placeholder(R.mipmap.default_error).resize(50,50)
+                if(mPost1.getPublishTime()!=null)
+                holder1.tv_time0.setText(TimeUtils.dateTime(mPost1.getPublishTime()));
+                holder1.tv_numbers0.setText(mPost1.getCommentNum() + "");
+                Arad.imageLoader.load(mPost1.getImgUrl()).placeholder(R.mipmap.default_error).resize(50,50)
                         .centerCrop().into(holder1.imageView1);
                 break;
             case 1:
-               // Post mPost2 = mPostList.get(position);
-                holder2.tv_titile1.setText(post.getTitle());
-                holder2.tv_name1.setText(post.getMemberName());
+                Post mPost2 = mPostList.get(position);
+                holder2.tv_titile1.setText(mPost2.getTitle());
+                holder2.tv_name1.setText(mPost2.getMemberName());
               //  holder2.tv_time1.setText(TimeUtils.date(Long.parseLong(post.getPublishTime())));
-                holder2.tv_time1.setText(TimeUtils.dateTime(post.getPublishTime()));
-                holder2.tv_numbers1.setText(post.getCommentNum() + "");
+                holder2.tv_time1.setText(TimeUtils.dateTime(mPost2.getPublishTime()));
+                holder2.tv_numbers1.setText(mPost2.getCommentNum() + "");
                /* if(post.getBlurbs()!=null&&!post.getBlurbs().equals("")){
                     holder2.tv_daoyu.setVisibility(View.VISIBLE);
                     holder2.tv_daoyu.setText(post.getBlurbs());
                 }else {
                     holder2.tv_daoyu.setVisibility(View.GONE);
                 }*/
-                Arad.imageLoader.load(post.getImgUrl()).placeholder(R.mipmap.default_error).resize(50,50)
+
+              /*  int width1 = holder2.iv_title_photo1.getWidth();
+                RelativeLayout.LayoutParams para1;
+                para1 = (RelativeLayout.LayoutParams) holder2.iv_title_photo1.getLayoutParams();
+
+
+                para1.height = width1;
+                para1.width = width1;
+                holder2.iv_title_photo1.setLayoutParams(para1);*/
+                Arad.imageLoader.load(mPost2.getImgUrl()).placeholder(R.mipmap.default_error).resize(50,50)
                         .centerCrop().into(holder2.imageView2);
-                if(post.getPostImgList()!=null) {
-                    Arad.imageLoader.load(post.getPostImgList().get(0).getImg()).placeholder(R.mipmap.default_error).resize(150,150).into(holder2.iv_title_photo1);
+                if(mPost2.getPostImgList()!=null) {
+                    Arad.imageLoader.load(mPost2.getPostImgList().get(0).getImg()).placeholder(R.mipmap.default_error).resize(400,400).centerCrop().into(holder2.iv_title_photo1);
                 }
                 break;
             case 3:
-              // Post mPos3 = mPostList.get(position);
-                if(post.getTitle()==null||post.getTitle().equals("")){
+               Post mPos3 = mPostList.get(position);
+                if(mPos3.getTitle()==null||mPos3.getTitle().equals("")){
                     holder3.tv_titile3.setVisibility(View.GONE);
                 }
-                holder3.tv_titile3.setText(post.getTitle());
-                holder3.tv_name3.setText(post.getMemberName());
-                holder3.tv_time3.setText(TimeUtils.dateTime(post.getPublishTime()));
-                holder3.tv_numbers03.setText(post.getCommentNum() + "");
+                holder3.tv_titile3.setText(mPos3.getTitle());
+                holder3.tv_name3.setText(mPos3.getMemberName());
+                holder3.tv_time3.setText(TimeUtils.dateTime(mPos3.getPublishTime()));
+                holder3.tv_numbers03.setText(mPos3.getCommentNum() + "");
                /* if(post.getBlurbs()!=null&&!post.getBlurbs().equals("")){
                     holder3.tv_daoyu.setVisibility(View.VISIBLE);
                     holder3.tv_daoyu.setText(post.getBlurbs());
                 }else {
                     holder3.tv_daoyu.setVisibility(View.GONE);
                 }*/
-                Arad.imageLoader.load(post.getImgUrl()).placeholder(R.mipmap.default_error).resize(50,50)
+                int width = holder3.iv_image3_01.getWidth();
+                LinearLayout.LayoutParams para;
+                para = (LinearLayout.LayoutParams) holder3.iv_image3_01.getLayoutParams();
+
+
+                para.height = width;
+                para.width = width;
+                holder3.iv_image3_01.setLayoutParams(para);
+                holder3.iv_image3_02.setLayoutParams(para);
+                holder3.iv_image3_03.setLayoutParams(para);
+                Arad.imageLoader.load(mPos3.getImgUrl()).placeholder(R.mipmap.default_error).resize(50, 50)
                         .centerCrop().into(holder3.imageView3);
-                if(post.getPostImgList()!=null) {
-                    Arad.imageLoader.load(post.getPostImgList().get(0).getImg()).placeholder(R.mipmap.default_error).resize(150,150).into(holder3.iv_image3_01);
-                    Arad.imageLoader.load(post.getPostImgList().get(1).getImg()).placeholder(R.mipmap.default_error).resize(150,150).into(holder3.iv_image3_02);
-                    Arad.imageLoader.load(post.getPostImgList().get(2).getImg()).placeholder(R.mipmap.default_error).resize(150,150).into(holder3.iv_image3_03);
+
+                if(mPos3.getPostImgList()!=null) {
+                    Arad.imageLoader.load(mPos3.getPostImgList().get(0).getImg()).placeholder(R.mipmap.default_error).resize(400,400).centerCrop().into(holder3.iv_image3_01);
+                    Arad.imageLoader.load(mPos3.getPostImgList().get(1).getImg()).placeholder(R.mipmap.default_error).resize(400, 400).centerCrop().into(holder3.iv_image3_02);
+                    Arad.imageLoader.load(mPos3.getPostImgList().get(2).getImg()).placeholder(R.mipmap.default_error).resize(400,400).centerCrop().into(holder3.iv_image3_03);
                 }
 
                 break;

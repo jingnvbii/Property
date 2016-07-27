@@ -51,6 +51,7 @@ public class InvitationSearchActivity extends AppToolBarActivity implements View
     private List<HotSearch> listHotSearch;
     private InvitationSearchGridViewAdapter mInvitationSearchGridViewAdapter;
     private ArrayAdapter mListHistorySearchAdapter;
+    private String styleType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +68,7 @@ public class InvitationSearchActivity extends AppToolBarActivity implements View
         tv_invitation_search.setOnClickListener(this);
         tv_delete_invitation_history.setOnClickListener(this);
         iv_toolbar_left.setOnClickListener(this);
+        styleType=getIntent().getStringExtra("styleType");
     }
 
     private void initData() {

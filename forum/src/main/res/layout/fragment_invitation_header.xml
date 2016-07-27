@@ -41,6 +41,37 @@
             />
 
     </LinearLayout>-->
+    <GridView
+        android:id="@+id/gridView_pull_down"
+        android:layout_width="match_parent"
+        android:numColumns="5"
+        android:layout_height="wrap_content" >
+    </GridView>
+
+    <LinearLayout
+        android:id="@+id/ll"
+        android:layout_width="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:visibility="gone"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/white_border"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tv_search"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:hint="搜索栏目内容"
+            android:background="@null"
+            android:paddingLeft="40dp"
+            android:paddingRight="40dp"
+            android:gravity="center_vertical"
+            android:drawablePadding="5dp"
+            android:drawableLeft="@mipmap/search_gray"
+            />
+    </LinearLayout>
 
     <FrameLayout
         android:id="@+id/framelayout"
@@ -49,12 +80,7 @@
         android:layout_height="100dp">
     </FrameLayout>
 
-    <GridView
-        android:id="@+id/gridView_pull_down"
-        android:layout_width="match_parent"
-        android:numColumns="5"
-        android:layout_height="wrap_content" >
-    </GridView>
+
 
   <!--  <HorizontalScrollView
         android:id="@+id/scrollView"
@@ -81,29 +107,6 @@
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:background="@color/line_gray" />-->
-    <LinearLayout
-        android:id="@+id/ll"
-        android:layout_width="wrap_content"
-        android:layout_centerInParent="true"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
-        android:visibility="gone"
-        android:layout_gravity="center_horizontal"
-        android:background="@drawable/white_border"
-        android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/tv_search"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:hint="搜索栏目内容"
-            android:background="@null"
-            android:paddingLeft="40dp"
-            android:paddingRight="40dp"
-            android:gravity="center_vertical"
-            android:drawablePadding="5dp"
-            android:drawableLeft="@mipmap/search_gray"
-            />
-    </LinearLayout>
 
 </LinearLayout>

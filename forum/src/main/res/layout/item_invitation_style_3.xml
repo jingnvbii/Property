@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:minHeight="200dp"
-        android:scaleType="fitXY"
+        android:scaleType="centerCrop"
         />
     <RelativeLayout
         android:layout_width="match_parent"

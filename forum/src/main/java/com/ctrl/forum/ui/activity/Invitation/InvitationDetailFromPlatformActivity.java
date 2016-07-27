@@ -308,6 +308,12 @@ public class InvitationDetailFromPlatformActivity extends AppToolBarActivity imp
         loadMoreView = getLayoutInflater().inflate(R.layout.load_more, null);
         initFooterView();
         initHeaderView();
+        headerView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                InputMethodUtils.hide(InvitationDetailFromPlatformActivity.this);
+            }
+        });
         lv_reply_detail.addHeaderView(headerView);
         lv_reply_detail.addFooterView(loadMoreView);
         iv01=(ImageView)FaceRelativeLayout.findViewById(R.id.iv01);
@@ -692,7 +698,7 @@ public class InvitationDetailFromPlatformActivity extends AppToolBarActivity imp
                 iv_zan.setImageResource(R.mipmap.zan_blue_shixin);
             }
             if (post.getPublishTime() != null && !post.getPublishTime().equals("")) {
-                tv_release_time.setText("发布时间：" + TimeUtils.date(Long.parseLong(post.getPublishTime())));
+                tv_release_time.setText(TimeUtils.dateTime(post.getPublishTime()));
             }
 
 

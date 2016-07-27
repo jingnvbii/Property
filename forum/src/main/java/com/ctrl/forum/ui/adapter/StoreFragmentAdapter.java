@@ -98,7 +98,7 @@ public class StoreFragmentAdapter extends BaseAdapter{
         }
         holder.ratingBar.setNumStars(5);
         holder.ratingBar.setRating(Float.parseFloat(mall.getEvaluatLevel()));
-        Arad.imageLoader.load(mall.getImg()).placeholder(R.mipmap.default_error).resize(150,150).into(holder.iv_title_photo);
+        Arad.imageLoader.load(mall.getImg()).placeholder(R.mipmap.default_error).resize(400,400).into(holder.iv_title_photo);
         return convertView;
     }
 

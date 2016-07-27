@@ -307,9 +307,11 @@ public class StroeFragment extends ToolBarFragment implements View.OnClickListen
                         }else if(latitude_search!=null&&longitude_search!=null){
                             mdao.requestInitMallRecommendCompany(latitude_search, longitude_search,
                                     String.valueOf(Constant.PAGE_SIZE), String.valueOf(PAGE_NUM));
-                        }else {
+                        }else if(latitude!=null&&longitude!=null){
                             mdao.requestInitMallRecommendCompany(latitude, longitude,
                                     String.valueOf(Constant.PAGE_SIZE), String.valueOf(PAGE_NUM));
+                        }else {
+
                         }
                     }
                 }, 500);
@@ -341,9 +343,11 @@ public class StroeFragment extends ToolBarFragment implements View.OnClickListen
                         }else if(latitude_search!=null&&longitude_search!=null){
                             mdao.requestInitMallRecommendCompany(latitude_search, longitude_search,
                                     String.valueOf(Constant.PAGE_SIZE), String.valueOf(PAGE_NUM));
-                        }else {
+                        }else if(latitude!=null&&longitude!=null){
                             mdao.requestInitMallRecommendCompany(latitude, longitude,
                                     String.valueOf(Constant.PAGE_SIZE), String.valueOf(PAGE_NUM));
+                        }else {
+
                         }
                     }
                 }, 500);
@@ -416,10 +420,10 @@ public class StroeFragment extends ToolBarFragment implements View.OnClickListen
                 if (latitude != null && longitude != null) {
                     Arad.preferences.putString("latitude", latitude);
                     Arad.preferences.putString("longitude", longitude);
+                    mdao.requestInitMallRecommendCompany(latitude, longitude,
+                            String.valueOf(Constant.PAGE_SIZE), String.valueOf(PAGE_NUM));
                 }
                 Arad.preferences.flush();
-                mdao.requestInitMallRecommendCompany(latitude, longitude,
-                        String.valueOf(Constant.PAGE_SIZE), String.valueOf(PAGE_NUM));
                 LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
                 mSearch.reverseGeoCode(new ReverseGeoCodeOption().location(latLng));
             }
@@ -577,19 +581,19 @@ public class StroeFragment extends ToolBarFragment implements View.OnClickListen
     private void initRecommend() {
         ll_tuijian.setVisibility(View.VISIBLE);
         if (listMallRecommend.size() > 0&&listMallRecommend.get(0).getImgUrl()!=null&&!listMallRecommend.get(0).getImgUrl().equals("")) {
-            Arad.imageLoader.load(listMallRecommend.get(0).getImgUrl()).placeholder(R.mipmap.default_error).into(iv01_store_recomend);
+            Arad.imageLoader.load(listMallRecommend.get(0).getImgUrl()).placeholder(R.mipmap.default_error).resize(400,400).centerCrop().into(iv01_store_recomend);
             iv01_store_recomend.setOnClickListener(this);
         }
         if (listMallRecommend.size() > 1&&listMallRecommend.get(1).getImgUrl()!=null&&!listMallRecommend.get(1).getImgUrl().equals("")) {
-            Arad.imageLoader.load(listMallRecommend.get(1).getImgUrl()).placeholder(R.mipmap.default_error).into(iv02_store_recomend);
+            Arad.imageLoader.load(listMallRecommend.get(1).getImgUrl()).placeholder(R.mipmap.default_error).resize(400, 400).centerCrop().into(iv02_store_recomend);
             iv02_store_recomend.setOnClickListener(this);
         }
         if (listMallRecommend.size() > 2&&listMallRecommend.get(2).getImgUrl()!=null&&!listMallRecommend.get(2).getImgUrl().equals("")) {
-            Arad.imageLoader.load(listMallRecommend.get(2).getImgUrl()).placeholder(R.mipmap.default_error).into(iv03_store_recomend);
+            Arad.imageLoader.load(listMallRecommend.get(2).getImgUrl()).placeholder(R.mipmap.default_error).resize(400, 400).centerCrop().into(iv03_store_recomend);
             iv03_store_recomend.setOnClickListener(this);
         }
         if (listMallRecommend.size() > 3&&listMallRecommend.get(3).getImgUrl()!=null&&!listMallRecommend.get(3).getImgUrl().equals("")) {
-            Arad.imageLoader.load(listMallRecommend.get(3).getImgUrl()).placeholder(R.mipmap.default_error).into(iv04_store_recomend);
+            Arad.imageLoader.load(listMallRecommend.get(3).getImgUrl()).placeholder(R.mipmap.default_error).resize(400,400).centerCrop().into(iv04_store_recomend);
             iv04_store_recomend.setOnClickListener(this);
         }
     }

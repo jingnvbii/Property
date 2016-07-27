@@ -132,6 +132,12 @@ public class InvitationPullDownHaveThirdKindFragment extends ToolBarFragment {
                 int position = holder.getPosition();
                 int tex = listPost.get(position).getPraiseNum();
 
+                if(Arad.preferences.getString("memberId")==null||Arad.preferences.getString("memberId").equals("")){
+                   startActivity(new Intent(getActivity(), LoginActivity.class));
+                    AnimUtil.intentSlidOut(getActivity());
+                    return;
+                }
+
                 if (isAdd.get(position)==null) {
                     if (listPost.get(position).getPraiseState().equals("0")) {
                         isAdd.put(position, true);
@@ -159,7 +165,7 @@ public class InvitationPullDownHaveThirdKindFragment extends ToolBarFragment {
                        // MessageUtils.showShortToast(getActivity(), "取消点赞");
                         holder.tv_friend_style_zan_num.setText((text.get(position) - 1) + "");
                         text.put(position, text.get(position)-1);
-                        holder.iv_friend_style_zan_num.setImageResource(R.mipmap.zan_blue);
+                        holder.iv_friend_style_zan_num.setImageResource(R.mipmap.zan_gray_kong);
                         isAdd.put(position,true);
                     }
                     }
@@ -391,6 +397,7 @@ public class InvitationPullDownHaveThirdKindFragment extends ToolBarFragment {
                 InvitationPullDownActivity.isFromSearch=true;
                 bol=1;
                 Intent intent = new Intent(getActivity(), InvitationSearchActivity.class);
+                intent.putExtra("styleType",styleType);
                 startActivityForResult(intent, 1111);
                 AnimUtil.intentSlidIn(getActivity());
             }

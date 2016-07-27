@@ -198,7 +198,6 @@ public class StoreLocateActivity extends AppToolBarActivity implements View.OnCl
                 intent.putExtra("address",poiInfoList.get(position).address);
                 intent.putExtra("latitude",poiInfoList.get(position).location.latitude+"");
                 intent.putExtra("longitude",poiInfoList.get(position).location.longitude+"");
-
                 setResult(888,intent);
                 finish();
             }

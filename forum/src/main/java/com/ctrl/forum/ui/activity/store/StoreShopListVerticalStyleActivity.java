@@ -449,7 +449,7 @@ public class StoreShopListVerticalStyleActivity extends AppToolBarActivity imple
                     FoodTypeModel model = titleAdapter.getItem(arg2);
                     Integer itemPos = model.getItemPosition();
                     // Log.i("tag", "itemPos---------------------" + itemPos);
-                    SELECTPOSITION = arg2;
+                   // SELECTPOSITION = arg2;
                     //  Log.i("tag", "SELECTPOSITION _listview---------------------" + SELECTPOSITION);
                     lv_Content.setSelection(itemPos);
                     titleAdapter.setPos(arg2);

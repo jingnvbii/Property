@@ -40,6 +40,7 @@
 
         </LinearLayout>
 
+
         <TextView
             android:id="@+id/tv_invitation_search"
             android:layout_toRightOf="@+id/ll"
@@ -57,6 +58,13 @@
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:background="@color/line_gray" />
+
+
+    <LinearLayout
+        android:id="@+id/ll_search"
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_height="match_parent">
 
     <TextView
         android:layout_width="wrap_content"
@@ -121,4 +129,13 @@
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:background="@color/line_gray" />
+</LinearLayout>
+
+    <com.handmark.pulltorefresh.library.PullToRefreshListView
+        android:id="@+id/lv_pull"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </com.handmark.pulltorefresh.library.PullToRefreshListView>
+
+
 </LinearLayout>

@@ -124,7 +124,7 @@ public class InvitationListViewFriendStyleAdapter extends BaseAdapter {
         }
         holder.tv_friend_style_content.setText(post.getContent());
         holder.tv_friend_style_name.setText(post.getMemberName());
-        holder.tv_friend_style_time.setText(TimeUtils.dates(Long.parseLong(post.getPublishTime()))+"   "+(post.getLocationName()==null?"":post.getLocationName()));
+        holder.tv_friend_style_time.setText(TimeUtils.dateTime(post.getPublishTime())+"   "+(post.getLocationName()==null?"":post.getLocationName()));
         holder.tv_friend_style_zan_num.setText(post.getPraiseNum()+"");
         holder.tv_friend_style_pinglun_num.setText(post.getCommentNum()+"");
         holder.tv_friend_style_share_num.setText(post.getShareNum() + "");
@@ -376,7 +376,7 @@ public class InvitationListViewFriendStyleAdapter extends BaseAdapter {
         if(post.getPraiseState()!=null) {
 
             if (post.getPraiseState().equals("0")) {
-                holder.iv_friend_style_zan_num.setImageResource(R.mipmap.zan_blue);
+                holder.iv_friend_style_zan_num.setImageResource(R.mipmap.zan_gray_kong);
             }
             if (post.getPraiseState().equals("1")) {
                 holder.iv_friend_style_zan_num.setImageResource(R.mipmap.zan_blue_shixin);

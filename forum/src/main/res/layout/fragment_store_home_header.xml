@@ -114,7 +114,7 @@
                android:layout_width="match_parent"
                android:layout_height="match_parent"
                android:src="@mipmap/default_error"
-               android:scaleType="fitXY"
+               android:scaleType="centerCrop"
                />
          </LinearLayout>
          <LinearLayout
@@ -127,20 +127,20 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:src="@mipmap/default_error"
-                android:scaleType="fitXY"
+                android:scaleType="centerCrop"
                 android:layout_weight="1"/>
             <ImageView
                 android:id="@+id/iv03_store_recomend"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:scaleType="fitXY"
+                android:scaleType="centerCrop"
                 android:src="@mipmap/default_error"
                 android:layout_weight="1"/>
             <ImageView
                 android:id="@+id/iv04_store_recomend"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:scaleType="fitXY"
+                android:scaleType="centerCrop"
                 android:src="@mipmap/default_error"
                 android:layout_weight="1"/>
          </LinearLayout>

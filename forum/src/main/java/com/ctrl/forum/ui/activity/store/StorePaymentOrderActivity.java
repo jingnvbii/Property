@@ -115,7 +115,7 @@ public class StorePaymentOrderActivity extends AppToolBarActivity implements Vie
               aliplyPayUtil.pay(orderId, Constant.ALIPLY_URL, "烟台项目商品", "烟台项目商城商品",productsTotal);
 
                 }
-                if(checkbox_payment_order_weixin.isChecked()){//支付宝支付
+                if(checkbox_payment_order_weixin.isChecked()){//微信支付
                     WeixinPayUtil weixinPayUtil = new WeixinPayUtil(this);
                     WXPayEntryActivity.setPayStateListener(new WXPayEntryActivity.PayStateListener() {
                         @Override
@@ -144,7 +144,7 @@ public class StorePaymentOrderActivity extends AppToolBarActivity implements Vie
                         }
                     });
                     //(int)Double.parseDouble(totalPrice)*100
-                    weixinPayUtil.pay(orderId, Constant.NOTICE_URL,"烟台项目商城商品", (int)productsTotal);
+                    weixinPayUtil.pay(orderId, Constant.NOTICE_URL,"烟台项目商城商品", (int)(productsTotal*100));
                 }
                 break;
             case R.id.rl_weixin:
