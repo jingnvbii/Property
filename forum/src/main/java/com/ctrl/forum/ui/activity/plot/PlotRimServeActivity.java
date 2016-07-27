@@ -74,15 +74,20 @@ public class PlotRimServeActivity extends ToolBarActivity implements View.OnClic
                     rimServiceCompanies.clear();
                     PAGE_NUM = 1;
                 }
-                plotDao.getAroundServiceCompanyList(PAGE_NUM + "", Constant.PAGE_SIZE + "",
-                        Arad.preferences.getString("memberId"), CompantyCategyId,
-                        Arad.preferences.getString("latitude"), Arad.preferences.getString("lontitude"));
+                if (CompantyCategyId!=null && !CompantyCategyId.equals("")) {
+                    plotDao.getAroundServiceCompanyList(PAGE_NUM + "", Constant.PAGE_SIZE + "",
+                            Arad.preferences.getString("memberId"), CompantyCategyId,
+                            Arad.preferences.getString("latitude"), Arad.preferences.getString("lontitude"));
+                }else{
+                    lv_content.onRefreshComplete();
+                }
             }
 
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
                 if (rimServiceCompanies != null) {
                     PAGE_NUM += 1;
+                    if (CompantyCategyId!=null && !CompantyCategyId.equals(""))
                     plotDao.getAroundServiceCompanyList(PAGE_NUM + "", Constant.PAGE_SIZE + "",
                             Arad.preferences.getString("memberId"), CompantyCategyId,
                             Arad.preferences.getString("latitude"), Arad.preferences.getString("lontitude"));

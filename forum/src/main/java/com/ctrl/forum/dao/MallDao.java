@@ -243,6 +243,20 @@ public class MallDao extends IDao {
         map.put("type",type);
         postRequest(Constant.RAW_URL + url, mapToRP(map),9);
     }
+
+    /**
+     * 获取店铺商品分类以及分类下的商品列表接口
+     * @param companyId //商家id
+     * */
+    public void requestProductCategroy2(String companyId
+    ){
+        String url="productCategory/getProductCategory";
+        Map<String,String> map = new HashMap<String,String>();
+        map.put("companyId",companyId);
+        postRequest(Constant.RAW_URL + url, mapToRP(map),9);
+    }
+
+
     /**
      * 搜索店内商品
      * @param companyId //商家id

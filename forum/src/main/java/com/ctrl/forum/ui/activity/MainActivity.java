@@ -167,7 +167,6 @@ public class MainActivity extends ToolBarActivity implements View.OnClickListene
 
     };
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

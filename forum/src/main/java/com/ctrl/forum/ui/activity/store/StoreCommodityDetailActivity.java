@@ -453,7 +453,6 @@ public class StoreCommodityDetailActivity extends AppToolBarActivity implements 
             }
         }
 
-
         tv_cart_popup_delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

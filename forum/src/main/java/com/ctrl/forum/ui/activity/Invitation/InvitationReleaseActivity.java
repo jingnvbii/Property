@@ -36,6 +36,7 @@ import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.beanu.arad.Arad;
 import com.beanu.arad.utils.AndroidUtil;
@@ -69,6 +70,7 @@ import com.ctrl.forum.qiniu_main.up.slice.Block;
 import com.ctrl.forum.qiniu_main.util.Util;
 import com.ctrl.forum.ui.activity.WebViewActivity;
 import com.ctrl.forum.utils.BitmapUtils;
+import com.ctrl.forum.utils.InputMethodUtils;
 import com.ctrl.forum.utils.Utils;
 
 import java.io.BufferedInputStream;
@@ -199,7 +201,10 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
 
         Bimp.max=0;
         if (checkActivity()){
+            showProgress(true);
             idao.requesPostDetail(id, Arad.preferences.getString("memberId"));
+        }else{
+            idao.requesItemCategory2(channelId, "1");
         }
         Init();
     }
@@ -215,7 +220,6 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
     private void initView() {
         channelId=getIntent().getStringExtra("channelId");
         idao = new InvitationDao(this);
-        idao.requesItemCategory2(channelId, "1");
 
         tv_tel=(TextView)findViewById(R.id.tv_tel);
         tv_location=(TextView)findViewById(R.id.tv_location);
@@ -298,6 +302,7 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
             public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
                                     long arg3) {
                 if (arg2 == Bimp.tempSelectBitmap.size()) {
+                    InputMethodUtils.hide(InvitationReleaseActivity.this);
                     ll_popup.startAnimation(AnimationUtils.loadAnimation(InvitationReleaseActivity.this, R.anim.activity_translate_in));
                     pop.showAtLocation(noScrollgridview, Gravity.BOTTOM, 0, 0);
                 } else {
@@ -550,9 +555,9 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
                         Bimp.tempSelectBitmap.add(ii); //网络中获取
                     }
                     adapter.update();
+                    showProgress(false);
                 }
             }).start();
-
         }
 
         if (requestCode == 12) {
@@ -563,10 +568,9 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
             for(int i=0;i<listItemCategroy.size();i++){
                 secondCategroyStr.add(listItemCategroy.get(i).getName());
             }
-
             setSecondSpinner2();
-
         }
+
         if(requestCode==13){
             if(listItemCategroy3!=null){
                 listItemCategroy3.clear();
@@ -613,8 +617,10 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
         spinner_third_kind.setAdapter(arrayAdapter);
         if (listItemCategroy3!=null && categoryTree!=null) {
             for (int i = 0; i < listItemCategroy3.size(); i++) {
-                if (listItemCategroy.get(i).getId().equals(eid[3])) {
-                    spinner_third_kind.setSelection(i);
+                if (eid.length>3) {
+                    if (listItemCategroy3.get(i).getId().equals(eid[3])) {
+                        spinner_third_kind.setSelection(i);
+                    }
                 }
             }
         }
@@ -642,8 +648,10 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
         spinner_second_kind.setAdapter(arrayAdapter);
         if (listItemCategroy!=null && categoryTree!=null){
             for(int i=0;i<listItemCategroy.size();i++){
-                if (listItemCategroy.get(i).getId().equals(eid[2])){
-                    spinner_second_kind.setSelection(i);
+                if (eid.length>2) {
+                    if (listItemCategroy.get(i).getId().equals(eid[2])) {
+                        spinner_second_kind.setSelection(i);
+                    }
                 }
             }
         }
@@ -838,7 +846,16 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
                 //checkContent();
                 if (checkContent()){
                     showProgress(true);
-                    saveInvitation();
+                    if (checkActivity()) {
+                        if (!et_content.getText().toString().equals("")) {
+                            saveInvitation();
+                            return;
+                        }
+                        if (listPostImage != null) {
+                            saveInvitation();
+                            return;
+                        }
+                    }
                 }
                 break;
             case R.id.tv_release:
@@ -888,17 +905,16 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
             if (AlbumActivity.addList.size() > 0) {
                 Uri uri = null;
                 for (int i = 0; i < AlbumActivity.addList.size(); i++) {
-                    uri = Uri.parse(MediaStore.Images.Media.insertImage(getContentResolver(), AlbumActivity.addList.get(i).getBitmap(), null, null));
+                    uri= Utils.getUriFromPath(this, AlbumActivity.addList.get(i).getImagePath());
+                    //uri = Uri.parse(MediaStore.Images.Media.insertImage(getContentResolver(), AlbumActivity.addList.get(i).getBitmap(), null, null));
                     preUpload(uri);
                 }
                 doUpload();
                 return false;
             }else {
-                if (!et_content.getText().toString().equals("")) {
-                    return true;
-                }
+                return true;
             }
-            return false;
+           // return false;
         }else{
             showProgress(true);
             if(Bimp.tempSelectBitmap.size()>0) {
@@ -1319,7 +1335,7 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
         @Override
         protected void onSuccess(UploadResultCallRet ret, UpParam p, Object passParam) {
 
-          //  Toast.makeText(InvitationReleaseActivity.this, "上传成功!", Toast.LENGTH_LONG).show();
+            Toast.makeText(InvitationReleaseActivity.this, "上传成功!", Toast.LENGTH_LONG).show();
           /*  String o = textViewCurrent.getText() == null ? "" : textViewCurrent.getText().toString();
             // o;
             textViewCurrent.setText("");
@@ -1328,25 +1344,33 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
             Log.e("0","1");
             Log.e("ups.size()",ups.size()+"");
             count++;
-            if (count == Bimp.tempSelectBitmap.size()){
-                Log.e("1","1");
-                for(int i=0;i<count;i++){
-                    String url=QiNiuConfig.BASE_URL+keyList.get(i);
-                    Log.e("url===========",url.toString());
-                    urlList.add(url);
-                    Log.i("tag","url==i=="+url);
-                }
-                if (checkActivity()){
-                    if (urlList.size() == AlbumActivity.addList.size()){
-                        if (TYPE.equals("0")){
+            if (checkActivity()){
+                if (count == AlbumActivity.addList.size()) {
+                    Log.e("1", "1");
+                    for (int i = 0; i < count; i++) {
+                        String url = QiNiuConfig.BASE_URL + keyList.get(i);
+                        Log.e("url===========", url.toString());
+                        urlList.add(url);
+                        Log.i("tag", "url==i==" + url);
+                    }
+                    if (urlList.size() == AlbumActivity.addList.size()) {
+                        if (TYPE.equals("0")) {
                             saveInvitation();
                         }
-                        if (TYPE.equals("1")){
+                        if (TYPE.equals("1")) {
                             releaseInvitation();
                         }
                     }
-                }else{
-                    Log.e("1","2");
+                }
+            }else{
+                if (count == Bimp.tempSelectBitmap.size()){
+                    Log.e("1","1");
+                    for(int i=0;i<count;i++){
+                        String url=QiNiuConfig.BASE_URL+keyList.get(i);
+                        Log.e("url===========",url.toString());
+                        urlList.add(url);
+                        Log.i("tag","url==i=="+url);
+                    }Log.e("1","2");
                     if(urlList.size()==Bimp.tempSelectBitmap.size()) {
                         Log.e("1","3");
                         Log.i("tag", "check type=11=="+checkType2);
