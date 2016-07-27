@@ -152,7 +152,9 @@ public class StoreScreenActivity extends AppToolBarActivity implements View.OnCl
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
                 PAGE_NEM = 1;
-                listMall.clear();
+                if (listMall!=null){
+                    listMall.clear();
+                }
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {

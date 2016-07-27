@@ -122,6 +122,7 @@ public class InvitationFragment extends ToolBarFragment implements View.OnClickL
             switch (msg.what) {
                 case 1:
                     if (isloop) {
+                        if (listNoticeString.size()!=0)
                         tv_change.setText(listNoticeString.get(item % listNoticeString.size()));
                         tv_change.setAnimation(set);
                         tv_change.startAnimation(set);
@@ -213,9 +214,9 @@ public class InvitationFragment extends ToolBarFragment implements View.OnClickL
 
             @Override
             public void onAnimationEnd(Animation animation) {
-                    item+=1;
-                   if(listNotice.size()>1)
-                   handler.sendEmptyMessage(1);
+                item += 1;
+                if (listNotice.size() > 1)
+                    handler.sendEmptyMessage(1);
             }
 
             @Override
@@ -296,10 +297,11 @@ public class InvitationFragment extends ToolBarFragment implements View.OnClickL
         lv_invitation_fragment_home.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
-                if(listPost!=null)
+                if (listPost!=null)
                 listPost.clear();
-                if(listNotice!=null)
-                    listNotice.clear();
+                if (listNoticeString!=null){
+                    listNoticeString.clear();
+                }
                 PAGE_NUM = 1;
                 //  showProgress(true);
                 new Handler().postDelayed(new Runnable() {
@@ -516,15 +518,12 @@ public class InvitationFragment extends ToolBarFragment implements View.OnClickL
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getActivity(), InvitationPullDownActivity.class);
-                intent.putExtra("channelId",listPostKind.get(position).getId());
+                intent.putExtra("channelId", listPostKind.get(position).getId());
                 getActivity().startActivity(intent);
             }
         });
 
     }
-
-
-
 
     private void getScreenDen() {
         dm = new DisplayMetrics();
@@ -543,7 +542,6 @@ public class InvitationFragment extends ToolBarFragment implements View.OnClickL
         Intent intent=null;
         switch (v.getId()){
             case R.id.tv_change:
-                if(item>0)
                 gotoDetail(item % listNoticeString.size());
                 break;
             case R.id.iv_recommend_1:
@@ -673,6 +671,7 @@ public class InvitationFragment extends ToolBarFragment implements View.OnClickL
 
     private void gotoDetail(int pos) {
         String type = listNotice.get(pos).getType();
+
         if(listNotice.get(pos).getTargetId()==null)return;
         Intent intent=null;
         switch (type){

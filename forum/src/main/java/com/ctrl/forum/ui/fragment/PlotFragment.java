@@ -146,11 +146,12 @@ public class PlotFragment extends ToolBarFragment implements View.OnClickListene
         View headview = getActivity().getLayoutInflater().inflate(R.layout.item_plot_header_view, lv_content, false);
         frameLayout = (FrameLayout) headview.findViewById(R.id.framelayout);
         search = (EditText) headview.findViewById(R.id.et_search);
+        search.setFocusable(false);
         rl_search = (RelativeLayout) headview.findViewById(R.id.rl_search);
-        search.setFocusable(true);
+        //search.setFocusable(true);
         search.setFocusableInTouchMode(true);
         search.setClickable(true);
-        search.requestFocus();
+        //search.requestFocus();
         headview.setLayoutParams(layoutParams);
         lv_content.getRefreshableView().addHeaderView(headview);
 

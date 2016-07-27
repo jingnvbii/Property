@@ -2,11 +2,13 @@ package com.ctrl.forum.ui.activity.Invitation;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.beanu.arad.utils.MessageUtils;
 import com.ctrl.forum.R;
 import com.ctrl.forum.base.AppToolBarActivity;
 import com.ctrl.forum.utils.InputMethodUtils;
@@ -73,20 +75,30 @@ public class AddContactPhoneActivity extends AppToolBarActivity {
         mRightText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent =new Intent();
-                intent.putExtra("name",et_name.getText().toString().trim());
-                intent.putExtra("adress",et_address.getText().toString().trim());
-                intent.putExtra("tel",et_tel.getText().toString().trim());
-                setResult(RESULT_OK, intent);
-                // 隐藏输入法
-                InputMethodUtils.hide(AddContactPhoneActivity.this);
-                finish();
+                if (checkPhone()) {
+                    Intent intent = new Intent();
+                    intent.putExtra("name", et_name.getText().toString().trim());
+                    intent.putExtra("adress", et_address.getText().toString().trim());
+                    intent.putExtra("tel", et_tel.getText().toString().trim());
+                    setResult(RESULT_OK, intent);
+                    // 隐藏输入法
+                    InputMethodUtils.hide(AddContactPhoneActivity.this);
+                    finish();
+                }
             }
         });
-
-
         return true;
     }
 
+    public boolean checkPhone(){
+        if(TextUtils.isEmpty(et_tel.getText())){
+            return true;
+        }
+        if (et_tel.getText().length()==11){
+            return true;
+        }
+        MessageUtils.showShortToast(this,"电话格式不对");
+        return false;
+    }
 
 }

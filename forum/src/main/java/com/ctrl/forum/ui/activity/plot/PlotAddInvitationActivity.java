@@ -65,6 +65,7 @@ import com.ctrl.forum.ui.activity.Invitation.CallingCardActivity;
 import com.ctrl.forum.ui.activity.Invitation.LocationActivity;
 import com.ctrl.forum.ui.activity.WebViewActivity;
 import com.ctrl.forum.utils.FileUtils;
+import com.ctrl.forum.utils.InputMethodUtils;
 import com.ctrl.forum.utils.Utils;
 
 import java.io.BufferedInputStream;
@@ -177,8 +178,8 @@ public class PlotAddInvitationActivity extends AppToolBarActivity implements Vie
         idao = new InvitationDao(this);
 
         if (checkActivity()){
-            idao.requesPostDetail(id, Arad.preferences.getString("memberId"));
             showProgress(true);
+            idao.requesPostDetail(id, Arad.preferences.getString("memberId"));
         }
         Init();
         Bimp.max=0;
@@ -317,6 +318,7 @@ public class PlotAddInvitationActivity extends AppToolBarActivity implements Vie
             public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
                                     long arg3) {
                 if (arg2 == Bimp.tempSelectBitmap.size()) {
+                    InputMethodUtils.hide(PlotAddInvitationActivity.this);
                     ll_popup.startAnimation(AnimationUtils.loadAnimation(PlotAddInvitationActivity.this, R.anim.activity_translate_in));
                     pop.showAtLocation(noScrollgridview, Gravity.BOTTOM, 0, 120);
                 } else {
@@ -559,14 +561,19 @@ public class PlotAddInvitationActivity extends AppToolBarActivity implements Vie
             if (AlbumActivity.addList.size() > 0) {
                 Uri uri = null;
                 for (int i = 0; i < AlbumActivity.addList.size(); i++) {
-                    uri = Uri.parse(MediaStore.Images.Media.insertImage(getContentResolver(), AlbumActivity.addList.get(i).getBitmap(), null, null));
+                    uri= Utils.getUriFromPath(this,AlbumActivity.addList.get(i).getImagePath());
+                    //uri = Uri.parse(MediaStore.Images.Media.insertImage(getContentResolver(), AlbumActivity.addList.get(i).getBitmap(), null, null));
                     preUpload(uri);
                     doUpload();
                 }
             }else{
-                if(!et_content.getText().toString().equals("")) {
-                    //发布帖子
+                if (!et_content.getText().toString().equals("")) {
                     releaseInvitation(TYPE);
+                    return;
+                }
+                if (listPostImage != null) {
+                    releaseInvitation(TYPE);
+                    return;
                 }
             }
         }else{

@@ -79,7 +79,6 @@ public class RimMapDetailActivity extends ToolBarActivity implements View.OnClic
     private RimDao rimDao;
     private BitmapDescriptor bdA = BitmapDescriptorFactory.fromResource(R.drawable.ic_location_chatbox);
 
-
     private String mSDCardPath = null;
     private static final String APP_FOLDER_NAME = "forum";
     String authinfo = null;

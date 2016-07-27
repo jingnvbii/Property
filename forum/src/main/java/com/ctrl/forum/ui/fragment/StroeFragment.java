@@ -168,6 +168,7 @@ public class StroeFragment extends ToolBarFragment implements View.OnClickListen
                 case 1:
 
                     if (isloop) {
+                        if (listNoticeString!=null)
                         tv_change.setText(listNoticeString.get(item % listNoticeString.size()));
                         tv_change.setAnimation(set);
                         tv_change.startAnimation(set);
@@ -282,6 +283,8 @@ public class StroeFragment extends ToolBarFragment implements View.OnClickListen
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
                 if (listMall != null)
                     listMall.clear();
+                if (listNoticeString!=null)
+                    listNoticeString.clear();
                if(PAGE_NUM==0){
                    PAGE_NUM=1;
                }else {
