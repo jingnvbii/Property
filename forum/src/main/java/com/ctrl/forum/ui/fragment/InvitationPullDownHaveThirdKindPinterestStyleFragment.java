@@ -235,7 +235,8 @@ public class InvitationPullDownHaveThirdKindPinterestStyleFragment extends ToolB
                 InvitationPullDownActivity.isFromSearch = true;
                 bol = 1;
                 Intent intent = new Intent(getActivity(), InvitationSearchActivity.class);
-                startActivityForResult(intent, 1112);
+                intent.putExtra("styleType","3");
+                startActivity(intent);
                 AnimUtil.intentSlidIn(getActivity());
             }
         });

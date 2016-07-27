@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.beanu.arad.Arad;
@@ -74,9 +75,12 @@ public class InvitationListViewBlockStyleAdapter extends BaseAdapter {
             Post post = mPostList.get(position);
             holder.tv_block_style_titile.setText(post.getTitle());
             if(post.getPostImgList()!=null) {
+                holder.rl_content.setVisibility(View.VISIBLE);
+                holder.iv_block_style_photo.setVisibility(View.VISIBLE);
                 Arad.imageLoader.load(post.getPostImgList().get(0).getImg()).placeholder(R.mipmap.default_error).resize(400,400).centerCrop().into(holder.iv_block_style_photo);
             }else {
-                holder.iv_block_style_photo.setImageResource(R.mipmap.default_error);
+                holder.rl_content.setVisibility(View.GONE);
+                holder.iv_block_style_photo.setVisibility(View.GONE);
             }
             if(post.getPublishTime()!=null)
             holder.tv_block_style_time.setText(TimeUtils.date(Long.parseLong(post.getPublishTime())));
@@ -93,6 +97,8 @@ public class InvitationListViewBlockStyleAdapter extends BaseAdapter {
                 TextView tv_block_style_time;
         @InjectView(R.id.tv_block_style_zan)//评论数
                 TextView tv_block_style_zan;
+        @InjectView(R.id.rl_content)
+        RelativeLayout rl_content;
 
         ViewHolder(View view) {
             ButterKnife.inject(this, view);
