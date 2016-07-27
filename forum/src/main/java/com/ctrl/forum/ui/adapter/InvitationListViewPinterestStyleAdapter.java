@@ -82,7 +82,7 @@ public class InvitationListViewPinterestStyleAdapter extends BaseAdapter {
                     return source;
                 }
 
-                if (source.getWidth() > source.getHeight()) {//横向长图
+                if (source.getWidth() > source.getHeight()) {//横向长图1
                     if (source.getHeight() < targetHeight && source.getWidth() <= 400) {
                         return source;
                     } else {
