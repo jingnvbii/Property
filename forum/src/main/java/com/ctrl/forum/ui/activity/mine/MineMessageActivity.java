@@ -1,5 +1,6 @@
 package com.ctrl.forum.ui.activity.mine;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -63,6 +64,12 @@ public class MineMessageActivity extends ToolBarActivity implements View.OnClick
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mine_notification);
         ButterKnife.inject(this);
+
+        Intent itt = new Intent();
+        itt.setAction("com.message");
+        itt.putExtra("num", "message");
+        this.sendBroadcast(itt, null);
+
         rdao = new ReplyCommentDao(this);
         rdao.modifyReadState(Arad.preferences.getString("memberId"));
 

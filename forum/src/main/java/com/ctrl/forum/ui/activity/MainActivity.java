@@ -1,7 +1,11 @@
 package com.ctrl.forum.ui.activity;
 
 import android.app.AlertDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -11,7 +15,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.CompoundButton;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 import com.beanu.arad.Arad;
@@ -19,6 +22,8 @@ import com.beanu.arad.base.ToolBarActivity;
 import com.ctrl.forum.R;
 import com.ctrl.forum.base.MyApplication;
 import com.ctrl.forum.customview.CircleRadioView;
+import com.ctrl.forum.dao.EditDao;
+import com.ctrl.forum.entity.MemberInfo;
 import com.ctrl.forum.entity.NavigationBar;
 import com.ctrl.forum.ui.fragment.InvitationFragment;
 import com.ctrl.forum.ui.fragment.MyFragment;
@@ -36,12 +41,13 @@ public class MainActivity extends ToolBarActivity implements View.OnClickListene
     @InjectView(R.id.ll_rb)
     RadioGroup ll_rb;
 
+    private MemberInfo memberInfo;
+    private EditDao edao;
     public static Boolean isFrist = false;
-    public static Boolean isEnter;
-    private RadioButton rb1;//帖子按钮
-    private RadioButton rb2;//商城按钮
-    private RadioButton rb3;//小区按钮
-    private RadioButton rb4;//周边按钮
+    private CircleRadioView rb1;//帖子按钮
+    private CircleRadioView rb2;//商城按钮
+    private CircleRadioView rb3;//小区按钮
+    private CircleRadioView rb4;//周边按钮
     private CircleRadioView rb5;//我  按钮1
     private InvitationFragment invitationFragment;
     private StroeFragment storeFragment;
@@ -155,7 +161,7 @@ public class MainActivity extends ToolBarActivity implements View.OnClickListene
                                 } else {
                                     drawable2.setBounds(0, 0, 50, 50);
                                     rb5.setCompoundDrawables(null, listDrawable2.get(4), null, null);
-                                   // rb5.setNum(203); //角标，消息的数量
+                                    //rb5.setNum(203); //角标，消息的数量
                                 }
                                 break;
                         }
@@ -173,14 +179,23 @@ public class MainActivity extends ToolBarActivity implements View.OnClickListene
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.inject(this);
+
+        edao = new EditDao(this);
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction("com.message");
+        this.registerReceiver(new MyBroadcastReciver(), intentFilter);
+
         showProgress(true);
         initView();
         initData();
         MyApplication.getInstance().addActivity(this);
+
+        if (Arad.preferences.getString("memberId")!=null && !Arad.preferences.getString("memberId").equals("")){
+            getNet();
+        }
     }
 
     private void initData() {
-        isEnter=true;
         listNavigation = (ArrayList<NavigationBar>) getIntent().getSerializableExtra("listNagationBar");
         listDrawable = new ArrayList<>();
         listDrawable2 = new ArrayList<>();
@@ -225,10 +240,10 @@ public class MainActivity extends ToolBarActivity implements View.OnClickListene
     private void initView() {
         ll_rb.setVisibility(View.GONE);
 
-        rb1 = (RadioButton) findViewById(R.id.rb_1);
-        rb2 = (RadioButton) findViewById(R.id.rb_2);
-        rb3 = (RadioButton) findViewById(R.id.rb_3);
-        rb4 = (RadioButton) findViewById(R.id.rb_4);
+        rb1 = (CircleRadioView) findViewById(R.id.rb_1);
+        rb2 = (CircleRadioView) findViewById(R.id.rb_2);
+        rb3 = (CircleRadioView) findViewById(R.id.rb_3);
+        rb4 = (CircleRadioView) findViewById(R.id.rb_4);
         rb5 = (CircleRadioView) findViewById(R.id.rb_5);
         rb1.setOnClickListener(this);
         rb2.setOnClickListener(this);
@@ -348,6 +363,7 @@ public class MainActivity extends ToolBarActivity implements View.OnClickListene
                     } else {
                         // 如果SettingFragment不为空，则直接将它显示出来
                         transaction.show(myFragment);
+
                     }
                 }
                 break;
@@ -689,5 +705,73 @@ public class MainActivity extends ToolBarActivity implements View.OnClickListene
     protected void onRestart() {
         super.onRestart();
         isFrist = true;
+    }
+
+    public class MyBroadcastReciver extends BroadcastReceiver{
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String num = intent.getExtras().getString("num");
+            switch (num){
+                case "num":
+                    //MessageUtils.showShortToast(context, "num");
+                    getNet();
+                    break;
+                case "message":
+                    //MessageUtils.showShortToast(context, "message");
+                    getNet();
+                    break;
+                case "cashCoupon": //现金劵
+                    //MessageUtils.showShortToast(context, "cashCoupon");
+                    getNet();
+                    break;
+                case "coupon": //优惠劵
+                    //MessageUtils.showShortToast(context, "coupon");
+                    getNet();
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
+    public void getNet(){
+        edao.getVipInfo(Arad.preferences.getString("memberId"));
+    }
+
+    @Override
+    public void onRequestSuccess(int requestCode) {
+        super.onRequestSuccess(requestCode);
+        if (requestCode==1){
+            memberInfo = edao.getMemberInfo();
+           // String coupons =  memberInfo.getCouponsNum();//现金劵
+            //String redenvelopNum = memberInfo.getRedenvelopeNum();//优惠劵
+            //String messageCount = memberInfo.getMessageCount();//消息通知
+
+            int coupons = 0;
+            int redenvelopNum = 0;
+            int messageCount = 0;
+            if (memberInfo.getCouponsNum()!=null && !memberInfo.getCouponsNum().equals("")){
+                coupons = Integer.parseInt(memberInfo.getCouponsNum());
+            }else{
+                coupons=0;
+            }
+            if (memberInfo.getRedenvelopeNum()!=null && !memberInfo.getRedenvelopeNum().equals("")){
+                redenvelopNum = Integer.parseInt(memberInfo.getRedenvelopeNum());
+            }else{
+                redenvelopNum = 0;
+            }
+            if ( memberInfo.getMessageCount()!=null && ! memberInfo.getMessageCount().equals("")){
+                messageCount = Integer.parseInt(memberInfo.getMessageCount());
+            }else{
+                messageCount = 0;
+            }
+            int num =coupons+redenvelopNum+messageCount;
+            for (int i=0;i<listNavigation.size();i++){
+                if (listNavigation.get(i).getCommentCode().equals("4")){
+                    CircleRadioView radioView = (CircleRadioView) ll_rb.getChildAt(i);
+                    radioView.setNum(num);
+                }
+            }
+        }
     }
 }

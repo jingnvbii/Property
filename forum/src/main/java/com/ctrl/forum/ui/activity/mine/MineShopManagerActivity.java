@@ -176,12 +176,12 @@ public class MineShopManagerActivity extends AppToolBarActivity implements Compo
         if (requestCode==3){
             if (type.equals("1")){
                 MessageUtils.showShortToast(this, "商品上架成功");
-                Arad.preferences.putBoolean(storeId,true);
+               // Arad.preferences.putBoolean(storeId, true);
             }else{
                 MessageUtils.showShortToast(this, "商品下架成功");
-                Arad.preferences.putBoolean(storeId, false);
+                //Arad.preferences.putBoolean(storeId, false);
             }
-            Arad.preferences.flush();
+            //Arad.preferences.flush();
         }
     }
 

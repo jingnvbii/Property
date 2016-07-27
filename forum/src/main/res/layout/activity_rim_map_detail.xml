@@ -32,10 +32,10 @@
             android:layout_centerHorizontal="true" />
 
         <TextView
+            android:padding="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/map_dh"
-            android:layout_marginRight="@dimen/margin_left_and_right"
             android:textColor="@color/rim_number"
             android:id="@+id/tv_dh"
             android:textSize="@dimen/text_size_small"

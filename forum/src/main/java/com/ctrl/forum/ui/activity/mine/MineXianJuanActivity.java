@@ -1,5 +1,6 @@
 package com.ctrl.forum.ui.activity.mine;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -79,6 +80,12 @@ public class MineXianJuanActivity extends ToolBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mine_you_juan);
         ButterKnife.inject(this);
+
+        Intent itt = new Intent();
+        itt.setAction("com.message");
+        itt.putExtra("num", "cashCoupon");
+        this.sendBroadcast(itt, null);
+
         initData();
         initCtrl();
 

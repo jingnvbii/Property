@@ -193,7 +193,7 @@
         <receiver
             android:name=".base.MyBroadcastReceiver"
             android:enabled="true" >
-            <intent-filter>
+            <intent-filter  android:priority="1000">
                 <action android:name="cn.jpush.android.intent.REGISTRATION" /> <!-- Required 用户注册SDK的intent -->
                 <action android:name="cn.jpush.android.intent.MESSAGE_RECEIVED" /> <!-- Required 用户接收SDK消息的intent -->
                 <action android:name="cn.jpush.android.intent.NOTIFICATION_RECEIVED" /> <!-- Required 用户接收SDK通知栏信息的intent -->
@@ -227,6 +227,17 @@
             android:name="com.baidu.lbsapi.API_KEY"
             android:value="cLdsvjVtjj2dO8fNZXPS2VKGkot67wTK" />
         -->
+
+        <meta-data
+            android:name="BaiduMobAd_CELL_LOCATION"
+            android:value="true" />
+        <meta-data
+            android:name="BaiduMobAd_GPS_LOCATION"
+            android:value="true" />
+        <meta-data
+            android:name="BaiduMobAd_WIFI_LOCATION"
+            android:value="true" />
+
 
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
@@ -452,6 +463,8 @@
             android:name=".ui.activity.mine.PlugWebView"
             android:label="@string/title_activity_plug_web_view" >
         </activity>
+
+
     </application>
 
 </manifest>
