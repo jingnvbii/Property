@@ -213,7 +213,7 @@ public class InvitationFragment extends ToolBarFragment implements View.OnClickL
 
             @Override
             public void onAnimationEnd(Animation animation) {
-                   item+=1;
+                    item+=1;
                    if(listNotice.size()>1)
                    handler.sendEmptyMessage(1);
             }
@@ -296,7 +296,10 @@ public class InvitationFragment extends ToolBarFragment implements View.OnClickL
         lv_invitation_fragment_home.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
+                if(listPost!=null)
                 listPost.clear();
+                if(listNotice!=null)
+                    listNotice.clear();
                 PAGE_NUM = 1;
                 //  showProgress(true);
                 new Handler().postDelayed(new Runnable() {

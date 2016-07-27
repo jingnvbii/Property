@@ -154,7 +154,7 @@ public class MainActivity extends ToolBarActivity implements View.OnClickListene
                                 } else {
                                     drawable2.setBounds(0, 0, 50, 50);
                                     rb5.setCompoundDrawables(null, listDrawable2.get(4), null, null);
-                                    //rb5.setNum(203); //角标，消息的数量
+                                   // rb5.setNum(203); //角标，消息的数量
                                 }
                                 break;
                         }

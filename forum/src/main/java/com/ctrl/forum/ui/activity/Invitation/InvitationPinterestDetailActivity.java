@@ -690,7 +690,7 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
             if(post.getZambiastate().equals("1")){
                 iv_zan.setImageResource(R.mipmap.zan_blue_shixin);
             }
-            tv_release_time.setText("发布时间：" + TimeUtils.date(Long.parseLong(post.getPublishTime())));
+            tv_release_time.setText(TimeUtils.dateTime(post.getPublishTime()));
             tv_content.setText(post.getContent());
             mFriendDetailImageAdapter.setList(idao.getListPostImage());
             imageUrl=new ArrayList<>();

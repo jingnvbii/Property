@@ -68,6 +68,7 @@ public class InvitationPullDownHaveThirdKindPinterestStyleFragment extends ToolB
     private InvitationDao idao;
     private int bol = 1;
     private int PAGE_NUM = 1;
+    private int PAGE_SIZE = 18;
     private List<Post> listPost;
     private List<Category> listCategroy3;
     private InvitationListViewPinterestStyleAdapter mInvitationListViewPinterestStyleAdapter;
@@ -124,16 +125,16 @@ public class InvitationPullDownHaveThirdKindPinterestStyleFragment extends ToolB
                     listPost.clear();
                 }
                 idao.requesPostCategory(id, "2", "0");
-                idao.requestPostListByCategory(Arad.preferences.getString("memberId"), id, "0", keyword,"", PAGE_NUM, Constant.PAGE_SIZE);
+                idao.requestPostListByCategory(Arad.preferences.getString("memberId"), id, "0", keyword,"", PAGE_NUM, PAGE_SIZE);
             }else if(thirdKindId!=null) {
                 idao.requesPostCategory(id, "2", "0");
-                idao.requestPostListByCategory(Arad.preferences.getString("memberId"), thirdKindId, "0", "","", PAGE_NUM, Constant.PAGE_SIZE);
+                idao.requestPostListByCategory(Arad.preferences.getString("memberId"), thirdKindId, "0", "","", PAGE_NUM, PAGE_SIZE);
             }else if(showAll.equals("1")) {
                 idao.requestPostRotaingBanner("B_POST_MIDDLE");
-                idao.requestPostListByCategory(Arad.preferences.getString("memberId"),firstId, "0", "","", PAGE_NUM, Constant.PAGE_SIZE);
+                idao.requestPostListByCategory(Arad.preferences.getString("memberId"),firstId, "0", "","", PAGE_NUM, PAGE_SIZE);
             }else {
                 idao.requesPostCategory(id, "2", "0");
-                idao.requestPostListByCategory(Arad.preferences.getString("memberId"), id, "0", "","", PAGE_NUM, Constant.PAGE_SIZE);
+                idao.requestPostListByCategory(Arad.preferences.getString("memberId"), id, "0", "","", PAGE_NUM, PAGE_SIZE);
             }
         }
 
@@ -142,7 +143,7 @@ public class InvitationPullDownHaveThirdKindPinterestStyleFragment extends ToolB
     public void request(String id) {
         bol = 1;
         thirdKindId = id;
-        idao.requestPostListByCategory(Arad.preferences.getString("memberId"), thirdKindId, "0", "","", PAGE_NUM, Constant.PAGE_SIZE);
+        idao.requestPostListByCategory(Arad.preferences.getString("memberId"), thirdKindId, "0", "","", PAGE_NUM, PAGE_SIZE);
 
     }
 

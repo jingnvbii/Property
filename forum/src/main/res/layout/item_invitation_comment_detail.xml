@@ -79,20 +79,20 @@
             android:id="@+id/iv_reply_invitation_image1"
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:scaleType="fitXY"
+            android:scaleType="centerCrop"
             android:layout_height="wrap_content" />
         <ImageView
             android:id="@+id/iv_reply_invitation_image2"
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:scaleType="fitXY"
+            android:scaleType="centerCrop"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:layout_height="wrap_content" />
         <ImageView
             android:id="@+id/iv_reply_invitation_image3"
             android:layout_width="0dp"
-            android:scaleType="fitXY"
+            android:scaleType="centerCrop"
             android:layout_weight="1"
             android:layout_height="wrap_content" />
     </LinearLayout>

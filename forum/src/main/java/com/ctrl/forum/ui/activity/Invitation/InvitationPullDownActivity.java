@@ -99,6 +99,7 @@ public class InvitationPullDownActivity extends ToolBarActivity implements View.
     private ExpandableListViewAllCategroyAdapter elvAdapter;
     private ExpandableListView elv_pull_down;
     private List<Category> listCategory2;
+    private List<RadioButton> listRadioButton=new ArrayList<>();
     private JasonViewPagerAdapter viewPagerAdapter;
     private String listCategoryId;
     private String listCategoryId2;
@@ -202,7 +203,7 @@ public class InvitationPullDownActivity extends ToolBarActivity implements View.
         layout.addView(myRadioGroup);
         for (int i = 0; i < listCategory.size(); i++) {
             RadioButton radio = new RadioButton(this);
-            radio.setBackgroundResource(R.drawable.top_category_selector);
+          //  radio.setBackgroundResource(R.drawable.top_category_selector);
             LinearLayout.LayoutParams l;
             if (listCategory.size() == 1) {
                 l = new LinearLayout.LayoutParams(width, ViewGroup.LayoutParams.MATCH_PARENT, Gravity.CENTER);
@@ -221,7 +222,6 @@ public class InvitationPullDownActivity extends ToolBarActivity implements View.
             radio.setId(i);
             radio.setButtonDrawable(getResources().getDrawable(R.color.white));
             radio.setTextSize(16.0f);
-            radio.setTextColor(getResources().getColor(R.color.text_black));//选择器
             radio.setText(listCategory.get(i).getName());//动态设置
             radio.setSingleLine(true);
             radio.setEllipsize(TextUtils.TruncateAt.END);
@@ -229,10 +229,16 @@ public class InvitationPullDownActivity extends ToolBarActivity implements View.
             if (i == 0) {
                 radio.setChecked(true);
             }
+            if(radio.isChecked()) {
+                radio.setTextColor(getResources().getColor(R.color.text_blue));//选择器
+            }else {
+                radio.setTextColor(getResources().getColor(R.color.text_black));//选择器
+            }
             View view = new View(this);
             LinearLayout.LayoutParams v = new LinearLayout.LayoutParams(1, ViewGroup.LayoutParams.MATCH_PARENT);
             view.setLayoutParams(v);
             //  view.setBackgroundColor(Color.parseColor("#cccccc"));
+            listRadioButton.add(radio);
             myRadioGroup.addView(radio);
             myRadioGroup.addView(view);
             styleType = listCategory.get(i).getStyleType();
@@ -254,6 +260,10 @@ public class InvitationPullDownActivity extends ToolBarActivity implements View.
                 int radioButtonId = group.getCheckedRadioButtonId();
                 //根据ID获取RadioButton的实例
                 RadioButton rb = (RadioButton) findViewById(radioButtonId);
+                for(int i=0;i<listRadioButton.size();i++){
+                    listRadioButton.get(i).setTextColor(getResources().getColor(R.color.text_black));
+                }
+                rb.setTextColor(getResources().getColor(R.color.text_blue));
                 viewpager_invitation_pull_down.setCurrentItem(radioButtonId);//让下方ViewPager跟随上面的HorizontalScrollView切换
                 mCurrentCheckedRadioLeft = rb.getLeft();
                 horizontalScrollView.smoothScrollTo((int) mCurrentCheckedRadioLeft - (width * 2) / 5, 0);

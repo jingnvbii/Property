@@ -74,7 +74,7 @@ public class InvitationListViewPinterestStyleAdapter extends BaseAdapter {
             @Override
             public Bitmap transform(Bitmap source) {
 
-                int targetWidth = width;
+                int targetWidth = width/2;
 
                 int targetHeight = 500;
 
@@ -139,7 +139,7 @@ public class InvitationListViewPinterestStyleAdapter extends BaseAdapter {
         if (post.getPostImgList() != null) {
             holder.iv_pinerest_style_image.setVisibility(View.VISIBLE);
             holder.rl_content.setVisibility(View.VISIBLE);
-            Arad.imageLoader.load(post.getPostImgList().get(0).getImg()).placeholder(R.mipmap.default_error).transform(transformation).into(holder.iv_pinerest_style_image);
+            Arad.imageLoader.load(post.getPostImgList().get(0).getImg()).transform(transformation).into(holder.iv_pinerest_style_image);
         }else {
             holder.iv_pinerest_style_image.setVisibility(View.GONE);
             holder.rl_content.setVisibility(View.GONE);

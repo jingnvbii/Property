@@ -515,6 +515,7 @@ public class PhotoViewAttacher implements IPhotoView, View.OnTouchListener,
             // Check to see if the user double tapped
             if (null != mGestureDetector && mGestureDetector.onTouchEvent(ev)) {
                 handled = true;
+
             }
 
             if (!handled && null != parent) {

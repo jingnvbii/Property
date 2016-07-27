@@ -60,8 +60,10 @@ public class TimeUtils {
             return diff / HOUR + " 小时前";
         } else if (diff < 48 * HOUR) {
             return "昨天";
-        } else {
-            return diff / DAY + " 天前";
+        } else if(diff<365*24*HOUR){
+            return timeFormat(time,"MM月dd日");
+        }else {
+            return timeFormat(time,"yyyy-MM-dd");
         }
 
     }
@@ -91,8 +93,10 @@ public class TimeUtils {
             return diff / HOUR + " 小时前";
         } else if (diff < 48 * HOUR) {
             return "昨天";
-        } else {
+        } else if(diff<365*24*HOUR){
             return timeFormat(time,"MM月dd日");
+        }else {
+            return timeFormat(time,"yyyy-MM-dd");
         }
 
     }

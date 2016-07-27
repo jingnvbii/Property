@@ -47,11 +47,11 @@ public class Constant {
      * 微信相关 支付信息的配置 - jason -
      */
     /*微信分配的公众账号ID 例: wx6848dc314d5a2b80*/
-    public static final String APP_ID = "wx41f9f015ff34c9c3";
+    public static final String APP_ID = "wx80654af2048a86ac";
     /*微信支付分配的商户号 例: 1232506602*/
-    public static final String MCH_ID = "1356975302";
+    public static final String MCH_ID = "1359972002";
     /*API密钥，在商户平台设置 例: q1w2e3r4t5y6u7i8o9p0asdfghjklzxc*/
-    public static final String API_KEY = "ruyansimeng1313342630yiwenfengji";
+    public static final String API_KEY = "ruyansimeng131334263015653585868";
     //异步通知地址
     public static final  String NOTICE_URL=RAW_URL + "wxOrderNotify.do";
  //   public static final String NOTICE_URL_PROPERTY = "http://121.42.159.145:8088/pm/wxPaymentNotify.do";

@@ -68,9 +68,9 @@ public class FriendDetailImageAdapter extends BaseAdapter{
             @Override
             public Bitmap transform(Bitmap source) {
 
-                int targetWidth = width;
+                int targetWidth = width/2;
 
-                int targetHeight = 800;
+                int targetHeight = 500;
 
                 if (source.getWidth() == 0 || source.getHeight() == 0) {
                     return source;

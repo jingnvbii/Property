@@ -44,7 +44,7 @@
              android:layout_width="0dp"
              android:layout_height="wrap_content"
              android:button="@null"
-             android:text="全部（25）"
+             android:text="全部（0）"
              android:gravity="center"
              android:layout_weight="1"/>
          <RadioButton
@@ -52,7 +52,7 @@
              android:layout_width="0dp"
              android:layout_height="wrap_content"
              android:button="@null"
-             android:text="好评（2）"
+             android:text="好评（0）"
              android:gravity="center"
              android:layout_weight="1"/>
          <RadioButton
@@ -60,7 +60,7 @@
              android:layout_width="0dp"
              android:layout_height="wrap_content"
              android:button="@null"
-             android:text="中评（5）"
+             android:text="中评（0）"
              android:gravity="center"
              android:layout_weight="1"/>
          <RadioButton
@@ -69,7 +69,7 @@
              android:layout_height="wrap_content"
              android:button="@null"
              android:gravity="center"
-             android:text="差评（6）"
+             android:text="差评（0）"
              android:layout_weight="1"/>
      </RadioGroup>
 

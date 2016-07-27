@@ -12,7 +12,8 @@ import android.view.Window;
 import com.beanu.arad.Arad;
 import com.ctrl.forum.R;
 import com.ctrl.forum.customview.photoview.HackyViewPager;
-import com.ctrl.forum.photo.zoom.PhotoView;
+import com.ctrl.forum.customview.photoview.PhotoView;
+import com.ctrl.forum.customview.photoview.PhotoViewAttacher;
 
 import java.util.ArrayList;
 
@@ -25,6 +26,9 @@ public class ImageZoomActivity extends Activity{
     private ViewPager mViewPager;
     private ArrayList<String> imageList;
     private int position;
+
+    boolean num=false;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -41,7 +45,9 @@ public class ImageZoomActivity extends Activity{
         position = getIntent().getIntExtra("position",0);
         mViewPager.setAdapter(new SamplePagerAdapter());
         mViewPager.setCurrentItem(position);
+
     }
+
 
     class SamplePagerAdapter extends PagerAdapter {
 
@@ -60,6 +66,13 @@ public class ImageZoomActivity extends Activity{
         public View instantiateItem(ViewGroup container, int position) {
             PhotoView photoView = new PhotoView(container.getContext());
             photoView.setImageResource(R.mipmap.default_error);
+            photoView.setOnPhotoTapListener(new PhotoViewAttacher.OnPhotoTapListener() {
+                @Override
+                public void onPhotoTap(View view, float x, float y) {
+                    finish();
+                    //onBackPressed();
+                }
+            });
             if (isFistOpen) {
                 isFistOpen = false;
                 Arad.imageLoader.load(imageList.get(position))

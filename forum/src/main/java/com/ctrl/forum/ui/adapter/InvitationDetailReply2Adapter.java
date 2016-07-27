@@ -83,7 +83,8 @@ public class InvitationDetailReply2Adapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
         final PostReply2 mPostReply2 = list.get(position);
-        holder.tv_reply_time.setText(TimeUtils.timeFormat(Long.parseLong(mPostReply2.getCreateTime()),"yyyy-MM-dd"));
+       // holder.tv_reply_time.setText(TimeUtils.timeFormat(Long.parseLong(mPostReply2.getCreateTime()),"yyyy-MM-dd"));
+        holder.tv_reply_time.setText(TimeUtils.dateTime(mPostReply2.getCreateTime()));
         holder.tv_comment_detail_floor.setText(mPostReply2.getMemberFloor() + " 楼");
         if(mPostReply2.getMemberLevel()!=null){
             switch (mPostReply2.getMemberLevel()){
@@ -224,7 +225,6 @@ public class InvitationDetailReply2Adapter extends BaseAdapter {
                 SpannableString spannableString2 = FaceConversionUtil.getInstace().getExpressionString(mcontext, mPostReply2.getPreContent());
                 holder.tv_pinglun_content.setText(spannableString2);
                 holder.tv_pinglun_title.setText("引用  " + mPostReply2.getReceiverName() + "  的回复");
-                holder.tv_pinglun_content.setText(mPostReply2.getPreContent());
                 holder.tv_pinglun_floor.setText(mPostReply2.getReceiverFloor() + "楼");
 
             } else if (mPostReply2.getContentType().equals("1") && mPostReply2.getPreContentType().equals("1")) {//评论图片  回复 图片

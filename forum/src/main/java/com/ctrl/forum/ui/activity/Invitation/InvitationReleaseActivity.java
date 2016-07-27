@@ -1295,7 +1295,6 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
 
 
     // *************************
-    private int count=0;
     private UploadHandler uploadHandler = new UploadHandler() {
         @Override
         protected void onProcess(long contentLength, long currentUploadLength, long lastUploadLength, UpParam p, Object passParam) {
