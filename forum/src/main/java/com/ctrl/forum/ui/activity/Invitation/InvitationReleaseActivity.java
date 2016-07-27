@@ -177,6 +177,8 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
     private List<PostImage> listPostImage = new ArrayList<>();
 
     private int count=0;
+    private String categoryName;
+    private String categroyId2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -219,7 +221,10 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
 
     private void initView() {
         channelId=getIntent().getStringExtra("channelId");
+        categroyId2=getIntent().getStringExtra("categoryId");
+        categoryName=getIntent().getStringExtra("categoryName");
         idao = new InvitationDao(this);
+
 
         tv_tel=(TextView)findViewById(R.id.tv_tel);
         tv_location=(TextView)findViewById(R.id.tv_location);
@@ -652,6 +657,12 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
                     if (listItemCategroy.get(i).getId().equals(eid[2])) {
                         spinner_second_kind.setSelection(i);
                     }
+                }
+            }
+        }else {
+            for (int i=0;i<listItemCategroy.size();i++){
+                if(listItemCategroy.get(i).getId().equals(categroyId2)){
+                    spinner_second_kind.setSelection(i);
                 }
             }
         }

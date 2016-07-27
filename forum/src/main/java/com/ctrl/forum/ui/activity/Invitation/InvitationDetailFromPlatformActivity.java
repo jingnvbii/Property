@@ -308,6 +308,12 @@ public class InvitationDetailFromPlatformActivity extends AppToolBarActivity imp
         loadMoreView = getLayoutInflater().inflate(R.layout.load_more, null);
         initFooterView();
         initHeaderView();
+        headerView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                InputMethodUtils.hide(InvitationDetailFromPlatformActivity.this);
+            }
+        });
         lv_reply_detail.addHeaderView(headerView);
         lv_reply_detail.addFooterView(loadMoreView);
         iv01=(ImageView)FaceRelativeLayout.findViewById(R.id.iv01);

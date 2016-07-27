@@ -37,6 +37,7 @@ public class MainActivity extends ToolBarActivity implements View.OnClickListene
     RadioGroup ll_rb;
 
     public static Boolean isFrist = false;
+    public static Boolean isEnter;
     private RadioButton rb1;//帖子按钮
     private RadioButton rb2;//商城按钮
     private RadioButton rb3;//小区按钮
@@ -179,6 +180,7 @@ public class MainActivity extends ToolBarActivity implements View.OnClickListene
     }
 
     private void initData() {
+        isEnter=true;
         listNavigation = (ArrayList<NavigationBar>) getIntent().getSerializableExtra("listNagationBar");
         listDrawable = new ArrayList<>();
         listDrawable2 = new ArrayList<>();

@@ -376,7 +376,7 @@ public class InvitationListViewFriendStyleAdapter extends BaseAdapter {
         if(post.getPraiseState()!=null) {
 
             if (post.getPraiseState().equals("0")) {
-                holder.iv_friend_style_zan_num.setImageResource(R.mipmap.zan_blue);
+                holder.iv_friend_style_zan_num.setImageResource(R.mipmap.zan_gray_kong);
             }
             if (post.getPraiseState().equals("1")) {
                 holder.iv_friend_style_zan_num.setImageResource(R.mipmap.zan_blue_shixin);

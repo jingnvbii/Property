@@ -275,16 +275,16 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
         et_sendmessage.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                if(InputMethodUtils.isShow(InvitationPinterestDetailActivity.this,et_sendmessage)){
-                        if(ll_bottom_edit!=null&&ll_bottom_edit.getVisibility()==View.VISIBLE){
-                            ll_bottom_edit.setVisibility(View.GONE);
-                            ll_image_custom_facerelativelayout.setVisibility(View.GONE);
-                        }
-                        if(ll_facechoose!=null&&ll_facechoose.getVisibility()==View.VISIBLE){
-                            ll_facechoose.setVisibility(View.GONE);
-                        }
-                }else {
-                    InputMethodUtils.show(InvitationPinterestDetailActivity.this,et_sendmessage);
+                if (InputMethodUtils.isShow(InvitationPinterestDetailActivity.this, et_sendmessage)) {
+                    if (ll_bottom_edit != null && ll_bottom_edit.getVisibility() == View.VISIBLE) {
+                        ll_bottom_edit.setVisibility(View.GONE);
+                        ll_image_custom_facerelativelayout.setVisibility(View.GONE);
+                    }
+                    if (ll_facechoose != null && ll_facechoose.getVisibility() == View.VISIBLE) {
+                        ll_facechoose.setVisibility(View.GONE);
+                    }
+                } else {
+                    InputMethodUtils.show(InvitationPinterestDetailActivity.this, et_sendmessage);
                 }
                 return false;
             }
@@ -294,6 +294,13 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
         loadMoreView = getLayoutInflater().inflate(R.layout.load_more, null);
         initFooterView();
         initHeaderView();
+
+        headerView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                InputMethodUtils.hide(InvitationPinterestDetailActivity.this);
+            }
+        });
         lv_reply_detail.addHeaderView(headerView);
         lv_reply_detail.addFooterView(loadMoreView);
         iv1=(ImageView)FaceRelativeLayout.findViewById(R.id.iv01);
