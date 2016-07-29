@@ -23,7 +23,6 @@ import com.ctrl.forum.customview.RoundImageView;
 import com.ctrl.forum.entity.Post;
 import com.ctrl.forum.entity.PostImage;
 import com.ctrl.forum.ui.activity.Invitation.InvitationCommentDetaioActivity;
-import com.ctrl.forum.ui.activity.Invitation.InvitationPullDownActivity;
 import com.ctrl.forum.ui.activity.LoginActivity;
 import com.ctrl.forum.ui.activity.mine.MineDetailActivity;
 import com.ctrl.forum.utils.SysUtils;
@@ -149,7 +148,7 @@ public class PlotListViewFriendStyleAdapter extends BaseAdapter {
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     if(Arad.preferences.getString("memberId")==null||Arad.preferences.getString("memberId").equals("")){
                         mcontext.startActivity(new Intent(mcontext, LoginActivity.class));
-                        AnimUtil.intentSlidOut((InvitationPullDownActivity)mcontext);
+                        AnimUtil.intentSlidOut(mcontext);
                         return;
                     }
                     Intent intent=new Intent(mcontext, InvitationCommentDetaioActivity.class);
