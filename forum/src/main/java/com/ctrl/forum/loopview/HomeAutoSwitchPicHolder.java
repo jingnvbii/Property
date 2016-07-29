@@ -175,7 +175,6 @@ public class HomeAutoSwitchPicHolder extends BaseHolder<List<String>>
             if(mPictures.get(position)!=null&&!mPictures.get(position).equals(""))
             Arad.imageLoader.load(mPictures.get(position)).placeholder(R.mipmap.default_error).into(iv);
             container.addView(iv, 0);
-
             if (listBanner.get(mPosition).getType()!=null) {
                 iv.setOnClickListener(new View.OnClickListener() {
                     @Override

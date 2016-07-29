@@ -93,6 +93,7 @@ public class InvitationPullDownHaveThirdKindPinterestStyleFragment extends ToolB
     private RelativeLayout rl_footer;
     private TextView tv_footer;
     private ProgressBar progressBar;
+    private boolean isFromLoad;
 
 
     public static InvitationPullDownHaveThirdKindPinterestStyleFragment newInstance(Context context,String id,String thirdKindId,String keyword,String showAll,String firstId) {
@@ -194,6 +195,7 @@ public class InvitationPullDownHaveThirdKindPinterestStyleFragment extends ToolB
                                 }
                             }
                         }, 500);
+                        isFromLoad=true;
                     }
                 }
             }
@@ -317,6 +319,8 @@ public class InvitationPullDownHaveThirdKindPinterestStyleFragment extends ToolB
             bol = 0;
             listPost = idao.getListPost();
             if(listCategroy3==null){
+
+                if(!isFromLoad)
                 idao.requestPostRotaingBanner("B_POST_MIDDLE");
               //  idao.requestPostRotaingBanner(id);
                 //   framelayout.setVisibility(View.VISIBLE);
@@ -388,12 +392,15 @@ public class InvitationPullDownHaveThirdKindPinterestStyleFragment extends ToolB
             if(listBanner==null||listBanner.size()==0) {
                 framelayout.setVisibility(View.GONE);
             }
-            if(listPost!=null&&listPost.size()>0){
+            if(listPost!=null&&listPost.size()>0&&isFromLoad){
                 //   MessageUtils.showShortToast(getActivity(),"fsdfdsf");
                 rl_footer.setVisibility(View.VISIBLE);
                 progressBar.setVisibility(View.GONE);
                 tv_footer.setText("已经到底了，请到别处看看");
+
             }
+
+
         }
     }
 

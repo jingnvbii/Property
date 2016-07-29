@@ -158,7 +158,7 @@ public class InvitationListViewFriendStyleAdapter extends BaseAdapter {
         }else {
             holder.iv_friend_style_levlel.setImageResource(R.mipmap.vip_icon);
         }
-        Arad.imageLoader.load(post.getImgUrl()).placeholder(R.mipmap.default_error).resize(50,50).into(holder.iv_friend_style_title_photo);
+        Arad.imageLoader.load(post.getImgUrl()).placeholder(R.mipmap.default_error).resize(300,300).centerCrop().into(holder.iv_friend_style_title_photo);
         if(post.getPostReplyList()!=null) {
             holder.lv_friend_style_reply.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override

@@ -875,7 +875,7 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
                 idao.requePostReport(post.getId(), "", user.getId(), Arad.preferences.getString("memberId"));
                 break;
 
-            case R.id.tv_delete:
+            case R.id.tv_delete_invitation:
                 if(Arad.preferences.getString("memberId")==null||Arad.preferences.getString("memberId").equals("")){
                     startActivity(new Intent(InvitationPinterestDetailActivity.this, LoginActivity.class));
                     AnimUtil.intentSlidOut(InvitationPinterestDetailActivity.this);

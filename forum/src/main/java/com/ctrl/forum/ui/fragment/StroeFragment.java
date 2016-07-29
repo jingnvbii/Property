@@ -752,7 +752,7 @@ public class StroeFragment extends ToolBarFragment implements View.OnClickListen
 
         tv_change.setOnClickListener(this);
 
-        setLoopViewHeight();
+       // setLoopViewHeight();
 
         View loadNoneView = getActivity().getLayoutInflater().inflate(R.layout.load_more, null);
         rl_footer=(RelativeLayout)loadNoneView.findViewById(R.id.rl_footer);
