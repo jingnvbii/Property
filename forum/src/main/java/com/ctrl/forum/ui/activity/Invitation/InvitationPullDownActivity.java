@@ -208,9 +208,6 @@ public class InvitationPullDownActivity extends ToolBarActivity implements View.
 
     }
 
-
-
-
     private void setRadioGruop() {
         myRadioGroup = new RadioGroup(this);
         myRadioGroup.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
@@ -245,6 +242,7 @@ public class InvitationPullDownActivity extends ToolBarActivity implements View.
                 radio.setChecked(true);
                 categoryId=listCategory.get(0).getId();
                 categoryName=listCategory.get(0).getName();
+                styleType = listCategory.get(0).getStyleType();
             }
             if(radio.isChecked()) {
                 radio.setTextColor(getResources().getColor(R.color.text_blue));//选择器
@@ -331,17 +329,14 @@ public class InvitationPullDownActivity extends ToolBarActivity implements View.
      * ViewPager的PageChangeListener(页面改变的监听器)
      */
     private class FragmentOnPageChangeListener implements ViewPager.OnPageChangeListener {
-
         @Override
         public void onPageScrollStateChanged(int arg0) {
             // TODO Auto-generated method stub
-
         }
 
         @Override
         public void onPageScrolled(int arg0, float arg1, int arg2) {
             // TODO Auto-generated method stub
-
         }
 
         /**
@@ -356,10 +351,8 @@ public class InvitationPullDownActivity extends ToolBarActivity implements View.
             categoryName=listCategory.get(position).getName();
             mGroupPostion=position;
             styleType=listCategory.get(position).getStyleType();
-
         }
     }
-
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent event) {
@@ -517,6 +510,7 @@ public class InvitationPullDownActivity extends ToolBarActivity implements View.
                     intent.putExtra("channelId", channelId);
                     intent.putExtra("categoryId", categoryId);
                     intent.putExtra("categoryName", categoryName);
+                    intent.putExtra("styleType",styleType);
                     startActivityForResult(intent, 222);
                     AnimUtil.intentSlidIn(InvitationPullDownActivity.this);
                 }
