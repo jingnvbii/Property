@@ -170,7 +170,7 @@ public class InvitationListViewPinterestStyleAdapter extends BaseAdapter {
     static class ViewHolder {
         @InjectView(R.id.iv_pinerest_style_image)//图片
                 ImageView iv_pinerest_style_image;
-        @InjectView(R.id.tv_pinerest_style_title)//标题
+        @InjectView(R.id.tv_pinerest_style_title)//标题1
                 TextView tv_pinerest_style_title;
         @InjectView(R.id.tv_pinerest_style_imagenum)//图片数
                 TextView tv_pinerest_style_imagenum;
