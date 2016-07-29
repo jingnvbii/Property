@@ -370,13 +370,16 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
         lv_invitation_detail_image.setAdapter(mFriendDetailImageAdapter);
         lv_invitation_detail_image.setFocusable(false);
         lv_reply_detail.setFocusable(false);
+        lv_reply_detail.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                InputMethodUtils.hide(InvitationPinterestDetailActivity.this);
+            }
+        });
         lv_reply_detail.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(AbsListView view, int scrollState) {
-                Log.i("tag", "scroll state===" + scrollState);
                 if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE) {
-                    Log.i("tag", "lastItem===" + lastItem);
-                    Log.i("tag", "adapter count===" + mInvitationCommentDetailAdapter.getCount());
                     if (lastItem-1 == mInvitationCommentDetailAdapter.getCount()) {
                         rl_footer.setVisibility(View.VISIBLE);
                         rl_footer.setPadding(0, 0, 0, 0);
@@ -394,7 +397,6 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
                 lastItem = firstVisibleItem + visibleItemCount - 1;
-                Log.i("tag", "lastItem===" + lastItem);
             }
         });
 

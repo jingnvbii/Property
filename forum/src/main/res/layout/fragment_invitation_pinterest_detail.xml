@@ -159,6 +159,7 @@
      <com.ctrl.forum.customview.ListViewForScrollView
          android:id="@+id/lv_invitation_detail_image"
          android:layout_width="match_parent"
+         android:divider="@null"
          android:layout_height="match_parent">
 
      </com.ctrl.forum.customview.ListViewForScrollView>

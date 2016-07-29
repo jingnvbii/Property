@@ -387,6 +387,12 @@ public class InvitationDetailFromPlatformActivity extends AppToolBarActivity imp
         lv_relevance_invitation.setAdapter(mInvitationListViewAdapter);
         lv_reply_detail.setFocusable(false);
         lv_relevance_invitation.setFocusable(false);
+        lv_reply_detail.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                InputMethodUtils.hide(InvitationDetailFromPlatformActivity.this);
+            }
+        });
         lv_reply_detail.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(AbsListView view, int scrollState) {

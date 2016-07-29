@@ -70,6 +70,7 @@ public class InvitationListViewPinterestStyleAdapter extends BaseAdapter {
         Post post = mPostList.get(position);
         holder.tv_pinerest_style_title.setText(post.getTitle());
         final int width = holder.iv_pinerest_style_image.getWidth();
+
         Transformation transformation = new Transformation() {
 
             @Override
@@ -145,6 +146,8 @@ public class InvitationListViewPinterestStyleAdapter extends BaseAdapter {
                 @Override
                 public void onSuccess() {
                     finalHolder.rl_content.setVisibility(View.VISIBLE);
+                    ((ViewGroup.MarginLayoutParams)finalHolder.iv_pinerest_style_image.getLayoutParams()).setMargins(10,10,10,10);
+                    ((ViewGroup.MarginLayoutParams)finalHolder.rl_content.getLayoutParams()).setMargins(10, 10, 10, 10);
                 }
 
                 @Override
@@ -156,6 +159,7 @@ public class InvitationListViewPinterestStyleAdapter extends BaseAdapter {
             holder.iv_pinerest_style_image.setVisibility(View.GONE);
             holder.rl_content.setVisibility(View.GONE);
         }
+
         holder.tv_pinerest_style_zan.setText(post.getPraiseNum() + "");
         if(post.getPostImgList()!=null)
         holder.tv_pinerest_style_imagenum.setText(post.getPostImgList().size() + " 图");

@@ -553,7 +553,7 @@ public class PlotFragment extends ToolBarFragment implements View.OnClickListene
         super.onRequestFaild(errorNo, errorMessage);
         lv_content.onRefreshComplete();
         if (errorNo.equals("006") && posts==null){
-           footView.setVisibility(View.VISIBLE);
+         //  footView.setVisibility(View.VISIBLE);
         }
     }
 
