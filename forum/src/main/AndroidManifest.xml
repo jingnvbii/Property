@@ -271,7 +271,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.activity.LoginActivity" />
-        <activity android:name=".ui.activity.MainActivity" />
+        <activity android:name=".ui.activity.MainActivity"
+           />
         <activity android:name=".ui.activity.RegisterActivity" />
         <activity android:name=".ui.activity.Invitation.InvitationPullDownActivity" />
         <activity android:name=".ui.activity.Invitation.InvitationReleaseActivity" />

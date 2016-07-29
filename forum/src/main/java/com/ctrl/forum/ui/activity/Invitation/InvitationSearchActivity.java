@@ -140,6 +140,12 @@ public class InvitationSearchActivity extends AppToolBarActivity implements View
         }
     };
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        et_invitation_search.setSelection(et_invitation_search.getText().length());
+    }
+
     private void initData() {
         sdao=new SearchDao(this);
         idao=new InvitationDao(this);
@@ -149,12 +155,14 @@ public class InvitationSearchActivity extends AppToolBarActivity implements View
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 et_invitation_search.setText(listHotSearch.get(position).getKeyword());
+                et_invitation_search.setSelection(et_invitation_search.getText().length());
             }
         });
         lv_invitation_history_search.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 et_invitation_search.setText(listHistorySearch.get(position).getKeyword());
+                et_invitation_search.setSelection(et_invitation_search.getText().length());
             }
         });
 

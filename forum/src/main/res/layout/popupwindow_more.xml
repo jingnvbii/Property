@@ -78,16 +78,17 @@
             android:gravity="center"
 
             />
-       <!-- <TextView
-            android:id="@+id/tv_fasongshixin"
+        <TextView
+            android:id="@+id/tv_delete_invitation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="倒叙查看"
+            android:text="删除本帖"
+            android:visibility="gone"
             android:layout_centerHorizontal="true"
-            android:drawableTop="@mipmap/shixin"
+            android:drawableTop="@mipmap/delete"
             android:drawablePadding="5dp"
             android:gravity="center"
-            />-->
+            />
     </RelativeLayout>
 
 

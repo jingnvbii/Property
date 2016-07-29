@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.beanu.arad.Arad;
 import com.ctrl.forum.R;
 import com.ctrl.forum.entity.Post;
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Transformation;
 
 import java.util.List;
@@ -138,8 +139,19 @@ public class InvitationListViewPinterestStyleAdapter extends BaseAdapter {
         };
         if (post.getPostImgList() != null) {
             holder.iv_pinerest_style_image.setVisibility(View.VISIBLE);
-            holder.rl_content.setVisibility(View.VISIBLE);
-            Arad.imageLoader.load(post.getPostImgList().get(0).getImg()).transform(transformation).into(holder.iv_pinerest_style_image);
+            holder.rl_content.setVisibility(View.GONE);
+            final ViewHolder finalHolder = holder;
+            Arad.imageLoader.load(post.getPostImgList().get(0).getImg()).transform(transformation).into(holder.iv_pinerest_style_image, new Callback() {
+                @Override
+                public void onSuccess() {
+                    finalHolder.rl_content.setVisibility(View.VISIBLE);
+                }
+
+                @Override
+                public void onError() {
+
+                }
+            });
         }else {
             holder.iv_pinerest_style_image.setVisibility(View.GONE);
             holder.rl_content.setVisibility(View.GONE);
@@ -149,6 +161,7 @@ public class InvitationListViewPinterestStyleAdapter extends BaseAdapter {
         holder.tv_pinerest_style_imagenum.setText(post.getPostImgList().size() + " 图");
         return convertView;
     }
+
 
     static class ViewHolder {
         @InjectView(R.id.iv_pinerest_style_image)//图片

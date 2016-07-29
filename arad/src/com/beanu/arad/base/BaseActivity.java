@@ -1,10 +1,12 @@
 package com.beanu.arad.base;
 
+import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.support.v7.app.ActionBarActivity;
 
 import com.beanu.arad.http.INetResult;
-import com.beanu.arad.widget.dialog.ProgressHUD;
 import com.beanu.arad.utils.MessageUtils;
+import com.beanu.arad.widget.dialog.ProgressHUD;
 
 /**
  * 基础类
@@ -21,6 +23,11 @@ public class BaseActivity extends ActionBarActivity implements INetResult {
     }
 
     @Override
+    public void onCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
+        super.onCreate(savedInstanceState, persistentState);
+    }
+
+    @Override
     public void onRequestFaild(String errorNo, String errorMessage) {
         showProgress(false);
         if(errorNo.equals("006")){
@@ -29,6 +36,7 @@ public class BaseActivity extends ActionBarActivity implements INetResult {
             MessageUtils.showShortToast(this, errorMessage);
         }
     }
+
 
     @Override
     public void onNoConnect() {

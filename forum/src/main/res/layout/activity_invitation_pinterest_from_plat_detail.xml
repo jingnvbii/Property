@@ -33,6 +33,7 @@
                         android:id="@+id/lv_reply_detail"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:footerDividersEnabled="false"
                         android:background="@color/white"></ListView>
                 </LinearLayout>
 

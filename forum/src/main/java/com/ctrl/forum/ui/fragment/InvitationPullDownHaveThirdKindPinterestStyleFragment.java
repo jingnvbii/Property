@@ -15,13 +15,17 @@ import android.widget.FrameLayout;
 import android.widget.GridView;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.beanu.arad.Arad;
 import com.beanu.arad.base.ToolBarFragment;
+import com.beanu.arad.utils.AndroidUtil;
 import com.beanu.arad.utils.AnimUtil;
 import com.ctrl.forum.R;
 import com.ctrl.forum.base.Constant;
+import com.ctrl.forum.customview.PLA_AbsListView;
 import com.ctrl.forum.customview.PLA_AdapterView;
 import com.ctrl.forum.customview.XListView;
 import com.ctrl.forum.dao.InvitationDao;
@@ -84,6 +88,11 @@ public class InvitationPullDownHaveThirdKindPinterestStyleFragment extends ToolB
     private String keyword;
     private String showAll;
     private String firstId;
+    private int lastItem;
+    private View loadNoneView;
+    private RelativeLayout rl_footer;
+    private TextView tv_footer;
+    private ProgressBar progressBar;
 
 
     public static InvitationPullDownHaveThirdKindPinterestStyleFragment newInstance(Context context,String id,String thirdKindId,String keyword,String showAll,String firstId) {
@@ -155,13 +164,52 @@ public class InvitationPullDownHaveThirdKindPinterestStyleFragment extends ToolB
         headview = getActivity().getLayoutInflater().inflate(R.layout.fragment_invitation_header, null);
         xlv_pinerest_style.addHeaderView(headview);
         xlv_pinerest_style.setFocusable(false);
+        loadNoneView = getActivity().getLayoutInflater().inflate(R.layout.load_more, null);
+        rl_footer=(RelativeLayout)loadNoneView.findViewById(R.id.rl_footer);
+        tv_footer=(TextView)loadNoneView.findViewById(R.id.tv_load_more);
+        progressBar=(ProgressBar)loadNoneView.findViewById(R.id.secondBar);
+        xlv_pinerest_style.addFooterView(loadNoneView);
+        xlv_pinerest_style.setOnScrollListener(new PLA_AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(PLA_AbsListView view, int scrollState) {
+                if (scrollState == PLA_AbsListView.OnScrollListener.SCROLL_STATE_IDLE) {
+                    if (view.getLastVisiblePosition() == view.getCount() - 1) {
+                        rl_footer.setVisibility(View.VISIBLE);
+                        rl_footer.setPadding(0, 0, 0, 0);
+                        tv_footer.setText("加载更多。。。");
+                        progressBar.setVisibility(View.VISIBLE);
+                        PAGE_NUM += 1;
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (thirdKindId != null) {
+                                    idao.requestPostListByCategory(Arad.preferences.getString("memberId"), thirdKindId, "0", "", "", PAGE_NUM, Constant.PAGE_SIZE);
+                                }
+                                if (listCategroy3 != null) {
+                                    idao.requestPostListByCategory(Arad.preferences.getString("memberId"), listCategroy3.get(Position).getId(), "0", "", "", PAGE_NUM, Constant.PAGE_SIZE);
+                                } else if (showAll.equals("1")) {
+                                    idao.requestPostListByCategory(Arad.preferences.getString("memberId"), firstId, "0", keyword, "", PAGE_NUM, Constant.PAGE_SIZE);
+                                } else {
+                                    idao.requestPostListByCategory(Arad.preferences.getString("memberId"), id, "0", keyword, "", PAGE_NUM, Constant.PAGE_SIZE);
+                                }
+                            }
+                        }, 500);
+                    }
+                }
+            }
+
+            @Override
+            public void onScroll(PLA_AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                lastItem = firstVisibleItem + visibleItemCount - 1;
+            }
+        });
         xlv_pinerest_style.setOnItemClickListener(new PLA_AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(PLA_AdapterView<?> parent, View view, int position, long id) {
                 int nowPos = position - xlv_pinerest_style.getHeaderViewsCount();
-                Intent intent=null;
-                String contentType=listPost.get(nowPos).getContentType();
-                switch (contentType){
+                Intent intent = null;
+                String contentType = listPost.get(nowPos).getContentType();
+                switch (contentType) {
                     case "0":
                         intent = new Intent(getActivity(), InvitationPinerestGalleyActivity.class);
                         intent.putExtra("id", listPost.get(nowPos).getId());
@@ -175,14 +223,14 @@ public class InvitationPullDownHaveThirdKindPinterestStyleFragment extends ToolB
                         AnimUtil.intentSlidIn(getActivity());
                         break;
                     case "2":
-                        intent=new Intent(getActivity(), StoreCommodityDetailActivity.class);
-                        intent.putExtra("id",listPost.get(nowPos).getLinkItemId());
+                        intent = new Intent(getActivity(), StoreCommodityDetailActivity.class);
+                        intent.putExtra("id", listPost.get(nowPos).getLinkItemId());
                         getActivity().startActivity(intent);
                         AnimUtil.intentSlidIn(getActivity());
                         break;
                     case "3":
-                        intent=new Intent(getActivity(), StoreShopListVerticalStyleActivity.class);
-                        intent.putExtra("id",listPost.get(nowPos).getLinkItemId());
+                        intent = new Intent(getActivity(), StoreShopListVerticalStyleActivity.class);
+                        intent.putExtra("id", listPost.get(nowPos).getLinkItemId());
                         getActivity().startActivity(intent);
                         AnimUtil.intentSlidIn(getActivity());
                         break;
@@ -193,7 +241,7 @@ public class InvitationPullDownHaveThirdKindPinterestStyleFragment extends ToolB
         });
         initData();
         getScreenDen();
-        xlv_pinerest_style.setPullLoadEnable(true);
+        xlv_pinerest_style.setPullLoadEnable(false);
         xlv_pinerest_style.setXListViewListener(this);
         // setValue();
 
@@ -210,6 +258,7 @@ public class InvitationPullDownHaveThirdKindPinterestStyleFragment extends ToolB
         gridView1 = (GridView) headview.findViewById(R.id.gridView_pull_down);
        framelayout = (FrameLayout) headview.findViewById(R.id.framelayout);
         tv_search = (TextView) headview.findViewById(R.id.tv_search);
+        setLoopViewHeight();
         gridView1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -243,7 +292,13 @@ public class InvitationPullDownHaveThirdKindPinterestStyleFragment extends ToolB
 
     }
 
-
+    /*
+    * 设置轮播图高度
+    * */
+    private void setLoopViewHeight() {
+        framelayout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                (int)(AndroidUtil.getDeviceWidth(getActivity())*Constant.SCALE_LOOP)));
+    }
 
     @Override
     public void onRequestSuccess(int requestCode) {
@@ -263,6 +318,7 @@ public class InvitationPullDownHaveThirdKindPinterestStyleFragment extends ToolB
             listPost = idao.getListPost();
             if(listCategroy3==null){
                 idao.requestPostRotaingBanner("B_POST_MIDDLE");
+              //  idao.requestPostRotaingBanner(id);
                 //   framelayout.setVisibility(View.VISIBLE);
                 gridView1.setVisibility(View.GONE);
             }else {
@@ -329,7 +385,15 @@ public class InvitationPullDownHaveThirdKindPinterestStyleFragment extends ToolB
         xlv_pinerest_style.stopLoadMore();
         xlv_pinerest_style.stopRefresh();
         if(errorNo.equals("006")){
-            framelayout.setVisibility(View.GONE);
+            if(listBanner==null||listBanner.size()==0) {
+                framelayout.setVisibility(View.GONE);
+            }
+            if(listPost!=null&&listPost.size()>0){
+                //   MessageUtils.showShortToast(getActivity(),"fsdfdsf");
+                rl_footer.setVisibility(View.VISIBLE);
+                progressBar.setVisibility(View.GONE);
+                tv_footer.setText("已经到底了，请到别处看看");
+            }
         }
     }
 
@@ -379,7 +443,8 @@ public class InvitationPullDownHaveThirdKindPinterestStyleFragment extends ToolB
 
     @Override
     public void onRefresh() {
-        ll.setVisibility(View.VISIBLE);
+       // ll.setVisibility(View.VISIBLE);
+        rl_footer.setVisibility(View.GONE);
         PAGE_NUM = 1;
         new Handler().postDelayed(new Runnable() {
             @Override

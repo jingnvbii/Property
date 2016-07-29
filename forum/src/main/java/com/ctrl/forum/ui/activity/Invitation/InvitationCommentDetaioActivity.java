@@ -21,6 +21,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -197,6 +198,13 @@ public class InvitationCommentDetaioActivity extends AppToolBarActivity implemen
         idao.requesPostReplyList(getIntent().getStringExtra("id"), "1", String.valueOf(PAGE_NUM), String.valueOf(Constant.PAGE_SIZE));
         mInvitationCommentDetailAdapter=new InvitationCommentDetailAdapter(this);
         lv_comment_detail.setAdapter(mInvitationCommentDetailAdapter);
+
+        lv_comment_detail.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                InputMethodUtils.hide(InvitationCommentDetaioActivity.this);
+            }
+        });
 
         lv_comment_detail.setMode(PullToRefreshBase.Mode.BOTH);
         lv_comment_detail.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
@@ -619,6 +627,8 @@ public class InvitationCommentDetaioActivity extends AppToolBarActivity implemen
         if(Arad.preferences.getString("isShielded").equals("1")){
             MessageUtils.showShortToast(InvitationCommentDetaioActivity.this,"您已经被屏蔽，不能回复评论");
         }
+        et_sendmessage.setEnabled(true);
+        et_sendmessage.requestFocus();
         if(Arad.preferences.getString("isShielded").equals("0")){
         InputMethodManager m=(InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         m.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);

@@ -2,10 +2,9 @@ package com.ctrl.forum.ui.activity.Invitation;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
@@ -15,16 +14,15 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.baidu.location.Address;
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
-import com.baidu.location.Poi;
 import com.baidu.mapapi.model.LatLng;
 import com.baidu.mapapi.search.core.PoiInfo;
 import com.baidu.mapapi.search.core.SearchResult;
 import com.baidu.mapapi.search.poi.OnGetPoiSearchResultListener;
 import com.baidu.mapapi.search.poi.PoiCitySearchOption;
 import com.baidu.mapapi.search.poi.PoiDetailResult;
-import com.baidu.mapapi.search.poi.PoiNearbySearchOption;
 import com.baidu.mapapi.search.poi.PoiResult;
 import com.baidu.mapapi.search.poi.PoiSearch;
 import com.beanu.arad.utils.MessageUtils;
@@ -32,6 +30,7 @@ import com.ctrl.forum.R;
 import com.ctrl.forum.base.AppToolBarActivity;
 import com.ctrl.forum.base.MyApplication;
 import com.ctrl.forum.service.LocationService;
+import com.ctrl.forum.ui.adapter.StoreSearchAddressListAdapter;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
@@ -60,7 +59,6 @@ public class LocationActivity extends AppToolBarActivity implements View.OnClick
     private List<String> mPoiInfoListStr=new ArrayList<>();
     private ArrayAdapter<String> adapter;
     private int totalPage;
-    private ArrayAdapter<String> adapter2;
 
     private static int PAGE_NUM=1;
     private PoiCitySearchOption option;
@@ -68,16 +66,9 @@ public class LocationActivity extends AppToolBarActivity implements View.OnClick
     private LatLng latLng;
     private boolean isRefresh=false;
 
-    private Handler handler=new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            if(msg.what==1){
-                lv_locate.onRefreshComplete();
-            }
-        }
-    };
-
+    private List<PoiInfo> poiInfoList;
+    private String keyWord;
+    private StoreSearchAddressListAdapter adapter2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +78,12 @@ public class LocationActivity extends AppToolBarActivity implements View.OnClick
         // 隐藏输入法
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         initView();
+        initData();
+    }
+
+    private void initData() {
+        adapter2 = new StoreSearchAddressListAdapter(this);
+        lv_locate.setAdapter(adapter2);
     }
 
 
@@ -96,6 +93,37 @@ public class LocationActivity extends AppToolBarActivity implements View.OnClick
     private void initView() {
         rl_loact_search.setOnClickListener(this);
         et_search.addTextChangedListener(watcher);
+        lv_locate.setMode(PullToRefreshBase.Mode.PULL_FROM_END);
+        lv_locate.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
+            @Override
+            public void onRefresh(PullToRefreshBase<ListView> refreshView) {
+                    PAGE_NUM += 1;
+                    //第四步，发起检索请求；
+                    if(!et_search.getText().toString().equals("")){
+                        keyWord=et_search.getText().toString();
+                    }
+                Log.i("tag","keyword===="+keyWord);
+                Log.i("tag","city===="+city);
+                    mPoiSearch.searchInCity((new PoiCitySearchOption())
+                            .pageNum(PAGE_NUM)
+                            .city(city)
+                            .keyword(keyWord)
+                            .pageCapacity(10));
+            }
+
+        });
+        lv_locate.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent();
+                intent.putExtra("locationLongitude",poiInfoList.get(position-1).location.latitude+"" );
+                intent.putExtra("locationLatitude",poiInfoList.get(position-1).location.longitude+"");
+                intent.putExtra("location", mPoiInfoListStr.get(position - 1));
+                setResult(RESULT_OK, intent);
+                finish();
+            }
+        });
+
         //第一步，创建POI检索实例
         mPoiSearch = PoiSearch.newInstance();
 
@@ -103,22 +131,18 @@ public class LocationActivity extends AppToolBarActivity implements View.OnClick
         OnGetPoiSearchResultListener poiListener = new OnGetPoiSearchResultListener() {
             public void onGetPoiResult(PoiResult result) {
                 lv_locate.onRefreshComplete();
-                isRefresh=true;
                 if (result == null || result.error == SearchResult.ERRORNO.RESULT_NOT_FOUND) {// 没有找到检索结
                     MessageUtils.showShortToast(LocationActivity.this, "抱歉，未找到结果");
                     mPoiInfoListStr.clear();
                     adapter2.notifyDataSetChanged();
+                    PAGE_NUM=1;
                     return;
                 }
 
                 if (result.error == SearchResult.ERRORNO.NO_ERROR) {// 检索结果正常返回
-                    List<PoiInfo>poiInfoList=result.getAllPoi();
-                    for(int i=0;i<poiInfoList.size();i++){
-                        mPoiInfoListStr.add(poiInfoList.get(i).name);
-                    }
-                    adapter2 = new ArrayAdapter<String>(LocationActivity.this, android.R.layout.simple_list_item_1, mPoiInfoListStr);
-                    adapter2.notifyDataSetChanged();
-                    lv_locate.setAdapter(adapter2);
+                   // MessageUtils.showShortToast(LocationActivity.this, "检索结果正常返回");
+                    poiInfoList=result.getAllPoi();
+                    adapter2.setList(poiInfoList);
                 }
 
             }
@@ -138,19 +162,19 @@ public class LocationActivity extends AppToolBarActivity implements View.OnClick
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
             // TODO Auto-generated method stub
+            if(mPoiInfoListStr!=null)
             mPoiInfoListStr.clear();
             if (s.toString() == null) {
                 adapter2.notifyDataSetChanged();
                 return;
             }
             //第四步，发起检索请求；
-            mPoiSearch.searchNearby((new PoiNearbySearchOption())
+            mPoiSearch.searchInCity((new PoiCitySearchOption())
                     .pageNum(PAGE_NUM)
-                    .location(latLng)
-                    .radius(500)
+                    .city(city)
                     .keyword(s.toString())
-                    .pageCapacity(10))
-            ;
+                    .pageCapacity(10));
+
 
 
         }
@@ -222,14 +246,27 @@ public class LocationActivity extends AppToolBarActivity implements View.OnClick
             isRefresh=false;
             // TODO Auto-generated method stub
             if (null != location && location.getLocType() != BDLocation.TypeServerError) {
-                mPoiInfoListStr.clear();
-                List<Poi> poiList = location.getPoiList();
-                for (int i = 0; i < poiList.size(); i++) {
-                    mPoiInfoListStr.add(poiList.get(i).getName());
-                }
                 latLng=new LatLng(location.getLatitude(),location.getLongitude());
                 city = location.getCity();
-                adapter = new ArrayAdapter<String>(LocationActivity.this, android.R.layout.simple_list_item_1, mPoiInfoListStr);
+                Address s = location.getAddress();
+                keyWord=s.streetNumber;
+              /*  Log.i("tag", "address=vvfvv==" + s.address);
+                Log.i("tag", "street=vvfvv==" + s.street);
+                Log.i("tag", "streetNumber=vvfvv==" + s.streetNumber);
+                Log.i("tag", "cityCode=vvfvv==" + s.cityCode);
+                Log.i("tag", "district=vvfvv==" + s.district);
+                Log.i("tag", "address=vvfvv==" + s.address);
+                Log.i("tag", "latidute=vvfvv==" + location.getLatitude());
+                Log.i("tag", "longtidu=vvfvv==" + location.getLongitude());*/
+                if(mPoiSearch!=null) {
+                    mPoiSearch.searchInCity((new PoiCitySearchOption())
+                            .pageNum(PAGE_NUM)
+                            .city(city)
+                            .keyword(keyWord)
+                            .pageCapacity(10))
+                    ;
+                }
+           /*     adapter = new ArrayAdapter<String>(LocationActivity.this, android.R.layout.simple_list_item_1, mPoiInfoListStr);
                 ListView lv = lv_locate.getRefreshableView();
                 lv.setAdapter(adapter);
                 lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -242,29 +279,7 @@ public class LocationActivity extends AppToolBarActivity implements View.OnClick
                         setResult(RESULT_OK, intent);
                         finish();
                     }
-                });
-                lv_locate.setMode(PullToRefreshBase.Mode.PULL_FROM_END);
-                lv_locate.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
-                    @Override
-                    public void onRefresh(PullToRefreshBase<ListView> refreshView) {
-                        if (isRefresh) {
-                            PAGE_NUM += 1;
-                            //第四步，发起检索请求；
-                            mPoiSearch.searchNearby((new PoiNearbySearchOption())
-                                    .pageNum(PAGE_NUM)
-                                    .location(latLng)
-                                    .radius(500)
-                                    .keyword(et_s.toString())
-                                    .pageCapacity(10));
-                            isRefresh=false;
-                        }else {
-                            Message message = handler.obtainMessage();
-                            message.what=1;
-                            handler.sendMessage(message);
-                        }
-                    }
-
-                });
+                });*/
             }
         }
 

@@ -257,7 +257,7 @@ public class InvitationDetailActivity extends AppToolBarActivity implements View
             }
             if (user!= null) {
                 if (user.getImgUrl() != null && !user.getImgUrl().equals(""))
-                    Arad.imageLoader.load(user.getImgUrl()).placeholder(R.mipmap.default_error).into(title_image);
+                    Arad.imageLoader.load(user.getImgUrl()).placeholder(R.mipmap.default_error).resize(300,300).centerCrop().into(title_image);
                 if (user.getNickName() != null) {
                     tv_name.setText(user.getNickName());
                 } else {
@@ -293,7 +293,7 @@ public class InvitationDetailActivity extends AppToolBarActivity implements View
                 ll_tel.setVisibility(View.GONE);
             }else {
                 ll_tel.setVisibility(View.VISIBLE);
-                tv_detail_tel.setText(post.getContactPhone());
+                tv_detail_tel.setText(post.getContactName());
 
             }
 

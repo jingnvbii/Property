@@ -77,6 +77,15 @@ public class InvitationPullDownActivity extends ToolBarActivity implements View.
     @InjectView(R.id.horizontalScrollView_pull)
     HorizontalScrollView horizontalScrollView;
 
+    @InjectView(R.id.iv_pull_back)//返回
+    ImageView iv_pull_back;
+    @InjectView(R.id.iv_pul_release)//发布
+    ImageView iv_pul_release;
+    @InjectView(R.id.iv_pul_search)//搜索
+    ImageView iv_pul_search;
+    @InjectView(R.id.tv_pull_title)//标题
+    TextView tv_pull_title;
+
 
     public int mCurrentCheckedRadioLeft;
     private int PAGE_NUM = 1;
@@ -156,10 +165,15 @@ public class InvitationPullDownActivity extends ToolBarActivity implements View.
     }
 
     private void initView() {
+        tv_pull_title.setText(getIntent().getStringExtra("channelName"));
         ShareSDK.initSDK(this);
         idao = new InvitationDao(this);
         idao.requesPostCategory(channelId, "1", "0");
         iv_pull_down.setOnClickListener(this);
+
+        iv_pull_back.setOnClickListener(this);
+        iv_pul_release.setOnClickListener(this);
+        iv_pul_search.setOnClickListener(this);
        // viewpager_invitation_pull_down.setScrollble(false);//禁止viewpager滚动
 
     }
@@ -341,6 +355,7 @@ public class InvitationPullDownActivity extends ToolBarActivity implements View.
             categoryId=listCategory.get(position).getId();
             categoryName=listCategory.get(position).getName();
             mGroupPostion=position;
+            styleType=listCategory.get(position).getStyleType();
 
         }
     }
@@ -412,28 +427,6 @@ public class InvitationPullDownActivity extends ToolBarActivity implements View.
         return Math.abs(velocity);
     }
 
-
-    @Override
-    public String setupToolBarTitle() {
-        TextView tv_title = getmTitle();
-       // tv_title.setText(get);
-        tv_title.setTextColor(getResources().getColor(R.color.text_black));
-        return getIntent().getStringExtra("channelName");
-    }
-
-    @Override
-    public boolean setupToolBarLeftButton(ImageView leftButton) {
-        leftButton.setImageResource(R.mipmap.jiantou_left);
-        leftButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
-        return true;
-    }
-
-
     public void request(int groupPosition,int position,String thirdId){
         mGroupPostion=groupPosition;
         mChildrenPosition=position;
@@ -444,9 +437,34 @@ public class InvitationPullDownActivity extends ToolBarActivity implements View.
         popupWindow.dismiss();
     }
 
+
+  /*  @Override
+    public String setupToolBarTitle() {
+      *//*  TextView tv_title = getmTitle();
+       // tv_title.setText(get);
+        tv_title.setTextColor(getResources().getColor(R.color.text_black));*//*
+       // return getIntent().getStringExtra("channelName");
+        return "";
+    }
+
+    @Override
+    public boolean setupToolBarLeftButton(ImageView leftButton) {
+      *//*  leftButton.setImageResource(R.mipmap.jiantou_left);
+        leftButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });*//*
+        return true;
+    }
+
+
+
+
     @Override
     public boolean setupToolBarRightButton(ImageView rightButton) {
-        rightButton.setImageResource(R.mipmap.edit);
+       *//* rightButton.setImageResource(R.mipmap.edit);
         rightButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -467,10 +485,10 @@ public class InvitationPullDownActivity extends ToolBarActivity implements View.
                 }
 
             }
-        });
+        });*//*
 
         return true;
-    }
+    }*/
 
     @Override
     public void onClick(View v) {
@@ -482,6 +500,39 @@ public class InvitationPullDownActivity extends ToolBarActivity implements View.
                     }
                     idao.requesAllPostCategory(channelId);
                 }
+                break;
+            case R.id.iv_pull_back:
+                onBackPressed();
+                break;
+            case R.id.iv_pul_release:
+                if (Arad.preferences.getString("memberId") == null || Arad.preferences.getString("memberId").equals("")) {
+                    startActivity(new Intent(InvitationPullDownActivity.this, LoginActivity.class));
+                    return;
+                }
+                if (Arad.preferences.getString("isShielded").equals("1")) {
+                    MessageUtils.showShortToast(InvitationPullDownActivity.this, "您已经被屏蔽，不能发帖");
+                }
+                if (Arad.preferences.getString("isShielded").equals("0")) {
+                    Intent intent = new Intent(InvitationPullDownActivity.this, InvitationReleaseActivity.class);
+                    intent.putExtra("channelId", channelId);
+                    intent.putExtra("categoryId", categoryId);
+                    intent.putExtra("categoryName", categoryName);
+                    startActivityForResult(intent, 222);
+                    AnimUtil.intentSlidIn(InvitationPullDownActivity.this);
+                }
+                break;
+            case R.id.iv_pul_search:
+                if(Arad.preferences.getString("memberId")==null||Arad.preferences.getString("memberId").equals("")){
+                    startActivity(new Intent(InvitationPullDownActivity.this, LoginActivity.class));
+                    AnimUtil.intentSlidOut(InvitationPullDownActivity.this);
+                    return;
+                }
+                InvitationPullDownActivity.isFromSearch=true;
+                Intent intent = new Intent(InvitationPullDownActivity.this, InvitationSearchActivity.class);
+                intent.putExtra("styleType",styleType);
+                intent.putExtra("channelId",categoryId);
+                startActivity(intent);
+                AnimUtil.intentSlidIn(InvitationPullDownActivity.this);
                 break;
         }
     }

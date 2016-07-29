@@ -17,10 +17,13 @@ import android.widget.GridView;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.beanu.arad.Arad;
 import com.beanu.arad.base.ToolBarFragment;
+import com.beanu.arad.utils.AndroidUtil;
 import com.beanu.arad.utils.AnimUtil;
 import com.ctrl.forum.R;
 import com.ctrl.forum.base.Constant;
@@ -103,6 +106,10 @@ public class InvitationPullDownHaveThirdKindFragment extends ToolBarFragment {
     private Map<Integer,Integer> text = new HashMap<>();
     private String showAll;
     private String firstId;
+    private View loadNoneView;
+    private RelativeLayout rl_footer;
+    private TextView tv_footer;
+    private ProgressBar progressBar;
 
 
     public static InvitationPullDownHaveThirdKindFragment newInstance(String channelId,String styleType,String thirdKindId,String keyword,String showAll,String firstId) {
@@ -232,12 +239,45 @@ public class InvitationPullDownHaveThirdKindFragment extends ToolBarFragment {
         getScreenDen();
         lv.addHeaderView(headview);
         lv.setFocusable(false);
-
-        lv_invitation_pull_down_have_third_kind.setMode(PullToRefreshBase.Mode.BOTH);
-        lv_invitation_pull_down_have_third_kind.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
+        loadNoneView = getActivity().getLayoutInflater().inflate(R.layout.load_more, null);
+        rl_footer=(RelativeLayout)loadNoneView.findViewById(R.id.rl_footer);
+        tv_footer=(TextView)loadNoneView.findViewById(R.id.tv_load_more);
+        progressBar=(ProgressBar)loadNoneView.findViewById(R.id.secondBar);
+        lv.addFooterView(loadNoneView);
+        lv_invitation_pull_down_have_third_kind.setMode(PullToRefreshBase.Mode.PULL_FROM_START);
+        lv_invitation_pull_down_have_third_kind.setOnLastItemVisibleListener(new PullToRefreshBase.OnLastItemVisibleListener() {
             @Override
-            public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
-                ll.setVisibility(View.VISIBLE);
+            public void onLastItemVisible() {
+                rl_footer.setVisibility(View.VISIBLE);
+                rl_footer.setPadding(0, 0, 0, 0);
+                tv_footer.setText("加载更多。。。");
+                progressBar.setVisibility(View.VISIBLE);
+               // ll.setVisibility(View.VISIBLE);
+                PAGE_NUM += 1;
+                new Handler().postDelayed(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        // TODO Auto-generated method stub
+                        if (thirdKindId != null) {
+                            idao.requestPostListByCategory(Arad.preferences.getString("memberId"), thirdKindId, "0", "", "", PAGE_NUM, Constant.PAGE_SIZE);
+                        } else if (listCategroy3 != null) {
+                            idao.requestPostListByCategory(Arad.preferences.getString("memberId"), listCategroy3.get(Position).getId(), "0", "", "", PAGE_NUM, Constant.PAGE_SIZE);
+                        } else if (showAll.equals("1")) {
+                            idao.requestPostListByCategory(Arad.preferences.getString("memberId"), firstId, "0", keyword, "", PAGE_NUM, Constant.PAGE_SIZE);
+                        } else {
+                            idao.requestPostListByCategory(Arad.preferences.getString("memberId"), channelId, "0", keyword, "", PAGE_NUM, Constant.PAGE_SIZE);
+                        }
+                    }
+                }, 500);
+            }
+        });
+
+        lv_invitation_pull_down_have_third_kind.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
+            @Override
+            public void onRefresh(PullToRefreshBase<ListView> refreshView) {
+               // ll.setVisibility(View.VISIBLE);
+                rl_footer.setVisibility(View.GONE);
                 if (listPost != null)
                     listPost.clear();
                 PAGE_NUM = 1;
@@ -260,30 +300,20 @@ public class InvitationPullDownHaveThirdKindFragment extends ToolBarFragment {
 
                 }, 500);
             }
+        });
+
+    /*    lv_invitation_pull_down_have_third_kind.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
+            @Override
+            public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
+
+            }
 
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
-                ll.setVisibility(View.VISIBLE);
-                PAGE_NUM += 1;
-                new Handler().postDelayed(new Runnable() {
 
-                    @Override
-                    public void run() {
-                        // TODO Auto-generated method stub
-                        if(thirdKindId!=null){
-                            idao.requestPostListByCategory(Arad.preferences.getString("memberId"), thirdKindId, "0", "", "", PAGE_NUM, Constant.PAGE_SIZE);
-                        }else if (listCategroy3 != null) {
-                            idao.requestPostListByCategory(Arad.preferences.getString("memberId"), listCategroy3.get(Position).getId(), "0", "", "", PAGE_NUM, Constant.PAGE_SIZE);
-                        } else if(showAll.equals("1")){
-                            idao.requestPostListByCategory(Arad.preferences.getString("memberId"), firstId, "0", keyword, "", PAGE_NUM, Constant.PAGE_SIZE);
-                        }else {
-                            idao.requestPostListByCategory(Arad.preferences.getString("memberId"), channelId, "0", keyword, "", PAGE_NUM, Constant.PAGE_SIZE);
-                        }
-                    }
-                }, 500);
 
             }
-        });
+        });*/
         lv_invitation_pull_down_have_third_kind.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -372,6 +402,8 @@ public class InvitationPullDownHaveThirdKindFragment extends ToolBarFragment {
         gridView1 = (GridView) headview.findViewById(R.id.gridView_pull_down);
         framelayout = (FrameLayout) headview.findViewById(R.id.framelayout);
         tv_search = (TextView) headview.findViewById(R.id.tv_search);
+        //设置轮播图高度
+       setLoopViewHeight();
         gridView1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -407,6 +439,15 @@ public class InvitationPullDownHaveThirdKindFragment extends ToolBarFragment {
 
 
 
+
+    }
+/*
+* 设置轮播图高度
+* */
+    private void setLoopViewHeight() {
+        Log.i("tag","height=-==="+ AndroidUtil.getDeviceWidth(getActivity()));
+        framelayout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                (int)(AndroidUtil.getDeviceWidth(getActivity())*Constant.SCALE_LOOP)));
 
     }
 
@@ -472,6 +513,7 @@ public class InvitationPullDownHaveThirdKindFragment extends ToolBarFragment {
             bol = 0;
             if(listCategroy3==null) {
                 idao.requestPostRotaingBanner("B_POST_MIDDLE");
+              //  idao.requestPostRotaingBanner(channelId);
                 //   framelayout.setVisibility(View.VISIBLE);
                 gridView1.setVisibility(View.GONE);
             }else {
@@ -523,6 +565,7 @@ public class InvitationPullDownHaveThirdKindFragment extends ToolBarFragment {
         mAutoSwitchPicHolder = new HomeAutoSwitchPicHolder(getActivity());
         // 2.得到轮播图的视图view
         View autoPlayPicView = mAutoSwitchPicHolder.getRootView();
+       // setLoopViewHeight(autoPlayPicView);
         // 把轮播图的视图添加到主界面中
         framelayout.addView(autoPlayPicView);
         //4. 为轮播图设置数据
@@ -545,7 +588,16 @@ public class InvitationPullDownHaveThirdKindFragment extends ToolBarFragment {
         lv_invitation_pull_down_have_third_kind.onRefreshComplete();
         showProgress(false);
         if(errorNo.equals("006")){
-            framelayout.setVisibility(View.GONE);
+            if(listBanner==null||listBanner.size()==0) {
+                framelayout.setVisibility(View.GONE);
+            }
+
+            if(listPost!=null&&listPost.size()>0){
+             //   MessageUtils.showShortToast(getActivity(),"fsdfdsf");
+                rl_footer.setVisibility(View.VISIBLE);
+                progressBar.setVisibility(View.GONE);
+                tv_footer.setText("已经到底了，请到别处看看");
+            }
         }
     }
 

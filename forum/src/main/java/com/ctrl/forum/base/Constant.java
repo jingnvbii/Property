@@ -131,5 +131,13 @@ public class Constant {
      */
     public static final int FROM_APP = 1;
     public static final int FROM_PLATFORM = 2;
+
+   /*
+   帖子轮播图宽高比例
+   * */
+    public static final double SCALE_LOOP = 0.5;
+
+
+
 }
 
