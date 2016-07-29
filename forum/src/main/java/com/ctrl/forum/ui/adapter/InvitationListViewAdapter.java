@@ -67,41 +67,49 @@ public class InvitationListViewAdapter extends BaseAdapter{
 
     @Override
     public int getItemViewType(int position) {
-       int type=-1;
+       int type;
        if(mPostList.get(position).getPostImgList()!=null) {
            int size = mPostList.get(position).getPostImgList().size();
-           switch (size) {
-               case 0:
-                   type = 0;
-                   break;
-               case 1:
-                   type = 1;
-                   break;
-               case 2:
-                   type = 1;
-                   break;
-               case 3:
-                   type = 3;
-                   break;
-               case 4:
-                   type = 3;
-                   break;
-               case 5:
-                   type = 3;
-                   break;
-               case 6:
-                   type = 3;
-                   break;
-               case 7:
-                   type = 3;
-                   break;
-               case 8:
-                   type = 3;
-                   break;
-               case 9:
-                   type = 3;
-                   break;
+           if(size>0&&size<3){
+               type=1;
+           }else if(size>=3){
+               type=3;
+           }else {
+               type=0;
            }
+              /* switch (size) {
+                   case 0:
+                       type = 0;
+                       break;
+                   case 1:
+                       type = 1;
+                       break;
+                   case 2:
+                       type = 1;
+                       break;
+                   case 3:
+                       type = 3;
+                       break;
+                   case 4:
+                       type = 3;
+                       break;
+                   case 5:
+                       type = 3;
+                       break;
+                   case 6:
+                       type = 3;
+                       break;
+                   case 7:
+                       type = 3;
+                       break;
+                   case 8:
+                       type = 3;
+                       break;
+                   case 9:
+                       type = 3;
+                       break;
+               }*/
+
            }else {
            type=0;
        }
@@ -132,8 +140,6 @@ public class InvitationListViewAdapter extends BaseAdapter{
                     convertView= inflter.inflate(R.layout.item_invitation_listview_three_image, parent, false);
                     holder3=new ViewHolder3(convertView);
                     convertView.setTag(holder3);
-                    break;
-                case -1:
                     break;
             }
         }else {

@@ -21,10 +21,13 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.beanu.arad.Arad;
 import com.beanu.arad.base.ToolBarFragment;
+import com.beanu.arad.utils.AndroidUtil;
 import com.beanu.arad.utils.AnimUtil;
 import com.ctrl.forum.HorzitalGridView.adapter.AppAdapter;
 import com.ctrl.forum.HorzitalGridView.adapter.MyViewPagerAdapter;
@@ -147,6 +150,10 @@ public class InvitationFragment extends ToolBarFragment implements View.OnClickL
     private LinearLayout viewGroup;
     private LinearLayout ll_tuijian;
     private LinearLayout ll_notice;
+    private View loadNoneView;
+    private RelativeLayout rl_footer;
+    private TextView tv_footer;
+    private ProgressBar progressBar;
 
 
     public static InvitationFragment newInstance() {
@@ -247,6 +254,41 @@ public class InvitationFragment extends ToolBarFragment implements View.OnClickL
        viewGroup=(LinearLayout)headview.findViewById(R.id.viewGroup);
         lv01.addHeaderView(headview);
         tv_change.setOnClickListener(this);
+        loadNoneView = getActivity().getLayoutInflater().inflate(R.layout.load_more, null);
+        rl_footer=(RelativeLayout)loadNoneView.findViewById(R.id.rl_footer);
+        tv_footer=(TextView)loadNoneView.findViewById(R.id.tv_load_more);
+        progressBar=(ProgressBar)loadNoneView.findViewById(R.id.secondBar);
+        lv01.addFooterView(loadNoneView);
+        setLoopViewHeight();
+        lv_invitation_fragment_home.setOnLastItemVisibleListener(new PullToRefreshBase.OnLastItemVisibleListener() {
+            @Override
+            public void onLastItemVisible() {
+                rl_footer.setVisibility(View.VISIBLE);
+                rl_footer.setPadding(0, 0, 0, 0);
+                tv_footer.setText("加载更多。。。");
+                progressBar.setVisibility(View.VISIBLE);
+                PAGE_NUM += 1;
+                //  showProgress(true);
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        idao.requestInitPostHomePage();
+                        idao.requestPostListByCategory(Arad.preferences.getString("memberId"), "", "0", "", "", PAGE_NUM, Constant.PAGE_SIZE);
+                    }
+                }, 500);
+
+            }
+        });
+
+    }
+
+    /*
+* 设置轮播图高度
+* */
+    private void setLoopViewHeight() {
+        framelayout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                (int) (AndroidUtil.getDeviceWidth(getActivity()) * Constant.SCALE_LOOP)));
+
     }
 
 
@@ -279,7 +321,7 @@ public class InvitationFragment extends ToolBarFragment implements View.OnClickL
       //  showProgress(true);
         idao.requestInitPostHomePage();
         idao.requestPostListByCategory(Arad.preferences.getString("memberId"), "", "0", "", "", PAGE_NUM, Constant.PAGE_SIZE);
-        lv_invitation_fragment_home.setMode(PullToRefreshBase.Mode.BOTH);
+        lv_invitation_fragment_home.setMode(PullToRefreshBase.Mode.PULL_FROM_START);
        /* lv_invitation_fragment_home.setOnLastItemVisibleListener(new PullToRefreshBase.OnLastItemVisibleListener() {
             @Override
             public void onLastItemVisible() {
@@ -294,7 +336,28 @@ public class InvitationFragment extends ToolBarFragment implements View.OnClickL
                 }, 500);
             }
         });*/
-        lv_invitation_fragment_home.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
+
+        lv_invitation_fragment_home.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
+            @Override
+            public void onRefresh(PullToRefreshBase<ListView> refreshView) {
+                rl_footer.setVisibility(View.GONE);
+                if (listPost!=null)
+                    listPost.clear();
+                if (listNoticeString!=null){
+                    listNoticeString.clear();
+                }
+                PAGE_NUM = 1;
+                //  showProgress(true);
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        idao.requestInitPostHomePage();
+                        idao.requestPostListByCategory(Arad.preferences.getString("memberId"), "", "0", "", "", PAGE_NUM, Constant.PAGE_SIZE);
+                    }
+                }, 500);
+            }
+        });
+      /*  lv_invitation_fragment_home.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
                 if (listPost!=null)
@@ -325,7 +388,7 @@ public class InvitationFragment extends ToolBarFragment implements View.OnClickL
                     }
                 }, 500);
             }
-        });
+        });*/
         lv01.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -389,6 +452,14 @@ public class InvitationFragment extends ToolBarFragment implements View.OnClickL
         super.onRequestFaild(errorNo, errorMessage);
        // showProgress(false);
         lv_invitation_fragment_home.onRefreshComplete();
+        if(errorNo.equals("006")){
+            if(listPost!=null&&listPost.size()>0){
+                //   MessageUtils.showShortToast(getActivity(),"fsdfdsf");
+                rl_footer.setVisibility(View.VISIBLE);
+                progressBar.setVisibility(View.GONE);
+                tv_footer.setText("已经到底了，请到别处看看");
+            }
+        }
     }
 
     @Override
@@ -455,7 +526,9 @@ public class InvitationFragment extends ToolBarFragment implements View.OnClickL
 
     private void initNotice() {
         ll_notice.setVisibility(View.VISIBLE);
-        Arad.imageLoader.load(idao.getListNoticeImage().get(0).getImgUrl()).placeholder(R.mipmap.jinrigonggao).into(iv_invitation_notice_image);
+        if(idao.getListNoticeImage()!=null&&idao.getListNoticeImage().size()>0) {
+            Arad.imageLoader.load(idao.getListNoticeImage().get(0).getImgUrl()).placeholder(R.mipmap.jinrigonggao).into(iv_invitation_notice_image);
+        }
         for (int i = 0; i < listNotice.size(); i++) {
             listNoticeString.add(listNotice.get(i).getContent());
         }
@@ -671,7 +744,6 @@ public class InvitationFragment extends ToolBarFragment implements View.OnClickL
 
     private void gotoDetail(int pos) {
         String type = listNotice.get(pos).getType();
-
         if(listNotice.get(pos).getTargetId()==null)return;
         Intent intent=null;
         switch (type){

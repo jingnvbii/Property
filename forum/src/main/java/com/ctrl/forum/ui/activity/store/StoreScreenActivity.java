@@ -452,10 +452,6 @@ public class StoreScreenActivity extends AppToolBarActivity implements View.OnCl
                 }
             }
         });
-
-        Log.i("tag", "list" + list.size());
-
-
         popupWindow = new PopupWindow(contentView,
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, true);
         // 设置SelectPicPopupWindow的View

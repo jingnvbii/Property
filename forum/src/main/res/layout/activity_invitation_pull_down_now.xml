@@ -3,11 +3,50 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <include
+   <!-- <include
         layout="@layout/toolbar_common_main"
         android:layout_width="match_parent"
         android:layout_height="@dimen/toolbar_height"
-        ></include>
+        ></include>-->
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:background="@color/main_bg"
+        android:layout_height="@dimen/toolbar_height">
+
+        <ImageView
+            android:id="@+id/iv_pull_back"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:src="@mipmap/jiantou_left"/>
+        <TextView
+            android:id="@+id/tv_pull_title"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:textColor="@color/text_black"
+            android:textSize="18sp"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            />
+        <ImageView
+            android:id="@+id/iv_pul_release"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:layout_alignParentRight="true"
+            android:src="@mipmap/edit"/>
+        <ImageView
+            android:id="@+id/iv_pul_search"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_toLeftOf="@+id/iv_pul_release"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:src="@mipmap/search_gray"/>
+    </RelativeLayout>
 
     <View
         android:layout_width="match_parent"

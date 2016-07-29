@@ -396,6 +396,7 @@ public class InvitationDetailFromPlatformActivity extends AppToolBarActivity imp
                     Log.i("tag", "adapter count===" + replyAdapter.getCount());
                     if (lastItem - 1 == replyAdapter.getCount()) {
                         rl_footer.setVisibility(View.VISIBLE);
+                        rl_footer.setPadding(0,0,0,0);
                         new Handler().postDelayed(new Runnable() {
                             @Override
                             public void run() {
@@ -470,6 +471,7 @@ public class InvitationDetailFromPlatformActivity extends AppToolBarActivity imp
         reset();
         if(rl_footer.getVisibility()==View.VISIBLE) {
             rl_footer.setVisibility(View.GONE);
+            rl_footer.setPadding(0, -rl_footer.getHeight(), 0, 0);
         }
         if (errorNo.equals("001")) {
             reset();
@@ -563,6 +565,7 @@ public class InvitationDetailFromPlatformActivity extends AppToolBarActivity imp
             //   MessageUtils.showShortToast(this, "获取评论列表成功");
             if(rl_footer.getVisibility()==View.VISIBLE) {
                 rl_footer.setVisibility(View.GONE);
+                rl_footer.setPadding(0,-rl_footer.getHeight(),0,0);
             }
             if (popupWindow != null) {
                 if (popupWindow.isShowing()) {
@@ -660,7 +663,7 @@ public class InvitationDetailFromPlatformActivity extends AppToolBarActivity imp
 
 
             if (user != null) {
-                Arad.imageLoader.load(user.getImgUrl()).placeholder(R.mipmap.default_error).into(title_image);
+                Arad.imageLoader.load(user.getImgUrl()).placeholder(R.mipmap.default_error).resize(300,300).centerCrop().into(title_image);
                 String levlel = idao.getUser().getMemberLevel();
                 if (levlel != null) {
                     switch (levlel) {
@@ -1123,6 +1126,7 @@ public class InvitationDetailFromPlatformActivity extends AppToolBarActivity imp
                 if (Arad.preferences.getString("isShielded").equals("1")) {
                     MessageUtils.showShortToast(InvitationDetailFromPlatformActivity.this, "您已经被屏蔽，不能发评论");
                 }
+                et_sendmessage.requestFocus();
                 if (Arad.preferences.getString("isShielded").equals("0")) {
                     if (ll_pinglun.getVisibility() == View.VISIBLE) {
                         ll_pinglun.setVisibility(View.GONE);

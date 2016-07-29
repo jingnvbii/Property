@@ -177,7 +177,7 @@ public class InvitationListViewForRelateAdapter extends BaseAdapter{
                 if(post.getPublishTime()!=null)
                 holder1.tv_time0.setText(TimeUtils.dateTime(post.getPublishTime()));
                 holder1.tv_numbers0.setText(post.getCommentNum() + "");
-                Arad.imageLoader.load(user.getImgUrl()).placeholder(R.mipmap.default_error).resize(50,50)
+                Arad.imageLoader.load(user.getImgUrl()).placeholder(R.mipmap.default_error).resize(300,300)
                         .centerCrop().into(holder1.imageView1);
                 break;
             case 1:

@@ -77,11 +77,22 @@ public class InvitationPullDownActivity extends ToolBarActivity implements View.
     @InjectView(R.id.horizontalScrollView_pull)
     HorizontalScrollView horizontalScrollView;
 
+    @InjectView(R.id.iv_pull_back)//返回
+    ImageView iv_pull_back;
+    @InjectView(R.id.iv_pul_release)//发布
+    ImageView iv_pul_release;
+    @InjectView(R.id.iv_pul_search)//搜索
+    ImageView iv_pul_search;
+    @InjectView(R.id.tv_pull_title)//标题
+    TextView tv_pull_title;
+
+
     public int mCurrentCheckedRadioLeft;
     private int PAGE_NUM = 1;
     private RadioGroup myRadioGroup;
     private int width;
     DisplayMetrics dm;
+
 
     private List<ThirdKind> kindList;
     private List<Invitation_listview> list;
@@ -140,6 +151,7 @@ public class InvitationPullDownActivity extends ToolBarActivity implements View.
     private String categoryId;
     private String categoryName;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -153,11 +165,17 @@ public class InvitationPullDownActivity extends ToolBarActivity implements View.
     }
 
     private void initView() {
+        tv_pull_title.setText(getIntent().getStringExtra("channelName"));
         ShareSDK.initSDK(this);
         idao = new InvitationDao(this);
         idao.requesPostCategory(channelId, "1", "0");
         iv_pull_down.setOnClickListener(this);
+
+        iv_pull_back.setOnClickListener(this);
+        iv_pul_release.setOnClickListener(this);
+        iv_pul_search.setOnClickListener(this);
        // viewpager_invitation_pull_down.setScrollble(false);//禁止viewpager滚动
+
     }
 
     @Override
@@ -189,6 +207,9 @@ public class InvitationPullDownActivity extends ToolBarActivity implements View.
         }
 
     }
+
+
+
 
     private void setRadioGruop() {
         myRadioGroup = new RadioGroup(this);
@@ -224,7 +245,6 @@ public class InvitationPullDownActivity extends ToolBarActivity implements View.
                 radio.setChecked(true);
                 categoryId=listCategory.get(0).getId();
                 categoryName=listCategory.get(0).getName();
-                styleType = listCategory.get(0).getStyleType();
             }
             if(radio.isChecked()) {
                 radio.setTextColor(getResources().getColor(R.color.text_blue));//选择器
@@ -315,11 +335,13 @@ public class InvitationPullDownActivity extends ToolBarActivity implements View.
         @Override
         public void onPageScrollStateChanged(int arg0) {
             // TODO Auto-generated method stub
+
         }
 
         @Override
         public void onPageScrolled(int arg0, float arg1, int arg2) {
             // TODO Auto-generated method stub
+
         }
 
         /**
@@ -332,11 +354,12 @@ public class InvitationPullDownActivity extends ToolBarActivity implements View.
             radioButton.performClick();
             categoryId=listCategory.get(position).getId();
             categoryName=listCategory.get(position).getName();
-            styleType = listCategory.get(position).getStyleType();
             mGroupPostion=position;
+            styleType=listCategory.get(position).getStyleType();
 
         }
     }
+
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent event) {
@@ -375,7 +398,9 @@ public class InvitationPullDownActivity extends ToolBarActivity implements View.
 
     /**
      * 创建VelocityTracker对象，并将触摸界面的滑动事件加入到VelocityTracker当中。
+     *
      * @param event
+     *
      */
     private void createVelocityTracker(MotionEvent event) {
         if (mVelocityTracker == null) {
@@ -402,28 +427,6 @@ public class InvitationPullDownActivity extends ToolBarActivity implements View.
         return Math.abs(velocity);
     }
 
-
-    @Override
-    public String setupToolBarTitle() {
-        TextView tv_title = getmTitle();
-       // tv_title.setText(get);
-        tv_title.setTextColor(getResources().getColor(R.color.text_black));
-        return getIntent().getStringExtra("channelName");
-    }
-
-    @Override
-    public boolean setupToolBarLeftButton(ImageView leftButton) {
-        leftButton.setImageResource(R.mipmap.jiantou_left);
-        leftButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
-        return true;
-    }
-
-
     public void request(int groupPosition,int position,String thirdId){
         mGroupPostion=groupPosition;
         mChildrenPosition=position;
@@ -434,9 +437,34 @@ public class InvitationPullDownActivity extends ToolBarActivity implements View.
         popupWindow.dismiss();
     }
 
+
+  /*  @Override
+    public String setupToolBarTitle() {
+      *//*  TextView tv_title = getmTitle();
+       // tv_title.setText(get);
+        tv_title.setTextColor(getResources().getColor(R.color.text_black));*//*
+       // return getIntent().getStringExtra("channelName");
+        return "";
+    }
+
+    @Override
+    public boolean setupToolBarLeftButton(ImageView leftButton) {
+      *//*  leftButton.setImageResource(R.mipmap.jiantou_left);
+        leftButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });*//*
+        return true;
+    }
+
+
+
+
     @Override
     public boolean setupToolBarRightButton(ImageView rightButton) {
-        rightButton.setImageResource(R.mipmap.edit);
+       *//* rightButton.setImageResource(R.mipmap.edit);
         rightButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -452,16 +480,15 @@ public class InvitationPullDownActivity extends ToolBarActivity implements View.
                     intent.putExtra("channelId", channelId);
                     intent.putExtra("categoryId", categoryId);
                     intent.putExtra("categoryName", categoryName);
-                    intent.putExtra("styleType",styleType);
                     startActivityForResult(intent, 222);
                     AnimUtil.intentSlidIn(InvitationPullDownActivity.this);
                 }
 
             }
-        });
+        });*//*
 
         return true;
-    }
+    }*/
 
     @Override
     public void onClick(View v) {
@@ -473,6 +500,39 @@ public class InvitationPullDownActivity extends ToolBarActivity implements View.
                     }
                     idao.requesAllPostCategory(channelId);
                 }
+                break;
+            case R.id.iv_pull_back:
+                onBackPressed();
+                break;
+            case R.id.iv_pul_release:
+                if (Arad.preferences.getString("memberId") == null || Arad.preferences.getString("memberId").equals("")) {
+                    startActivity(new Intent(InvitationPullDownActivity.this, LoginActivity.class));
+                    return;
+                }
+                if (Arad.preferences.getString("isShielded").equals("1")) {
+                    MessageUtils.showShortToast(InvitationPullDownActivity.this, "您已经被屏蔽，不能发帖");
+                }
+                if (Arad.preferences.getString("isShielded").equals("0")) {
+                    Intent intent = new Intent(InvitationPullDownActivity.this, InvitationReleaseActivity.class);
+                    intent.putExtra("channelId", channelId);
+                    intent.putExtra("categoryId", categoryId);
+                    intent.putExtra("categoryName", categoryName);
+                    startActivityForResult(intent, 222);
+                    AnimUtil.intentSlidIn(InvitationPullDownActivity.this);
+                }
+                break;
+            case R.id.iv_pul_search:
+                if(Arad.preferences.getString("memberId")==null||Arad.preferences.getString("memberId").equals("")){
+                    startActivity(new Intent(InvitationPullDownActivity.this, LoginActivity.class));
+                    AnimUtil.intentSlidOut(InvitationPullDownActivity.this);
+                    return;
+                }
+                InvitationPullDownActivity.isFromSearch=true;
+                Intent intent = new Intent(InvitationPullDownActivity.this, InvitationSearchActivity.class);
+                intent.putExtra("styleType",styleType);
+                intent.putExtra("channelId",categoryId);
+                startActivity(intent);
+                AnimUtil.intentSlidIn(InvitationPullDownActivity.this);
                 break;
         }
     }

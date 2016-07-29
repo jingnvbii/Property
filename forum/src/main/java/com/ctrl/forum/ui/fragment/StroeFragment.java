@@ -22,6 +22,8 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.baidu.location.BDLocation;
@@ -35,6 +37,7 @@ import com.baidu.mapapi.search.geocode.ReverseGeoCodeOption;
 import com.baidu.mapapi.search.geocode.ReverseGeoCodeResult;
 import com.beanu.arad.Arad;
 import com.beanu.arad.base.ToolBarFragment;
+import com.beanu.arad.utils.AndroidUtil;
 import com.beanu.arad.utils.AnimUtil;
 import com.beanu.arad.utils.MessageUtils;
 import com.ctrl.forum.HorzitalGridView.adapter.App2Adapter;
@@ -138,6 +141,9 @@ public class StroeFragment extends ToolBarFragment implements View.OnClickListen
     private LinearLayout ll_tuijian;
     private int bol=0;
     private int PageCount;
+    private RelativeLayout rl_footer;
+    private TextView tv_footer;
+    private ProgressBar progressBar;
 
 
     public static StroeFragment newInstance() {
@@ -168,7 +174,7 @@ public class StroeFragment extends ToolBarFragment implements View.OnClickListen
                 case 1:
 
                     if (isloop) {
-                        if (listNoticeString!=null)
+                        if (listNoticeString!=null&&listNoticeString.size()>0)
                         tv_change.setText(listNoticeString.get(item % listNoticeString.size()));
                         tv_change.setAnimation(set);
                         tv_change.startAnimation(set);
@@ -277,8 +283,49 @@ public class StroeFragment extends ToolBarFragment implements View.OnClickListen
     private void initData() {
         tv_toolbar.requestFocus();//跑马灯获取焦点
 
-        lv_store_home.setMode(PullToRefreshBase.Mode.BOTH);
-        lv_store_home.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
+        lv_store_home.setMode(PullToRefreshBase.Mode.PULL_FROM_START);
+        lv_store_home.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
+            @Override
+            public void onRefresh(PullToRefreshBase<ListView> refreshView) {
+                if (listMall != null)
+                    listMall.clear();
+                if (listNoticeString!=null)
+                    listNoticeString.clear();
+                if(PAGE_NUM==0){
+                    PAGE_NUM=1;
+                }else {
+                    PAGE_NUM=1;
+                }
+                rl_footer.setVisibility(View.GONE);
+                // showProgress(true);
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        mdao.requestInitMall();
+                        if(latitude_now!=null&&longitude_now!=null){
+                            mdao.requestInitMallRecommendCompany(latitude_now, longitude_now,
+                                    String.valueOf(Constant.PAGE_SIZE), String.valueOf(PAGE_NUM));
+                        }else if(latitude_address!=null&&longitude_address!=null){
+                            mdao.requestInitMallRecommendCompany(latitude_address, longitude_address,
+                                    String.valueOf(Constant.PAGE_SIZE), String.valueOf(PAGE_NUM));
+                        }else if(latitude_map!=null&&longitude_map!=null){
+                            mdao.requestInitMallRecommendCompany(latitude_map, longitude_map,
+                                    String.valueOf(Constant.PAGE_SIZE), String.valueOf(PAGE_NUM));
+                        }else if(latitude_search!=null&&longitude_search!=null){
+                            mdao.requestInitMallRecommendCompany(latitude_search, longitude_search,
+                                    String.valueOf(Constant.PAGE_SIZE), String.valueOf(PAGE_NUM));
+                        }else if(latitude!=null&&longitude!=null){
+                            mdao.requestInitMallRecommendCompany(latitude, longitude,
+                                    String.valueOf(Constant.PAGE_SIZE), String.valueOf(PAGE_NUM));
+                        }else {
+
+                        }
+                    }
+                }, 500);
+            }
+        });
+
+       /* lv_store_home.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
                 if (listMall != null)
@@ -352,7 +399,7 @@ public class StroeFragment extends ToolBarFragment implements View.OnClickListen
                     }
                 }, 500);
             }
-        });
+        });*/
 
         lv_store_home.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -437,6 +484,14 @@ public class StroeFragment extends ToolBarFragment implements View.OnClickListen
         super.onRequestFaild(errorNo, errorMessage);
         showProgress(false);
         lv_store_home.onRefreshComplete();
+        if(errorNo.equals("006")){
+            if(listMall!=null&&listMall.size()>0){
+                //   MessageUtils.showShortToast(getActivity(),"fsdfdsf");
+                rl_footer.setVisibility(View.VISIBLE);
+                progressBar.setVisibility(View.GONE);
+                tv_footer.setText("已经到底了，请到别处看看");
+            }
+        }
     }
 
     @Override
@@ -450,6 +505,7 @@ public class StroeFragment extends ToolBarFragment implements View.OnClickListen
             listMallNotice = mdao.getListMallNotice();
             listMallRecommend = mdao.getListMallRecommend();
             listNoticeImage=mdao.getListNoticeImage();
+            if(listNoticeImage!=null&&listNoticeImage.size()>0)
             Arad.imageLoader.load(listNoticeImage.get(0).getImgUrl()).placeholder(R.mipmap.jinrigonggao_red).into(iv_notice_store_home);
             //    MessageUtils.showShortToast(getActivity(), "商城初始化成功");
             setValue();
@@ -581,7 +637,7 @@ public class StroeFragment extends ToolBarFragment implements View.OnClickListen
     private void initRecommend() {
         ll_tuijian.setVisibility(View.VISIBLE);
         if (listMallRecommend.size() > 0&&listMallRecommend.get(0).getImgUrl()!=null&&!listMallRecommend.get(0).getImgUrl().equals("")) {
-            Arad.imageLoader.load(listMallRecommend.get(0).getImgUrl()).placeholder(R.mipmap.default_error).resize(400,400).centerCrop().into(iv01_store_recomend);
+            Arad.imageLoader.load(listMallRecommend.get(0).getImgUrl()).placeholder(R.mipmap.default_error).into(iv01_store_recomend);
             iv01_store_recomend.setOnClickListener(this);
         }
         if (listMallRecommend.size() > 1&&listMallRecommend.get(1).getImgUrl()!=null&&!listMallRecommend.get(1).getImgUrl().equals("")) {
@@ -695,6 +751,64 @@ public class StroeFragment extends ToolBarFragment implements View.OnClickListen
         listviewAdapter = new StoreFragmentAdapter(getActivity());
 
         tv_change.setOnClickListener(this);
+
+        setLoopViewHeight();
+
+        View loadNoneView = getActivity().getLayoutInflater().inflate(R.layout.load_more, null);
+        rl_footer=(RelativeLayout)loadNoneView.findViewById(R.id.rl_footer);
+        tv_footer=(TextView)loadNoneView.findViewById(R.id.tv_load_more);
+        progressBar=(ProgressBar)loadNoneView.findViewById(R.id.secondBar);
+        lv01.addFooterView(loadNoneView);
+        lv_store_home.setOnLastItemVisibleListener(new PullToRefreshBase.OnLastItemVisibleListener() {
+            @Override
+            public void onLastItemVisible() {
+                rl_footer.setVisibility(View.VISIBLE);
+                rl_footer.setPadding(0, 0, 0, 0);
+                tv_footer.setText("加载更多。。。");
+                progressBar.setVisibility(View.VISIBLE);
+                if(listMall==null){
+                    PAGE_NUM=1;
+                }else {
+                    PAGE_NUM += 1;
+                }
+                //  showProgress(true);
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        mdao.requestInitMall();
+                        if(latitude_now!=null&&longitude_now!=null){
+                            mdao.requestInitMallRecommendCompany(latitude_now, longitude_now,
+                                    String.valueOf(Constant.PAGE_SIZE), String.valueOf(PAGE_NUM));
+                        }else if(latitude_address!=null&&longitude_address!=null){
+                            mdao.requestInitMallRecommendCompany(latitude_address, longitude_address,
+                                    String.valueOf(Constant.PAGE_SIZE), String.valueOf(PAGE_NUM));
+                        }else if(latitude_map!=null&&longitude_map!=null){
+                            mdao.requestInitMallRecommendCompany(latitude_map, longitude_map,
+                                    String.valueOf(Constant.PAGE_SIZE), String.valueOf(PAGE_NUM));
+                        }else if(latitude_search!=null&&longitude_search!=null){
+                            mdao.requestInitMallRecommendCompany(latitude_search, longitude_search,
+                                    String.valueOf(Constant.PAGE_SIZE), String.valueOf(PAGE_NUM));
+                        }else if(latitude!=null&&longitude!=null){
+                            mdao.requestInitMallRecommendCompany(latitude, longitude,
+                                    String.valueOf(Constant.PAGE_SIZE), String.valueOf(PAGE_NUM));
+                        }else {
+
+                        }
+                    }
+                }, 500);
+
+            }
+        });
+
+    }
+
+    /*
+* 设置轮播图高度
+* */
+    private void setLoopViewHeight() {
+        framelayout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                (int)(AndroidUtil.getDeviceWidth(getActivity())*Constant.SCALE_LOOP)));
+
     }
 
     /*

@@ -117,7 +117,7 @@ public class InvitationPinetestDetailAdapter extends BaseAdapter  {
         }else {
             holder.iv_reply_level.setImageResource(R.mipmap.vip_icon);
         }
-        Arad.imageLoader.load(mPostReply2.getImgUrl()).placeholder(R.mipmap.baby_large).resize(50,50)
+        Arad.imageLoader.load(mPostReply2.getImgUrl()).placeholder(R.mipmap.baby_large).resize(300,300)
                 .centerCrop().into(holder.iv_reply_photo);
         if (mPostReply2.getReplyType().equals("0")) {//无评论
             holder.rl_pinglun.setVisibility(View.GONE);//评论布局隐藏

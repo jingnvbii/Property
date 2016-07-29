@@ -379,6 +379,7 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
                     Log.i("tag", "adapter count===" + mInvitationCommentDetailAdapter.getCount());
                     if (lastItem-1 == mInvitationCommentDetailAdapter.getCount()) {
                         rl_footer.setVisibility(View.VISIBLE);
+                        rl_footer.setPadding(0, 0, 0, 0);
                         new Handler().postDelayed(new Runnable() {
                             @Override
                             public void run() {
@@ -473,6 +474,7 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
         super.onRequestFaild(errorNo, errorMessage);
         if(rl_footer.getVisibility()==View.VISIBLE){
             rl_footer.setVisibility(View.GONE);
+            rl_footer.setPadding(0, -rl_footer.getHeight(), 0, 0);
         }
         if(errorNo.equals("027")){
           //  MessageUtils.showShortToast(this, "已经拉黑过，无需重复拉黑");
@@ -571,6 +573,7 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
 
             if(rl_footer.getVisibility()==View.VISIBLE){
                 rl_footer.setVisibility(View.GONE);
+                rl_footer.setPadding(0, -rl_footer.getHeight(), 0, 0);
             }
 
             listPostReply2 = idao.getListPostReply2();
@@ -617,7 +620,38 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
             post = idao.getPost2();
             user = idao.getUser();
             if (user != null) {
-                Arad.imageLoader.load(user.getImgUrl()).placeholder(R.mipmap.round_img).into(title_image);
+                String levlel = idao.getUser().getMemberLevel();
+                if (levlel != null) {
+                    switch (levlel) {
+                        case "0":
+                            iv_levlel.setImageResource(R.mipmap.vip_icon);
+                            break;
+                        case "1":
+                            iv_levlel.setImageResource(R.mipmap.vip_icon1);
+                            break;
+                        case "2":
+                            iv_levlel.setImageResource(R.mipmap.vip_icon2);
+                            break;
+                        case "3":
+                            iv_levlel.setImageResource(R.mipmap.vip_icon3);
+                            break;
+                        case "4":
+                            iv_levlel.setImageResource(R.mipmap.vip_icon4);
+                            break;
+                        case "5":
+                            iv_levlel.setImageResource(R.mipmap.vip_icon5);
+                            break;
+                        case "6":
+                            iv_levlel.setImageResource(R.mipmap.vip_icon6);
+                            break;
+                        case "7":
+                            iv_levlel.setImageResource(R.mipmap.vip_icon7);
+                            break;
+                    }
+                }else {
+                    iv_levlel.setImageResource(R.mipmap.vip_icon);
+                }
+                Arad.imageLoader.load(user.getImgUrl()).placeholder(R.mipmap.round_img).resize(300,300).centerCrop().into(title_image);
                 if(user.getNickName()!=null&&!user.getNickName().equals("")){
                     tv_name.setText(user.getNickName());
                 }else {
@@ -646,10 +680,10 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
 
             if(post.getContactAddress()!=null&&!post.getContactAddress().equals("")){
                 tv_contact_address.setVisibility(View.VISIBLE);
-                tv_contact_address.setText("地址："+post.getContactAddress());
+                tv_contact_address.setText("地址：" + post.getContactAddress());
             }
             if(post.getReporterId().equals(Arad.preferences.getString("memberId"))){
-                tv_delete.setVisibility(View.VISIBLE);
+               // tv_delete.setVisibility(View.VISIBLE);
             }
 
             if ( post.getContactPhone() == null||post.getContactPhone().equals("")) {
@@ -659,38 +693,6 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
                 tv_tel.setText(post.getContactName());
             }
 
-
-            String levlel = idao.getUser().getMemberLevel();
-            if (levlel != null) {
-                switch (levlel) {
-                    case "0":
-                        iv_levlel.setImageResource(R.mipmap.vip_icon);
-                        break;
-                    case "1":
-                        iv_levlel.setImageResource(R.mipmap.vip_icon1);
-                        break;
-                    case "2":
-                        iv_levlel.setImageResource(R.mipmap.vip_icon2);
-                        break;
-                    case "3":
-                        iv_levlel.setImageResource(R.mipmap.vip_icon3);
-                        break;
-                    case "4":
-                        iv_levlel.setImageResource(R.mipmap.vip_icon4);
-                        break;
-                    case "5":
-                        iv_levlel.setImageResource(R.mipmap.vip_icon5);
-                        break;
-                    case "6":
-                        iv_levlel.setImageResource(R.mipmap.vip_icon6);
-                        break;
-                    case "7":
-                        iv_levlel.setImageResource(R.mipmap.vip_icon7);
-                        break;
-                }
-            }else {
-                iv_levlel.setImageResource(R.mipmap.vip_icon);
-            }
             if(post.getZambiastate().equals("0")){
                 iv_zan.setImageResource(R.mipmap.zan_blue);
             }
@@ -1488,11 +1490,18 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
         TextView tv_daoxu = (TextView) contentView.findViewById(R.id.tv_daoxu);
         TextView tv_pinbizuozhe = (TextView) contentView.findViewById(R.id.tv_pinbizuozhe);
         TextView tv_jubao = (TextView) contentView.findViewById(R.id.tv_jubao);
+        TextView tv_delete_invitation = (TextView) contentView.findViewById(R.id.tv_delete_invitation);
+
+        if(post.getReporterId().equals(Arad.preferences.getString("memberId"))){
+            // tv_delete.setVisibility(View.VISIBLE);
+            tv_delete_invitation.setVisibility(View.VISIBLE);
+        }
 
         tv_zhikanlouzhu.setOnClickListener(this);
         tv_daoxu.setOnClickListener(this);
         tv_pinbizuozhe.setOnClickListener(this);
         tv_jubao.setOnClickListener(this);
+        tv_delete_invitation.setOnClickListener(this);
 
 
         popupWindow = new PopupWindow(contentView,
