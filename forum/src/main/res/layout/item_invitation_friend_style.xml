@@ -223,7 +223,7 @@
         android:layout_marginLeft="10dp"
         android:drawablePadding="5dp"
         android:layout_marginTop="10dp"
-        android:drawableLeft="@mipmap/pinglun_friend"/>
+        android:drawableLeft="@mipmap/pinglun_gray_friend"/>
 
     <com.ctrl.forum.customview.ListViewForScrollView
         android:focusable="false"

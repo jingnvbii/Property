@@ -110,7 +110,7 @@ public class InvitationPullDownHaveThirdKindFragment extends ToolBarFragment {
     private RelativeLayout rl_footer;
     private TextView tv_footer;
     private ProgressBar progressBar;
-
+    private boolean isFromLoad;
 
     public static InvitationPullDownHaveThirdKindFragment newInstance(String channelId,String styleType,String thirdKindId,String keyword,String showAll,String firstId) {
         InvitationPullDownHaveThirdKindFragment fragment = new InvitationPullDownHaveThirdKindFragment();
@@ -270,6 +270,7 @@ public class InvitationPullDownHaveThirdKindFragment extends ToolBarFragment {
                         }
                     }
                 }, 500);
+                isFromLoad=true;
             }
         });
 
@@ -512,6 +513,7 @@ public class InvitationPullDownHaveThirdKindFragment extends ToolBarFragment {
         if (requestCode == 1) {
             bol = 0;
             if(listCategroy3==null) {
+                if(!isFromLoad)
                 idao.requestPostRotaingBanner("B_POST_MIDDLE");
               //  idao.requestPostRotaingBanner(channelId);
                 //   framelayout.setVisibility(View.VISIBLE);
@@ -592,7 +594,7 @@ public class InvitationPullDownHaveThirdKindFragment extends ToolBarFragment {
                 framelayout.setVisibility(View.GONE);
             }
 
-            if(listPost!=null&&listPost.size()>0){
+            if(listPost!=null&&listPost.size()>0&&isFromLoad){
              //   MessageUtils.showShortToast(getActivity(),"fsdfdsf");
                 rl_footer.setVisibility(View.VISIBLE);
                 progressBar.setVisibility(View.GONE);

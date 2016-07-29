@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -619,38 +620,68 @@ public class MainActivity extends ToolBarActivity implements View.OnClickListene
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         if (rb1.isChecked()) {
+                if(listNavigation.get(0).getCommentCode().equals("1")){
+                    rb1.setTextColor(Color.parseColor("#ce1010"));
+                }
                 listDrawable.get(0).setBounds(0, 0, 50, 50);
                 rb1.setCompoundDrawables(null, listDrawable.get(0), null, null);
         } else {
+            if(listNavigation.get(0).getCommentCode().equals("1")){
+                rb1.setTextColor(Color.parseColor("#949494"));
+            }
             drawable2.setBounds(0, 0, 50, 50);
             rb1.setCompoundDrawables(null, listDrawable2.get(0), null, null);
         }
         if (rb2.isChecked()) {
+            if(listNavigation.get(1).getCommentCode().equals("1")){
+                rb2.setTextColor(Color.parseColor("#ce1010"));
+            }
             listDrawable.get(1).setBounds(0, 0, 50, 50);
             rb2.setCompoundDrawables(null, listDrawable.get(1), null, null);
         } else {
+            if(listNavigation.get(1).getCommentCode().equals("1")){
+                rb2.setTextColor(Color.parseColor("#949494"));
+            }
             drawable2.setBounds(0, 0, 50, 50);
             rb2.setCompoundDrawables(null, listDrawable2.get(1), null, null);
         }
         if (rb3.isChecked()) {
+            if(listNavigation.get(2).getCommentCode().equals("1")){
+                rb3.setTextColor(Color.parseColor("#ce1010"));
+            }
             listDrawable.get(2).setBounds(0, 0, 50, 50);
             rb3.setCompoundDrawables(null, listDrawable.get(2), null, null);
         } else {
+            if(listNavigation.get(2).getCommentCode().equals("1")){
+                rb3.setTextColor(Color.parseColor("#949494"));
+            }
             drawable2.setBounds(0, 0, 50,50);
             rb3.setCompoundDrawables(null, listDrawable2.get(2), null, null);
         }
         if (rb4.isChecked()) {
+            if(listNavigation.get(3).getCommentCode().equals("1")){
+                rb4.setTextColor(Color.parseColor("#ce1010"));
+            }
             if(listDrawable.get(3)!=null)
             listDrawable.get(3).setBounds(0, 0, 50, 50);
             rb4.setCompoundDrawables(null, listDrawable.get(3), null, null);
         } else {
+            if(listNavigation.get(3).getCommentCode().equals("1")){
+                rb4.setTextColor(Color.parseColor("#949494"));
+            }
             drawable2.setBounds(0, 0, 50, 50);
             rb4.setCompoundDrawables(null, listDrawable2.get(3), null, null);
         }
         if (rb5.isChecked()) {
+            if(listNavigation.get(4).getCommentCode().equals("1")){
+                rb5.setTextColor(Color.parseColor("#ce1010"));
+            }
             listDrawable.get(4).setBounds(0, 0, 50, 50);
             rb5.setCompoundDrawables(null, listDrawable.get(4), null, null);
         } else {
+            if(listNavigation.get(4).getCommentCode().equals("1")){
+                rb5.setTextColor(Color.parseColor("#949494"));
+            }
             drawable2.setBounds(0, 0, 50, 50);
             rb5.setCompoundDrawables(null, listDrawable2.get(4), null, null);
         }

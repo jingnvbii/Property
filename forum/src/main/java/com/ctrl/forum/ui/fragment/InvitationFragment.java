@@ -259,7 +259,7 @@ public class InvitationFragment extends ToolBarFragment implements View.OnClickL
         tv_footer=(TextView)loadNoneView.findViewById(R.id.tv_load_more);
         progressBar=(ProgressBar)loadNoneView.findViewById(R.id.secondBar);
         lv01.addFooterView(loadNoneView);
-        setLoopViewHeight();
+       // setLoopViewHeight();
         lv_invitation_fragment_home.setOnLastItemVisibleListener(new PullToRefreshBase.OnLastItemVisibleListener() {
             @Override
             public void onLastItemVisible() {
