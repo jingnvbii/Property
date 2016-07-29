@@ -62,71 +62,7 @@
         android:orientation="vertical"
         android:layout_height="match_parent">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/white"
-        android:paddingLeft="15dp"
-        android:paddingRight="15dp"
-        android:orientation="vertical"
-        android:layout_marginTop="10dp">
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:visibility="gone"
-            android:layout_height="wrap_content">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="投稿的行为表明您同意"
-            />
-        <TextView
-            android:id="@+id/tougao"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text=" 《投稿协议》 "
-            android:textColor="@color/text_blue"
-            />
-        </LinearLayout>
 
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="wrap_content"
-            android:layout_height="50dp">
-
-            <TextView
-                android:id="@+id/tv_visit_room"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="center_vertical"
-                android:gravity="center"
-                android:text="发布到 :"
-                android:textColor="@color/text_black"
-                android:layout_centerVertical="true"/>
-
-            <Spinner
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="5dp"
-                android:id="@+id/spinner_second_kind"
-                android:layout_width="100dp"
-                android:layout_gravity="center_vertical"
-                android:gravity="center"
-                android:background="@null"
-                android:layout_height="match_parent"
-                ></Spinner>
-            <Spinner
-                android:layout_marginTop="5dp"
-                android:id="@+id/spinner_third_kind"
-                android:layout_width="100dp"
-                android:background="@null"
-                android:layout_marginRight="5dp"
-                android:layout_marginLeft="5dp"
-                android:layout_gravity="center_vertical"
-                android:gravity="center"
-                android:layout_height="match_parent"
-                ></Spinner>
-        </LinearLayout>
-    </LinearLayout>
 
     <LinearLayout
         android:layout_marginTop="10dp"
@@ -337,6 +273,72 @@
         </com.ctrl.forum.customview.GridViewForScrollView>
 
     </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:orientation="vertical"
+            android:layout_marginTop="10dp">
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:visibility="gone"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="投稿的行为表明您同意"
+                    />
+                <TextView
+                    android:id="@+id/tougao"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" 《投稿协议》 "
+                    android:textColor="@color/text_blue"
+                    />
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp">
+
+                <TextView
+                    android:id="@+id/tv_visit_room"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical"
+                    android:gravity="center"
+                    android:text="发布到 :"
+                    android:textColor="@color/text_black"
+                    android:layout_centerVertical="true"/>
+
+                <Spinner
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="5dp"
+                    android:id="@+id/spinner_second_kind"
+                    android:layout_width="100dp"
+                    android:layout_gravity="center_vertical"
+                    android:gravity="center"
+                    android:background="@null"
+                    android:layout_height="match_parent"
+                    ></Spinner>
+                <Spinner
+                    android:layout_marginTop="5dp"
+                    android:id="@+id/spinner_third_kind"
+                    android:layout_width="100dp"
+                    android:background="@null"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_gravity="center_vertical"
+                    android:gravity="center"
+                    android:layout_height="match_parent"
+                    ></Spinner>
+            </LinearLayout>
+        </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
