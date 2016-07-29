@@ -11,7 +11,7 @@ import com.beanu.arad.utils.MessageUtils;
 /**
  * 基础类
  * 1.继承了INetResult 具备了网络处理能力
- * 2.添加了ProgressHUD 可以显示等待progress
+ * 2.添加了ProgressHUD 可以显示等待progress1
  */
 public class BaseActivity extends ActionBarActivity implements INetResult {
 
