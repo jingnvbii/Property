@@ -8,6 +8,7 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.beanu.arad.Arad;
@@ -15,6 +16,7 @@ import com.beanu.arad.utils.MessageUtils;
 import com.ctrl.forum.R;
 import com.ctrl.forum.base.AppToolBarActivity;
 import com.ctrl.forum.dao.EditDao;
+import com.ctrl.forum.utils.InputMethodUtils;
 
 /**
  * 修改昵称
@@ -24,17 +26,26 @@ public class MineNickNameActivity extends AppToolBarActivity {
     private TextView tv_ni;
     private EditDao edao;
     private String id;
+    private LinearLayout ll_all;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nick_name);
         init();
 
+        ll_all.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                InputMethodUtils.hide(MineNickNameActivity.this);
+            }
+        });
     }
 
     private void init() {
         et_nickname = (EditText) findViewById(R.id.et_nickname);
         tv_ni = (TextView) findViewById(R.id.tv_ni);
+        ll_all = (LinearLayout) findViewById(R.id.ll_all);
         et_nickname.setText(Arad.preferences.getString("nickName"));
         tv_ni.setText("昵称"+et_nickname.length()+"/11");
 

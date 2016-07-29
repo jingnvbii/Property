@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.beanu.arad.Arad;
@@ -13,6 +14,7 @@ import com.beanu.arad.utils.MessageUtils;
 import com.ctrl.forum.R;
 import com.ctrl.forum.base.AppToolBarActivity;
 import com.ctrl.forum.dao.StoreManageDao;
+import com.ctrl.forum.utils.InputMethodUtils;
 
 /**
  * 我的店铺_马上申请我的店铺
@@ -21,6 +23,7 @@ public class MineCreateShopTwoActivity extends AppToolBarActivity implements Vie
     private EditText et_shop_name,et_address,et_apply_name,et_shop_phone;
     private TextView tv_num,tv_commit;
     private StoreManageDao storeManageDao;
+    private LinearLayout ll_all;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,12 +60,14 @@ public class MineCreateShopTwoActivity extends AppToolBarActivity implements Vie
         et_shop_phone = (EditText) findViewById(R.id.et_shop_phone);
         tv_num = (TextView) findViewById(R.id.tv_num);
         tv_commit = (TextView) findViewById(R.id.tv_commit);
+        ll_all = (LinearLayout) findViewById(R.id.ll_all);
 
         et_shop_name.setOnClickListener(this);
         et_address.setOnClickListener(this);
         et_apply_name.setOnClickListener(this);
         et_shop_phone.setOnClickListener(this);
         tv_commit.setOnClickListener(this);
+        ll_all.setOnClickListener(this);
 
         storeManageDao = new StoreManageDao(this);
     }
@@ -93,6 +98,9 @@ public class MineCreateShopTwoActivity extends AppToolBarActivity implements Vie
                             et_shop_name.getText().toString());
                 }
             break;
+            case R.id.ll_all:
+                InputMethodUtils.hide(MineCreateShopTwoActivity.this);
+                break;
         }
     }
 

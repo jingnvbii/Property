@@ -1,5 +1,6 @@
 package com.beanu.arad.base;
 
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -29,6 +30,9 @@ public class ToolBarActivity extends BaseActivity implements ISetupToolBar {
         super.onCreate(savedInstanceState);
        /* View rootView = getWindow().getDecorView();
         rootView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);*/
+
+        /*禁止横屏*/
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
     }
 
     @Override

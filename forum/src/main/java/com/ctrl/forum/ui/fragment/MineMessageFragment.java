@@ -63,8 +63,6 @@ public class MineMessageFragment extends ToolBarFragment {
                 if (messages != null) {
                     messages.clear();
                     PAGE_NUM = 1;
-                    mineMessageListAdapter = new MineMessageListAdapter(getActivity());
-                    lv_content.setAdapter(mineMessageListAdapter);
                 }
                 rdao.queryMessageList(Arad.preferences.getString("memberId"), PAGE_NUM, Constant.PAGE_SIZE);
             }
@@ -83,9 +81,9 @@ public class MineMessageFragment extends ToolBarFragment {
         lv_content.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (messageList != null && messageList.get(position - 1) != null) {
-                    String state = messageList.get(position - 1).getMsgType();
-                    String targetId = messageList.get(position - 1).getTargetId();
+                if (messages != null && messages.get(position-1) != null) {
+                    String state = messages.get(position - 1).getMsgType();
+                    String targetId = messages.get(position - 1).getTargetId();
                     Intent intent;
                     switch (state) {
                         case "1": //用户下单支付成功<通知商家>
@@ -153,7 +151,6 @@ public class MineMessageFragment extends ToolBarFragment {
             messages = rdao.getMessages();
             if (messages!=null){
                 mineMessageListAdapter.setMessages(messages);
-                this.messageList.addAll(messages);
             }
 
         }

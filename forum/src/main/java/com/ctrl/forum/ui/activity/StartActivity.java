@@ -132,40 +132,41 @@ public class StartActivity extends ToolBarActivity implements View.OnClickListen
            startAds=ldao.getStartAds();
            Boolean isFirstIn= Arad.preferences.getBoolean("isFirstIn",true);
            if(isFirstIn){//第一次进入
-               Arad.preferences.putBoolean("isFirstIn",false);
-               Arad.preferences.flush();
-               iv_start.setVisibility(View.GONE);
-               viewPager_start.setVisibility(View.VISIBLE);
-               for (int i = 0; i < listAdvertising.size(); i++) {
-                   View view = inflater.inflate(R.layout.commdity_image_item, null);
-                   views.add(view);
-               }
-               //设置小圆点
-               if (listAdvertising.size()>1) {
+               if (listAdvertising!=null && listAdvertising.size()!=0) {
+                   Arad.preferences.putBoolean("isFirstIn", false);
+                   Arad.preferences.flush();
+                   iv_start.setVisibility(View.GONE);
+                   viewPager_start.setVisibility(View.VISIBLE);
                    for (int i = 0; i < listAdvertising.size(); i++) {
-                       ImageView imageView = new ImageView(this);
-                       imageView.setImageResource(R.drawable.red_round_select);
-                       imageView.setEnabled(false);
-                       LinearLayout.LayoutParams params=new LinearLayout.LayoutParams(15,15);
-                       params.leftMargin=15;
-                       ll_icons.addView(imageView,params);
-                       ll_icons.getChildAt(0).setEnabled(true);//默认第一个为选中的情况
+                       View view = inflater.inflate(R.layout.commdity_image_item, null);
+                       views.add(view);
                    }
+                   //设置小圆点
+                   if (listAdvertising.size() > 1) {
+                       for (int i = 0; i < listAdvertising.size(); i++) {
+                           ImageView imageView = new ImageView(this);
+                           imageView.setImageResource(R.drawable.red_round_select);
+                           imageView.setEnabled(false);
+                           LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(15, 15);
+                           params.leftMargin = 15;
+                           ll_icons.addView(imageView, params);
+                           ll_icons.getChildAt(0).setEnabled(true);//默认第一个为选中的情况
+                       }
+                   }
+                   // 1.设置幕后item的缓存数目
+                   viewPager_start.setOffscreenPageLimit(listAdvertising.size());
+                   // 2.设置页与页之间的间距
+                   viewPager_start.setPageMargin(10);
+                   // 3.将父类的touch事件分发至viewPgaer，否则只能滑动中间的一个view对象
+                   ////////////////////////////////////////////////////////////////
+                   viewPager_start.setAdapter(new StartImageViewPagerAdapter(views, listAdvertising)); // 为viewpager设置adapter
+                   return;
                }
-               // 1.设置幕后item的缓存数目
-               viewPager_start.setOffscreenPageLimit(listAdvertising.size());
-               // 2.设置页与页之间的间距
-               viewPager_start.setPageMargin(10);
-               // 3.将父类的touch事件分发至viewPgaer，否则只能滑动中间的一个view对象
-               ////////////////////////////////////////////////////////////////
-               viewPager_start.setAdapter(new StartImageViewPagerAdapter(views, listAdvertising)); // 为viewpager设置adapter
-
-
-           }else {//不是第一次进入
-              Arad.imageLoader.load(startAds.getKindIcon()).placeholder(R.mipmap.default_error).into(iv_start);
-               Handler x = new Handler();
-               x.postDelayed(new splashhandler(), 2000);
            }
+           //不是第一次进入或者引导页无图片
+           Arad.imageLoader.load(startAds.getKindIcon()).placeholder(R.mipmap.default_error).into(iv_start);
+           Handler x = new Handler();
+           x.postDelayed(new splashhandler(), 2000);
 
         }
     }
@@ -192,7 +193,6 @@ public class StartActivity extends ToolBarActivity implements View.OnClickListen
             currentItem = (currentItem + 1) % listAdvertising.size();
             //更新界面
         }
-
     }
 
     class splashhandler implements Runnable{

@@ -705,6 +705,9 @@ public class MainActivity extends ToolBarActivity implements View.OnClickListene
     protected void onRestart() {
         super.onRestart();
         isFrist = true;
+        if (!Arad.preferences.getString("memberId").equals("")){
+            getNet();
+        }
     }
 
     public class MyBroadcastReciver extends BroadcastReceiver{
@@ -720,14 +723,14 @@ public class MainActivity extends ToolBarActivity implements View.OnClickListene
                     //MessageUtils.showShortToast(context, "message");
                     getNet();
                     break;
-                case "cashCoupon": //现金劵
+                /*case "cashCoupon": //现金劵
                     //MessageUtils.showShortToast(context, "cashCoupon");
                     getNet();
                     break;
                 case "coupon": //优惠劵
                     //MessageUtils.showShortToast(context, "coupon");
                     getNet();
-                    break;
+                    break;*/
                 default:
                     break;
             }
@@ -747,10 +750,10 @@ public class MainActivity extends ToolBarActivity implements View.OnClickListene
             //String redenvelopNum = memberInfo.getRedenvelopeNum();//优惠劵
             //String messageCount = memberInfo.getMessageCount();//消息通知
 
-            int coupons = 0;
-            int redenvelopNum = 0;
+            /*int coupons = 0;
+            int redenvelopNum = 0;*/
             int messageCount = 0;
-            if (memberInfo.getCouponsNum()!=null && !memberInfo.getCouponsNum().equals("")){
+            /*if (memberInfo.getCouponsNum()!=null && !memberInfo.getCouponsNum().equals("")){
                 coupons = Integer.parseInt(memberInfo.getCouponsNum());
             }else{
                 coupons=0;
@@ -759,17 +762,23 @@ public class MainActivity extends ToolBarActivity implements View.OnClickListene
                 redenvelopNum = Integer.parseInt(memberInfo.getRedenvelopeNum());
             }else{
                 redenvelopNum = 0;
-            }
+            }*/
             if ( memberInfo.getMessageCount()!=null && ! memberInfo.getMessageCount().equals("")){
                 messageCount = Integer.parseInt(memberInfo.getMessageCount());
             }else{
                 messageCount = 0;
             }
-            int num =coupons+redenvelopNum+messageCount;
+
+            /*
+            Log.e("coupons=========",coupons+"");
+            Log.e("redenvelopNum=========",redenvelopNum+"");
+            Log.e("messageCount=========",messageCount+"");*/
+            //int num =coupons+redenvelopNum+messageCount;
+
             for (int i=0;i<listNavigation.size();i++){
                 if (listNavigation.get(i).getCommentCode().equals("4")){
                     CircleRadioView radioView = (CircleRadioView) ll_rb.getChildAt(i);
-                    radioView.setNum(num);
+                    radioView.setNum(messageCount);
                 }
             }
         }

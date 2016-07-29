@@ -33,7 +33,7 @@ public class MineMessageListAdapter extends BaseAdapter{
     }
 
     public void setMessages(List<Message> messages) {
-        this.messages.addAll(messages);
+        this.messages=messages;
         notifyDataSetChanged();
     }
 

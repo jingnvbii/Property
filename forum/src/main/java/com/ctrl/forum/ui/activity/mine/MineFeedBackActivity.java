@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.beanu.arad.Arad;
@@ -13,6 +14,7 @@ import com.beanu.arad.utils.MessageUtils;
 import com.ctrl.forum.R;
 import com.ctrl.forum.base.AppToolBarActivity;
 import com.ctrl.forum.dao.SetDao;
+import com.ctrl.forum.utils.InputMethodUtils;
 
 /**
  * 意见反馈
@@ -21,6 +23,7 @@ public class MineFeedBackActivity extends AppToolBarActivity {
     private SetDao sdao;
     private EditText et_content;
     private EditText et_phone;
+    private LinearLayout ll_all;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,6 +37,14 @@ public class MineFeedBackActivity extends AppToolBarActivity {
 
         et_content = (EditText) findViewById(R.id.et_content);
         et_phone = (EditText) findViewById(R.id.et_phone);
+        ll_all = (LinearLayout) findViewById(R.id.ll_all);
+
+        ll_all.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                InputMethodUtils.hide(MineFeedBackActivity.this);
+            }
+        });
     }
     //检查输入内容是否为空
     public boolean checkInput(){

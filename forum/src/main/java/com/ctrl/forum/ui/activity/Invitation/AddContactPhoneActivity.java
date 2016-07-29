@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.beanu.arad.utils.MessageUtils;
@@ -27,6 +28,8 @@ public class AddContactPhoneActivity extends AppToolBarActivity {
     EditText et_address;
     @InjectView(R.id.et_tel)//电话
     EditText et_tel;
+    @InjectView(R.id.rl_all)
+    RelativeLayout rl_all;
 
 
     @Override
@@ -38,6 +41,7 @@ public class AddContactPhoneActivity extends AppToolBarActivity {
 
         // 隐藏输入法
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+
     }
 
     private void initView() {
@@ -45,6 +49,13 @@ public class AddContactPhoneActivity extends AppToolBarActivity {
         et_address.setText(intent.getStringExtra("adress"));
         et_name.setText(intent.getStringExtra("name"));
         et_tel.setText(intent.getStringExtra("tel"));
+
+        rl_all.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                InputMethodUtils.hide(AddContactPhoneActivity.this);
+            }
+        });
     }
 
 
@@ -97,7 +108,7 @@ public class AddContactPhoneActivity extends AppToolBarActivity {
         if (et_tel.getText().length()==11){
             return true;
         }
-        MessageUtils.showShortToast(this,"电话格式不对");
+        MessageUtils.showShortToast(this, "电话格式不对");
         return false;
     }
 

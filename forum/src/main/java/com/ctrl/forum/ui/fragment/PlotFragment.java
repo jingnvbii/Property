@@ -112,6 +112,7 @@ public class PlotFragment extends ToolBarFragment implements View.OnClickListene
     private ShareDialog shareDialog;
     private Map<Integer,Boolean> isAdd = new HashMap<>();
     private Map<Integer,Integer> text = new HashMap<>();
+    private View footView;
 
     private RelativeLayout rl_search;
     private EditText search;
@@ -154,6 +155,14 @@ public class PlotFragment extends ToolBarFragment implements View.OnClickListene
         //search.requestFocus();
         headview.setLayoutParams(layoutParams);
         lv_content.getRefreshableView().addHeaderView(headview);
+
+        //listview增加尾部布局
+        /*lv_content.onRefreshComplete();
+        footView= LayoutInflater.from(getActivity()).inflate(R.layout.textview_layout, null);
+        footView.setVisibility(View.GONE);
+        TextView v = (TextView) footView.findViewById(R.id.tv_text);
+        v.setText("已经到底,请到别处去看看吧!");
+        lv_content.getRefreshableView().addFooterView(footView);*/
 
         invitationListViewFriendStyleAdapter = new PlotListViewFriendStyleAdapter(getActivity());
         lv_content.setAdapter(invitationListViewFriendStyleAdapter);
@@ -543,6 +552,9 @@ public class PlotFragment extends ToolBarFragment implements View.OnClickListene
     public void onRequestFaild(String errorNo, String errorMessage) {
         super.onRequestFaild(errorNo, errorMessage);
         lv_content.onRefreshComplete();
+        if (errorNo.equals("006") && posts==null){
+           footView.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -740,14 +752,10 @@ public class PlotFragment extends ToolBarFragment implements View.OnClickListene
     }
 
     @Override
-    public void onRefresh() {
-
-    }
+    public void onRefresh() {}
 
     @Override
-    public void onLoadMore() {
-
-    }
+    public void onLoadMore() {}
 
     @Override
     public void onComplete(Platform platform, int i, HashMap<String, Object> hashMap) {

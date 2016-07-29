@@ -335,6 +335,7 @@ public class PlotListViewFriendStyleAdapter extends BaseAdapter {
         for(int i=0;i<imgList.size();i++){
             imageUrl.add(imgList.get(i).getImg());
         }
+
         RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(w, RelativeLayout.LayoutParams.WRAP_CONTENT);
         newGridView.setLayoutParams(lp);
         friendInfoImgsAdapter = new FriendGridAdapter(mcontext, imgList);

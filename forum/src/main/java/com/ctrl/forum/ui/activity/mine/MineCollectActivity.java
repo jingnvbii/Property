@@ -73,7 +73,6 @@ public class MineCollectActivity extends ToolBarActivity {
         initData();
 
         fl_content.setAdapter(fragmentPagerAdapter);
-
         fl_content.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageSelected(int arg0) {

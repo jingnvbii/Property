@@ -98,16 +98,17 @@ public class MineSettingActivity extends ToolBarActivity implements View.OnClick
             e.printStackTrace();
         }
 
-        onChange(iv_system_notification,"systemNotification");
-        onChange(iv_reply_comments,"replyComments");
-        onChange(iv_voice,"voice");
-        onChange(iv_vibration,"vibration");
-        onChange(iv_night_no_message,"nightNoMessage");
-        onChange(iv_notification_show,"notificationShow");
-        onChange(iv_desktop_icon_hints,"desktopIconHints");
+            onChange(iv_system_notification, "systemNotification");
+            onChange(iv_reply_comments, "replyComments");
+            onChange(iv_voice, "voice");
+            onChange(iv_vibration, "vibration");
+            onChange(iv_night_no_message, "nightNoMessage");
+            onChange(iv_notification_show, "notificationShow");
+            onChange(iv_desktop_icon_hints, "desktopIconHints");
 
         feedback.setOnClickListener(this);
         rl_cancle.setOnClickListener(this);
+
     }
 
     public boolean setupToolBarLeftButton(ImageView leftButton) {
@@ -148,14 +149,26 @@ public class MineSettingActivity extends ToolBarActivity implements View.OnClick
     }
 
     public void onChange(CheckBox ib, final String name){
-        if (Arad.preferences.getBoolean(name)){
-            ib.setChecked(true);
-            Arad.preferences.putBoolean(name,true);
+        if (!Arad.preferences.getBoolean("isSet")) {
+            if (ib.isChecked()){
+                Arad.preferences.putBoolean(name, true);
+            }else{
+                Arad.preferences.putBoolean(name, false);
+            }
+            Arad.preferences.putBoolean("isSet", true);
+            Arad.preferences.flush();
+        }else {
+            if (Arad.preferences.getBoolean(name)) {
+                ib.setChecked(true);
+                Arad.preferences.putBoolean(name, true);
+                Arad.preferences.flush();
+            } else {
+                ib.setChecked(false);
+                Arad.preferences.putBoolean(name, false);
+                Arad.preferences.flush();
+            }
         }
-        else{
-            ib.setChecked(false);
-            Arad.preferences.putBoolean(name,false);
-        }
+
         ib.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -164,8 +177,6 @@ public class MineSettingActivity extends ToolBarActivity implements View.OnClick
                 setJPush();
             }
         });
-
-        Arad.preferences.flush();
     }
 
     @Override

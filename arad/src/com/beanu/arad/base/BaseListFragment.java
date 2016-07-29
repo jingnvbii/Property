@@ -14,6 +14,7 @@ public class BaseListFragment extends ListFragment implements INetResult {
 
     }
 
+
     @Override
     public void onRequestFaild(String errorNo, String errorMessage) {
         showProgress(false);

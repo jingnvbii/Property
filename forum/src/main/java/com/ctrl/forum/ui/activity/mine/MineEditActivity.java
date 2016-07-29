@@ -122,7 +122,7 @@ public class MineEditActivity extends AppToolBarActivity implements View.OnClick
                 Arad.preferences.putString("imgUrl", url);
                 Arad.preferences.flush();
                 Arad.imageLoader.load(Arad.preferences.getString("imgUrl")).
-                        placeholder(getResources().getDrawable(R.mipmap.my_gray)).into(iv_head);//设置头像
+                        placeholder(getResources().getDrawable(R.mipmap.my_gray)).resize(200,200).centerCrop().into(iv_head);//设置头像
             }
         }
         if (requestCode==5){
@@ -227,7 +227,7 @@ public class MineEditActivity extends AppToolBarActivity implements View.OnClick
             case R.id.tv_tuichu://退出登陆
                 Arad.preferences.clear();
                 DataCleanUtils.clearAllCache(this.getApplicationContext());
-                Arad.preferences.putBoolean("isFirstIn",false);
+                Arad.preferences.putBoolean("isFirstIn", false);
                 Arad.preferences.flush();
                 startActivity(new Intent(this, LoginActivity.class));
                 this.finish();
@@ -249,11 +249,11 @@ public class MineEditActivity extends AppToolBarActivity implements View.OnClick
                 case IMAGE_REQUEST_CODE://相册
                     Uri uri = data.getData();
                     String thePath = Utils.getInstance().getPath(this, uri);
-                    Bitmap bitmap = zoomImg(thePath,50,50);
+                    Bitmap bitmap = zoomImg(thePath,200,200);
                     getImageToView1(bitmap);
                     break;
                 case CAMERA_REQUEST_CODE://相机
-                    Bitmap bm = zoomImg((Bitmap)data.getExtras().get("data"),50,50);
+                    Bitmap bm = zoomImg((Bitmap)data.getExtras().get("data"),200,200);
                     getImageToView1(bm);
                     break;
                 default:

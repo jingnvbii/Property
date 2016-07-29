@@ -2,12 +2,11 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:imagecontrol="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:weightSum="1"
-    android:background="@color/main_bg">
+    android:background="#f6f4f4">
     <!-- 标题 -->
-    <RelativeLayout
+    <!--<RelativeLayout
         android:id="@+id/my_toolbar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/toolbar_height"
@@ -24,7 +23,7 @@
             android:layout_centerHorizontal="true"
             android:id="@+id/textView" />
 
-        <!--消息-->
+        &lt;!&ndash;消息&ndash;&gt;
         <com.ctrl.forum.customview.NumView
             android:padding="10dp"
             android:layout_width="wrap_content"
@@ -33,7 +32,7 @@
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
             android:src="@mipmap/iconfont_pinglun01"/>
-        <!--设置-->
+        &lt;!&ndash;设置&ndash;&gt;
         <ImageView
             android:padding="10dp"
             android:layout_width="wrap_content"
@@ -43,7 +42,7 @@
             android:layout_toLeftOf="@+id/iv_message"
             android:src="@mipmap/iconfont_shezhi" />
 
-    </RelativeLayout>
+    </RelativeLayout>-->
 
     <ScrollView
         android:scrollbars="none"
@@ -57,15 +56,17 @@
 
        <!-- 头像,签到,积分 -->
        <RelativeLayout
+           android:id="@+id/rl_head"
         android:layout_width="match_parent"
         android:layout_height="140dp"
+           android:background="#ece7ea"
         >
 
-        <ImageView
+        <!--<ImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/edit_bg_view"
-            android:background="@mipmap/bacg_people" />
+            android:background="@mipmap/bacg_people" />-->
 
         <ImageView
             android:layout_width="wrap_content"
@@ -78,7 +79,7 @@
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
-            android:src="@mipmap/iconfont_more" />
+            android:src="@mipmap/iconfont_go" />
 
         <com.ctrl.forum.customview.MineHeadView
             android:layout_width="50dp"
@@ -88,34 +89,43 @@
             android:scaleType="fitXY"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="@dimen/margin_left_and_right"  />
+            android:layout_marginTop="20dp"  />
            <!-- imagecontrol:border_outside_color="@color/blue"
             imagecontrol:border_thickness="1dp"-->
 
+           <TextView
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:text="昵称:"
+               android:id="@+id/textView17"
+               android:textSize="@dimen/text_size_basic"
+               android:textColor="@color/text_my"
+               android:layout_toLeftOf="@+id/tv_nickName"
+               android:layout_alignTop="@+id/iv_bianji"
+               android:layout_marginTop="30dp"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/my_name"
+            android:text="点"
             android:textSize="@dimen/text_size_basic"
-            android:textColor="@color/text_white"
+            android:textColor="@color/text_my"
             android:id="@+id/tv_nickName"
+            android:layout_centerHorizontal="true"
             android:layout_alignTop="@+id/iv_bianji"
-            android:layout_marginTop="20dp"
-            android:layout_alignRight="@+id/iv_head"
-            android:layout_alignEnd="@+id/iv_head" />
+            android:layout_marginTop="30dp" />
 
         <Button
             android:layout_width="70dp"
             android:layout_height="30dp"
             android:text="@string/sign"
-            android:textColor="@color/text_white"
+            android:textColor="@color/text_my"
             android:textSize="@dimen/text_size_small"
             android:id="@+id/bt_sign"
             android:background="@drawable/btn_red_selector"
-            android:layout_below="@+id/tv_nickName"
+            android:layout_below="@+id/textView17"
             android:layout_marginRight="35dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="5dp"
             android:layout_alignRight="@+id/iv_head"
             android:layout_alignEnd="@+id/iv_head" />
 
@@ -125,7 +135,7 @@
             android:text="@string/integral"
             android:id="@+id/bt_integral"
             android:background="@drawable/btn_red_selector"
-            android:textColor="@color/text_white"
+            android:textColor="@color/text_my"
             android:textSize="@dimen/text_size_small"
             android:layout_alignTop="@+id/bt_sign"
             android:layout_alignLeft="@+id/iv_head"
@@ -133,16 +143,15 @@
             android:layout_marginLeft="20dp"/>
 
         <TextView
+            android:layout_marginLeft="15dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/my_grade"
             android:id="@+id/textView10"
-            android:textColor="@color/text_white"
+            android:textColor="@color/text_my"
             android:textSize="@dimen/text_size_basic"
-            android:layout_above="@+id/bt_sign"
-            android:layout_marginLeft="7dp"
             android:layout_toRightOf="@+id/tv_nickName"
-            android:layout_toEndOf="@+id/tv_nickName" />
+            android:layout_above="@+id/bt_sign" />
 
         <ImageView
             android:layout_width="wrap_content"
@@ -156,7 +165,27 @@
             android:layout_alignBottom="@+id/textView10"
             android:layout_toEndOf="@+id/textView10" />
 
-    </RelativeLayout>
+           <ImageView
+               android:id="@+id/iv_set"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:src="@mipmap/iconfont_sett"
+               android:padding="10dp"
+               android:layout_alignParentTop="true"
+               android:layout_alignParentLeft="true"
+               android:layout_alignParentStart="true" />
+
+           <com.ctrl.forum.customview.NumView
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:id="@+id/iv_message"
+               android:src="@mipmap/iconfont_message"
+               android:padding="10dp"
+               android:layout_alignParentTop="true"
+               android:layout_alignParentRight="true"
+               android:layout_alignParentEnd="true" />
+
+       </RelativeLayout>
 
        <com.ctrl.forum.customview.WrapContentHeightViewPager
            android:id="@+id/vp_plug"
@@ -225,7 +254,7 @@
            android:id="@+id/my_collect"
            android:layout_width="match_parent"
            android:layout_height="@dimen/list_item_micro"
-           android:layout_marginTop="@dimen/space_size"
+           android:layout_marginTop="@dimen/folder_cover_top"
            android:background="@color/white">
            <ImageView
                android:layout_width="wrap_content"
@@ -267,7 +296,7 @@
            android:id="@+id/my_post"
            android:layout_width="match_parent"
            android:layout_height="@dimen/list_item_micro"
-           android:layout_marginTop="@dimen/space_size"
+           android:layout_marginTop="@dimen/folder_cover_top"
            android:background="@color/white">
            <ImageView
                android:layout_width="wrap_content"
@@ -310,7 +339,7 @@
            android:id="@+id/my_juan"
            android:layout_width="match_parent"
            android:layout_height="@dimen/list_item_micro"
-           android:layout_marginTop="@dimen/space_size"
+           android:layout_marginTop="@dimen/folder_cover_top"
            android:background="@color/white">
            <ImageView
                android:layout_width="wrap_content"
@@ -363,7 +392,7 @@
            android:id="@+id/my_order"
            android:layout_width="match_parent"
            android:layout_height="@dimen/list_item_micro"
-           android:layout_marginTop="@dimen/space_size"
+           android:layout_marginTop="@dimen/folder_cover_top"
            android:background="@color/white">
            <ImageView
                android:layout_width="wrap_content"
@@ -406,7 +435,7 @@
            android:id="@+id/my_address"
            android:layout_width="match_parent"
            android:layout_height="@dimen/list_item_micro"
-           android:layout_marginTop="@dimen/space_size"
+           android:layout_marginTop="@dimen/folder_cover_top"
            android:background="@color/white">
            <ImageView
                android:layout_width="wrap_content"
@@ -449,7 +478,7 @@
            android:id="@+id/my_pingjia"
            android:layout_width="match_parent"
            android:layout_height="@dimen/list_item_micro"
-           android:layout_marginTop="@dimen/space_size"
+           android:layout_marginTop="@dimen/folder_cover_top"
            android:background="@color/white">
            <ImageView
                android:layout_width="wrap_content"
@@ -492,7 +521,7 @@
            android:id="@+id/my_xiaoqu"
            android:layout_width="match_parent"
            android:layout_height="@dimen/list_item_micro"
-           android:layout_marginTop="@dimen/space_size"
+           android:layout_marginTop="@dimen/folder_cover_top"
            android:background="@color/white">
            <ImageView
                android:layout_width="wrap_content"
@@ -535,7 +564,7 @@
            android:id="@+id/my_shop"
            android:layout_width="match_parent"
            android:layout_height="@dimen/list_item_micro"
-           android:layout_marginTop="@dimen/space_size"
+           android:layout_marginTop="@dimen/folder_cover_top"
            android:background="@color/white">
            <ImageView
                android:layout_width="wrap_content"
@@ -578,7 +607,7 @@
            android:id="@+id/my_drafts"
            android:layout_width="match_parent"
            android:layout_height="@dimen/list_item_micro"
-           android:layout_marginTop="@dimen/space_size"
+           android:layout_marginTop="@dimen/folder_cover_top"
            android:background="@color/white">
            <ImageView
                android:layout_width="wrap_content"
@@ -621,7 +650,7 @@
            android:id="@+id/my_blacklist"
            android:layout_width="match_parent"
            android:layout_height="@dimen/list_item_micro"
-           android:layout_marginTop="@dimen/space_size"
+           android:layout_marginTop="@dimen/folder_cover_top"
            android:background="@color/white">
            <ImageView
                android:layout_width="wrap_content"

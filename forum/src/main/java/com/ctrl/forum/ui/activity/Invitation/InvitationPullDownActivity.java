@@ -77,13 +77,11 @@ public class InvitationPullDownActivity extends ToolBarActivity implements View.
     @InjectView(R.id.horizontalScrollView_pull)
     HorizontalScrollView horizontalScrollView;
 
-
     public int mCurrentCheckedRadioLeft;
     private int PAGE_NUM = 1;
     private RadioGroup myRadioGroup;
     private int width;
     DisplayMetrics dm;
-
 
     private List<ThirdKind> kindList;
     private List<Invitation_listview> list;
@@ -142,7 +140,6 @@ public class InvitationPullDownActivity extends ToolBarActivity implements View.
     private String categoryId;
     private String categoryName;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -161,7 +158,6 @@ public class InvitationPullDownActivity extends ToolBarActivity implements View.
         idao.requesPostCategory(channelId, "1", "0");
         iv_pull_down.setOnClickListener(this);
        // viewpager_invitation_pull_down.setScrollble(false);//禁止viewpager滚动
-
     }
 
     @Override
@@ -193,9 +189,6 @@ public class InvitationPullDownActivity extends ToolBarActivity implements View.
         }
 
     }
-
-
-
 
     private void setRadioGruop() {
         myRadioGroup = new RadioGroup(this);
@@ -231,6 +224,7 @@ public class InvitationPullDownActivity extends ToolBarActivity implements View.
                 radio.setChecked(true);
                 categoryId=listCategory.get(0).getId();
                 categoryName=listCategory.get(0).getName();
+                styleType = listCategory.get(0).getStyleType();
             }
             if(radio.isChecked()) {
                 radio.setTextColor(getResources().getColor(R.color.text_blue));//选择器
@@ -321,13 +315,11 @@ public class InvitationPullDownActivity extends ToolBarActivity implements View.
         @Override
         public void onPageScrollStateChanged(int arg0) {
             // TODO Auto-generated method stub
-
         }
 
         @Override
         public void onPageScrolled(int arg0, float arg1, int arg2) {
             // TODO Auto-generated method stub
-
         }
 
         /**
@@ -340,11 +332,11 @@ public class InvitationPullDownActivity extends ToolBarActivity implements View.
             radioButton.performClick();
             categoryId=listCategory.get(position).getId();
             categoryName=listCategory.get(position).getName();
+            styleType = listCategory.get(position).getStyleType();
             mGroupPostion=position;
 
         }
     }
-
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent event) {
@@ -383,9 +375,7 @@ public class InvitationPullDownActivity extends ToolBarActivity implements View.
 
     /**
      * 创建VelocityTracker对象，并将触摸界面的滑动事件加入到VelocityTracker当中。
-     *
      * @param event
-     *
      */
     private void createVelocityTracker(MotionEvent event) {
         if (mVelocityTracker == null) {
@@ -462,6 +452,7 @@ public class InvitationPullDownActivity extends ToolBarActivity implements View.
                     intent.putExtra("channelId", channelId);
                     intent.putExtra("categoryId", categoryId);
                     intent.putExtra("categoryName", categoryName);
+                    intent.putExtra("styleType",styleType);
                     startActivityForResult(intent, 222);
                     AnimUtil.intentSlidIn(InvitationPullDownActivity.this);
                 }
