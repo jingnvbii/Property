@@ -36,7 +36,6 @@ import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.beanu.arad.Arad;
 import com.beanu.arad.utils.AndroidUtil;
@@ -181,6 +180,7 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
     private int count=0;
     private String categoryName;
     private String categroyId2;
+    private String styleType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -225,6 +225,7 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
         channelId=getIntent().getStringExtra("channelId");
         categroyId2=getIntent().getStringExtra("categoryId");
         categoryName=getIntent().getStringExtra("categoryName");
+        styleType  = getIntent().getStringExtra("styleType");
         idao = new InvitationDao(this);
 
 
@@ -659,6 +660,7 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
                 if (eid.length>2) {
                     if (listItemCategroy.get(i).getId().equals(eid[2])) {
                         spinner_second_kind.setSelection(i);
+                        styleType = listItemCategroy.get(i).getStyleType();
                     }
                 }
             }
@@ -676,6 +678,8 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
                 idao.requesItemCategory3(listItemCategroy.get(position).getId(), "2");
                 secondKindId = listItemCategroy.get(position).getId();
                 checkType2 = listItemCategroy.get(position).getCheckType();
+                styleType = listItemCategroy.get(position).getStyleType();
+                Log.e("styleType================",styleType);
 
             }
 
@@ -833,6 +837,18 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
         return "";
     }
 
+    public boolean checkStyle(){
+        if (styleType.equals("3")){
+            if (Bimp.tempSelectBitmap.size()>0){
+                return true;
+            }else{
+                MessageUtils.showShortToast(this,"瀑布流样式必须有图片");
+                return false;
+            }
+        }
+        return true;
+    }
+
     @Override
     public void onClick(View v) {
        Intent intent=null;
@@ -858,14 +874,19 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
                 TYPE="0";
                 isSave=true;
                 //checkContent();
-                if (checkContent()){
-                    showProgress(true);
-                    if (checkActivity()) {
-                        if (!et_content.getText().toString().equals("")) {
-                            saveInvitation();
-                            return;
+                if (checkStyle()) {
+                    if (checkContent()) {
+                        if (checkActivity()) {
+                            if (!et_content.getText().toString().equals("")) {
+                                saveInvitation();
+                                return;
+                            }
+                            if (listPostImage != null) {
+                                saveInvitation();
+                                return;
+                            }
                         }
-                        if (listPostImage != null) {
+                        if (!et_content.getText().toString().equals("")) {
                             saveInvitation();
                             return;
                         }
@@ -874,11 +895,13 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
                 break;
             case R.id.tv_release:
                 TYPE="1";
-                checkContent();
-                if(checkContent()) {
-                    showProgress(true);
-                    //发布帖子
-                    releaseInvitation();
+                //checkContent();
+                if (checkStyle()) {
+                    if (checkContent()) {
+                        showProgress(true);
+                        //发布帖子
+                        releaseInvitation();
+                    }
                 }
                 break;
             case R.id.tv_tel:
@@ -1349,7 +1372,7 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
         @Override
         protected void onSuccess(UploadResultCallRet ret, UpParam p, Object passParam) {
 
-            Toast.makeText(InvitationReleaseActivity.this, "上传成功!", Toast.LENGTH_LONG).show();
+            //Toast.makeText(InvitationReleaseActivity.this, "上传成功!", Toast.LENGTH_LONG).show();
           /*  String o = textViewCurrent.getText() == null ? "" : textViewCurrent.getText().toString();
             // o;
             textViewCurrent.setText("");

@@ -6,11 +6,13 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.beanu.arad.utils.MessageUtils;
 import com.ctrl.forum.R;
 import com.ctrl.forum.base.AppToolBarActivity;
 import com.ctrl.forum.dao.LoginDao;
+import com.ctrl.forum.utils.InputMethodUtils;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -26,6 +28,8 @@ public class MineNewpwdActivity extends AppToolBarActivity {
     @InjectView(R.id.et_ok)
     EditText et_ok;    //确认密码
     private LoginDao ldao;
+    @InjectView(R.id.ll_all)
+    LinearLayout ll_all;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +44,13 @@ public class MineNewpwdActivity extends AppToolBarActivity {
         Intent intent = getIntent();
         userName = intent.getStringExtra("userName");
         ldao = new LoginDao(this);
+
+        ll_all.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                InputMethodUtils.hide(MineNewpwdActivity.this);
+            }
+        });
     }
 
     public boolean setupToolBarLeftButton(ImageView leftButton) {

@@ -51,9 +51,9 @@ public class MineCommentFragment extends ToolBarFragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_mine_list, container, false);
-        initData();
 
         lv_content = (PullToRefreshListView) view.findViewById(R.id.lv_content);
+        initData();
 
         lv_content.setMode(PullToRefreshBase.Mode.BOTH);
         lv_content.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
@@ -63,13 +63,13 @@ public class MineCommentFragment extends ToolBarFragment {
                     replyForMes.clear();
                     PAGE_NUM = 1;
                 }
-                    rcdao.obtainReply(Arad.preferences.getString("memberId"), PAGE_NUM, Constant.PAGE_SIZE);
+                rcdao.obtainReply(Arad.preferences.getString("memberId"), PAGE_NUM, Constant.PAGE_SIZE);
             }
 
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
                 PAGE_NUM += 1;
-                rcdao.obtainReply(Arad.preferences.getString("memberId"),PAGE_NUM, Constant.PAGE_SIZE);
+                rcdao.obtainReply(Arad.preferences.getString("memberId"), PAGE_NUM, Constant.PAGE_SIZE);
             }
         });
 
@@ -82,12 +82,13 @@ public class MineCommentFragment extends ToolBarFragment {
             }
         });
 
-        mineMesCommentListAdapter = new MineMesCommentListAdapter(getActivity());
         return view;
     }
 
     private void initData() {
       rcdao = new ReplyCommentDao(this);
+        mineMesCommentListAdapter = new MineMesCommentListAdapter(getActivity());
+        lv_content.setAdapter(mineMesCommentListAdapter);
         rcdao.obtainReply(Arad.preferences.getString("memberId"),PAGE_NUM,Constant.PAGE_SIZE);
     }
 
@@ -98,7 +99,6 @@ public class MineCommentFragment extends ToolBarFragment {
         if(requestCode == 0){
             replyForMes = rcdao.getReplyForMes();
             if (replyForMes.size()>0){
-                lv_content.setAdapter(mineMesCommentListAdapter);
                 mineMesCommentListAdapter.setReplyForMes(replyForMes);
             }
         }

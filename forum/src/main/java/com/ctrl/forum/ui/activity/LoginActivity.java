@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,6 +33,7 @@ import com.ctrl.forum.entity.Data;
 import com.ctrl.forum.entity.MemberInfo;
 import com.ctrl.forum.ui.activity.mine.MineUpdatepwdActivity;
 import com.ctrl.forum.ui.activity.rim.ExampleUtil;
+import com.ctrl.forum.utils.InputMethodUtils;
 import com.mob.tools.utils.UIHandler;
 
 import java.io.Serializable;
@@ -66,8 +68,11 @@ public class LoginActivity extends AppToolBarActivity implements View.OnClickLis
     private ImageView iv_weixin;//微信
     private LoginDao ldao;
     private MemberInfo memberInfo;
+
     @InjectView(R.id.iv_back)
     ImageView iv_back;
+    @InjectView(R.id.ll_all)
+    LinearLayout ll_all;
 
     public LocationClient mLocationClient = null;
     public BDLocationListener myListener = new MyLocationListener();
@@ -211,6 +216,7 @@ public class LoginActivity extends AppToolBarActivity implements View.OnClickLis
        iv_qqzone.setOnClickListener(this);
        iv_weixin.setOnClickListener(this);
         iv_back.setOnClickListener(this);
+        ll_all.setOnClickListener(this);
 
         ldao=new LoginDao(this);
     }
@@ -315,6 +321,9 @@ public class LoginActivity extends AppToolBarActivity implements View.OnClickLis
                 break;
             case R.id.iv_weixin :
                 authorize(new Wechat(this));
+                break;
+            case R.id.ll_all:
+                InputMethodUtils.hide(LoginActivity.this);
                 break;
         }
 

@@ -134,7 +134,8 @@ public class ReplyCommentDao extends IDao{
             obtainMyReplies.addAll(list);
         }
         if (requestCode==4){
-            messages = JsonUtil.node2pojoList(result.findValue("messageList"),Message.class);
+            List<Message> list = JsonUtil.node2pojoList(result.findValue("messageList"),Message.class);
+            messages.addAll(list);
         }
     }
 

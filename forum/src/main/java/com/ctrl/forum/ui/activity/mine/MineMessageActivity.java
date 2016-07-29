@@ -65,13 +65,13 @@ public class MineMessageActivity extends ToolBarActivity implements View.OnClick
         setContentView(R.layout.activity_mine_notification);
         ButterKnife.inject(this);
 
+        rdao = new ReplyCommentDao(this);
+        rdao.modifyReadState(Arad.preferences.getString("memberId"));
+
         Intent itt = new Intent();
         itt.setAction("com.message");
         itt.putExtra("num", "message");
         this.sendBroadcast(itt, null);
-
-        rdao = new ReplyCommentDao(this);
-        rdao.modifyReadState(Arad.preferences.getString("memberId"));
 
         initData();
         initCtrl();

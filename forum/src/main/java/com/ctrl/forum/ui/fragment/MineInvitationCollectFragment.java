@@ -68,8 +68,6 @@ public class MineInvitationCollectFragment extends ToolBarFragment{
                 if (collectionPosts != null) {
                     collectionPosts.clear();
                     PAGE_NUM = 1;
-                    minePostCollectListAdapter = new MinePostCollectListAdapter(getActivity());
-                    lv_content.setAdapter(minePostCollectListAdapter);
                 }
                 collectDao.getCollectPostList(Arad.preferences.getString("memberId"), PAGE_NUM + "", Constant.PAGE_SIZE + "");
             }

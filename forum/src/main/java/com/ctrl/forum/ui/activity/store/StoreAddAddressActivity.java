@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -16,6 +17,7 @@ import com.beanu.arad.utils.MessageUtils;
 import com.ctrl.forum.R;
 import com.ctrl.forum.base.AppToolBarActivity;
 import com.ctrl.forum.dao.AddressDao;
+import com.ctrl.forum.utils.InputMethodUtils;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -37,6 +39,8 @@ public class StoreAddAddressActivity extends AppToolBarActivity implements View.
             TextView tv_add_address_save;
     @InjectView(R.id.tv_add_address_base)//基本地址
             TextView tv_add_address_base;
+    @InjectView(R.id.ll_all)
+    LinearLayout ll_all;
 
 
     private String province;
@@ -66,6 +70,7 @@ public class StoreAddAddressActivity extends AppToolBarActivity implements View.
     private void initView() {
         rl_add_address.setOnClickListener(this);
         tv_add_address_save.setOnClickListener(this);
+        ll_all.setOnClickListener(this);
     }
 
 
@@ -93,6 +98,11 @@ public class StoreAddAddressActivity extends AppToolBarActivity implements View.
 
                }
 
+                break;
+            case R.id.ll_all:
+                InputMethodUtils.hide(StoreAddAddressActivity.this);
+                break;
+            default:
                 break;
         }
 

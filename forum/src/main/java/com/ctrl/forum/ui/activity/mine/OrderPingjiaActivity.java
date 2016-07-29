@@ -60,6 +60,7 @@ public class  OrderPingjiaActivity extends AppToolBarActivity {
             }
         });
 
+
         tv_pingjia.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

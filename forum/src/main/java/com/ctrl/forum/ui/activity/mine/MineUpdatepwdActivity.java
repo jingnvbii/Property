@@ -7,6 +7,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.beanu.arad.utils.MessageUtils;
@@ -14,6 +15,7 @@ import com.ctrl.forum.R;
 import com.ctrl.forum.base.AppToolBarActivity;
 import com.ctrl.forum.dao.RegisteDao;
 import com.ctrl.forum.ui.activity.WebViewActivity;
+import com.ctrl.forum.utils.InputMethodUtils;
 import com.ctrl.forum.utils.RegexpUtil;
 
 /**
@@ -29,6 +31,7 @@ public class MineUpdatepwdActivity extends AppToolBarActivity implements View.On
     private TimeCount time;
     private String code;
     private TextView xieyi;
+    private LinearLayout ll_all;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,10 +50,13 @@ public class MineUpdatepwdActivity extends AppToolBarActivity implements View.On
         et_phone = (EditText) findViewById(R.id.et_phone);
         et_test = (EditText) findViewById(R.id.et_test);
         xieyi = (TextView) findViewById(R.id.xieyi);
+        ll_all = (LinearLayout) findViewById(R.id.ll_all);
+
 
         get_test.setOnClickListener(this);
         tv_next.setOnClickListener(this);
         xieyi.setOnClickListener(this);
+        ll_all.setOnClickListener(this);
     }
 
     public boolean setupToolBarLeftButton(ImageView leftButton) {
@@ -126,6 +132,9 @@ public class MineUpdatepwdActivity extends AppToolBarActivity implements View.On
                 Intent intent1 = new Intent(this,WebViewActivity.class);
                 intent1.putExtra("title", "使用协议");
                 startActivity(intent1);
+                break;
+            case R.id.ll_all:
+                InputMethodUtils.hide(MineUpdatepwdActivity.this);
                 break;
            default:
                break;

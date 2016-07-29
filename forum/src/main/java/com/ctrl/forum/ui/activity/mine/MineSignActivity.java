@@ -8,6 +8,7 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.beanu.arad.Arad;
@@ -15,6 +16,7 @@ import com.beanu.arad.utils.MessageUtils;
 import com.ctrl.forum.R;
 import com.ctrl.forum.base.AppToolBarActivity;
 import com.ctrl.forum.dao.EditDao;
+import com.ctrl.forum.utils.InputMethodUtils;
 
 /**
  * 我的签名
@@ -24,6 +26,7 @@ public class MineSignActivity extends AppToolBarActivity {
     private EditText et_sign;
     private EditDao edao;
     private String id;
+    private LinearLayout ll_all;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,10 +38,18 @@ public class MineSignActivity extends AppToolBarActivity {
     private void init() {
         tv_sign = (TextView) findViewById(R.id.tv_sign);
         et_sign = (EditText) findViewById(R.id.et_sign);
+        ll_all = (LinearLayout) findViewById(R.id.ll_all);
         et_sign.setText(Arad.preferences.getString("remark"));
         et_sign.addTextChangedListener(mTextWatcher);
         edao = new EditDao(this);
         id = Arad.preferences.getString("memberId");
+
+        ll_all.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                InputMethodUtils.hide(MineSignActivity.this);
+            }
+        });
     }
 
     TextWatcher mTextWatcher = new TextWatcher() {

@@ -31,7 +31,7 @@ public class MinePostCollectListAdapter extends BaseAdapter {
     collectionPosts = new ArrayList<>();}
 
     public void setCollectionPosts(List<CollectionPost> collectionPosts) {
-        this.collectionPosts.addAll(collectionPosts);
+        this.collectionPosts = collectionPosts;
         notifyDataSetChanged();
     }
 
@@ -57,9 +57,21 @@ public class MinePostCollectListAdapter extends BaseAdapter {
 
         if (collectionPosts!=null && collectionPosts.get(position)!=null){
             holder.post_title.setText(collectionPosts.get(position).getPostTitle());
-            holder.tv_post_name.setText(collectionPosts.get(position).getReportName());
+
+            String soureType = collectionPosts.get(position).getSourceType();
+            switch (soureType){
+                case "0"://后台发的
+                    holder.tv_post_name.setText("管理员");
+                    break;
+                case "1":
+                    holder.tv_post_name.setText(collectionPosts.get(position).getReportName());
+                    break;
+            }
+
             holder.tv_post_time.setText(collectionPosts.get(position).getPostCreateTime());
-            Arad.imageLoader.load(collectionPosts.get(position).getPostImgUrl()).into(holder.iconfont_head);
+            Arad.imageLoader.load(collectionPosts.get(position).getPostImgUrl()).
+                    placeholder(context.getResources().getDrawable(R.mipmap.my_gray)).
+                    into(holder.iconfont_head);
         }
 
         return convertView;

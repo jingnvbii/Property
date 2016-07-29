@@ -109,8 +109,8 @@ public class MyFragment extends ToolBarFragment implements View.OnClickListener{
     ViewPager vp_plug;
     @InjectView(R.id.ll_icons)
     LinearLayout ll_icons;
-    @InjectView(R.id.edit_bg_view)
-    ImageView edit_bg_view;
+    @InjectView(R.id.rl_head)
+    RelativeLayout rl_head;
 
     private MemberDao mdao;
     private EditDao editDao;
@@ -206,7 +206,9 @@ public class MyFragment extends ToolBarFragment implements View.OnClickListener{
         iv_grade.setOnClickListener(this);
         bt_integral.setOnClickListener(this);
         bt_sign.setOnClickListener(this);
-        edit_bg_view.setOnClickListener(this);
+        rl_head.setOnClickListener(this);
+        iv_head.setOnClickListener(this);
+
     }
 
     public View setPlugins(View view,int type){
@@ -304,7 +306,7 @@ public class MyFragment extends ToolBarFragment implements View.OnClickListener{
             if (view == iv_bianji) {
                 startActivity(new Intent(getActivity(), MineEditActivity.class));
             }
-            if (view==edit_bg_view){
+            if (view==iv_head){
                 startActivity(new Intent(getActivity(), MineEditActivity.class));
             }
             //设置
@@ -444,7 +446,8 @@ public class MyFragment extends ToolBarFragment implements View.OnClickListener{
             Arad.preferences.flush();
 
             bt_integral.setText("积分:" + Arad.preferences.getString("point"));
-            tv_nickName.setText("昵称:" + Arad.preferences.getString("nickName"));
+            //tv_nickName.setText("昵称:" + Arad.preferences.getString("nickName"));
+            tv_nickName.setText(Arad.preferences.getString("nickName"));
             String grad = Arad.preferences.getString("memberLevel"); //等级
             String imgUrl = Arad.preferences.getString("imgUrl");
             if (imgUrl!=null&&!imgUrl.equals(""))

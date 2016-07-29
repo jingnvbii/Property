@@ -10,6 +10,15 @@ public class CategoryItem {
     private String categoryIcon;//分类图标url
     private String grade;//分类级别
     private String checkType;//审核类型（0：无需审核、1：需审核)
+    private String styleType;////样式类型（1：列表样式、2：方块样式、3：瀑布流样式、4：朋友圈样式）
+
+    public String getStyleType() {
+        return styleType;
+    }
+
+    public void setStyleType(String styleType) {
+        this.styleType = styleType;
+    }
 
     public String getCheckType() {
         return checkType;

@@ -9,7 +9,14 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/toolbar_height"
         />
-
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:id="@+id/ll_all"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
     <TextView
         android:layout_width="match_parent"
         android:layout_height="1dp"
@@ -57,5 +64,8 @@
             android:textColorHint="@color/text_newpwd"
             android:background="@null"/>
     </RelativeLayout>
+
+        </LinearLayout>
+    </ScrollView>
 
 </LinearLayout>
