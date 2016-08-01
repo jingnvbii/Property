@@ -83,7 +83,7 @@ public class InvitationListViewBlockStyleAdapter extends BaseAdapter {
                 holder.iv_block_style_photo.setVisibility(View.GONE);
             }
             if(post.getPublishTime()!=null)
-            holder.tv_block_style_time.setText(TimeUtils.date(Long.parseLong(post.getPublishTime())));
+            holder.tv_block_style_time.setText(TimeUtils.dateTime(post.getPublishTime()));
             holder.tv_block_style_zan.setText(post.getCommentNum()+"");
         return convertView;
     }

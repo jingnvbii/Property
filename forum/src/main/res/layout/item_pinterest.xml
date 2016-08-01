@@ -20,7 +20,10 @@
         <TextView
             android:id="@+id/tv_pinerest_style_title"
             android:layout_width="match_parent"
+            android:textSize="@dimen/LargeTextSize"
             android:layout_height="wrap_content"
+            android:maxLines="3"
+            android:ellipsize="end"
             android:textColor="@color/white"
             android:layout_marginLeft="10dp"
             />
@@ -40,6 +43,7 @@
             android:layout_toRightOf="@+id/iv_zan"
             android:layout_below="@+id/tv_pinerest_style_title"
             android:layout_marginLeft="5dp"
+            android:textSize="@dimen/text_size_micro"
             android:textColor="@color/white"/>
 
         <TextView
@@ -48,6 +52,7 @@
             android:layout_height="wrap_content"
             android:textColor="@color/white"
             android:layout_alignParentRight="true"
+            android:textSize="@dimen/text_size_micro"
             android:layout_below="@+id/tv_pinerest_style_title"
             android:layout_marginRight="10dp"
             />

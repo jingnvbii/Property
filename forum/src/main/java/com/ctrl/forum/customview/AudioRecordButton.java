@@ -121,10 +121,9 @@ public class AudioRecordButton extends Button implements AudioManager.AudioStage
                     break;
                 case MSG_VOICE_CHANGE:
                     mDialogManager.updateVoiceLevel(mAudioManager.getVoiceLevel(7));
-
                     break;
                 case MSG_DIALOG_DIMISS:
-
+                    mDialogManager.dimissDialog();
                     break;
 
             }
@@ -164,33 +163,33 @@ public class AudioRecordButton extends Button implements AudioManager.AudioStage
                     }
 
                 }
-
+                break;
+            case MotionEvent.ACTION_CANCEL:
+                mDialogManager.tooShort();
+                mAudioManager.cancel();
+                mhandler.sendEmptyMessageDelayed(MSG_DIALOG_DIMISS, 1300);// 持续1.3s
+                reset();
                 break;
             case MotionEvent.ACTION_UP:
+
                 // 首先判断是否有触发onlongclick事件，没有的话直接返回reset
                 if (!mReady) {
                     reset();
                     return super.onTouchEvent(event);
                 }
                 // 如果按的时间太短，还没准备好或者时间录制太短，就离开了，则显示这个dialog
-                if (!isRecording || mTime < 0.6f) {
+
+                if (!isRecording || mTime <0.6f) {
                     mDialogManager.tooShort();
                     mAudioManager.cancel();
                     mhandler.sendEmptyMessageDelayed(MSG_DIALOG_DIMISS, 1300);// 持续1.3s
                 } else if (mCurrentState == STATE_RECORDING) {//正常录制结束
-
                     mDialogManager.dimissDialog();
-
                     mAudioManager.release();// release释放一个mediarecorder
-
                     if (mListener!=null) {// 并且callbackActivity，保存录音
 
                         mListener.onFinished(mTime, mAudioManager.getCurrentFilePath());
                     }
-
-
-
-
 
                 } else if (mCurrentState == STATE_WANT_TO_CANCEL) {
                     // cancel

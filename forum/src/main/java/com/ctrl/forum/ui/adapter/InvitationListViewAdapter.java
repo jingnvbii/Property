@@ -6,7 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.beanu.arad.Arad;
@@ -153,8 +152,7 @@ public class InvitationListViewAdapter extends BaseAdapter{
                 case 3:
                     holder3=(ViewHolder3)convertView.getTag();
                     break;
-                case -1:
-                    break;
+
             }
             }
       //  Post post=mPostList.get(position);
@@ -219,7 +217,7 @@ public class InvitationListViewAdapter extends BaseAdapter{
                 }else {
                     holder3.tv_daoyu.setVisibility(View.GONE);
                 }*/
-                int width = holder3.iv_image3_01.getWidth();
+              /*  int width = holder3.iv_image3_01.getWidth();
                 LinearLayout.LayoutParams para;
                 para = (LinearLayout.LayoutParams) holder3.iv_image3_01.getLayoutParams();
 
@@ -228,7 +226,7 @@ public class InvitationListViewAdapter extends BaseAdapter{
                 para.width = width;
                 holder3.iv_image3_01.setLayoutParams(para);
                 holder3.iv_image3_02.setLayoutParams(para);
-                holder3.iv_image3_03.setLayoutParams(para);
+                holder3.iv_image3_03.setLayoutParams(para);*/
                 Arad.imageLoader.load(mPos3.getImgUrl()).placeholder(R.mipmap.default_error).resize(50, 50)
                         .centerCrop().into(holder3.imageView3);
 
@@ -239,8 +237,7 @@ public class InvitationListViewAdapter extends BaseAdapter{
                 }
 
                 break;
-            case -1:
-                break;
+
         }
         return convertView;
     }

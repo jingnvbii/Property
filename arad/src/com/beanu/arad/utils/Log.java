@@ -60,11 +60,11 @@ public class Log {
 
 	/**
 	 * Send an INFO log message.
-	 * 
+	 *
+	 * @param tag
 	 * @param msg
-	 *            The message you would like logged.
 	 */
-	public static void i(String msg) {
+	public static void i(String tag, String msg) {
 		if (BuildConfig.DEBUG)
 			android.util.Log.i(TAG, buildMessage(msg));
 	}
