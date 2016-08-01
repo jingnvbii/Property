@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.beanu.arad.Arad;
 import com.beanu.arad.utils.AnimUtil;
 import com.ctrl.forum.R;
+import com.ctrl.forum.base.SetMemberLevel;
 import com.ctrl.forum.customview.ImageZoomActivity;
 import com.ctrl.forum.customview.RoundImageView;
 import com.ctrl.forum.entity.PostReply2;
@@ -89,7 +90,9 @@ public class InvitationDetailFromPlatAdapter extends BaseAdapter {
       //  holder.tv_reply_time.setText(TimeUtils.timeFormat(Long.parseLong(mPostReply2.getCreateTime()), "yyyy-MM-dd"));
         holder.tv_reply_time.setText(TimeUtils.dateTime(mPostReply2.getCreateTime()));
         holder.tv_comment_detail_floor.setText(mPostReply2.getMemberFloor() + " 楼");
-        if(mPostReply2.getMemberLevel()!=null){
+
+        SetMemberLevel.setLevelImage(mcontext, holder.iv_reply_level, mPostReply2.getMemberLevel());
+       /* if(mPostReply2.getMemberLevel()!=null){
             switch (mPostReply2.getMemberLevel()){
                 case "0":
                     holder.iv_reply_level.setImageResource(R.mipmap.vip_icon);
@@ -118,7 +121,7 @@ public class InvitationDetailFromPlatAdapter extends BaseAdapter {
             }
         }else {
             holder.iv_reply_level.setImageResource(R.mipmap.vip_icon);
-        }
+        }*/
         Arad.imageLoader.load(mPostReply2.getImgUrl()).placeholder(R.mipmap.baby_large).resize(300,300)
                 .centerCrop().into(holder.iv_reply_photo);
         if (mPostReply2.getReplyType().equals("0")) {//无评论
@@ -382,7 +385,7 @@ public class InvitationDetailFromPlatAdapter extends BaseAdapter {
         @InjectView(R.id.tv_reply_name)//发帖人
                 TextView tv_reply_name;
         @InjectView(R.id.iv_reply_level)//等级
-                ImageView iv_reply_level;
+                TextView iv_reply_level;
         @InjectView(R.id.iv_reply_photo)//头像
                 RoundImageView iv_reply_photo;
         @InjectView(R.id.tv_reply_time)//时间

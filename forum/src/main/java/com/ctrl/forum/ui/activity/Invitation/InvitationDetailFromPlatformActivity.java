@@ -56,6 +56,7 @@ import com.beanu.arad.utils.MessageUtils;
 import com.ctrl.forum.R;
 import com.ctrl.forum.base.AppToolBarActivity;
 import com.ctrl.forum.base.Constant;
+import com.ctrl.forum.base.SetMemberLevel;
 import com.ctrl.forum.customview.AudioRecordButton;
 import com.ctrl.forum.customview.ImageZoomActivity;
 import com.ctrl.forum.customview.ListViewForScrollView;
@@ -244,7 +245,7 @@ public class InvitationDetailFromPlatformActivity extends AppToolBarActivity imp
     private View loadMoreView;
     private RelativeLayout rl_footer;
     private ImageView title_image;
-    private ImageView iv_levlel;
+    private TextView iv_levlel;
     private MapView mapview_invitation;
     private ListViewForScrollView lv_relevance_invitation;
     private TextView tv_name;
@@ -453,7 +454,7 @@ public class InvitationDetailFromPlatformActivity extends AppToolBarActivity imp
 
     private void initHeaderView() {
         title_image = (ImageView) headerView.findViewById(R.id.title_image);//用户头像
-        iv_levlel = (ImageView) headerView.findViewById(R.id.iv_levlel);//等级
+        iv_levlel = (TextView) headerView.findViewById(R.id.iv_levlel);//等级
         mapview_invitation = (MapView) headerView.findViewById(R.id.mapview_invitation);
         lv_relevance_invitation = (ListViewForScrollView) headerView.findViewById(R.id.lv_relevance_invitation);
         tv_name = (TextView) headerView.findViewById(R.id.tv_name);//发帖人昵称
@@ -671,7 +672,9 @@ public class InvitationDetailFromPlatformActivity extends AppToolBarActivity imp
             if (user != null) {
                 Arad.imageLoader.load(user.getImgUrl()).placeholder(R.mipmap.default_error).resize(300,300).centerCrop().into(title_image);
                 String levlel = idao.getUser().getMemberLevel();
-                if (levlel != null) {
+                iv_levlel.setVisibility(View.VISIBLE);
+                SetMemberLevel.setLevelImage(this, iv_levlel, levlel);
+                /*if (levlel != null) {
                     switch (levlel) {
                         case "1":
                             iv_levlel.setImageResource(R.mipmap.vip_icon1);
@@ -697,7 +700,9 @@ public class InvitationDetailFromPlatformActivity extends AppToolBarActivity imp
                     }
                 } else {
                     iv_levlel.setImageResource(R.mipmap.vip_icon);
-                }
+                }*/
+            }else {
+                iv_levlel.setVisibility(View.GONE);
             }
 
             if (post.getZambiastate().equals("0")) {

@@ -21,6 +21,7 @@ import android.widget.Toast;
 import com.beanu.arad.Arad;
 import com.beanu.arad.utils.AnimUtil;
 import com.ctrl.forum.R;
+import com.ctrl.forum.base.SetMemberLevel;
 import com.ctrl.forum.customview.GridViewForScrollView;
 import com.ctrl.forum.customview.ListViewForScrollView;
 import com.ctrl.forum.entity.Post;
@@ -101,7 +102,9 @@ public class MineQueryPostAdapter extends BaseAdapter {
         holder.tv_friend_style_zan_num.setText(post.getPraiseNum()+"");
         holder.tv_friend_style_pinglun_num.setText(post.getCommentNum()+"");
         holder.tv_friend_style_share_num.setText(post.getShareNum() + "");
-        if(post.getMemberLevel()!=null){
+
+        SetMemberLevel.setLevelImage(mcontext, holder.iv_friend_style_levlel, post.getMemberLevel());
+       /* if(post.getMemberLevel()!=null){
             switch (post.getMemberLevel()){
                 case "1":
                     holder.iv_friend_style_levlel.setImageResource(R.mipmap.vip_icon1);
@@ -125,7 +128,7 @@ public class MineQueryPostAdapter extends BaseAdapter {
                     holder.iv_friend_style_levlel.setImageResource(R.mipmap.vip_icon7);
                     break;
             }
-        }
+        }*/
         Arad.imageLoader.load(post.getImgUrl()).placeholder(R.mipmap.default_error).into(holder.iv_friend_style_title_photo);
         if(post.getPostReplyList()!=null) {
             if (post.getPostReplyList().size() <= 3) {
@@ -354,7 +357,7 @@ public class MineQueryPostAdapter extends BaseAdapter {
         @InjectView(R.id.tv_friend_style_shengyu_pinglun)//查看其它评论
                 TextView tv_friend_style_shengyu_pinglun;
         @InjectView(R.id.iv_friend_style_levlel)//用户等级
-                ImageView iv_friend_style_levlel;
+                TextView iv_friend_style_levlel;
       //  @InjectView(R.id.rl_friend_style_zan)//点赞
                // RelativeLayout rl_friend_style_zan;
         @InjectView(R.id.rl_friend_style_pinglun)//评论

@@ -26,6 +26,7 @@ import com.beanu.arad.utils.MessageUtils;
 import com.ctrl.forum.R;
 import com.ctrl.forum.base.AppToolBarActivity;
 import com.ctrl.forum.base.Constant;
+import com.ctrl.forum.base.SetMemberLevel;
 import com.ctrl.forum.customview.ImageZoomActivity;
 import com.ctrl.forum.customview.ListViewForScrollView;
 import com.ctrl.forum.customview.RoundImageView;
@@ -78,7 +79,7 @@ public class InvitationDetailActivity extends AppToolBarActivity implements View
     @InjectView(R.id.tv_chakan_more)//查看更多
     TextView tv_chakan_more;
     @InjectView(R.id.iv_detail_levlel)//等级
-    ImageView iv_detail_levlel;
+    TextView iv_detail_levlel;
     @InjectView(R.id.iv_friend_style_zan_num)//点赞图片
     ImageView iv_friend_style_zan_num;
     @InjectView(R.id.lv_detail_image)//图片列表
@@ -301,7 +302,8 @@ public class InvitationDetailActivity extends AppToolBarActivity implements View
             tv_friend_style_zan_num.setText(pariseNum+"");
             if (idao.getUser()!=null) {
                 String levlel = idao.getUser().getMemberLevel();
-                if (levlel != null) {
+                SetMemberLevel.setLevelImage(this,iv_detail_levlel,levlel);
+                /*if (levlel != null) {
                     switch (levlel) {
                         case "0":
                             iv_detail_levlel.setImageResource(R.mipmap.vip_icon);
@@ -330,7 +332,7 @@ public class InvitationDetailActivity extends AppToolBarActivity implements View
                     }
                 } else {
                     iv_detail_levlel.setImageResource(R.mipmap.vip_icon);
-                }
+                }*/
             }
         }
     }

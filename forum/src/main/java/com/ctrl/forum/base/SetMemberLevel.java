@@ -17,8 +17,9 @@ public class SetMemberLevel {
                 //iv_grade.setImageBitmap(BitmapFactory.decodeResource(context.getResources(), R.mipmap.vip_icon));
             } else {
                 int grade = Integer.parseInt(memberLevel);
-                switch (grade) {
-                   /* case 8://月
+                iv_grade.setText("LV."+grade);
+               /* switch (grade) {
+                   *//* case 8://月
                         //iv_grade.setImageBitmap(BitmapFactory.decodeResource(context.getResources(), R.mipmap.vip_icon_month));
                         break;
                     case 9://季
@@ -26,12 +27,12 @@ public class SetMemberLevel {
                         break;
                     case 10://年
                         iv_grade.setImageBitmap(BitmapFactory.decodeResource(context.getResources(), R.mipmap.vip_icon_year));
-                        break;*/
+                        break;*//*
                     default:
                         iv_grade.setText("LV."+grade);
                         //iv_grade.setImageBitmap(BitmapFactory.decodeResource(context.getResources(), R.mipmap.vip_icon + grade));
                         break;
-                }
+                }*/
             }
         }else{
             iv_grade.setText("LV.0");

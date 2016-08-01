@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.beanu.arad.Arad;
 import com.ctrl.forum.R;
 import com.ctrl.forum.base.Constant;
+import com.ctrl.forum.base.SetMemberLevel;
 import com.ctrl.forum.customview.RoundImageView;
 import com.ctrl.forum.entity.PostReply2;
 import com.ctrl.forum.ui.activity.Invitation.InvitationDetailFromPlatformActivity;
@@ -78,7 +79,9 @@ public class InvitationDetailReplyAdapter extends BaseAdapter {
         final PostReply2 mPostReply2 = list.get(position);
         holder.tv_reply_time.setText(TimeUtils.date(Long.parseLong(mPostReply2.getCreateTime())));
         holder.tv_reply_address.setText("");
-        if(mPostReply2.getMemberLevel()!=null){
+
+        SetMemberLevel.setLevelImage(mcontext, holder.iv_reply_level, mPostReply2.getMemberLevel());
+        /*if(mPostReply2.getMemberLevel()!=null){
             switch (mPostReply2.getMemberLevel()){
                 case "1":
                     holder.iv_reply_level.setImageResource(R.mipmap.vip_icon1);
@@ -102,7 +105,7 @@ public class InvitationDetailReplyAdapter extends BaseAdapter {
                     holder.iv_reply_level.setImageResource(R.mipmap.vip_icon7);
                     break;
             }
-        }
+        }*/
         Arad.imageLoader.load(mPostReply2.getImgUrl()).placeholder(R.mipmap.baby_large).into(holder.iv_reply_photo);
         if (mPostReply2.getReplyType().equals("0")) {//无评论
             holder.rl_pinglun.setVisibility(View.GONE);//评论布局隐藏
@@ -311,7 +314,7 @@ public class InvitationDetailReplyAdapter extends BaseAdapter {
         @InjectView(R.id.tv_reply_name)//发帖人
                 TextView tv_reply_name;
         @InjectView(R.id.iv_reply_level)//等级
-                ImageView iv_reply_level;
+                TextView iv_reply_level;
         @InjectView(R.id.iv_reply_photo)//头像
                 RoundImageView iv_reply_photo;
         @InjectView(R.id.tv_reply_time)//时间

@@ -25,8 +25,10 @@
         android:layout_marginLeft="10dp"
         android:textSize="16sp"
         android:textColor="@color/text_black"/>
-    <ImageView
+    <TextView
         android:id="@+id/iv_reply_level"
+        android:textColor="@color/white"
+        android:background="@drawable/red_border_2"
         android:layout_toRightOf="@id/tv_reply_name"
         android:layout_marginTop="10dp"
         android:layout_width="wrap_content"

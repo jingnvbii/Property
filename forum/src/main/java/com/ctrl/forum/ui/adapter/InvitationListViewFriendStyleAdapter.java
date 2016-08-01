@@ -20,6 +20,7 @@ import android.widget.TextView;
 import com.beanu.arad.Arad;
 import com.beanu.arad.utils.AnimUtil;
 import com.ctrl.forum.R;
+import com.ctrl.forum.base.SetMemberLevel;
 import com.ctrl.forum.customview.GridViewForScrollView;
 import com.ctrl.forum.customview.ImageZoomActivity;
 import com.ctrl.forum.customview.ListViewForScrollView;
@@ -128,7 +129,9 @@ public class InvitationListViewFriendStyleAdapter extends BaseAdapter {
         holder.tv_friend_style_zan_num.setText(post.getPraiseNum()+"");
         holder.tv_friend_style_pinglun_num.setText(post.getCommentNum()+"");
         holder.tv_friend_style_share_num.setText(post.getShareNum() + "");
-        if(post.getMemberLevel()!=null){
+
+        SetMemberLevel.setLevelImage(mcontext, holder.iv_friend_style_levlel, post.getMemberLevel());
+        /*if(post.getMemberLevel()!=null){
             switch (post.getMemberLevel()){
                 case "0":
                     holder.iv_friend_style_levlel.setImageResource(R.mipmap.vip_icon);
@@ -157,7 +160,7 @@ public class InvitationListViewFriendStyleAdapter extends BaseAdapter {
             }
         }else {
             holder.iv_friend_style_levlel.setImageResource(R.mipmap.vip_icon);
-        }
+        }*/
         Arad.imageLoader.load(post.getImgUrl()).placeholder(R.mipmap.default_error).resize(300,300).centerCrop().into(holder.iv_friend_style_title_photo);
         if(post.getPostReplyList()!=null) {
             holder.lv_friend_style_reply.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -554,7 +557,7 @@ public class InvitationListViewFriendStyleAdapter extends BaseAdapter {
         @InjectView(R.id.tv_friend_style_shengyu_pinglun)//查看其它评论
                 TextView tv_friend_style_shengyu_pinglun;
         @InjectView(R.id.iv_friend_style_levlel)//用户等级
-                ImageView iv_friend_style_levlel;
+                TextView iv_friend_style_levlel;
        @InjectView(R.id.rl_friend_style_zan)//点赞
              public    RelativeLayout rl_friend_style_zan;
         @InjectView(R.id.rl_friend_style_pinglun)//评论
