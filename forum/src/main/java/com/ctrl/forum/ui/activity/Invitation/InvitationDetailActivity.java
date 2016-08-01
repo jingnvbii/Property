@@ -274,7 +274,7 @@ public class InvitationDetailActivity extends AppToolBarActivity implements View
                 iv_friend_style_zan_num.setImageResource(R.mipmap.zan_blue_shixin);
             }
 
-            tv_detail_time.setText("发布时间：" + TimeUtils.date(Long.parseLong(post.getPublishTime())));
+            tv_detail_time.setText("发布时间：" + TimeUtils.dateTime(post.getPublishTime()));
             tv_detail_title.setText(post.getTitle());
             tv_detail_content.setText(post.getContent());
             tv_detail_tel.setText(post.getContactPhone());
