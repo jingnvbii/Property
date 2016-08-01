@@ -89,6 +89,7 @@ public class InvitationDetailReply2Adapter extends BaseAdapter {
         holder.tv_comment_detail_floor.setText(mPostReply2.getMemberFloor() + " 楼");
 
         SetMemberLevel.setLevelImage(mcontext,holder.iv_reply_level,mPostReply2.getMemberLevel());
+
        /* if(mPostReply2.getMemberLevel()!=null){
             switch (mPostReply2.getMemberLevel()){
                 case "0":
