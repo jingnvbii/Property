@@ -597,6 +597,10 @@ public class InvitationPullDownHaveThirdKindFragment extends ToolBarFragment {
                 progressBar.setVisibility(View.GONE);
                 tv_footer.setText("已经到底了，请到别处看看");
             }
+
+            if(listPost==null||listPost.size()==0){
+                rl_footer.setVisibility(View.GONE);
+            }
         }
     }
 

@@ -17,7 +17,8 @@
         android:orientation="vertical">
         <com.ctrl.forum.customview.XListView
             android:id="@+id/xlv_pinerest_style"
-            android:scrollbars="vertical"
+            android:scrollbars="none"
+            android:fastScrollEnabled="true"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
     </LinearLayout>
