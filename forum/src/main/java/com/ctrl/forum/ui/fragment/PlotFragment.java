@@ -174,11 +174,11 @@ public class PlotFragment extends ToolBarFragment implements View.OnClickListene
         initData();
 
         lv_content.setMode(PullToRefreshBase.Mode.PULL_FROM_START);
-
         lv_content.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
             @Override
             public void onRefresh(PullToRefreshBase<ListView> refreshView) {
                 idao.requestPostRotaingBanner("B_COMMUNITY_TOP");
+                rl_footer.setVisibility(View.GONE);
                 if (posts != null) {
                     posts.clear();
                 }
@@ -197,7 +197,7 @@ public class PlotFragment extends ToolBarFragment implements View.OnClickListene
                 rl_footer.setVisibility(View.VISIBLE);
                 progressBar.setVisibility(View.VISIBLE);
                 textView.setText("加载更多。。。");
-                if (posts != null) {
+                if (posts != null && posts.size()>0) {
                     PAGE_NUM += 1;
                     if (Arad.preferences.getString("memberId") != null && !Arad.preferences.getString("memberId").equals("")) {
                         new Handler().postDelayed(new Runnable() {
@@ -209,7 +209,14 @@ public class PlotFragment extends ToolBarFragment implements View.OnClickListene
                         isFromLoad = true;
                     }
                 } else {
-                    lv_content.onRefreshComplete();
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            rl_footer.setVisibility(View.VISIBLE);
+                            progressBar.setVisibility(View.GONE);
+                            textView.setText("该小区暂无数据,请到别处看看");
+                        }
+                    }, 500);
                 }
 
             }
@@ -240,36 +247,41 @@ public class PlotFragment extends ToolBarFragment implements View.OnClickListene
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = null;
-                if (posts.get(position - 2)!=null) {
-                    if (posts.get(position-2).getContentType()!=null){
-                        String type = posts.get(position-2).getContentType();
-                        switch (type){
-                            case "0":
-                                intent = new Intent(getActivity(), InvitationDetailActivity.class);
-                                intent.putExtra("id", posts.get(position - 2).getId());
-                                intent.putExtra("reportid", posts.get(position - 2).getReporterId());
-                                getActivity().startActivity(intent);
-                                AnimUtil.intentSlidIn(getActivity());
-                                break;
-                            case "1":
-                                Uri uri = Uri.parse(posts.get(position - 2).getArticleLink());
-                                intent = new Intent(Intent.ACTION_VIEW, uri);
-                                getActivity().startActivity(intent);
-                                AnimUtil.intentSlidIn(getActivity());
-                                break;
-                            case "2":
-                                intent = new Intent(getActivity(), StoreCommodityDetailActivity.class);
-                                intent.putExtra("id", posts.get(position-2).getLinkItemId());
-                                getActivity().startActivity(intent);
-                                break;
-                            case "3":
-                                intent = new Intent(getActivity(), StoreShopListVerticalStyleActivity.class);
-                                intent.putExtra("id",posts.get(position-2).getLinkItemId());
-                                getActivity().startActivity(intent);
-                                AnimUtil.intentSlidIn(getActivity());
-                                break;
-                            default:
-                                break;
+                if (posts!=null) {
+                    if (position == lv_content.getRefreshableView().getHeaderViewsCount() + posts.size()) {
+                        return;
+                    }
+                    if (posts.get(position - 2) != null) {
+                        if (posts.get(position - 2).getContentType() != null) {
+                            String type = posts.get(position - 2).getContentType();
+                            switch (type) {
+                                case "0":
+                                    intent = new Intent(getActivity(), InvitationDetailActivity.class);
+                                    intent.putExtra("id", posts.get(position - 2).getId());
+                                    intent.putExtra("reportid", posts.get(position - 2).getReporterId());
+                                    getActivity().startActivity(intent);
+                                    AnimUtil.intentSlidIn(getActivity());
+                                    break;
+                                case "1":
+                                    Uri uri = Uri.parse(posts.get(position - 2).getArticleLink());
+                                    intent = new Intent(Intent.ACTION_VIEW, uri);
+                                    getActivity().startActivity(intent);
+                                    AnimUtil.intentSlidIn(getActivity());
+                                    break;
+                                case "2":
+                                    intent = new Intent(getActivity(), StoreCommodityDetailActivity.class);
+                                    intent.putExtra("id", posts.get(position - 2).getLinkItemId());
+                                    getActivity().startActivity(intent);
+                                    break;
+                                case "3":
+                                    intent = new Intent(getActivity(), StoreShopListVerticalStyleActivity.class);
+                                    intent.putExtra("id", posts.get(position - 2).getLinkItemId());
+                                    getActivity().startActivity(intent);
+                                    AnimUtil.intentSlidIn(getActivity());
+                                    break;
+                                default:
+                                    break;
+                            }
                         }
                     }
                 }
@@ -317,7 +329,6 @@ public class PlotFragment extends ToolBarFragment implements View.OnClickListene
         });
 
         idao.requestPostRotaingBanner("B_COMMUNITY_TOP");
-
         return view;
     }
     /**
@@ -557,10 +568,15 @@ public class PlotFragment extends ToolBarFragment implements View.OnClickListene
         super.onRequestFaild(errorNo, errorMessage);
         lv_content.onRefreshComplete();
         if(errorNo.equals("006")){
-            if(posts!=null&&posts.size()>0 && isFromLoad){
+            if(posts!=null && posts.size()>0 && isFromLoad){
                 progressBar.setVisibility(View.GONE);
                 textView.setVisibility(View.VISIBLE);
                 textView.setText("已经到底了，请到别处看看");
+            }
+            if (posts==null || posts.size()==0){
+                rl_footer.setVisibility(View.GONE);
+               /* progressBar.setVisibility(View.GONE);
+                textView.setVisibility(View.GONE);*/
             }
         }
     }
@@ -610,6 +626,8 @@ public class PlotFragment extends ToolBarFragment implements View.OnClickListene
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
        if (resultCode==getActivity().RESULT_OK){
            if (requestCode==1203){
+               rl_footer.setVisibility(View.GONE);
+               isFromLoad = false;
                communityId = Arad.preferences.getString("communityId");
                tv_plot_name.setText(Arad.preferences.getString("communityName"));
                if (posts != null) {
@@ -622,8 +640,11 @@ public class PlotFragment extends ToolBarFragment implements View.OnClickListene
                        PAGE_NUM + "", Constant.PAGE_SIZE + "");
            }
            if (requestCode==7788){
+               rl_footer.setVisibility(View.GONE);
+               isFromLoad = false;
                if (posts != null) {
                    posts.clear();
+                   invitationListViewFriendStyleAdapter.notifyDataSetChanged();
                }
                PAGE_NUM=1;
                plotDao.queryCommunityPostList(Arad.preferences.getString("memberId"),

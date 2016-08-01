@@ -13,11 +13,11 @@ public class SetMemberLevel {
     public static void setLevelImage(Context context,TextView iv_grade,String memberLevel) {
         if (memberLevel != null) {
             if (memberLevel.equals("")) {
-                iv_grade.setText("LV.0");
+                iv_grade.setText("Lv.0");
                 //iv_grade.setImageBitmap(BitmapFactory.decodeResource(context.getResources(), R.mipmap.vip_icon));
             } else {
                 int grade = Integer.parseInt(memberLevel);
-                iv_grade.setText("LV."+grade);
+                iv_grade.setText("Lv."+grade);
                /* switch (grade) {
                    *//* case 8://月
                         //iv_grade.setImageBitmap(BitmapFactory.decodeResource(context.getResources(), R.mipmap.vip_icon_month));
@@ -35,7 +35,7 @@ public class SetMemberLevel {
                 }*/
             }
         }else{
-            iv_grade.setText("LV.0");
+            iv_grade.setText("Lv.0");
            // iv_grade.setImageBitmap(BitmapFactory.decodeResource(context.getResources(), R.mipmap.vip_icon));
         }
     }

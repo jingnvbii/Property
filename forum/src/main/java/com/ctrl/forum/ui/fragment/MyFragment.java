@@ -3,8 +3,11 @@ package com.ctrl.forum.ui.fragment;
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -162,6 +165,11 @@ public class MyFragment extends ToolBarFragment implements View.OnClickListener{
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_my, container, false);
         ButterKnife.inject(this, view);
+
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction("com.message");
+        getActivity().registerReceiver(new MyBroadcastReciver(), intentFilter);
+
         mdao = new MemberDao(this);
         editDao = new EditDao(this);
         if (!MainActivity.isFrist){
@@ -392,7 +400,7 @@ public class MyFragment extends ToolBarFragment implements View.OnClickListener{
     public void onResume() {
         super.onResume();
         bt_integral.setText("积分:" + Arad.preferences.getString("point"));
-        tv_nickName.setText("昵称:" + Arad.preferences.getString("nickName"));
+        tv_nickName.setText(Arad.preferences.getString("nickName"));
         String imgUrl = Arad.preferences.getString("imgUrl");
         if (Arad.preferences.getString("memberId")!=null && !Arad.preferences.getString("memberId").equals("")) {
             if (imgUrl != null && !imgUrl.equals("")) {
@@ -570,6 +578,23 @@ public class MyFragment extends ToolBarFragment implements View.OnClickListener{
             return view==obj;
         }
 
+    }
+
+    public class MyBroadcastReciver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String num = intent.getExtras().getString("num");
+            switch (num){
+                case "num":
+                    editDao.getVipInfo(Arad.preferences.getString("memberId"));
+                    break;
+                case "message":
+                    editDao.getVipInfo(Arad.preferences.getString("memberId"));
+                    break;
+                default:
+                    break;
+            }
+        }
     }
 
 }

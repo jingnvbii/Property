@@ -221,7 +221,6 @@ public class InvitationListViewForRelateAdapter extends BaseAdapter{
                     Arad.imageLoader.load(postImageList.get(1).getImg()).placeholder(R.mipmap.default_error).resize(150,150).into(holder3.iv_image3_02);
                     Arad.imageLoader.load(postImageList.get(2).getImg()).placeholder(R.mipmap.default_error).resize(150,150).into(holder3.iv_image3_03);
                 }
-
                 break;
             case -1:
                 break;

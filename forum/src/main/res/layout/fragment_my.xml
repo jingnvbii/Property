@@ -170,7 +170,7 @@
                android:layout_height="wrap_content"
                android:id="@+id/iv_grade"
                android:textSize="16sp"
-               android:text="LV.0"
+               android:text="Lv.0"
                android:textColor="@color/white"
                android:background="@drawable/red_border_2"
                android:layout_centerVertical="true"
