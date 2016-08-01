@@ -140,7 +140,8 @@ public class InvitationPullDownHaveThirdKindPinterestStyleFragment extends ToolB
                 idao.requesPostCategory(id, "2", "0");
                 idao.requestPostListByCategory(Arad.preferences.getString("memberId"), thirdKindId, "0", "","", PAGE_NUM, PAGE_SIZE);
             }else if(showAll.equals("1")) {
-                idao.requestPostRotaingBanner("B_POST_MIDDLE");
+                idao.requestPostRotaingBanner(id);
+               // idao.requestPostRotaingBanner("B_POST_MIDDLE");
                 idao.requestPostListByCategory(Arad.preferences.getString("memberId"),firstId, "0", "","", PAGE_NUM, PAGE_SIZE);
             }else {
                 idao.requesPostCategory(id, "2", "0");
@@ -208,6 +209,9 @@ public class InvitationPullDownHaveThirdKindPinterestStyleFragment extends ToolB
         xlv_pinerest_style.setOnItemClickListener(new PLA_AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(PLA_AdapterView<?> parent, View view, int position, long id) {
+                if (position==listPost.size()+xlv_pinerest_style.getHeaderViewsCount()){
+                    return;
+                }
                 int nowPos = position - xlv_pinerest_style.getHeaderViewsCount();
                 Intent intent = null;
                 String contentType = listPost.get(nowPos).getContentType();
@@ -321,8 +325,8 @@ public class InvitationPullDownHaveThirdKindPinterestStyleFragment extends ToolB
             if(listCategroy3==null){
 
                 if(!isFromLoad)
-                idao.requestPostRotaingBanner("B_POST_MIDDLE");
-              //  idao.requestPostRotaingBanner(id);
+              //  idao.requestPostRotaingBanner("B_POST_MIDDLE");
+                idao.requestPostRotaingBanner(id);
                 //   framelayout.setVisibility(View.VISIBLE);
                 gridView1.setVisibility(View.GONE);
             }else {

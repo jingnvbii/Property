@@ -177,6 +177,7 @@ public class InvitationListViewForRelateAdapter extends BaseAdapter{
                 if(post.getPublishTime()!=null)
                 holder1.tv_time0.setText(TimeUtils.dateTime(post.getPublishTime()));
                 holder1.tv_numbers0.setText(post.getCommentNum() + "");
+                if(user!=null&&user.getImgUrl()!=null&&!user.getImgUrl().equals(""))
                 Arad.imageLoader.load(user.getImgUrl()).placeholder(R.mipmap.default_error).resize(300,300)
                         .centerCrop().into(holder1.imageView1);
                 break;
@@ -185,6 +186,7 @@ public class InvitationListViewForRelateAdapter extends BaseAdapter{
                 holder2.tv_titile1.setText(post.getTitle());
                 holder2.tv_name1.setText(post.getMemberName());
               //  holder2.tv_time1.setText(TimeUtils.date(Long.parseLong(post.getPublishTime())));
+                if(post.getPublishTime()!=null)
                 holder2.tv_time1.setText(TimeUtils.dateTime(post.getPublishTime()));
                 holder2.tv_numbers1.setText(post.getCommentNum() + "");
                 if(post.getBlurbs()!=null&&!post.getBlurbs().equals("")){
@@ -193,7 +195,8 @@ public class InvitationListViewForRelateAdapter extends BaseAdapter{
                 }else {
                     holder2.tv_daoyu.setVisibility(View.GONE);
                 }
-                Arad.imageLoader.load(user.getImgUrl()).placeholder(R.mipmap.default_error).resize(50,50)
+                if(user!=null&&user.getImgUrl()!=null&&!user.getImgUrl().equals(""))
+                Arad.imageLoader.load(user.getImgUrl()).placeholder(R.mipmap.default_error).resize(300,300)
                         .centerCrop().into(holder2.imageView2);
                 if(postImageList!=null) {
                     Arad.imageLoader.load(postImageList.get(0).getImg()).placeholder(R.mipmap.default_error).resize(150,150).into(holder2.iv_title_photo1);
@@ -206,6 +209,7 @@ public class InvitationListViewForRelateAdapter extends BaseAdapter{
                 }
                 holder3.tv_titile3.setText(post.getTitle());
                 holder3.tv_name3.setText(post.getMemberName());
+                if(post.getPublishTime()!=null)
                 holder3.tv_time3.setText(TimeUtils.dateTime(post.getPublishTime()));
                 holder3.tv_numbers03.setText(post.getCommentNum() + "");
                 if(post.getBlurbs()!=null&&!post.getBlurbs().equals("")){
@@ -214,8 +218,10 @@ public class InvitationListViewForRelateAdapter extends BaseAdapter{
                 }else {
                     holder3.tv_daoyu.setVisibility(View.GONE);
                 }
-                Arad.imageLoader.load(user.getImgUrl()).placeholder(R.mipmap.default_error).resize(50,50)
-                        .centerCrop().into(holder3.imageView3);
+                if(user!=null&&user.getImgUrl()!=null&&!user.getImgUrl().equals("")) {
+                    Arad.imageLoader.load(user.getImgUrl()).placeholder(R.mipmap.default_error).resize(300, 300)
+                            .centerCrop().into(holder3.imageView3);
+                }
                 if(postImageList!=null) {
                     Arad.imageLoader.load(postImageList.get(0).getImg()).placeholder(R.mipmap.default_error).resize(150,150).into(holder3.iv_image3_01);
                     Arad.imageLoader.load(postImageList.get(1).getImg()).placeholder(R.mipmap.default_error).resize(150,150).into(holder3.iv_image3_02);

@@ -213,11 +213,24 @@ public class InvitationPullDownActivity extends ToolBarActivity implements View.
         myRadioGroup.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         myRadioGroup.setOrientation(LinearLayout.HORIZONTAL);
         layout.addView(myRadioGroup);
+        int newWidth = width / 5;
         for (int i = 0; i < listCategory.size(); i++) {
             RadioButton radio = new RadioButton(this);
           //  radio.setBackgroundResource(R.drawable.top_category_selector);
             LinearLayout.LayoutParams l;
-            if (listCategory.size() == 1) {
+            l = new LinearLayout.LayoutParams(newWidth, ViewGroup.LayoutParams.MATCH_PARENT, Gravity.CENTER);
+           /* if (listCategory.size() == 1) {
+                l = new LinearLayout.LayoutParams(newWidth, ViewGroup.LayoutParams.MATCH_PARENT, Gravity.CENTER);
+            } else if (listCategory.size() == 2) {
+                l = new LinearLayout.LayoutParams(newWidth, ViewGroup.LayoutParams.MATCH_PARENT, Gravity.CENTER);
+            } else if (listCategory.size() == 3) {
+                l = new LinearLayout.LayoutParams(newWidth, ViewGroup.LayoutParams.MATCH_PARENT, Gravity.CENTER);
+            } else if (listCategory.size() == 4) {
+                l = new LinearLayout.LayoutParams(newWidth, ViewGroup.LayoutParams.MATCH_PARENT, Gravity.CENTER);
+            } else {
+                l = new LinearLayout.LayoutParams(newWidth, ViewGroup.LayoutParams.MATCH_PARENT, Gravity.CENTER);
+            }*/
+/*            if (listCategory.size() == 1) {
                 l = new LinearLayout.LayoutParams(width, ViewGroup.LayoutParams.MATCH_PARENT, Gravity.CENTER);
             } else if (listCategory.size() == 2) {
                 l = new LinearLayout.LayoutParams(width / 2, ViewGroup.LayoutParams.MATCH_PARENT, Gravity.CENTER);
@@ -227,7 +240,7 @@ public class InvitationPullDownActivity extends ToolBarActivity implements View.
                 l = new LinearLayout.LayoutParams(width / 4, ViewGroup.LayoutParams.MATCH_PARENT, Gravity.CENTER);
             } else {
                 l = new LinearLayout.LayoutParams((width - 30) / 5, ViewGroup.LayoutParams.MATCH_PARENT, Gravity.CENTER);
-            }
+            }*/
             radio.setLayoutParams(l);
             radio.setGravity(Gravity.CENTER);
             //  radio.setPadding(20, 20, 20, 20);

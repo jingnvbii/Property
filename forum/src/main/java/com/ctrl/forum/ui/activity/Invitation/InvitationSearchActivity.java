@@ -107,7 +107,8 @@ public class InvitationSearchActivity extends AppToolBarActivity implements View
         tv_invitation_search.setOnClickListener(this);
         tv_delete_invitation_history.setOnClickListener(this);
         iv_toolbar_left.setOnClickListener(this);
-        styleType=getIntent().getStringExtra("styleType");
+      // styleType=getIntent().getStringExtra("styleType");
+        styleType="1";
         channelId=getIntent().getStringExtra("channelId");
         et_invitation_search.addTextChangedListener(watcher);
 

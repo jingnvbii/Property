@@ -8,7 +8,6 @@ import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -56,8 +55,6 @@ public class LocationActivity extends AppToolBarActivity implements View.OnClick
     private LocationService locationService;
     private String city;//城市名
     private PoiSearch mPoiSearch;
-    private List<String> mPoiInfoListStr=new ArrayList<>();
-    private ArrayAdapter<String> adapter;
     private int totalPage;
 
     private static int PAGE_NUM=1;
@@ -67,6 +64,7 @@ public class LocationActivity extends AppToolBarActivity implements View.OnClick
     private boolean isRefresh=false;
 
     private List<PoiInfo> poiInfoList;
+    private List<PoiInfo> allPoiInfoList=new ArrayList<>();
     private String keyWord;
     private StoreSearchAddressListAdapter adapter2;
 
@@ -93,8 +91,41 @@ public class LocationActivity extends AppToolBarActivity implements View.OnClick
     private void initView() {
         rl_loact_search.setOnClickListener(this);
         et_search.addTextChangedListener(watcher);
-        lv_locate.setMode(PullToRefreshBase.Mode.PULL_FROM_END);
-        lv_locate.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
+        lv_locate.setMode(PullToRefreshBase.Mode.BOTH);
+        lv_locate.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
+            @Override
+            public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
+                PAGE_NUM = 1;
+                if(allPoiInfoList!=null)
+                    allPoiInfoList.clear();
+                //第四步，发起检索请求；
+                if(!et_search.getText().toString().equals("")){
+                    keyWord=et_search.getText().toString();
+                }
+
+                mPoiSearch.searchInCity((new PoiCitySearchOption())
+                        .pageNum(PAGE_NUM)
+                        .city(city)
+                        .keyword(keyWord)
+                        .pageCapacity(10));
+            }
+
+            @Override
+            public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
+                PAGE_NUM += 1;
+                //第四步，发起检索请求；
+                if(!et_search.getText().toString().equals("")){
+                    keyWord=et_search.getText().toString();
+                }
+
+                mPoiSearch.searchInCity((new PoiCitySearchOption())
+                        .pageNum(PAGE_NUM)
+                        .city(city)
+                        .keyword(keyWord)
+                        .pageCapacity(10));
+            }
+        });
+       /* lv_locate.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
             @Override
             public void onRefresh(PullToRefreshBase<ListView> refreshView) {
                     PAGE_NUM += 1;
@@ -102,8 +133,7 @@ public class LocationActivity extends AppToolBarActivity implements View.OnClick
                     if(!et_search.getText().toString().equals("")){
                         keyWord=et_search.getText().toString();
                     }
-                Log.i("tag","keyword===="+keyWord);
-                Log.i("tag","city===="+city);
+
                     mPoiSearch.searchInCity((new PoiCitySearchOption())
                             .pageNum(PAGE_NUM)
                             .city(city)
@@ -111,14 +141,18 @@ public class LocationActivity extends AppToolBarActivity implements View.OnClick
                             .pageCapacity(10));
             }
 
-        });
+        });*/
         lv_locate.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Log.i("tag", "position====" + position);
+                Log.i("tag","locationLongitude===="+allPoiInfoList.get(position-1).location.latitude+"" );
+                Log.i("tag","locationLatitude===="+allPoiInfoList.get(position-1).location.longitude+"");
+                Log.i("tag","location===="+ allPoiInfoList.get(position - 1).address);
                 Intent intent = new Intent();
-                intent.putExtra("locationLongitude",poiInfoList.get(position-1).location.latitude+"" );
-                intent.putExtra("locationLatitude",poiInfoList.get(position-1).location.longitude+"");
-                intent.putExtra("location", mPoiInfoListStr.get(position - 1));
+                intent.putExtra("locationLongitude",allPoiInfoList.get(position-1).location.latitude+"" );
+                intent.putExtra("locationLatitude",allPoiInfoList.get(position-1).location.longitude+"");
+                intent.putExtra("location", allPoiInfoList.get(position - 1).address);
                 setResult(RESULT_OK, intent);
                 finish();
             }
@@ -133,8 +167,8 @@ public class LocationActivity extends AppToolBarActivity implements View.OnClick
                 lv_locate.onRefreshComplete();
                 if (result == null || result.error == SearchResult.ERRORNO.RESULT_NOT_FOUND) {// 没有找到检索结
                     MessageUtils.showShortToast(LocationActivity.this, "抱歉，未找到结果");
-                    mPoiInfoListStr.clear();
-                    adapter2.notifyDataSetChanged();
+                 //   poiInfoList.clear();
+                //    adapter2.notifyDataSetChanged();
                     PAGE_NUM=1;
                     return;
                 }
@@ -142,7 +176,10 @@ public class LocationActivity extends AppToolBarActivity implements View.OnClick
                 if (result.error == SearchResult.ERRORNO.NO_ERROR) {// 检索结果正常返回
                    // MessageUtils.showShortToast(LocationActivity.this, "检索结果正常返回");
                     poiInfoList=result.getAllPoi();
-                    adapter2.setList(poiInfoList);
+                    for(int i=0;i<poiInfoList.size();i++){
+                        allPoiInfoList.add(poiInfoList.get(i));
+                    }
+                    adapter2.setList(allPoiInfoList);
                 }
 
             }
@@ -162,8 +199,8 @@ public class LocationActivity extends AppToolBarActivity implements View.OnClick
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
             // TODO Auto-generated method stub
-            if(mPoiInfoListStr!=null)
-            mPoiInfoListStr.clear();
+            if(allPoiInfoList!=null)
+                allPoiInfoList.clear();
             if (s.toString() == null) {
                 adapter2.notifyDataSetChanged();
                 return;
@@ -193,7 +230,7 @@ public class LocationActivity extends AppToolBarActivity implements View.OnClick
         public void afterTextChanged(Editable s) {
             // TODO Auto-generated method stub
             if (s.length() == 0) {
-                mPoiInfoListStr.clear();
+                allPoiInfoList.clear();
                 adapter2.notifyDataSetChanged();
             }
             et_s=s.toString();

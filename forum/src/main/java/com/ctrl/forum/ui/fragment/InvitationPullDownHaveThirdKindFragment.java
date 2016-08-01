@@ -190,8 +190,6 @@ public class InvitationPullDownHaveThirdKindFragment extends ToolBarFragment {
         if(!InvitationPullDownActivity.isFromSelcet){
             thirdKindId=null;
         }
-        Log.i("tag", "isFromSearch===" + InvitationPullDownActivity.isFromSearch);
-        Log.i("tag", "keyword===" + keyword);
         if(!InvitationPullDownActivity.isFromSearch){
             keyword=null;
            // thirdKindId=null;
@@ -206,21 +204,17 @@ public class InvitationPullDownHaveThirdKindFragment extends ToolBarFragment {
                 if(listPost!=null){
                     listPost.clear();
                 }
-                Log.i("tag", "111===" );
                 idao.requesPostCategory(channelId, "2", "0");
                 idao.requestPostListByCategory(Arad.preferences.getString("memberId"), channelId, "0", keyword,"", PAGE_NUM, Constant.PAGE_SIZE);
             }else if(thirdKindId!=null) {
-                Log.i("tag", "222===" );
                 idao.requesPostCategory(channelId, "2", "0");
                 idao.requestPostListByCategory(Arad.preferences.getString("memberId"), thirdKindId, "0", "","", PAGE_NUM, Constant.PAGE_SIZE);
           
             }else if(showAll.equals("1")) {
-                Log.i("tag", "333===" );
-               // idao.requesPostCategory(channelId, "2", "0");
-                idao.requestPostRotaingBanner("B_POST_MIDDLE");
+                idao.requesPostCategory(channelId, "2", "0");
+              //  idao.requestPostRotaingBanner("B_POST_MIDDLE");
                 idao.requestPostListByCategory(Arad.preferences.getString("memberId"), firstId, "0", "","", PAGE_NUM, Constant.PAGE_SIZE);
             }else {
-                Log.i("tag", "444===" );
                 idao.requesPostCategory(channelId, "2", "0");
                 idao.requestPostListByCategory(Arad.preferences.getString("memberId"), channelId, "0", "","", PAGE_NUM, Constant.PAGE_SIZE);
             }
@@ -318,6 +312,9 @@ public class InvitationPullDownHaveThirdKindFragment extends ToolBarFragment {
         lv_invitation_pull_down_have_third_kind.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (position==listPost.size()+lv.getHeaderViewsCount()){
+                    return;
+                }
                 newPosition = position - lv.getHeaderViewsCount();
                 Intent intent = null;
                 String type = listPost.get(newPosition).getSourceType();
@@ -514,8 +511,8 @@ public class InvitationPullDownHaveThirdKindFragment extends ToolBarFragment {
             bol = 0;
             if(listCategroy3==null) {
                 if(!isFromLoad)
-                idao.requestPostRotaingBanner("B_POST_MIDDLE");
-              //  idao.requestPostRotaingBanner(channelId);
+             //   idao.requestPostRotaingBanner("B_POST_MIDDLE");
+                idao.requestPostRotaingBanner(channelId);
                 //   framelayout.setVisibility(View.VISIBLE);
                 gridView1.setVisibility(View.GONE);
             }else {

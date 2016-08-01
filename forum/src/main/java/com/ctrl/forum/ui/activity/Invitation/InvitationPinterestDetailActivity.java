@@ -541,7 +541,7 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
             popupWindow.dismiss();
         }
         if (requestCode == 889) {
-            MessageUtils.showShortToast(this, "语音上传成功");
+          //  MessageUtils.showShortToast(this, "语音上传成功");
             soundUrl = sdao.getSoundUrl();
             // replyAdapter.setSoundrUrl(soundUrl);
             if (soundUrl != null) {
@@ -1057,6 +1057,10 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
                         ll_pinglun.setVisibility(View.GONE);
                         InputMethodUtils.toggle(InvitationPinterestDetailActivity.this);
                         FaceRelativeLayout.setVisibility(View.VISIBLE);
+                        if(btn_yuyin.getVisibility()==View.VISIBLE){
+                            btn_yuyin.setVisibility(View.GONE);
+                            ll_input_text.setVisibility(View.VISIBLE);
+                        }
                         //  ll_edit.setVisibility(View.VISIBLE);
                     } else {
                         ll_pinglun.setVisibility(View.VISIBLE);

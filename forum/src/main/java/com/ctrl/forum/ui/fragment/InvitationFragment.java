@@ -263,6 +263,7 @@ public class InvitationFragment extends ToolBarFragment implements View.OnClickL
         lv_invitation_fragment_home.setOnLastItemVisibleListener(new PullToRefreshBase.OnLastItemVisibleListener() {
             @Override
             public void onLastItemVisible() {
+
                 rl_footer.setVisibility(View.VISIBLE);
                 rl_footer.setPadding(0, 0, 0, 0);
                 tv_footer.setText("加载更多。。。");
@@ -392,6 +393,9 @@ public class InvitationFragment extends ToolBarFragment implements View.OnClickL
         lv01.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (position==listPost.size()+lv01.getHeaderViewsCount()){
+                    return;
+                }
                 Intent intent = null;
                 String type = listPost.get(position - lv01.getHeaderViewsCount()).getSourceType();
                 String contentType = listPost.get(position - lv01.getHeaderViewsCount()).getContentType();

@@ -7,8 +7,8 @@
     <ImageView
         android:id="@+id/iv_title_photo1"
         android:scaleType="centerCrop"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="90dp"
+        android:layout_height="80dp"
         />
 
     <TextView
@@ -16,7 +16,8 @@
         android:layout_height="wrap_content"
         android:textColor="@color/text_black"
         android:layout_marginLeft="5dp"
-        android:maxLines="2"
+        android:maxLines="3"
+        android:ellipsize="end"
         android:textSize="@dimen/LargeTextSize"
         android:layout_alignTop="@+id/iv_title_photo1"
         android:layout_toRightOf="@+id/iv_title_photo1"

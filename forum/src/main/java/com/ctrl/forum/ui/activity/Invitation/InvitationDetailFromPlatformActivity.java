@@ -341,7 +341,7 @@ public class InvitationDetailFromPlatformActivity extends AppToolBarActivity imp
         btn_yuyin.setAudioFinishRecorderListener(new AudioRecordButton.AudioFinishRecorderListener() {
             @Override
             public void onFinished(float seconds, String filePath) {
-                MessageUtils.showShortToast(InvitationDetailFromPlatformActivity.this, "语音说话");
+               // MessageUtils.showShortToast(InvitationDetailFromPlatformActivity.this, "语音说话");
                 try {
                     second = seconds;
                     String voice = Base64Util.encodeBase64File(filePath);
@@ -397,10 +397,7 @@ public class InvitationDetailFromPlatformActivity extends AppToolBarActivity imp
         lv_reply_detail.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(AbsListView view, int scrollState) {
-                Log.i("tag", "scroll state===" + scrollState);
                 if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE) {
-                    Log.i("tag", "lastItem===" + lastItem);
-                    Log.i("tag", "adapter count===" + replyAdapter.getCount());
                     if (lastItem - 1 == replyAdapter.getCount()) {
                         rl_footer.setVisibility(View.VISIBLE);
                         rl_footer.setPadding(0,0,0,0);
@@ -418,7 +415,6 @@ public class InvitationDetailFromPlatformActivity extends AppToolBarActivity imp
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
                 lastItem = firstVisibleItem + visibleItemCount - 1;
-                Log.i("tag", "lastItem===" + lastItem);
             }
         });
 
@@ -546,7 +542,7 @@ public class InvitationDetailFromPlatformActivity extends AppToolBarActivity imp
             //  MessageUtils.showShortToast(this, "语音上传成功");
             soundUrl = sdao.getSoundUrl();
             // replyAdapter.setSoundrUrl(soundUrl);
-            Log.i("tag", "soundUrl---" + soundUrl);
+           // Log.i("tag", "soundUrl---" + soundUrl);
             if (soundUrl != null) {
                 if (listPostReply2.get(itemPosition).getReplyType().equals("0")) {//无评论
                     idao.requestReplyPost(post.getId(), post.getReporterId(), "", Arad.preferences.getString("memberId"), "2", "", soundUrl, "", "", "", "");
@@ -1143,6 +1139,10 @@ public class InvitationDetailFromPlatformActivity extends AppToolBarActivity imp
                         ll_pinglun.setVisibility(View.GONE);
                         InputMethodUtils.toggle(InvitationDetailFromPlatformActivity.this);
                         FaceRelativeLayout.setVisibility(View.VISIBLE);
+                        if(btn_yuyin.getVisibility()==View.VISIBLE){
+                            btn_yuyin.setVisibility(View.GONE);
+                            ll_input_text.setVisibility(View.VISIBLE);
+                        }
                         //  ll_edit.setVisibility(View.VISIBLE);
                     } else {
                         ll_pinglun.setVisibility(View.VISIBLE);

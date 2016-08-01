@@ -149,7 +149,7 @@ public class InvitationCommentDetaioActivity extends AppToolBarActivity implemen
         btn_yuyin.setAudioFinishRecorderListener(new AudioRecordButton.AudioFinishRecorderListener() {
             @Override
             public void onFinished(float seconds, String filePath) {
-                MessageUtils.showShortToast(InvitationCommentDetaioActivity.this, "语音说话");
+           //     MessageUtils.showShortToast(InvitationCommentDetaioActivity.this, "语音说话");
                 try {
                   //  second = seconds;
                     String voice = Base64Util.encodeBase64File(filePath);
