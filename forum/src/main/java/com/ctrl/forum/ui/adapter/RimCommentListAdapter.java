@@ -196,7 +196,7 @@ public class RimCommentListAdapter extends BaseAdapter {
         @InjectView(R.id.tv_name)
         TextView tv_name; //
         @InjectView(R.id.iv_grade)
-        ImageView iv_grade; //等级
+        TextView iv_grade; //等级
         @InjectView(R.id.tv_data)
         TextView tv_data;//时间
         ViewHolder(View view) {
@@ -223,7 +223,7 @@ public class RimCommentListAdapter extends BaseAdapter {
         @InjectView(R.id.tv_name)
           TextView tv_name; //本人名
         @InjectView(R.id.iv_grade)
-          ImageView iv_grade; //等级
+          TextView iv_grade; //等级
         @InjectView(R.id.tv_data)
        TextView tv_data;//时间
        @InjectView(R.id.rl_reply_voice)
@@ -238,7 +238,7 @@ public class RimCommentListAdapter extends BaseAdapter {
         @InjectView(R.id.tv_name)
         TextView tv_name; //本人名
         @InjectView(R.id.iv_grade)
-        ImageView iv_grade; //等级
+        TextView iv_grade; //等级
         @InjectView(R.id.tv_data)
         TextView tv_data;//时间
         @InjectView(R.id.tv_replay)

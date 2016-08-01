@@ -28,11 +28,12 @@
         android:layout_marginLeft="10dp"
         android:layout_marginStart="10dp" />
 
-    <ImageView
+    <TextView
+        android:background="@drawable/red_border_2"
+        android:textColor="@color/white"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/grad"
-        android:src="@mipmap/vip_icon2"
         android:layout_marginLeft="@dimen/margin_left_and_right"
         android:layout_marginBottom="3dp"
         android:layout_alignBottom="@+id/comment_vip_name"

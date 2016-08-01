@@ -37,14 +37,15 @@
             android:layout_toRightOf="@+id/iv_head"
             android:layout_toEndOf="@+id/iv_head" />
 
-        <ImageView
+        <TextView
+            android:background="@drawable/red_border_2"
+            android:textColor="@color/white"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/iv_grade"
             android:layout_centerVertical="true"
             android:layout_toRightOf="@+id/tv_name"
             android:layout_marginLeft="5dp"
-            android:src="@mipmap/vip_icon2"
             android:layout_toEndOf="@+id/tv_name" />
     </RelativeLayout>
     <TextView

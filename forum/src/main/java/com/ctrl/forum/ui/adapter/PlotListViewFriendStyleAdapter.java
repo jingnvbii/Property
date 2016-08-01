@@ -270,7 +270,7 @@ public class PlotListViewFriendStyleAdapter extends BaseAdapter {
         @InjectView(R.id.tv_friend_style_shengyu_pinglun)//查看其它评论
                 TextView tv_friend_style_shengyu_pinglun;
         @InjectView(R.id.iv_friend_style_levlel)//用户等级
-                ImageView iv_friend_style_levlel;
+                TextView iv_friend_style_levlel;
         @InjectView(R.id.rl_friend_style_zan)//点赞
         public    RelativeLayout rl_friend_style_zan;
         @InjectView(R.id.rl_friend_style_pinglun)//评论

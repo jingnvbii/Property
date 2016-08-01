@@ -50,7 +50,7 @@ public class MineBlacklistAdapter extends BaseAdapter {
             convertView= LayoutInflater.from(context).inflate(R.layout.item_mine_blacklist,parent,false);
             holder=new ViewHolder();
             holder.iv_icon = (ImageView) convertView.findViewById(R.id.iv_icon);
-            holder.iv_grade = (ImageView) convertView.findViewById(R.id.iv_grade);
+            holder.iv_grade = (TextView) convertView.findViewById(R.id.iv_grade);
             holder.tv_name = (TextView) convertView.findViewById(R.id.tv_name);
             holder.bt_clear = (Button) convertView.findViewById(R.id.bt_clear);
             holder.bt_clear.setOnClickListener(onButton);
@@ -72,7 +72,7 @@ public class MineBlacklistAdapter extends BaseAdapter {
     class ViewHolder{
         ImageView iv_icon;
         TextView tv_name;
-        ImageView iv_grade;
+        TextView iv_grade;
         Button bt_clear;
     }
 }

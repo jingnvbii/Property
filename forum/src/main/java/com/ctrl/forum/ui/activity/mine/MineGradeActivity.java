@@ -39,7 +39,7 @@ public class MineGradeActivity extends AppToolBarActivity implements View.OnClic
     @InjectView(R.id.tv_name)
     TextView tv_name;
     @InjectView(R.id.iv_grade)
-    ImageView iv_grade;
+    TextView iv_grade;
     @InjectView(R.id.fast_stage)
     RelativeLayout fast_stage;  //如何快速升级
     @InjectView(R.id.use_grade)

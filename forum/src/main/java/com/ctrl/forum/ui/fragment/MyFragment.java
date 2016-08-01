@@ -94,7 +94,7 @@ public class MyFragment extends ToolBarFragment implements View.OnClickListener{
     @InjectView(R.id.iv_message)
     NumView iv_message; //消息
     @InjectView(R.id.iv_grade)
-    ImageView iv_grade; //等级
+    TextView iv_grade; //等级
     @InjectView(R.id.bt_integral)
     Button bt_integral; //积分
     @InjectView(R.id.tv_nickName)
