@@ -71,7 +71,7 @@ public class MyBroadcastReceiver extends BroadcastReceiver{
             Intent itt = new Intent();
             itt.setAction("com.message");
             itt.putExtra("num", "num");
-            context.sendBroadcast(itt, null);
+            context.sendBroadcast(itt,null);
 
             if (Arad.preferences.getBoolean("replyComments")){//评论回复
                 setNavti(context, "您收到一条新消息", message, messageKey);
