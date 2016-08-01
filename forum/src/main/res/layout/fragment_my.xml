@@ -153,7 +153,7 @@
             android:layout_toRightOf="@+id/tv_nickName"
             android:layout_above="@+id/bt_sign" />
 
-        <ImageView
+       <!-- <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/iv_grade"
@@ -163,7 +163,21 @@
             android:layout_marginLeft="4dp"
             android:layout_marginBottom="3dp"
             android:layout_alignBottom="@+id/textView10"
-            android:layout_toEndOf="@+id/textView10" />
+            android:layout_toEndOf="@+id/textView10" />-->
+
+           <TextView
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:id="@+id/iv_grade"
+               android:textSize="16sp"
+               android:text="LV.0"
+               android:textColor="@color/white"
+               android:background="@drawable/red_border_2"
+               android:layout_centerVertical="true"
+               android:layout_toRightOf="@+id/textView10"
+               android:layout_marginLeft="4dp"
+               android:layout_alignBottom="@+id/textView10"
+               android:layout_toEndOf="@+id/textView10" />
 
            <ImageView
                android:id="@+id/iv_set"

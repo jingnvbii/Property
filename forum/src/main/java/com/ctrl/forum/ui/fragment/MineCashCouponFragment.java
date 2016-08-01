@@ -73,11 +73,16 @@ public class MineCashCouponFragment extends ToolBarFragment implements View.OnCl
                         popView = LayoutInflater.from(getActivity()).inflate(R.layout.coupon_share, null);
                         tv_no = (TextView) popView.findViewById(R.id.tv_no);
                         tv_share = (TextView) popView.findViewById(R.id.tv_share);
+                        tv_no.setOnClickListener(MineCashCouponFragment.this);
+                        tv_share.setOnClickListener(MineCashCouponFragment.this);
                     }
                     if (useType.equals("1")) {
                         popView = LayoutInflater.from(getActivity()).inflate(R.layout.coupon_cost, null);
                         tv_no = (TextView) popView.findViewById(R.id.tv_no);
                         tv_yes = (TextView) popView.findViewById(R.id.tv_yes);
+                        tv_no.setOnClickListener(MineCashCouponFragment.this);
+                        tv_yes.setOnClickListener(MineCashCouponFragment.this);
+
                     }
                     initPop();
                     popupWindow.showAtLocation(popView, Gravity.BOTTOM, 0, 0);  //在底部
@@ -115,13 +120,12 @@ public class MineCashCouponFragment extends ToolBarFragment implements View.OnCl
     }
 
     private void initData() {
-
          resources = R.layout.item_mine_xian;
-        couponXianListAdapter = new MineCouponXianListAdapter(getActivity(), resources);
-        lv_content.setAdapter(couponXianListAdapter);
+         couponXianListAdapter = new MineCouponXianListAdapter(getActivity(), resources);
+         lv_content.setAdapter(couponXianListAdapter);
 
-        cdao = new CouponsDao(this);
-        cdao.getMemberCoupons("1", "0", Arad.preferences.getString("memberId"), PAGE_NUM + "", Constant.PAGE_SIZE + "");
+         cdao = new CouponsDao(this);
+         cdao.getMemberCoupons("1", "0", Arad.preferences.getString("memberId"), PAGE_NUM + "", Constant.PAGE_SIZE + "");
 
     }
 
@@ -148,10 +152,6 @@ public class MineCashCouponFragment extends ToolBarFragment implements View.OnCl
         colorDrawable.setAlpha(40);
         popupWindow.setBackgroundDrawable(colorDrawable);
         popupWindow.setOutsideTouchable(true);
-
-        tv_no.setOnClickListener(this);
-        tv_yes.setOnClickListener(this);
-        tv_share.setOnClickListener(this);
     }
 
     @Override

@@ -167,7 +167,8 @@ public class PlotDao extends IDao {
         }
         if (requestCode==3){
             Log.d("demo", "dao中结果集(搜索栏目内容):" + result);
-            searchPost = JsonUtil.node2pojoList(result.findValue("postList"),Post.class);
+            List<Post> list = JsonUtil.node2pojoList(result.findValue("postList"),Post.class);
+            searchPost.addAll(list);
         }
         if (requestCode==4){
             Log.d("demo", "dao中结果集(小区周边服务分类):" + result);

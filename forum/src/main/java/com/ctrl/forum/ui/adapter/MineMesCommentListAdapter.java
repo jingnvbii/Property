@@ -153,7 +153,7 @@ public class MineMesCommentListAdapter extends BaseAdapter {
         @InjectView(R.id.iconfont_head)
         ImageView iconfont_head;
         @InjectView(R.id.grad)
-        ImageView grad;
+        TextView grad;
         @InjectView(R.id.comment_vip_name)
         TextView comment_vip_name;
         @InjectView(R.id.tv_day)

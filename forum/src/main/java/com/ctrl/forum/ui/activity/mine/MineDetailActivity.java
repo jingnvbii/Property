@@ -31,7 +31,7 @@ public class MineDetailActivity extends AppToolBarActivity implements View.OnCli
     @InjectView(R.id.shop_head)
     MineHeadView shop_head;
     @InjectView(R.id.iv_grade)
-    ImageView iv_grade;
+    TextView iv_grade;
     @InjectView(R.id.tv_name)
     TextView tv_name;
     @InjectView(R.id.shop_name)

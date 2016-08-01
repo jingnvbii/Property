@@ -23,11 +23,12 @@
         android:layout_toRightOf="@+id/iv_head"
         android:layout_toEndOf="@+id/iv_head" />
 
-    <ImageView
+    <TextView
+        android:background="@drawable/red_border_2"
+        android:textColor="@color/white"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/iv_grade"
-        android:src="@mipmap/vip_icon2"
         android:layout_alignBottom="@+id/tv_name"
         android:layout_marginBottom="2dp"
         android:layout_marginLeft="2dp"

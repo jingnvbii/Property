@@ -1,6 +1,5 @@
 package com.ctrl.forum.ui.fragment;
 
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
@@ -10,20 +9,17 @@ import android.os.Message;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.PopupWindow;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -90,6 +86,8 @@ public class PlotFragment extends ToolBarFragment implements View.OnClickListene
     RelativeLayout rl_search;*/
    /* @InjectView(R.id.et_search)
     EditText et_search;*/
+    @InjectView(R.id.iv_search)
+    ImageView iv_search;
 
     private PlotListViewFriendStyleAdapter invitationListViewFriendStyleAdapter;
 
@@ -113,9 +111,11 @@ public class PlotFragment extends ToolBarFragment implements View.OnClickListene
     private Map<Integer,Boolean> isAdd = new HashMap<>();
     private Map<Integer,Integer> text = new HashMap<>();
     private View footView;
-
-    private RelativeLayout rl_search;
-    private EditText search;
+    private TextView endText;
+    private ProgressBar progressBar;
+    private TextView textView;
+    private RelativeLayout rl_footer;
+    private Boolean isFromLoad= false;
 
     public static PlotFragment newInstance() {
         PlotFragment fragment = new PlotFragment();
@@ -146,23 +146,20 @@ public class PlotFragment extends ToolBarFragment implements View.OnClickListene
         AbsListView.LayoutParams layoutParams = new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, AbsListView.LayoutParams.WRAP_CONTENT);
         View headview = getActivity().getLayoutInflater().inflate(R.layout.item_plot_header_view, lv_content, false);
         frameLayout = (FrameLayout) headview.findViewById(R.id.framelayout);
-        search = (EditText) headview.findViewById(R.id.et_search);
-        search.setFocusable(false);
-        rl_search = (RelativeLayout) headview.findViewById(R.id.rl_search);
-        //search.setFocusable(true);
-        search.setFocusableInTouchMode(true);
-        search.setClickable(true);
-        //search.requestFocus();
         headview.setLayoutParams(layoutParams);
         lv_content.getRefreshableView().addHeaderView(headview);
 
         //listview增加尾部布局
-        /*lv_content.onRefreshComplete();
-        footView= LayoutInflater.from(getActivity()).inflate(R.layout.textview_layout, null);
-        footView.setVisibility(View.GONE);
-        TextView v = (TextView) footView.findViewById(R.id.tv_text);
-        v.setText("已经到底,请到别处去看看吧!");
-        lv_content.getRefreshableView().addFooterView(footView);*/
+        lv_content.onRefreshComplete();
+        footView= LayoutInflater.from(getActivity()).inflate(R.layout.load_more, null);
+        progressBar = (ProgressBar) footView.findViewById(R.id.secondBar);
+        textView = (TextView) footView.findViewById(R.id.tv_load_more);
+        rl_footer = (RelativeLayout) footView.findViewById(R.id.rl_footer);
+
+        /*endText = (TextView) footView.findViewById(R.id.tv_text);
+        endText.setVisibility(View.GONE);
+        endText.setTextColor(getResources().getColor(R.color.text_my));*/
+        lv_content.getRefreshableView().addFooterView(footView);
 
         invitationListViewFriendStyleAdapter = new PlotListViewFriendStyleAdapter(getActivity());
         lv_content.setAdapter(invitationListViewFriendStyleAdapter);
@@ -176,41 +173,14 @@ public class PlotFragment extends ToolBarFragment implements View.OnClickListene
 
         initData();
 
-        //为输入框注册键盘监听事件
-        search.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_GO) {
-                    //隐藏软键盘
-                    InputMethodManager imm = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                    if (imm.isActive()) {
-                        imm.hideSoftInputFromWindow(v.getApplicationWindowToken(), 0);
-                    }
-                    if (!search.getText().toString().equals("")) {
-                        if (Arad.preferences.getString("memberId") == null || Arad.preferences.getString("memberId").equals("")) {
-                            startActivity(new Intent(getActivity(), LoginActivity.class));
-                            search.setText("");
-                        } else {
-                            Intent intent = new Intent(getActivity(), PlotSearchResultActivity.class);
-                            intent.putExtra("keyWord", search.getText().toString());
-                            search.setText("");
-                            startActivity(intent);
-                        }
-                    }
-                    return true;
-                }
-                return false;
-            }
-        });
+        lv_content.setMode(PullToRefreshBase.Mode.PULL_FROM_START);
 
-        lv_content.setMode(PullToRefreshBase.Mode.BOTH);
-        lv_content.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
+        lv_content.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
             @Override
-            public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
+            public void onRefresh(PullToRefreshBase<ListView> refreshView) {
                 idao.requestPostRotaingBanner("B_COMMUNITY_TOP");
                 if (posts != null) {
                     posts.clear();
-                    rl_search.setVisibility(View.VISIBLE);
                 }
                 if (Arad.preferences.getString("memberId") != null && !Arad.preferences.getString("memberId").equals("")) {
                     PAGE_NUM = 1;
@@ -219,9 +189,41 @@ public class PlotFragment extends ToolBarFragment implements View.OnClickListene
                     lv_content.onRefreshComplete();
                 }
             }
+        });
+
+        lv_content.setOnLastItemVisibleListener(new PullToRefreshBase.OnLastItemVisibleListener() {
+            @Override
+            public void onLastItemVisible() {
+                rl_footer.setVisibility(View.VISIBLE);
+                progressBar.setVisibility(View.VISIBLE);
+                textView.setText("加载更多。。。");
+                if (posts != null) {
+                    PAGE_NUM += 1;
+                    if (Arad.preferences.getString("memberId") != null && !Arad.preferences.getString("memberId").equals("")) {
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                plotDao.queryCommunityPostList(Arad.preferences.getString("memberId"), communityId, PAGE_NUM + "", Constant.PAGE_SIZE + "");
+                            }
+                        }, 500);
+                        isFromLoad = true;
+                    }
+                } else {
+                    lv_content.onRefreshComplete();
+                }
+
+            }
+        });
+
+        /*lv_content.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
+            @Override
+            public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
+
+            }
 
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
+                endText.setVisibility(View.GONE);
                 if (posts != null) {
                     PAGE_NUM += 1;
                     if (Arad.preferences.getString("memberId") != null && !Arad.preferences.getString("memberId").equals("")) {
@@ -231,7 +233,7 @@ public class PlotFragment extends ToolBarFragment implements View.OnClickListene
                     lv_content.onRefreshComplete();
                 }
             }
-        });
+        });*/
 
         //跳转界面
         lv_content.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -481,7 +483,8 @@ public class PlotFragment extends ToolBarFragment implements View.OnClickListene
         Bundle bundle = getArguments();
         str = bundle.getString("str");
         if (str.equals("我")){
-           iv_back.setImageDrawable(getResources().getDrawable(R.mipmap.white_arrow_left_none));
+           //iv_back.setImageDrawable(getResources().getDrawable(R.mipmap.white_arrow_left_none));
+            iv_back.setVisibility(View.VISIBLE);
             iv_back.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -501,6 +504,7 @@ public class PlotFragment extends ToolBarFragment implements View.OnClickListene
         tv_plot_name.setOnClickListener(this);
         rim_post.setOnClickListener(this);
         rim_serve.setOnClickListener(this);
+        iv_search.setOnClickListener(this);
     }
 
     private void initData() {
@@ -552,8 +556,12 @@ public class PlotFragment extends ToolBarFragment implements View.OnClickListene
     public void onRequestFaild(String errorNo, String errorMessage) {
         super.onRequestFaild(errorNo, errorMessage);
         lv_content.onRefreshComplete();
-        if (errorNo.equals("006") && posts==null){
-           //footView.setVisibility(View.VISIBLE);
+        if(errorNo.equals("006")){
+            if(posts!=null&&posts.size()>0 && isFromLoad){
+                progressBar.setVisibility(View.GONE);
+                textView.setVisibility(View.VISIBLE);
+                textView.setText("已经到底了，请到别处看看");
+            }
         }
     }
 
@@ -591,6 +599,9 @@ public class PlotFragment extends ToolBarFragment implements View.OnClickListene
             case R.id.rl_friend_style_more:
                 int position1 = (int)id;
                 showMoreDialog(v, position1, posts.get(position1));
+                break;
+            case R.id.iv_search:
+                startActivity(new Intent(getActivity(), PlotSearchResultActivity.class));
                 break;
         }
     }

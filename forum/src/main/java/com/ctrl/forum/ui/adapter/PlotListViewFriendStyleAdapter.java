@@ -23,7 +23,6 @@ import com.ctrl.forum.customview.RoundImageView;
 import com.ctrl.forum.entity.Post;
 import com.ctrl.forum.entity.PostImage;
 import com.ctrl.forum.ui.activity.Invitation.InvitationCommentDetaioActivity;
-import com.ctrl.forum.ui.activity.Invitation.InvitationPullDownActivity;
 import com.ctrl.forum.ui.activity.LoginActivity;
 import com.ctrl.forum.ui.activity.mine.MineDetailActivity;
 import com.ctrl.forum.utils.SysUtils;
@@ -149,7 +148,7 @@ public class PlotListViewFriendStyleAdapter extends BaseAdapter {
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     if(Arad.preferences.getString("memberId")==null||Arad.preferences.getString("memberId").equals("")){
                         mcontext.startActivity(new Intent(mcontext, LoginActivity.class));
-                        AnimUtil.intentSlidOut((InvitationPullDownActivity)mcontext);
+                        AnimUtil.intentSlidOut(mcontext);
                         return;
                     }
                     Intent intent=new Intent(mcontext, InvitationCommentDetaioActivity.class);
@@ -271,7 +270,7 @@ public class PlotListViewFriendStyleAdapter extends BaseAdapter {
         @InjectView(R.id.tv_friend_style_shengyu_pinglun)//查看其它评论
                 TextView tv_friend_style_shengyu_pinglun;
         @InjectView(R.id.iv_friend_style_levlel)//用户等级
-                ImageView iv_friend_style_levlel;
+                TextView iv_friend_style_levlel;
         @InjectView(R.id.rl_friend_style_zan)//点赞
         public    RelativeLayout rl_friend_style_zan;
         @InjectView(R.id.rl_friend_style_pinglun)//评论
