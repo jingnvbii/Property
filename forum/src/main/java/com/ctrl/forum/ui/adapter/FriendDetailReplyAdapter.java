@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.beanu.arad.Arad;
 import com.beanu.arad.utils.AnimUtil;
 import com.ctrl.forum.R;
+import com.ctrl.forum.base.SetMemberLevel;
 import com.ctrl.forum.entity.PostReply2;
 import com.ctrl.forum.face.FaceConversionUtil;
 import com.ctrl.forum.ui.activity.Invitation.InvitationDetailActivity;
@@ -88,7 +89,9 @@ public class FriendDetailReplyAdapter extends BaseAdapter{
         }
         Arad.imageLoader.load(merchant.getImgUrl()).placeholder(R.mipmap.default_error).into(holder.iv_reply_photo);
         String levlel = merchant.getMemberLevel();
-        if (levlel != null) {
+
+        SetMemberLevel.setLevelImage(mcontext, holder.iv_reply_level, levlel);
+       /* if (levlel != null) {
             switch (levlel) {
                 case "0":
                     holder.iv_reply_level.setImageResource(R.mipmap.vip_icon);
@@ -117,7 +120,7 @@ public class FriendDetailReplyAdapter extends BaseAdapter{
             }
         }else {
             holder.iv_reply_level.setImageResource(R.mipmap.vip_icon);
-        }
+        }*/
 
         holder.iv_reply_photo.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -143,7 +146,7 @@ public class FriendDetailReplyAdapter extends BaseAdapter{
         @InjectView(R.id.iv_reply_photo)//文字
                ImageView iv_reply_photo;
         @InjectView(R.id.iv_reply_level)//文字
-               ImageView iv_reply_level;
+               TextView iv_reply_level;
         @InjectView(R.id.tv_reply_name)
                 TextView tv_reply_name;
         @InjectView(R.id.tv_reply_time)

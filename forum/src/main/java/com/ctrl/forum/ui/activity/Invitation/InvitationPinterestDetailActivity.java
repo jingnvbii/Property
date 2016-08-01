@@ -44,6 +44,7 @@ import com.beanu.arad.utils.MessageUtils;
 import com.ctrl.forum.R;
 import com.ctrl.forum.base.AppToolBarActivity;
 import com.ctrl.forum.base.Constant;
+import com.ctrl.forum.base.SetMemberLevel;
 import com.ctrl.forum.customview.AudioRecordButton;
 import com.ctrl.forum.customview.ImageZoomActivity;
 import com.ctrl.forum.customview.ListViewForScrollView;
@@ -234,7 +235,7 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
     private int lastItem;
     private View headerView;
     private ImageView title_image;
-    private ImageView iv_levlel;
+    private TextView iv_levlel;
     private TextView tv_name;
     private TextView tv_release_time;
     private TextView tv_address;
@@ -454,7 +455,7 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
 
     private void initHeaderView() {
          title_image=(ImageView)headerView.findViewById(R.id.title_image);
-         iv_levlel=(ImageView)headerView.findViewById(R.id.iv_levlel);
+         iv_levlel= (TextView) headerView.findViewById(R.id.iv_levlel);
         tv_name=(TextView)headerView.findViewById(R.id.tv_name);
         tv_release_time=(TextView)headerView.findViewById(R.id.tv_release_time);
         tv_address=(TextView)headerView.findViewById(R.id.tv_address);
@@ -623,7 +624,8 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
             user = idao.getUser();
             if (user != null) {
                 String levlel = idao.getUser().getMemberLevel();
-                if (levlel != null) {
+                SetMemberLevel.setLevelImage(this, iv_levlel, levlel);
+               /* if (levlel != null) {
                     switch (levlel) {
                         case "0":
                             iv_levlel.setImageResource(R.mipmap.vip_icon);
@@ -652,7 +654,7 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
                     }
                 }else {
                     iv_levlel.setImageResource(R.mipmap.vip_icon);
-                }
+                }*/
                 Arad.imageLoader.load(user.getImgUrl()).placeholder(R.mipmap.round_img).resize(300,300).centerCrop().into(title_image);
                 if(user.getNickName()!=null&&!user.getNickName().equals("")){
                     tv_name.setText(user.getNickName());
