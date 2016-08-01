@@ -63,7 +63,7 @@ public class InvitationPullDownHaveThirdKindPinterestStyleFragment extends ToolB
     private int width;
     DisplayMetrics dm;
     private int NUM = 4; // 每行显示个数
-    private int hSpacing = 20;// 水平间距
+    private int hSpacing = 20;// 水平间距1
     private String id;
     private View headview;
     private HorizontalScrollView horizontalScrollView;
