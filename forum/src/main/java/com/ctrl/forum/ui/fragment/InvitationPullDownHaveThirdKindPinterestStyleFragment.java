@@ -140,7 +140,7 @@ public class InvitationPullDownHaveThirdKindPinterestStyleFragment extends ToolB
                 idao.requesPostCategory(id, "2", "0");
                 idao.requestPostListByCategory(Arad.preferences.getString("memberId"), thirdKindId, "0", "","", PAGE_NUM, PAGE_SIZE);
             }else if(showAll.equals("1")) {
-                idao.requestPostRotaingBanner(id);
+                idao.requestPostRotaingBanner(firstId);
                // idao.requestPostRotaingBanner("B_POST_MIDDLE");
                 idao.requestPostListByCategory(Arad.preferences.getString("memberId"),firstId, "0", "","", PAGE_NUM, PAGE_SIZE);
             }else {

@@ -24,6 +24,7 @@ import com.beanu.arad.Arad;
 import com.beanu.arad.base.ToolBarFragment;
 import com.beanu.arad.utils.AndroidUtil;
 import com.beanu.arad.utils.AnimUtil;
+import com.beanu.arad.utils.Log;
 import com.ctrl.forum.R;
 import com.ctrl.forum.base.Constant;
 import com.ctrl.forum.dao.InvitationDao;
@@ -210,7 +211,7 @@ public class InvitationPullDownHaveThirdKindFragment extends ToolBarFragment {
                 idao.requestPostListByCategory(Arad.preferences.getString("memberId"), thirdKindId, "0", "","", PAGE_NUM, Constant.PAGE_SIZE);
           
             }else if(showAll.equals("1")) {
-                idao.requesPostCategory(channelId, "2", "0");
+                idao.requesPostCategory(firstId, "2", "0");
               //  idao.requestPostRotaingBanner("B_POST_MIDDLE");
                 idao.requestPostListByCategory(Arad.preferences.getString("memberId"), firstId, "0", "","", PAGE_NUM, Constant.PAGE_SIZE);
             }else {
@@ -427,6 +428,7 @@ public class InvitationPullDownHaveThirdKindFragment extends ToolBarFragment {
                 bol=1;
                 Intent intent = new Intent(getActivity(), InvitationSearchActivity.class);
                 intent.putExtra("styleType",styleType);
+                Log.i("tag","showall==="+showAll);
                 if (showAll.equals("1")){
                     intent.putExtra("channelId",firstId);
                 }else {
