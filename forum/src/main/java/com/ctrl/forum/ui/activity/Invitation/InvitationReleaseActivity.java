@@ -228,7 +228,6 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
         styleType  = getIntent().getStringExtra("styleType");
         idao = new InvitationDao(this);
 
-
         tv_tel=(TextView)findViewById(R.id.tv_tel);
         tv_location=(TextView)findViewById(R.id.tv_location);
         tv_name=(TextView)findViewById(R.id.tv_name);
@@ -674,15 +673,11 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
         spinner_second_kind.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
                 idao.requesItemCategory3(listItemCategroy.get(position).getId(), "2");
                 secondKindId = listItemCategroy.get(position).getId();
                 checkType2 = listItemCategroy.get(position).getCheckType();
                 styleType = listItemCategroy.get(position).getStyleType();
-                Log.e("styleType================",styleType);
-
             }
-
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
 

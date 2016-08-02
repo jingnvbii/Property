@@ -266,6 +266,9 @@ public class InvitationDetailActivity extends AppToolBarActivity implements View
                     String result = mobile.substring(0, 3) + "****" + mobile.substring(7, mobile.length());
                     tv_name.setText(result);
                 }
+            }else{
+                title_image.setImageResource(R.mipmap.image_default);
+                tv_name.setText("管理员");
             }
 
             if(post.getZambiastate().equals("0")){
@@ -333,6 +336,8 @@ public class InvitationDetailActivity extends AppToolBarActivity implements View
                 } else {
                     iv_detail_levlel.setImageResource(R.mipmap.vip_icon);
                 }*/
+            }else{
+                iv_detail_levlel.setVisibility(View.GONE);
             }
         }
     }

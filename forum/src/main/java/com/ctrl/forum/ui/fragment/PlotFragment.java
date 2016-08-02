@@ -616,7 +616,11 @@ public class PlotFragment extends ToolBarFragment implements View.OnClickListene
                 showMoreDialog(v, position1, posts.get(position1));
                 break;
             case R.id.iv_search:
-                startActivity(new Intent(getActivity(), PlotSearchResultActivity.class));
+                if (Arad.preferences.getString("memberId").equals("")){
+                    startActivity(new Intent(getActivity(), LoginActivity.class));
+                }else {
+                    startActivity(new Intent(getActivity(), PlotSearchResultActivity.class));
+                }
                 break;
         }
     }

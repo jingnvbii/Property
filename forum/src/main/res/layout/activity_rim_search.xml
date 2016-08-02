@@ -33,19 +33,38 @@
             android:layout_centerHorizontal="true" />
     </RelativeLayout>
 
-    <EditText
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="45dp">
+        <EditText
         android:id="@+id/ed_search"
         android:layout_width="match_parent"
-        android:layout_height="35dp"
+        android:layout_height="45dp"
         android:textSize="@dimen/text_size_basic"
         android:background="@drawable/bt_gray_stroke"
-        android:layout_marginTop="@dimen/margin_left_and_right"
-        android:layout_marginRight="@dimen/margin_left_and_right"
-        android:layout_marginLeft="@dimen/margin_left_and_right"
+            android:layout_marginTop="@dimen/margin_left_and_right"
+            android:layout_marginRight="@dimen/margin_left_and_right"
+            android:layout_marginLeft="@dimen/margin_left_and_right"
         android:paddingLeft="3dp"
         android:singleLine="true"
-        android:imeOptions="actionGo"
+            android:imeOptions="actionGo"
+            android:layout_toLeftOf="@+id/tv_search"
         />
+
+        <TextView
+            android:textColor="#999999"
+            android:textSize="16sp"
+            android:id="@+id/tv_search"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:text="搜索"
+            android:paddingRight="10dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="10dp"/>
+
+    </RelativeLayout>
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">

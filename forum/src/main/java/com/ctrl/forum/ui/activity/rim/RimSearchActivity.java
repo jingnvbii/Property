@@ -3,11 +3,9 @@ package com.ctrl.forum.ui.activity.rim;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.view.ViewGroup.MarginLayoutParams;
-import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
@@ -43,6 +41,8 @@ public class RimSearchActivity extends AppToolBarActivity implements View.OnClic
     ListView rl_history;
     @InjectView(R.id.clear_all)
     TextView clear_all; //清空历史记录
+    @InjectView(R.id.tv_search)
+    TextView tv_search;
 
     private SearchDao searchDao;
     private List<SearchHistory> hotSearch;
@@ -70,7 +70,7 @@ public class RimSearchActivity extends AppToolBarActivity implements View.OnClic
             }
         });
 
-        //为输入框注册键盘监听事件
+      /*  //为输入框注册键盘监听事件
       ed_search.setOnEditorActionListener(new TextView.OnEditorActionListener() {
           @Override
           public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -92,7 +92,7 @@ public class RimSearchActivity extends AppToolBarActivity implements View.OnClic
               }
               return false;
           }
-      });
+      });*/
     }
 
     //初始化数据
@@ -111,6 +111,7 @@ public class RimSearchActivity extends AppToolBarActivity implements View.OnClic
         iv_back.setOnClickListener(this);
         flowlayout.setOnClickListener(this);
         clear_all.setOnClickListener(this);
+        tv_search.setOnClickListener(this);
     }
 
     //流式布局
@@ -154,6 +155,20 @@ public class RimSearchActivity extends AppToolBarActivity implements View.OnClic
             case R.id.clear_all:
                 searchDao.deleteSearchHistory(Arad.preferences.getString("memberId"),"3");
                 break;
+            case R.id.tv_search:
+                //隐藏软键盘
+                InputMethodManager imm = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                if (imm.isActive()) {
+                    imm.hideSoftInputFromWindow(v.getApplicationWindowToken(), 0);
+                }
+                if (!ed_search.getText().toString().equals("")) {
+                    Intent intent = new Intent(getApplicationContext(), RimSearchReaultActivity.class);
+                    intent.putExtra("keyWord", ed_search.getText().toString());
+                    ed_search.setText("");
+                    startActivity(intent);
+                }
+                break;
+
         }
     }
 

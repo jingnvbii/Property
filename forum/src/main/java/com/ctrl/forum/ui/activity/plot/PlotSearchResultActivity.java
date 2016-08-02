@@ -8,11 +8,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.view.Gravity;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
@@ -34,7 +32,6 @@ import com.ctrl.forum.dao.InvitationDao;
 import com.ctrl.forum.dao.PlotDao;
 import com.ctrl.forum.entity.Post;
 import com.ctrl.forum.ui.activity.Invitation.InvitationDetailActivity;
-import com.ctrl.forum.ui.activity.LoginActivity;
 import com.ctrl.forum.ui.activity.store.StoreCommodityDetailActivity;
 import com.ctrl.forum.ui.activity.store.StoreShopListVerticalStyleActivity;
 import com.ctrl.forum.ui.adapter.PlotListViewFriendStyleAdapter;
@@ -68,6 +65,8 @@ public class PlotSearchResultActivity extends AppToolBarActivity implements View
     PullToRefreshListView lv_content; //周边服务
     @InjectView(R.id.et_search)
     EditText et_search;
+    @InjectView(R.id.tv_search)
+    TextView tv_search;
 
     private PlotListViewFriendStyleAdapter invitationListViewFriendStyleAdapter;
     private List<Post> posts;
@@ -98,7 +97,7 @@ public class PlotSearchResultActivity extends AppToolBarActivity implements View
         invitationListViewFriendStyleAdapter.setOnShare(this);
         invitationListViewFriendStyleAdapter.setOnMoreDialog(this);
 
-        //为输入框注册键盘监听事件
+       /* //为输入框注册键盘监听事件
         et_search.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -127,7 +126,7 @@ public class PlotSearchResultActivity extends AppToolBarActivity implements View
                 }
                 return false;
             }
-        });
+        });*/
 
         lv_content.setMode(PullToRefreshBase.Mode.BOTH);
         lv_content.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
@@ -243,6 +242,26 @@ public class PlotSearchResultActivity extends AppToolBarActivity implements View
             @Override
             public void onClick(View v) {
                PlotSearchResultActivity.this.finish();
+            }
+        });
+        tv_search.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //隐藏软键盘
+                InputMethodManager imm = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                if (imm.isActive()) {
+                    imm.hideSoftInputFromWindow(v.getApplicationWindowToken(), 0);
+                }
+                if (!et_search.getText().toString().equals("")) {
+                    keyWord = et_search.getText().toString();
+                    plotDao.queryPostList(Arad.preferences.getString("memberId"), "1",
+                            keyWord,
+                            Arad.preferences.getString("communityId"),
+                            PAGE_NUM + "", Constant.PAGE_SIZE + "");
+                    et_search.setText("");
+                }else{
+                    MessageUtils.showShortToast(PlotSearchResultActivity.this,"搜索内容不能为空");
+                }
             }
         });
     }
