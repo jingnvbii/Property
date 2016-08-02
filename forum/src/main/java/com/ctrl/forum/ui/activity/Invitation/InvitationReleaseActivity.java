@@ -181,6 +181,7 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
     private String categoryName;
     private String categroyId2;
     private String styleType;
+    private Bitmap bmp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -388,7 +389,9 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
                     holder.image.setVisibility(View.GONE);
                 }
             } else {
+                if (Bimp.tempSelectBitmap.get(position).getBitmap()!=null) {
                     holder.image.setImageBitmap(Bimp.tempSelectBitmap.get(position).getBitmap());
+                }
             }
                 return convertView;
             }
@@ -550,20 +553,29 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
                 delIds.put(post.getImg(), listPostImage.get(i).getId());//用来存放获取到的图片的url对应的id
             }
 
-
             new Thread(new Runnable() {
                 @Override
                 public void run() {
                     List<PostImage> listPostImage = idao.getListPostImage();//图片
                     for (int i=0;i<listPostImage.size();i++) {
-                        Bitmap bmp = getBitmap(listPostImage.get(i).getImg());
-                        ImageItem ii = new ImageItem();
-                        ii.setBitmap(bmp);
-                        ii.setImageUrl(listPostImage.get(i).getImg());
-                        Bimp.tempSelectBitmap.add(ii); //网络中获取
+                       // Bitmap bmp = getBitmap(listPostImage.get(i).getImg());
+                        Bitmap bitmap = null;
+                        try {
+                            Log.e("img============", listPostImage.get(i).getImg());
+                            bitmap = Arad.imageLoader.load(listPostImage.get(i).getImg()).resize(300,300).get();
+                            Log.e("bimp===========", bitmap.toString());
+                            ImageItem ii = new ImageItem();
+                            ii.setBitmap(bitmap);
+                            ii.setImageUrl(listPostImage.get(i).getImg());
+                            Bimp.tempSelectBitmap.add(ii);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     }
-                    adapter.update();
-                    showProgress(false);
+                    if (Bimp.tempSelectBitmap.size()==listPostImage.size()) {
+                        adapter.update();
+                        showProgress(false);
+                    }
                 }
             }).start();
         }
@@ -591,7 +603,6 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
             for(int i=0;i<listItemCategroy3.size();i++){
                 thirdCategroyStr.add(listItemCategroy3.get(i).getName());
             }
-
            setSecondSpinner3();
         }
     }

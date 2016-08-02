@@ -580,7 +580,8 @@ public class PlotAddInvitationActivity extends AppToolBarActivity implements Vie
             if (Bimp.tempSelectBitmap.size() > 0) {
                 Uri uri = null;
                 for (int i = 0; i < Bimp.tempSelectBitmap.size(); i++) {
-                    uri = Uri.parse(MediaStore.Images.Media.insertImage(getContentResolver(), Bimp.tempSelectBitmap.get(i).getBitmap(), null, null));
+                    uri= Utils.getUriFromPath(this,AlbumActivity.addList.get(i).getImagePath());
+                    //uri = Uri.parse(MediaStore.Images.Media.insertImage(getContentResolver(), Bimp.tempSelectBitmap.get(i).getBitmap(), null, null));
                     //uri = Bimp.tempSelectBitmap.get(i).getUri();
                     Log.e("uri=========",uri+"");
                     preUpload(uri);
