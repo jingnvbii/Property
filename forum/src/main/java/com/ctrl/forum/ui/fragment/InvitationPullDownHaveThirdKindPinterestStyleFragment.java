@@ -291,6 +291,11 @@ public class InvitationPullDownHaveThirdKindPinterestStyleFragment extends ToolB
                 bol = 1;
                 Intent intent = new Intent(getActivity(), InvitationSearchActivity.class);
                 intent.putExtra("styleType","3");
+                if (showAll.equals("1")){
+                    intent.putExtra("channelId",firstId);
+                }else {
+                    intent.putExtra("channelId", id);
+                }
                 startActivity(intent);
                 AnimUtil.intentSlidIn(getActivity());
             }

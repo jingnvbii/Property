@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -428,7 +427,11 @@ public class InvitationPullDownHaveThirdKindFragment extends ToolBarFragment {
                 bol=1;
                 Intent intent = new Intent(getActivity(), InvitationSearchActivity.class);
                 intent.putExtra("styleType",styleType);
-                intent.putExtra("channelId",channelId);
+                if (showAll.equals("1")){
+                    intent.putExtra("channelId",firstId);
+                }else {
+                    intent.putExtra("channelId", channelId);
+                }
                 startActivity(intent);
                 AnimUtil.intentSlidIn(getActivity());
             }
@@ -443,7 +446,6 @@ public class InvitationPullDownHaveThirdKindFragment extends ToolBarFragment {
 * 设置轮播图高度
 * */
     private void setLoopViewHeight() {
-        Log.i("tag","height=-==="+ AndroidUtil.getDeviceWidth(getActivity()));
         framelayout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
                 (int)(AndroidUtil.getDeviceWidth(getActivity())*Constant.SCALE_LOOP)));
 

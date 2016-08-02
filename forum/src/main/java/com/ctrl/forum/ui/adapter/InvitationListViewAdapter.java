@@ -1,14 +1,16 @@
 package com.ctrl.forum.ui.adapter;
 
-import android.content.Context;
+import android.app.Activity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.beanu.arad.Arad;
+import com.beanu.arad.utils.AndroidUtil;
 import com.ctrl.forum.R;
 import com.ctrl.forum.customview.RoundImageView;
 import com.ctrl.forum.entity.Post;
@@ -25,7 +27,7 @@ import butterknife.InjectView;
  * Created by jason on 2016/4/8.
  */
 public class InvitationListViewAdapter extends BaseAdapter{
-    private Context mcontext;
+    private Activity mcontext;
     private List<Post>mPostList;
     private List<PostImage>mPostImageList;
     private LayoutInflater inflter;
@@ -34,7 +36,7 @@ public class InvitationListViewAdapter extends BaseAdapter{
 
 
 
-    public InvitationListViewAdapter(Context context) {
+    public InvitationListViewAdapter(Activity context) {
                this.mcontext=context;
     }
 
@@ -188,14 +190,11 @@ public class InvitationListViewAdapter extends BaseAdapter{
                     holder2.tv_daoyu.setVisibility(View.GONE);
                 }*/
 
-              /*  int width1 = holder2.iv_title_photo1.getWidth();
+                int width1 = AndroidUtil.getDeviceWidth(mcontext);
                 RelativeLayout.LayoutParams para1;
                 para1 = (RelativeLayout.LayoutParams) holder2.iv_title_photo1.getLayoutParams();
-
-
-                para1.height = width1;
-                para1.width = width1;
-                holder2.iv_title_photo1.setLayoutParams(para1);*/
+                para1.width = (width1-AndroidUtil.dp2px(mcontext,40))/3;
+                holder2.iv_title_photo1.setLayoutParams(para1);
                 Arad.imageLoader.load(mPost2.getImgUrl()).placeholder(R.mipmap.default_error).resize(50,50)
                         .centerCrop().into(holder2.imageView2);
                 if(mPost2.getPostImgList()!=null) {
