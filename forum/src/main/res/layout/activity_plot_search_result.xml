@@ -1,9 +1,6 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
-
-
+    android:layout_height="match_parent">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -35,13 +32,14 @@
     </RelativeLayout>
 
     <RelativeLayout
+        android:layout_toLeftOf="@+id/tv_search"
+        android:layout_below="@+id/relativeLayout4"
         android:id="@+id/rl_search"
         android:layout_width="match_parent"
         android:layout_height="35dp"
         android:background="@drawable/bt_gray_stroke"
         android:layout_marginBottom="@dimen/margin_left_and_right"
         android:layout_marginTop="@dimen/margin_left_and_right"
-        android:layout_marginRight="@dimen/margin_left_and_right"
         android:layout_marginLeft="@dimen/margin_left_and_right">
 
         <ImageView
@@ -65,13 +63,25 @@
             android:singleLine="true"
             android:imeOptions="actionGo"
             android:layout_width="match_parent"
-            android:layout_height="35dp"/>
+            android:layout_height="35dp"
+            />
     </RelativeLayout>
 
-
     <com.handmark.pulltorefresh.library.PullToRefreshListView
+        android:layout_below="@+id/rl_search"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/lv_content" />
 
-</LinearLayout>
+    <TextView
+        android:layout_alignParentRight="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:text="搜索"
+        android:padding="10dp"
+        android:id="@+id/tv_search"
+        android:layout_above="@+id/lv_content"
+        android:layout_below="@+id/relativeLayout4"/>
+
+</RelativeLayout>

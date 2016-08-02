@@ -59,7 +59,6 @@ public class StartActivity extends ToolBarActivity implements View.OnClickListen
                 case 2:
                     //设置当前页面
                     viewPager_start.setCurrentItem(currentItem);
-
                     break;
             }
 
