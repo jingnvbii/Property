@@ -750,6 +750,7 @@ public class InvitationFragment extends ToolBarFragment implements View.OnClickL
     }
 
     private void gotoDetail(int pos) {
+        if (pos>=listNotice.size())return;
         String type = listNotice.get(pos).getType();
         if(listNotice.get(pos).getTargetId()==null)return;
         Intent intent=null;

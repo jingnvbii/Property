@@ -1044,6 +1044,7 @@ public class StroeFragment extends ToolBarFragment implements View.OnClickListen
     }
 
     private void gotoDetail(int pos) {
+        if (pos>=listMallNotice.size())return;
         String type = listMallNotice.get(pos).getType();
         if(listMallNotice.get(pos).getTargetId()==null)return;
         Intent intent=null;

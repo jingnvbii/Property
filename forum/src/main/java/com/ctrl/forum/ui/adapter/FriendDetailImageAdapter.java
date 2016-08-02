@@ -1,6 +1,6 @@
 package com.ctrl.forum.ui.adapter;
 
-import android.content.Context;
+import android.app.Activity;
 import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,8 +9,10 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
 import com.beanu.arad.Arad;
+import com.beanu.arad.utils.AndroidUtil;
 import com.ctrl.forum.R;
 import com.ctrl.forum.entity.PostImage;
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Transformation;
 
 import java.util.List;
@@ -23,10 +25,10 @@ import butterknife.InjectView;
  * Created by jason on 2016/4/8.
  */
 public class FriendDetailImageAdapter extends BaseAdapter{
-    private Context mcontext;
+    private Activity mcontext;
     private List<PostImage> list;
 
-    public FriendDetailImageAdapter(Context context) {
+    public FriendDetailImageAdapter(Activity context) {
                this.mcontext=context;
     }
 
@@ -62,14 +64,12 @@ public class FriendDetailImageAdapter extends BaseAdapter{
             holder=(ViewHolder)convertView.getTag();
         }
         PostImage merchant=list.get(position);
-        final int width = holder.iv_friend_detail.getWidth();
+       // final int width = holder.iv_friend_detail.getWidth();
         Transformation transformation = new Transformation() {
 
             @Override
             public Bitmap transform(Bitmap source) {
-
-                int targetWidth = width/2;
-
+                int targetWidth = (AndroidUtil.getDeviceWidth(mcontext))/2;
                 int targetHeight = 500;
 
                 if (source.getWidth() == 0 || source.getHeight() == 0) {
@@ -130,7 +130,15 @@ public class FriendDetailImageAdapter extends BaseAdapter{
                 return "transformation" + " desiredWidth";
             }
         };
-        Arad.imageLoader.load(merchant.getImg()).placeholder(R.mipmap.default_error).transform(transformation).into(holder.iv_friend_detail);
+        Arad.imageLoader.load(merchant.getImg()).placeholder(R.mipmap.default_error).transform(transformation).into(holder.iv_friend_detail, new Callback() {
+            @Override
+            public void onSuccess() {
+            }
+
+            @Override
+            public void onError() {
+            }
+        });
         return convertView;
     }
 
