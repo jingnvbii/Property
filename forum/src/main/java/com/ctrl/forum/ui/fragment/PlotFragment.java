@@ -218,7 +218,6 @@ public class PlotFragment extends ToolBarFragment implements View.OnClickListene
                         }
                     }, 500);
                 }
-
             }
         });
 
