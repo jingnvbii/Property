@@ -20,6 +20,7 @@ import android.widget.TextView;
 
 import com.beanu.arad.Arad;
 import com.beanu.arad.utils.AnimUtil;
+import com.beanu.arad.utils.Log;
 import com.beanu.arad.utils.MessageUtils;
 import com.ctrl.forum.R;
 import com.ctrl.forum.base.AppToolBarActivity;
@@ -110,6 +111,7 @@ public class InvitationSearchActivity extends AppToolBarActivity implements View
        styleType=getIntent().getStringExtra("styleType");
        // styleType="1";
         channelId=getIntent().getStringExtra("channelId");
+        Log.i("tag", "channelId===" + channelId);
         et_invitation_search.addTextChangedListener(watcher);
 
     }

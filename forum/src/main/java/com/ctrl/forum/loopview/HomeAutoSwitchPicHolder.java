@@ -116,19 +116,20 @@ public class HomeAutoSwitchPicHolder extends BaseHolder<List<String>>
      */
     protected void addPointToContainer(List<String> data) {
         mPointContainer.removeAllViews();
+        if(data.size()>1) {
+            for (int i = 0; i < data.size(); i++) {
+                View view = new View(UIUtils.getContext());
+                view.setBackgroundResource(R.drawable.home_point_normal);
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(UIUtils.dip2px(6), UIUtils.dip2px(6));
+                if (i != 0) {
+                    params.leftMargin = UIUtils.dip2px(8);
+                    //   params.bottomMargin = UIUtils.dip2px(8);
+                } else {
+                    view.setBackgroundResource(R.drawable.home_point_select);
+                }
 
-        for (int i = 0; i < data.size(); i++) {
-            View view = new View(UIUtils.getContext());
-            view.setBackgroundResource(R.drawable.home_point_normal);
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(UIUtils.dip2px(6), UIUtils.dip2px(6));
-            if (i != 0) {
-                params.leftMargin = UIUtils.dip2px(8);
-                params.bottomMargin = UIUtils.dip2px(8);
-            } else {
-                view.setBackgroundResource(R.drawable.home_point_select);
+                mPointContainer.addView(view, params);
             }
-
-            mPointContainer.addView(view,params);
         }
     }
 

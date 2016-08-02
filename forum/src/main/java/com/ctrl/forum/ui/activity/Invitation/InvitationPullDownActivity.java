@@ -150,6 +150,8 @@ public class InvitationPullDownActivity extends ToolBarActivity implements View.
     private VelocityTracker mVelocityTracker;
     private String categoryId;
     private String categoryName;
+    private String showAll;
+    private String sstyleType;
 
 
     @Override
@@ -255,7 +257,8 @@ public class InvitationPullDownActivity extends ToolBarActivity implements View.
                 radio.setChecked(true);
                 categoryId=listCategory.get(0).getId();
                 categoryName=listCategory.get(0).getName();
-                styleType = listCategory.get(0).getStyleType();
+                sstyleType = listCategory.get(0).getStyleType();
+                showAll=listCategory.get(0).getShowAll();
             }
             if(radio.isChecked()) {
                 radio.setTextColor(getResources().getColor(R.color.text_blue));//选择器
@@ -363,7 +366,8 @@ public class InvitationPullDownActivity extends ToolBarActivity implements View.
             categoryId=listCategory.get(position).getId();
             categoryName=listCategory.get(position).getName();
             mGroupPostion=position;
-            styleType=listCategory.get(position).getStyleType();
+            sstyleType=listCategory.get(position).getStyleType();
+            showAll=listCategory.get(position).getShowAll();
         }
     }
 
@@ -536,8 +540,13 @@ public class InvitationPullDownActivity extends ToolBarActivity implements View.
                 }
                 InvitationPullDownActivity.isFromSearch=true;
                 Intent intent = new Intent(InvitationPullDownActivity.this, InvitationSearchActivity.class);
-                intent.putExtra("styleType",styleType);
-                intent.putExtra("channelId",categoryId);
+                if(showAll.equals("1")){
+                    intent.putExtra("channelId",channelId);
+                }else {
+                    intent.putExtra("channelId",categoryId);
+                }
+                Log.i("tag","styleType==="+sstyleType);
+                intent.putExtra("styleType",sstyleType);
                 startActivity(intent);
                 AnimUtil.intentSlidIn(InvitationPullDownActivity.this);
                 break;

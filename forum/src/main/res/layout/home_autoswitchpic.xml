@@ -11,7 +11,7 @@
         <android.support.v4.view.ViewPager
             android:id="@+id/item_home_viewPager"
             android:layout_width="match_parent"
-            android:layout_height="160dp" >
+            android:layout_height="match_parent" >
         </android.support.v4.view.ViewPager>
 
         <!-- 轮播图下方的圆点指针容器 -->
@@ -21,8 +21,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/item_home_viewPager"
+            android:paddingBottom="10dp"
             android:layout_centerHorizontal="true"
-            android:layout_marginBottom="10dp"
             android:orientation="horizontal" >
         </LinearLayout>
     </RelativeLayout>
