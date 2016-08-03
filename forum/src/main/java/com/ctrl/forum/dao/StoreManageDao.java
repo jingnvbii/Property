@@ -40,4 +40,9 @@ public class StoreManageDao extends IDao {
     public void onRequestSuccess(JsonNode result, int requestCode) throws IOException {
 
     }
+
+    @Override
+    public void onRequestFails(String result, int requestCode, String errorNo) {
+
+    }
 }

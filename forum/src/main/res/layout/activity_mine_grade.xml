@@ -45,21 +45,22 @@
             android:layout_marginLeft="@dimen/margin_left_and_right"
             android:id="@+id/textView12"
             android:textColor="@color/text_newpwd"
-            android:textSize="@dimen/text_size_small"
+            android:textSize="@dimen/text_size_basic"
             android:layout_below="@+id/tv_name"
             android:layout_toRightOf="@+id/iv_header"
             android:layout_toEndOf="@+id/iv_header" />
 
         <TextView
             android:background="@drawable/red_border_2"
+            android:textSize="@dimen/level_text"
+            android:layout_marginBottom="@dimen/level_bottom"
             android:textColor="@color/white"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/iv_grade"
             android:layout_alignBottom="@+id/textView12"
             android:layout_toRightOf="@+id/textView12"
-            android:layout_marginLeft="@dimen/margin_left_and_right"
-            android:layout_marginBottom="3dp"
+            android:layout_marginLeft="5dp"
              />
 
         <TextView
@@ -72,14 +73,14 @@
             android:layout_alignStart="@+id/textView12"
             android:layout_marginTop="5dp"
             android:textColor="@color/text_newpwd"
-            android:textSize="@dimen/text_size_small"/>
+            android:textSize="@dimen/text_size_basic"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="2"
             android:id="@+id/tv_stage"
-            android:textSize="@dimen/text_size_small"
+            android:textSize="@dimen/text_size_basic"
             android:layout_alignBottom="@+id/textView13"
             android:layout_toRightOf="@+id/textView13"
             android:layout_toEndOf="@+id/textView13"
@@ -91,7 +92,7 @@
             android:layout_height="wrap_content"
             android:text="@string/max_stage"
             android:id="@+id/tv_MaxExp"
-            android:textSize="@dimen/text_size_small"
+            android:textSize="@dimen/text_size_basic"
             android:layout_alignBottom="@+id/tv_stage"
             android:layout_toRightOf="@+id/tv_stage"
             android:layout_toEndOf="@+id/tv_stage"

@@ -53,6 +53,11 @@ public class KindDao extends IDao {
 
     }
 
+    @Override
+    public void onRequestFails(String result, int requestCode, String errorNo) {
+
+    }
+
     public List<Kind> getListKind() {
         return listKind;
     }

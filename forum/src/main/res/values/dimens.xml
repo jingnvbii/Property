@@ -22,6 +22,8 @@
     <dimen name="text_size_large">22sp</dimen>
 
     <dimen name="image_heade">50dp</dimen>
+    <dimen name="level_text">12sp</dimen>
+    <dimen name="level_bottom">3dp</dimen>
 
     <!-- img select -->
     <dimen name="image_size">120dp</dimen>
@@ -31,9 +33,7 @@
 
     <dimen name="list_item_micro">50dp</dimen>
     <dimen name="gray_space">40dp</dimen>
-
     <dimen name="ui_10_dip">10dip</dimen>
-
 
 <!--微信支付-->
     <dimen name="LargeTextSize">16sp</dimen>

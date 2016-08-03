@@ -136,6 +136,10 @@ public class SearchDao extends IDao {
         }
     }
 
+    @Override
+    public void onRequestFails(String result, int requestCode, String errorNo) {
+
+    }
 
 
     public List<SearchHistory> getSearchHistory() {

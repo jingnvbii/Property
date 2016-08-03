@@ -184,6 +184,11 @@ public class MineStoreDao extends IDao {
         }
     }
 
+    @Override
+    public void onRequestFails(String result, int requestCode, String errorNo) {
+
+    }
+
     public List<MemeberOrder> getMemeberOrders() {
         return memeberOrders;
     }

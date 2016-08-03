@@ -21,9 +21,6 @@ import java.util.Map;
  */
 public class AddressDao extends IDao {
 
-
-
-
     private List<Address> listAddress = new ArrayList<>();//收货地址列表
 
     public AddressDao(INetResult activity){
@@ -156,6 +153,11 @@ public class AddressDao extends IDao {
         if(requestCode == 1){
             Log.d("demo", "dao中结果集(商城首页商家推荐返回): " + result);
         }
+
+    }
+
+    @Override
+    public void onRequestFails(String result, int requestCode, String errorNo) {
 
     }
 

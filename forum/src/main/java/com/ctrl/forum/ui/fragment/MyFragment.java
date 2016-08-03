@@ -161,6 +161,7 @@ public class MyFragment extends ToolBarFragment implements View.OnClickListener{
         super.setUserVisibleHint(isVisibleToUser);
     }
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_my, container, false);
@@ -590,6 +591,10 @@ public class MyFragment extends ToolBarFragment implements View.OnClickListener{
                     break;
                 case "message":
                     editDao.getVipInfo(Arad.preferences.getString("memberId"));
+                    break;
+                case "back":
+                    int number = Integer.valueOf(intent.getExtras().getString("number"));
+                    iv_message.setNum(number);
                     break;
                 default:
                     break;

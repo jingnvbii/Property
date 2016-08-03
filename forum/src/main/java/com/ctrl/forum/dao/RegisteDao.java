@@ -60,5 +60,10 @@ public class RegisteDao extends IDao {
 
     }
 
+    @Override
+    public void onRequestFails(String result, int requestCode, String errorNo) {
+
+    }
+
     public String getCode(){return code;}
 }

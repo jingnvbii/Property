@@ -247,6 +247,11 @@ public class RimDao extends IDao {
         }
     }
 
+    @Override
+    public void onRequestFails(String result, int requestCode, String errorNo) {
+
+    }
+
     public List<CompanyEvaluation> getEvaluations() {
         return evaluations;
     }

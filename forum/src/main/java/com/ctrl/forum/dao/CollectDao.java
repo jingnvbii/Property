@@ -134,6 +134,12 @@ public class CollectDao extends IDao {
         }
     }
 
+    @Override
+    public void onRequestFails(String result, int requestCode, String errorNo) {
+
+    }
+
+
     public List<CompanyCollect> getCompanyCollects() {
         return companyCollects;
     }

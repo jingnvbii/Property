@@ -77,6 +77,11 @@ public class MemberDao extends IDao {
         }
     }
 
+    @Override
+    public void onRequestFails(String result, int requestCode, String errorNo) {
+
+    }
+
     public LevelInfo getLevelInfos() {
         return levelInfos;
     }

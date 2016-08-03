@@ -115,7 +115,6 @@ public class PlotRimServeActivity extends ToolBarActivity implements View.OnClic
                 startActivity(intent);
             }
         });
-
     }
 
     //初始化分类列表
@@ -126,6 +125,16 @@ public class PlotRimServeActivity extends ToolBarActivity implements View.OnClic
             v.setText(category2s.get(i).getName());
             view.setOnClickListener(this);
             ll_category.addView(view);
+
+            //中间添加竖线
+           /* if (i!=category2s.size()-1){
+                TextView tv = new TextView(this);
+                AbsListView.LayoutParams layoutParams = new
+                        AbsListView.LayoutParams(1, AbsListView.LayoutParams.MATCH_PARENT);
+                tv.setLayoutParams(layoutParams);
+                tv.setBackgroundResource(R.color.gray_store);
+                ll_category.addView(tv);
+            }*/
         }
         View v = ll_category.getChildAt(0);
         tv = (TextView) v.findViewById(R.id.tv_text);

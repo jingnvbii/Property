@@ -7,12 +7,14 @@ import com.beanu.arad.http.INetResult;
 import com.beanu.arad.utils.JsonUtil;
 import com.ctrl.forum.base.Constant;
 import com.ctrl.forum.entity.Advertising;
-import com.ctrl.forum.entity.Data;
 import com.ctrl.forum.entity.MemberInfo;
 import com.ctrl.forum.entity.NavigationBar;
 import com.ctrl.forum.entity.ReceiveAddress;
 import com.ctrl.forum.entity.StartAds;
 import com.fasterxml.jackson.databind.JsonNode;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -39,7 +41,7 @@ public class LoginDao extends IDao {
     private List<Advertising> listAdvertising=new ArrayList<>();
     private List<StartAds> listAds=new ArrayList<>();
     private StartAds startAds;
-    private Data data = new Data(); //(拉黑天数)
+    private String handleDay = "";
 
     public LoginDao(INetResult activity){
         super(activity);
@@ -90,7 +92,6 @@ public class LoginDao extends IDao {
             memberInfo = JsonUtil.node2pojo(result.findValue("memberInfo"), MemberInfo.class);
             listReceiveAddress = JsonUtil.node2pojoList(result.findValue("receiveAddressList"), ReceiveAddress.class);
             listNavigationBar = JsonUtil.node2pojoList(result.findValue("navigationBar"), NavigationBar.class);
-            data = JsonUtil.node2pojo(result.findValue("data"),Data.class);
         }
         if(requestCode == 1){
             Log.d("demo","dao中结果集(修改密码): " + result);
@@ -105,6 +106,21 @@ public class LoginDao extends IDao {
         }
     }
 
+    @Override
+    public void onRequestFails(String result, int requestCode, String errorNo) {
+        if(requestCode == 0) {
+            if (errorNo.equals("033")) {
+                Log.d("demo", "dao中结果集(033设备拉黑): " + result);
+                try {
+                    JSONObject jsonObject = new JSONObject(result);
+                    JSONObject data = jsonObject.optJSONObject("data");
+                    handleDay = data.optString("handleDay");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
 
     public MemberInfo getMemberInfo() {
         return memberInfo;
@@ -130,7 +146,7 @@ public class LoginDao extends IDao {
         return startAds;
     }
 
-    public Data getData() {
-        return data;
+    public String getHandleDay() {
+        return handleDay;
     }
 }

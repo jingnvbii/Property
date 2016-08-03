@@ -14,10 +14,13 @@ import com.ctrl.forum.R;
 import com.ctrl.forum.base.Constant;
 import com.ctrl.forum.dao.ReplyCommentDao;
 import com.ctrl.forum.entity.Message;
+import com.ctrl.forum.ui.activity.Invitation.InvitationDetailFromPlatformActivity;
 import com.ctrl.forum.ui.activity.Invitation.InvitationPinterestDetailActivity;
 import com.ctrl.forum.ui.activity.mine.MineOrderActivity;
 import com.ctrl.forum.ui.activity.mine.MineXianJuanActivity;
 import com.ctrl.forum.ui.activity.mine.MineYouJuanActivity;
+import com.ctrl.forum.ui.activity.store.StoreCommodityDetailActivity;
+import com.ctrl.forum.ui.activity.store.StoreShopDetailActivity;
 import com.ctrl.forum.ui.adapter.MineMessageListAdapter;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
@@ -127,6 +130,26 @@ public class MineMessageFragment extends ToolBarFragment {
                             intent.putExtra("id", targetId);
                             startActivity(intent);
                             break;
+                        case "10"://后台推送帖子
+                            intent = new Intent(getActivity(), InvitationDetailFromPlatformActivity.class);
+                            intent.putExtra("id", targetId);
+                            startActivity(intent);
+                            break;
+                        case "11"://后台推送商品
+                            intent = new Intent(getActivity(), StoreCommodityDetailActivity.class);
+                            intent.putExtra("id", targetId);
+                            startActivity(intent);
+                            break;
+                        case "12"://后台推送店铺
+                            intent = new Intent(getActivity(), StoreShopDetailActivity.class);
+                            intent.putExtra("id", targetId);
+                            startActivity(intent);
+                            break;
+                        case "13"://后台推送通知
+                           /* intent = new Intent(getActivity(), InvitationDetailFromPlatformActivity.class);
+                            intent.putExtra("id", targetId);
+                            startActivity(intent);*/
+                            break;
                         default:
                             break;
                     }
@@ -135,7 +158,6 @@ public class MineMessageFragment extends ToolBarFragment {
         });
 
         return view;
-
     }
 
     private void initData() {
@@ -152,7 +174,6 @@ public class MineMessageFragment extends ToolBarFragment {
             if (messages!=null){
                 mineMessageListAdapter.setMessages(messages);
             }
-
         }
     }
 

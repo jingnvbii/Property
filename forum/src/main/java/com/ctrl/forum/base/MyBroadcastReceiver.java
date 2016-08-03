@@ -73,11 +73,13 @@ public class MyBroadcastReceiver extends BroadcastReceiver{
             itt.putExtra("num", "num");
             context.sendBroadcast(itt,null);
 
-            if (Arad.preferences.getBoolean("replyComments")){//评论回复
-                setNavti(context, "您收到一条新消息", message, messageKey);
-            }else{
-                if (Arad.preferences.getBoolean("systemNotification")){//系统通知
-                    setNavti(context, "系统通知", message, messageKey);
+            if (!Arad.preferences.getString("memeberId").equals("")) {
+                if (Arad.preferences.getBoolean("replyComments")) {//评论回复
+                    setNavti(context, "您收到一条新消息", message, messageKey);
+                } else {
+                    if (Arad.preferences.getBoolean("systemNotification")) {//系统通知
+                        setNavti(context, "系统通知", message, messageKey);
+                    }
                 }
             }
         }

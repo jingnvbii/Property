@@ -100,7 +100,6 @@ public class ItemRimActivity extends ToolBarActivity implements View.OnClickList
                 }
                 rimDao.getAroundServiceCompanyList(PAGE_NUM + "", Constant.PAGE_SIZE + "", Arad.preferences.getString("memberId"), id, "", Arad.preferences.getString("latitude"), Arad.preferences.getString("lontitude"));
             }
-
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
                 if (rimServiceCompanies != null) {
@@ -111,7 +110,6 @@ public class ItemRimActivity extends ToolBarActivity implements View.OnClickList
                 }
             }
         });
-
         lv_shop.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -129,14 +127,13 @@ public class ItemRimActivity extends ToolBarActivity implements View.OnClickList
                 }
             }
         });
-
     }
 
     private void initMap() {
         mBaiduMap = mMapView.getMap();
         Marker mMarker = null;
-       /* MapStatusUpdate msu = MapStatusUpdateFactory.zoomTo(14.0f);
-        mBaiduMap.setMapStatus(msu);*/
+        MapStatusUpdate msu = MapStatusUpdateFactory.zoomTo(14.0f);
+        mBaiduMap.setMapStatus(msu);
 
         LatLng cenpt = new LatLng(Double.valueOf(Arad.preferences.getString("latitude")),
                 Double.valueOf(Arad.preferences.getString("lontitude")));
@@ -153,7 +150,6 @@ public class ItemRimActivity extends ToolBarActivity implements View.OnClickList
         for(int i=0;i<rimServiceCompanies.size();i++){
             LatLng cenpt1 = new LatLng(rimServiceCompanies.get(i).getLatitude(),
                     rimServiceCompanies.get(i).getLongitude());
-
             //构建Marker图标
             BitmapDescriptor bitmap = BitmapDescriptorFactory
                     .fromResource(R.drawable.ic_location_chatbox);
@@ -165,7 +161,6 @@ public class ItemRimActivity extends ToolBarActivity implements View.OnClickList
             mMarker = (Marker) (mBaiduMap.addOverlay(option));
             mMarker.setTitle(rimServiceCompanies.get(i).getName());
         }
-
         //添加覆盖物
         //initOverlay();
 

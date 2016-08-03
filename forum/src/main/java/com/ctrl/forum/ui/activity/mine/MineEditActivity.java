@@ -83,7 +83,6 @@ public class MineEditActivity extends AppToolBarActivity implements View.OnClick
     private static final int IMAGE_REQUEST_CODE = 0;
     private static final int CAMERA_REQUEST_CODE = 1;
 
-
     // 使用系统当前日期加以调整作为照片的名称
     /*@SuppressLint("SimpleDateFormat")*/
     private String getPhotoFileName() {
@@ -229,6 +228,13 @@ public class MineEditActivity extends AppToolBarActivity implements View.OnClick
                 DataCleanUtils.clearAllCache(this.getApplicationContext());
                 Arad.preferences.putBoolean("isFirstIn", false);
                 Arad.preferences.flush();
+
+                Intent itt = new Intent();
+                itt.setAction("com.message");
+                itt.putExtra("num", "back");
+                itt.putExtra("number","0");
+                this.sendBroadcast(itt, null);
+
                 startActivity(new Intent(this, LoginActivity.class));
                 this.finish();
                 break;
@@ -284,6 +290,7 @@ public class MineEditActivity extends AppToolBarActivity implements View.OnClick
         intent.putExtra("return-data", true);
         startActivityForResult(intent, CROP_PHOTO_INTENT);
     }
+
     /**
      * 设置图片并将图片转成base64
      */

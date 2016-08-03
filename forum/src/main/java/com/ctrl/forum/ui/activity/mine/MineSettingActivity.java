@@ -155,8 +155,6 @@ public class MineSettingActivity extends ToolBarActivity implements View.OnClick
             }else{
                 Arad.preferences.putBoolean(name, false);
             }
-            Arad.preferences.putBoolean("isSet", true);
-            Arad.preferences.flush();
         }else {
             if (Arad.preferences.getBoolean(name)) {
                 ib.setChecked(true);
@@ -182,6 +180,8 @@ public class MineSettingActivity extends ToolBarActivity implements View.OnClick
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        Arad.preferences.putBoolean("isSet", true);
+        Arad.preferences.flush();
         //unregisterReceiver(receiver);
     }
 

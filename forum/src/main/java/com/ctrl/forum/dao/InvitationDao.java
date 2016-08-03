@@ -43,7 +43,6 @@ public class InvitationDao extends IDao {
     private Post post;
     private MemberInfo userInfo;
 
-
     private List<CategoryItem> list2s = new ArrayList<>();
     private List<CategoryItem> list3 = new ArrayList<>();
     private List<Banner> listBanner = new ArrayList<>();//帖子首页轮播图列表
@@ -724,6 +723,10 @@ public class InvitationDao extends IDao {
 
     }
 
+    @Override
+    public void onRequestFails(String result, int requestCode, String errorNo) {
+
+    }
 
 
     public List<Banner> getListBanner() {

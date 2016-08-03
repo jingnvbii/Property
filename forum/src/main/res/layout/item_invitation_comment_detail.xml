@@ -29,6 +29,8 @@
         android:id="@+id/iv_reply_level"
         android:textColor="@color/white"
         android:background="@drawable/red_border_2"
+        android:textSize="@dimen/level_text"
+        android:layout_marginBottom="@dimen/level_bottom"
         android:layout_toRightOf="@id/tv_reply_name"
         android:layout_marginTop="10dp"
         android:layout_width="wrap_content"

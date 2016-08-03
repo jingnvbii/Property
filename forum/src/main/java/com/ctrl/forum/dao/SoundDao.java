@@ -51,6 +51,10 @@ public class SoundDao extends IDao {
 
     }
 
+    @Override
+    public void onRequestFails(String result, int requestCode, String errorNo) {
+
+    }
 
     public String getSoundUrl() {
         return soundUrl;

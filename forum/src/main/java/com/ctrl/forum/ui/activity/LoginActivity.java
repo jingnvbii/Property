@@ -29,7 +29,6 @@ import com.ctrl.forum.R;
 import com.ctrl.forum.base.AppToolBarActivity;
 import com.ctrl.forum.base.MyApplication;
 import com.ctrl.forum.dao.LoginDao;
-import com.ctrl.forum.entity.Data;
 import com.ctrl.forum.entity.MemberInfo;
 import com.ctrl.forum.ui.activity.mine.MineUpdatepwdActivity;
 import com.ctrl.forum.ui.activity.rim.ExampleUtil;
@@ -250,20 +249,11 @@ public class LoginActivity extends AppToolBarActivity implements View.OnClickLis
             Arad.preferences.putString("address", address);
             Arad.preferences.flush();
 
+            Intent intent02=new Intent(this,MainActivity.class);
+            intent02.putExtra("listNagationBar", (Serializable) ldao.getListNavigationBar());
+            startActivity(intent02);
+            AnimUtil.intentSlidIn(this);
             setAlias();
-
-            Data data= ldao.getData();
-            if (data!=null){
-                int handleDay = data.getHandleDay();
-                if (handleDay==0){
-                    Intent intent02=new Intent(this,MainActivity.class);
-                    intent02.putExtra("listNagationBar", (Serializable) ldao.getListNavigationBar());
-                    startActivity(intent02);
-                    AnimUtil.intentSlidIn(this);
-                }else{
-                   MessageUtils.showShortToast(this,"您的设备已被拉黑"+handleDay+"天");
-                }
-            }
         }
     }
 
@@ -272,6 +262,11 @@ public class LoginActivity extends AppToolBarActivity implements View.OnClickLis
         super.onRequestFaild(errorNo, errorMessage);
         if(errorNo.equals("002")){
             MessageUtils.showShortToast(this, "账号或密码错误");
+            Log.e("errorMessage", errorMessage);
+        }
+        if (errorNo.equals("033")){
+            String handleDay = ldao.getHandleDay();
+            MessageUtils.showShortToast(this, "该设备已被拉黑"+handleDay+"天!");
         }
     }
 
