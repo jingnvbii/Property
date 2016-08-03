@@ -38,6 +38,7 @@
             android:layout_height="wrap_content"
             android:layout_toRightOf="@+id/tv_friend_style_name"
             android:layout_marginLeft="5dp"
+            android:layout_alignBottom="@+id/tv_friend_style_name"
             />
 
         <TextView
