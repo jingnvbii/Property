@@ -164,12 +164,12 @@ public class InvitationListViewAdapter extends BaseAdapter{
                 if(mPost1==null){break;}
                 holder1.tv_titile0.setText(mPost1.getTitle());
                 holder1.tv_name0.setText(mPost1.getMemberName());
-               /* if(post.getBlurbs()!=null&&!post.getBlurbs().equals("")){
+                if(mPost1.getBlurbs()!=null&&!mPost1.getBlurbs().equals("")){
                     holder1.tv_daoyu.setVisibility(View.VISIBLE);
-                    holder1.tv_daoyu.setText(post.getBlurbs());
+                    holder1.tv_daoyu.setText(mPost1.getBlurbs());
                 }else {
                     holder1.tv_daoyu.setVisibility(View.GONE);
-                }*/
+                }
                 if(mPost1.getPublishTime()!=null)
                 holder1.tv_time0.setText(TimeUtils.dateTime(mPost1.getPublishTime()));
                 holder1.tv_numbers0.setText(mPost1.getCommentNum() + "");
@@ -183,12 +183,12 @@ public class InvitationListViewAdapter extends BaseAdapter{
               //  holder2.tv_time1.setText(TimeUtils.date(Long.parseLong(post.getPublishTime())));
                 holder2.tv_time1.setText(TimeUtils.dateTime(mPost2.getPublishTime()));
                 holder2.tv_numbers1.setText(mPost2.getCommentNum() + "");
-               /* if(post.getBlurbs()!=null&&!post.getBlurbs().equals("")){
+                if(mPost2.getBlurbs()!=null&&!mPost2.getBlurbs().equals("")){
                     holder2.tv_daoyu.setVisibility(View.VISIBLE);
-                    holder2.tv_daoyu.setText(post.getBlurbs());
+                    holder2.tv_daoyu.setText(mPost2.getBlurbs());
                 }else {
                     holder2.tv_daoyu.setVisibility(View.GONE);
-                }*/
+                }
 
                 int width1 = AndroidUtil.getDeviceWidth(mcontext);
                 RelativeLayout.LayoutParams para1;
@@ -210,12 +210,12 @@ public class InvitationListViewAdapter extends BaseAdapter{
                 holder3.tv_name3.setText(mPos3.getMemberName());
                 holder3.tv_time3.setText(TimeUtils.dateTime(mPos3.getPublishTime()));
                 holder3.tv_numbers03.setText(mPos3.getCommentNum() + "");
-               /* if(post.getBlurbs()!=null&&!post.getBlurbs().equals("")){
+                if(mPos3.getBlurbs()!=null&&!mPos3.getBlurbs().equals("")){
                     holder3.tv_daoyu.setVisibility(View.VISIBLE);
-                    holder3.tv_daoyu.setText(post.getBlurbs());
+                    holder3.tv_daoyu.setText(mPos3.getBlurbs());
                 }else {
                     holder3.tv_daoyu.setVisibility(View.GONE);
-                }*/
+                }
               /*  int width = holder3.iv_image3_01.getWidth();
                 LinearLayout.LayoutParams para;
                 para = (LinearLayout.LayoutParams) holder3.iv_image3_01.getLayoutParams();

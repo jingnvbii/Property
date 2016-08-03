@@ -907,7 +907,7 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
                         sp.setText("欢迎加入");
 
                         sp.setImageUrl("http://7sby7r.com1.z0.glb.clouddn.com/CYSJ_02.jpg");//网络图片rul
-                        sp.setTitleUrl("http://7sby7r.com1.z0.glb.clouddn.com/CYSJ_02.jpg");  //网友点进链接后，可以看到分享的详情
+                        sp.setTitleUrl(Constant.SHARE_INVITION_URL+post.getId());  //网友点进链接后，可以看到分享的详情
                         //3、非常重要：获取平台对象
                         Platform qq = ShareSDK.getPlatform(QQ.NAME);
                         qq.setPlatformActionListener(InvitationPinterestDetailActivity.this); // 设置分享事件回调
@@ -925,7 +925,7 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
                         sp.setTitle("烟台项目");  //分享标题
                         sp.setText("欢迎加入");   //分享文本
                         sp.setImageUrl("http://7sby7r.com1.z0.glb.clouddn.com/CYSJ_02.jpg");//网络图片rul
-                        sp.setUrl("http://7sby7r.com1.z0.glb.clouddn.com/CYSJ_02.jpg");   //网友点进链接后，可以看到分享的详情
+                        sp.setUrl(Constant.SHARE_INVITION_URL+post.getId());   //网友点进链接后，可以看到分享的详情
 
                         //3、非常重要：获取平台对象
                         Platform wechat = ShareSDK.getPlatform(Wechat.NAME);
@@ -941,6 +941,7 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
                         Platform.ShareParams sp = new Platform.ShareParams();
                         sp.setText("我是新浪微博分享文本，啦啦啦~http://uestcbmi.com/"); //分享文本
                         sp.setImageUrl("http://7sby7r.com1.z0.glb.clouddn.com/CYSJ_02.jpg");//网络图片rul
+                        sp.setUrl(Constant.SHARE_INVITION_URL+post.getId());
                         //3、非常重要：获取平台对象
                         Platform sinaWeibo = ShareSDK.getPlatform(SinaWeibo.NAME);
                         sinaWeibo.setPlatformActionListener(InvitationPinterestDetailActivity.this); // 设置分享事件回调
@@ -958,7 +959,7 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
                         sp.setTitle("我是朋友圈分享标题");  //分享标题
                         sp.setText("我是朋友圈分享文本，啦啦啦~http://uestcbmi.com/");   //分享文本
                         sp.setImageUrl("http://7sby7r.com1.z0.glb.clouddn.com/CYSJ_02.jpg");//网络图片rul
-                        sp.setUrl("http://sharesdk.cn");   //网友点进链接后，可以看到分享的详情
+                        sp.setUrl(Constant.SHARE_INVITION_URL+post.getId());   //网友点进链接后，可以看到分享的详情
                         //3、非常重要：获取平台对象
                         Platform wechatMoments = ShareSDK.getPlatform(WechatMoments.NAME);
                         wechatMoments.setPlatformActionListener(InvitationPinterestDetailActivity.this); // 设置分享事件回调
@@ -974,7 +975,7 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
                         sp.setTitle("我是腾讯微博分享标题");  //分享标题
                         sp.setText("我是腾讯微博分享文本，啦啦啦~http://uestcbmi.com/");   //分享文本
                         sp.setImageUrl("http://7sby7r.com1.z0.glb.clouddn.com/CYSJ_02.jpg");//网络图片rul
-                        sp.setUrl("http://sharesdk.cn");   //网友点进链接后，可以看到分享的详情
+                        sp.setUrl(Constant.SHARE_INVITION_URL+post.getId());   //网友点进链接后，可以看到分享的详情
                         //3、非常重要：获取平台对象
                         Platform tecentWeibo = ShareSDK.getPlatform(TencentWeibo.NAME);
                         tecentWeibo.setPlatformActionListener(InvitationPinterestDetailActivity.this); // 设置分享事件回调
@@ -991,7 +992,7 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
                         sp.setTitle("我是邮件分享标题");  //分享标题
                         sp.setText("我是邮件分享文本，啦啦啦~http://uestcbmi.com/");   //分享文本
                         sp.setImageUrl("http://7sby7r.com1.z0.glb.clouddn.com/CYSJ_02.jpg");//网络图片rul
-                        sp.setUrl("http://sharesdk.cn");   //网友点进链接后，可以看到分享的详情
+                        sp.setUrl(Constant.SHARE_INVITION_URL+post.getId());   //网友点进链接后，可以看到分享的详情
                         //3、非常重要：获取平台对象
                         Platform emailName = ShareSDK.getPlatform(Email.NAME);
                         emailName.setPlatformActionListener(InvitationPinterestDetailActivity.this); // 设置分享事件回调
@@ -1007,7 +1008,7 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
                         sp.setTitle("我是短信分享标题");  //分享标题
                         sp.setText("我是短信分享文本，啦啦啦~http://uestcbmi.com/");   //分享文本
                         sp.setImageUrl("http://7sby7r.com1.z0.glb.clouddn.com/CYSJ_02.jpg");//网络图片rul
-                        sp.setUrl("http://sharesdk.cn");   //网友点进链接后，可以看到分享的详情
+                        sp.setUrl(Constant.SHARE_INVITION_URL+post.getId());   //网友点进链接后，可以看到分享的详情
                         //3、非常重要：获取平台对象
                         Platform shortMessage = ShareSDK.getPlatform(ShortMessage.NAME);
                         shortMessage.setPlatformActionListener(InvitationPinterestDetailActivity.this); // 设置分享事件回调

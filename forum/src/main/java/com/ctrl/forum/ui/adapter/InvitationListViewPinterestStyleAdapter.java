@@ -70,7 +70,6 @@ public class InvitationListViewPinterestStyleAdapter extends BaseAdapter {
         Post post = mPostList.get(position);
         holder.tv_pinerest_style_title.setText(post.getTitle());
         final int width = holder.iv_pinerest_style_image.getWidth();
-
         Transformation transformation = new Transformation() {
 
             @Override

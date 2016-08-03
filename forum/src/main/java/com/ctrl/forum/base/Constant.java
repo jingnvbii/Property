@@ -14,7 +14,13 @@ public class Constant {
     //  public static final String RAW_URL = "http://192.168.1.36:8088/pm/api?";//李鑫测试地址
     //public static final String RAW_URL = "http://192.168.1.210:8088/pm/api?";//桑越测试地址
      public static final String RAW_URL = "http://115.28.243.3:8008/ctrl-api/";//新测试地址
-      //public static final String RAW_URL = "http://192.168.0.54:8888/ctrl-api/";//李鑫测试地址
+    //public static final String RAW_URL = "http://192.168.0.54:8888/ctrl-api/";//李鑫测试地址
+
+    /*
+    * 分享链接
+    * */
+
+    public static final String SHARE_INVITION_URL= "http://115.28.243.3:8008/ctrl-api/post/getPostDetail?id=";//帖子分享地址
 
     /**
      * 请求dao时传递参数 - Eric -

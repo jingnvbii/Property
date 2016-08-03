@@ -45,7 +45,7 @@
             android:layout_toLeftOf="@+id/iv_pul_release"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
-            android:src="@mipmap/search_gray"/>
+            android:src="@mipmap/gray_search"/>
     </RelativeLayout>
 
     <View
@@ -57,6 +57,8 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:background="@color/white"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
         android:layout_height="@dimen/text_height">
 
         <HorizontalScrollView
@@ -85,6 +87,7 @@
             android:id="@+id/iv_pull_down"
             android:layout_width="30dp"
             android:paddingTop="10dp"
+            android:visibility="gone"
             android:paddingBottom="10dp"
             android:layout_height="wrap_content"
             android:src="@mipmap/jiantou_xia"

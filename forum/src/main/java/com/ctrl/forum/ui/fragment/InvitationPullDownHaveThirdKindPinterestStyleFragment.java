@@ -2,10 +2,13 @@ package com.ctrl.forum.ui.fragment;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,14 +28,12 @@ import com.beanu.arad.utils.AndroidUtil;
 import com.beanu.arad.utils.AnimUtil;
 import com.ctrl.forum.R;
 import com.ctrl.forum.base.Constant;
-import com.ctrl.forum.customview.PLA_AbsListView;
-import com.ctrl.forum.customview.PLA_AdapterView;
-import com.ctrl.forum.customview.XListView;
 import com.ctrl.forum.dao.InvitationDao;
 import com.ctrl.forum.entity.Banner;
 import com.ctrl.forum.entity.Category;
 import com.ctrl.forum.entity.Post;
 import com.ctrl.forum.loopview.HomeAutoSwitchPicHolder;
+import com.ctrl.forum.recyclerview.YRecycleview;
 import com.ctrl.forum.ui.activity.Invitation.InvitationPinerestGalleyActivity;
 import com.ctrl.forum.ui.activity.Invitation.InvitationPullDownActivity;
 import com.ctrl.forum.ui.activity.Invitation.InvitationSearchActivity;
@@ -42,6 +43,7 @@ import com.ctrl.forum.ui.activity.store.StoreShopListVerticalStyleActivity;
 import com.ctrl.forum.ui.adapter.InvitationListViewPinterestStyleAdapter;
 import com.ctrl.forum.ui.adapter.InvitationPullDownGridViewAdapter;
 import com.ctrl.forum.ui.adapter.JasonViewPagerAdapter;
+import com.ctrl.forum.ui.adapter.MasonryAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,10 +55,12 @@ import butterknife.InjectView;
  * 帖子下拉列表有三级分类 fragment
  * Created by Administrator on 2015/11/30.
  */
-public class InvitationPullDownHaveThirdKindPinterestStyleFragment extends ToolBarFragment implements XListView.IXListViewListener {
+public class InvitationPullDownHaveThirdKindPinterestStyleFragment extends ToolBarFragment  {
     private static Context mContext;
-    @InjectView(R.id.xlv_pinerest_style)
-    XListView xlv_pinerest_style;
+ /*   @InjectView(R.id.xlv_pinerest_style)
+    XListView xlv_pinerest_style;*/
+    @InjectView(R.id.myRecyclerview)
+    YRecycleview myRecyclerview;
     private GridView gridView1;
 
 
@@ -94,6 +98,8 @@ public class InvitationPullDownHaveThirdKindPinterestStyleFragment extends ToolB
     private TextView tv_footer;
     private ProgressBar progressBar;
     private boolean isFromLoad;
+    private StaggeredGridLayoutManager mLayoutManager;
+    private MasonryAdapter recyclerAdapter;
 
 
     public static InvitationPullDownHaveThirdKindPinterestStyleFragment newInstance(Context context,String id,String thirdKindId,String keyword,String showAll,String firstId) {
@@ -154,7 +160,7 @@ public class InvitationPullDownHaveThirdKindPinterestStyleFragment extends ToolB
     public void request(String id) {
         bol = 1;
         thirdKindId = id;
-        idao.requestPostListByCategory(Arad.preferences.getString("memberId"), thirdKindId, "0", "","", PAGE_NUM, PAGE_SIZE);
+        idao.requestPostListByCategory(Arad.preferences.getString("memberId"), thirdKindId, "0", "", "", PAGE_NUM, PAGE_SIZE);
 
     }
 
@@ -163,56 +169,41 @@ public class InvitationPullDownHaveThirdKindPinterestStyleFragment extends ToolB
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_invitation_pull_down_have_third_kind_pinterest_style, container, false);
         ButterKnife.inject(this, view);
+        //设置layoutManager
+        mLayoutManager = new StaggeredGridLayoutManager(
+                2,
+                StaggeredGridLayoutManager.VERTICAL);
+        mLayoutManager.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_NONE);
+        myRecyclerview.setLayoutManager(mLayoutManager);
         headview = getActivity().getLayoutInflater().inflate(R.layout.fragment_invitation_header, null);
-        xlv_pinerest_style.addHeaderView(headview);
-        xlv_pinerest_style.setFocusable(false);
         loadNoneView = getActivity().getLayoutInflater().inflate(R.layout.load_more, null);
         rl_footer=(RelativeLayout)loadNoneView.findViewById(R.id.rl_footer);
         tv_footer=(TextView)loadNoneView.findViewById(R.id.tv_load_more);
         progressBar=(ProgressBar)loadNoneView.findViewById(R.id.secondBar);
-        xlv_pinerest_style.addFooterView(loadNoneView);
-        xlv_pinerest_style.setOnScrollListener(new PLA_AbsListView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(PLA_AbsListView view, int scrollState) {
-                if (scrollState == PLA_AbsListView.OnScrollListener.SCROLL_STATE_IDLE) {
-                    if (view.getLastVisiblePosition() == view.getCount() - 1) {
-                        rl_footer.setVisibility(View.VISIBLE);
-                        rl_footer.setPadding(0, 0, 0, 0);
-                        tv_footer.setText("加载更多。。。");
-                        progressBar.setVisibility(View.VISIBLE);
-                        PAGE_NUM += 1;
-                        new Handler().postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                if (thirdKindId != null) {
-                                    idao.requestPostListByCategory(Arad.preferences.getString("memberId"), thirdKindId, "0", "", "", PAGE_NUM, Constant.PAGE_SIZE);
-                                }
-                                if (listCategroy3 != null) {
-                                    idao.requestPostListByCategory(Arad.preferences.getString("memberId"), listCategroy3.get(Position).getId(), "0", "", "", PAGE_NUM, Constant.PAGE_SIZE);
-                                } else if (showAll.equals("1")) {
-                                    idao.requestPostListByCategory(Arad.preferences.getString("memberId"), firstId, "0", keyword, "", PAGE_NUM, Constant.PAGE_SIZE);
-                                } else {
-                                    idao.requestPostListByCategory(Arad.preferences.getString("memberId"), id, "0", keyword, "", PAGE_NUM, Constant.PAGE_SIZE);
-                                }
-                            }
-                        }, 500);
-                        isFromLoad=true;
-                    }
-                }
-            }
+        myRecyclerview.addHeadView(headview);
+        initData();
+        getScreenDen();
+        // setValue();
 
+        SpacesItemDecoration decoration=new SpacesItemDecoration(8);
+        myRecyclerview.addItemDecoration(decoration);
+        recyclerAdapter=new MasonryAdapter(getActivity());
+        // adapter=new MyRecyclerAdapter(this);
+
+        myRecyclerview.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
-            public void onScroll(PLA_AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-                lastItem = firstVisibleItem + visibleItemCount - 1;
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                //防止第一行到顶部有空白区域
+                mLayoutManager.invalidateSpanAssignments();
             }
         });
-        xlv_pinerest_style.setOnItemClickListener(new PLA_AdapterView.OnItemClickListener() {
+
+
+        recyclerAdapter.setOnClickListener(new MasonryAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(PLA_AdapterView<?> parent, View view, int position, long id) {
-                if (position==listPost.size()+xlv_pinerest_style.getHeaderViewsCount()){
-                    return;
-                }
-                int nowPos = position - xlv_pinerest_style.getHeaderViewsCount();
+            public void ItemClickListener(View view, int postion) {
+                int nowPos = postion - 2;
                 Intent intent = null;
                 String contentType = listPost.get(nowPos).getContentType();
                 switch (contentType) {
@@ -241,21 +232,93 @@ public class InvitationPullDownHaveThirdKindPinterestStyleFragment extends ToolB
                         AnimUtil.intentSlidIn(getActivity());
                         break;
                 }
+            }
 
+            @Override
+            public void ItemLongClickListener(View view, int postion) {
 
             }
         });
-        initData();
-        getScreenDen();
-        xlv_pinerest_style.setPullLoadEnable(false);
-        xlv_pinerest_style.setXListViewListener(this);
-        // setValue();
 
 
+        myRecyclerview.setRefreshAndLoadMoreListener(new YRecycleview.OnRefreshAndLoadMoreListener() {
+            @Override
+            public void onRefresh() {
+                        if (listPost != null) listPost.clear();
+                        PAGE_NUM = 1;
+                       myRecyclerview.setNoMoreData(false);
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (thirdKindId != null) {
+                                    idao.requestPostListByCategory(Arad.preferences.getString("memberId"), thirdKindId, "0", "", "", PAGE_NUM, Constant.PAGE_SIZE);
+                                }
+                                if (listCategroy3 != null) {
+                                    idao.requestPostListByCategory(Arad.preferences.getString("memberId"), listCategroy3.get(Position).getId(), "0", "", "", PAGE_NUM, Constant.PAGE_SIZE);
+                                } else if (showAll.equals("1")) {
+                                    idao.requestPostListByCategory(Arad.preferences.getString("memberId"), firstId, "0", keyword, "", PAGE_NUM, Constant.PAGE_SIZE);
+                                } else {
+                                    idao.requestPostListByCategory(Arad.preferences.getString("memberId"), id, "0", keyword, "", PAGE_NUM, Constant.PAGE_SIZE);
+                                }
+                            }
+                        }, 500);
+            }
+
+            @Override
+            public void onLoadMore() {
+                        PAGE_NUM += 1;
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (thirdKindId != null) {
+                                    idao.requestPostListByCategory(Arad.preferences.getString("memberId"), thirdKindId, "0", "", "", PAGE_NUM, Constant.PAGE_SIZE);
+                                }
+                                if (listCategroy3 != null) {
+                                    idao.requestPostListByCategory(Arad.preferences.getString("memberId"), listCategroy3.get(Position).getId(), "0", "", "", PAGE_NUM, Constant.PAGE_SIZE);
+                                } else if (showAll.equals("1")) {
+                                    idao.requestPostListByCategory(Arad.preferences.getString("memberId"), firstId, "0", keyword, "", PAGE_NUM, Constant.PAGE_SIZE);
+                                } else {
+                                    idao.requestPostListByCategory(Arad.preferences.getString("memberId"), id, "0", keyword, "", PAGE_NUM, Constant.PAGE_SIZE);
+                                }
+                            }
+                        }, 500);
+                isFromLoad=true;
+                       // recyclerView.setloadMoreComplete();
+            }
+        });
         return view;
     }
 
+    public class SpacesItemDecoration extends RecyclerView.ItemDecoration {
 
+        private int space;
+
+        public SpacesItemDecoration(int space) {
+            this.space=space;
+        }
+
+        @Override
+        public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+            if(parent.getChildAdapterPosition(view)==0){
+                outRect.bottom=0;
+            }else if(parent.getChildAdapterPosition(view)==1){
+                outRect.left = 0;
+                outRect.right = 0;
+                outRect.bottom = 0;
+                outRect.top = 0;
+            }else {
+                outRect.left = space;
+                outRect.right = space;
+                outRect.bottom = space;
+                outRect.top = space;
+            }
+           /* if(parent.getChildAdapterPosition(view)==0){
+                outRect.top=0;
+            }else {
+                outRect.top=space;
+            }*/
+        }
+    }
 
     private void initData() {
         gridView1 = (GridView) headview.findViewById(R.id.gridView_pull_down);
@@ -308,14 +371,14 @@ public class InvitationPullDownHaveThirdKindPinterestStyleFragment extends ToolB
     * */
     private void setLoopViewHeight() {
         framelayout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
-                (int)(AndroidUtil.getDeviceWidth(getActivity())*Constant.SCALE_LOOP)));
+                (int) (AndroidUtil.getDeviceWidth(getActivity()) * Constant.SCALE_LOOP)));
     }
 
     @Override
     public void onRequestSuccess(int requestCode) {
         super.onRequestSuccess(requestCode);
-        xlv_pinerest_style.stopLoadMore();
-        xlv_pinerest_style.stopRefresh();
+        myRecyclerview.setloadMoreComplete();
+        myRecyclerview.setReFreshComplete();
         if(requestCode==19){
             listBanner=idao.getListBanner();
             framelayout.setVisibility(View.VISIBLE);
@@ -338,7 +401,7 @@ public class InvitationPullDownHaveThirdKindPinterestStyleFragment extends ToolB
                 framelayout.setVisibility(View.GONE);
                 gridView1.setVisibility(View.VISIBLE);
             }
-            mInvitationListViewPinterestStyleAdapter.setList(listPost);
+            recyclerAdapter.setList(listPost);
             InvitationPullDownActivity.isFromSelcet=false;
             InvitationPullDownActivity.isFromSearch=false;
         }
@@ -395,17 +458,18 @@ public class InvitationPullDownHaveThirdKindPinterestStyleFragment extends ToolB
     @Override
     public void onRequestFaild(String errorNo, String errorMessage) {
         super.onRequestFaild(errorNo, errorMessage);
-        xlv_pinerest_style.stopLoadMore();
-        xlv_pinerest_style.stopRefresh();
+        myRecyclerview.setloadMoreComplete();
+        myRecyclerview.setReFreshComplete();
         if(errorNo.equals("006")){
             if(listBanner==null||listBanner.size()==0) {
                 framelayout.setVisibility(View.GONE);
             }
             if(listPost!=null&&listPost.size()>0&&isFromLoad){
                 //   MessageUtils.showShortToast(getActivity(),"fsdfdsf");
-                rl_footer.setVisibility(View.VISIBLE);
-                progressBar.setVisibility(View.GONE);
-                tv_footer.setText("已经到底了，请到别处看看");
+             /*   rl_footer.setVisibility(View.VISIBLE);
+                progressBar.setVisibility(View.GONE);*/
+                myRecyclerview.setNoMoreData(true);
+              //  tv_footer.setText("已经到底了，请到别处看看");
             }
             if(listPost==null||listPost.size()==0){
                 rl_footer.setVisibility(View.GONE);
@@ -438,7 +502,7 @@ public class InvitationPullDownHaveThirdKindPinterestStyleFragment extends ToolB
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 bol = 1;
                 Position = position;
-                idao.requestPostListByCategory(Arad.preferences.getString("memberId"), listCategroy3.get(position).getId(), "0", "", "",PAGE_NUM, Constant.PAGE_SIZE);
+                idao.requestPostListByCategory(Arad.preferences.getString("memberId"), listCategroy3.get(position).getId(), "0", "", "", PAGE_NUM, Constant.PAGE_SIZE);
             }
         });
 
@@ -455,55 +519,8 @@ public class InvitationPullDownHaveThirdKindPinterestStyleFragment extends ToolB
         if(listBanner!=null&&listBanner.size()==0){
             framelayout.setVisibility(View.GONE);
         }
-        xlv_pinerest_style.setAdapter(mInvitationListViewPinterestStyleAdapter);
+        myRecyclerview.setAdapter(recyclerAdapter);
         gridView1.setAdapter(adapter);
     }
 
-    @Override
-    public void onRefresh() {
-       // ll.setVisibility(View.VISIBLE);
-        rl_footer.setVisibility(View.GONE);
-        PAGE_NUM = 1;
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if(listPost!=null){
-                    listPost.clear();
-                }
-
-                if(thirdKindId!=null){
-                    idao.requestPostListByCategory(Arad.preferences.getString("memberId"), thirdKindId, "0", "", "", PAGE_NUM, Constant.PAGE_SIZE);
-                }
-                if (listCategroy3 != null) {
-                    idao.requestPostListByCategory(Arad.preferences.getString("memberId"),listCategroy3.get(Position).getId(), "0", "", "",PAGE_NUM, Constant.PAGE_SIZE);
-                }else if(showAll.equals("1")){
-                    idao.requestPostListByCategory(Arad.preferences.getString("memberId"),firstId, "0", keyword, "",PAGE_NUM, Constant.PAGE_SIZE);
-                }else {
-                    idao.requestPostListByCategory(Arad.preferences.getString("memberId"), id, "0", keyword, "", PAGE_NUM, Constant.PAGE_SIZE);
-                }
-            }
-        }, 500);
-
-    }
-
-    @Override
-    public void onLoadMore() {
-        ll.setVisibility(View.VISIBLE);
-        PAGE_NUM += 1;
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if(thirdKindId!=null){
-                    idao.requestPostListByCategory(Arad.preferences.getString("memberId"),thirdKindId, "0", "", "",PAGE_NUM, Constant.PAGE_SIZE);
-                }
-                if (listCategroy3 != null) {
-                    idao.requestPostListByCategory(Arad.preferences.getString("memberId"),listCategroy3.get(Position).getId(), "0", "", "",PAGE_NUM, Constant.PAGE_SIZE);
-                }else if(showAll.equals("1")){
-                    idao.requestPostListByCategory(Arad.preferences.getString("memberId"),firstId, "0", keyword, "",PAGE_NUM, Constant.PAGE_SIZE);
-                }else {
-                    idao.requestPostListByCategory(Arad.preferences.getString("memberId"), id, "0", keyword, "", PAGE_NUM, Constant.PAGE_SIZE);
-                }
-            }
-        }, 500);
-    }
 }

@@ -10,10 +10,18 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>-->
 
-    <LinearLayout
+
+    <com.ctrl.forum.recyclerview.YRecycleview
+        android:id="@+id/myRecyclerview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </com.ctrl.forum.recyclerview.YRecycleview>
+
+   <!-- <LinearLayout
         android:id="@+id/ll_linear_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:visibility="gone"
         android:orientation="vertical">
         <com.ctrl.forum.customview.XListView
             android:id="@+id/xlv_pinerest_style"
@@ -21,6 +29,6 @@
             android:fastScrollEnabled="true"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
-    </LinearLayout>
+    </LinearLayout>-->
 
 </LinearLayout>
