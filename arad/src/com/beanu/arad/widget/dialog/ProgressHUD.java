@@ -47,8 +47,8 @@ public class ProgressHUD extends Dialog {
             TextView txt = (TextView) dialog.findViewById(R.id.message);
             txt.setText(message);
         }
-        dialog.setCancelable(cancelable);
-        dialog.setOnCancelListener(cancelListener);
+        //dialog.setCancelable(cancelable);
+        //dialog.setOnCancelListener(cancelListener);
         dialog.getWindow().getAttributes().gravity = Gravity.CENTER;
         WindowManager.LayoutParams lp = dialog.getWindow().getAttributes();
         lp.dimAmount = 0.2f;
