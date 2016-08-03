@@ -26,11 +26,12 @@
 
     <TextView
         android:background="@drawable/red_border_2"
+        android:textSize="@dimen/level_text"
+        android:layout_marginBottom="@dimen/level_bottom"
         android:textColor="@color/white"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/iv_grade"
-        android:layout_marginBottom="2dp"
         android:layout_marginLeft="2dp"
         android:layout_alignBottom="@+id/tv_name"
         android:layout_toRightOf="@+id/tv_name"

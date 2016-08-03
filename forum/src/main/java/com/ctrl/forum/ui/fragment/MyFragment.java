@@ -161,6 +161,7 @@ public class MyFragment extends ToolBarFragment implements View.OnClickListener{
         super.setUserVisibleHint(isVisibleToUser);
     }
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_my, container, false);

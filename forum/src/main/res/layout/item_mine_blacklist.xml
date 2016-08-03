@@ -54,6 +54,8 @@
 
     <TextView
         android:background="@drawable/red_border_2"
+        android:textSize="@dimen/level_text"
+        android:layout_marginBottom="@dimen/level_bottom"
         android:textColor="@color/white"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
