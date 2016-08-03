@@ -5,6 +5,8 @@ import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -18,6 +20,7 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.beanu.arad.Arad;
 import com.beanu.arad.utils.AndroidUtil;
@@ -30,6 +33,7 @@ import com.ctrl.forum.base.SetMemberLevel;
 import com.ctrl.forum.customview.ImageZoomActivity;
 import com.ctrl.forum.customview.ListViewForScrollView;
 import com.ctrl.forum.customview.RoundImageView;
+import com.ctrl.forum.customview.ShareDialog;
 import com.ctrl.forum.dao.InvitationDao;
 import com.ctrl.forum.entity.MemberInfo;
 import com.ctrl.forum.entity.Post2;
@@ -49,13 +53,23 @@ import java.util.Map;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import cn.sharesdk.framework.Platform;
+import cn.sharesdk.framework.PlatformActionListener;
+import cn.sharesdk.framework.ShareSDK;
+import cn.sharesdk.sina.weibo.SinaWeibo;
+import cn.sharesdk.system.email.Email;
+import cn.sharesdk.system.text.ShortMessage;
+import cn.sharesdk.tencent.qq.QQ;
+import cn.sharesdk.tencent.weibo.TencentWeibo;
+import cn.sharesdk.wechat.friends.Wechat;
+import cn.sharesdk.wechat.moments.WechatMoments;
 
 /**
  *
  * 帖子详情 activity
  * Created by jason on 2016/4/12.
  */
-public class InvitationDetailActivity extends AppToolBarActivity implements View.OnClickListener{
+public class InvitationDetailActivity extends AppToolBarActivity implements View.OnClickListener,PlatformActionListener{
     private PopupWindow popupWindow;
     private RelativeLayout rl;
     @InjectView(R.id.title_image)//头像
@@ -114,6 +128,7 @@ public class InvitationDetailActivity extends AppToolBarActivity implements View
 
     final ArrayList<String>imageUrl=new ArrayList<>();
     private View viewanim;
+    private ShareDialog shareDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -534,6 +549,131 @@ public class InvitationDetailActivity extends AppToolBarActivity implements View
                     AnimUtil.intentSlidOut(InvitationDetailActivity.this);
                     return;
                 }
+
+                shareDialog = new ShareDialog(this);
+                shareDialog.setCancelButtonOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        shareDialog.dismiss();
+                    }
+                });
+                shareDialog.setQQButtonOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Platform.ShareParams sp = new Platform.ShareParams();
+                        sp.setTitle("烟台项目");
+                        sp.setText("欢迎加入");
+
+                        sp.setImageUrl(getIntent().getStringExtra("qrImgUrl"));//网络图片rul
+                        sp.setTitleUrl(Constant.SHARE_INVITION_URL+post.getId());  //网友点进链接后，可以看到分享的详情
+                        //3、非常重要：获取平台对象
+                        Platform qq = ShareSDK.getPlatform(QQ.NAME);
+                        qq.setPlatformActionListener(InvitationDetailActivity.this); // 设置分享事件回调
+                        // 执行分享
+                        qq.share(sp);
+                    }
+
+                });
+
+                shareDialog.setWeixinButtonOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Platform.ShareParams sp = new Platform.ShareParams();
+                        sp.setShareType(Platform.SHARE_WEBPAGE);//非常重要：一定要设置分享属性
+                        sp.setTitle("烟台项目");  //分享标题
+                        sp.setText("欢迎加入");   //分享文本
+                        sp.setImageUrl(getIntent().getStringExtra("qrImgUrl"));//网络图片rul
+                        sp.setUrl(Constant.SHARE_INVITION_URL+post.getId());   //网友点进链接后，可以看到分享的详情
+
+                        //3、非常重要：获取平台对象
+                        Platform wechat = ShareSDK.getPlatform(Wechat.NAME);
+                        wechat.setPlatformActionListener(InvitationDetailActivity.this); // 设置分享事件回调
+                        // 执行分享
+                        wechat.share(sp);
+                    }
+                });
+                shareDialog.setSinaWeiBoButtonOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //2、设置分享内容
+                        Platform.ShareParams sp = new Platform.ShareParams();
+                        sp.setText("我是新浪微博分享文本，啦啦啦~http://uestcbmi.com/"); //分享文本
+                        sp.setImageUrl("http://7sby7r.com1.z0.glb.clouddn.com/CYSJ_02.jpg");//网络图片rul
+                        sp.setUrl(Constant.SHARE_INVITION_URL+post.getId());
+                        //3、非常重要：获取平台对象
+                        Platform sinaWeibo = ShareSDK.getPlatform(SinaWeibo.NAME);
+                        sinaWeibo.setPlatformActionListener(InvitationDetailActivity.this); // 设置分享事件回调
+                        // 执行分享
+                        sinaWeibo.share(sp);
+                    }
+                });
+
+                shareDialog.setPengYouQuanButtonOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //2、设置分享内容
+                        Platform.ShareParams sp = new Platform.ShareParams();
+                        sp.setShareType(Platform.SHARE_WEBPAGE); //非常重要：一定要设置分享属性
+                        sp.setTitle("我是朋友圈分享标题");  //分享标题
+                        sp.setText("我是朋友圈分享文本，啦啦啦~http://uestcbmi.com/");   //分享文本
+                        sp.setImageUrl("http://7sby7r.com1.z0.glb.clouddn.com/CYSJ_02.jpg");//网络图片rul
+                        sp.setUrl(Constant.SHARE_INVITION_URL+post.getId());   //网友点进链接后，可以看到分享的详情
+                        //3、非常重要：获取平台对象
+                        Platform wechatMoments = ShareSDK.getPlatform(WechatMoments.NAME);
+                        wechatMoments.setPlatformActionListener(InvitationDetailActivity.this); // 设置分享事件回调
+                        // 执行分享
+                        wechatMoments.share(sp);
+                    }
+                });
+                shareDialog.setTecentWeiBoButtonOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //2、设置分享内容
+                        Platform.ShareParams sp = new Platform.ShareParams();
+                        sp.setTitle("我是腾讯微博分享标题");  //分享标题
+                        sp.setText("我是腾讯微博分享文本，啦啦啦~http://uestcbmi.com/");   //分享文本
+                        sp.setImageUrl("http://7sby7r.com1.z0.glb.clouddn.com/CYSJ_02.jpg");//网络图片rul
+                        sp.setUrl(Constant.SHARE_INVITION_URL+post.getId());   //网友点进链接后，可以看到分享的详情
+                        //3、非常重要：获取平台对象
+                        Platform tecentWeibo = ShareSDK.getPlatform(TencentWeibo.NAME);
+                        tecentWeibo.setPlatformActionListener(InvitationDetailActivity.this); // 设置分享事件回调
+                        // 执行分享
+                        tecentWeibo.share(sp);
+                    }
+                });
+
+                shareDialog.setEmailButtonOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //2、设置分享内容
+                        Platform.ShareParams sp = new Platform.ShareParams();
+                        sp.setTitle("我是邮件分享标题");  //分享标题
+                        sp.setText("我是邮件分享文本，啦啦啦~http://uestcbmi.com/");   //分享文本
+                        sp.setImageUrl("http://7sby7r.com1.z0.glb.clouddn.com/CYSJ_02.jpg");//网络图片rul
+                        sp.setUrl(Constant.SHARE_INVITION_URL+post.getId());   //网友点进链接后，可以看到分享的详情
+                        //3、非常重要：获取平台对象
+                        Platform emailName = ShareSDK.getPlatform(Email.NAME);
+                        emailName.setPlatformActionListener(InvitationDetailActivity.this); // 设置分享事件回调
+                        // 执行分享
+                        emailName.share(sp);
+                    }
+                });
+                shareDialog.setDuanXinButtonOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //2、设置分享内容
+                        Platform.ShareParams sp = new Platform.ShareParams();
+                        sp.setTitle("我是短信分享标题");  //分享标题
+                        sp.setText("我是短信分享文本，啦啦啦~http://uestcbmi.com/");   //分享文本
+                        sp.setImageUrl("http://7sby7r.com1.z0.glb.clouddn.com/CYSJ_02.jpg");//网络图片rul
+                        sp.setUrl(Constant.SHARE_INVITION_URL+post.getId());   //网友点进链接后，可以看到分享的详情
+                        //3、非常重要：获取平台对象
+                        Platform shortMessage = ShareSDK.getPlatform(ShortMessage.NAME);
+                        shortMessage.setPlatformActionListener(InvitationDetailActivity.this); // 设置分享事件回调
+                        // 执行分享
+                        shortMessage.share(sp);
+                    }
+                });
                 break;
             case R.id.rl_friend_style_more:
                 showButoomMoreDialog();
@@ -669,4 +809,80 @@ public class InvitationDetailActivity extends AppToolBarActivity implements View
         MediaManager.resume();
     }
 
+    @Override
+    public void onComplete(Platform platform, int i, HashMap<String, Object> hashMap) {
+        if (platform.getName().equals(QQ.NAME)) {// 判断成功的平台是不是QQ
+            handler.sendEmptyMessage(1);
+        } else if (platform.getName().equals(Wechat.NAME)) {//判断成功的平台是不是微信
+            handler.sendEmptyMessage(2);
+        } else if (platform.getName().equals(SinaWeibo.NAME)) {//判断成功的平台是不是新浪微博
+            handler.sendEmptyMessage(3);
+        } else if (platform.getName().equals(WechatMoments.NAME)) {//判断成功平台是不是微信朋友圈
+            handler.sendEmptyMessage(4);
+        } else if (platform.getName().equals(TencentWeibo.NAME)) {//判断成功平台是不是腾讯微博
+            handler.sendEmptyMessage(5);
+        } else if (platform.getName().equals(Email.NAME)) {//判断成功平台是不是邮件
+            handler.sendEmptyMessage(6);
+        } else if (platform.getName().equals(ShortMessage.NAME)) {//判断成功平台是不是短信
+            handler.sendEmptyMessage(7);
+        } else {
+            //
+        }
+
+    }
+
+    @Override
+    public void onError(Platform platform, int i, Throwable throwable) {
+        throwable.printStackTrace();
+        Message msg = new Message();
+        msg.what = 8;
+        msg.obj = throwable.getMessage();
+        handler.sendMessage(msg);
+
+    }
+
+    @Override
+    public void onCancel(Platform platform, int i) {
+        handler.sendEmptyMessage(9);
+    }
+
+    Handler handler = new Handler() {
+
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case 1:
+                    //  Toast.makeText(getApplicationContext(), "QQ分享成功", Toast.LENGTH_LONG).show();
+                    break;
+
+                case 2:
+                    //Toast.makeText(getApplicationContext(), "微信分享成功", Toast.LENGTH_LONG).show();
+                    break;
+                case 3:
+                    //Toast.makeText(getApplicationContext(), "微信分享成功", Toast.LENGTH_LONG).show();
+                    break;
+                case 4:
+                    //Toast.makeText(getApplicationContext(), "微信分享成功", Toast.LENGTH_LONG).show();
+                    break;
+                case 5:
+                    //Toast.makeText(getApplicationContext(), "微信分享成功", Toast.LENGTH_LONG).show();
+                    break;
+                case 6:
+                    //Toast.makeText(getApplicationContext(), "微信分享成功", Toast.LENGTH_LONG).show();
+                    break;
+                case 7:
+                    //Toast.makeText(getApplicationContext(), "微信分享成功", Toast.LENGTH_LONG).show();
+                    break;
+                case 8:
+                    Toast.makeText(getApplicationContext(), "分享失败啊", Toast.LENGTH_LONG).show();
+                    break;
+                case 9:
+                    Toast.makeText(getApplicationContext(), "已取消", Toast.LENGTH_LONG).show();
+                    break;
+                default:
+                    break;
+            }
+        }
+
+    };
 }
