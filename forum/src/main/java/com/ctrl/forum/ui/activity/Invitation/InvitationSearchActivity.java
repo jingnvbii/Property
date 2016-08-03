@@ -1,9 +1,12 @@
 package com.ctrl.forum.ui.activity.Invitation;
 
 import android.content.Intent;
+import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -20,25 +23,24 @@ import android.widget.TextView;
 
 import com.beanu.arad.Arad;
 import com.beanu.arad.utils.AnimUtil;
-import com.beanu.arad.utils.Log;
 import com.beanu.arad.utils.MessageUtils;
 import com.ctrl.forum.R;
 import com.ctrl.forum.base.AppToolBarActivity;
 import com.ctrl.forum.base.Constant;
-import com.ctrl.forum.customview.PLA_AdapterView;
 import com.ctrl.forum.customview.XListView;
 import com.ctrl.forum.dao.InvitationDao;
 import com.ctrl.forum.dao.SearchDao;
 import com.ctrl.forum.entity.HotSearch;
 import com.ctrl.forum.entity.Post;
 import com.ctrl.forum.entity.SearchHistory;
+import com.ctrl.forum.recyclerview.YRecycleview;
 import com.ctrl.forum.ui.activity.store.StoreCommodityDetailActivity;
 import com.ctrl.forum.ui.activity.store.StoreShopListVerticalStyleActivity;
 import com.ctrl.forum.ui.adapter.InvitationListViewAdapter;
 import com.ctrl.forum.ui.adapter.InvitationListViewBlockStyleAdapter;
 import com.ctrl.forum.ui.adapter.InvitationListViewFriendStyleAdapter;
-import com.ctrl.forum.ui.adapter.InvitationListViewPinterestStyleAdapter;
 import com.ctrl.forum.ui.adapter.InvitationSearchGridViewAdapter;
+import com.ctrl.forum.ui.adapter.MasonryAdapter;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
@@ -69,11 +71,8 @@ public class InvitationSearchActivity extends AppToolBarActivity implements View
             ImageView iv_toolbar_left;
     @InjectView(R.id.ll_search)
     LinearLayout ll_search;
-    @InjectView(R.id.ll_linear_layout)
-    LinearLayout ll_linear_layout;
-    @InjectView(R.id.xlv_pinerest_style)
-    XListView xlv_pinerest_style;
-
+    @InjectView(R.id.myRecyclerview)
+    YRecycleview myRecyclerview;
     @InjectView(R.id.lv_pull)
     PullToRefreshListView lv_pull;
 
@@ -89,8 +88,10 @@ public class InvitationSearchActivity extends AppToolBarActivity implements View
     private InvitationListViewAdapter invitationListViewAdapter;
     private InvitationListViewBlockStyleAdapter mInvitationListViewBlockStyleAdapter;
     private InvitationListViewFriendStyleAdapter mInvitationListViewFriendStyleAdapter;
-    private InvitationListViewPinterestStyleAdapter mInvitationListViewPinterestStyleAdapter;
+   // private InvitationListViewPinterestStyleAdapter mInvitationListViewPinterestStyleAdapter;
+   private MasonryAdapter recyclerAdapter;
     private List<Post> listPost;
+    private StaggeredGridLayoutManager mLayoutManager;
 
 
     @Override
@@ -111,7 +112,6 @@ public class InvitationSearchActivity extends AppToolBarActivity implements View
        styleType=getIntent().getStringExtra("styleType");
        // styleType="1";
         channelId=getIntent().getStringExtra("channelId");
-        Log.i("tag", "channelId===" + channelId);
         et_invitation_search.addTextChangedListener(watcher);
 
     }
@@ -124,7 +124,7 @@ public class InvitationSearchActivity extends AppToolBarActivity implements View
             if(s.length()==0){
                 ll_search.setVisibility(View.VISIBLE);
                 lv_pull.setVisibility(View.GONE);
-                ll_linear_layout.setVisibility(View.GONE);
+                myRecyclerview.setVisibility(View.GONE);
             }
         }
         //文字变化前
@@ -169,10 +169,23 @@ public class InvitationSearchActivity extends AppToolBarActivity implements View
             }
         });
 
-        mInvitationListViewPinterestStyleAdapter=new InvitationListViewPinterestStyleAdapter(this);
+      //  mInvitationListViewPinterestStyleAdapter=new InvitationListViewPinterestStyleAdapter(this);
+        recyclerAdapter=new MasonryAdapter(this);
         invitationListViewAdapter=new InvitationListViewAdapter(this);
         mInvitationListViewBlockStyleAdapter=new InvitationListViewBlockStyleAdapter(this);
         mInvitationListViewFriendStyleAdapter=new InvitationListViewFriendStyleAdapter(this);
+
+
+        //设置layoutManager
+        mLayoutManager = new StaggeredGridLayoutManager(
+                2,
+                StaggeredGridLayoutManager.VERTICAL);
+        mLayoutManager.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_NONE);
+        myRecyclerview.setLayoutManager(mLayoutManager);
+        myRecyclerview.setPadding(8, 8, 8, 8);
+        SpacesItemDecoration decoration=new SpacesItemDecoration(8);
+        myRecyclerview.addItemDecoration(decoration);
+        recyclerAdapter=new MasonryAdapter(this);
 
         if(styleType.equals("1")){
             lv_pull.setAdapter(invitationListViewAdapter);
@@ -181,16 +194,26 @@ public class InvitationSearchActivity extends AppToolBarActivity implements View
         }else if(styleType.equals("4")){
             lv_pull.setAdapter(mInvitationListViewFriendStyleAdapter);
         }else if(styleType.equals("3")) {
-              xlv_pinerest_style.setAdapter(mInvitationListViewPinterestStyleAdapter);
+            //  xlv_pinerest_style.setAdapter(mInvitationListViewPinterestStyleAdapter);
+            myRecyclerview.setAdapter(recyclerAdapter);
+
         }else {
 
         }
+        // adapter=new MyRecyclerAdapter(this);
 
-        xlv_pinerest_style.setFocusable(false);
-        xlv_pinerest_style.setOnItemClickListener(new PLA_AdapterView.OnItemClickListener() {
+        myRecyclerview.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
-            public void onItemClick(PLA_AdapterView<?> parent, View view, int position, long id) {
-               // int nowPos = position - xlv_pinerest_style.getHeaderViewsCount();
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                //防止第一行到顶部有空白区域
+                mLayoutManager.invalidateSpanAssignments();
+            }
+        });
+
+        recyclerAdapter.setOnClickListener(new MasonryAdapter.OnItemClickListener() {
+            @Override
+            public void ItemClickListener(View view, int position) {
                 Intent intent = null;
                 String contentType = listPost.get(position-1).getContentType();
                 switch (contentType) {
@@ -209,7 +232,7 @@ public class InvitationSearchActivity extends AppToolBarActivity implements View
                     case "2":
                         intent = new Intent(InvitationSearchActivity.this, StoreCommodityDetailActivity.class);
                         intent.putExtra("id", listPost.get(position-1).getLinkItemId());
-                       startActivity(intent);
+                        startActivity(intent);
                         AnimUtil.intentSlidIn(InvitationSearchActivity.this);
                         break;
                     case "3":
@@ -219,13 +242,51 @@ public class InvitationSearchActivity extends AppToolBarActivity implements View
                         AnimUtil.intentSlidIn(InvitationSearchActivity.this);
                         break;
                 }
+            }
 
+            @Override
+            public void ItemLongClickListener(View view, int postion) {
 
             }
         });
 
-        xlv_pinerest_style.setPullLoadEnable(true);
-        xlv_pinerest_style.setXListViewListener(this);
+
+        myRecyclerview.setRefreshAndLoadMoreListener(new YRecycleview.OnRefreshAndLoadMoreListener() {
+            @Override
+            public void onRefresh() {
+                if(listPost.size()<5){
+                    myRecyclerview.setReFreshComplete();
+                    return;}
+                if (listPost != null)
+                    listPost.clear();
+                PAGE_NUM = 1;
+                new Handler().postDelayed(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        // TODO Auto-generated method stub
+                        idao.requestPostListByCategory(Arad.preferences.getString("memberId"), channelId, "0", et_invitation_search.getText().toString().trim(), "", PAGE_NUM, Constant.PAGE_SIZE);
+                    }
+
+                }, 500);
+            }
+
+            @Override
+            public void onLoadMore() {
+                PAGE_NUM += 1;
+                new Handler().postDelayed(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        // TODO Auto-generated method stub
+                        idao.requestPostListByCategory(Arad.preferences.getString("memberId"), channelId, "0", et_invitation_search.getText().toString().trim(), "", PAGE_NUM, Constant.PAGE_SIZE);
+                    }
+                }, 500);
+
+            }
+                // recyclerView.setloadMoreComplete();
+        });
+
 
         lv_pull.setMode(PullToRefreshBase.Mode.BOTH);
         lv_pull.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
@@ -342,13 +403,36 @@ public class InvitationSearchActivity extends AppToolBarActivity implements View
 
     }
 
+    public class SpacesItemDecoration extends RecyclerView.ItemDecoration {
+
+        private int space;
+
+        public SpacesItemDecoration(int space) {
+            this.space=space;
+        }
+
+        @Override
+        public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+                outRect.left = space;
+                outRect.right = space;
+                outRect.bottom = space;
+                outRect.top = space;
+           /* if(parent.getChildAdapterPosition(view)==0){
+                outRect.top=0;
+            }else {
+                outRect.top=space;
+            }*/
+        }
+        }
+
+
     @Override
     public void onRequestFaild(String errorNo, String errorMessage) {
         super.onRequestFaild(errorNo, errorMessage);
         showProgress(false);
+        myRecyclerview.setReFreshComplete();
+        myRecyclerview.setloadMoreComplete();
         lv_pull.onRefreshComplete();
-        xlv_pinerest_style.stopLoadMore();
-        xlv_pinerest_style.stopRefresh();
         ll_search.setVisibility(View.GONE);
        /* ll_linear_layout.setVisibility(View.GONE);
         lv_pull.setVisibility(View.GONE);*/
@@ -357,19 +441,19 @@ public class InvitationSearchActivity extends AppToolBarActivity implements View
     @Override
     public void onRequestSuccess(int requestCode) {
         super.onRequestSuccess(requestCode);
+        myRecyclerview.setReFreshComplete();
+        myRecyclerview.setloadMoreComplete();
         lv_pull.onRefreshComplete();
-        xlv_pinerest_style.stopLoadMore();
-        xlv_pinerest_style.stopRefresh();
         if (requestCode == 1) {
             ll_search.setVisibility(View.GONE);
             listPost=idao.getListPost();
             if(styleType.equals("3")){
                 lv_pull.setVisibility(View.GONE);
-                ll_linear_layout.setVisibility(View.VISIBLE);
+                myRecyclerview.setVisibility(View.VISIBLE);
               //  xlv_pinerest_style.setVisibility(View.VISIBLE);
-                mInvitationListViewPinterestStyleAdapter.setList(listPost);
+              recyclerAdapter.setList(listPost);
             }else {
-                ll_linear_layout.setVisibility(View.GONE);
+                myRecyclerview.setVisibility(View.GONE);
                 lv_pull.setVisibility(View.VISIBLE);
                 if(styleType.equals("1")){
                    invitationListViewAdapter.setList(listPost);
@@ -438,6 +522,7 @@ public class InvitationSearchActivity extends AppToolBarActivity implements View
                     MessageUtils.showShortToast(InvitationSearchActivity.this,"搜索关键字为空");
                     return;
                 }
+                PAGE_NUM=1;
                /* Intent intent =new Intent();
                 intent.putExtra("keyword",et_invitation_search.getText().toString().trim());
                 setResult(2222,intent);

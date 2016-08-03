@@ -244,6 +244,9 @@ public class InvitationPullDownHaveThirdKindPinterestStyleFragment extends ToolB
         myRecyclerview.setRefreshAndLoadMoreListener(new YRecycleview.OnRefreshAndLoadMoreListener() {
             @Override
             public void onRefresh() {
+                if(listPost.size()<5){
+                    myRecyclerview.setReFreshComplete();
+                    return;}
                         if (listPost != null) listPost.clear();
                         PAGE_NUM = 1;
                        myRecyclerview.setNoMoreData(false);
