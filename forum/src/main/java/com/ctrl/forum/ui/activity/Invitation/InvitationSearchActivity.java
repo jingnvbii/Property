@@ -522,6 +522,9 @@ public class InvitationSearchActivity extends AppToolBarActivity implements View
                     MessageUtils.showShortToast(InvitationSearchActivity.this,"搜索关键字为空");
                     return;
                 }
+                if(listPost!=null){
+                    listPost.clear();
+                }
                 PAGE_NUM=1;
                /* Intent intent =new Intent();
                 intent.putExtra("keyword",et_invitation_search.getText().toString().trim());
