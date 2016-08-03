@@ -164,6 +164,11 @@ public class EditDao extends IDao {
         }
     }
 
+    @Override
+    public void onRequestFails(String result, int requestCode, String errorNo) {
+
+    }
+
     public MemberInfo getMemberInfo() {
         return memberInfo;
     }

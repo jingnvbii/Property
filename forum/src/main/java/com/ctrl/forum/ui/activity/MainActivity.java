@@ -754,6 +754,15 @@ public class MainActivity extends ToolBarActivity implements View.OnClickListene
                     //MessageUtils.showShortToast(context, "message");
                     getNet();
                     break;
+                case "back":
+                    int number = Integer.valueOf(intent.getExtras().getString("number"));
+                    for (int i=0;i<listNavigation.size();i++){
+                        if (listNavigation.get(i).getCommentCode().equals("4")){
+                            CircleRadioView radioView = (CircleRadioView) ll_rb.getChildAt(i);
+                            radioView.setNum(number);
+                        }
+                    }
+                    break;
                 /*case "cashCoupon": //现金劵
                     //MessageUtils.showShortToast(context, "cashCoupon");
                     getNet();

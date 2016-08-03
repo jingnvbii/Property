@@ -21,7 +21,6 @@ public class AradException extends Exception {
 	private String error_code;
 
 	public AradException() {
-
 	}
 
 	public AradException(String detailMessage) {
@@ -148,6 +147,8 @@ public class AradException extends Exception {
 				}
 				else if(error_code.equals("032")){
 					result = "管理员不能被加入黑名单！";
+				}else if(error_code.equals("032")){
+					result = "该设备已被拉黑!";
 				}
                 else {
                     result = Arad.app.getString(R.string.unknown_error_code) + error_code;

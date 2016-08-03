@@ -22,6 +22,8 @@
     <dimen name="text_size_large">22sp</dimen>
 
     <dimen name="image_heade">50dp</dimen>
+    <dimen name="level_text">12sp</dimen>
+    <dimen name="level_bottom">3dp</dimen>
 
     <!-- img select -->
     <dimen name="image_size">120dp</dimen>

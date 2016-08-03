@@ -2,6 +2,7 @@ package com.ctrl.forum.customview;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.graphics.drawable.ColorDrawable;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,6 +35,10 @@ public class ShareDialog {
         Window window = dialog.getWindow();
         window.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         window.setGravity(Gravity.BOTTOM); // 非常重要：设置对话框弹出的位置
+
+        ColorDrawable colorDrawable = new ColorDrawable(context.getResources().getColor(R.color.pop_bg));
+        colorDrawable.setAlpha(40);
+        window.setBackgroundDrawable(colorDrawable);
 
         window.setContentView(R.layout.share_dialog);
         cancelButton = (TextView) window.findViewById(R.id.share_cancel);

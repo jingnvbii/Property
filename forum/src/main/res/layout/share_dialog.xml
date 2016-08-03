@@ -4,6 +4,7 @@
     android:layout_height="match_parent"
     android:background="#00000000"
     >
+
     <LinearLayout
         android:background="@color/white"
         android:layout_width="match_parent"
@@ -99,7 +100,6 @@
             android:layout_weight="1"/>
     </LinearLayout>
 
-
     <TextView
         android:id="@+id/share_cancel"
         android:layout_width="match_parent"
@@ -113,7 +113,6 @@
         android:padding="15dp"
         android:gravity="center"
         android:textColor="@color/text_blue"
-
         />
     </LinearLayout>
 

@@ -65,6 +65,10 @@ public class ImageDao extends IDao {
 
     }
 
+    @Override
+    public void onRequestFails(String result, int requestCode, String errorNo) {
+
+    }
 
     public Image getImage() {
         return image;

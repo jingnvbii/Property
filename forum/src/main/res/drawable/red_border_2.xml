@@ -3,7 +3,7 @@
      >
 
     <!-- 填充的颜色：这里设置背景透明 -->
-    <solid android:color="#ff0000" />
+    <solid android:color="#ed5236" />
 
     <corners
         android:bottomLeftRadius="5dip"

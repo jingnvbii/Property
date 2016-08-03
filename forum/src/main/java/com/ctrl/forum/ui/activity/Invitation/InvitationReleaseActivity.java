@@ -562,7 +562,7 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
                         Bitmap bitmap = null;
                         try {
                             Log.e("img============", listPostImage.get(i).getImg());
-                            bitmap = Arad.imageLoader.load(listPostImage.get(i).getImg()).resize(300,300).get();
+                            bitmap = Arad.imageLoader.load(listPostImage.get(i).getImg()).resize(200,200).centerCrop().get();
                             Log.e("bimp===========", bitmap.toString());
                             ImageItem ii = new ImageItem();
                             ii.setBitmap(bitmap);

@@ -6,6 +6,7 @@ import com.beanu.arad.http.IDao;
 import com.beanu.arad.http.INetResult;
 import com.ctrl.forum.base.Constant;
 import com.fasterxml.jackson.databind.JsonNode;
+
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -40,4 +41,10 @@ public class SetDao extends IDao{
            Log.d("demo", "dao中结果集(提交意见反馈): " + result);
        }
     }
+
+    @Override
+    public void onRequestFails(String result, int requestCode, String errorNo) {
+
+    }
+
 }

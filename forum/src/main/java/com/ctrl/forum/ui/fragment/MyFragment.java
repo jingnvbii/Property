@@ -591,6 +591,10 @@ public class MyFragment extends ToolBarFragment implements View.OnClickListener{
                 case "message":
                     editDao.getVipInfo(Arad.preferences.getString("memberId"));
                     break;
+                case "back":
+                    int number = Integer.valueOf(intent.getExtras().getString("number"));
+                    iv_message.setNum(number);
+                    break;
                 default:
                     break;
             }

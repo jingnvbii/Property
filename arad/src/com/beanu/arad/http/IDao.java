@@ -33,7 +33,7 @@ public abstract class IDao {
      */
     public abstract void onRequestSuccess(JsonNode result, int requestCode) throws IOException, JSONException;
 
-
+    public abstract void onRequestFails(String result, int requestCode,String errorNo);
     /**
      * get请求网络，本方法提供结果的分发
      *
@@ -104,7 +104,7 @@ public abstract class IDao {
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseBody) {
                 android.util.Log.d("demo","statusCode: " + statusCode);
-                android.util.Log.d("demo","返回结果集: " + responseBody);
+                android.util.Log.d("demo", "返回结果集: " + responseBody);
                 try {
                     if (Arad.app.config.httpConfig != null) {
                         JsonNode node = Arad.app.config.httpConfig.handleResult(responseBody);
@@ -113,6 +113,7 @@ public abstract class IDao {
                     }
                     mResult.onRequestSuccess(requestCode);
                 } catch (AradException e) {
+                    onRequestFails(responseBody, requestCode,e.getError_code());
                     mResult.onRequestFaild(e.getError_code(), e.getMessage());
                 } catch (JsonProcessingException e) {
                     e.printStackTrace();

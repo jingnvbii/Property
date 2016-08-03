@@ -371,14 +371,19 @@ public class PlotAddInvitationActivity extends AppToolBarActivity implements Vie
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-
                     List<PostImage> listPostImage = idao.getListPostImage();//图片
                     for (int i=0;i<listPostImage.size();i++) {
-                        Bitmap bmp = getBitmap(listPostImage.get(i).getImg());
+                        //Bitmap bmp = getBitmap(listPostImage.get(i).getImg());
+                        Bitmap bitmap = null;
+                        try {
+                            bitmap = Arad.imageLoader.load(listPostImage.get(i).getImg()).resize(200, 200).centerCrop().get();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                         ImageItem ii = new ImageItem();
-                        ii.setBitmap(bmp);
+                        ii.setBitmap(bitmap);
                         ii.setImageUrl(listPostImage.get(i).getImg());
-                        Bimp.tempSelectBitmap.add(ii); //网络中获取
+                        Bimp.tempSelectBitmap.add(ii);
                     }
                     adapter.update();
                     showProgress(false);
@@ -580,7 +585,7 @@ public class PlotAddInvitationActivity extends AppToolBarActivity implements Vie
             if (Bimp.tempSelectBitmap.size() > 0) {
                 Uri uri = null;
                 for (int i = 0; i < Bimp.tempSelectBitmap.size(); i++) {
-                    uri= Utils.getUriFromPath(this,AlbumActivity.addList.get(i).getImagePath());
+                    uri= Utils.getUriFromPath(this, AlbumActivity.addList.get(i).getImagePath());
                     //uri = Uri.parse(MediaStore.Images.Media.insertImage(getContentResolver(), Bimp.tempSelectBitmap.get(i).getBitmap(), null, null));
                     //uri = Bimp.tempSelectBitmap.get(i).getUri();
                     Log.e("uri=========",uri+"");

@@ -49,6 +49,7 @@ public class ProgressHUD extends Dialog {
         }
         //dialog.setCancelable(cancelable);
         //dialog.setOnCancelListener(cancelListener);
+        dialog.setCanceledOnTouchOutside(false);// 设置点击屏幕Dialog不消失
         dialog.getWindow().getAttributes().gravity = Gravity.CENTER;
         WindowManager.LayoutParams lp = dialog.getWindow().getAttributes();
         lp.dimAmount = 0.2f;

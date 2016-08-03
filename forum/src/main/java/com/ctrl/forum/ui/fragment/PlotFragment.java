@@ -138,8 +138,10 @@ public class PlotFragment extends ToolBarFragment implements View.OnClickListene
         ButterKnife.inject(this, view);
        // rl_search.setVisibility(View.GONE);
         idao = new InvitationDao(this);
-        checkActivity();
 
+        ShareSDK.initSDK(getActivity());
+
+        checkActivity();
         initView();
 
         //listview增加头部布局

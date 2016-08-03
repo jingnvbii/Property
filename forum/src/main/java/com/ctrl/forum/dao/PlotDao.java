@@ -186,6 +186,11 @@ public class PlotDao extends IDao {
         }
     }
 
+    @Override
+    public void onRequestFails(String result, int requestCode, String errorNo) {
+
+    }
+
     public List<Communitys> getCommunities() {
         return communities;
     }

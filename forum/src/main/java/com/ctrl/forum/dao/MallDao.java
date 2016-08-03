@@ -358,6 +358,11 @@ public class MallDao extends IDao {
 
     }
 
+    @Override
+    public void onRequestFails(String result, int requestCode, String errorNo) {
+
+    }
+
     public List<Banner> getListMallBanner() {
         return listMallBanner;
     }

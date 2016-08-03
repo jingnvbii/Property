@@ -40,6 +40,11 @@ public class KeyDao extends IDao {
        }
     }
 
+    @Override
+    public void onRequestFails(String result, int requestCode, String errorNo) {
+
+    }
+
     public ItemValues getItemValues() {
         return itemValues;
     }

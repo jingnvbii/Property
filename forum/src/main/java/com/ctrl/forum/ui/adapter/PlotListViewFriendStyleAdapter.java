@@ -125,9 +125,10 @@ public class PlotListViewFriendStyleAdapter extends BaseAdapter {
 
         if (post.getPublishTime()!=null&& !post.getPublishTime().equals("")) {
             if (post.getLocationName()!=null && !post.getLocationName().equals("")) {
-                holder.tv_friend_style_time.setText(TimeUtils.date(Long.parseLong(post.getPublishTime())) + "   " + post.getLocationName());
+                //holder.tv_friend_style_time.setText(TimeUtils.date(Long.parseLong(post.getPublishTime())) + "   " + post.getLocationName());
+                holder.tv_friend_style_time.setText(TimeUtils.dateTime1(post.getPublishTime()) + "   " + post.getLocationName());
             }else {
-                holder.tv_friend_style_time.setText(TimeUtils.date(Long.parseLong(post.getPublishTime())));
+                holder.tv_friend_style_time.setText(TimeUtils.dateTime1(post.getPublishTime()));
             }
         }
 

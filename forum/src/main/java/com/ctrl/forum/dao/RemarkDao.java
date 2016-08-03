@@ -109,6 +109,11 @@ public class RemarkDao extends IDao {
         }
     }
 
+    @Override
+    public void onRequestFails(String result, int requestCode, String errorNo) {
+
+    }
+
     public List<IntegralProduct> getIntegralProducts() {
         return integralProducts;
     }
