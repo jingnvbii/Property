@@ -33,9 +33,7 @@
 
     <dimen name="list_item_micro">50dp</dimen>
     <dimen name="gray_space">40dp</dimen>
-
     <dimen name="ui_10_dip">10dip</dimen>
-
 
 <!--微信支付-->
     <dimen name="LargeTextSize">16sp</dimen>
