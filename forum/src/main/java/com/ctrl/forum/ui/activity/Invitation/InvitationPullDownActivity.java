@@ -245,7 +245,7 @@ public class InvitationPullDownActivity extends ToolBarActivity implements View.
             }*/
             radio.setLayoutParams(l);
             radio.setGravity(Gravity.LEFT | Gravity.CENTER_VERTICAL);
-            radio.setPadding(10, 10, 20, 10);
+            radio.setPadding(10, 10, 40, 10);
             radio.setId(i);
             radio.setButtonDrawable(getResources().getDrawable(R.color.white));
             radio.setTextSize(16.0f);
