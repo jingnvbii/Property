@@ -170,6 +170,7 @@ public class ItemRimActivity extends ToolBarActivity implements View.OnClickList
         }
        /* mBaiduMap.setMapStatus(MapStatusUpdateFactory
                 .newLatLngBounds(builder.build()));*/
+
         //添加覆盖物
         //initOverlay();
 
