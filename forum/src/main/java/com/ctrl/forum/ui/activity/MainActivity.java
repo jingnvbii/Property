@@ -592,7 +592,6 @@ public class MainActivity extends ToolBarActivity implements View.OnClickListene
         transaction.commit();
     }
 
-
     /**
      * 将所有的Fragment都置为隐藏状态。
      *
@@ -615,7 +614,6 @@ public class MainActivity extends ToolBarActivity implements View.OnClickListene
             transaction.hide(myFragment);
         }
     }
-
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -687,7 +685,6 @@ public class MainActivity extends ToolBarActivity implements View.OnClickListene
         }
 
     }
-
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {

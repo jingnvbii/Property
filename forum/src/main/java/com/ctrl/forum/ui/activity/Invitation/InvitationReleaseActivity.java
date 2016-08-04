@@ -14,7 +14,9 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Base64;
 import android.util.Log;
 import android.view.Gravity;
@@ -145,7 +147,8 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
     TextView tougao;
     @InjectView(R.id.ll_gen)
     LinearLayout ll_gen;
-
+    @InjectView(R.id.tv_number)
+    TextView tv_number;
 
     /* 请求码*/
     private static final int IMAGE_REQUEST_CODE = 0;
@@ -212,6 +215,8 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
             idao.requesItemCategory2(channelId, "1");
         }
         Init();
+
+
     }
 
     private Boolean checkActivity() {
@@ -323,7 +328,46 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
                 }
             }
         });
+
+        et_content.addTextChangedListener(mTextWatcher);
+        et_tittle.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (s.length()==500 || s.length()>500){
+                    MessageUtils.showShortToast(getApplicationContext(),"已超出标题最大限制字数500字!");
+                }
+            }
+        });
     }
+
+    TextWatcher mTextWatcher = new TextWatcher() {
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+        }
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count,
+                                      int after) {
+        }
+        @Override
+        public void afterTextChanged(Editable s) {
+            int length = 2000 - s.length();
+            tv_number.setText("("+length+"/2000)");
+            if (s.length()==2000){
+                MessageUtils.showShortToast(getApplicationContext(),"已输入2000位,不能继续输入!");
+            }
+        }
+    };
 
     public class GridAdapter extends BaseAdapter {
         private LayoutInflater inflater;
@@ -1657,9 +1701,4 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
     private String sync(Block b) {
         return b.getIdx() + "," + b.getCtx() + "," + b.getLength() + "," + b.getHost();
     }
-
-
-
-
-
 }

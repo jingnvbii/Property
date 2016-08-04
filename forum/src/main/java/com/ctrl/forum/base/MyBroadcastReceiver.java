@@ -17,6 +17,8 @@ import com.ctrl.forum.ui.activity.mine.MineOrderManageActivity;
 import com.ctrl.forum.ui.activity.mine.MineXianJuanActivity;
 import com.ctrl.forum.ui.activity.mine.MineYouJuanActivity;
 import com.ctrl.forum.ui.activity.rim.ExampleUtil;
+import com.ctrl.forum.ui.activity.store.StoreCommodityDetailActivity;
+import com.ctrl.forum.ui.activity.store.StoreShopDetailActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -52,11 +54,15 @@ public class MyBroadcastReceiver extends BroadcastReceiver{
         }
         else if (JPushInterface.ACTION_MESSAGE_RECEIVED.equals(intent.getAction())) {
             Log.d(TAG, "[MyReceiver] 接收到推送下来的自定义消息: " + bundle.getString(JPushInterface.EXTRA_MESSAGE));
+            int notifactionId = bundle.getInt(JPushInterface.EXTRA_NOTIFICATION_ID);
+            Log.d(TAG, "[MyReceiver] 接收到推送下来的自定义消息的ID: " + notifactionId);
            // processCustomMessage(context, bundle);
             // 自定义消息不会展示在通知栏，完全要开发者写代码去处理
             bundle.getString(JPushInterface.EXTRA_APP_KEY);
 
             String extras = bundle.getString(JPushInterface.EXTRA_EXTRA);
+            Log.e("extras=========",extras);
+
             if (!ExampleUtil.isEmpty(extras)) {
                 try {
                     JSONObject object = new JSONObject(extras);
@@ -73,7 +79,7 @@ public class MyBroadcastReceiver extends BroadcastReceiver{
             itt.putExtra("num", "num");
             context.sendBroadcast(itt,null);
 
-            if (!Arad.preferences.getString("memeberId").equals("")) {
+            if (!Arad.preferences.getString("memberId").equals("")) {
                 if (Arad.preferences.getBoolean("replyComments")) {//评论回复
                     setNavti(context, "您收到一条新消息", message, messageKey);
                 } else {
@@ -103,6 +109,8 @@ public class MyBroadcastReceiver extends BroadcastReceiver{
     }
 
     private void setNavti(Context context,String title,String content,String state) {
+        Log.e("1234","23467");
+
         // 得到通知消息的管理器对象，负责管理 Notification 的发送与清除消息等
         mManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         // 创建Notification对象 参数分别代表 通知栏 中显示的图标 显示的标题 显示的时间
@@ -153,6 +161,17 @@ public class MyBroadcastReceiver extends BroadcastReceiver{
                     break;
                 case "9"://9：帖子评论收到回复
                     intent = new Intent(context, MineMessageActivity.class);
+                    break;
+                case "10"://后台推送帖子
+                    intent = new Intent(context, MineMessageActivity.class);
+                    break;
+                case "11"://后台推送商品
+                    intent = new Intent(context, StoreCommodityDetailActivity.class);
+                    break;
+                case "12"://后台推送店铺
+                    intent = new Intent(context, StoreShopDetailActivity.class);
+                    break;
+                case "13"://后台推送通知
                     break;
                 default:
                     break;

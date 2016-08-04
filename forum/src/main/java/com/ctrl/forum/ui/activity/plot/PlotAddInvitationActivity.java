@@ -15,7 +15,9 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -107,6 +109,7 @@ public class PlotAddInvitationActivity extends AppToolBarActivity implements Vie
     private TextView tv_tel;//联系电话
     private TextView tv_location;//位置
     private TextView tv_name;//名片
+    private TextView tv_number;
 
     private String channelId;
     private String name;
@@ -197,6 +200,7 @@ public class PlotAddInvitationActivity extends AppToolBarActivity implements Vie
         tv_tel = (TextView) findViewById(R.id.tv_tel);
         tv_location = (TextView) findViewById(R.id.tv_location);
         tv_name = (TextView) findViewById(R.id.tv_name);
+        tv_number = (TextView) findViewById(R.id.tv_number);
 
         tv_tel.setOnClickListener(this);
         tv_location.setOnClickListener(this);
@@ -330,7 +334,28 @@ public class PlotAddInvitationActivity extends AppToolBarActivity implements Vie
                 }
             }
         });
+
+        et_content.addTextChangedListener(mTextWatcher);
     }
+
+    TextWatcher mTextWatcher = new TextWatcher() {
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+        }
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count,
+                                      int after) {
+        }
+        @Override
+        public void afterTextChanged(Editable s) {
+            int length = 2000 - s.length();
+            tv_number.setText("("+length+"/2000)");
+            if (s.length()==2000){
+                MessageUtils.showShortToast(getApplicationContext(),"已输入2000位,不能继续输入!");
+            }
+        }
+    };
 
     private static final int TAKE_PICTURE = 0x000001;
 

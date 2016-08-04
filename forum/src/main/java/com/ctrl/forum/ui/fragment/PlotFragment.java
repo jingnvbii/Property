@@ -39,6 +39,7 @@ import com.ctrl.forum.entity.Post;
 import com.ctrl.forum.loopview.HomeAutoSwitchPicHolder;
 import com.ctrl.forum.ui.activity.Invitation.InvitationDetailActivity;
 import com.ctrl.forum.ui.activity.LoginActivity;
+import com.ctrl.forum.ui.activity.MainActivity;
 import com.ctrl.forum.ui.activity.mine.MineFindFlotActivity;
 import com.ctrl.forum.ui.activity.plot.PlotAddInvitationActivity;
 import com.ctrl.forum.ui.activity.plot.PlotRimServeActivity;
@@ -332,6 +333,26 @@ public class PlotFragment extends ToolBarFragment implements View.OnClickListene
         idao.requestPostRotaingBanner("B_COMMUNITY_TOP");
         return view;
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (MainActivity.isFrist){
+            rl_footer.setVisibility(View.GONE);
+            isFromLoad = false;
+            communityId = Arad.preferences.getString("communityId");
+            tv_plot_name.setText(Arad.preferences.getString("communityName"));
+            if (posts != null) {
+                posts.clear();
+                invitationListViewFriendStyleAdapter.notifyDataSetChanged();
+            }
+            PAGE_NUM=1;
+            plotDao.queryCommunityPostList(Arad.preferences.getString("memberId"),
+                    communityId,
+                    PAGE_NUM + "", Constant.PAGE_SIZE + "");
+        }
+    }
+
     /**
      * 轮播图
      */
@@ -630,7 +651,7 @@ public class PlotFragment extends ToolBarFragment implements View.OnClickListene
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
        if (resultCode==getActivity().RESULT_OK){
-           if (requestCode==1203){
+          /* if (requestCode==1203){
                rl_footer.setVisibility(View.GONE);
                isFromLoad = false;
                communityId = Arad.preferences.getString("communityId");
@@ -643,7 +664,7 @@ public class PlotFragment extends ToolBarFragment implements View.OnClickListene
                plotDao.queryCommunityPostList(Arad.preferences.getString("memberId"),
                        communityId,
                        PAGE_NUM + "", Constant.PAGE_SIZE + "");
-           }
+           }*/
            if (requestCode==7788){
                rl_footer.setVisibility(View.GONE);
                isFromLoad = false;

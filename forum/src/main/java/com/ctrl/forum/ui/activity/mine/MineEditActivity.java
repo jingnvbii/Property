@@ -199,7 +199,8 @@ public class MineEditActivity extends AppToolBarActivity implements View.OnClick
             case R.id.rl_phone://
                 break;
             case R.id.rl_xiaoqu://小区
-                startActivity(new Intent(this,MineFindFlotActivity.class));
+                intent = new Intent(this,MineFindFlotActivity.class);
+                startActivityForResult(intent,1203);
                 break;
             case R.id.rl_pwd://修改密码
                 intent = new Intent(getApplicationContext(),MineUpdatepwdActivity.class);
