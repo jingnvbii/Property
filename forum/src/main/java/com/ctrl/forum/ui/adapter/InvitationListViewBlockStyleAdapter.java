@@ -85,6 +85,13 @@ public class InvitationListViewBlockStyleAdapter extends BaseAdapter {
             if(post.getPublishTime()!=null)
             holder.tv_block_style_time.setText(TimeUtils.dateTime(post.getPublishTime()));
             holder.tv_block_style_zan.setText(post.getCommentNum()+"");
+            if(post.getBlurbs()!=null&&!post.getBlurbs().equals("")){
+                holder.tv_blurs.setVisibility(View.VISIBLE);
+                holder.tv_blurs.setText(post.getBlurbs());
+            }else {
+                holder.tv_blurs.setVisibility(View.GONE);
+            }
+
         return convertView;
     }
 
@@ -97,6 +104,8 @@ public class InvitationListViewBlockStyleAdapter extends BaseAdapter {
                 TextView tv_block_style_time;
         @InjectView(R.id.tv_block_style_zan)//评论数
                 TextView tv_block_style_zan;
+        @InjectView(R.id.tv_blurs)//导语
+                TextView tv_blurs;
         @InjectView(R.id.rl_content)
         RelativeLayout rl_content;
 

@@ -220,7 +220,7 @@ public class InvitationPullDownActivity extends ToolBarActivity implements View.
             RadioButton radio = new RadioButton(this);
           //  radio.setBackgroundResource(R.drawable.top_category_selector);
             LinearLayout.LayoutParams l;
-            l = new LinearLayout.LayoutParams(newWidth, ViewGroup.LayoutParams.MATCH_PARENT, Gravity.CENTER);
+            l = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT, Gravity.CENTER);
            /* if (listCategory.size() == 1) {
                 l = new LinearLayout.LayoutParams(newWidth, ViewGroup.LayoutParams.MATCH_PARENT, Gravity.CENTER);
             } else if (listCategory.size() == 2) {
@@ -244,8 +244,8 @@ public class InvitationPullDownActivity extends ToolBarActivity implements View.
                 l = new LinearLayout.LayoutParams((width - 30) / 5, ViewGroup.LayoutParams.MATCH_PARENT, Gravity.CENTER);
             }*/
             radio.setLayoutParams(l);
-            radio.setGravity(Gravity.CENTER);
-            //  radio.setPadding(20, 20, 20, 20);
+            radio.setGravity(Gravity.LEFT | Gravity.CENTER_VERTICAL);
+            radio.setPadding(10, 10, 40, 10);
             radio.setId(i);
             radio.setButtonDrawable(getResources().getDrawable(R.color.white));
             radio.setTextSize(16.0f);
