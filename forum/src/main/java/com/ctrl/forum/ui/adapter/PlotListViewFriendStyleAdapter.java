@@ -194,6 +194,7 @@ public class PlotListViewFriendStyleAdapter extends BaseAdapter {
         holder.rl_friend_style_more.setTag(position);
 
         holder.rl_friend_style_share.setOnClickListener(onShare);
+        holder.rl_friend_style_share.setTag(position);
 
         holder.rl_friend_style_pinglun.setOnClickListener(new View.OnClickListener() {
             @Override
