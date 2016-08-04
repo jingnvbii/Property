@@ -77,8 +77,11 @@ public class ItemRimActivity extends ToolBarActivity implements View.OnClickList
         SDKInitializer.initialize(getApplicationContext());
         setContentView(R.layout.activity_rim_item);
         ButterKnife.inject(this);
+
         mMapView = (MapView) findViewById(R.id.bmapView);
         mMapView.setVisibility(View.GONE);
+        mBaiduMap = mMapView.getMap();
+        mMapView.onCreate(ItemRimActivity.this,null);
 
         Intent intent = getIntent();
         id = intent.getStringExtra("id");
@@ -130,10 +133,11 @@ public class ItemRimActivity extends ToolBarActivity implements View.OnClickList
     }
 
     private void initMap() {
-        mBaiduMap = mMapView.getMap();
+        LatLngBounds.Builder builder = new LatLngBounds.Builder();
+
         Marker mMarker = null;
-        MapStatusUpdate msu = MapStatusUpdateFactory.zoomTo(14.0f);
-        mBaiduMap.setMapStatus(msu);
+        /*MapStatusUpdate msu = MapStatusUpdateFactory.zoomTo(14.0f);
+        mBaiduMap.setMapStatus(msu);*/
 
         LatLng cenpt = new LatLng(Double.valueOf(Arad.preferences.getString("latitude")),
                 Double.valueOf(Arad.preferences.getString("lontitude")));
@@ -153,6 +157,8 @@ public class ItemRimActivity extends ToolBarActivity implements View.OnClickList
             //构建Marker图标
             BitmapDescriptor bitmap = BitmapDescriptorFactory
                     .fromResource(R.drawable.ic_location_chatbox);
+           /* BitmapDescriptor bitmap = BitmapDescriptorFactory
+                    .fromResource(R.mipmap.map_marker);*/
             //构建MarkerOption，用于在地图上添加Marker
             OverlayOptions option = new MarkerOptions()
                     .position(cenpt1)
@@ -160,7 +166,11 @@ public class ItemRimActivity extends ToolBarActivity implements View.OnClickList
             //在地图上添加Marker，并显示
             mMarker = (Marker) (mBaiduMap.addOverlay(option));
             mMarker.setTitle(rimServiceCompanies.get(i).getName());
+           // builder.include(mMarker.getPosition());
         }
+       /* mBaiduMap.setMapStatus(MapStatusUpdateFactory
+                .newLatLngBounds(builder.build()));*/
+
         //添加覆盖物
         //initOverlay();
 
@@ -258,7 +268,6 @@ public class ItemRimActivity extends ToolBarActivity implements View.OnClickList
 
     private void initView() {
         tv_item_one.setText(title);
-
         rimDao = new RimDao(this);
         rimDao.getAroundServiceCompanyList(PAGE_NUM + "", Constant.PAGE_SIZE + "", Arad.preferences.getString("memberId"), id, "", Arad.preferences.getString("latitude"), Arad.preferences.getString("lontitude"));
     }
