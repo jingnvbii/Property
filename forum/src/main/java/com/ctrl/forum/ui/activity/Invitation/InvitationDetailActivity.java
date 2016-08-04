@@ -597,7 +597,7 @@ public class InvitationDetailActivity extends AppToolBarActivity implements View
                     public void onClick(View v) {
                         //2、设置分享内容
                         Platform.ShareParams sp = new Platform.ShareParams();
-                        sp.setText("我是新浪微博分享文本，啦啦啦~http://uestcbmi.com/"); //分享文本
+                        sp.setText("我是新浪微博分享文本，啦啦啦~"+Constant.SHARE_INVITION_URL+post.getId()); //分享文本
                         sp.setImageUrl("http://7sby7r.com1.z0.glb.clouddn.com/CYSJ_02.jpg");//网络图片rul
                         sp.setUrl(Constant.SHARE_INVITION_URL+post.getId());
                         //3、非常重要：获取平台对象
@@ -631,7 +631,7 @@ public class InvitationDetailActivity extends AppToolBarActivity implements View
                         //2、设置分享内容
                         Platform.ShareParams sp = new Platform.ShareParams();
                         sp.setTitle("我是腾讯微博分享标题");  //分享标题
-                        sp.setText("我是腾讯微博分享文本，啦啦啦~http://uestcbmi.com/");   //分享文本
+                        sp.setText("我是腾讯微博分享文本，啦啦啦~"+Constant.SHARE_INVITION_URL+post.getId());   //分享文本
                         sp.setImageUrl("http://7sby7r.com1.z0.glb.clouddn.com/CYSJ_02.jpg");//网络图片rul
                         sp.setUrl(Constant.SHARE_INVITION_URL+post.getId());   //网友点进链接后，可以看到分享的详情
                         //3、非常重要：获取平台对象
@@ -648,7 +648,7 @@ public class InvitationDetailActivity extends AppToolBarActivity implements View
                         //2、设置分享内容
                         Platform.ShareParams sp = new Platform.ShareParams();
                         sp.setTitle("我是邮件分享标题");  //分享标题
-                        sp.setText("我是邮件分享文本，啦啦啦~http://uestcbmi.com/");   //分享文本
+                        sp.setText("我是邮件分享文本，啦啦啦~"+Constant.SHARE_INVITION_URL+post.getId());   //分享文本
                         sp.setImageUrl("http://7sby7r.com1.z0.glb.clouddn.com/CYSJ_02.jpg");//网络图片rul
                         sp.setUrl(Constant.SHARE_INVITION_URL+post.getId());   //网友点进链接后，可以看到分享的详情
                         //3、非常重要：获取平台对象
@@ -664,7 +664,7 @@ public class InvitationDetailActivity extends AppToolBarActivity implements View
                         //2、设置分享内容
                         Platform.ShareParams sp = new Platform.ShareParams();
                         sp.setTitle("我是短信分享标题");  //分享标题
-                        sp.setText("我是短信分享文本，啦啦啦~http://uestcbmi.com/");   //分享文本
+                        sp.setText("我是短信分享文本，啦啦啦~"+Constant.SHARE_INVITION_URL+post.getId());   //分享文本
                         sp.setImageUrl("http://7sby7r.com1.z0.glb.clouddn.com/CYSJ_02.jpg");//网络图片rul
                         sp.setUrl(Constant.SHARE_INVITION_URL+post.getId());   //网友点进链接后，可以看到分享的详情
                         //3、非常重要：获取平台对象
