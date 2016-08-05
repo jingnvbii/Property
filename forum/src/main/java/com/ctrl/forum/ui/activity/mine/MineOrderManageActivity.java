@@ -15,6 +15,7 @@ import com.beanu.arad.utils.MessageUtils;
 import com.ctrl.forum.R;
 import com.ctrl.forum.base.Constant;
 import com.ctrl.forum.dao.MineStoreDao;
+import com.ctrl.forum.dao.ReplyCommentDao;
 import com.ctrl.forum.entity.CompanyOrder;
 import com.ctrl.forum.ui.adapter.MineOrderManagerAdapter;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
@@ -46,6 +47,7 @@ public class MineOrderManageActivity extends ToolBarActivity implements View.OnC
     private MineStoreDao odao;
     public static int type = 0;
     private int PAGE_NUM =1;
+    private ReplyCommentDao rdao;
 
 
     @Override
@@ -54,6 +56,7 @@ public class MineOrderManageActivity extends ToolBarActivity implements View.OnC
         setContentView(R.layout.activity_mine_shop_manage);
         ButterKnife.inject(this);
 
+        modityMessageRead();
         initView();
 
         orderManagerAdapter = new MineOrderManagerAdapter(this);
@@ -95,6 +98,14 @@ public class MineOrderManageActivity extends ToolBarActivity implements View.OnC
                 startActivity(intent);
             }
         });
+    }
+
+    private void modityMessageRead() {
+        rdao = new ReplyCommentDao(this);
+        String msgId = getIntent().getStringExtra("msgId");
+        if (msgId!=null){
+            rdao.modifyOneReadState(msgId);
+        }
     }
 
     private void initData() {

@@ -52,6 +52,7 @@ import com.ctrl.forum.customview.RoundImageView;
 import com.ctrl.forum.customview.ShareDialog;
 import com.ctrl.forum.dao.ImageDao;
 import com.ctrl.forum.dao.InvitationDao;
+import com.ctrl.forum.dao.ReplyCommentDao;
 import com.ctrl.forum.dao.SoundDao;
 import com.ctrl.forum.entity.Image;
 import com.ctrl.forum.entity.MemberInfo;
@@ -251,6 +252,7 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
     private ListViewForScrollView lv_invitation_detail_image;
     private RelativeLayout rl_footer;
     private ImageButton biaoqingImage;
+    private ReplyCommentDao rdao;
 
 
     @Override
@@ -259,9 +261,19 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
         setContentView(R.layout.activity_invitation_pinterest_detail);
         ButterKnife.inject(this);
         // 隐藏输入法1
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+        getWindow().setSoftInputMode(WindowManager. LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+        modityMessageRead();
+
         initView();
         ShareSDK.initSDK(this);
+    }
+
+    private void modityMessageRead() {
+        rdao = new ReplyCommentDao(this);
+        String msgId = getIntent().getStringExtra("msgId");
+        if (msgId!=null){
+            rdao.modifyOneReadState(msgId);
+        }
     }
 
     @Override

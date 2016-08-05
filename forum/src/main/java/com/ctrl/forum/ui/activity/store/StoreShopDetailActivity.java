@@ -22,6 +22,7 @@ import com.ctrl.forum.base.AppToolBarActivity;
 import com.ctrl.forum.customview.ListViewForScrollView;
 import com.ctrl.forum.dao.CollectDao;
 import com.ctrl.forum.dao.MallDao;
+import com.ctrl.forum.dao.ReplyCommentDao;
 import com.ctrl.forum.entity.CashCoupons;
 import com.ctrl.forum.entity.Company;
 import com.ctrl.forum.entity.CompanyUnion;
@@ -86,6 +87,7 @@ public class StoreShopDetailActivity extends AppToolBarActivity implements View.
 
     private int count=0;//点击计数器
     private ImageView mRightButton;
+    private ReplyCommentDao rdao;
 
     private Handler handler= new Handler() {
         @Override
@@ -109,12 +111,19 @@ public class StoreShopDetailActivity extends AppToolBarActivity implements View.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_store_shop_detail);
         ButterKnife.inject(this);
+        modityMessageRead();
         // 隐藏输入法11
         // getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         initView();
         initData();
     }
-
+    private void modityMessageRead() {
+        rdao = new ReplyCommentDao(this);
+        String msgId = getIntent().getStringExtra("msgId");
+        if (msgId!=null){
+            rdao.modifyOneReadState(msgId);
+        }
+    }
     private void initView() {
         count=0;
         tv_reply_detail.setOnClickListener(this);

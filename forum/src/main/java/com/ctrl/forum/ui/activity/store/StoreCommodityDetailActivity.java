@@ -39,6 +39,7 @@ import com.ctrl.forum.cart.datasave.OperateGoodsDataBaseStatic;
 import com.ctrl.forum.customview.ShareDialog;
 import com.ctrl.forum.dao.CollectDao;
 import com.ctrl.forum.dao.MallDao;
+import com.ctrl.forum.dao.ReplyCommentDao;
 import com.ctrl.forum.entity.Image2;
 import com.ctrl.forum.entity.Product2;
 import com.ctrl.forum.ui.activity.LoginActivity;
@@ -173,6 +174,7 @@ public class StoreCommodityDetailActivity extends AppToolBarActivity implements 
     private PopupWindow popupWindow_share;
     private ShareDialog shareDialog;
     private int currentItem;
+    private ReplyCommentDao rdao;
 
 
     @Override
@@ -181,11 +183,21 @@ public class StoreCommodityDetailActivity extends AppToolBarActivity implements 
         setContentView(R.layout.activity_store_commodity_detail);
         ButterKnife.inject(this);
         ShareSDK.initSDK(this);
+
+        modityMessageRead();
         mContext = this;
         // 隐藏输入法
         // getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         initView();
         initData();
+    }
+
+    private void modityMessageRead() {
+        rdao = new ReplyCommentDao(this);
+        String msgId = getIntent().getStringExtra("msgId");
+        if (msgId!=null){
+            rdao.modifyOneReadState(msgId);
+        }
     }
 
     private void initData() {

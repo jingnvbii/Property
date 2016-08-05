@@ -1,9 +1,11 @@
 package com.ctrl.forum.base;
 
+import android.app.ActivityManager;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,6 +13,8 @@ import android.util.Log;
 
 import com.beanu.arad.Arad;
 import com.ctrl.forum.R;
+import com.ctrl.forum.ui.activity.Invitation.InvitationDetailFromPlatformActivity;
+import com.ctrl.forum.ui.activity.Invitation.InvitationPinterestDetailActivity;
 import com.ctrl.forum.ui.activity.mine.MineMessageActivity;
 import com.ctrl.forum.ui.activity.mine.MineOrderActivity;
 import com.ctrl.forum.ui.activity.mine.MineOrderManageActivity;
@@ -22,6 +26,8 @@ import com.ctrl.forum.ui.activity.store.StoreShopDetailActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.List;
 
 import cn.jpush.android.api.JPushInterface;
 
@@ -40,6 +46,9 @@ public class MyBroadcastReceiver extends BroadcastReceiver{
     NotificationManager mManager = null;
     Notification notification =null;
     String messageKey;
+    String targetId;
+    String sourceType;
+    String msgId;
     Intent intent = null;
     Bundle bundle = null;
 
@@ -62,11 +71,15 @@ public class MyBroadcastReceiver extends BroadcastReceiver{
 
             String extras = bundle.getString(JPushInterface.EXTRA_EXTRA);
             Log.e("extras=========",extras);
+            // {"messageKey":"9","targetId":"5b088e45a3af40adae27c38eb268f052","sourceType":"1"}
 
             if (!ExampleUtil.isEmpty(extras)) {
                 try {
                     JSONObject object = new JSONObject(extras);
-                    messageKey = object.getString("messageKey");
+                    messageKey = object.optString("messageKey");
+                    sourceType = object.optString("sourceType");
+                    targetId = object.optString("targetId");
+                    msgId= object.optString("msgId");
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -79,19 +92,17 @@ public class MyBroadcastReceiver extends BroadcastReceiver{
             itt.putExtra("num", "num");
             context.sendBroadcast(itt, null);
 
-            Log.e("memberId", Arad.preferences.getString("memberId"));
-            Log.e("memberId", Arad.preferences.getBoolean("replyComments")+"");
-            Log.e("memberId",Arad.preferences.getBoolean("systemNotification")+"");
             if (!Arad.preferences.getString("memberId").equals("")) {
-                if (Arad.preferences.getBoolean("replyComments")) {//评论回复
-                    setNavti(context, "您收到一条新消息", message, messageKey);
-                    Log.e("您收到一条新消息", "nininini");
-                } else {
-                    if (Arad.preferences.getBoolean("systemNotification")) {//系统通知
-                        setNavti(context, "系统通知", message, messageKey);
-                        Log.e("系统通知", "nininini");
+                if (!isBackground(context) && !isFrom(messageKey)) {//程序运行在前台，通知类型不是评论帖子，帖子收到回复
+                    if (!Arad.preferences.getBoolean("isSet")) {
+                        if (Arad.preferences.getBoolean("replyComments")) {//评论回复
+                            setNavti(context, "您收到一条新消息", message, messageKey);
+                        } else {
+                            if (Arad.preferences.getBoolean("systemNotification")) {//系统通知
+                                setNavti(context, "系统通知", message, messageKey);}
+                        }
                     }
-                }
+                }else {setNavti(context, "您收到一条新消息", message, messageKey);}
             }
         }
         else if (JPushInterface.ACTION_NOTIFICATION_RECEIVED.equals(intent.getAction())) {
@@ -114,8 +125,6 @@ public class MyBroadcastReceiver extends BroadcastReceiver{
     }
 
     private void setNavti(Context context,String title,String content,String state) {
-        Log.e("1234","23467");
-
         // 得到通知消息的管理器对象，负责管理 Notification 的发送与清除消息等
         mManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         // 创建Notification对象 参数分别代表 通知栏 中显示的图标 显示的标题 显示的时间
@@ -124,9 +133,6 @@ public class MyBroadcastReceiver extends BroadcastReceiver{
         }else{
             notification = new Notification(R.mipmap.logo,title,System.currentTimeMillis());
         }
-
-        //12
-        //notification.icon = R.mipmap.image_default;
 
         if (Arad.preferences.getBoolean("voice")){//声音
             notification.defaults = Notification.DEFAULT_SOUND;
@@ -142,39 +148,53 @@ public class MyBroadcastReceiver extends BroadcastReceiver{
             switch (state) {
                 case "1": //1.用户下单支付成功<通知商家>：跳转到
                     intent = new Intent(context, MineOrderManageActivity.class);
+                    intent.putExtra("msgId",msgId);
                     break;
                 case "2"://2：商家发货<通知买家>
                     intent = new Intent(context, MineOrderActivity.class);
+                    intent.putExtra("msgId",msgId);
                     break;
                 case "3"://3：买家领取优惠券<通知买家>
                     intent = new Intent(context, MineYouJuanActivity.class);
+                    intent.putExtra("msgId",msgId);
                     break;
                 case "4"://4：商家赠送现金券给买家<通知买家>
                     intent = new Intent(context, MineXianJuanActivity.class);
+                    intent.putExtra("msgId",msgId);
                     break;
                 case "5"://5：会员发布帖子<通知会员>
-                    intent = new Intent(context, MineMessageActivity.class);
+                    //intent = new Intent(context, MineMessageActivity.class);
+                    jumpActiv(context);
                     break;
                 case "6"://6：已发布帖子需要审核<通知会员>
-                    intent = new Intent(context, MineMessageActivity.class);
+                    //intent = new Intent(context, MineMessageActivity.class);
+                    jumpActiv(context);
                     break;
                 case "7"://7：帖子被赞<通知发帖人>
-                    intent = new Intent(context, MineMessageActivity.class);
+                    //intent = new Intent(context, MineMessageActivity.class);
+                    jumpActiv(context);
                     break;
                 case "8"://8：帖子收到评论
-                    intent = new Intent(context, MineMessageActivity.class);
+                    //intent = new Intent(context, MineMessageActivity.class);
+                    jumpActiv(context);
                     break;
                 case "9"://9：帖子评论收到回复
-                    intent = new Intent(context, MineMessageActivity.class);
+                    //intent = new Intent(context, MineMessageActivity.class);
+                    jumpActiv(context);
                     break;
                 case "10"://后台推送帖子
-                    intent = new Intent(context, MineMessageActivity.class);
+                    //intent = new Intent(context, MineMessageActivity.class);
+                    jumpActiv(context);
                     break;
                 case "11"://后台推送商品
                     intent = new Intent(context, StoreCommodityDetailActivity.class);
+                    intent.putExtra("id",targetId);
+                    intent.putExtra("msgId",msgId);
                     break;
                 case "12"://后台推送店铺
                     intent = new Intent(context, StoreShopDetailActivity.class);
+                    intent.putExtra("id",targetId);
+                    intent.putExtra("msgId",msgId);
                     break;
                 case "13"://后台推送通知
                     break;
@@ -183,7 +203,6 @@ public class MyBroadcastReceiver extends BroadcastReceiver{
             }
         }
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-
         //通过bundle可以带一些数据过去 这里将字符串传递了过去
         /*bundle = new Bundle();
         bundle.putString("name", "从Notification转跳过来的");
@@ -191,10 +210,92 @@ public class MyBroadcastReceiver extends BroadcastReceiver{
 
         //设置通知栏中显示的内容
         PendingIntent contentIntent = PendingIntent.getActivity(context,
-                R.string.app_name, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+                R.string.app_name,intent, PendingIntent.FLAG_UPDATE_CURRENT);
         notification.setLatestEventInfo(context, title,
                 content, contentIntent);
         mManager.notify(0,notification);
+    }
+
+    /**
+     * 需要权限:android.permission.GET_TASKS
+     * @param context
+     * @return
+     */
+    public boolean isApplicationBroughtToBackground(Context context) {
+        ActivityManager am = (ActivityManager) context
+                .getSystemService(Context.ACTIVITY_SERVICE);
+        List<ActivityManager.RunningTaskInfo> tasks = am.getRunningTasks(1);
+        if (tasks != null && !tasks.isEmpty()) {
+            ComponentName topActivity = tasks.get(0).topActivity;
+            //Debug.i(TAG, "topActivity:" + topActivity.flattenToString());
+            //Debug.f(TAG, "topActivity:" + topActivity.flattenToString());
+            if (!topActivity.getPackageName().equals(context.getPackageName())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean isBackground(Context context) {
+        ActivityManager activityManager = (ActivityManager) context
+                .getSystemService(Context.ACTIVITY_SERVICE);
+        List<ActivityManager.RunningAppProcessInfo> appProcesses = activityManager
+                .getRunningAppProcesses();
+        for (ActivityManager.RunningAppProcessInfo appProcess : appProcesses) {
+            if (appProcess.processName.equals(context.getPackageName())) {
+                /*
+                BACKGROUND=400 EMPTY=500 FOREGROUND=100
+                GONE=1000 PERCEPTIBLE=130 SERVICE=300 ISIBLE=200
+                 */
+                Log.i(context.getPackageName(), "此appimportace ="
+                        + appProcess.importance
+                        + ",context.getClass().getName()="
+                        + context.getClass().getName());
+                if (appProcess.importance != ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND) {
+                    Log.i(context.getPackageName(), "处于后台"
+                            + appProcess.processName);
+                    return true;
+                } else {
+                    Log.i(context.getPackageName(), "处于前台"
+                            + appProcess.processName);
+                    return false;
+                }
+            }
+        }
+        return false;
+    }
+    public boolean isFrom(String messageKey){
+       if (messageKey.equals("5")){
+           return true;
+       }
+       if (messageKey.equals("6")){
+           return true;
+       }
+       if (messageKey.equals("7")){
+           return true;
+       }
+       if (messageKey.equals("8")){
+           return true;
+       }
+       if (messageKey.equals("9")){
+           return true;
+       }
+       return false;
+   }
+
+    public void jumpActiv(Context context){
+        switch (sourceType){
+            case "1"://app
+                intent = new Intent(context, InvitationPinterestDetailActivity.class);
+                intent.putExtra("id",targetId);
+                intent.putExtra("msgId",msgId);
+                break;
+            case "0"://pingtai
+                intent = new Intent(context, InvitationDetailFromPlatformActivity.class);
+                intent.putExtra("id",targetId);
+                intent.putExtra("msgId",msgId);
+                break;
+        }
     }
 
 }

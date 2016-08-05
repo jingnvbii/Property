@@ -201,7 +201,6 @@ public class InvitationFragment extends ToolBarFragment implements View.OnClickL
     }
 
     private void initNoticeView() {
-
         ta.setDuration(800);
      //   animation.setDuration(500);
      //   animation2.setDuration(500);
@@ -228,11 +227,8 @@ public class InvitationFragment extends ToolBarFragment implements View.OnClickL
 
             @Override
             public void onAnimationRepeat(Animation animation) {
-
             }
         });
-
-
     }
 
     private void initView() {
@@ -277,7 +273,6 @@ public class InvitationFragment extends ToolBarFragment implements View.OnClickL
                         idao.requestPostListByCategory(Arad.preferences.getString("memberId"), "", "0", "", "", PAGE_NUM, Constant.PAGE_SIZE);
                     }
                 }, 500);
-
             }
         });
 
@@ -291,7 +286,6 @@ public class InvitationFragment extends ToolBarFragment implements View.OnClickL
                 (int) (AndroidUtil.getDeviceWidth(getActivity()) * Constant.SCALE_LOOP)));
 
     }
-
 
     /*
  * 轮播图
