@@ -27,6 +27,7 @@ public class MasonryAdapter extends RecyclerView.Adapter<MasonryAdapter.MasonryV
     private  Activity context;
     private List<Post> products;
     HashMap<Integer, Integer> indexMap = new HashMap<Integer, Integer>();
+  //  HashMap<Integer, Bitmap> bitmapMap = new HashMap<Integer, Bitmap>();
     public static final int TYPE_HEADER = 0;
     public static final int TYPE_NORMAL = 1;
 
@@ -129,27 +130,32 @@ public class MasonryAdapter extends RecyclerView.Adapter<MasonryAdapter.MasonryV
        // resizeItemView(masonryView.iv_pinerest_style_image,getScaleType(position));
        // if(getItemViewType(position1) == TYPE_HEADER) return;
       //  final int position = getRealPosition(masonryView);
+
         if(indexMap.get(position)!=null&&indexMap.get(position)>0){
+          //  masonryView.rl_content.setVisibility(View.VISIBLE);
             ViewGroup.LayoutParams params = masonryView.iv_pinerest_style_image.getLayoutParams();
             params.height=indexMap.get(position);
             masonryView.iv_pinerest_style_image.setLayoutParams(params);
+            //  masonryView.iv_pinerest_style_image.setImageBitmap(bitmapMap.get(position));
+            //  return;
         }
-
         Post post=products.get(position);
         Transformation transformation = new Transformation() {
 
             @Override
             public Bitmap transform(Bitmap source) {
                 int targetWidth = (AndroidUtil.getDeviceWidth(context)-48)/2;
-                int targetHeight = 500;
+                int targetHeight = 300;
                 if (source.getWidth() == 0 || source.getHeight() == 0) {
                     indexMap.put(position,source.getHeight());
+                //    bitmapMap.put(position,source);
                     return source;
                 }
 
                 if (source.getWidth() > source.getHeight()) {//横向长图1
                     if (source.getHeight() < targetHeight && source.getWidth() <= 400) {
                         indexMap.put(position, source.getHeight());
+                      //  bitmapMap.put(position,source);
                         return source;
                     } else {
                         //如果图片大小大于等于设置的高度，则按照设置的高度比例来缩放
@@ -166,9 +172,11 @@ public class MasonryAdapter extends RecyclerView.Adapter<MasonryAdapter.MasonryV
                                 source.recycle();
                             }
                             indexMap.put(position,result.getHeight());
+                         //   bitmapMap.put(position,result);
                             return result;
                         } else {
                             indexMap.put(position,source.getHeight());
+                          //  bitmapMap.put(position,source);
                             return source;
                         }
                     }
@@ -176,6 +184,7 @@ public class MasonryAdapter extends RecyclerView.Adapter<MasonryAdapter.MasonryV
                     //如果图片小于设置的宽度，则返回原图
                     if (source.getWidth() < targetWidth && source.getHeight() <= 600) {
                         indexMap.put(position,source.getHeight());
+                     //   bitmapMap.put(position,source);
                         return source;
                     } else {
                         //如果图片大小大于等于设置的宽度，则按照设置的宽度比例来缩放
@@ -192,9 +201,11 @@ public class MasonryAdapter extends RecyclerView.Adapter<MasonryAdapter.MasonryV
                                 source.recycle();
                             }
                             indexMap.put(position,result.getHeight());
+                          //  bitmapMap.put(position,result);
                             return result;
                         } else {
                             indexMap.put(position,source.getHeight());
+                          //  bitmapMap.put(position,source);
                             return source;
                         }
                     }
@@ -211,12 +222,14 @@ public class MasonryAdapter extends RecyclerView.Adapter<MasonryAdapter.MasonryV
         masonryView.tv_pinerest_style_title.setText(post.getTitle());
         masonryView.tv_pinerest_style_zan.setText(post.getPraiseNum() + "");
         if(post.getPostImgList()!=null){
-            masonryView.tv_pinerest_style_imagenum.setText(post.getPostImgList().size() + " 图");
             masonryView.iv_pinerest_style_image.setVisibility(View.VISIBLE);
             masonryView.rl_content.setVisibility(View.GONE);
+            masonryView.tv_pinerest_style_imagenum.setText(post.getPostImgList().size() + " 图");
+
         if(post.getPostImgList()!=null&&!post.getPostImgList().get(0).getImg().equals("")){
            // Log.i("tag","position==="+position);
          //  Log.i("tag","url==="+products.get(position).getPostImgList().get(0).getImg());
+
             Arad.imageLoader.load(post.getPostImgList().get(0).getImg()).transform(transformation).into(masonryView.iv_pinerest_style_image, new Callback() {
                 @Override
                 public void onSuccess() {

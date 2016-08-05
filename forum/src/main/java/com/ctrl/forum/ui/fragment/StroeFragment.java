@@ -405,6 +405,9 @@ public class StroeFragment extends ToolBarFragment implements View.OnClickListen
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 int newpositon = position - lv01.getHeaderViewsCount();
+                if (position==listMall.size()+lv01.getHeaderViewsCount()){
+                    return;
+                }
                 if(listMall.get(newpositon).getCompanyStyle().equals("0")) {
                     Intent intent = new Intent(getActivity(), StoreShopListVerticalStyleActivity.class);
                     intent.putExtra("id", listMall.get(newpositon).getId());

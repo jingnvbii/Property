@@ -177,6 +177,7 @@ public class InvitationFragment extends ToolBarFragment implements View.OnClickL
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
+
     }
 
 
@@ -259,17 +260,17 @@ public class InvitationFragment extends ToolBarFragment implements View.OnClickL
         lv_invitation_fragment_home.setOnLastItemVisibleListener(new PullToRefreshBase.OnLastItemVisibleListener() {
             @Override
             public void onLastItemVisible() {
-
                 rl_footer.setVisibility(View.VISIBLE);
                 rl_footer.setPadding(0, 0, 0, 0);
                 tv_footer.setText("加载更多。。。");
                 progressBar.setVisibility(View.VISIBLE);
-                PAGE_NUM += 1;
+                if(listPost==null||listPost.size()==0) return;
+                PAGE_NUM+=1;
                 //  showProgress(true);
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        idao.requestInitPostHomePage();
+                        //idao.requestInitPostHomePage();
                         idao.requestPostListByCategory(Arad.preferences.getString("memberId"), "", "0", "", "", PAGE_NUM, Constant.PAGE_SIZE);
                     }
                 }, 500);
@@ -313,8 +314,9 @@ public class InvitationFragment extends ToolBarFragment implements View.OnClickL
 
     private void initData() {
         idao = new InvitationDao(this);
-      //  showProgress(true);
+       // showProgress(true);
         idao.requestInitPostHomePage();
+        PAGE_NUM=1;
         idao.requestPostListByCategory(Arad.preferences.getString("memberId"), "", "0", "", "", PAGE_NUM, Constant.PAGE_SIZE);
         lv_invitation_fragment_home.setMode(PullToRefreshBase.Mode.PULL_FROM_START);
        /* lv_invitation_fragment_home.setOnLastItemVisibleListener(new PullToRefreshBase.OnLastItemVisibleListener() {
@@ -346,8 +348,8 @@ public class InvitationFragment extends ToolBarFragment implements View.OnClickL
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        idao.requestInitPostHomePage();
                         idao.requestPostListByCategory(Arad.preferences.getString("memberId"), "", "0", "", "", PAGE_NUM, Constant.PAGE_SIZE);
+                        idao.requestInitPostHomePage();
                     }
                 }, 500);
             }
