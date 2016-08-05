@@ -136,10 +136,7 @@ public class InvitationPullDownHaveThirdKindPinterestStyleFragment extends ToolB
         }
         if (isVisibleToUser&&bol==1 ) {
             if(listCategroy3!=null)listCategroy3.clear();
-            showProgress(true);
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
+           // showProgress(true);
                     if(keyword!=null){
                         if(listPost!=null){
                             listPost.clear();
@@ -158,8 +155,6 @@ public class InvitationPullDownHaveThirdKindPinterestStyleFragment extends ToolB
                         idao.requestPostListByCategory(Arad.preferences.getString("memberId"), id, "0", "","", PAGE_NUM, PAGE_SIZE);
                     }
                 }
-            },2000);
-        }
     }
     public void request(String id) {
         bol = 1;
@@ -268,7 +263,7 @@ public class InvitationPullDownHaveThirdKindPinterestStyleFragment extends ToolB
                                     idao.requestPostListByCategory(Arad.preferences.getString("memberId"), id, "0", keyword, "", PAGE_NUM, Constant.PAGE_SIZE);
                                 }
                             }
-                        },2000);
+                        },1000);
             }
 
             @Override
