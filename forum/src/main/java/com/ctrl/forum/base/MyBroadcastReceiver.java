@@ -179,6 +179,7 @@ public class MyBroadcastReceiver extends BroadcastReceiver{
                     jumpActiv(context);
                     break;
                 case "9"://9：帖子评论收到回复
+
                     //intent = new Intent(context, MineMessageActivity.class);
                     jumpActiv(context);
                     break;
