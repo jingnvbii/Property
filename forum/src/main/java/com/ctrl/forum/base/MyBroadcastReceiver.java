@@ -77,14 +77,19 @@ public class MyBroadcastReceiver extends BroadcastReceiver{
             Intent itt = new Intent();
             itt.setAction("com.message");
             itt.putExtra("num", "num");
-            context.sendBroadcast(itt,null);
+            context.sendBroadcast(itt, null);
 
+            Log.e("memberId", Arad.preferences.getString("memberId"));
+            Log.e("memberId", Arad.preferences.getBoolean("replyComments")+"");
+            Log.e("memberId",Arad.preferences.getBoolean("systemNotification")+"");
             if (!Arad.preferences.getString("memberId").equals("")) {
                 if (Arad.preferences.getBoolean("replyComments")) {//评论回复
                     setNavti(context, "您收到一条新消息", message, messageKey);
+                    Log.e("您收到一条新消息", "nininini");
                 } else {
                     if (Arad.preferences.getBoolean("systemNotification")) {//系统通知
                         setNavti(context, "系统通知", message, messageKey);
+                        Log.e("系统通知", "nininini");
                     }
                 }
             }
