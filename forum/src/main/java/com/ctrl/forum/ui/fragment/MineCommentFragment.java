@@ -78,6 +78,7 @@ public class MineCommentFragment extends ToolBarFragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getActivity(), InvitationDetailActivity.class);
                 intent.putExtra("id", replyForMes.get(position-1).getPostId());
+                intent.putExtra("reportid",replyForMes.get(position-1).getReporterId());
                 startActivity(intent);
             }
         });

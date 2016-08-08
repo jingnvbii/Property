@@ -111,11 +111,13 @@ public class PlotListViewFriendStyleAdapter extends BaseAdapter {
         }
         final Post post = mPostList.get(position);
 
-        if (post.getTitle()!=null && !post.getTitle().equals("")) {
+        /*if (post.getTitle()!=null && !post.getTitle().equals("")) {
             holder.tv_friend_style_content.setText(post.getTitle());
         }else{
             holder.tv_friend_style_content.setText(post.getContent());
-        }
+        }*/
+        //直接显示内容，不判断标题是否为空
+        holder.tv_friend_style_content.setText(post.getContent());
 
         if (post.getMemberName()!=null && !post.getMemberName().equals("")) {
             holder.tv_friend_style_name.setText(post.getMemberName());

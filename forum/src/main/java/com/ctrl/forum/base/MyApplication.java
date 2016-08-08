@@ -68,7 +68,6 @@ public class MyApplication extends AradApplication {
         System.gc();
     }
 
-
     @Override
     public void onCreate() {
         super.onCreate();
@@ -93,7 +92,6 @@ public class MyApplication extends AradApplication {
             }
         }).start();
 
-
         //应用程序的上下文
         mContext=getApplicationContext();
         //主线程
@@ -104,10 +102,7 @@ public class MyApplication extends AradApplication {
         mMainLooper=getMainLooper();
         //创建主线程的Handler
         mMainHander=new Handler();
-
-
     }
-
 
     public static Context getContext()
     {
