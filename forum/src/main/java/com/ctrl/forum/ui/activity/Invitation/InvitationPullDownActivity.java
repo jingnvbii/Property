@@ -34,14 +34,9 @@ import com.beanu.arad.utils.MessageUtils;
 import com.ctrl.forum.R;
 import com.ctrl.forum.base.MyApplication;
 import com.ctrl.forum.customview.CustomViewPager;
-import com.ctrl.forum.customview.XListView;
 import com.ctrl.forum.dao.InvitationDao;
 import com.ctrl.forum.entity.Category;
-import com.ctrl.forum.entity.Invitation_listview;
-import com.ctrl.forum.entity.Post;
-import com.ctrl.forum.entity.ThirdKind;
 import com.ctrl.forum.ui.activity.LoginActivity;
-import com.ctrl.forum.ui.adapter.ExpandableListViewAllCategroyAdapter;
 import com.ctrl.forum.ui.adapter.JasonViewPagerAdapter;
 import com.ctrl.forum.ui.fragment.InvitationPullDownHaveThirdKindFragment;
 import com.ctrl.forum.ui.fragment.InvitationPullDownHaveThirdKindPinterestStyleFragment;
@@ -67,7 +62,7 @@ import cn.sharesdk.wechat.moments.WechatMoments;
  * 帖子列表 三级分类下拉页面 activity
  * Created by jason on 2016/4/8
  */
-public class InvitationPullDownActivity extends ToolBarActivity implements View.OnClickListener, XListView.IXListViewListener ,PlatformActionListener{
+public class InvitationPullDownActivity extends ToolBarActivity implements View.OnClickListener,PlatformActionListener{
     @InjectView(R.id.viewpager_invitation_pull_down)
     CustomViewPager viewpager_invitation_pull_down;
     @InjectView(R.id.lay)
@@ -94,18 +89,15 @@ public class InvitationPullDownActivity extends ToolBarActivity implements View.
     DisplayMetrics dm;
 
 
-    private List<ThirdKind> kindList;
-    private List<Invitation_listview> list;
     private InvitationDao idao;
     private String channelId;
     private List<Category> listCategory;
-    private List<Post> listPost;
 
    // private SparseArray<Fragment> fragments = new SparseArray<>();
    List<Fragment> fragments=new ArrayList<>();
     private String styleType;
     private PopupWindow popupWindow;
-    private ExpandableListViewAllCategroyAdapter elvAdapter;
+ //   private ExpandableListViewAllCategroyAdapter elvAdapter;
     private ExpandableListView elv_pull_down;
     private List<Category> listCategory2;
     private List<RadioButton> listRadioButton=new ArrayList<>();
@@ -153,6 +145,8 @@ public class InvitationPullDownActivity extends ToolBarActivity implements View.
     private String showAll;
     private String sstyleType;
 
+    List<Fragment> list = new ArrayList<Fragment>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -161,7 +155,7 @@ public class InvitationPullDownActivity extends ToolBarActivity implements View.
         ButterKnife.inject(this);
         width = getResources().getDisplayMetrics().widthPixels;
         channelId = getIntent().getStringExtra("channelId");
-        elvAdapter = new ExpandableListViewAllCategroyAdapter(this);
+       // elvAdapter = new ExpandableListViewAllCategroyAdapter(this);
         initView();
         MyApplication.getInstance().addActivity(this);
     }
@@ -184,6 +178,16 @@ public class InvitationPullDownActivity extends ToolBarActivity implements View.
     protected void onDestroy() {
         super.onDestroy();
         ShareSDK.stopSDK(this);
+        idao=null;
+        //elvAdapter=null;
+        myRadioGroup=null;
+        mPopupWindow=null;
+        invitationPullDownHaveThirdKindPinterestStyleFragment=null;
+        invitationPullDownHaveThirdKindFragment=null;
+        viewPagerAdapter=null;
+        list=null;
+        fragments=null;
+        handler.removeCallbacksAndMessages(null);
     }
 
     @Override
@@ -215,7 +219,6 @@ public class InvitationPullDownActivity extends ToolBarActivity implements View.
         myRadioGroup.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         myRadioGroup.setOrientation(LinearLayout.HORIZONTAL);
         layout.addView(myRadioGroup);
-        int newWidth = width / 5;
         for (int i = 0; i < listCategory.size(); i++) {
             RadioButton radio = new RadioButton(this);
           //  radio.setBackgroundResource(R.drawable.top_category_selector);
@@ -274,7 +277,7 @@ public class InvitationPullDownActivity extends ToolBarActivity implements View.
             myRadioGroup.addView(view);
             styleType = listCategory.get(i).getStyleType();
             if (styleType.equals("3")) {
-                invitationPullDownHaveThirdKindPinterestStyleFragment = InvitationPullDownHaveThirdKindPinterestStyleFragment.newInstance(InvitationPullDownActivity.this,listCategory.get(i).getId(),null,null,listCategory.get(i).getShowAll(),channelId);
+                invitationPullDownHaveThirdKindPinterestStyleFragment = InvitationPullDownHaveThirdKindPinterestStyleFragment.newInstance(getApplicationContext(),listCategory.get(i).getId(),null,null,listCategory.get(i).getShowAll(),channelId);
                 fragments.add(invitationPullDownHaveThirdKindPinterestStyleFragment);
             } else {
                invitationPullDownHaveThirdKindFragment = InvitationPullDownHaveThirdKindFragment.newInstance(listCategory.get(i).getId(), listCategory.get(i).getStyleType(),null,null,listCategory.get(i).getShowAll(),channelId);
@@ -310,12 +313,12 @@ public class InvitationPullDownActivity extends ToolBarActivity implements View.
             public void onReload() {
                 fragments = null;
                 String keyword1 = keyword;
-                List<Fragment> list = new ArrayList<Fragment>();
+
                 if (listCategory2 == null) {
                     for (int i = 0; i < listCategory.size(); i++) {
                         styleType = listCategory.get(i).getStyleType();
                         if (styleType.equals("3")) {
-                            list.add(InvitationPullDownHaveThirdKindPinterestStyleFragment.newInstance(InvitationPullDownActivity.this, listCategory.get(i).getId(), thirdKindId, keyword1,listCategory.get(i).getShowAll(),channelId));
+                            list.add(InvitationPullDownHaveThirdKindPinterestStyleFragment.newInstance(getApplicationContext(), listCategory.get(i).getId(), thirdKindId, keyword1,listCategory.get(i).getShowAll(),channelId));
                         } else {
                             list.add(InvitationPullDownHaveThirdKindFragment.newInstance(listCategory.get(i).getId(), listCategory.get(i).getStyleType(), thirdKindId, keyword1,listCategory.get(i).getShowAll(),channelId));
                         }
@@ -325,7 +328,7 @@ public class InvitationPullDownActivity extends ToolBarActivity implements View.
                         styleType = listCategory2.get(i).getStyleType();
 
                         if (styleType.equals("3")) {
-                            list.add(InvitationPullDownHaveThirdKindPinterestStyleFragment.newInstance(InvitationPullDownActivity.this, listCategory2.get(i).getId(), thirdKindId, keyword1,listCategory.get(i).getShowAll(),channelId));
+                            list.add(InvitationPullDownHaveThirdKindPinterestStyleFragment.newInstance(getApplicationContext(), listCategory2.get(i).getId(), thirdKindId, keyword1,listCategory.get(i).getShowAll(),channelId));
                         } else {
                             list.add(InvitationPullDownHaveThirdKindFragment.newInstance(listCategory2.get(i).getId(), listCategory2.get(i).getStyleType(), thirdKindId, keyword1,listCategory.get(i).getShowAll(),channelId));
                         }
@@ -625,13 +628,13 @@ public class InvitationPullDownActivity extends ToolBarActivity implements View.
         // 设置好参数之后再show
         popupWindow.showAsDropDown(iv_pull_down);
 
-        elvAdapter.setList(listCategory2);
-        elv_pull_down.setAdapter(elvAdapter);
-        for(int i = 0; i < elvAdapter.getGroupCount(); i++){
+      //  elvAdapter.setList(listCategory2);
+       // elv_pull_down.setAdapter(elvAdapter);
+      /*  for(int i = 0; i < elvAdapter.getGroupCount(); i++){
 
             elv_pull_down.expandGroup(i);
 
-        }
+        }*/
         elv_pull_down.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
             @Override
             public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
@@ -645,7 +648,7 @@ public class InvitationPullDownActivity extends ToolBarActivity implements View.
     }
 
 
-    @Override
+ /*   @Override
     public void onRefresh() {
 
     }
@@ -653,7 +656,11 @@ public class InvitationPullDownActivity extends ToolBarActivity implements View.
     @Override
     public void onLoadMore() {
 
-    }
+    }*/
+
+
+
+
 
     /*
  * 举报请求

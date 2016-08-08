@@ -1,16 +1,17 @@
 package com.ctrl.forum.ui.adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.beanu.arad.Arad;
 import com.ctrl.forum.R;
+import com.ctrl.forum.customview.RecyclableImageView;
 import com.ctrl.forum.entity.Post;
 import com.ctrl.forum.entity.PostImage;
 import com.ctrl.forum.utils.TimeUtils;
@@ -77,7 +78,7 @@ public class InvitationListViewBlockStyleAdapter extends BaseAdapter {
             if(post.getPostImgList()!=null) {
                 holder.rl_content.setVisibility(View.VISIBLE);
                 holder.iv_block_style_photo.setVisibility(View.VISIBLE);
-                Arad.imageLoader.load(post.getPostImgList().get(0).getImg()).placeholder(R.mipmap.default_error).resize(400,400).centerCrop().into(holder.iv_block_style_photo);
+                Arad.imageLoader.load(post.getPostImgList().get(0).getImg()).placeholder(R.mipmap.default_error).config(Bitmap.Config.RGB_565).resize(400, 400).centerCrop().into(holder.iv_block_style_photo);
             }else {
                 holder.rl_content.setVisibility(View.GONE);
                 holder.iv_block_style_photo.setVisibility(View.GONE);
@@ -97,7 +98,7 @@ public class InvitationListViewBlockStyleAdapter extends BaseAdapter {
 
     static class ViewHolder {
         @InjectView(R.id.iv_block_style_photo)//图片
-                ImageView iv_block_style_photo;
+                RecyclableImageView iv_block_style_photo;
         @InjectView(R.id.tv_block_style_titile)//标题
                 TextView tv_block_style_titile;
         @InjectView(R.id.tv_block_style_time)//时间

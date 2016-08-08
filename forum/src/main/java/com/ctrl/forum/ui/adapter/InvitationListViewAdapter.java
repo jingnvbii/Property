@@ -1,17 +1,18 @@
 package com.ctrl.forum.ui.adapter;
 
 import android.app.Activity;
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.beanu.arad.Arad;
 import com.beanu.arad.utils.AndroidUtil;
 import com.ctrl.forum.R;
+import com.ctrl.forum.customview.RecyclableImageView;
 import com.ctrl.forum.customview.RoundImageView;
 import com.ctrl.forum.entity.Post;
 import com.ctrl.forum.entity.PostImage;
@@ -198,7 +199,7 @@ public class InvitationListViewAdapter extends BaseAdapter{
                 Arad.imageLoader.load(mPost2.getImgUrl()).placeholder(R.mipmap.default_error).resize(50,50)
                         .centerCrop().into(holder2.imageView2);
                 if(mPost2.getPostImgList()!=null) {
-                    Arad.imageLoader.load(mPost2.getPostImgList().get(0).getImg()).placeholder(R.mipmap.default_error).resize(400,400).centerCrop().into(holder2.iv_title_photo1);
+                    Arad.imageLoader.load(mPost2.getPostImgList().get(0).getImg()).placeholder(R.mipmap.default_error).resize(400,400).config(Bitmap.Config.RGB_565).centerCrop().into(holder2.iv_title_photo1);
                 }
                 break;
             case 3:
@@ -230,9 +231,9 @@ public class InvitationListViewAdapter extends BaseAdapter{
                         .centerCrop().into(holder3.imageView3);
 
                 if(mPos3.getPostImgList()!=null) {
-                    Arad.imageLoader.load(mPos3.getPostImgList().get(0).getImg()).placeholder(R.mipmap.default_error).resize(400,400).centerCrop().into(holder3.iv_image3_01);
-                    Arad.imageLoader.load(mPos3.getPostImgList().get(1).getImg()).placeholder(R.mipmap.default_error).resize(400, 400).centerCrop().into(holder3.iv_image3_02);
-                    Arad.imageLoader.load(mPos3.getPostImgList().get(2).getImg()).placeholder(R.mipmap.default_error).resize(400,400).centerCrop().into(holder3.iv_image3_03);
+                    Arad.imageLoader.load(mPos3.getPostImgList().get(0).getImg()).placeholder(R.mipmap.default_error).config(Bitmap.Config.RGB_565).resize(400, 400).centerCrop().into(holder3.iv_image3_01);
+                    Arad.imageLoader.load(mPos3.getPostImgList().get(1).getImg()).placeholder(R.mipmap.default_error).config(Bitmap.Config.RGB_565).resize(400, 400).centerCrop().into(holder3.iv_image3_02);
+                    Arad.imageLoader.load(mPos3.getPostImgList().get(2).getImg()).placeholder(R.mipmap.default_error).config(Bitmap.Config.RGB_565).resize(400, 400).centerCrop().into(holder3.iv_image3_03);
                 }
 
                 break;
@@ -272,7 +273,7 @@ public class InvitationListViewAdapter extends BaseAdapter{
         @InjectView(R.id.imageView1)
         RoundImageView imageView2;
         @InjectView(R.id.iv_title_photo1)
-        ImageView iv_title_photo1;
+        RecyclableImageView iv_title_photo1;
         ViewHolder2(View view) {
             ButterKnife.inject(this, view);
         }
@@ -291,11 +292,11 @@ public class InvitationListViewAdapter extends BaseAdapter{
         @InjectView(R.id.imageView3)
         RoundImageView imageView3;
         @InjectView(R.id.iv_image3_01)
-        ImageView iv_image3_01;
+        RecyclableImageView iv_image3_01;
         @InjectView(R.id.iv_image3_02)
-        ImageView iv_image3_02;
+        RecyclableImageView iv_image3_02;
         @InjectView(R.id.iv_image3_03)
-        ImageView iv_image3_03;
+        RecyclableImageView iv_image3_03;
         ViewHolder3(View view) {
             ButterKnife.inject(this, view);
         }

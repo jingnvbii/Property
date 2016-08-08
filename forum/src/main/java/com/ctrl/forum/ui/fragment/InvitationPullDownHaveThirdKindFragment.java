@@ -35,7 +35,6 @@ import com.ctrl.forum.entity.Merchant;
 import com.ctrl.forum.entity.Post;
 import com.ctrl.forum.entity.ThirdKind;
 import com.ctrl.forum.loopview.HomeAutoSwitchPicHolder;
-import com.ctrl.forum.ui.activity.Invitation.InvitationDetailActivity;
 import com.ctrl.forum.ui.activity.Invitation.InvitationDetailFromPlatformActivity;
 import com.ctrl.forum.ui.activity.Invitation.InvitationPinterestDetailActivity;
 import com.ctrl.forum.ui.activity.Invitation.InvitationPullDownActivity;
@@ -63,6 +62,7 @@ import butterknife.InjectView;
  * Created by Administrator on 2015/11/30.
  */
 public class InvitationPullDownHaveThirdKindFragment extends ToolBarFragment {
+    private static InvitationPullDownHaveThirdKindFragment fragment;
     @InjectView(R.id.lv_invitation_pull_down_have_third_kind)
     PullToRefreshListView lv_invitation_pull_down_have_third_kind;
 
@@ -113,7 +113,7 @@ public class InvitationPullDownHaveThirdKindFragment extends ToolBarFragment {
     private boolean isFromLoad;
 
     public static InvitationPullDownHaveThirdKindFragment newInstance(String channelId,String styleType,String thirdKindId,String keyword,String showAll,String firstId) {
-        InvitationPullDownHaveThirdKindFragment fragment = new InvitationPullDownHaveThirdKindFragment();
+        fragment = new InvitationPullDownHaveThirdKindFragment();
         fragment.channelId = channelId;
         fragment.styleType = styleType;
         fragment.keyword = keyword;
@@ -322,7 +322,7 @@ public class InvitationPullDownHaveThirdKindFragment extends ToolBarFragment {
                 if(styleType.equals("4")){
                     switch (contentType){
                         case "0":
-                            intent = new Intent(getActivity(), InvitationDetailActivity.class);
+                            intent = new Intent(getActivity(), InvitationPinterestDetailActivity.class);
                             intent.putExtra("id", listPost.get(newPosition).getId());
                             intent.putExtra("reportid", listPost.get(newPosition).getReporterId());
                             startActivity(intent);

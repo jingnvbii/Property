@@ -6,13 +6,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.beanu.arad.Arad;
 import com.beanu.arad.utils.AndroidUtil;
 import com.ctrl.forum.R;
+import com.ctrl.forum.customview.RecyclableImageView;
 import com.ctrl.forum.entity.Post;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Transformation;
@@ -230,7 +230,7 @@ public class MasonryAdapter extends RecyclerView.Adapter<MasonryAdapter.MasonryV
            // Log.i("tag","position==="+position);
          //  Log.i("tag","url==="+products.get(position).getPostImgList().get(0).getImg());
 
-            Arad.imageLoader.load(post.getPostImgList().get(0).getImg()).transform(transformation).into(masonryView.iv_pinerest_style_image, new Callback() {
+            Arad.imageLoader.load(post.getPostImgList().get(0).getImg()).config(Bitmap.Config.RGB_565).transform(transformation).into(masonryView.iv_pinerest_style_image, new Callback() {
                 @Override
                 public void onSuccess() {
                     masonryView.rl_content.setVisibility(View.VISIBLE);
@@ -310,14 +310,14 @@ public class MasonryAdapter extends RecyclerView.Adapter<MasonryAdapter.MasonryV
     }*/
 
  public static class MasonryView extends  RecyclerView.ViewHolder{
-                ImageView iv_pinerest_style_image;
+                RecyclableImageView iv_pinerest_style_image;
                 TextView tv_pinerest_style_title;
                 TextView tv_pinerest_style_imagenum;
                 TextView tv_pinerest_style_zan;
                 RelativeLayout rl_content;
         public MasonryView( View itemView){
             super(itemView);
-            iv_pinerest_style_image= (ImageView) itemView.findViewById(R.id.iv_pinerest_style_image);
+            iv_pinerest_style_image= (RecyclableImageView) itemView.findViewById(R.id.iv_pinerest_style_image);
             tv_pinerest_style_title= (TextView) itemView.findViewById(R.id.tv_pinerest_style_title);
             tv_pinerest_style_imagenum= (TextView) itemView.findViewById(R.id.tv_pinerest_style_imagenum);
             tv_pinerest_style_zan= (TextView) itemView.findViewById(R.id.tv_pinerest_style_zan);
