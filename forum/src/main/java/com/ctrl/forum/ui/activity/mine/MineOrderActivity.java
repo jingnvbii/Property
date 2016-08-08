@@ -14,6 +14,7 @@ import com.ctrl.forum.base.AppToolBarActivity;
 import com.ctrl.forum.base.Constant;
 import com.ctrl.forum.dao.MineStoreDao;
 import com.ctrl.forum.dao.OrderDao;
+import com.ctrl.forum.dao.ReplyCommentDao;
 import com.ctrl.forum.entity.MemeberOrder;
 import com.ctrl.forum.ui.activity.store.StoreOrderStatusActivity;
 import com.ctrl.forum.ui.adapter.MineOrderListAdapter;
@@ -32,13 +33,14 @@ public class MineOrderActivity extends AppToolBarActivity implements View.OnClic
     private MineStoreDao orderDao;
     private OrderDao odao;
     private int PAGE_NUM=1;
+    private ReplyCommentDao rdao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mine_order);
         lv_order = (PullToRefreshListView) findViewById(R.id.lv_order);
-
+        modityMessageRead();
         initData();
         orderListviewAdapter = new MineOrderListAdapter(getApplicationContext());
         lv_order.setAdapter(orderListviewAdapter);
@@ -77,6 +79,14 @@ public class MineOrderActivity extends AppToolBarActivity implements View.OnClic
         orderListviewAdapter.setOnDelete(this);
         orderListviewAdapter.setOnCancle(this);
         orderListviewAdapter.setOnGoods(this);
+    }
+
+    private void modityMessageRead() {
+        rdao = new ReplyCommentDao(this);
+        String msgId = getIntent().getStringExtra("msgId");
+        if (msgId!=null){
+            rdao.modifyOneReadState(msgId);
+        }
     }
 
     private void initData() {

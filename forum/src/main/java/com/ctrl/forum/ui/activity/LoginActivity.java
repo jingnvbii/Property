@@ -250,6 +250,7 @@ public class LoginActivity extends AppToolBarActivity implements View.OnClickLis
             Arad.preferences.flush();
 
             Intent intent02=new Intent(this,MainActivity.class);
+            intent02.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             intent02.putExtra("listNagationBar", (Serializable) ldao.getListNavigationBar());
             startActivity(intent02);
             AnimUtil.intentSlidIn(this);

@@ -691,9 +691,9 @@ public class MainActivity extends ToolBarActivity implements View.OnClickListene
 
     }
 
-    @Override
+   @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK )
+       /* if (keyCode == KeyEvent.KEYCODE_BACK )
         {
             // 创建退出对话框
             AlertDialog isExit = new AlertDialog.Builder(this).create();
@@ -706,12 +706,14 @@ public class MainActivity extends ToolBarActivity implements View.OnClickListene
             isExit.setButton(AlertDialog.BUTTON_NEGATIVE, "取消", listener);
             // 显示对话框
             isExit.show();
-
         }
-
-        return false;
-
-    }
+        return false;*/
+       if (keyCode == KeyEvent.KEYCODE_BACK) {
+           moveTaskToBack(false);
+           return true;
+       }
+       return super.onKeyDown(keyCode, event);
+   }
 
     /**监听对话框里面的button点击事件*/
     DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener()
@@ -721,7 +723,7 @@ public class MainActivity extends ToolBarActivity implements View.OnClickListene
             switch (which)
             {
                 case AlertDialog.BUTTON_POSITIVE:// "确认"按钮退出程序
-                   /* Arad.preferences.clear();
+                    /*Arad.preferences.clear();
                     Arad.preferences.flush();*/
                     MyApplication.getInstance().exit();
                     finish();

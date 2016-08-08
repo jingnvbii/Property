@@ -3,17 +3,17 @@ package com.ctrl.forum.ui.activity.mine;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.ActionBarActivity;
 import android.widget.FrameLayout;
 
 import com.ctrl.forum.R;
+import com.ctrl.forum.base.AppToolBarActivity;
 import com.ctrl.forum.ui.activity.MainActivity;
 import com.ctrl.forum.ui.fragment.PlotFragment;
 
 /**
  * 个人中心--我的小区
  */
-public class MinePlotActivity extends ActionBarActivity {
+public class MinePlotActivity extends AppToolBarActivity {
     private FrameLayout fragment;
     private FragmentManager fragmentManager;
     private PlotFragment plotFragment;

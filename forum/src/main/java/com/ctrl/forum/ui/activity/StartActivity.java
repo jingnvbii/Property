@@ -198,6 +198,7 @@ public class StartActivity extends ToolBarActivity implements View.OnClickListen
         public void run() {
             Intent intent02=new Intent(StartActivity.this,MainActivity.class);
             intent02.putExtra("listNagationBar", (Serializable) ldao.getListNavigationBar());
+            intent02.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent02);
             AnimUtil.intentSlidIn(StartActivity.this);
             finish();

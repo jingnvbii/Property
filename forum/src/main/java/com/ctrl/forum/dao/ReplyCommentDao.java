@@ -117,6 +117,18 @@ public class ReplyCommentDao extends IDao{
         postRequest(Constant.RAW_URL + url, mapToRP(map), 5);
     }
 
+
+    /**
+     * 更改某一条消息为已读
+     * @param id //会员id
+     * */
+    public void modifyOneReadState(String id){
+        String url="message/modifyOneReadState";
+        Map<String,String> map = new HashMap<String,String>();
+        map.put("id",id);
+        postRequest(Constant.RAW_URL+url, mapToRP(map),6);
+    }
+
     @Override
     public void onRequestSuccess(JsonNode result, int requestCode) throws IOException {
         if(requestCode == 0){

@@ -15,6 +15,7 @@ import com.beanu.arad.Arad;
 import com.beanu.arad.base.ToolBarActivity;
 import com.ctrl.forum.R;
 import com.ctrl.forum.dao.CouponsDao;
+import com.ctrl.forum.dao.ReplyCommentDao;
 import com.ctrl.forum.entity.Count;
 import com.ctrl.forum.ui.fragment.MineCashCouponFragment;
 import com.ctrl.forum.ui.fragment.MineCashCouponPastFragment;
@@ -74,11 +75,13 @@ public class MineXianJuanActivity extends ToolBarActivity {
 
     //用于计算手指滑动的速度。
     private VelocityTracker mVelocityTracker;
+    private ReplyCommentDao rdao;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mine_you_juan);
         ButterKnife.inject(this);
+        modityMessageRead();
 
        /* Intent itt = new Intent();
         itt.setAction("com.message");
@@ -111,6 +114,15 @@ public class MineXianJuanActivity extends ToolBarActivity {
             }
         });
     }
+
+    private void modityMessageRead() {
+        rdao = new ReplyCommentDao(this);
+        String msgId = getIntent().getStringExtra("msgId");
+        if (msgId!=null){
+            rdao.modifyOneReadState(msgId);
+        }
+    }
+
     private void initData() {
         fragments = new ArrayList<>();
         cashCouponFragment = MineCashCouponFragment.newInstance();

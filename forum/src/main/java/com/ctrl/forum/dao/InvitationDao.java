@@ -616,9 +616,6 @@ public class InvitationDao extends IDao {
 
 
 
-
-
-
     @Override
     public void onRequestSuccess(JsonNode result, int requestCode) throws IOException{
         if(requestCode == 0){

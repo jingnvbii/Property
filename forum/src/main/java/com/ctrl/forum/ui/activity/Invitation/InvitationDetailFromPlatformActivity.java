@@ -63,6 +63,7 @@ import com.ctrl.forum.customview.ListViewForScrollView;
 import com.ctrl.forum.customview.ShareDialog;
 import com.ctrl.forum.dao.ImageDao;
 import com.ctrl.forum.dao.InvitationDao;
+import com.ctrl.forum.dao.ReplyCommentDao;
 import com.ctrl.forum.dao.SoundDao;
 import com.ctrl.forum.entity.Image;
 import com.ctrl.forum.entity.MemberInfo;
@@ -261,6 +262,7 @@ public class InvitationDetailFromPlatformActivity extends AppToolBarActivity imp
     private TextView tv_daoyu;
     private LinearLayout ll_relate;
     private int lastItem;
+    private ReplyCommentDao rdao;
 
 
     @Override
@@ -275,8 +277,18 @@ public class InvitationDetailFromPlatformActivity extends AppToolBarActivity imp
         headview.setLayoutParams(layoutParams);
         ListView lv = lv_reply_detail.getRefreshableView();
         lv.addHeaderView(headview);*/
+        modityMessageRead();
+
         initView();
         ShareSDK.initSDK(this);
+    }
+
+    private void modityMessageRead() {
+        rdao = new ReplyCommentDao(this);
+        String msgId = getIntent().getStringExtra("msgId");
+        if (msgId!=null){
+            rdao.modifyOneReadState(msgId);
+        }
     }
 
     @Override
