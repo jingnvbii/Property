@@ -34,6 +34,7 @@ public class JasonViewPagerAdapter extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int index)
     {
+
         Log.i(TAG,"ITEM CREATED...");
         return fgs.get(index);
     }

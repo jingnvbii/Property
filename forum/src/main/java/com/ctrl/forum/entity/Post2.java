@@ -36,6 +36,8 @@ public class Post2 {
     private String zambiastate;//是否被当前用户点赞
     private String collectstate;//是否被当前用户收藏
     private String linkUrl;//网址链接
+    private String linkType;//网址链接
+    private String linkName;//网址链接
     private String linkLongitude;//
     private String linkLatitude;//
     private String reportSign;//发布人署名
@@ -45,6 +47,22 @@ public class Post2 {
 
     private List<PostImage> postImgList;//图片列表
     private List<PostReply2> postReplyList;//回复列表
+
+    public String getLinkType() {
+        return linkType;
+    }
+
+    public void setLinkType(String linkType) {
+        this.linkType = linkType;
+    }
+
+    public String getLinkName() {
+        return linkName;
+    }
+
+    public void setLinkName(String linkName) {
+        this.linkName = linkName;
+    }
 
     public String getContentType() {
         return contentType;

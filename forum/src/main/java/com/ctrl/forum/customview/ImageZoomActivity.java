@@ -151,7 +151,6 @@ public class ImageZoomActivity extends Activity{
 //                Arad.imageLoader.display(Constant.IMGPATH + mPaths1.get(position).getMaxImgPath(), photoView, R.drawable.icon_default);
             }
             container.addView(photoView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-
             return photoView;
         }
 

@@ -174,26 +174,31 @@ public class MainActivity extends ToolBarActivity implements View.OnClickListene
 
 
     };
+    private MyBroadcastReciver myBroadCasrReciver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.inject(this);
-
         edao = new EditDao(this);
+        myBroadCasrReciver=new MyBroadcastReciver();
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction("com.message");
-        this.registerReceiver(new MyBroadcastReciver(), intentFilter);
-
+        this.registerReceiver(myBroadCasrReciver, intentFilter);
         showProgress(true);
         initView();
         initData();
         MyApplication.getInstance().addActivity(this);
-
         if (Arad.preferences.getString("memberId")!=null && !Arad.preferences.getString("memberId").equals("")){
             getNet();
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(myBroadCasrReciver);
     }
 
     private void initData() {

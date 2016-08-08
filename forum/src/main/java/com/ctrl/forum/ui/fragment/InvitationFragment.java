@@ -154,6 +154,7 @@ public class InvitationFragment extends ToolBarFragment implements View.OnClickL
     private RelativeLayout rl_footer;
     private TextView tv_footer;
     private ProgressBar progressBar;
+    private int bol=1;
 
 
     public static InvitationFragment newInstance() {
@@ -165,27 +166,23 @@ public class InvitationFragment extends ToolBarFragment implements View.OnClickL
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        showProgress(true);
+      //  showProgress(true);
+        bol=1;
+        idao = new InvitationDao(this);
         invitationListViewAdapter = new InvitationListViewAdapter(getActivity());
         inflater = getActivity().getLayoutInflater();
         ViewGroup main = (ViewGroup) inflater.inflate(R.layout.fragment_invitation_home_header,
                 null);
-
-
     }
+
 
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
-
     }
 
 
 
-    @Override
-    public void onPause() {
-        super.onPause();
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater,@Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -212,7 +209,6 @@ public class InvitationFragment extends ToolBarFragment implements View.OnClickL
         set.addAnimation(ta2);
         set.addAnimation(animation2);
         set.setRepeatMode(Animation.REVERSE);
-
         set.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
@@ -313,11 +309,9 @@ public class InvitationFragment extends ToolBarFragment implements View.OnClickL
     }
 
     private void initData() {
-        idao = new InvitationDao(this);
        // showProgress(true);
-        idao.requestInitPostHomePage();
-        PAGE_NUM=1;
         idao.requestPostListByCategory(Arad.preferences.getString("memberId"), "", "0", "", "", PAGE_NUM, Constant.PAGE_SIZE);
+        idao.requestInitPostHomePage();
         lv_invitation_fragment_home.setMode(PullToRefreshBase.Mode.PULL_FROM_START);
        /* lv_invitation_fragment_home.setOnLastItemVisibleListener(new PullToRefreshBase.OnLastItemVisibleListener() {
             @Override
@@ -488,12 +482,13 @@ public class InvitationFragment extends ToolBarFragment implements View.OnClickL
             }
             initViewPager();
             viewpagerAdapter = new MyViewPagerAdapter(getActivity(), map);
-            myViewPager.setAdapter(viewpagerAdapter);
             myViewPager.setOnPageChangeListener(new MyListener());
+            myViewPager.setAdapter(viewpagerAdapter);
             showProgress(false);
         }
 
         if (requestCode == 1) {
+            bol=0;
           //  MessageUtils.showShortToast(getActivity(), "获取帖子列表成功");
             listPost=idao.getListPost();
             if(listPost!=null) {
@@ -554,19 +549,19 @@ public class InvitationFragment extends ToolBarFragment implements View.OnClickL
     private void initRecommend() {
         ll_tuijian.setVisibility(View.VISIBLE);
         if (listRecommend.size() > 0&&listRecommend.get(0).getImgUrl()!=null&&!listRecommend.get(0).getImgUrl().equals("")) {
-            Arad.imageLoader.load(listRecommend.get(0).getImgUrl()).placeholder(R.mipmap.default_error).into(iv_recommend_1);
+            Arad.imageLoader.load(listRecommend.get(0).getImgUrl()).placeholder(R.mipmap.default_error).resize(400,400).into(iv_recommend_1);
             iv_recommend_1.setOnClickListener(this);
         }
         if (listRecommend.size() > 1&&listRecommend.get(1).getImgUrl()!=null&&!listRecommend.get(1).getImgUrl().equals("")) {
-            Arad.imageLoader.load(listRecommend.get(1).getImgUrl()).placeholder(R.mipmap.default_error).into(iv_recommend_2);
+            Arad.imageLoader.load(listRecommend.get(1).getImgUrl()).placeholder(R.mipmap.default_error).resize(400, 400).into(iv_recommend_2);
             iv_recommend_2.setOnClickListener(this);
         }
         if (listRecommend.size() > 2&&listRecommend.get(2).getImgUrl()!=null&&!listRecommend.get(2).getImgUrl().equals("")) {
-            Arad.imageLoader.load(listRecommend.get(2).getImgUrl()).placeholder(R.mipmap.default_error).into(iv_recommend_3);
+            Arad.imageLoader.load(listRecommend.get(2).getImgUrl()).placeholder(R.mipmap.default_error).resize(400, 400).into(iv_recommend_3);
             iv_recommend_3.setOnClickListener(this);
         }
         if (listRecommend.size() > 3&&listRecommend.get(3).getImgUrl()!=null&&!listRecommend.get(3).getImgUrl().equals("")) {
-            Arad.imageLoader.load(listRecommend.get(3).getImgUrl()).placeholder(R.mipmap.default_error).into(iv_recommend_4);
+            Arad.imageLoader.load(listRecommend.get(3).getImgUrl()).placeholder(R.mipmap.default_error).resize(400,400).into(iv_recommend_4);
             iv_recommend_4.setOnClickListener(this);
         }
     }

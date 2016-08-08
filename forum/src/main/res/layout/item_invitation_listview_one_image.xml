@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:padding="10dp">
 
-    <ImageView
+    <com.ctrl.forum.customview.RecyclableImageView
         android:id="@+id/iv_title_photo1"
         android:scaleType="centerCrop"
         android:layout_width="90dp"

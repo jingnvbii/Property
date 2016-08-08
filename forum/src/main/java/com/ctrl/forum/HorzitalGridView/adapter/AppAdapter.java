@@ -91,7 +91,7 @@ public class AppAdapter extends BaseAdapter implements OnItemClickListener {
 				.findViewById(R.id.ivAppIcon);
 		TextView appname = (TextView) convertView.findViewById(R.id.tvAppName);
 		if(appInfo.getCategoryIcon()!=null&&!appInfo.getCategoryIcon().equals("")) {
-			Arad.imageLoader.load(appInfo.getCategoryIcon()).placeholder(R.mipmap.default_error).into(appicon);
+			Arad.imageLoader.load(appInfo.getCategoryIcon()).placeholder(R.mipmap.default_error).resize(300,300).into(appicon);
 		}else {
 			appicon.setImageResource(R.mipmap.default_error);
 		}

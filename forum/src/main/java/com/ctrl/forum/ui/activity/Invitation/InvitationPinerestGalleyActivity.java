@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -39,6 +40,7 @@ import com.ctrl.forum.photo.zoom.PhotoView;
 import com.ctrl.forum.photo.zoom.ViewPagerFixed;
 import com.ctrl.forum.ui.activity.LoginActivity;
 import com.ctrl.forum.utils.BitmapUtils;
+import com.squareup.picasso.Transformation;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -217,10 +219,20 @@ public class InvitationPinerestGalleyActivity extends ToolBarActivity implements
             listPostImage=idao.getListPostImage();
             user = idao.getUser();
             listViews = new ArrayList<>();
+
            // listViews2 = new ArrayList<>();
-            if(post.getContactPhone()!=null&&!post.getContactPhone().equals("")){
-                tv_image_tel.setVisibility(View.VISIBLE);
+            if(post.getLinkType().equals("3")){//电话连接
+                if(post.getContactPhone()!=null&&!post.getContactPhone().equals("")){
+                    tv_image_tel.setText(post.getLinkName());
+                }
+            }else if(post.getLinkType().equals("4")){//网址连接
+                if(post.getLinkUrl()!=null&&!post.getLinkUrl().equals("")){
+                    tv_image_tel.setText(post.getLinkName());
+                }
+            }else{
+                tv_image_tel.setVisibility(View.GONE);
             }
+
 
            if(listPostImage==null){
                ImageView view = new ImageView(this);
@@ -232,12 +244,76 @@ public class InvitationPinerestGalleyActivity extends ToolBarActivity implements
                listViews.add(view);
                tv_titile.setVisibility(View.GONE);
            }else {
+               tv_titile.setText(1 + "/" + listPostImage.size());
                for (int i = 0; i < listPostImage.size(); i++) {
                    ImageView view = new ImageView(this);
                    view.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,
                            LayoutParams.WRAP_CONTENT));
                    // TextView view2=new TextView(this);
-                   Arad.imageLoader.load(listPostImage.get(i).getImg()).placeholder(R.mipmap.default_error).into(view);
+                   Transformation transformation = new Transformation() {
+                       @Override
+                       public Bitmap transform(Bitmap source) {
+                           int targetWidth = (AndroidUtil.getDeviceWidth(InvitationPinerestGalleyActivity.this));
+                           int targetHeight = 800;
+                           if (source.getWidth() == 0 || source.getHeight() == 0) {
+                               return source;
+                           }
+
+                           if (source.getWidth() > source.getHeight()) {//横向长图
+                               if (source.getHeight() < targetHeight && source.getWidth() <= 400) {
+                                   return source;
+                               } else {
+                                   //如果图片大小大于等于设置的高度，则按照设置的高度比例来缩放
+                                   double aspectRatio = (double) source.getWidth() / (double) source.getHeight();
+                                   int width = (int) (targetHeight * aspectRatio);
+                                   if (width > 400) { //对横向长图的宽度 进行二次限制
+                                       width = 400;
+                                       targetHeight = (int) (width / aspectRatio);// 根据二次限制的宽度，计算最终高度
+                                   }
+                                   if (width != 0 && targetHeight != 0) {
+                                       Bitmap result = Bitmap.createScaledBitmap(source, width, targetHeight, false);
+                                       if (result != source) {
+                                           // Same bitmap is returned if sizes are the same
+                                           source.recycle();
+                                       }
+                                       return result;
+                                   } else {
+                                       return source;
+                                   }
+                               }
+                           } else {//竖向长图
+                               //如果图片小于设置的宽度，则返回原图
+                               if (source.getWidth() < targetWidth && source.getHeight() <= 600) {
+                                   return source;
+                               } else {
+                                   //如果图片大小大于等于设置的宽度，则按照设置的宽度比例来缩放
+                                   double aspectRatio = (double) source.getHeight() / (double) source.getWidth();
+                                   int height = (int) (targetWidth * aspectRatio);
+                                   if (height > 600) {//对横向长图的高度进行二次限制
+                                       height = 600;
+                                       targetWidth = (int) (height / aspectRatio);//根据二次限制的高度，计算最终宽度
+                                   }
+                                   if (height != 0 && targetWidth != 0) {
+                                       Bitmap result = Bitmap.createScaledBitmap(source, targetWidth, height, false);
+                                       if (result != source) {
+                                           // Same bitmap is returned if sizes are the same
+                                           source.recycle();
+                                       }
+                                       return result;
+                                   } else {
+                                       return source;
+                                   }
+                               }
+                           }
+
+                       }
+
+                       @Override
+                       public String key() {
+                           return "transformation" + " desiredWidth";
+                       }
+                   };
+                   Arad.imageLoader.load(listPostImage.get(i).getImg()).placeholder(R.mipmap.default_error).transform(transformation).into(view);
                    // view2.setText(post.getPostImgList().get(i).getRemark());
                  //  view.setScaleType(ImageView.ScaleType.FIT_XY);
                    listViews.add(view);
@@ -251,7 +327,7 @@ public class InvitationPinerestGalleyActivity extends ToolBarActivity implements
             if(post.getZambiastate().equals("1")){
                 iv_zan.setImageResource(R.mipmap.shoucang_white);
             }
-            tv_titile.setText(1 + "/" + listViews.size());
+
             adapter = new MyPageAdapter(listViews);
             pager.setAdapter(adapter);
             praiseNum=post.getPraiseNum();
@@ -294,7 +370,16 @@ public class InvitationPinerestGalleyActivity extends ToolBarActivity implements
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_image_tel:
-                showPupupWindow();
+                if(post.getLinkType().equals("3")) {
+                    showPupupWindow();
+                }else if(post.getLinkType().equals("4")){
+                    Uri uri = Uri.parse(post.getLinkUrl());
+                    Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                    startActivity(intent);
+                    AnimUtil.intentSlidIn(this);
+                }else {
+
+                }
                 break;
             case R.id.rl_pinerest_gallery_zan:
                 if(Arad.preferences.getString("memberId")==null||Arad.preferences.getString("memberId").equals("")){

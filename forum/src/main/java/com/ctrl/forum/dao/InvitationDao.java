@@ -24,10 +24,6 @@ import com.ctrl.forum.entity.RelateMap;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -648,7 +644,7 @@ public class InvitationDao extends IDao {
             listCategory.addAll(data);
         }
         if(requestCode == 3){
-            String json = JsonUtil.node2json(result);
+          /*  String json = JsonUtil.node2json(result);
             JSONObject object= null;
             try {
                 object = new JSONObject(json);
@@ -670,7 +666,7 @@ public class InvitationDao extends IDao {
 
             } catch (JSONException e) {
                 e.printStackTrace();
-            }
+            }*/
 
             list3 = JsonUtil.node2pojoList(result.findValue("list3"), CategoryItem.class);
             list2s = JsonUtil.node2pojoList(result.findValue("list2"), CategoryItem.class);
@@ -679,6 +675,7 @@ public class InvitationDao extends IDao {
             });
             listRelateMap.addAll(data);
             post2=JsonUtil.node2pojo(result.findValue("post"), Post2.class);
+            listPostImage=JsonUtil.node2pojoList(result.findValue("postImgList"),PostImage.class);
         }
 
         if(requestCode == 4){
