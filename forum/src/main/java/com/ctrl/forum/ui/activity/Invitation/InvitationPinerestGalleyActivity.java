@@ -244,7 +244,7 @@ public class InvitationPinerestGalleyActivity extends ToolBarActivity implements
                listViews.add(view);
                tv_titile.setVisibility(View.GONE);
            }else {
-               tv_titile.setText(1 + "/" + listViews.size());
+               tv_titile.setText(1 + "/" + listPostImage.size());
                for (int i = 0; i < listPostImage.size(); i++) {
                    ImageView view = new ImageView(this);
                    view.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,
