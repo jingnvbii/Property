@@ -84,6 +84,8 @@ public class LoginActivity extends AppToolBarActivity implements View.OnClickLis
     private static final int MSG_AUTH_ERROR= 4;
     private static final int MSG_AUTH_COMPLETE = 5;
     private String deviceImei="";
+    String thirdLoginType="";
+    String openId="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -269,7 +271,19 @@ public class LoginActivity extends AppToolBarActivity implements View.OnClickLis
             String handleDay = ldao.getHandleDay();
             MessageUtils.showShortToast(this, "该设备已被拉黑"+handleDay+"天!");
         }
+        if(errorNo.equals("034")){
+            Intent intent=new Intent(LoginActivity.this,BindPhoneActivity.class);
+            intent.putExtra("openId",openId);
+            intent.putExtra("thirdLoginType",thirdLoginType);
+            intent.putExtra("deviceImei",deviceImei);
+            intent.putExtra("latitude",latitude);
+            intent.putExtra("lontitude",lontitude);
+            intent.putExtra("address",address);
+            startActivity(intent);
+            AnimUtil.intentSlidIn(this);
+        }
     }
+
 
     /**监听对话框里面的button点击事件*/
     DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener()
@@ -303,7 +317,7 @@ public class LoginActivity extends AppToolBarActivity implements View.OnClickLis
                 break;
             case R.id.tv_login :
                 if(checkInput()){
-                    ldao.requestLogin(et_username.getText().toString().trim(), et_pass_word.getText().toString().trim(),deviceImei, "1");
+                    ldao.requestLogin("1",et_username.getText().toString().trim(), et_pass_word.getText().toString().trim(),deviceImei, "1","","");
                 }
                 break;
             case R.id.tv_forget :
@@ -431,7 +445,7 @@ public class LoginActivity extends AppToolBarActivity implements View.OnClickLis
             }
         }
         plat.setPlatformActionListener(this);
-        plat.SSOSetting(true);
+        plat.SSOSetting(false);
         plat.showUser(null);
     }
 
@@ -443,6 +457,7 @@ public class LoginActivity extends AppToolBarActivity implements View.OnClickLis
         }
         System.out.println(res);
         System.out.println("------User Name ---------" + platform.getDb().getUserName());
+        System.out.println("------plat Name ---------" + platform.getName());
         System.out.println("------User ID ---------" + platform.getDb().getUserId());
     }
 
@@ -464,7 +479,10 @@ public class LoginActivity extends AppToolBarActivity implements View.OnClickLis
     private void login(String plat, String userId, HashMap<String, Object> userInfo) {
         Message msg = new Message();
         msg.what = MSG_LOGIN;
-        msg.obj = plat;
+        Bundle bundle=new Bundle();
+        bundle.putString("name",plat);
+        bundle.putString("openId",userId);
+        msg.setData(bundle);
         UIHandler.sendMessage(msg, this);
     }
     public boolean handleMessage(Message msg) {
@@ -474,11 +492,20 @@ public class LoginActivity extends AppToolBarActivity implements View.OnClickLis
             }
             break;
             case MSG_LOGIN: {
+               // String text = getString(R.string.logining, msg.obj);
+              //  Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
+              //  System.out.println("---------------");
+                if(msg.getData().getString("name").equals(QQ.NAME)){
+                    thirdLoginType="qq";
+                }else if(msg.getData().getString("name").equals(Wechat.NAME)){
+                    thirdLoginType="wx";
+                }else if(msg.getData().getString("name").equals(SinaWeibo.NAME)){
+                    thirdLoginType="wb";
+                }else {
 
-                String text = getString(R.string.logining, msg.obj);
-                Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
-                System.out.println("---------------");
-
+                }
+                openId=msg.getData().getString("openId");
+                ldao.requestLogin("0","","",deviceImei,"1",openId,thirdLoginType);
 //				Builder builder = new Builder(this);
 //				builder.setTitle(R.string.if_register_needed);
 //				builder.setMessage(R.string.after_auth);

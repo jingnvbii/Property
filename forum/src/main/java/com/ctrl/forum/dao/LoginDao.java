@@ -49,18 +49,24 @@ public class LoginDao extends IDao {
 
     /**
      * 登录
+     * @param loginType //登录类型 (0是第三方登录 , 1是账号密码登录)
      * @param userName 用户名
      * @param password 密码
      * @param lastLoginType （1：Android、2：IOS、3：WEB）
      * @param deviceImei 设备串码
+     * @param openId 第三方的openId
+     * @param thirdloginType 第三方类型 (qq,微信,微博)  分别传(qq  wx  wb )
      * */
-    public void requestLogin(String userName,String password,String deviceImei,String lastLoginType){
+    public void requestLogin(String loginType,String userName,String password,String deviceImei,String lastLoginType,String openId,String thirdloginType){
         String url="member/login";
         Map<String,String> map = new HashMap<String,String>();
+        map.put("loginType",loginType);
         map.put("userName",userName);
         map.put("password",password);
         map.put("deviceImei",deviceImei);
         map.put("lastLoginType",lastLoginType);
+        map.put("openId",openId);
+        map.put("thirdloginType",thirdloginType);
         postRequest(Constant.RAW_URL+url, mapToRP(map), 0);
     }
 
