@@ -57,6 +57,7 @@ public class LoginDao extends IDao {
      * @param openId 第三方的openId
      * @param thirdloginType 第三方类型 (qq,微信,微博)  分别传(qq  wx  wb )
      * */
+
     public void requestLogin(String loginType,String userName,String password,String deviceImei,String lastLoginType,String openId,String thirdloginType){
         String url="member/login";
         Map<String,String> map = new HashMap<String,String>();
