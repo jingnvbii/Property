@@ -125,6 +125,7 @@ public class MyFragment extends ToolBarFragment implements View.OnClickListener{
     private int lens;  //viewPager的页数
     private NoScrollGridView gridView;
     private MineMemberGridAdapter gridListAdapter;
+    private MyBroadcastReciver myBroadcastReciver;
     int len;
 
     private View[] views;
@@ -167,9 +168,10 @@ public class MyFragment extends ToolBarFragment implements View.OnClickListener{
         View view = inflater.inflate(R.layout.fragment_my, container, false);
         ButterKnife.inject(this, view);
 
+        myBroadcastReciver = new MyBroadcastReciver();
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction("com.message");
-        getActivity().registerReceiver(new MyBroadcastReciver(), intentFilter);
+        getActivity().registerReceiver(myBroadcastReciver, intentFilter);
 
         mdao = new MemberDao(this);
         editDao = new EditDao(this);
@@ -584,6 +586,7 @@ public class MyFragment extends ToolBarFragment implements View.OnClickListener{
     public class MyBroadcastReciver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
+            context.unregisterReceiver(myBroadcastReciver);
             String num = intent.getExtras().getString("num");
             switch (num){
                 case "num":

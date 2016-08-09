@@ -117,6 +117,7 @@ public class PlotFragment extends ToolBarFragment implements View.OnClickListene
     private TextView textView;
     private RelativeLayout rl_footer;
     private Boolean isFromLoad= false;
+    private Boolean isDetail = true;
 
     public static PlotFragment newInstance() {
         PlotFragment fragment = new PlotFragment();
@@ -249,6 +250,7 @@ public class PlotFragment extends ToolBarFragment implements View.OnClickListene
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = null;
+                isDetail = false;
                 if (posts!=null) {
                     if (position == lv_content.getRefreshableView().getHeaderViewsCount() + posts.size()) {
                         return;
@@ -295,7 +297,6 @@ public class PlotFragment extends ToolBarFragment implements View.OnClickListene
             public void onItemZanClick(PlotListViewFriendStyleAdapter.ViewHolder v) {
                 int position = v.getPosition();
                 int tex = posts.get(position).getPraiseNum();
-
                 if (isAdd.get(position) == null) {
                     if (posts.get(position).getPraiseState().equals("0")) {
                         isAdd.put(position, true);
@@ -337,20 +338,22 @@ public class PlotFragment extends ToolBarFragment implements View.OnClickListene
     @Override
     public void onResume() {
         super.onResume();
-        if (MainActivity.isFrist){
-            if (!Arad.preferences.getString("memberId").equals("")) {
-                rl_footer.setVisibility(View.GONE);
-                isFromLoad = false;
-                communityId = Arad.preferences.getString("communityId");
-                tv_plot_name.setText(Arad.preferences.getString("communityName"));
-                if (posts != null) {
-                    posts.clear();
-                    invitationListViewFriendStyleAdapter.notifyDataSetChanged();
+        if (MainActivity.isFrist) {
+            if (isDetail) {
+                if (!Arad.preferences.getString("memberId").equals("")) {
+                    rl_footer.setVisibility(View.GONE);
+                    isFromLoad = false;
+                    communityId = Arad.preferences.getString("communityId");
+                    tv_plot_name.setText(Arad.preferences.getString("communityName"));
+                    if (posts != null) {
+                        posts.clear();
+                        invitationListViewFriendStyleAdapter.notifyDataSetChanged();
+                    }
+                    PAGE_NUM = 1;
+                    plotDao.queryCommunityPostList(Arad.preferences.getString("memberId"),
+                            communityId,
+                            PAGE_NUM + "", Constant.PAGE_SIZE + "");
                 }
-                PAGE_NUM = 1;
-                plotDao.queryCommunityPostList(Arad.preferences.getString("memberId"),
-                        communityId,
-                        PAGE_NUM + "", Constant.PAGE_SIZE + "");
             }
         }
     }
@@ -613,6 +616,7 @@ public class PlotFragment extends ToolBarFragment implements View.OnClickListene
                 if (Arad.preferences.getString("memberId").equals("")){
                     startActivity(new Intent(getActivity(), LoginActivity.class));
                 }else {
+                    isDetail = true;
                     Intent intent = new Intent(getActivity(),MineFindFlotActivity.class);
                     startActivityForResult(intent,1203);
                 }
@@ -621,6 +625,7 @@ public class PlotFragment extends ToolBarFragment implements View.OnClickListene
                 if (Arad.preferences.getString("memberId").equals("")){
                     startActivity(new Intent(getActivity(), LoginActivity.class));
                 }else {
+                    isDetail = true;
                     Intent intent = new Intent(getActivity(),PlotAddInvitationActivity.class);
                     startActivityForResult(intent,7788);
                 }
@@ -629,6 +634,7 @@ public class PlotFragment extends ToolBarFragment implements View.OnClickListene
                 if (Arad.preferences.getString("memberId").equals("")){
                     startActivity(new Intent(getActivity(), LoginActivity.class));
                 }else {
+                    isDetail = true;
                     startActivity(new Intent(getActivity(), PlotRimServeActivity.class));
                 }
                 break;
@@ -645,6 +651,7 @@ public class PlotFragment extends ToolBarFragment implements View.OnClickListene
                 if (Arad.preferences.getString("memberId").equals("")){
                     startActivity(new Intent(getActivity(), LoginActivity.class));
                 }else {
+                    isDetail = true;
                     startActivity(new Intent(getActivity(), PlotSearchResultActivity.class));
                 }
                 break;

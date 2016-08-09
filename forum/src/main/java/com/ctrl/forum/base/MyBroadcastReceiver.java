@@ -15,6 +15,7 @@ import com.beanu.arad.Arad;
 import com.ctrl.forum.R;
 import com.ctrl.forum.ui.activity.Invitation.InvitationDetailFromPlatformActivity;
 import com.ctrl.forum.ui.activity.Invitation.InvitationPinterestDetailActivity;
+import com.ctrl.forum.ui.activity.StartActivity;
 import com.ctrl.forum.ui.activity.mine.MineOrderActivity;
 import com.ctrl.forum.ui.activity.mine.MineOrderManageActivity;
 import com.ctrl.forum.ui.activity.mine.MineXianJuanActivity;
@@ -28,7 +29,6 @@ import org.json.JSONObject;
 
 import java.util.List;
 
-import cn.jpush.android.api.CustomPushNotificationBuilder;
 import cn.jpush.android.api.JPushInterface;
 
 /**
@@ -56,6 +56,20 @@ public class MyBroadcastReceiver extends BroadcastReceiver{
     public void onReceive(Context context, Intent intent) {
         Bundle bundle = intent.getExtras();
         String registrationID =  JPushInterface.getRegistrationID(context);
+
+        //通知栏下方的图标能变化,但字体颜色不会适配(太长也不行)
+       /* CustomPushNotificationBuilder builder = new CustomPushNotificationBuilder(context,
+                R.layout.customer_notitfication_layout, R.id.icon, R.id.title, R.id.text);  // 指定定制的 Notification Layout
+        builder.statusBarDrawable = R.mipmap.tr_white;      //指定最顶层状态栏小图标
+        builder.layoutIconDrawable =R.mipmap.logo;   //指定下拉状态栏时显示的通知图标
+        JPushInterface.setPushNotificationBuilder(2, builder);
+        JPushInterface.setDefaultPushNotificationBuilder(builder);*/
+
+        //字体颜色会适配,但下拉出现的框的图片也是顶部状态栏的图片
+        /*BasicPushNotificationBuilder builder = new BasicPushNotificationBuilder(context);
+        builder.statusBarDrawable = R.mipmap.logo;
+        JPushInterface.setPushNotificationBuilder(2, builder);
+        JPushInterface.setDefaultPushNotificationBuilder(builder);*/
 
         if (JPushInterface.ACTION_REGISTRATION_ID.equals(intent.getAction())) {
             String regId = bundle.getString(JPushInterface.EXTRA_REGISTRATION_ID);
@@ -129,19 +143,10 @@ public class MyBroadcastReceiver extends BroadcastReceiver{
             Log.d(TAG, "[MyReceiver] 接收到推送下来的通知的ID: " + notifactionId);
             // 在这里可以做些统计，或者做些其他工作.
 
-            CustomPushNotificationBuilder builder = new
-                    CustomPushNotificationBuilder(context,
-                    R.layout.customer_notitfication_layout,
-                    R.id.icon,
-                    R.id.title,
-                    R.id.text);
-            // 指定定制的 Notification Layout
-            builder.statusBarDrawable = R.mipmap.logo;
-            // 指定最顶层状态栏小图标
-            builder.layoutIconDrawable = R.mipmap.logo;
-            builder.notificationFlags |= Notification.FLAG_ONGOING_EVENT;
-            // 指定下拉状态栏时显示的通知图标
-            JPushInterface.setPushNotificationBuilder(2, builder);
+            Intent itt = new Intent();
+            itt.setAction("com.message");
+            itt.putExtra("num", "num");
+            context.sendBroadcast(itt, null);
 
         }
         else if (JPushInterface.ACTION_NOTIFICATION_OPENED.equals(intent.getAction())) {
@@ -162,7 +167,6 @@ public class MyBroadcastReceiver extends BroadcastReceiver{
             }*/
 
             bundle.getString(JPushInterface.EXTRA_APP_KEY);
-
             String extras = bundle.getString(JPushInterface.EXTRA_EXTRA);
             // {"messageKey":"9","targetId":"5b088e45a3af40adae27c38eb268f052","sourceType":"1"}
             Log.e("extras============",extras);
@@ -182,10 +186,6 @@ public class MyBroadcastReceiver extends BroadcastReceiver{
             String title = bundle.getString(JPushInterface.EXTRA_TITLE);
             String message = bundle.getString(JPushInterface.EXTRA_MESSAGE);
 
-            Intent itt = new Intent();
-            itt.setAction("com.message");
-            itt.putExtra("num", "num");
-            context.sendBroadcast(itt, null);
             Log.e("messageKey===========", messageKey);
             Log.e("messageKey===========",messageKey);
             startAiti(messageKey,context);
@@ -461,6 +461,17 @@ public class MyBroadcastReceiver extends BroadcastReceiver{
                     ii.putExtra("msgId",msgId);
                     break;
                 case "13"://后台推送通知
+                    if (isBackground(context)){
+                        //正确的
+                        MyApplication.clearActivity();
+                        ii = new Intent(context, StartActivity.class);
+
+                       /* //更改的
+                        ii = new Intent(context, MainActivity.class);
+                        ii.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        //context.startActivity(ii);*/
+                        return;
+                    }
                     break;
                 default:
                     break;

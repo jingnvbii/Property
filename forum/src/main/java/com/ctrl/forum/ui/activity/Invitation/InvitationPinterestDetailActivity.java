@@ -196,7 +196,6 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
     private List<ImageView> listImg = new ArrayList<>();
     private String[] items = new String[]{"本地图片", "拍照"};
 
-
     private ShareDialog shareDialog;
     private InvitationDao idao;
     private Post2 post;
@@ -271,7 +270,7 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
     private void modityMessageRead() {
         rdao = new ReplyCommentDao(this);
         String msgId = getIntent().getStringExtra("msgId");
-        if (msgId!=null){
+        if (msgId!=null && !msgId.equals("")){
             rdao.modifyOneReadState(msgId);
         }
     }
@@ -347,7 +346,6 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
 
         isFromPinglun = false;
 
-
         FaceRelativeLayout.setVisibility(View.GONE);
         //  replyAdapter = new InvitationDetailReplyAdapter(this,1);
         mInvitationCommentDetailAdapter = new InvitationPinetestDetailAdapter(this);
@@ -367,7 +365,6 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
         ll_tel.setOnClickListener(this);
         rl_detail_user.setOnClickListener(this);
         title_image.setOnClickListener(this);
-
 
      /*   lv_reply_detail.setMode(PullToRefreshBase.Mode.PULL_FROM_END);
         lv_reply_detail.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
