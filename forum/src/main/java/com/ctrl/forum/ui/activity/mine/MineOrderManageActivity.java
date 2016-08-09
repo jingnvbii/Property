@@ -49,7 +49,6 @@ public class MineOrderManageActivity extends ToolBarActivity implements View.OnC
     private int PAGE_NUM =1;
     private ReplyCommentDao rdao;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

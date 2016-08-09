@@ -523,5 +523,6 @@
     <string name="title_activity_integral_store_detail">IntegralStoreDetailActivity</string>
     <string name="title_activity_dao_hang">DaoHangActivity</string>
     <string name="title_activity_plug_web_view">PlugWebView</string>
+    <string name="title_activity_main2">Main2Activity</string>
 
 </resources>

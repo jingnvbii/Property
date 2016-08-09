@@ -37,7 +37,7 @@ import com.ctrl.forum.dao.PlotDao;
 import com.ctrl.forum.entity.Banner;
 import com.ctrl.forum.entity.Post;
 import com.ctrl.forum.loopview.HomeAutoSwitchPicHolder;
-import com.ctrl.forum.ui.activity.Invitation.InvitationDetailActivity;
+import com.ctrl.forum.ui.activity.Invitation.InvitationPinterestDetailActivity;
 import com.ctrl.forum.ui.activity.LoginActivity;
 import com.ctrl.forum.ui.activity.MainActivity;
 import com.ctrl.forum.ui.activity.mine.MineFindFlotActivity;
@@ -258,7 +258,7 @@ public class PlotFragment extends ToolBarFragment implements View.OnClickListene
                             String type = posts.get(position - 2).getContentType();
                             switch (type) {
                                 case "0":
-                                    intent = new Intent(getActivity(), InvitationDetailActivity.class);
+                                    intent = new Intent(getActivity(), InvitationPinterestDetailActivity.class);
                                     intent.putExtra("id", posts.get(position - 2).getId());
                                     intent.putExtra("reportid", posts.get(position - 2).getReporterId());
                                     getActivity().startActivity(intent);
@@ -338,18 +338,20 @@ public class PlotFragment extends ToolBarFragment implements View.OnClickListene
     public void onResume() {
         super.onResume();
         if (MainActivity.isFrist){
-            rl_footer.setVisibility(View.GONE);
-            isFromLoad = false;
-            communityId = Arad.preferences.getString("communityId");
-            tv_plot_name.setText(Arad.preferences.getString("communityName"));
-            if (posts != null) {
-                posts.clear();
-                invitationListViewFriendStyleAdapter.notifyDataSetChanged();
+            if (!Arad.preferences.getString("memberId").equals("")) {
+                rl_footer.setVisibility(View.GONE);
+                isFromLoad = false;
+                communityId = Arad.preferences.getString("communityId");
+                tv_plot_name.setText(Arad.preferences.getString("communityName"));
+                if (posts != null) {
+                    posts.clear();
+                    invitationListViewFriendStyleAdapter.notifyDataSetChanged();
+                }
+                PAGE_NUM = 1;
+                plotDao.queryCommunityPostList(Arad.preferences.getString("memberId"),
+                        communityId,
+                        PAGE_NUM + "", Constant.PAGE_SIZE + "");
             }
-            PAGE_NUM=1;
-            plotDao.queryCommunityPostList(Arad.preferences.getString("memberId"),
-                    communityId,
-                    PAGE_NUM + "", Constant.PAGE_SIZE + "");
         }
     }
 

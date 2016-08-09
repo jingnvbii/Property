@@ -1,7 +1,9 @@
 package com.ctrl.forum.ui.activity.mine;
 
+import android.app.Notification;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -20,6 +22,7 @@ import java.util.Set;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import cn.jpush.android.api.BasicPushNotificationBuilder;
 import cn.jpush.android.api.JPushInterface;
 
 /**
@@ -86,9 +89,40 @@ public class MineSettingActivity extends ToolBarActivity implements View.OnClick
             days.add(6);
             JPushInterface.setPushTime(getApplicationContext(), days, 0, 23);
         }
+
         if (Arad.preferences.getBoolean("desktopIconHints")){ //桌面图标提示
 
         }else {}
+
+        JPushInterface.setSilenceTime(getApplicationContext(), 0, 0, 0, 0);
+        BasicPushNotificationBuilder builder = new BasicPushNotificationBuilder(MineSettingActivity.this);
+        builder.statusBarDrawable = R.mipmap.logo;
+        if (!Arad.preferences.getBoolean("isSet")) {
+            Log.e("isSet==========", Arad.preferences.getBoolean("isSet") + "");
+            builder.notificationDefaults = Notification.DEFAULT_SOUND
+                    | Notification.DEFAULT_VIBRATE;  // 设置为铃声、震动都要
+            JPushInterface.setPushNotificationBuilder(1, builder);
+        }else{
+            if (Arad.preferences.getBoolean("voice")&&Arad.preferences.getBoolean("vibration") ){
+                builder.notificationDefaults = Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE;  // 设置为铃声
+                JPushInterface.setPushNotificationBuilder(1, builder);
+            }else{
+                if(Arad.preferences.getBoolean("voice")){
+                    Log.e("voice==========",Arad.preferences.getBoolean("voice")+"");
+                    builder.notificationDefaults = Notification.DEFAULT_SOUND;  // 设置为铃声
+                    JPushInterface.setPushNotificationBuilder(1, builder);
+                }
+                if(Arad.preferences.getBoolean("vibration")){
+                    Log.e("vibration==========",Arad.preferences.getBoolean("vibration")+"");
+                    builder.notificationDefaults = Notification.DEFAULT_VIBRATE;  // 设置为震动
+                    JPushInterface.setPushNotificationBuilder(1, builder);
+                }
+                if (!Arad.preferences.getBoolean("voice")&&!Arad.preferences.getBoolean("voice")){
+                    Log.e("vibration==========","wu");
+                    JPushInterface.setSilenceTime(getApplicationContext(), 0, 0, 23, 59);
+                }
+            }
+        }
     }
 
     private void init() {
@@ -108,7 +142,6 @@ public class MineSettingActivity extends ToolBarActivity implements View.OnClick
 
         feedback.setOnClickListener(this);
         rl_cancle.setOnClickListener(this);
-
     }
 
     public boolean setupToolBarLeftButton(ImageView leftButton) {
