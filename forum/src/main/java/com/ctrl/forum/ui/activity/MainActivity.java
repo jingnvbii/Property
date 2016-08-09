@@ -49,7 +49,7 @@ public class MainActivity extends ToolBarActivity implements View.OnClickListene
     private CircleRadioView rb2;//商城按钮
     private CircleRadioView rb3;//小区按钮
     private CircleRadioView rb4;//周边按钮
-    private CircleRadioView rb5;//我  按钮1
+    private CircleRadioView rb5;//我  按钮
     private InvitationFragment invitationFragment;
     private StroeFragment storeFragment;
     private PlotFragment plotFragment;
@@ -199,6 +199,10 @@ public class MainActivity extends ToolBarActivity implements View.OnClickListene
     protected void onDestroy() {
         super.onDestroy();
         unregisterReceiver(myBroadCasrReciver);
+        listNavigation=null;
+        listDrawable=null;
+        listDrawable2=null;
+        MyApplication.getInstance().removeActivity(this);
     }
 
     private void initData() {
@@ -268,6 +272,8 @@ public class MainActivity extends ToolBarActivity implements View.OnClickListene
         rb1.setChecked(true);
         setTabSelection(0);
     }
+
+
 
     @Override
     public void onClick(View v) {

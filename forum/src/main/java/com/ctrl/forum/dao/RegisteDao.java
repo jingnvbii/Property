@@ -28,13 +28,17 @@ public class RegisteDao extends IDao {
      * @param userName 用户名
      * @param password 密码
      * @param registIp 注册ip
+     * @param openId 第三方的openId
+     * @param thirdloginType 第三方类型 (qq,微信,微博)  分别传(qq  wx  wb )
      * */
-    public void requestRegiste(String userName,String password,String registIp){
+    public void requestRegiste(String userName,String password,String registIp,String openId,String thirdloginType){
         String url="member/regist";
         Map<String,String> map = new HashMap<String,String>();
         map.put("userName", userName);
         map.put("password", password);
         map.put("registIp", registIp);
+        map.put("openId", openId);
+        map.put("thirdloginType", thirdloginType);
         postRequest(Constant.RAW_URL+url, mapToRP(map), 0);
     }
     /**

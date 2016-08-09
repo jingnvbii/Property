@@ -52,6 +52,12 @@ public class AppToolBarActivity extends ToolBarActivity {
         MyApplication.getInstance().addActivity(this);
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        MyApplication.getInstance().removeActivity(this);
+    }
+
     /**
      * 跳到当前App的主页
      * 使用时再修改相关部分代码

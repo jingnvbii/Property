@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/main_bg">
+
+    <include
+        layout="@layout/toolbar_common_red"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/toolbar_height"
+        />
+
+    <EditText
+        android:id="@+id/et_put_phone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="请输入手机号"
+        android:background="@color/white"
+        android:layout_marginTop="10dp"
+        android:padding="15dp"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal"
+        >
+
+        <EditText
+            android:id="@+id/et_yanzhen_code"
+            android:layout_width="0dp"
+            android:layout_weight="3"
+            android:layout_height="wrap_content"
+            android:hint="验证码"
+            android:background="@color/white"
+            android:padding="15dp"
+            />
+        <TextView
+            android:id="@+id/tv_get_yanzhencode"
+            android:layout_width="0dp"
+            android:layout_weight="2"
+            android:layout_height="wrap_content"
+            android:hint="获取验证码"
+            android:textColor="@color/text_white"
+            android:gravity="center"
+            android:background="#dc3d3c"
+            android:padding="15dp"
+            />
+
+    </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_bind_phone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="绑定"
+            android:layout_marginTop="40dp"
+            android:padding="15dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:textSize="16sp"
+            android:textColor="@color/text_white"
+            android:background="@drawable/gray_border_bg"
+            android:gravity="center"
+            />
+
+
+</LinearLayout>

@@ -111,7 +111,7 @@ public class RegisterActivity extends AppToolBarActivity implements View.OnClick
 
             case R.id.tv_login:
                 if (checkAllInput()) {
-                    rdao.requestRegiste(et_username.getText().toString().trim(), et_pass_word.getText().toString().trim(), "");
+                    rdao.requestRegiste(et_username.getText().toString().trim(), et_pass_word.getText().toString().trim(), "","","");
                 }
                 break;
             case R.id.tv_user_agreement:

@@ -49,6 +49,9 @@ public class MyApplication extends AradApplication {
     public void addActivity(Activity activity) {
         mList.add(activity);
     }
+    public void removeActivity(Activity activity) {
+        mList.remove(activity);
+    }
     //关闭每一个list内的activity
     public void exit() {
         try {
