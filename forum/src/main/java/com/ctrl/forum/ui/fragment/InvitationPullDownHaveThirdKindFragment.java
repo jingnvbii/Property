@@ -13,7 +13,6 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.GridView;
-import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -30,10 +29,7 @@ import com.ctrl.forum.base.Constant;
 import com.ctrl.forum.dao.InvitationDao;
 import com.ctrl.forum.entity.Banner;
 import com.ctrl.forum.entity.Category;
-import com.ctrl.forum.entity.Category2;
-import com.ctrl.forum.entity.Merchant;
 import com.ctrl.forum.entity.Post;
-import com.ctrl.forum.entity.ThirdKind;
 import com.ctrl.forum.loopview.HomeAutoSwitchPicHolder;
 import com.ctrl.forum.ui.activity.Invitation.InvitationDetailFromPlatformActivity;
 import com.ctrl.forum.ui.activity.Invitation.InvitationPinterestDetailActivity;
@@ -67,22 +63,22 @@ public class InvitationPullDownHaveThirdKindFragment extends ToolBarFragment {
     PullToRefreshListView lv_invitation_pull_down_have_third_kind;
 
 
-    private List<Merchant> list;
-    private List<ThirdKind> kindList;
+ //  private List<Merchant> list;
+  //  private List<ThirdKind> kindList;
     private GridView gridView1;
 
     private int width;
     DisplayMetrics dm;
     private int NUM = 4; // 每行显示个数
-    private int hSpacing = 20;// 水平间距
-    private List<Category2> mCategory2List;
+   // private int hSpacing = 20;// 水平间距
+ //   private List<Category2> mCategory2List;
     private InvitationDao idao;
     private String channelId;
     private int PAGE_NUM = 1;
     private List<Post> listPost;
     private List<Category> listCategroy3;
     private FrameLayout framelayout;
-    private HorizontalScrollView horizontalScrollView;
+  //  private HorizontalScrollView horizontalScrollView;
     private LinearLayout ll;
     private View headview;
     private int bol = 1;
@@ -93,7 +89,7 @@ public class InvitationPullDownHaveThirdKindFragment extends ToolBarFragment {
     private InvitationListViewFriendStyleAdapter mInvitationListViewFriendStyleAdapter;
     private InvitationPullDownGridViewAdapter gridViewAdapter;
     private String thirdKindId = null;
-    private List<Post> listPost2;
+ //   private List<Post> listPost2;
     private int Position;
     private HomeAutoSwitchPicHolder mAutoSwitchPicHolder;
     private ArrayList<String> mData;
@@ -392,6 +388,14 @@ public class InvitationPullDownHaveThirdKindFragment extends ToolBarFragment {
             }
         });
         return view;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        invitationListViewAdapter=null;
+        mInvitationListViewBlockStyleAdapter=null;
+        mInvitationListViewFriendStyleAdapter=null;
     }
 
     private void initData() {

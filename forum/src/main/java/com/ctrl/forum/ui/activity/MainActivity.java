@@ -199,6 +199,10 @@ public class MainActivity extends ToolBarActivity implements View.OnClickListene
     protected void onDestroy() {
         super.onDestroy();
         unregisterReceiver(myBroadCasrReciver);
+        listNavigation=null;
+        listDrawable=null;
+        listDrawable2=null;
+        MyApplication.getInstance().removeActivity(this);
     }
 
     private void initData() {
@@ -268,6 +272,8 @@ public class MainActivity extends ToolBarActivity implements View.OnClickListene
         rb1.setChecked(true);
         setTabSelection(0);
     }
+
+
 
     @Override
     public void onClick(View v) {

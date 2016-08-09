@@ -38,11 +38,8 @@ import com.ctrl.forum.customview.GridViewForScrollView;
 import com.ctrl.forum.dao.InvitationDao;
 import com.ctrl.forum.entity.Banner;
 import com.ctrl.forum.entity.Invitation_listview;
-import com.ctrl.forum.entity.Kind;
-import com.ctrl.forum.entity.Merchant;
 import com.ctrl.forum.entity.Notice;
 import com.ctrl.forum.entity.Post;
-import com.ctrl.forum.entity.PostImage;
 import com.ctrl.forum.entity.PostKind;
 import com.ctrl.forum.entity.Recommend;
 import com.ctrl.forum.loopview.HomeAutoSwitchPicHolder;
@@ -75,7 +72,7 @@ public class InvitationFragment extends ToolBarFragment implements View.OnClickL
     DisplayMetrics dm;
     private int NUM = 4; // 每行显示个数
     private int hSpacing = 20;// 水平间距
-    private List<Kind> kindList;
+  //  private List<Kind> kindList;
     private InvitationListViewAdapter invitationListViewAdapter;
     private List<Invitation_listview> list;
     private InvitationDao idao;
@@ -86,7 +83,7 @@ public class InvitationFragment extends ToolBarFragment implements View.OnClickL
     private List<PostKind> listPostKind;
 
     private List<Post> listPost;
-    private List<PostImage> listPostImage;
+   // private List<PostImage> listPostImage;
     private ImageView iv_recommend_1;
     private ImageView iv_recommend_2;
     private ImageView iv_recommend_3;
@@ -96,7 +93,7 @@ public class InvitationFragment extends ToolBarFragment implements View.OnClickL
 
     private TextView tv_change;
     private ListView lv01;
-    private List<Merchant> listMerchant;
+//    private List<Merchant> listMerchant;
     private FrameLayout framelayout;
     private GridViewForScrollView gridView1;
     private int PAGE_NUM=1;
@@ -154,7 +151,7 @@ public class InvitationFragment extends ToolBarFragment implements View.OnClickL
     private RelativeLayout rl_footer;
     private TextView tv_footer;
     private ProgressBar progressBar;
-    private int bol=1;
+ //   private int bol=1;
 
 
     public static InvitationFragment newInstance() {
@@ -167,7 +164,7 @@ public class InvitationFragment extends ToolBarFragment implements View.OnClickL
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
       //  showProgress(true);
-        bol=1;
+        //bol=1;
         idao = new InvitationDao(this);
         invitationListViewAdapter = new InvitationListViewAdapter(getActivity());
         inflater = getActivity().getLayoutInflater();
@@ -488,7 +485,7 @@ public class InvitationFragment extends ToolBarFragment implements View.OnClickL
         }
 
         if (requestCode == 1) {
-            bol=0;
+            //bol=0;
           //  MessageUtils.showShortToast(getActivity(), "获取帖子列表成功");
             listPost=idao.getListPost();
             if(listPost!=null) {

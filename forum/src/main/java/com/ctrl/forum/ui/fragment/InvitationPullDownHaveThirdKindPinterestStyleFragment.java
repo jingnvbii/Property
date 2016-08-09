@@ -1,6 +1,5 @@
 package com.ctrl.forum.ui.fragment;
 
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Rect;
 import android.net.Uri;
@@ -16,9 +15,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.GridView;
-import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -40,7 +37,6 @@ import com.ctrl.forum.ui.activity.Invitation.InvitationSearchActivity;
 import com.ctrl.forum.ui.activity.LoginActivity;
 import com.ctrl.forum.ui.activity.store.StoreCommodityDetailActivity;
 import com.ctrl.forum.ui.activity.store.StoreShopListVerticalStyleActivity;
-import com.ctrl.forum.ui.adapter.InvitationListViewPinterestStyleAdapter;
 import com.ctrl.forum.ui.adapter.InvitationPullDownGridViewAdapter;
 import com.ctrl.forum.ui.adapter.JasonViewPagerAdapter;
 import com.ctrl.forum.ui.adapter.MasonryAdapter;
@@ -56,7 +52,7 @@ import butterknife.InjectView;
  * Created by Administrator on 2015/11/30.
  */
 public class InvitationPullDownHaveThirdKindPinterestStyleFragment extends ToolBarFragment  {
-    private static Context mContext;
+   // private static Context mContext;
     private static InvitationPullDownHaveThirdKindPinterestStyleFragment fragment;
     /*   @InjectView(R.id.xlv_pinerest_style)
        XListView xlv_pinerest_style;*/
@@ -68,10 +64,10 @@ public class InvitationPullDownHaveThirdKindPinterestStyleFragment extends ToolB
     private int width;
     DisplayMetrics dm;
     private int NUM = 4; // 每行显示个数
-    private int hSpacing = 20;// 水平间距
+  //  private int hSpacing = 20;// 水平间距
     private String id;
     private View headview;
-    private HorizontalScrollView horizontalScrollView;
+   // private HorizontalScrollView horizontalScrollView;
     private LinearLayout ll;
     private FrameLayout framelayout;
     private InvitationDao idao;
@@ -80,33 +76,33 @@ public class InvitationPullDownHaveThirdKindPinterestStyleFragment extends ToolB
     private int PAGE_SIZE = 18;
     private List<Post> listPost;
     private List<Category> listCategroy3;
-    private InvitationListViewPinterestStyleAdapter mInvitationListViewPinterestStyleAdapter;
+  //  private InvitationListViewPinterestStyleAdapter mInvitationListViewPinterestStyleAdapter;
     private InvitationPullDownGridViewAdapter adapter;
     private String thirdKindId = null;
     private int Position;
     private HomeAutoSwitchPicHolder mAutoSwitchPicHolder;
     private ArrayList<String> mData;
     private TextView tv_search;
-    private boolean isFirst=true;
+ //   private boolean isFirst=true;
     private List<Banner> listBanner;
     private String keyword;
     private String showAll;
     private String firstId;
-    private int lastItem;
+ //   private int lastItem;
     private View loadNoneView;
     private RelativeLayout rl_footer;
-    private TextView tv_footer;
-    private ProgressBar progressBar;
+ //   private TextView tv_footer;
+ //   private ProgressBar progressBar;
     private boolean isFromLoad;
     private StaggeredGridLayoutManager mLayoutManager;
     private MasonryAdapter recyclerAdapter;
     private Handler handler=new Handler();
 
 
-    public static InvitationPullDownHaveThirdKindPinterestStyleFragment newInstance(Context context,String id,String thirdKindId,String keyword,String showAll,String firstId) {
+    public static InvitationPullDownHaveThirdKindPinterestStyleFragment newInstance(String id,String thirdKindId,String keyword,String showAll,String firstId) {
         fragment = new InvitationPullDownHaveThirdKindPinterestStyleFragment();
         fragment.id = id;
-        mContext=context;
+       // mContext=context;
         fragment.thirdKindId = thirdKindId;
         fragment.keyword = keyword;
         fragment.showAll = showAll;
@@ -117,7 +113,7 @@ public class InvitationPullDownHaveThirdKindPinterestStyleFragment extends ToolB
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mInvitationListViewPinterestStyleAdapter = new InvitationListViewPinterestStyleAdapter(getActivity());
+     //   mInvitationListViewPinterestStyleAdapter = new InvitationListViewPinterestStyleAdapter(getActivity());
         width = getResources().getDisplayMetrics().widthPixels;
         idao = new InvitationDao(this);
         adapter = new InvitationPullDownGridViewAdapter(getActivity());
@@ -126,7 +122,7 @@ public class InvitationPullDownHaveThirdKindPinterestStyleFragment extends ToolB
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        mInvitationListViewPinterestStyleAdapter=null;
+     //   mInvitationListViewPinterestStyleAdapter=null;
         adapter=null;
         idao=null;
         recyclerAdapter=null;
@@ -192,8 +188,8 @@ public class InvitationPullDownHaveThirdKindPinterestStyleFragment extends ToolB
         headview = getActivity().getLayoutInflater().inflate(R.layout.fragment_invitation_header, null);
         loadNoneView = getActivity().getLayoutInflater().inflate(R.layout.load_more, null);
         rl_footer=(RelativeLayout)loadNoneView.findViewById(R.id.rl_footer);
-        tv_footer=(TextView)loadNoneView.findViewById(R.id.tv_load_more);
-        progressBar=(ProgressBar)loadNoneView.findViewById(R.id.secondBar);
+      //  tv_footer=(TextView)loadNoneView.findViewById(R.id.tv_load_more);
+      //  progressBar=(ProgressBar)loadNoneView.findViewById(R.id.secondBar);
         myRecyclerview.addHeadView(headview);
         initData();
         getScreenDen();
@@ -458,7 +454,7 @@ public class InvitationPullDownHaveThirdKindPinterestStyleFragment extends ToolB
             activity.getAdapter().reLoad();
         }
         if(requestCode==202&&resultCode==203){
-            InvitationPullDownActivity activity=(InvitationPullDownActivity)mContext;
+            InvitationPullDownActivity activity=(InvitationPullDownActivity)getActivity();
             JasonViewPagerAdapter adapter1 = activity.getAdapter();
             adapter1.reLoad();
         }
