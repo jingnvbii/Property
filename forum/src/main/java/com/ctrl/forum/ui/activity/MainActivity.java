@@ -49,7 +49,7 @@ public class MainActivity extends ToolBarActivity implements View.OnClickListene
     private CircleRadioView rb2;//商城按钮
     private CircleRadioView rb3;//小区按钮
     private CircleRadioView rb4;//周边按钮
-    private CircleRadioView rb5;//我  按钮1
+    private CircleRadioView rb5;//我  按钮
     private InvitationFragment invitationFragment;
     private StroeFragment storeFragment;
     private PlotFragment plotFragment;
