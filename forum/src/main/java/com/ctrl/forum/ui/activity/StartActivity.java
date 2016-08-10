@@ -61,7 +61,6 @@ public class StartActivity extends ToolBarActivity implements View.OnClickListen
                     viewPager_start.setCurrentItem(currentItem);
                     break;
             }
-
             return false;
         }
     });
@@ -100,7 +99,6 @@ public class StartActivity extends ToolBarActivity implements View.OnClickListen
                     viewPager_start.invalidate();
                 }
             }
-
             @Override
             public void onPageSelected(int position) {
                 for (int i = 0; i < listAdvertising.size(); i++) {
@@ -112,7 +110,6 @@ public class StartActivity extends ToolBarActivity implements View.OnClickListen
                 }else {
                     tv_enter.setVisibility(View.GONE);
                 }
-
             }
 
             @Override

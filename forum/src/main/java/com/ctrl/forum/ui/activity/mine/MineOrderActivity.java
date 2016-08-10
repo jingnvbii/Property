@@ -84,7 +84,7 @@ public class MineOrderActivity extends AppToolBarActivity implements View.OnClic
     private void modityMessageRead() {
         rdao = new ReplyCommentDao(this);
         String msgId = getIntent().getStringExtra("msgId");
-        if (msgId!=null){
+        if (msgId!=null && !msgId.equals("")){
             rdao.modifyOneReadState(msgId);
         }
     }

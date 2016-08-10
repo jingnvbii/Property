@@ -96,7 +96,6 @@ public class MineSettingActivity extends ToolBarActivity implements View.OnClick
 
         JPushInterface.setSilenceTime(getApplicationContext(), 0, 0, 0, 0);
         BasicPushNotificationBuilder builder = new BasicPushNotificationBuilder(MineSettingActivity.this);
-        builder.statusBarDrawable = R.mipmap.logo;
         if (!Arad.preferences.getBoolean("isSet")) {
             Log.e("isSet==========", Arad.preferences.getBoolean("isSet") + "");
             builder.notificationDefaults = Notification.DEFAULT_SOUND

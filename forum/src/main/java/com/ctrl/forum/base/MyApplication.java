@@ -25,7 +25,7 @@ public class MyApplication extends AradApplication {
     //public LocationClient mLocationClient = null;
 
     //运用list来保存们每一个activity是关键
-    private List<Activity> mList = new LinkedList<Activity>();
+    private static List<Activity> mList = new LinkedList<Activity>();
     //为了实现每次使用该类时不创建新的对象而创建的静态对象
     private static MyApplication instance;
     public LocationService locationService;
@@ -69,6 +69,10 @@ public class MyApplication extends AradApplication {
     public void onLowMemory() {
         super.onLowMemory();
         System.gc();
+    }
+
+    public static void clearActivity(){
+        mList.clear();
     }
 
     @Override

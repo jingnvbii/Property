@@ -7,9 +7,11 @@ import android.graphics.Matrix;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.text.format.DateFormat;
 import android.util.Base64;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,6 +29,7 @@ import com.ctrl.forum.customview.MineHeadView;
 import com.ctrl.forum.dao.EditDao;
 import com.ctrl.forum.entity.MemberInfo;
 import com.ctrl.forum.ui.activity.LoginActivity;
+import com.ctrl.forum.ui.activity.rim.ExampleUtil;
 import com.ctrl.forum.utils.DataCleanUtils;
 import com.ctrl.forum.utils.Utils;
 
@@ -34,9 +37,12 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.Locale;
+import java.util.Set;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import cn.jpush.android.api.JPushInterface;
+import cn.jpush.android.api.TagAliasCallback;
 
 /**
  * 编辑界面
@@ -236,10 +242,107 @@ public class MineEditActivity extends AppToolBarActivity implements View.OnClick
                 itt.putExtra("number","0");
                 this.sendBroadcast(itt, null);
 
+                setAlias();
+
                 startActivity(new Intent(this, LoginActivity.class));
                 this.finish();
                 break;
         }
+    }
+
+    private static final int MSG_SET_ALIAS = 1001;
+    private static final int MSG_SET_TAGS = 1002;
+    private static final String TAG = "JPush";
+    private final Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(android.os.Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what) {
+                case MSG_SET_ALIAS:
+                    Log.d(TAG, "Set alias in handler.");
+                    JPushInterface.setAliasAndTags(getApplicationContext(), (String) msg.obj, null, mAliasCallback);
+                    break;
+
+                case MSG_SET_TAGS:
+                    Log.d(TAG, "Set tags in handler.");
+                    JPushInterface.setAliasAndTags(getApplicationContext(), null, (Set<String>) msg.obj, mTagsCallback);
+                    break;
+
+                default:
+                    Log.i(TAG, "Unhandled msg - " + msg.what);
+            }
+        }
+    };
+
+    private final TagAliasCallback mTagsCallback = new TagAliasCallback() {
+
+        @Override
+        public void gotResult(int code, String alias, Set<String> tags) {
+            String logs ;
+            switch (code) {
+                case 0:
+                    logs = "Set tag and alias success";
+                    Log.i(TAG, logs);
+                    break;
+
+                case 6002:
+                    logs = "Failed to set alias and tags due to timeout. Try again after 60s.";
+                    Log.i(TAG, logs);
+                    if (ExampleUtil.isConnected(getApplicationContext())) {
+                        mHandler.sendMessageDelayed(mHandler.obtainMessage(MSG_SET_TAGS, tags), 1000 * 60);
+                    } else {
+                        Log.i(TAG, "No network");
+                    }
+                    break;
+
+                default:
+                    logs = "Failed with errorCode = " + code;
+                    Log.e(TAG, logs);
+            }
+
+            // ExampleUtil.showToast(logs, getApplicationContext());
+        }
+
+    };
+
+    private final TagAliasCallback mAliasCallback = new TagAliasCallback() {
+
+        @Override
+        public void gotResult(int code, String alias, Set<String> tags) {
+            String logs ;
+            switch (code) {
+                case 0:
+                    logs = "Set tag and alias success";
+                    Log.i(TAG, logs);
+                    break;
+                case 6002:
+                    logs = "Failed to set alias and tags due to timeout. Try again after 60s.";
+                    Log.i(TAG, logs);
+                    if (ExampleUtil.isConnected(getApplicationContext())) {
+                        mHandler.sendMessageDelayed(mHandler.obtainMessage(MSG_SET_ALIAS, alias), 1000 * 60);
+                    } else {
+                        Log.i(TAG, "No network");
+                    }
+                    break;
+                default:
+                    logs = "Failed with errorCode = " + code;
+                    Log.e(TAG, logs);
+            }
+            //ExampleUtil.showToast(logs, getApplicationContext());
+        }
+    };
+
+    private void setAlias(){
+        String alias = "";
+       /* if (TextUtils.isEmpty(alias)) {
+            return;
+        }
+        if (!ExampleUtil.isValidTagAndAlias(alias)) {
+            //Toast.makeText(LoginActivity.this, "格式不对", Toast.LENGTH_SHORT).show();
+            return;
+        }*/
+        //调用JPush API设置Alias
+        mHandler.sendMessage(mHandler.obtainMessage(MSG_SET_ALIAS, alias));
     }
 
     @Override

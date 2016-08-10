@@ -66,7 +66,7 @@ import com.ctrl.forum.ui.activity.Invitation.AddContactPhoneActivity;
 import com.ctrl.forum.ui.activity.Invitation.CallingCardActivity;
 import com.ctrl.forum.ui.activity.Invitation.LocationActivity;
 import com.ctrl.forum.ui.activity.WebViewActivity;
-import com.ctrl.forum.utils.FileUtils;
+import com.ctrl.forum.utils.BitmapUtils;
 import com.ctrl.forum.utils.InputMethodUtils;
 import com.ctrl.forum.utils.Utils;
 
@@ -610,7 +610,7 @@ public class PlotAddInvitationActivity extends AppToolBarActivity implements Vie
             if (Bimp.tempSelectBitmap.size() > 0) {
                 Uri uri = null;
                 for (int i = 0; i < Bimp.tempSelectBitmap.size(); i++) {
-                    uri= Utils.getUriFromPath(this, AlbumActivity.addList.get(i).getImagePath());
+                    uri= Utils.getUriFromPath(this, Bimp.tempSelectBitmap.get(i).getImagePath());
                     //uri = Uri.parse(MediaStore.Images.Media.insertImage(getContentResolver(), Bimp.tempSelectBitmap.get(i).getBitmap(), null, null));
                     //uri = Bimp.tempSelectBitmap.get(i).getUri();
                     Log.e("uri=========",uri+"");
@@ -746,12 +746,14 @@ public class PlotAddInvitationActivity extends AppToolBarActivity implements Vie
                     break;
                 case TAKE_PICTURE: //拍照
                     if (Bimp.tempSelectBitmap.size() < 9 && resultCode == RESULT_OK) {
+                        Bitmap bitmap =(Bitmap)data.getExtras().get("data");
                         String fileName = String.valueOf(System.currentTimeMillis());
-                        Bitmap bm = (Bitmap) data.getExtras().get("data");
-                        FileUtils.saveBitmap(bm, fileName);
+                        // String path = FileUtils.saveBitmap(bm, fileName).getPath();
+                        BitmapUtils.saveImageToGallery(this, bitmap, "laizhouren", fileName);
                         ImageItem takePhoto = new ImageItem();
-                        takePhoto.setBitmap(bm);
-                        //takePhoto.setUri(Uri.parse(fileName));
+                        takePhoto.setBitmap(bitmap);
+                        takePhoto.setImagePath(Environment.getExternalStorageDirectory()
+                                + "/laizhouren/" + fileName + ".jpg");
                         Bimp.tempSelectBitmap.add(takePhoto);
                     }
                     break;
