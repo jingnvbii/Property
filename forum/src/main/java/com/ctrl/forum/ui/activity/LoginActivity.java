@@ -509,9 +509,9 @@ public class LoginActivity extends AppToolBarActivity implements View.OnClickLis
             }
             break;
             case MSG_LOGIN: {
-                String text = getString(R.string.logining, msg.obj);
+              /*  String text = getString(R.string.logining, msg.obj);
                 Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
-                System.out.println("---------------");
+                System.out.println("---------------");*/
                 if(msg.getData().getString("name").equals(QQ.NAME)){
                     thirdLoginType="qq";
                 }else if(msg.getData().getString("name").equals(Wechat.NAME)){
