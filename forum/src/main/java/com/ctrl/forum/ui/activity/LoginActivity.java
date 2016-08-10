@@ -276,7 +276,7 @@ public class LoginActivity extends AppToolBarActivity implements View.OnClickLis
 
     @Override
     public void onRequestFaild(String errorNo, String errorMessage) {
-        super.onRequestFaild(errorNo, errorMessage);
+      //  super.onRequestFaild(errorNo, errorMessage);
         if(errorNo.equals("002")){
             MessageUtils.showShortToast(this, "账号或密码错误");
             Log.e("errorMessage", errorMessage);
