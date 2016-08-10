@@ -68,6 +68,7 @@ public class BindPhoneActivity extends AppToolBarActivity implements View.OnClic
     }
 
     private void initData() {
+        time = new TimeCount(60000, 1000);
         rdao=new RegisteDao(this);
         ldao=new LoginDao(this);
         activity = new BindPhoneActivity();
@@ -89,7 +90,7 @@ public class BindPhoneActivity extends AppToolBarActivity implements View.OnClic
         switch (v.getId()){
             case R.id.tv_bind_phone:
                 if(checkInput()){
-                    MessageUtils.showShortToast(this,"手机号绑定成功");
+                   // MessageUtils.showShortToast(this,"手机号绑定成功");
                     ldao.requestLogin("0",et_put_phone.getText().toString().trim(),"",deviceImei,"1",openId,thirdLoginType);
                 }
                 break;
@@ -99,6 +100,7 @@ public class BindPhoneActivity extends AppToolBarActivity implements View.OnClic
                     return;
                 }
                 if(!TextUtils.isEmpty(et_put_phone.getText().toString())) {
+                    time.start();
                     rdao.requestAuthCode(et_put_phone.getText().toString().trim());
                 }else {
                     MessageUtils.showShortToast(this,"请输入手机号");
@@ -109,8 +111,26 @@ public class BindPhoneActivity extends AppToolBarActivity implements View.OnClic
     }
 
     @Override
+    public void onRequestFaild(String errorNo, String errorMessage) {
+        super.onRequestFaild(errorNo, errorMessage);
+        if(errorNo.equals("035")){
+          //  rdao.requestRegiste("","","",openId,thirdLoginType);
+            Intent intent=new Intent(BindPhoneActivity.this,RegisterActivity.class);
+            intent.putExtra("openId",openId);
+            intent.putExtra("thirdLoginType",thirdLoginType);
+            intent.putExtra("tel",et_put_phone.getText().toString().trim());
+            startActivity(intent);
+            AnimUtil.intentSlidIn(this);
+            finish();
+        }
+    }
+
+    @Override
     public void onRequestSuccess(int requestCode) {
         super.onRequestSuccess(requestCode);
+        if(requestCode==666){
+            ldao.requestLogin("0",et_put_phone.getText().toString().trim(),"",deviceImei,"1",openId,thirdLoginType);
+        }
         if(requestCode==1) {
             code = rdao.getCode();
         }

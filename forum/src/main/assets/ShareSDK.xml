@@ -87,6 +87,8 @@
                        注意：开发者不能用我们这两个平台的appid,否则分享不了
     
        	  微信测试的时候，微信测试需要先签名打包出apk,
+
+       	  64020361b8ec4c99936c0e3999a9f249
 		sample测试微信，要先签名打包，keystore在sample项目中，密码123456
 		
 		BypassApproval是绕过审核的标记，设置为true后AppId将被忽略，故不经过
@@ -97,7 +99,7 @@
         Id="4"
         SortId="4"
         AppId="wx80654af2048a86ac"
-        AppSecret="64020361b8ec4c99936c0e3999a9f249"
+        AppSecret="c692fe7415c3aaa90651442068b387b4"
         BypassApproval="false"
         Enable="true" />
 
@@ -105,16 +107,16 @@
         Id="5"
         SortId="5"
         AppId="wx80654af2048a86ac"
-        AppSecret="64020361b8ec4c99936c0e3999a9f249"
+        AppSecret="c692fe7415c3aaa90651442068b387b4"
         BypassApproval="false"
         Enable="true" />
 
     <WechatFavorite
         Id="6"
         SortId="6"
-        AppId="wx4868b35061f87885"
-        AppSecret="64020361b8ec4c99936c0e3999a9f249"
-        Enable="false" />
+        AppId="wx80654af2048a86ac"
+        AppSecret="c692fe7415c3aaa90651442068b387b4"
+        Enable="true" />
 
     <!-- ShareByAppClient标识是否使用微博客户端分享，默认是false -->
     <QQ
