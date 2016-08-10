@@ -68,6 +68,8 @@ public class MineSettingActivity extends ToolBarActivity implements View.OnClick
     }
 
     private void setJPush() {
+
+        //设置夜间免大佬模式
         if (Arad.preferences.getBoolean("nightNoMessage")){//夜间免打捞
             Set<Integer> days = new HashSet<>();
             days.add(0);
@@ -94,6 +96,7 @@ public class MineSettingActivity extends ToolBarActivity implements View.OnClick
 
         }else {}
 
+        //设置极光推送通知的声音与震动
         JPushInterface.setSilenceTime(getApplicationContext(), 0, 0, 0, 0);
         BasicPushNotificationBuilder builder = new BasicPushNotificationBuilder(MineSettingActivity.this);
         if (!Arad.preferences.getBoolean("isSet")) {
@@ -122,6 +125,16 @@ public class MineSettingActivity extends ToolBarActivity implements View.OnClick
                 }
             }
         }
+
+        //设置停止推送，恢复推送
+        if(Arad.preferences.getBoolean("systemNotification")){
+            if (JPushInterface.isPushStopped(MineSettingActivity.this)){
+                JPushInterface.resumePush(getApplicationContext());
+            }
+        }else{
+            JPushInterface.stopPush(MineSettingActivity.this);
+        }
+
     }
 
     private void init() {
