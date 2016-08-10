@@ -700,7 +700,6 @@ public class InvitationFragment extends ToolBarFragment implements View.OnClickL
                         getActivity().startActivity(intent);
                         AnimUtil.intentSlidIn(getActivity());
                         break;
-
                 }
 
                 break;

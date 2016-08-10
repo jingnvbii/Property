@@ -142,6 +142,7 @@ public class MyBroadcastReceiver extends BroadcastReceiver{
             int notifactionId = bundle.getInt(JPushInterface.EXTRA_NOTIFICATION_ID);
             Log.d(TAG, "[MyReceiver] 接收到推送下来的通知的ID: " + notifactionId);
             // 在这里可以做些统计，或者做些其他工作.
+            Log.e("extras============",bundle.getString(JPushInterface.EXTRA_EXTRA));
 
             Intent itt = new Intent();
             itt.setAction("com.message");
@@ -187,7 +188,6 @@ public class MyBroadcastReceiver extends BroadcastReceiver{
             String message = bundle.getString(JPushInterface.EXTRA_MESSAGE);
 
             Log.e("messageKey===========", messageKey);
-            Log.e("messageKey===========",messageKey);
             startAiti(messageKey,context);
         } else {
             Log.d("TAG", "Unhandled intent - " + intent.getAction());
@@ -376,7 +376,7 @@ public class MyBroadcastReceiver extends BroadcastReceiver{
                 ii.putExtra("id",targetId);
                 ii.putExtra("msgId",msgId);
                 break;
-            case "0"://pingtai
+            case "0"://平台
                 ii = new Intent(context, InvitationDetailFromPlatformActivity.class);
                 ii.putExtra("id",targetId);
                 ii.putExtra("msgId",msgId);
@@ -470,7 +470,10 @@ public class MyBroadcastReceiver extends BroadcastReceiver{
                         ii = new Intent(context, MainActivity.class);
                         ii.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         //context.startActivity(ii);*/
-                        return;
+                        //return;
+
+                        /*ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+                        am.moveTaskToFront(get,ActivityManager.MOVE_TASK_WITH_HOME);*/
                     }
                     break;
                 default:
