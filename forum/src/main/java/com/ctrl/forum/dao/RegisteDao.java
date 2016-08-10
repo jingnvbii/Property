@@ -39,7 +39,7 @@ public class RegisteDao extends IDao {
         map.put("registIp", registIp);
         map.put("openId", openId);
         map.put("thirdloginType", thirdloginType);
-        postRequest(Constant.RAW_URL+url, mapToRP(map), 0);
+        postRequest(Constant.RAW_URL+url, mapToRP(map), 666);
     }
     /**
      * 短信验证码接口
@@ -54,7 +54,7 @@ public class RegisteDao extends IDao {
 
     @Override
     public void onRequestSuccess(JsonNode result, int requestCode) throws IOException {
-        if(requestCode == 0){
+        if(requestCode == 666){
             Log.d("demo","dao中结果集(注册): " + result);
         }
         if(requestCode == 1){

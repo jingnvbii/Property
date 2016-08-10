@@ -95,6 +95,8 @@ public class LoginActivity extends AppToolBarActivity implements View.OnClickLis
         ShareSDK.initSDK(this);
         initView();
 
+      // initShareSDK();
+
         mLocationClient = new LocationClient(getApplicationContext());     //声明LocationClient类
         mLocationClient.registerLocationListener(myListener);    //注册监听函数1
         initLocation();
@@ -103,6 +105,18 @@ public class LoginActivity extends AppToolBarActivity implements View.OnClickLis
         Context context = getWindow().getContext();
         TelephonyManager telephonemanage = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
         deviceImei = telephonemanage.getDeviceId();
+    }
+
+    private void initShareSDK() {
+        HashMap<String,Object> map = new HashMap<String,Object>();
+        map.put("Id","4");
+        map.put("SortId", "4");
+        map.put("AppId","wx80654af2048a86ac");
+        map.put("AppKey","64020361b8ec4c99936c0e3999a9f249");
+        map.put("ShareByAppClient","true");
+        map.put("Enable","true");
+        map.put("RedirectUrl", "http://www.sharesdk.cn");
+        ShareSDK.setPlatformDevInfo(Wechat.NAME,map);
     }
 
     @Override
@@ -330,6 +344,9 @@ public class LoginActivity extends AppToolBarActivity implements View.OnClickLis
                 authorize(new QQ(this));
                 break;
             case R.id.iv_weixin :
+             /*   Platform wechat= ShareSDK.getPlatform(Wechat.NAME);
+                wechat.setPlatformActionListener(this);
+                wechat.authorize();*/
                 authorize(new Wechat(this));
                 break;
             case R.id.ll_all:
@@ -436,7 +453,7 @@ public class LoginActivity extends AppToolBarActivity implements View.OnClickLis
     }
 
     private void authorize(Platform plat) {
-        if(plat.isValid()) {
+        if(plat.isAuthValid()) {
             String userId = plat.getDb().getUserId();
             if (!TextUtils.isEmpty(userId)) {
                 UIHandler.sendEmptyMessage(MSG_USERID_FOUND,this);
@@ -492,9 +509,9 @@ public class LoginActivity extends AppToolBarActivity implements View.OnClickLis
             }
             break;
             case MSG_LOGIN: {
-               // String text = getString(R.string.logining, msg.obj);
-              //  Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
-              //  System.out.println("---------------");
+                String text = getString(R.string.logining, msg.obj);
+                Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
+                System.out.println("---------------");
                 if(msg.getData().getString("name").equals(QQ.NAME)){
                     thirdLoginType="qq";
                 }else if(msg.getData().getString("name").equals(Wechat.NAME)){

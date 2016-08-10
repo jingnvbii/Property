@@ -634,7 +634,7 @@ public class InvitationFragment extends ToolBarFragment implements View.OnClickL
                         AnimUtil.intentSlidIn(getActivity());
                         break;
                     case "3"://外部链接
-                        Uri uri = Uri.parse(listRecommend.get(0).getTargetUrl());
+                        Uri uri = Uri.parse(listRecommend.get(0).getLinkUrl());
                         intent = new Intent(Intent.ACTION_VIEW, uri);
                         getActivity().startActivity(intent);
                         AnimUtil.intentSlidIn(getActivity());
@@ -664,7 +664,7 @@ public class InvitationFragment extends ToolBarFragment implements View.OnClickL
                         AnimUtil.intentSlidIn(getActivity());
                         break;
                     case "3"://外部链接
-                        Uri uri = Uri.parse(listRecommend.get(1).getTargetUrl());
+                        Uri uri = Uri.parse(listRecommend.get(1).getLinkUrl());
                         intent = new Intent(Intent.ACTION_VIEW, uri);
                         getActivity().startActivity(intent);
                         AnimUtil.intentSlidIn(getActivity());
@@ -695,7 +695,7 @@ public class InvitationFragment extends ToolBarFragment implements View.OnClickL
                         AnimUtil.intentSlidIn(getActivity());
                         break;
                     case "3"://外部链接
-                        Uri uri = Uri.parse(listRecommend.get(2).getTargetUrl());
+                        Uri uri = Uri.parse(listRecommend.get(2).getLinkUrl());
                         intent = new Intent(Intent.ACTION_VIEW, uri);
                         getActivity().startActivity(intent);
                         AnimUtil.intentSlidIn(getActivity());
@@ -725,7 +725,7 @@ public class InvitationFragment extends ToolBarFragment implements View.OnClickL
                         AnimUtil.intentSlidIn(getActivity());
                         break;
                     case "3"://外部链接
-                        Uri uri = Uri.parse(listRecommend.get(3).getTargetUrl());
+                        Uri uri = Uri.parse(listRecommend.get(3).getLinkUrl());
                         intent = new Intent(Intent.ACTION_VIEW, uri);
                         getActivity().startActivity(intent);
                         AnimUtil.intentSlidIn(getActivity());

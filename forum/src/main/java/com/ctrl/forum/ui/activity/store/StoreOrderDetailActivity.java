@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.beanu.arad.Arad;
 import com.beanu.arad.utils.AnimUtil;
 import com.beanu.arad.utils.JsonUtil;
+import com.beanu.arad.utils.MessageUtils;
 import com.ctrl.forum.R;
 import com.ctrl.forum.base.AppToolBarActivity;
 import com.ctrl.forum.cart.datasave.GoodsBean;
@@ -46,7 +47,7 @@ public class StoreOrderDetailActivity extends AppToolBarActivity implements View
             Button btn_jiesuan;
     @InjectView(R.id.tv_order_name)//收货人姓名和电话
             TextView tv_order_name;
-    @InjectView(R.id.tv_order_address)//收货人地址
+    @InjectView(R.id.tv_order_address)//收货人地址1
             TextView tv_order_address;
     @InjectView(R.id.tv_remark)//订单备注
             TextView tv_remark;
@@ -250,6 +251,10 @@ public class StoreOrderDetailActivity extends AppToolBarActivity implements View
             case R.id.btn_jiesuan:
                    /* odao.requestGenetateOrder(Arad.preferences.getString("memberId"), companyId, productStr, "4", "1", name, tel, province,
                             city, area, address, "1", "",Double.parseDouble(productsTotal));*/
+                   if(address==null){
+                       MessageUtils.showShortToast(this,"收货地址不能为空");
+                       return;
+                   }
                    odao.requestGenetateOrder(Arad.preferences.getString("memberId"), companyId, productStr2, couponId, amounts, name, tel, province,
                             city, area, address, "1", tv_remark.getText().toString().trim(),productsTotal);
 
