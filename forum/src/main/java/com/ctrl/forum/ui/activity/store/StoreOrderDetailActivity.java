@@ -47,7 +47,7 @@ public class StoreOrderDetailActivity extends AppToolBarActivity implements View
             Button btn_jiesuan;
     @InjectView(R.id.tv_order_name)//收货人姓名和电话
             TextView tv_order_name;
-    @InjectView(R.id.tv_order_address)//收货人地址
+    @InjectView(R.id.tv_order_address)//收货人地址1
             TextView tv_order_address;
     @InjectView(R.id.tv_remark)//订单备注
             TextView tv_remark;
