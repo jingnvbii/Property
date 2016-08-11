@@ -58,7 +58,6 @@ public class MineSettingActivity extends ToolBarActivity implements View.OnClick
         setContentView(R.layout.activity_mine_setting);
         ButterKnife.inject(this);
         init();
-
         receiver = new MyBroadcastReceiver();
         initJpush();
         //setJPush();
