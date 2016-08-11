@@ -2,6 +2,7 @@ package com.ctrl.forum.ui.activity.mine;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -403,6 +404,24 @@ public class MineQueryPostActivity extends AppToolBarActivity implements View.On
         }
     }
 
+    public String setTitle(Post post){
+        if (post.getTitle()==null || post.getTitle().equals("")){
+            return "莱州人";
+        }else{
+            return post.getTitle();
+        }
+    }
+
+    public void setBimp(Platform.ShareParams sp,Post post){
+        if (post.getPostImgList()==null || post.getPostImgList().size()==0){
+            Log.e("bimap==========","1235");
+            //设为图片路径
+            sp.setImageData(BitmapFactory.decodeResource(this.getResources(), R.mipmap.logo));
+        }else{
+            sp.setImageUrl(post.getPostImgList().get(0).getImg());//网络图片rul
+        }
+    }
+
     public void clickShare(final Post post){
         shareDialog = new ShareDialog(this);
         shareDialog.setCancelButtonOnClickListener(new View.OnClickListener() {
@@ -411,14 +430,18 @@ public class MineQueryPostActivity extends AppToolBarActivity implements View.On
                 shareDialog.dismiss();
             }
         });
+
         shareDialog.setQQButtonOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Platform.ShareParams sp = new Platform.ShareParams();
-                sp.setTitle("烟台项目");
+                /*sp.setTitle("烟台项目");
                 sp.setText("欢迎加入");
 
-                sp.setImageUrl("http://7sby7r.com1.z0.glb.clouddn.com/CYSJ_02.jpg");//网络图片rul
+                sp.setImageUrl("http://7sby7r.com1.z0.glb.clouddn.com/CYSJ_02.jpg");//网络图片rul*/
+
+                sp.setTitle(setTitle(post));
+                setBimp(sp, post);//设置标题与图片
                 //网友点进链接后，可以看到分享的详情
                 sp.setTitleUrl(Constant.SHARE_INVITION_URL + post.getId());
                 //3、非常重要：获取平台对象
@@ -435,9 +458,12 @@ public class MineQueryPostActivity extends AppToolBarActivity implements View.On
             public void onClick(View v) {
                 Platform.ShareParams sp = new Platform.ShareParams();
                 sp.setShareType(Platform.SHARE_WEBPAGE);//非常重要：一定要设置分享属性
-                sp.setTitle("烟台项目");  //分享标题
+               /* sp.setTitle("烟台项目");  //分享标题
                 sp.setText("欢迎加入");   //分享文本
-                sp.setImageUrl("http://7sby7r.com1.z0.glb.clouddn.com/CYSJ_02.jpg");//网络图片rul
+                sp.setImageUrl("http://7sby7r.com1.z0.glb.clouddn.com/CYSJ_02.jpg");//网络图片rul*/
+
+                sp.setTitle(setTitle(post));
+                setBimp(sp, post);//设置标题与图片
                 sp.setUrl(Constant.SHARE_INVITION_URL+ post.getId());
                 //3、非常重要：获取平台对象
                 Platform wechat = ShareSDK.getPlatform(Wechat.NAME);
@@ -452,9 +478,12 @@ public class MineQueryPostActivity extends AppToolBarActivity implements View.On
                 //2、设置分享内容
                 Platform.ShareParams sp = new Platform.ShareParams();
                 //sp.setText("我是新浪微博分享文本，啦啦啦~http://uestcbmi.com/"); //分享文本
-                sp.setText("我是新浪微博分享文本，啦啦啦~"+Constant.SHARE_INVITION_URL+post.getId());
+               /* sp.setText("我是新浪微博分享文本，啦啦啦~"+Constant.SHARE_INVITION_URL+post.getId());
                 sp.setImageUrl("http://7sby7r.com1.z0.glb.clouddn.com/CYSJ_02.jpg");//网络图片rul
-                sp.setUrl(Constant.SHARE_INVITION_URL+ post.getId());
+                sp.setUrl(Constant.SHARE_INVITION_URL+ post.getId());*/
+
+                setBimp(sp, post);//设置标题与图片
+                sp.setText(setTitle(post)+Constant.SHARE_INVITION_URL + post.getId());
                 //3、非常重要：获取平台对象
                 Platform sinaWeibo = ShareSDK.getPlatform(SinaWeibo.NAME);
                 sinaWeibo.setPlatformActionListener(MineQueryPostActivity.this); // 设置分享事件回调
@@ -469,10 +498,13 @@ public class MineQueryPostActivity extends AppToolBarActivity implements View.On
                 //2、设置分享内容
                 Platform.ShareParams sp = new Platform.ShareParams();
                 sp.setShareType(Platform.SHARE_WEBPAGE); //非常重要：一定要设置分享属性
-                sp.setTitle("我是朋友圈分享标题");  //分享标题
+                /*sp.setTitle("我是朋友圈分享标题");  //分享标题
                 sp.setText("我是朋友圈分享文本，啦啦啦~http://uestcbmi.com/");   //分享文本
                 sp.setImageUrl("http://7sby7r.com1.z0.glb.clouddn.com/CYSJ_02.jpg");//网络图片rul
-                sp.setUrl(Constant.SHARE_INVITION_URL+ post.getId());
+                sp.setUrl(Constant.SHARE_INVITION_URL+ post.getId());*/
+
+                setBimp(sp, post);//设置标题与图片
+                sp.setText(setTitle(post) + Constant.SHARE_INVITION_URL + post.getId());
                 //3、非常重要：获取平台对象
                 Platform wechatMoments = ShareSDK.getPlatform(WechatMoments.NAME);
                 wechatMoments.setPlatformActionListener(MineQueryPostActivity.this); // 设置分享事件回调
@@ -485,10 +517,13 @@ public class MineQueryPostActivity extends AppToolBarActivity implements View.On
             public void onClick(View v) {
                 //2、设置分享内容
                 Platform.ShareParams sp = new Platform.ShareParams();
-                sp.setTitle("我是腾讯微博分享标题");  //分享标题
+               /* sp.setTitle("我是腾讯微博分享标题");  //分享标题
                 //sp.setText("我是腾讯微博分享文本，啦啦啦~http://uestcbmi.com/");   //分享文本
                 sp.setImageUrl("http://7sby7r.com1.z0.glb.clouddn.com/CYSJ_02.jpg");//网络图片rul
-                sp.setText("我是腾讯微博分享文本，啦啦啦~" + Constant.SHARE_INVITION_URL + post.getId());
+                sp.setText("我是腾讯微博分享文本，啦啦啦~" + Constant.SHARE_INVITION_URL + post.getId());*/
+
+                setBimp(sp, post);//设置标题与图片
+                sp.setText(setTitle(post)+Constant.SHARE_INVITION_URL + post.getId());
                 //3、非常重要：获取平台对象
                 Platform tecentWeibo = ShareSDK.getPlatform(TencentWeibo.NAME);
                 tecentWeibo.setPlatformActionListener(MineQueryPostActivity.this); // 设置分享事件回调
@@ -502,10 +537,13 @@ public class MineQueryPostActivity extends AppToolBarActivity implements View.On
             public void onClick(View v) {
                 //2、设置分享内容
                 Platform.ShareParams sp = new Platform.ShareParams();
-                sp.setTitle("我是邮件分享标题");  //分享标题
+                /*sp.setTitle("我是邮件分享标题");  //分享标题
                 sp.setText("我是邮件分享文本，啦啦啦~"+Constant.SHARE_INVITION_URL+post.getId());
                 sp.setImageUrl("http://7sby7r.com1.z0.glb.clouddn.com/CYSJ_02.jpg");//网络图片rul
-                sp.setUrl(Constant.SHARE_INVITION_URL+ post.getId());
+                sp.setUrl(Constant.SHARE_INVITION_URL+ post.getId());*/
+
+                setBimp(sp, post);//设置标题与图片
+                sp.setText(setTitle(post)+Constant.SHARE_INVITION_URL + post.getId());
                 //3、非常重要：获取平台对象
                 Platform emailName = ShareSDK.getPlatform(Email.NAME);
                 emailName.setPlatformActionListener(MineQueryPostActivity.this); // 设置分享事件回调
@@ -518,10 +556,13 @@ public class MineQueryPostActivity extends AppToolBarActivity implements View.On
             public void onClick(View v) {
                 //2、设置分享内容
                 Platform.ShareParams sp = new Platform.ShareParams();
-                sp.setTitle("我是短信分享标题");  //分享标题
+               /* sp.setTitle("我是短信分享标题");  //分享标题
                 sp.setText("我是短信分享文本，啦啦啦~"+Constant.SHARE_INVITION_URL+post.getId());
                 sp.setImageUrl("http://7sby7r.com1.z0.glb.clouddn.com/CYSJ_02.jpg");//网络图片rul
-                sp.setUrl(Constant.SHARE_INVITION_URL+ post.getId());
+                sp.setUrl(Constant.SHARE_INVITION_URL+ post.getId());*/
+
+                setBimp(sp, post);//设置标题与图片
+                sp.setText(setTitle(post)+Constant.SHARE_INVITION_URL + post.getId());
                 //3、非常重要：获取平台对象
                 Platform shortMessage = ShareSDK.getPlatform(ShortMessage.NAME);
                 shortMessage.setPlatformActionListener(MineQueryPostActivity.this); // 设置分享事件回调

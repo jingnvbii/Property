@@ -29,7 +29,7 @@ import cn.jpush.android.api.JPushInterface;
  * 系统设置
  */
 public class MineSettingActivity extends ToolBarActivity implements View.OnClickListener{
-    @InjectView(R.id.iv_system_notification) //系统通知
+    @InjectView(R.id.iv_system_notification) //是否推送
     CheckBox iv_system_notification;
     @InjectView(R.id.iv_reply_comments)  //评论回复
     CheckBox iv_reply_comments;
@@ -50,6 +50,8 @@ public class MineSettingActivity extends ToolBarActivity implements View.OnClick
     @InjectView(R.id.iv_clear)
     TextView iv_clear;
     MyBroadcastReceiver receiver;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,7 +70,6 @@ public class MineSettingActivity extends ToolBarActivity implements View.OnClick
     }
 
     private void setJPush() {
-
         //设置夜间免大佬模式
         if (Arad.preferences.getBoolean("nightNoMessage")){//夜间免打捞
             Set<Integer> days = new HashSet<>();
@@ -93,7 +94,6 @@ public class MineSettingActivity extends ToolBarActivity implements View.OnClick
         }
 
         if (Arad.preferences.getBoolean("desktopIconHints")){ //桌面图标提示
-
         }else {}
 
         //设置极光推送通知的声音与震动
@@ -134,7 +134,6 @@ public class MineSettingActivity extends ToolBarActivity implements View.OnClick
         }else{
             JPushInterface.stopPush(MineSettingActivity.this);
         }
-
     }
 
     private void init() {

@@ -1,6 +1,7 @@
 package com.ctrl.forum.ui.fragment;
 
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -693,6 +694,24 @@ public class PlotFragment extends ToolBarFragment implements View.OnClickListene
         super.onActivityResult(requestCode, resultCode, data);
     }
 
+    public String setTitle(Post post){
+        if (post.getTitle()==null || post.getTitle().equals("")){
+            return "莱州人";
+        }else{
+            return post.getTitle();
+        }
+    }
+
+    public void setBimp(Platform.ShareParams sp,Post post){
+        if (post.getPostImgList()==null || post.getPostImgList().size()==0){
+            Log.e("bimap==========","1235");
+            //设为图片路径
+            sp.setImageData(BitmapFactory.decodeResource(getActivity().getResources(), R.mipmap.logo));
+        }else{
+            sp.setImageUrl(post.getPostImgList().get(0).getImg());//网络图片rul
+        }
+    }
+
     public void clickShare(final Post post){
         shareDialog = new ShareDialog(getActivity());
         shareDialog.setCancelButtonOnClickListener(new View.OnClickListener() {
@@ -705,11 +724,12 @@ public class PlotFragment extends ToolBarFragment implements View.OnClickListene
             @Override
             public void onClick(View v) {
                 Platform.ShareParams sp = new Platform.ShareParams();
-                sp.setTitle("烟台项目");
-                sp.setText("欢迎加入");
+               /* sp.setTitle("烟台项目");
+                sp.setText("欢迎加入");*/
 
-                sp.setImageUrl("http://7sby7r.com1.z0.glb.clouddn.com/CYSJ_02.jpg");//网络图片rul
-                //sp.setTitleUrl("http://7sby7r.com1.z0.glb.clouddn.com/CYSJ_02.jpg");  //网友点进链接后，可以看到分享的详情
+                sp.setTitle(setTitle(post));
+                sp.setText(post.getContent());
+                setBimp(sp,post);
                 sp.setTitleUrl(Constant.SHARE_INVITION_URL + post.getId());
                 //3、非常重要：获取平台对象
                 Platform qq = ShareSDK.getPlatform(QQ.NAME);
@@ -725,10 +745,14 @@ public class PlotFragment extends ToolBarFragment implements View.OnClickListene
             public void onClick(View v) {
                 Platform.ShareParams sp = new Platform.ShareParams();
                 sp.setShareType(Platform.SHARE_WEBPAGE);//非常重要：一定要设置分享属性
-                sp.setTitle("烟台项目");  //分享标题
+               /* sp.setTitle("烟台项目");  //分享标题
                 sp.setText("欢迎加入");   //分享文本
-                sp.setImageUrl("http://7sby7r.com1.z0.glb.clouddn.com/CYSJ_02.jpg");//网络图片rul
+                sp.setImageUrl("http://7sby7r.com1.z0.glb.clouddn.com/CYSJ_02.jpg");//网络图片rul*/
                 //sp.setUrl("http://7sby7r.com1.z0.glb.clouddn.com/CYSJ_02.jpg");   //网友点进链接后，可以看到分享的详情
+
+                sp.setText(post.getContent());
+                sp.setTitle(setTitle(post));
+                setBimp(sp, post);//设置标题与图片
                 sp.setUrl(Constant.SHARE_INVITION_URL + post.getId());
 
                 //3、非常重要：获取平台对象
@@ -746,8 +770,10 @@ public class PlotFragment extends ToolBarFragment implements View.OnClickListene
                 //sp.setText("我是新浪微博分享文本，啦啦啦~http://uestcbmi.com/"); //分享文本
                 //sp.setImageUrl("http://7sby7r.com1.z0.glb.clouddn.com/CYSJ_02.jpg");//网络图片rul
                 //sp.setUrl(Constant.SHARE_INVITION_URL + post.getId());
-                sp.setText("我是新浪微博分享文本，啦啦啦~"+Constant.SHARE_INVITION_URL+post.getId());   //分享文本
+                //sp.setText("我是新浪微博分享文本，啦啦啦~"+Constant.SHARE_INVITION_URL+post.getId());   //分享文本
 
+                setBimp(sp, post);//设置标题与图片
+                sp.setText(setTitle(post)+Constant.SHARE_INVITION_URL + post.getId());
                 //3、非常重要：获取平台对象
                 Platform sinaWeibo = ShareSDK.getPlatform(SinaWeibo.NAME);
                 sinaWeibo.setPlatformActionListener(PlotFragment.this); // 设置分享事件回调
@@ -765,7 +791,9 @@ public class PlotFragment extends ToolBarFragment implements View.OnClickListene
                 sp.setText("我是朋友圈分享文本，啦啦啦~http://uestcbmi.com/");   //分享文本
                 sp.setImageUrl("http://7sby7r.com1.z0.glb.clouddn.com/CYSJ_02.jpg");//网络图片rul
                 sp.setUrl("http://sharesdk.cn");   //网友点进链接后，可以看到分享的详情*/
-                sp.setUrl(Constant.SHARE_INVITION_URL + post.getId());
+
+                setBimp(sp, post);//设置标题与图片
+                sp.setText(setTitle(post)+Constant.SHARE_INVITION_URL + post.getId());
                 //3、非常重要：获取平台对象
                 Platform wechatMoments = ShareSDK.getPlatform(WechatMoments.NAME);
                 wechatMoments.setPlatformActionListener(PlotFragment.this); // 设置分享事件回调
@@ -783,9 +811,10 @@ public class PlotFragment extends ToolBarFragment implements View.OnClickListene
                 sp.setImageUrl("http://7sby7r.com1.z0.glb.clouddn.com/CYSJ_02.jpg");//网络图片rul
                 sp.setUrl("http://sharesdk.cn");   //网友点进链接后，可以看到分享的详情*/
                // sp.setUrl(Constant.SHARE_INVITION_URL+post.getId());
+                //sp.setText("我是腾讯微博分享文本，啦啦啦~"+Constant.SHARE_INVITION_URL+post.getId());   //分享文本
 
-                sp.setText("我是腾讯微博分享文本，啦啦啦~"+Constant.SHARE_INVITION_URL+post.getId());   //分享文本
-
+                setBimp(sp, post);//设置标题与图片
+                sp.setText(setTitle(post)+Constant.SHARE_INVITION_URL + post.getId());
                 //3、非常重要：获取平台对象
                 Platform tecentWeibo = ShareSDK.getPlatform(TencentWeibo.NAME);
                 tecentWeibo.setPlatformActionListener(PlotFragment.this); // 设置分享事件回调
@@ -803,7 +832,9 @@ public class PlotFragment extends ToolBarFragment implements View.OnClickListene
                 sp.setText("我是邮件分享文本，啦啦啦~http://uestcbmi.com/");   //分享文本
                 sp.setImageUrl("http://7sby7r.com1.z0.glb.clouddn.com/CYSJ_02.jpg");//网络图片rul
                 sp.setUrl("http://sharesdk.cn");   //网友点进链接后，可以看到分享的详情*/
-                sp.setText("我是邮件分享文本，啦啦啦~" + Constant.SHARE_INVITION_URL + post.getId());
+
+                setBimp(sp, post);//设置标题与图片
+                sp.setText(setTitle(post)+Constant.SHARE_INVITION_URL + post.getId());
                 //3、非常重要：获取平台对象
                 Platform emailName = ShareSDK.getPlatform(Email.NAME);
                 emailName.setPlatformActionListener(PlotFragment.this); // 设置分享事件回调
@@ -811,6 +842,7 @@ public class PlotFragment extends ToolBarFragment implements View.OnClickListene
                 emailName.share(sp);
             }
         });
+
         shareDialog.setDuanXinButtonOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -820,7 +852,9 @@ public class PlotFragment extends ToolBarFragment implements View.OnClickListene
                 sp.setText("我是短信分享文本，啦啦啦~http://uestcbmi.com/");   //分享文本
                 sp.setImageUrl("http://7sby7r.com1.z0.glb.clouddn.com/CYSJ_02.jpg");//网络图片rul
                 sp.setUrl("http://sharesdk.cn");   //网友点进链接后，可以看到分享的详情*/
-                sp.setText("我是短信分享文本，啦啦啦~" + Constant.SHARE_INVITION_URL + post.getId());
+
+                setBimp(sp, post);//设置标题与图片
+                sp.setText(setTitle(post)+Constant.SHARE_INVITION_URL + post.getId());
                 //3、非常重要：获取平台对象
                 Platform shortMessage = ShareSDK.getPlatform(ShortMessage.NAME);
                 shortMessage.setPlatformActionListener(PlotFragment.this); // 设置分享事件回调
