@@ -390,13 +390,6 @@ public class InvitationPullDownHaveThirdKindFragment extends ToolBarFragment {
         return view;
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        invitationListViewAdapter=null;
-        mInvitationListViewBlockStyleAdapter=null;
-        mInvitationListViewFriendStyleAdapter=null;
-    }
 
     private void initData() {
         //  horizontalScrollView = (HorizontalScrollView) headview.findViewById(R.id.scrollView);

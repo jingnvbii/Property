@@ -45,6 +45,7 @@ public class JasonViewPagerAdapter extends FragmentPagerAdapter {
         return fgs.size();// 返回选项卡总数
     }
 
+
     @Override
     public int getItemPosition(Object object)
     {

@@ -172,16 +172,12 @@ public class InvitationPullDownActivity extends ToolBarActivity implements View.
     protected void onDestroy() {
         super.onDestroy();
         ShareSDK.stopSDK(this);
-        idao=null;
-        //elvAdapter=null;
-        myRadioGroup=null;
-        mPopupWindow=null;
-        invitationPullDownHaveThirdKindPinterestStyleFragment=null;
-        invitationPullDownHaveThirdKindFragment=null;
-        viewPagerAdapter=null;
-        list=null;
+       /* if(fragments!=null)
+            fragments.clear();
+        if(list!=null)
+            list.clear();
         fragments=null;
-        handler.removeCallbacksAndMessages(null);
+        list=null;*/
         MyApplication.getInstance().removeActivity(this);
     }
 
@@ -332,7 +328,7 @@ public class InvitationPullDownActivity extends ToolBarActivity implements View.
                 viewPagerAdapter.setPagerItems(list);
             }
         });
-        viewpager_invitation_pull_down.setOffscreenPageLimit(3);
+        viewpager_invitation_pull_down.setOffscreenPageLimit(listCategory.size());
     }
 
     public JasonViewPagerAdapter getAdapter(){
@@ -497,6 +493,9 @@ public class InvitationPullDownActivity extends ToolBarActivity implements View.
 
         return true;
     }*/
+
+
+
 
     @Override
     public void onClick(View v) {

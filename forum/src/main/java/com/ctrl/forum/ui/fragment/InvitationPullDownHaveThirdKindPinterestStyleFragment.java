@@ -119,21 +119,6 @@ public class InvitationPullDownHaveThirdKindPinterestStyleFragment extends ToolB
         adapter = new InvitationPullDownGridViewAdapter(getActivity());
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-     //   mInvitationListViewPinterestStyleAdapter=null;
-        adapter=null;
-        idao=null;
-        recyclerAdapter=null;
-    /*    listPost.clear();
-        listBanner.clear();
-        listCategroy3.clear();*/
-        listPost=null;
-        listBanner=null;
-        listCategroy3=null;
-        handler.removeCallbacksAndMessages(null);
-    }
 
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
