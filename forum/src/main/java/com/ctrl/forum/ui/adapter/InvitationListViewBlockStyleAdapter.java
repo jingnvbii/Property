@@ -13,7 +13,6 @@ import com.beanu.arad.Arad;
 import com.ctrl.forum.R;
 import com.ctrl.forum.customview.RecyclableImageView;
 import com.ctrl.forum.entity.Post;
-import com.ctrl.forum.entity.PostImage;
 import com.ctrl.forum.utils.TimeUtils;
 
 import java.util.List;
@@ -28,12 +27,7 @@ import butterknife.InjectView;
 public class InvitationListViewBlockStyleAdapter extends BaseAdapter {
     private Context mcontext;
     private List<Post> mPostList;
-    private List<PostImage> mPostImageList;
     private LayoutInflater inflter;
-
-    private List<PostImage> imageList;
-
-
     public InvitationListViewBlockStyleAdapter(Context context) {
         this.mcontext = context;
     }
@@ -63,7 +57,6 @@ public class InvitationListViewBlockStyleAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder = null;
-
         int type = getItemViewType(position);
         if (convertView == null) {
             inflter = LayoutInflater.from(mcontext);

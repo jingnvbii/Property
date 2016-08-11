@@ -28,7 +28,6 @@ import butterknife.InjectView;
  */
 public class InvitationListViewForRelateAdapter extends BaseAdapter{
     private Context mcontext;
-    private List<PostImage>mPostImageList;
     private LayoutInflater inflter;
     private List<RelateMap> mListRelateMap;
 

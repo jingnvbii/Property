@@ -423,10 +423,9 @@ public class InvitationPinerestGalleyActivity extends ToolBarActivity implements
                     @Override
                     public void onClick(View v) {
                         Platform.ShareParams sp = new Platform.ShareParams();
-                        sp.setTitle("烟台项目");
-                        sp.setText("欢迎加入");
-
-                        sp.setImageUrl(getIntent().getStringExtra("qrImgUrl"));//网络图片rul
+                        sp.setTitle(post.getTitle());
+                        sp.setText(post.getContent()); //分享文本
+                        setImage(sp);
                         sp.setTitleUrl(Constant.SHARE_INVITION_URL+post.getId());  //网友点进链接后，可以看到分享的详情
                         //3、非常重要：获取平台对象
                         Platform qq = ShareSDK.getPlatform(QQ.NAME);
@@ -442,9 +441,9 @@ public class InvitationPinerestGalleyActivity extends ToolBarActivity implements
                     public void onClick(View v) {
                         Platform.ShareParams sp = new Platform.ShareParams();
                         sp.setShareType(Platform.SHARE_WEBPAGE);//非常重要：一定要设置分享属性
-                        sp.setTitle("烟台项目");  //分享标题
-                        sp.setText("欢迎加入");   //分享文本
-                        sp.setImageUrl(getIntent().getStringExtra("qrImgUrl"));//网络图片rul
+                        sp.setTitle(post.getTitle());
+                        sp.setText(post.getContent()); //分享文本
+                        setImage(sp);
                         sp.setUrl(Constant.SHARE_INVITION_URL+post.getId());   //网友点进链接后，可以看到分享的详情
 
                         //3、非常重要：获取平台对象
@@ -459,8 +458,9 @@ public class InvitationPinerestGalleyActivity extends ToolBarActivity implements
                     public void onClick(View v) {
                         //2、设置分享内容
                         Platform.ShareParams sp = new Platform.ShareParams();
-                        sp.setText("我是新浪微博分享文本，啦啦啦~"+Constant.SHARE_INVITION_URL+post.getId()); //分享文本
-                        sp.setImageUrl("http://7sby7r.com1.z0.glb.clouddn.com/CYSJ_02.jpg");//网络图片rul
+                        sp.setTitle(post.getTitle());
+                        sp.setText(post.getContent() + Constant.SHARE_INVITION_URL + post.getId()); //分享文本
+                        setImage(sp);
                         sp.setUrl(Constant.SHARE_INVITION_URL+post.getId());
                         //3、非常重要：获取平台对象
                         Platform sinaWeibo = ShareSDK.getPlatform(SinaWeibo.NAME);
@@ -476,9 +476,9 @@ public class InvitationPinerestGalleyActivity extends ToolBarActivity implements
                         //2、设置分享内容
                         Platform.ShareParams sp = new Platform.ShareParams();
                         sp.setShareType(Platform.SHARE_WEBPAGE); //非常重要：一定要设置分享属性
-                        sp.setTitle("我是朋友圈分享标题");  //分享标题
-                        sp.setText("我是朋友圈分享文本，啦啦啦~http://uestcbmi.com/");   //分享文本
-                        sp.setImageUrl("http://7sby7r.com1.z0.glb.clouddn.com/CYSJ_02.jpg");//网络图片rul
+                        sp.setTitle(post.getTitle());
+                        sp.setText(post.getContent()); //分享文本
+                        setImage(sp);
                         sp.setUrl(Constant.SHARE_INVITION_URL+post.getId());   //网友点进链接后，可以看到分享的详情
                         //3、非常重要：获取平台对象
                         Platform wechatMoments = ShareSDK.getPlatform(WechatMoments.NAME);
@@ -492,9 +492,9 @@ public class InvitationPinerestGalleyActivity extends ToolBarActivity implements
                     public void onClick(View v) {
                         //2、设置分享内容
                         Platform.ShareParams sp = new Platform.ShareParams();
-                        sp.setTitle("我是腾讯微博分享标题");  //分享标题
-                        sp.setText("我是腾讯微博分享文本，啦啦啦~" + Constant.SHARE_INVITION_URL + post.getId());   //分享文本
-                        sp.setImageUrl("http://7sby7r.com1.z0.glb.clouddn.com/CYSJ_02.jpg");//网络图片rul
+                        sp.setTitle(post.getTitle());
+                        sp.setText(post.getContent()+Constant.SHARE_INVITION_URL+post.getId()); //分享文本
+                        setImage(sp);
                         //3、非常重要：获取平台对象
                         Platform tecentWeibo = ShareSDK.getPlatform(TencentWeibo.NAME);
                         tecentWeibo.setPlatformActionListener(InvitationPinerestGalleyActivity.this); // 设置分享事件回调
@@ -508,9 +508,9 @@ public class InvitationPinerestGalleyActivity extends ToolBarActivity implements
                     public void onClick(View v) {
                         //2、设置分享内容
                         Platform.ShareParams sp = new Platform.ShareParams();
-                        sp.setTitle("我是邮件分享标题");  //分享标题
-                        sp.setText("我是邮件分享文本，啦啦啦~" + Constant.SHARE_INVITION_URL + post.getId());   //分享文本
-                        sp.setImageUrl("http://7sby7r.com1.z0.glb.clouddn.com/CYSJ_02.jpg");//网络图片rul
+                        sp.setTitle(post.getTitle());
+                        sp.setText(post.getContent()+Constant.SHARE_INVITION_URL+post.getId()); //分享文本
+                        setImage(sp);
                         //3、非常重要：获取平台对象
                         Platform emailName = ShareSDK.getPlatform(Email.NAME);
                         emailName.setPlatformActionListener(InvitationPinerestGalleyActivity.this); // 设置分享事件回调
@@ -523,9 +523,9 @@ public class InvitationPinerestGalleyActivity extends ToolBarActivity implements
                     public void onClick(View v) {
                         //2、设置分享内容
                         Platform.ShareParams sp = new Platform.ShareParams();
-                        sp.setTitle("我是短信分享标题");  //分享标题
-                        sp.setText("我是短信分享文本，啦啦啦~" + Constant.SHARE_INVITION_URL + post.getId());   //分享文本
-                        sp.setImageUrl("http://7sby7r.com1.z0.glb.clouddn.com/CYSJ_02.jpg");//网络图片rul
+                        sp.setTitle(post.getTitle());
+                        sp.setText(post.getContent()+Constant.SHARE_INVITION_URL+post.getId()); //分享文本
+                        setImage(sp);
                         //3、非常重要：获取平台对象
                         Platform shortMessage = ShareSDK.getPlatform(ShortMessage.NAME);
                         shortMessage.setPlatformActionListener(InvitationPinerestGalleyActivity.this); // 设置分享事件回调
@@ -548,6 +548,14 @@ public class InvitationPinerestGalleyActivity extends ToolBarActivity implements
             case R.id.iv_gallery_back:
                 onBackPressed();
                 break;
+        }
+    }
+
+    private void setImage(Platform.ShareParams sp) {
+        if(idao.getListPostImage()!=null&&idao.getListPostImage().size()>0){
+            sp.setImageUrl(idao.getListPostImage().get(0).getImg());
+        }else {
+            sp.setImagePath(Constant.SHARE_IMAGE_PATH);
         }
     }
 

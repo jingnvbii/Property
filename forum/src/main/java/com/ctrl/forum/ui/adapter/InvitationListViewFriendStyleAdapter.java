@@ -57,12 +57,10 @@ import cn.sharesdk.wechat.moments.WechatMoments;
 public class InvitationListViewFriendStyleAdapter extends BaseAdapter {
     private Activity mcontext;
     private List<Post> mPostList;
-    private List<PostImage> mPostImageList;
     private LayoutInflater inflter;
 
     private int wh;
 
-    private List<PostImage> imageList;
     private FriendGridAdapter friendInfoImgsAdapter;
     private PopupWindow popupWindow;
     private PopupWindow popupWindow_share;
@@ -232,10 +230,9 @@ public class InvitationListViewFriendStyleAdapter extends BaseAdapter {
                     @Override
                     public void onClick(View v) {
                         Platform.ShareParams sp = new Platform.ShareParams();
-                        sp.setTitle("烟台项目");
-                        sp.setText("欢迎加入");
-
-                        sp.setImageUrl("http://7sby7r.com1.z0.glb.clouddn.com/CYSJ_02.jpg");//网络图片rul
+                        sp.setTitle(post.getTitle());
+                        sp.setText(post.getContent());
+                        setImage(post,sp);
                         sp.setTitleUrl(Constant.SHARE_INVITION_URL+post.getId());  //网友点进链接后，可以看到分享的详情
                         //3、非常重要：获取平台对象
                         Platform qq = ShareSDK.getPlatform(QQ.NAME);
@@ -251,9 +248,9 @@ public class InvitationListViewFriendStyleAdapter extends BaseAdapter {
                     public void onClick(View v) {
                         Platform.ShareParams sp = new Platform.ShareParams();
                         sp.setShareType(Platform.SHARE_WEBPAGE);//非常重要：一定要设置分享属性
-                        sp.setTitle("烟台项目");  //分享标题
-                        sp.setText("欢迎加入");   //分享文本
-                        sp.setImageUrl("http://7sby7r.com1.z0.glb.clouddn.com/CYSJ_02.jpg");//网络图片rul
+                        sp.setTitle(post.getTitle());
+                        sp.setText(post.getContent());
+                        setImage(post, sp);
                         sp.setUrl(Constant.SHARE_INVITION_URL+post.getId());   //网友点进链接后，可以看到分享的详情
 
                         //3、非常重要：获取平台对象
@@ -268,8 +265,9 @@ public class InvitationListViewFriendStyleAdapter extends BaseAdapter {
                     public void onClick(View v) {
                         //2、设置分享内容
                         Platform.ShareParams sp = new Platform.ShareParams();
-                        sp.setText("我是新浪微博分享文本，啦啦啦~"+Constant.SHARE_INVITION_URL+post.getId()); //分享文本
-                        sp.setImageUrl("http://7sby7r.com1.z0.glb.clouddn.com/CYSJ_02.jpg");//网络图片rul
+                        sp.setTitle(post.getTitle());
+                        sp.setText(post.getContent()+Constant.SHARE_INVITION_URL+post.getId());
+                        setImage(post, sp);
                         sp.setUrl(Constant.SHARE_INVITION_URL+post.getId());
                         //3、非常重要：获取平台对象
                         Platform sinaWeibo = ShareSDK.getPlatform(SinaWeibo.NAME);
@@ -285,9 +283,9 @@ public class InvitationListViewFriendStyleAdapter extends BaseAdapter {
                         //2、设置分享内容
                         Platform.ShareParams sp = new Platform.ShareParams();
                         sp.setShareType(Platform.SHARE_WEBPAGE); //非常重要：一定要设置分享属性
-                        sp.setTitle("我是朋友圈分享标题");  //分享标题
-                        sp.setText("我是朋友圈分享文本，啦啦啦~http://uestcbmi.com/");   //分享文本
-                        sp.setImageUrl("http://7sby7r.com1.z0.glb.clouddn.com/CYSJ_02.jpg");//网络图片rul
+                        sp.setTitle(post.getTitle());
+                        sp.setText(post.getContent());
+                        setImage(post, sp);
                         sp.setUrl(Constant.SHARE_INVITION_URL+post.getId());   //网友点进链接后，可以看到分享的详情
                         //3、非常重要：获取平台对象
                         Platform wechatMoments = ShareSDK.getPlatform(WechatMoments.NAME);
@@ -301,9 +299,9 @@ public class InvitationListViewFriendStyleAdapter extends BaseAdapter {
                     public void onClick(View v) {
                         //2、设置分享内容
                         Platform.ShareParams sp = new Platform.ShareParams();
-                        sp.setTitle("我是腾讯微博分享标题");  //分享标题
-                        sp.setText("我是腾讯微博分享文本，啦啦啦~"+Constant.SHARE_INVITION_URL+post.getId());   //分享文本
-                        sp.setImageUrl("http://7sby7r.com1.z0.glb.clouddn.com/CYSJ_02.jpg");//网络图片rul
+                        sp.setTitle(post.getTitle());
+                        sp.setText(post.getContent()+Constant.SHARE_INVITION_URL+post.getId());
+                        setImage(post, sp);
                         sp.setUrl(Constant.SHARE_INVITION_URL+post.getId());   //网友点进链接后，可以看到分享的详情
                         //3、非常重要：获取平台对象
                         Platform tecentWeibo = ShareSDK.getPlatform(TencentWeibo.NAME);
@@ -318,9 +316,9 @@ public class InvitationListViewFriendStyleAdapter extends BaseAdapter {
                     public void onClick(View v) {
                         //2、设置分享内容
                         Platform.ShareParams sp = new Platform.ShareParams();
-                        sp.setTitle("我是邮件分享标题");  //分享标题
-                        sp.setText("我是邮件分享文本，啦啦啦~"+Constant.SHARE_INVITION_URL+post.getId());   //分享文本
-                        sp.setImageUrl("http://7sby7r.com1.z0.glb.clouddn.com/CYSJ_02.jpg");//网络图片rul
+                        sp.setTitle(post.getTitle());
+                        sp.setText(post.getContent()+Constant.SHARE_INVITION_URL+post.getId());
+                        setImage(post, sp);
                         sp.setUrl(Constant.SHARE_INVITION_URL+post.getId());   //网友点进链接后，可以看到分享的详情
                         //3、非常重要：获取平台对象
                         Platform emailName = ShareSDK.getPlatform(Email.NAME);
@@ -334,9 +332,9 @@ public class InvitationListViewFriendStyleAdapter extends BaseAdapter {
                     public void onClick(View v) {
                         //2、设置分享内容
                         Platform.ShareParams sp = new Platform.ShareParams();
-                        sp.setTitle("我是短信分享标题");  //分享标题
-                        sp.setText("我是短信分享文本，啦啦啦~"+Constant.SHARE_INVITION_URL+post.getId());   //分享文本
-                        sp.setImageUrl("http://7sby7r.com1.z0.glb.clouddn.com/CYSJ_02.jpg");//网络图片rul
+                        sp.setTitle(post.getTitle());
+                        sp.setText(post.getContent()+Constant.SHARE_INVITION_URL+post.getId());
+                        setImage(post, sp);
                         sp.setUrl(Constant.SHARE_INVITION_URL+post.getId());   //网友点进链接后，可以看到分享的详情
                         //3、非常重要：获取平台对象
                         Platform shortMessage = ShareSDK.getPlatform(ShortMessage.NAME);
@@ -390,6 +388,14 @@ public class InvitationListViewFriendStyleAdapter extends BaseAdapter {
         holder.setPosition(position);
         setOnListtener(holder);
         return convertView;
+    }
+
+    private void setImage(Post post, Platform.ShareParams sp) {
+        if(post.getPostImgList()!=null&post.getPostImgList().size()>0){
+            sp.setImageUrl(post.getPostImgList().get(0).getImg());
+        }else {
+            sp.setImagePath(Constant.SHARE_IMAGE_PATH);
+        }
     }
 
     //触发
@@ -476,6 +482,7 @@ public class InvitationListViewFriendStyleAdapter extends BaseAdapter {
                 }
                 InvitationPullDownActivity activity=(InvitationPullDownActivity)mcontext;
                 activity.requeMemberBlackListAdd(post.getReporterId(), popupWindow);
+                activity=null;
 
             }
         });
