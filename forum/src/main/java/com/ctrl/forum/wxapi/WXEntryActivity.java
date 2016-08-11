@@ -30,6 +30,7 @@ public class WXEntryActivity extends WechatHandlerActivity {
 		startActivity(iLaunchMyself);
 	}
 
+
 	/**
 	 * 处理微信向第三方应用发起的消息
 	 * <p>

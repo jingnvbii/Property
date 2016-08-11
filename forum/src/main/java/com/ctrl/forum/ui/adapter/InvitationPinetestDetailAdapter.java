@@ -40,7 +40,6 @@ import butterknife.InjectView;
 public class InvitationPinetestDetailAdapter extends BaseAdapter  {
     private Context mcontext;
     private List<PostReply2> list;
-    private View viewanim;
 
 
     //  private String soundUrl;
@@ -158,6 +157,7 @@ public class InvitationPinetestDetailAdapter extends BaseAdapter  {
                     public void onClick(View v) {
                         InvitationPinterestDetailActivity activity = (InvitationPinterestDetailActivity) mcontext;
                         activity.playSound(v, mPostReply2.getSoundUrl());
+                        activity=null;
                     }
                 });
             } else {
@@ -282,6 +282,7 @@ public class InvitationPinetestDetailAdapter extends BaseAdapter  {
                     public void onClick(View v) {
                         InvitationPinterestDetailActivity activity = (InvitationPinterestDetailActivity) mcontext;
                         activity.playSound(v, mPostReply2.getSoundUrl());
+                        activity=null;
                     }
                 });
                 holder.rl_pinglun.setVisibility(View.VISIBLE);
@@ -303,6 +304,7 @@ public class InvitationPinetestDetailAdapter extends BaseAdapter  {
                     public void onClick(View v) {
                         InvitationPinterestDetailActivity activity = (InvitationPinterestDetailActivity) mcontext;
                         activity.playSound(v, mPostReply2.getSoundUrl());
+                        activity=null;
                     }
                 });
                 holder.tv_pinglun_title.setText("引用  " + mPostReply2.getReceiverName() + "  的回复");
@@ -334,6 +336,7 @@ public class InvitationPinetestDetailAdapter extends BaseAdapter  {
                 //
                 InvitationPinterestDetailActivity activity=(InvitationPinterestDetailActivity)mcontext;
                 activity.replyPinglun(position);
+                activity=null;
 
             }
         });

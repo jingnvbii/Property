@@ -96,6 +96,9 @@ public class Constant {
     public static final String MALL_COMMENT_LIST_BAD = "bad";
 
 
+    public static  String SHARE_IMAGE_PATH = "";
+
+
     /**
      * 时间 类型 - Eric - 20151013
      */

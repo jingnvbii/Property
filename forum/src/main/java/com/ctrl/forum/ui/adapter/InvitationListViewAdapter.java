@@ -15,7 +15,6 @@ import com.ctrl.forum.R;
 import com.ctrl.forum.customview.RecyclableImageView;
 import com.ctrl.forum.customview.RoundImageView;
 import com.ctrl.forum.entity.Post;
-import com.ctrl.forum.entity.PostImage;
 import com.ctrl.forum.utils.TimeUtils;
 
 import java.util.List;
@@ -30,12 +29,7 @@ import butterknife.InjectView;
 public class InvitationListViewAdapter extends BaseAdapter{
     private Activity mcontext;
     private List<Post>mPostList;
-    private List<PostImage>mPostImageList;
     private LayoutInflater inflter;
-
-    private List<PostImage> imageList;
-
-
 
     public InvitationListViewAdapter(Activity context) {
                this.mcontext=context;
@@ -158,35 +152,35 @@ public class InvitationListViewAdapter extends BaseAdapter{
 
             }
             }
-      //  Post post=mPostList.get(position);
+        Post post=mPostList.get(position);
         switch (type){
             case 0:
-                Post mPost1 = mPostList.get(position);
-                if(mPost1==null){break;}
-                holder1.tv_titile0.setText(mPost1.getTitle());
-                holder1.tv_name0.setText(mPost1.getMemberName());
-                if(mPost1.getBlurbs()!=null&&!mPost1.getBlurbs().equals("")){
+               // Post mPost1 = mPostList.get(position);
+                if(post==null){break;}
+                holder1.tv_titile0.setText(post.getTitle());
+                holder1.tv_name0.setText(post.getMemberName());
+                if(post.getBlurbs()!=null&&!post.getBlurbs().equals("")){
                     holder1.tv_daoyu.setVisibility(View.VISIBLE);
-                    holder1.tv_daoyu.setText(mPost1.getBlurbs());
+                    holder1.tv_daoyu.setText(post.getBlurbs());
                 }else {
                     holder1.tv_daoyu.setVisibility(View.GONE);
                 }
-                if(mPost1.getPublishTime()!=null)
-                holder1.tv_time0.setText(TimeUtils.dateTime(mPost1.getPublishTime()));
-                holder1.tv_numbers0.setText(mPost1.getCommentNum() + "");
-                Arad.imageLoader.load(mPost1.getImgUrl()).placeholder(R.mipmap.default_error).resize(50,50)
+                if(post.getPublishTime()!=null)
+                holder1.tv_time0.setText(TimeUtils.dateTime(post.getPublishTime()));
+                holder1.tv_numbers0.setText(post.getCommentNum() + "");
+                Arad.imageLoader.load(post.getImgUrl()).placeholder(R.mipmap.default_error).resize(50,50)
                         .centerCrop().into(holder1.imageView1);
                 break;
             case 1:
-                Post mPost2 = mPostList.get(position);
-                holder2.tv_titile1.setText(mPost2.getTitle());
-                holder2.tv_name1.setText(mPost2.getMemberName());
+               // Post mPost2 = mPostList.get(position);
+                holder2.tv_titile1.setText(post.getTitle());
+                holder2.tv_name1.setText(post.getMemberName());
               //  holder2.tv_time1.setText(TimeUtils.date(Long.parseLong(post.getPublishTime())));
-                holder2.tv_time1.setText(TimeUtils.dateTime(mPost2.getPublishTime()));
-                holder2.tv_numbers1.setText(mPost2.getCommentNum() + "");
-                if(mPost2.getBlurbs()!=null&&!mPost2.getBlurbs().equals("")){
+                holder2.tv_time1.setText(TimeUtils.dateTime(post.getPublishTime()));
+                holder2.tv_numbers1.setText(post.getCommentNum() + "");
+                if(post.getBlurbs()!=null&&!post.getBlurbs().equals("")){
                     holder2.tv_daoyu.setVisibility(View.VISIBLE);
-                    holder2.tv_daoyu.setText(mPost2.getBlurbs());
+                    holder2.tv_daoyu.setText(post.getBlurbs());
                 }else {
                     holder2.tv_daoyu.setVisibility(View.GONE);
                 }
@@ -196,24 +190,24 @@ public class InvitationListViewAdapter extends BaseAdapter{
                 para1 = (RelativeLayout.LayoutParams) holder2.iv_title_photo1.getLayoutParams();
                 para1.width = (width1-AndroidUtil.dp2px(mcontext,40))/3;
                 holder2.iv_title_photo1.setLayoutParams(para1);
-                Arad.imageLoader.load(mPost2.getImgUrl()).placeholder(R.mipmap.default_error).resize(50,50)
+                Arad.imageLoader.load(post.getImgUrl()).placeholder(R.mipmap.default_error).resize(50,50)
                         .centerCrop().into(holder2.imageView2);
-                if(mPost2.getPostImgList()!=null) {
-                    Arad.imageLoader.load(mPost2.getPostImgList().get(0).getImg()).placeholder(R.mipmap.default_error).resize(400,400).config(Bitmap.Config.RGB_565).centerCrop().into(holder2.iv_title_photo1);
+                if(post.getPostImgList()!=null) {
+                    Arad.imageLoader.load(post.getPostImgList().get(0).getImg()).placeholder(R.mipmap.default_error).resize(400,400).config(Bitmap.Config.RGB_565).centerCrop().into(holder2.iv_title_photo1);
                 }
                 break;
             case 3:
-               Post mPos3 = mPostList.get(position);
-                if(mPos3.getTitle()==null||mPos3.getTitle().equals("")){
+              // Post mPos3 = mPostList.get(position);
+                if(post.getTitle()==null||post.getTitle().equals("")){
                     holder3.tv_titile3.setVisibility(View.GONE);
                 }
-                holder3.tv_titile3.setText(mPos3.getTitle());
-                holder3.tv_name3.setText(mPos3.getMemberName());
-                holder3.tv_time3.setText(TimeUtils.dateTime(mPos3.getPublishTime()));
-                holder3.tv_numbers03.setText(mPos3.getCommentNum() + "");
-                if(mPos3.getBlurbs()!=null&&!mPos3.getBlurbs().equals("")){
+                holder3.tv_titile3.setText(post.getTitle());
+                holder3.tv_name3.setText(post.getMemberName());
+                holder3.tv_time3.setText(TimeUtils.dateTime(post.getPublishTime()));
+                holder3.tv_numbers03.setText(post.getCommentNum() + "");
+                if(post.getBlurbs()!=null&&!post.getBlurbs().equals("")){
                     holder3.tv_daoyu.setVisibility(View.VISIBLE);
-                    holder3.tv_daoyu.setText(mPos3.getBlurbs());
+                    holder3.tv_daoyu.setText(post.getBlurbs());
                 }else {
                     holder3.tv_daoyu.setVisibility(View.GONE);
                 }
@@ -227,13 +221,13 @@ public class InvitationListViewAdapter extends BaseAdapter{
                 holder3.iv_image3_01.setLayoutParams(para);
                 holder3.iv_image3_02.setLayoutParams(para);
                 holder3.iv_image3_03.setLayoutParams(para);*/
-                Arad.imageLoader.load(mPos3.getImgUrl()).placeholder(R.mipmap.default_error).resize(50, 50)
+                Arad.imageLoader.load(post.getImgUrl()).placeholder(R.mipmap.default_error).resize(50, 50)
                         .centerCrop().into(holder3.imageView3);
 
-                if(mPos3.getPostImgList()!=null) {
-                    Arad.imageLoader.load(mPos3.getPostImgList().get(0).getImg()).placeholder(R.mipmap.default_error).config(Bitmap.Config.RGB_565).resize(400, 400).centerCrop().into(holder3.iv_image3_01);
-                    Arad.imageLoader.load(mPos3.getPostImgList().get(1).getImg()).placeholder(R.mipmap.default_error).config(Bitmap.Config.RGB_565).resize(400, 400).centerCrop().into(holder3.iv_image3_02);
-                    Arad.imageLoader.load(mPos3.getPostImgList().get(2).getImg()).placeholder(R.mipmap.default_error).config(Bitmap.Config.RGB_565).resize(400, 400).centerCrop().into(holder3.iv_image3_03);
+                if(post.getPostImgList()!=null) {
+                    Arad.imageLoader.load(post.getPostImgList().get(0).getImg()).placeholder(R.mipmap.default_error).config(Bitmap.Config.RGB_565).resize(400, 400).centerCrop().into(holder3.iv_image3_01);
+                    Arad.imageLoader.load(post.getPostImgList().get(1).getImg()).placeholder(R.mipmap.default_error).config(Bitmap.Config.RGB_565).resize(400, 400).centerCrop().into(holder3.iv_image3_02);
+                    Arad.imageLoader.load(post.getPostImgList().get(2).getImg()).placeholder(R.mipmap.default_error).config(Bitmap.Config.RGB_565).resize(400, 400).centerCrop().into(holder3.iv_image3_03);
                 }
 
                 break;

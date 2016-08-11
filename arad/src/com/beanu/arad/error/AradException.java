@@ -147,8 +147,12 @@ public class AradException extends Exception {
 				}
 				else if(error_code.equals("032")){
 					result = "管理员不能被加入黑名单！";
-				}else if(error_code.equals("032")){
+				}else if(error_code.equals("033")){
 					result = "该设备已被拉黑!";
+				}else if(error_code.equals("034")){
+					result = "请验证手机号!";
+				}else if(error_code.equals("035")){
+					result = "请先进行注册!";
 				}
                 else {
                     result = Arad.app.getString(R.string.unknown_error_code) + error_code;
