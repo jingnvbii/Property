@@ -17,20 +17,8 @@
         android:layout_toEndOf="@+id/iv_title_photo"
         android:id="@+id/tv_titile0" />
 
-
-    <TextView
-        android:id="@+id/tv_daoyu"
-        android:layout_below="@+id/tv_titile0"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="5dp"
-        android:textColor="@color/text_gray"
-        android:visibility="gone"
-        android:paddingBottom="5dp"
-        />
-
     <com.ctrl.forum.customview.RoundImageView
-        android:layout_below="@+id/tv_daoyu"
+        android:layout_below="@+id/tv_titile0"
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:scaleType="fitXY"
@@ -46,7 +34,7 @@
         android:layout_marginLeft="5dp"
         android:textColor="@color/text_gray"
         android:layout_marginTop="13dp"
-        android:layout_below="@+id/tv_daoyu"
+        android:layout_below="@+id/tv_titile0"
         android:layout_alignBottom="@+id/iv_title_photo"
         android:layout_toRightOf="@+id/imageView0"
         android:id="@+id/tv_name0" />
@@ -55,7 +43,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:layout_below="@+id/tv_daoyu"
+        android:layout_below="@+id/tv_titile0"
         android:drawablePadding="5dp"
         android:textColor="@color/text_gray"
         android:textSize="@dimen/text_size_micro"
@@ -73,12 +61,20 @@
         android:drawableLeft="@mipmap/number_small"
         android:textColor="@color/text_gray"
         android:drawablePadding="5dp"
-        android:layout_below="@+id/tv_daoyu"
+        android:layout_below="@+id/tv_titile0"
         android:textSize="@dimen/text_size_micro"
         android:layout_alignParentRight="true"
         android:layout_alignBottom="@+id/iv_title_photo"
         />
 
-
-
+    <TextView
+        android:id="@+id/tv_daoyu"
+        android:layout_below="@+id/imageView0"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="5dp"
+        android:textColor="@color/text_gray"
+        android:visibility="gone"
+        android:paddingBottom="5dp"
+        />
 </RelativeLayout>
