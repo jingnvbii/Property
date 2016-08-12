@@ -553,6 +553,12 @@ public class MyFragment extends ToolBarFragment implements View.OnClickListener{
         }
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        getActivity().unregisterReceiver(myBroadcastReciver);
+    }
+
     //viewPager的适配器
     private final class MyPagerAdapter extends PagerAdapter {
 
@@ -586,7 +592,6 @@ public class MyFragment extends ToolBarFragment implements View.OnClickListener{
     public class MyBroadcastReciver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
-            context.unregisterReceiver(myBroadcastReciver);
             String num = intent.getExtras().getString("num");
             switch (num){
                 case "num":

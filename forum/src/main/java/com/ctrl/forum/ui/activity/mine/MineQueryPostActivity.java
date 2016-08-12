@@ -2,7 +2,6 @@ package com.ctrl.forum.ui.activity.mine;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -414,9 +413,10 @@ public class MineQueryPostActivity extends AppToolBarActivity implements View.On
 
     public void setBimp(Platform.ShareParams sp,Post post){
         if (post.getPostImgList()==null || post.getPostImgList().size()==0){
-            Log.e("bimap==========","1235");
+            Log.e("bimap==========", "1235");
             //设为图片路径
-            sp.setImageData(BitmapFactory.decodeResource(this.getResources(), R.mipmap.logo));
+            sp.setImagePath(Constant.SHARE_IMAGE_PATH);
+            //sp.setImageData(BitmapFactory.decodeResource(this.getResources(), R.mipmap.logo));
         }else{
             sp.setImageUrl(post.getPostImgList().get(0).getImg());//网络图片rul
         }
@@ -441,6 +441,7 @@ public class MineQueryPostActivity extends AppToolBarActivity implements View.On
                 sp.setImageUrl("http://7sby7r.com1.z0.glb.clouddn.com/CYSJ_02.jpg");//网络图片rul*/
 
                 sp.setTitle(setTitle(post));
+                sp.setText(post.getContent());
                 setBimp(sp, post);//设置标题与图片
                 //网友点进链接后，可以看到分享的详情
                 sp.setTitleUrl(Constant.SHARE_INVITION_URL + post.getId());
@@ -464,6 +465,7 @@ public class MineQueryPostActivity extends AppToolBarActivity implements View.On
 
                 sp.setTitle(setTitle(post));
                 setBimp(sp, post);//设置标题与图片
+                sp.setText(post.getContent());
                 sp.setUrl(Constant.SHARE_INVITION_URL+ post.getId());
                 //3、非常重要：获取平台对象
                 Platform wechat = ShareSDK.getPlatform(Wechat.NAME);
@@ -482,6 +484,7 @@ public class MineQueryPostActivity extends AppToolBarActivity implements View.On
                 sp.setImageUrl("http://7sby7r.com1.z0.glb.clouddn.com/CYSJ_02.jpg");//网络图片rul
                 sp.setUrl(Constant.SHARE_INVITION_URL+ post.getId());*/
 
+                sp.setTitle(setTitle(post));
                 setBimp(sp, post);//设置标题与图片
                 sp.setText(setTitle(post)+Constant.SHARE_INVITION_URL + post.getId());
                 //3、非常重要：获取平台对象
@@ -503,6 +506,7 @@ public class MineQueryPostActivity extends AppToolBarActivity implements View.On
                 sp.setImageUrl("http://7sby7r.com1.z0.glb.clouddn.com/CYSJ_02.jpg");//网络图片rul
                 sp.setUrl(Constant.SHARE_INVITION_URL+ post.getId());*/
 
+                sp.setTitle(setTitle(post));
                 setBimp(sp, post);//设置标题与图片
                 sp.setText(setTitle(post) + Constant.SHARE_INVITION_URL + post.getId());
                 //3、非常重要：获取平台对象

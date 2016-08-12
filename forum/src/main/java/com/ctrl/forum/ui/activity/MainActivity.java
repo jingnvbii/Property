@@ -194,7 +194,6 @@ public class MainActivity extends ToolBarActivity implements View.OnClickListene
             getNet();
         }
     }
-
     @Override
     protected void onDestroy() {
         super.onDestroy();

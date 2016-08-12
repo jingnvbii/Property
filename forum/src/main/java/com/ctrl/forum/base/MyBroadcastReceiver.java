@@ -9,7 +9,11 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.beanu.arad.Arad;
 import com.ctrl.forum.R;
@@ -57,8 +61,8 @@ public class MyBroadcastReceiver extends BroadcastReceiver{
         Bundle bundle = intent.getExtras();
         String registrationID =  JPushInterface.getRegistrationID(context);
 
-       /* //通知栏下方的图标能变化,但字体颜色不会适配(太长也不行)
-        CustomPushNotificationBuilder builder = new CustomPushNotificationBuilder(context,
+        //通知栏下方的图标能变化,但字体颜色不会适配(太长也不行)
+       /* CustomPushNotificationBuilder builder = new CustomPushNotificationBuilder(context,
                 R.layout.customer_notitfication_layout, R.id.icon, R.id.title, R.id.text);  // 指定定制的 Notification Layout
         builder.statusBarDrawable = R.mipmap.tr_white;      //指定最顶层状态栏小图标
         builder.layoutIconDrawable =R.mipmap.logo;   //指定下拉状态栏时显示的通知图标
@@ -487,4 +491,12 @@ public class MyBroadcastReceiver extends BroadcastReceiver{
         }
     }
 
+    //获取通知栏的字体的颜色
+    private int getNotifitionColor(Context context){
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
+        Notification notification = builder.build();
+        ViewGroup viewGroup = (ViewGroup) notification.contentView.apply(context,new LinearLayout(context));
+        TextView title = (TextView) viewGroup.findViewById(android.R.id.title);
+        return title.getCurrentTextColor();
+    }
 }

@@ -1,7 +1,6 @@
 package com.ctrl.forum.ui.fragment;
 
 import android.content.Intent;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -706,7 +705,8 @@ public class PlotFragment extends ToolBarFragment implements View.OnClickListene
         if (post.getPostImgList()==null || post.getPostImgList().size()==0){
             Log.e("bimap==========","1235");
             //设为图片路径
-            sp.setImageData(BitmapFactory.decodeResource(getActivity().getResources(), R.mipmap.logo));
+            sp.setImagePath(Constant.SHARE_IMAGE_PATH);
+            //sp.setImageData(BitmapFactory.decodeResource(getActivity().getResources(), R.mipmap.logo));
         }else{
             sp.setImageUrl(post.getPostImgList().get(0).getImg());//网络图片rul
         }
@@ -851,7 +851,7 @@ public class PlotFragment extends ToolBarFragment implements View.OnClickListene
                 /*sp.setTitle("我是短信分享标题");  //分享标题
                 sp.setText("我是短信分享文本，啦啦啦~http://uestcbmi.com/");   //分享文本
                 sp.setImageUrl("http://7sby7r.com1.z0.glb.clouddn.com/CYSJ_02.jpg");//网络图片rul
-                sp.setUrl("http://sharesdk.cn");   //网友点进链接后，可以看到分享的详情*/
+                      sp.setUrl("http://sharesdk.cn");   //网友点进链接后，可以看到分享的详情*/
 
                 setBimp(sp, post);//设置标题与图片
                 sp.setText(setTitle(post)+Constant.SHARE_INVITION_URL + post.getId());
