@@ -57,17 +57,18 @@ public class MyBroadcastReceiver extends BroadcastReceiver{
         Bundle bundle = intent.getExtras();
         String registrationID =  JPushInterface.getRegistrationID(context);
 
-        //通知栏下方的图标能变化,但字体颜色不会适配(太长也不行)
-       /* CustomPushNotificationBuilder builder = new CustomPushNotificationBuilder(context,
+       /* //通知栏下方的图标能变化,但字体颜色不会适配(太长也不行)
+        CustomPushNotificationBuilder builder = new CustomPushNotificationBuilder(context,
                 R.layout.customer_notitfication_layout, R.id.icon, R.id.title, R.id.text);  // 指定定制的 Notification Layout
         builder.statusBarDrawable = R.mipmap.tr_white;      //指定最顶层状态栏小图标
         builder.layoutIconDrawable =R.mipmap.logo;   //指定下拉状态栏时显示的通知图标
+        builder.developerArg0 = String.valueOf(System.currentTimeMillis());
         JPushInterface.setPushNotificationBuilder(2, builder);
         JPushInterface.setDefaultPushNotificationBuilder(builder);*/
 
         //字体颜色会适配,但下拉出现的框的图片也是顶部状态栏的图片
-        /*BasicPushNotificationBuilder builder = new BasicPushNotificationBuilder(context);
-        builder.statusBarDrawable = R.mipmap.logo;
+       /* BasicPushNotificationBuilder builder = new BasicPushNotificationBuilder(context);
+        builder.statusBarDrawable = R.mipmap.tr_white;
         JPushInterface.setPushNotificationBuilder(2, builder);
         JPushInterface.setDefaultPushNotificationBuilder(builder);*/
 

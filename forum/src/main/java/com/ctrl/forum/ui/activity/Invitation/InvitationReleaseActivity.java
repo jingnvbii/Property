@@ -947,10 +947,12 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
                 TYPE="1";
                 //checkContent();
                 if (checkStyle()) {
-                    if (checkContent()) {
-                        showProgress(true);
-                        //发布帖子
-                        releaseInvitation();
+                    if (checkInput()) {
+                        if (checkContent()) {
+                            showProgress(true);
+                            //发布帖子
+                            releaseInvitation();
+                        }
                     }
                 }
                 break;
@@ -1115,91 +1117,87 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
     private void releaseInvitation() {
         String imagesUrl=getImageUrl(urlList);
         String thumbImagesUrl= getImageUrl(urlList);
-
-        if(checkInput()){
-            if(spinner_third_kind.getVisibility()==View.VISIBLE){
-                if(!checkActivity()) {
-                    idao.requesInvitationPost(
-                            Arad.preferences.getString("memberId"),
-                            thirdKindId,
-                            "0",
-                            "1",
-                            checkType3,
-                            et_tittle.getText().toString().trim(),
-                            et_content.getText().toString().trim(),
-                            vcardDisplay,
-                            name,
-                            adress,
-                            tel,
-                            locationLongitude,
-                            locationLatitude,
-                            tv_location_name,
-                            imagesUrl,
-                            thumbImagesUrl
-                    );
-                }else{
-                    idao.requesPostEditor(
-                            id,
-                            thirdKindId,
-                            "0",
-                            "1",
-                            checkType3,
-                            et_tittle.getText().toString().trim(),
-                            et_content.getText().toString().trim(),
-                            vcardDisplay,
-                            name,
-                            adress,
-                            tel,
-                            locationLongitude,
-                            locationLatitude,
-                            tv_location_name,
-                            getDelImageId(GalleryActivity.delList),  //删除图片的id的字符串
-                            imagesUrl,
-                            imagesUrl);
-                }
-            }else {
-                if (!checkActivity()) {
-                    idao.requesInvitationPost(
-                            Arad.preferences.getString("memberId"),
-                            secondKindId,
-                            "0",
-                            "1",
-                            checkType2,
-                            et_tittle.getText().toString().trim(),
-                            et_content.getText().toString().trim(),
-                            vcardDisplay,
-                            name,
-                            adress,
-                            tel,
-                            locationLongitude,
-                            locationLatitude,
-                            tv_location_name,
-                            imagesUrl,
-                            thumbImagesUrl
-                    );
-                }else{
-                    idao.requesPostEditor(
-                            id,
-                            secondKindId,
-                            "0",
-                            "1",
-                            checkType2,
-                            et_tittle.getText().toString().trim(),
-                            et_content.getText().toString().trim(),
-                            vcardDisplay,
-                            name,
-                            adress,
-                            tel,
-                            locationLongitude,
-                            locationLatitude,
-                            tv_location_name,
-                            getDelImageId(GalleryActivity.delList),  //删除图片的id的字符串
-                            imagesUrl,
-                            imagesUrl);
-                }
+        if(spinner_third_kind.getVisibility()==View.VISIBLE){
+            if(!checkActivity()) {
+                idao.requesInvitationPost(
+                        Arad.preferences.getString("memberId"),
+                        thirdKindId,
+                        "0",
+                        "1",
+                        checkType3,
+                        et_tittle.getText().toString().trim(),
+                        et_content.getText().toString().trim(),
+                        vcardDisplay,
+                        name,
+                        adress,
+                        tel,
+                        locationLongitude,
+                        locationLatitude,
+                        tv_location_name,
+                        imagesUrl,
+                        thumbImagesUrl
+                );
+            }else{
+                idao.requesPostEditor(
+                        id,
+                        thirdKindId,
+                        "0",
+                        "1",
+                        checkType3,
+                        et_tittle.getText().toString().trim(),
+                        et_content.getText().toString().trim(),
+                        vcardDisplay,
+                        name,
+                        adress,
+                        tel,
+                        locationLongitude,
+                        locationLatitude,
+                        tv_location_name,
+                        getDelImageId(GalleryActivity.delList),  //删除图片的id的字符串
+                        imagesUrl,
+                        imagesUrl);
+            }
+        }else {
+            if (!checkActivity()) {
+                idao.requesInvitationPost(
+                        Arad.preferences.getString("memberId"),
+                        secondKindId,
+                        "0",
+                        "1",
+                        checkType2,
+                        et_tittle.getText().toString().trim(),
+                        et_content.getText().toString().trim(),
+                        vcardDisplay,
+                        name,
+                        adress,
+                        tel,
+                        locationLongitude,
+                        locationLatitude,
+                        tv_location_name,
+                        imagesUrl,
+                        thumbImagesUrl
+                );
+            }else{
+                idao.requesPostEditor(
+                        id,
+                        secondKindId,
+                        "0",
+                        "1",
+                        checkType2,
+                        et_tittle.getText().toString().trim(),
+                        et_content.getText().toString().trim(),
+                        vcardDisplay,
+                        name,
+                        adress,
+                        tel,
+                        locationLongitude,
+                        locationLatitude,
+                        tv_location_name,
+                        getDelImageId(GalleryActivity.delList),  //删除图片的id的字符串
+                        imagesUrl,
+                        imagesUrl);
             }
         }
-
     }
 
     private void getImageToView1(String path) {
