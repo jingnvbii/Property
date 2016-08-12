@@ -95,11 +95,11 @@ public class BindPhoneActivity extends AppToolBarActivity implements View.OnClic
                 }
                 break;
             case R.id.tv_get_yanzhencode:
-                if(et_put_phone.getText().toString().trim().length()!=11){
-                    MessageUtils.showShortToast(this,"手机号格式不对");
-                    return;
-                }
                 if(!TextUtils.isEmpty(et_put_phone.getText().toString())) {
+                    if(et_put_phone.getText().toString().trim().length()!=11){
+                        MessageUtils.showShortToast(this,"手机号格式不对");
+                        return;
+                    }
                     time.start();
                     rdao.requestAuthCode(et_put_phone.getText().toString().trim());
                 }else {
