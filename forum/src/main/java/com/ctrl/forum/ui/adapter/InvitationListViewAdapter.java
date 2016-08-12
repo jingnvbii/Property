@@ -155,7 +155,7 @@ public class InvitationListViewAdapter extends BaseAdapter{
         Post post=mPostList.get(position);
         switch (type){
             case 0:
-               // Post mPost1 = mPostList.get(position);
+               // Post mPost1 = mPostList.get(position);1
                 if(post==null){break;}
                 holder1.tv_titile0.setText(post.getTitle());
                 holder1.tv_name0.setText(post.getMemberName());
