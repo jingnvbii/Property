@@ -112,7 +112,7 @@ public class BindPhoneActivity extends AppToolBarActivity implements View.OnClic
 
     @Override
     public void onRequestFaild(String errorNo, String errorMessage) {
-      //  super.onRequestFaild(errorNo, errorMessage);
+      //  super.onRequestFaild(errorNo, errorMessage)1;
         if(errorNo.equals("035")){
           //  rdao.requestRegiste("","","",openId,thirdLoginType);
             Intent intent=new Intent(BindPhoneActivity.this,RegisterActivity.class);
