@@ -553,6 +553,7 @@ public class MineQueryPostActivity extends AppToolBarActivity implements View.On
                 emailName.setPlatformActionListener(MineQueryPostActivity.this); // 设置分享事件回调
                 // 执行分享
                 emailName.share(sp);
+
             }
         });
         shareDialog.setDuanXinButtonOnClickListener(new View.OnClickListener() {
