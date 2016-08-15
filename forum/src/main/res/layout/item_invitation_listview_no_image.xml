@@ -75,6 +75,5 @@
         android:paddingTop="5dp"
         android:textColor="@color/text_gray"
         android:visibility="gone"
-        android:paddingBottom="5dp"
         />
 </RelativeLayout>

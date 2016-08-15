@@ -105,7 +105,6 @@ import cn.sharesdk.wechat.moments.WechatMoments;
  * Created by Administrator on 2016/4/11.
  */
 public class InvitationDetailFromPlatformActivity extends AppToolBarActivity implements View.OnClickListener, PlatformActionListener {
-
     @InjectView(R.id.iv_share)//分享
             ImageView iv_share;
     @InjectView(R.id.iv_zan)//点赞
@@ -263,6 +262,7 @@ public class InvitationDetailFromPlatformActivity extends AppToolBarActivity imp
     private LinearLayout ll_relate;
     private int lastItem;
     private ReplyCommentDao rdao;
+    private LinearLayout ll_all;
 
 
     @Override
@@ -271,14 +271,20 @@ public class InvitationDetailFromPlatformActivity extends AppToolBarActivity imp
         setContentView(R.layout.activity_invitation_pinterest_from_plat_detail);
         ButterKnife.inject(this);
         // 隐藏输入法
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                showProgress(true);
+            }
+        }, 500);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
        /* AbsListView.LayoutParams layoutParams = new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, AbsListView.LayoutParams.WRAP_CONTENT);
         headview = getLayoutInflater().inflate(R.layout.fragment_invitation_detai_from_platform, lv_reply_detail, false);
         headview.setLayoutParams(layoutParams);
         ListView lv = lv_reply_detail.getRefreshableView();
         lv.addHeaderView(headview);*/
-        modityMessageRead();
 
+        modityMessageRead();
         initView();
         ShareSDK.initSDK(this);
     }
@@ -353,7 +359,7 @@ public class InvitationDetailFromPlatformActivity extends AppToolBarActivity imp
         btn_yuyin.setAudioFinishRecorderListener(new AudioRecordButton.AudioFinishRecorderListener() {
             @Override
             public void onFinished(float seconds, String filePath) {
-               // MessageUtils.showShortToast(InvitationDetailFromPlatformActivity.this, "语音说话");
+                // MessageUtils.showShortToast(InvitationDetailFromPlatformActivity.this, "语音说话");
                 try {
                     second = seconds;
                     String voice = Base64Util.encodeBase64File(filePath);
@@ -461,6 +467,7 @@ public class InvitationDetailFromPlatformActivity extends AppToolBarActivity imp
     }
 
     private void initHeaderView() {
+        ll_all = (LinearLayout) headerView.findViewById(R.id.ll_all);//用户头像
         title_image = (ImageView) headerView.findViewById(R.id.title_image);//用户头像
         iv_levlel = (TextView) headerView.findViewById(R.id.iv_levlel);//等级
         mapview_invitation = (MapView) headerView.findViewById(R.id.mapview_invitation);
@@ -641,7 +648,7 @@ public class InvitationDetailFromPlatformActivity extends AppToolBarActivity imp
                     tv_name.setText(result);
                 }
             }else {
-                tv_name.setText(post.getReportSign());
+                tv_name.setText("管理员");
             }
             tv_address.setText(post.getContactAddress());
             tv_introduction.setText(post.getTitle());
@@ -736,13 +743,25 @@ public class InvitationDetailFromPlatformActivity extends AppToolBarActivity imp
                     showMap();
                 }
             }
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    showProgress(false);
+                    ll_all.setVisibility(View.VISIBLE);
+
+                }
+            }, 500);
+         //   showProgress(false);
         }
+
+
 
     }
 
+
     /*
-    * 显示地图
-    * */
+        * 显示地图
+        * */
     private void showMap() {
 
         BaiduMap mBaidumap = mapview_invitation.getMap();
@@ -831,6 +850,7 @@ public class InvitationDetailFromPlatformActivity extends AppToolBarActivity imp
         String htmlContent = post.getContent() + javascript;
         webview.loadDataWithBaseURL(null, htmlContent, "text/html", "UTF-8", null);
        // webview.loadDataWithBaseURL(null, post.getContent(), "text/html", "UTF-8", null);
+
 
     }
 

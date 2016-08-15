@@ -158,7 +158,11 @@ public class InvitationListViewAdapter extends BaseAdapter{
                // Post mPost1 = mPostList.get(position);1
                 if(post==null){break;}
                 holder1.tv_titile0.setText(post.getTitle());
-                holder1.tv_name0.setText(post.getMemberName());
+                if(post.getMemberName()!=null&&!post.getMemberName().equals("")) {
+                    holder1.tv_name0.setText(post.getMemberName());
+                }else {
+                    holder1.tv_name0.setText("管理员");
+                }
                 if(post.getBlurbs()!=null&&!post.getBlurbs().equals("")){
                     holder1.tv_daoyu.setVisibility(View.VISIBLE);
                     holder1.tv_daoyu.setText(post.getBlurbs());
@@ -174,7 +178,11 @@ public class InvitationListViewAdapter extends BaseAdapter{
             case 1:
                // Post mPost2 = mPostList.get(position);
                 holder2.tv_titile1.setText(post.getTitle());
-                holder2.tv_name1.setText(post.getMemberName());
+                if(post.getMemberName()!=null&&!post.getMemberName().equals("")) {
+                    holder2.tv_name1.setText(post.getMemberName());
+                }else {
+                    holder2.tv_name1.setText("管理员");
+                }
               //  holder2.tv_time1.setText(TimeUtils.date(Long.parseLong(post.getPublishTime())));
                 holder2.tv_time1.setText(TimeUtils.dateTime(post.getPublishTime()));
                 holder2.tv_numbers1.setText(post.getCommentNum() + "");
@@ -202,7 +210,11 @@ public class InvitationListViewAdapter extends BaseAdapter{
                     holder3.tv_titile3.setVisibility(View.GONE);
                 }
                 holder3.tv_titile3.setText(post.getTitle());
-                holder3.tv_name3.setText(post.getMemberName());
+                if(post.getMemberName()!=null&&!post.getMemberName().equals("")) {
+                    holder3.tv_name3.setText(post.getMemberName());
+                }else {
+                    holder3.tv_name3.setText("管理员");
+                }
                 holder3.tv_time3.setText(TimeUtils.dateTime(post.getPublishTime()));
                 holder3.tv_numbers03.setText(post.getCommentNum() + "");
                 if(post.getBlurbs()!=null&&!post.getBlurbs().equals("")){
