@@ -120,7 +120,6 @@ public class StorePaymentOrderActivity extends AppToolBarActivity implements Vie
                     WXPayEntryActivity.setPayStateListener(new WXPayEntryActivity.PayStateListener() {
                         @Override
                         public void doAfterWeixinPay(int payStatus) {
-
                             if (payStatus == Constant.PAY_STATUS_SUCCESS) {
                                 MessageUtils.showLongToast(StorePaymentOrderActivity.this, "支付成功");
                                 new Handler().postDelayed(new Runnable() {

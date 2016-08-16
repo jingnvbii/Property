@@ -58,8 +58,6 @@ public class WeixinPayUtil {
         sb=new StringBuffer();
     }
 
-
-
     /**
      * 1 将App注册到微信
      * */

@@ -803,6 +803,7 @@ public class InvitationDetailFromPlatformActivity extends AppToolBarActivity imp
         webview.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
         webview.getSettings().setLoadWithOverviewMode(true);
         webview.getSettings().setDefaultTextEncodingName("UTF -8");
+
         //判断html中是否包含视频<iframe width="300" height="150">标签
 
         if(post.getContent().indexOf("iframe") == -1 && post.getContent().indexOf("IFRAME") == -1){

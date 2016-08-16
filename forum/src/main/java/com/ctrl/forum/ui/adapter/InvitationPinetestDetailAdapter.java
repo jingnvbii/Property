@@ -41,7 +41,6 @@ public class InvitationPinetestDetailAdapter extends BaseAdapter  {
     private Context mcontext;
     private List<PostReply2> list;
 
-
     //  private String soundUrl;
 
     public InvitationPinetestDetailAdapter(Context context) {

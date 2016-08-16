@@ -268,7 +268,11 @@ public class ItemRimActivity extends ToolBarActivity implements View.OnClickList
     private void initView() {
         tv_item_one.setText(title);
         rimDao = new RimDao(this);
-        rimDao.getAroundServiceCompanyList(PAGE_NUM + "", Constant.PAGE_SIZE + "", Arad.preferences.getString("memberId"), id, "", Arad.preferences.getString("latitude"), Arad.preferences.getString("lontitude"));
+        rimDao.getAroundServiceCompanyList(PAGE_NUM + "",
+                Constant.PAGE_SIZE + "",
+                Arad.preferences.getString("memberId"), id, "",
+                Arad.preferences.getString("latitude"),
+                Arad.preferences.getString("lontitude"));
     }
 
     @Override

@@ -108,6 +108,7 @@
         android:background="@color/line_gray" />
 
     <TextView
+        android:textSize="16sp"
         android:id="@+id/tv_introduction"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -150,6 +151,7 @@
         android:textColor="@color/text_gray"
      />
     <TextView
+        android:textSize="14sp"
         android:id="@+id/tv_content"
         android:paddingTop="20dp"
         android:paddingLeft="10dp"
