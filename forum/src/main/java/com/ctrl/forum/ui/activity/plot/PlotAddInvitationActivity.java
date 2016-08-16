@@ -228,6 +228,7 @@ public class PlotAddInvitationActivity extends AppToolBarActivity implements Vie
                                 AlbumActivity.addList.remove(i);
                             }
                         }
+
                         Bimp.tempSelectBitmap.remove(posititon);
                         Bimp.max = Bimp.tempSelectBitmap.size();
                         //delImages.add(ii); //删除的图片
