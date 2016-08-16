@@ -207,7 +207,6 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
                 R.drawable.icon_addpic_unfocused);
         PublicWay.activityList.add(this);
 
-        Bimp.max=0;
         if (checkActivity()){
             showProgress(true);
             idao.requesPostDetail(id, Arad.preferences.getString("memberId"));
@@ -215,7 +214,7 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
             idao.requesItemCategory2(channelId, "1");
         }
         Init();
-
+        Bimp.max=0;
 
     }
 
@@ -616,12 +615,14 @@ public class InvitationReleaseActivity extends AppToolBarActivity implements Vie
                             e.printStackTrace();
                         }
                     }
-                    if (Bimp.tempSelectBitmap.size()==listPostImage.size()) {
-                        adapter.update();
-                        showProgress(false);
-                    }
+                    adapter.update();
                 }
             }).start();
+            showProgress(false);
+            /*if (Bimp.tempSelectBitmap.size()==listPostImage.size()) {
+
+                showProgress(false);
+            }*/
         }
 
         if (requestCode == 12) {

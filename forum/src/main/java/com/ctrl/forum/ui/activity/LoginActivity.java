@@ -248,6 +248,7 @@ public class LoginActivity extends AppToolBarActivity implements View.OnClickLis
             Arad.preferences.putString("remark", memberInfo.getRemark());
             Arad.preferences.putString("memberLevel", memberInfo.getMemberLevel());
 
+
             if (memberInfo.getImgUrl()==null){
                 Arad.preferences.putString("imgUrl","");
             }else{

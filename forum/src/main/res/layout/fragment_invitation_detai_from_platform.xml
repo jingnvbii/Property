@@ -106,12 +106,12 @@
             </RelativeLayout>
         </LinearLayout>
     </LinearLayout>
-    <View
+   <!-- <View
         android:layout_width="match_parent"
         android:layout_height="1px"
-        android:background="@color/line_gray" />
+        android:background="@color/line_gray" />-->
 
-     <TextView
+    <!-- <TextView
          android:id="@+id/tv_daoyu"
          android:layout_width="match_parent"
          android:layout_height="wrap_content"
@@ -121,15 +121,28 @@
          android:paddingRight="10dp"
          android:paddingBottom="30dp"
          android:background="@mipmap/duobianxing"
-         />
+         />-->
 
+        <TextView
+            android:id="@+id/tv_daoyu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:paddingLeft="5dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:visibility="gone"
+            android:background="@mipmap/duobianxing"
+            />
 
     <TextView
+        android:textSize="16sp"
         android:id="@+id/tv_introduction"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/text_black"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="5dp"
         android:layout_marginLeft="@dimen/margin_left_and_right"
          />
 
@@ -138,7 +151,9 @@
         android:id="@+id/ll_tel"
         android:layout_width="match_parent"
         android:background="@drawable/edit_white_shap"
-        android:layout_margin="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         android:layout_height="wrap_content">
 
         <TextView
@@ -160,8 +175,8 @@
 
     <WebView
         android:id="@+id/webView_plat"
+        android:layout_marginTop="10dp"
         android:layout_width="match_parent"
-        android:layout_margin="10dp"
         android:layout_height="wrap_content"
        />
 
@@ -171,7 +186,6 @@
         android:layout_height="wrap_content"
         android:text="电话按钮"
         android:padding="10dp"
-        android:layout_marginTop="10dp"
         android:layout_marginLeft="10dp"
         android:drawablePadding="10dp"
         android:gravity="center"
@@ -202,7 +216,10 @@
      <com.baidu.mapapi.map.MapView
          android:id="@+id/mapview_invitation"
          android:layout_width="match_parent"
-         android:layout_margin="10dp"
+         android:layout_marginTop="20dp"
+         android:layout_marginLeft="10dp"
+         android:layout_marginRight="10dp"
+         android:layout_marginBottom="10dp"
          android:layout_height="200dp">
 
      </com.baidu.mapapi.map.MapView>

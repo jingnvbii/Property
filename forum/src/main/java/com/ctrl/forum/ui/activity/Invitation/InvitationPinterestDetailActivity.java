@@ -253,7 +253,6 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
     private ImageButton biaoqingImage;
     private ReplyCommentDao rdao;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

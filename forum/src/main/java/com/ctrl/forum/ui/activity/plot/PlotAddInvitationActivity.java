@@ -180,11 +180,11 @@ public class PlotAddInvitationActivity extends AppToolBarActivity implements Vie
         initBuildToken();
         idao = new InvitationDao(this);
 
+        Init();
         if (checkActivity()){
-            showProgress(true);
+            //showProgress(true);
             idao.requesPostDetail(id, Arad.preferences.getString("memberId"));
         }
-        Init();
         Bimp.max=0;
     }
 
@@ -393,7 +393,7 @@ public class PlotAddInvitationActivity extends AppToolBarActivity implements Vie
                 delIds.put(post.getImg(), listPostImage.get(i).getId());//用来存放获取到的图片的url对应的id
             }
 
-            new Thread(new Runnable() {
+            /*new Thread(new Runnable() {
                 @Override
                 public void run() {
                     List<PostImage> listPostImage = idao.getListPostImage();//图片
@@ -402,6 +402,7 @@ public class PlotAddInvitationActivity extends AppToolBarActivity implements Vie
                         Bitmap bitmap = null;
                         try {
                             bitmap = Arad.imageLoader.load(listPostImage.get(i).getImg()).resize(200, 200).centerCrop().get();
+                            Log.e(i+"",bitmap.toString());
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
@@ -411,9 +412,12 @@ public class PlotAddInvitationActivity extends AppToolBarActivity implements Vie
                         Bimp.tempSelectBitmap.add(ii);
                     }
                     adapter.update();
-                    showProgress(false);
+                    Log.e("adapter.update()","adapter.update()======= ");
                 }
             }).start();
+            showProgress(true);*/
+
+            adapter.update();
         }
 
         if (requestCode == 7) {
@@ -850,14 +854,28 @@ public class PlotAddInvitationActivity extends AppToolBarActivity implements Vie
                 holder = (ViewHolder) convertView.getTag();
             }
 
-            if (position == Bimp.tempSelectBitmap.size()) {
-                holder.image.setImageBitmap(BitmapFactory.decodeResource(
-                        getResources(), R.drawable.icon_addpic_unfocused));
-                if (position == 9) {
-                    holder.image.setVisibility(View.GONE);
+            if (checkActivity()){
+                if (position ==listPostImage.size()) {
+                    holder.image.setImageBitmap(BitmapFactory.decodeResource(
+                            getResources(), R.drawable.icon_addpic_unfocused));
+                    if (position == 9) {
+                        holder.image.setVisibility(View.GONE);
+                    }
+                } else {
+                    Arad.imageLoader.load(listPostImage.get(position).getImg()).resize(200, 200).centerCrop();
                 }
-            } else {
-                holder.image.setImageBitmap(Bimp.tempSelectBitmap.get(position).getBitmap());
+            }else {
+
+                if (position == Bimp.tempSelectBitmap.size()) {
+                    holder.image.setImageBitmap(BitmapFactory.decodeResource(
+                            getResources(), R.drawable.icon_addpic_unfocused));
+                    if (position == 9) {
+                        holder.image.setVisibility(View.GONE);
+                    }
+                } else {
+                    holder.image.setImageBitmap(Bimp.tempSelectBitmap.get(position).getBitmap());
+                    Log.e("getView(setImageBitmap)", "1234567");
+                }
             }
 
             return convertView;
@@ -923,6 +941,7 @@ public class PlotAddInvitationActivity extends AppToolBarActivity implements Vie
     @Override
      protected void onDestroy() {
         super.onDestroy();
+        cancel();
         Bimp.tempSelectBitmap.clear();
         GalleryActivity.delList.clear();
         AlbumActivity.addList.clear();

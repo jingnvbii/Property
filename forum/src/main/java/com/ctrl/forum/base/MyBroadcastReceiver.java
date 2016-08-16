@@ -61,7 +61,7 @@ public class MyBroadcastReceiver extends BroadcastReceiver{
         Bundle bundle = intent.getExtras();
         String registrationID =  JPushInterface.getRegistrationID(context);
 
-        //通知栏下方的图标能变化,但字体颜色不会适配(太长也不行)
+        //通知栏下方的图标能变化,但字体颜色不会适配(文字 太长也不行)
        /* CustomPushNotificationBuilder builder = new CustomPushNotificationBuilder(context,
                 R.layout.customer_notitfication_layout, R.id.icon, R.id.title, R.id.text);  // 指定定制的 Notification Layout
         builder.statusBarDrawable = R.mipmap.tr_white;      //指定最顶层状态栏小图标
@@ -125,6 +125,7 @@ public class MyBroadcastReceiver extends BroadcastReceiver{
                     }else {setNavti(context, "您收到一条新消息", message, messageKey);}
                 }else {setNavti(context, "您收到一条新消息", message, messageKey);}
             }*/
+
             if (!Arad.preferences.getString("memberId").equals("")) {
                 if (Arad.preferences.getBoolean("isSet")) {
                     if (Arad.preferences.getBoolean("replyComments")) {//评论回复
