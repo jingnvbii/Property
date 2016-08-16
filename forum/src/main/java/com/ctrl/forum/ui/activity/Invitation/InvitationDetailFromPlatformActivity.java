@@ -146,7 +146,7 @@ public class InvitationDetailFromPlatformActivity extends AppToolBarActivity imp
     @InjectView(R.id.et_sendmessage)//回复内容
             EditText et_sendmessage;
 
-   /* @InjectView(R.id.iv01)//图片1
+   /* @InjectView(R.id.iv01)//图片
             ImageView iv01;
     @InjectView(R.id.iv02)//图片2
             ImageView iv02;
