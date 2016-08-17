@@ -648,7 +648,11 @@ public class InvitationDetailFromPlatformActivity extends AppToolBarActivity imp
                     tv_name.setText(result);
                 }
             }else {
-                tv_name.setText("管理员");
+                if(post.getReportSign()!=null&&!post.getReportSign().equals("")){
+                    tv_name.setText(post.getReportSign());
+                }else {
+                    tv_name.setText("管理员");
+                }
             }
             tv_address.setText(post.getContactAddress());
             tv_introduction.setText(post.getTitle());
