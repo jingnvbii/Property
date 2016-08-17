@@ -69,6 +69,7 @@ public class MineMessageActivity extends ToolBarActivity implements View.OnClick
 
         rdao = new ReplyCommentDao(this);
         rdao.modifyReadState(Arad.preferences.getString("memberId"));
+
         NotificationManager mManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
         mManager.cancelAll();
 
