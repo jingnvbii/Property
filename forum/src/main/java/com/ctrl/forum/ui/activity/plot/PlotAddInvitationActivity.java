@@ -393,7 +393,7 @@ public class PlotAddInvitationActivity extends AppToolBarActivity implements Vie
                 delIds.put(post.getImg(), listPostImage.get(i).getId());//用来存放获取到的图片的url对应的id
             }
 
-            /*new Thread(new Runnable() {
+            new Thread(new Runnable() {
                 @Override
                 public void run() {
                     List<PostImage> listPostImage = idao.getListPostImage();//图片
@@ -410,12 +410,13 @@ public class PlotAddInvitationActivity extends AppToolBarActivity implements Vie
                         ii.setBitmap(bitmap);
                         ii.setImageUrl(listPostImage.get(i).getImg());
                         Bimp.tempSelectBitmap.add(ii);
+                        adapter.update();
                     }
-                    adapter.update();
+                    //adapter.update();
                     Log.e("adapter.update()","adapter.update()======= ");
                 }
             }).start();
-            showProgress(true);*/
+            showProgress(false);
 
             adapter.update();
         }
@@ -854,28 +855,15 @@ public class PlotAddInvitationActivity extends AppToolBarActivity implements Vie
                 holder = (ViewHolder) convertView.getTag();
             }
 
-            if (checkActivity()){
-                if (position ==listPostImage.size()) {
-                    holder.image.setImageBitmap(BitmapFactory.decodeResource(
-                            getResources(), R.drawable.icon_addpic_unfocused));
-                    if (position == 9) {
-                        holder.image.setVisibility(View.GONE);
-                    }
-                } else {
-                    Arad.imageLoader.load(listPostImage.get(position).getImg()).resize(200, 200).centerCrop();
+            if (position == Bimp.tempSelectBitmap.size()) {
+                holder.image.setImageBitmap(BitmapFactory.decodeResource(
+                        getResources(), R.drawable.icon_addpic_unfocused));
+                if (position == 9) {
+                    holder.image.setVisibility(View.GONE);
                 }
-            }else {
-
-                if (position == Bimp.tempSelectBitmap.size()) {
-                    holder.image.setImageBitmap(BitmapFactory.decodeResource(
-                            getResources(), R.drawable.icon_addpic_unfocused));
-                    if (position == 9) {
-                        holder.image.setVisibility(View.GONE);
-                    }
-                } else {
-                    holder.image.setImageBitmap(Bimp.tempSelectBitmap.get(position).getBitmap());
-                    Log.e("getView(setImageBitmap)", "1234567");
-                }
+            } else {
+                holder.image.setImageBitmap(Bimp.tempSelectBitmap.get(position).getBitmap());
+                Log.e("getView(setImageBitmap)", "1234567");
             }
 
             return convertView;
