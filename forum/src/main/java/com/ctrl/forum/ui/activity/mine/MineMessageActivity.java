@@ -1,5 +1,7 @@
 package com.ctrl.forum.ui.activity.mine;
 
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -67,6 +69,8 @@ public class MineMessageActivity extends ToolBarActivity implements View.OnClick
 
         rdao = new ReplyCommentDao(this);
         rdao.modifyReadState(Arad.preferences.getString("memberId"));
+        NotificationManager mManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
+        mManager.cancelAll();
 
         Intent itt = new Intent();
         itt.setAction("com.message");
