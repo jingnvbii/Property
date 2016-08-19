@@ -13,9 +13,10 @@ public class Constant {
     // public static final String RAW_URL = "http://121.42.159.145:8088/pm/api?";//外网地址
     //  public static final String RAW_URL = "http://192.168.1.36:8088/pm/api?";//李鑫测试地址
     //public static final String RAW_URL = "http://192.168.1.210:8088/pm/api?";//桑越测试地址
-     public static final String RAW_URL = "http://115.28.243.3:8008/ctrl-api/";//新测试地址
+     //public static final String RAW_URL = "http://115.28.243.3:8008/ctrl-api/";//新测试地址
   //   public static final String RAW_URL = "http://192.168.0.46:8008/ctrl-api/";//方文测试地址
     //public static final String RAW_URL = "http://192.168.0.54:8888/ctrl-api/";//李鑫测试地址
+    public static final String RAW_URL = "http://120.27.125.91:8008/ctrl-api/";
 
     /*
     * 分享链接
