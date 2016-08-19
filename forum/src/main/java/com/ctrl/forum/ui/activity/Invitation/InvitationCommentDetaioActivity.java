@@ -121,7 +121,7 @@ public class InvitationCommentDetaioActivity extends AppToolBarActivity implemen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_invitation_comment_detail);
         ButterKnife.inject(this);
-        // 隐藏输入法
+        // 隐藏输入法1
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         initView();
         initData();
