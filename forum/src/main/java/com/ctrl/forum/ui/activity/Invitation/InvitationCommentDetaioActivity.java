@@ -149,9 +149,9 @@ public class InvitationCommentDetaioActivity extends AppToolBarActivity implemen
         btn_yuyin.setAudioFinishRecorderListener(new AudioRecordButton.AudioFinishRecorderListener() {
             @Override
             public void onFinished(float seconds, String filePath) {
-           //     MessageUtils.showShortToast(InvitationCommentDetaioActivity.this, "语音说话");
+                //     MessageUtils.showShortToast(InvitationCommentDetaioActivity.this, "语音说话");
                 try {
-                  //  second = seconds;
+                    //  second = seconds;
                     String voice = Base64Util.encodeBase64File(filePath);
                     sdao.requestSoundUpload(voice);
 
@@ -335,6 +335,10 @@ public class InvitationCommentDetaioActivity extends AppToolBarActivity implemen
         }
         if(ll_bottom_edit.getVisibility()==View.VISIBLE){
             ll_bottom_edit.setVisibility(View.GONE);
+        }
+        if(ll_input_text.getVisibility()==View.GONE){
+            ll_input_text.setVisibility(View.VISIBLE);
+            btn_yuyin.setVisibility(View.GONE);
         }
         if(ll_image_custom_facerelativelayout.getVisibility()==View.VISIBLE){
             ll_image_custom_facerelativelayout.setVisibility(View.GONE);
@@ -627,6 +631,7 @@ public class InvitationCommentDetaioActivity extends AppToolBarActivity implemen
         if(Arad.preferences.getString("isShielded").equals("1")){
             MessageUtils.showShortToast(InvitationCommentDetaioActivity.this,"您已经被屏蔽，不能回复评论");
         }
+        reset();
         et_sendmessage.setEnabled(true);
         et_sendmessage.requestFocus();
         if(Arad.preferences.getString("isShielded").equals("0")){
@@ -634,8 +639,10 @@ public class InvitationCommentDetaioActivity extends AppToolBarActivity implemen
         m.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
         mPosition=position;
         isFromPinglun=true;
+
         }
     }
+
 
     private String setThunbUrl() {
         String url=null;
@@ -719,10 +726,10 @@ public class InvitationCommentDetaioActivity extends AppToolBarActivity implemen
         if(ll_input_text.getVisibility()==View.VISIBLE){
             ll_input_text.setVisibility(View.GONE);
             btn_yuyin.setVisibility(View.VISIBLE);
+            InputMethodUtils.hide(InvitationCommentDetaioActivity.this);
         }else {
             ll_input_text.setVisibility(View.VISIBLE);
             btn_yuyin.setVisibility(View.GONE);
-
         }
     }
 

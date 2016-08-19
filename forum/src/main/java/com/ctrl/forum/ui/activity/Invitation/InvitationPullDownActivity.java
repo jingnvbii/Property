@@ -164,7 +164,7 @@ public class InvitationPullDownActivity extends ToolBarActivity implements View.
         iv_pull_back.setOnClickListener(this);
         iv_pul_release.setOnClickListener(this);
         iv_pul_search.setOnClickListener(this);
-       // viewpager_invitation_pull_down.setScrollble(false);//禁止viewpager滚动
+        viewpager_invitation_pull_down.setScrollble(false);//禁止viewpager滚动
 
     }
 

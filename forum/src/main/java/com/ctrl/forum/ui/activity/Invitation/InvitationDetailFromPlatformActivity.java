@@ -1715,6 +1715,10 @@ public class InvitationDetailFromPlatformActivity extends AppToolBarActivity imp
         if (ll_pinglun.getVisibility() == View.VISIBLE) {
             ll_pinglun.setVisibility(View.GONE);
             FaceRelativeLayout.setVisibility(View.VISIBLE);
+            if(ll_input_text.getVisibility()==View.GONE){
+                ll_input_text.setVisibility(View.VISIBLE);
+                btn_yuyin.setVisibility(View.GONE);
+            }
             InputMethodUtils.toggle(InvitationDetailFromPlatformActivity.this);
         } else {
             ll_pinglun.setVisibility(View.VISIBLE);

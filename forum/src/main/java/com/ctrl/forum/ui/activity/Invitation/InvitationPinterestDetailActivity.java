@@ -1437,6 +1437,7 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
         if (!et_sendmessage.isEnabled()) {
             et_sendmessage.setEnabled(true);
         }
+
         if (mImageList != null) {
             mImageList.clear();
         }
@@ -1611,6 +1612,10 @@ public class InvitationPinterestDetailActivity extends AppToolBarActivity implem
         if (ll_pinglun.getVisibility() == View.VISIBLE) {
             ll_pinglun.setVisibility(View.GONE);
             FaceRelativeLayout.setVisibility(View.VISIBLE);
+            if(ll_input_text.getVisibility()==View.GONE){
+                ll_input_text.setVisibility(View.VISIBLE);
+                btn_yuyin.setVisibility(View.GONE);
+            }
            InputMethodUtils.toggle(InvitationPinterestDetailActivity.this);
         } else {
             ll_pinglun.setVisibility(View.VISIBLE);
